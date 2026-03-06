@@ -1,0 +1,17 @@
+.typography {
+  color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.typography--normal {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.typography--title {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+}

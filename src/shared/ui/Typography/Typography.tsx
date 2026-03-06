@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { FC, ElementType, JSX } from "react";
 
 import type {
@@ -13,14 +14,24 @@ const withTypography = <TDefaultTag extends ElementType = "span">(
   return function TypographyComponent<TTag extends ElementType = TDefaultTag>({
     Tag,
     children,
+    className,
     variant,
     ...props
   }: TypographyProps<TTag>): JSX.Element {
     const Component = (Tag ?? defaults.Tag ?? "span") as ElementType;
     const resolvedVariant = variant ?? defaults.variant ?? "normal";
+    const resolvedClassName = clsx(
+      "typography",
+      `typography--${resolvedVariant}`,
+      className,
+    );
 
     return (
-      <Component data-variant={resolvedVariant} {...props}>
+      <Component
+        className={resolvedClassName}
+        data-variant={resolvedVariant}
+        {...props}
+      >
         {children}
       </Component>
     );
