@@ -1,6 +1,11 @@
-import type { ElementType, JSX } from "react";
+import type { FC, ElementType, JSX } from "react";
 
-import type { TypographyDefaults, TypographyProps } from "./Typography.types";
+import type {
+  TextTag,
+  TitleTag,
+  TypographyDefaults,
+  TypographyProps,
+} from "./Typography.types";
 
 const withTypography = <TDefaultTag extends ElementType = "span">(
   defaults: TypographyDefaults<TDefaultTag>,
@@ -22,4 +27,14 @@ const withTypography = <TDefaultTag extends ElementType = "span">(
   };
 };
 
-export const Typography = withTypography({});
+export const Typography: FC<TypographyProps> = withTypography({});
+
+export const Text: FC<TypographyProps<TextTag>> = withTypography<TextTag>({
+  Tag: "span",
+  variant: "normal",
+});
+
+export const Title: FC<TypographyProps<TitleTag>> = withTypography<TitleTag>({
+  Tag: "h3",
+  variant: "title",
+});
