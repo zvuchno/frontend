@@ -35,6 +35,6 @@ export const Text: FC<TypographyProps<TextTag>> = withTypography<TextTag>({
 });
 
 export const Title: FC<TypographyProps<TitleTag>> = withTypography<TitleTag>({
-  Tag: "h3",
+  Tag: "h2",
   variant: "title",
 });
