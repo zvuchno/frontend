@@ -5,18 +5,12 @@
 }
 
 .typography--normal {
-  font-size: clamp(0.875rem, 0.84rem + 0.18vw, 1rem);
+  font-size: 1rem;
   font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.4;
 }
 
 .typography--title {
-  font-family:
-    "Arial Narrow Bold", "Franklin Gothic Medium", Impact, sans-serif;
-  font-size: clamp(1.75rem, 1.45rem + 1.2vw, 2.75rem);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 0.92;
+  font-size: 4rem;
+  font-weight: 400;
   text-transform: uppercase;
 }
