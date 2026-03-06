@@ -33,6 +33,17 @@ const featureMono = localFont({
   variable: "--font-feature-mono",
   display: "swap",
 });
+const betterVcr = localFont({
+  src: [
+    {
+      path: "./fonts/BetterVCR.woff2",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-better-vcr",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -46,7 +57,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable} ${betterVcr.variable}`}>
         {children}
       </body>
     </html>
