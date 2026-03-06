@@ -1,17 +1,21 @@
 import clsx from "clsx";
-import type { FC, ElementType, JSX } from "react";
+import type { ElementType, JSX } from "react";
 
 import type {
   TextTag,
   TitleTag,
+  TypographyComponent,
   TypographyDefaults,
   TypographyProps,
 } from "./Typography.types";
 
-const withTypography = <TDefaultTag extends ElementType = "span">(
+const withTypography = <
+  TAllowedTag extends ElementType = ElementType,
+  TDefaultTag extends TAllowedTag = TAllowedTag,
+>(
   defaults: TypographyDefaults<TDefaultTag>,
 ) => {
-  return function TypographyComponent<TTag extends ElementType = TDefaultTag>({
+  return function TypographyComponent<TTag extends TAllowedTag = TDefaultTag>({
     Tag,
     children,
     className,
@@ -35,17 +39,17 @@ const withTypography = <TDefaultTag extends ElementType = "span">(
         {children}
       </Component>
     );
-  };
+  } as TypographyComponent<TAllowedTag, TDefaultTag>;
 };
 
-export const Typography: FC<TypographyProps> = withTypography({});
+export const Typography = withTypography<ElementType, "span">({});
 
-export const Text: FC<TypographyProps<TextTag>> = withTypography<TextTag>({
+export const Text = withTypography<TextTag, "span">({
   Tag: "span",
   variant: "normal",
 });
 
-export const Title: FC<TypographyProps<TitleTag>> = withTypography<TitleTag>({
-  Tag: "h2",
+export const Title = withTypography<TitleTag, "h3">({
+  Tag: "h3",
   variant: "title",
 });

@@ -1,4 +1,9 @@
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
+import type {
+  ComponentPropsWithoutRef,
+  ElementType,
+  JSX,
+  ReactNode,
+} from "react";
 
 export type TypographyVariant = "normal" | "title";
 
@@ -28,3 +33,10 @@ export type TypographyProps<TTag extends ElementType = "span"> =
 export type TypographyDefaults<TTag extends ElementType = "span"> = Partial<
   Pick<TypographyProps<TTag>, "Tag" | "variant">
 >;
+
+export type TypographyComponent<
+  TAllowedTag extends ElementType = ElementType,
+  TDefaultTag extends TAllowedTag = TAllowedTag,
+> = <TTag extends TAllowedTag = TDefaultTag>(
+  props: TypographyProps<TTag>,
+) => JSX.Element;
