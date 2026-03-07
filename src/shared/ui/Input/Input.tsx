@@ -1,38 +1,38 @@
 import { forwardRef } from "react";
 import { InputProps } from "./Input.types";
-import s from './Input.module.scss';
 import clsx from "clsx";
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({
     id,
-    placeholder,
     isRequired,
     label,
+    placeholder,
     error = false,
     message,
     inputSize = 'small',
     style,
     multiline = false,
     rows = 5,
+    ...otherProps
   }, 
     ref
   ) => {
-    const inputClassName = clsx(s.input, { [s.error]: error }, s[`input_size_${inputSize}`]);
-    const labelClassName = clsx(s.labelContainer__label, s[`labelContainer__label_size_${inputSize}`]);
+    const inputClassName = clsx('input', { ['error']: error }, [`input_size_${inputSize}`]);
+    const labelClassName = clsx('labelContainer__label', [`labelContainer__label_size_${inputSize}`], { ['labelContainer__label_size_large']: multiline});
       
     return (
-      <div className={clsx(s.field, { [s.field_multiline]: multiline })}>
+      <div className={clsx('field', { ['field_multiline']: multiline })}>
 
-        <div className={s.labelContainer}>
+        <div className={'labelContainer'}>
           {label && <label className={labelClassName} htmlFor={id}>{label}</label>}
-          {isRequired && <span className={s.labelContainer__markRequired}>*</span>}
+          {isRequired && <span className={'labelContainer__markRequired'}>*</span>}
         </div>
 
         {multiline ? (
           <textarea
             id={id}
-            className={s.input_multiline}
+            className={'input_multiline'}
             style={style}
             placeholder={placeholder}
             rows={rows}
@@ -46,11 +46,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             placeholder={placeholder}
             type="text"
             ref={ref as React.Ref<HTMLInputElement>}
+            {...otherProps}
           />
         )}
         
         {message && (
-          <span className={clsx(s.message, { [s.error]: error })}>{message}</span>
+          <span className={clsx('message', { ['error']: error })}>{message}</span>
         )}
       </div>
     )

@@ -17,13 +17,13 @@ import { InputHTMLAttributes } from "react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
-  placeholder: string;
   isRequired: boolean;
   label: string;
+  placeholder?: string;
   error?: boolean;
   message?: string;
   inputSize?: 'small' | 'large';
   style?: React.CSSProperties;
-  multiline: boolean;
-  rows: number;
+  multiline?: boolean;
+  rows?: number;
 };
