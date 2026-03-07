@@ -1,0 +1,16 @@
+.typography {
+  color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.typography--normal {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.typography--title {
+  font-size: 4rem;
+  font-weight: 400;
+  text-transform: uppercase;
+}
