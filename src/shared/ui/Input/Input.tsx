@@ -4,38 +4,53 @@ import s from './Input.module.scss';
 import clsx from "clsx";
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ 
-    className, 
-    label, error, 
-    innerRef, 
+  ({
     id,
-    value,
-    isHighlighted, 
-    hintText,
-    inputSize = 'small',
+    placeholder,
     isRequired,
-    ...otherProps 
+    label,
+    error = false,
+    message,
+    inputSize = 'small',
+    style,
+    multiline = false,
+    rows = 5,
   }, 
     ref
   ) => {
-    const inputClassName = clsx(s.input, { [s.input_highlighted]: isHighlighted }, { [s.error]: error }, s[`input_${inputSize}`], className);
+    const inputClassName = clsx(s.input, { [s.error]: error }, s[`input_size_${inputSize}`]);
+    const labelClassName = clsx(s.labelContainer__label, s[`labelContainer__label_size_${inputSize}`]);
       
     return (
-      <div className={s.field}>
-        {label && <label className={clsx(s.label, s[`label_${inputSize}`])} htmlFor={id}>{label}</label>}
-        {isRequired && (
-          <span className={s.required}>*</span>
+      <div className={clsx(s.field, { [s.field_multiline]: multiline })}>
+
+        <div className={s.labelContainer}>
+          {label && <label className={labelClassName} htmlFor={id}>{label}</label>}
+          {isRequired && <span className={s.labelContainer__markRequired}>*</span>}
+        </div>
+
+        {multiline ? (
+          <textarea
+            id={id}
+            className={s.input_multiline}
+            style={style}
+            placeholder={placeholder}
+            rows={rows}
+            ref={ref as React.Ref<HTMLTextAreaElement>}
+          />
+        ) : (
+          <input
+            id={id}
+            className={inputClassName}
+            style={style}
+            placeholder={placeholder}
+            type="text"
+            ref={ref as React.Ref<HTMLInputElement>}
+          />
         )}
-        <input
-          id={id}
-          value={value}
-          className={clsx(s.input, { [s.input_highlighted]: isHighlighted }, { [s.error]: error }, className)}
-          ref={innerRef ? innerRef : ref}
-          type="text"
-          {...otherProps}
-        />
-        {hintText && (
-          <span>{hintText}</span>
+        
+        {message && (
+          <span className={clsx(s.message, { [s.error]: error })}>{message}</span>
         )}
       </div>
     )

@@ -1,46 +1,62 @@
 .field {
+  position: relative;
 	display: flex;
   flex-direction: column;
 	gap: 4px;
 	width: 100%;
-}
 
-.label {
-	// font-family: Feature Mono
-	color: #100F0D;
-	text-align: left;
-
-  &_size_smal {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 100%;
-    letter-spacing: 0.6;
-    
-  }
-
-  &_size_large {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0.4;
+  &_multiline {
+    gap: 8px;
   }
 }
 
-.required {
-  font-size: 20px;
-  font-weight: 700;
-  color: #0046D3;
-  line-height: 100%;
-  letter-spacing: 0.6;
+.labelContainer {
+  display: flex;
+  align-items: center;
+
+    &__label {
+      font-family: var(--font-feature-mono);
+	    color: var(--color-text-primary);
+	    text-align: left;
+      cursor: pointer;
+
+        &_size_small {
+          font-size: 20px;
+          font-weight: 700;
+          line-height: 100%;
+          letter-spacing: 0.6;
+        }
+
+        &_size_large {
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 16px;
+          letter-spacing: 0.6;
+        }
+    }
+
+    &__markRequired {
+      display: inline-block;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-text-accent-blue);
+      line-height: 100%;
+      letter-spacing: 0.6;
+    }
 }
 
 .input {
 	width: 100%;
-	border: 1px solid #100F0D;
-	font-size: 18px;
-	//outline: 2px solid transparent;
-	color: #100F0D;
+	border: 1px solid var(--outline-color);
+  font-family: var(--font-feature-mono);
+	font-size: 16px;
+  line-height: 16px;
+	color: var(--color-text-primary);
 	background-color: transparent;
+
+  &_multiline {
+    padding: 12px 16px;
+  }
 
   &_size_small {
     padding: 12px 32px;
@@ -50,15 +66,6 @@
     padding: 14px 16px;
   }
 
-	&_highlighted {
-		background-color: #FFFEF9;
-	}
-
-	&:focus {
-		border-color: transparent;
-		outline: 2px solid green;
-	}
-
 	&::placeholder {
 		font-size: 16px;
 		font-weight: 400;
@@ -67,23 +74,22 @@
 	}
 }
 
-.error {
-	.label {
-		//color: red;
-	}
-
-	.input {
-		//outline: 2px solid red;
-		border: 1px solid #FD6D4A;
-
-		&:focus {
-			box-shadow: none;
-		}
-	}
+.message {
+  position: absolute;
+  top: 104%;
+  font-family: var(--font-feature-mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: #A2A2A2;
 }
 
-.hint {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
+.error {
+	&.input {
+		//outline: 2px solid red;
+		border: 1px solid #FD6D4A;
+	}
+
+  &.message {
+    color: #FD6D4A;
+  }
 }
