@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.scss";
+import localFont from "next/font/local";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -10,6 +11,38 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+const featureMono = localFont({
+  src: [
+    {
+      path: "./fonts/FeatureMono-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/FeatureMono-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/FeatureMono-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-feature-mono",
+  display: "swap",
+});
+const betterVcr = localFont({
+  src: [
+    {
+      path: "./fonts/BetterVCR.woff2",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-better-vcr",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +57,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable} ${betterVcr.variable}`}>
         {children}
       </body>
     </html>
