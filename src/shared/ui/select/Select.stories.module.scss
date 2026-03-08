@@ -14,7 +14,42 @@
   font-size: 16px;
 }
 
+.containerOnPersonalAccountPage {
+  width: 240px;
+  gap: 3px;
+}
+
 .selectOnPersonalAccountPage {
   border-width: 1px;
   border-radius: 0;
+  padding-block: 9px;
+  &[data-placeholder] { color: var(--color-text-primary); }
+}
+
+.itemOnLoadingMerch {
+  &:hover, &[data-highlighted] {
+    background-color: transparent;
+    outline: none;
+  }
+}
+
+.itemListOnPersonalAccountPage {
+  padding: 0px;
+  height: 104px;
+  overflow: hidden;
+  gap: 12px;
+  border-width: 1px;
+  border-radius: 0;
+  background-color: var(--color-bg-main);
+}
+
+.itemOnPersonalAccountPage {
+  padding-block: 7px;
+  border-radius: 0;
+  border: none;
+  margin-bottom: 3px;
+
+  &:hover, &[data-highlighted] {
+    background-color: var(--color-bg-main);
+  }
 }
