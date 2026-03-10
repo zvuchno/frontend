@@ -1,19 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { fn } from 'storybook/test';
-import { Button } from './Button';
+import { ButtonUI } from './ButtonUI';
 import React from 'react';
 
-const container = (width: string, justifySelf: 'center') => {
+const container = (width: string) => {
   return (Story: React.ComponentType) => (
-    <div style={{width, justifySelf}}>
+    <div style={{
+      width,
+      justifySelf: 'center'
+    }}>
       <Story />
     </div>
   )
 };
 
-const meta: Meta<typeof Button> = {
-  title: 'UI/Button',
-  component: Button,
+const meta: Meta<typeof ButtonUI> = {
+  title: 'shared/ui/Button',
+  component: ButtonUI,
   parameters: {
     layout: 'centered',
     controls: { include: ['size', 'disabled', 'styled'] },
@@ -31,7 +34,7 @@ const meta: Meta<typeof Button> = {
 
 export default meta;
 
-type StoryType = StoryObj<typeof Button>;
+type StoryType = StoryObj<typeof ButtonUI>;
 
 export const Primary: StoryType = {
   args: {
@@ -39,14 +42,13 @@ export const Primary: StoryType = {
     size: 'standart',
     children: 'Button',
     disabled: false,
-    styled: false,
   },
   argTypes: {
     size: {
       options: ['standart', 'small']
     }
   },
-  decorators: [container('clamp(194px, calc(100vw - 40px), 400px)', 'center')]
+  decorators: [container('clamp(194px, calc(100vw - 40px), 400px)')]
 };
 
 export const Secondary: StoryType = {
@@ -55,66 +57,89 @@ export const Secondary: StoryType = {
     size: 'standart',
     children: 'Button',
     disabled: false,
-    styled: false,
   },
   argTypes: {
     size: {
       options: ['standart', 'small']
     }
   },
-  decorators: [container('clamp(194px, calc(100vw - 40px), 400px)', 'center')]
+  decorators: [container('clamp(194px, calc(100vw - 40px), 400px)')]
 };
 
-export const AccentDark: StoryType = {
+export const AccentDarkLarge: StoryType = {
   args: {
     variant: 'accentDark',
     size: 'large',
-    children: 'Button',
+    children: 
+    <span 
+      style={{
+        fontSize: '28px', 
+        textTransform: 'uppercase'
+      }}
+    >
+      Button
+    </span>,
     disabled: false,
-    styled: true,
   },
   argTypes: {
     size: {
-      options: ['standart', 'large']
-    },
-    styled: {
-      control: 'boolean',
+      options: ['large']
     }
   },
-  decorators: [container('clamp(min(calc(100vw - 40px), 300px), calc(100vw - 40px), 436px)', 'center')]
+  decorators: [container('clamp(min(calc(100vw - 40px), 300px), calc(100vw - 40px), 436px)')]
 };
 
-export const AccentLight: StoryType = {
+export const AccentDarkStandart: StoryType = {
   args: {
-    variant: 'accentLight',
+    variant: 'accentDark',
+    size: 'standart',
+    children: 'Button',
+    disabled: false,
+  },
+  argTypes: {
+    size: {
+      options: ['standart']
+    }
+  },
+  decorators: [container('clamp(min(calc(100vw - 40px), 300px), calc(100vw - 40px), 436px)')]
+};
+
+export const OrderDetailsButton: StoryType = {
+  args: {
+    variant: 'secondary',
     size: 'medium',
     children: 'Button',
     disabled: false,
-    styled: false,
   },
   argTypes: {
     size: {
       options: ['medium']
     }
   },
-  decorators: [container('284px', 'center')]
+  decorators: [container('284px')]
 };
 
-export const DownloadContent: StoryType = {
+export const ContentDownloadButton: StoryType = {
   args: {
     variant: 'secondary',
     size: 'small',
-    children: 'Button',
+    children: 
+      <span 
+        style={{
+          fontSize: '16px',
+          fontWeight: '500'
+        }}
+      >
+        Button
+      </span>,
     disabled: false,
-    styled: false,
-    onFileSelect: true
   },
   argTypes: {
     size: {
       options: ['small']
     }
   },
-  decorators: [container('204px', 'center')]
+  decorators: [container('204px')]
 };
 
 

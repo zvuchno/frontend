@@ -1,13 +1,6 @@
-export type TButtonProps = {
-  children: string | React.ReactNode;
-  variant: 'primary' | 'secondary' | 'accentDark' | 'accentLight';
-  size: 'standart' | 'small' | 'medium' | 'large' | null;
-  disabled?: boolean;
-  isLoading?: boolean;
-  htmlType?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
-  styled?: boolean;
+export type TButtonUIProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant: 'primary' | 'secondary' | 'accentDark';
+  size: 'standart' | 'small' | 'medium' | 'large';
   ariaLabel?: string;
-  className?: string;
-  onFileSelect?: boolean;
-  onClick?: () => void;
+  contentClassName?: string;
 }

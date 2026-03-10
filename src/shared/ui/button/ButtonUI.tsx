@@ -1,33 +1,28 @@
-import { TButtonProps } from "./types";
+import { TButtonUIProps } from "./types";
 import styles from './button.module.scss'
 import clsx from 'clsx';
 import { FC } from "react";
 
-export const Button: FC<TButtonProps> = (
+export const ButtonUI: FC<TButtonUIProps> = (
   {
     variant,
     disabled = false,
     children,
-    htmlType = 'button',
-    isLoading = false,
-    size = null,
-    styled = false,
+    type = 'button',
+    size = 'standart',
     ariaLabel,
     className,
-    onFileSelect = false,
+    contentClassName,
     onClick
   }) => (
   <button 
     className={clsx(
       styles.button,
       styles[`${variant}Button`],
-      { [styles[`${size}Button`]] : size !== 'standart'},
-      { [styles.disabled] : disabled},
-      { [styles.isLoading] : isLoading},
-      { [styles.onFileSelect] : onFileSelect},
+      { [styles[`${size}Button`]] : size !== 'standart' },
       className
     )}
-    type={htmlType}
+    type={type}
     disabled={disabled}
     aria-label={typeof children === 'string' ? children : ariaLabel}
     aria-disabled={disabled}
@@ -35,9 +30,10 @@ export const Button: FC<TButtonProps> = (
       >
         <span className={clsx(
           styles.buttonContent,
-          { [styles.styled] : styled })}
-          >
-            {children}
+          contentClassName
+          )}
+        >
+          {children}
         </span>
   </button>
 )
