@@ -11,7 +11,7 @@
 .checkbox {
   $root: &;
 
-  color: #100F0D;
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   gap: 16px;
@@ -37,7 +37,7 @@
     font-family: 'Feature Mono', monospace;
     font-weight: 500;
     font-size: 14px;
-    line-height: (16/14);
+    line-height: calc(16 / 14);
     letter-spacing: -0.04em;
     justify-self: left;
     

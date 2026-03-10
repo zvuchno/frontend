@@ -3,10 +3,10 @@ import { CheckboxUI } from './CheckboxUI';
 import React, { useState } from 'react';
 import { fn } from 'storybook/test';
 
-const container = (width: string) => 
+const container = () => 
   (Story: React.ComponentType) => (
     <div style={{ 
-      width, 
+      width: 'clamp(194px, calc(100vw - 40px), 394px)', 
       justifySelf: 'center', 
       border: '1px dotted #acacac' 
     }}>
@@ -15,7 +15,7 @@ const container = (width: string) =>
   );
 
 const meta: Meta<typeof CheckboxUI> = {
-  title: 'UI/Checkbox',
+  title: 'shared/ui/Checkbox',
   component: CheckboxUI,
   parameters: {
     layout: 'centered',
@@ -68,7 +68,7 @@ export const CheckboxButton: StoryType = {
     disabled: false,
     isChecked: false,
   },
-  decorators: [container('clamp(194px, calc(100vw - 40px), 394px)')]
+  decorators: [container()]
 };
 
 export const RadioButton: StoryType = {
@@ -78,7 +78,7 @@ export const RadioButton: StoryType = {
     disabled: false,
     isChecked: false
   },
-  decorators: [container('clamp(194px, calc(100vw - 40px), 392px)')]
+  decorators: [container()]
 };
 
 export const RadioButtonGroup: StoryType = {
@@ -118,5 +118,5 @@ export const RadioButtonGroup: StoryType = {
     );
   },
 
-  decorators: [container('clamp(194px, calc(100vw - 40px), 392px)')]
+  decorators: [container()]
 };
