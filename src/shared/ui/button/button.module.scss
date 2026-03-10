@@ -1,13 +1,35 @@
+$button-hight-large: 88px;
+$button-hight-standart: 60px;
+$button-hight-medium: 48px;
+$button-hight-small: 44px;
+$button-hight-large-mobile: 60px;
+$button-hight-standart-mobile: 40px;
+$button-hight-small-mobile: 28px;
+
+$padding-20: 20px;
+$padding-16: 16px;
+
+$borger-radius-large: 48px;
+$borger-radius-standart: 36px;
+
+$font-size: 20px;
+$font-size-mobile: 14px;
+
+$font-weight-bold: 700;
+$font-weight-semi-bold: 500;
+
+$text-color-accent: #ffffff;
+
 .button {
   display: flex;
   justify-content: center;
   width: 100%;
-  min-height: 60px;
-  padding-inline: 20px;
+  min-height: $button-hight-standart;
+  padding-inline: $padding-20;
   padding-block: 0;
-  color: #100F0D;
-  border: 1px solid #100F0D;
-  border-radius: 36px;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-text-primary);
+  border-radius: $borger-radius-standart;
   transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
   cursor: pointer;
 
@@ -16,152 +38,114 @@
     justify-content: space-around;
     align-items: center;
     color: currentColor;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 0;
-    letter-spacing: -1.2px;
+    font-family: 'Feature Mono', monospace;
+    font-size: $font-size;
+    font-weight: $font-weight-bold;
+    line-height: 100%;
+    letter-spacing: -0.06em;
     transition: color 0.3s ease-in-out;
+  }
 
-    &.styled {
-      text-transform: uppercase;
-    }
-  } 
-
-  /* светло-голубая кнопка */
+    /* светло-голубая кнопка */
   &.primaryButton {
-    background-color: #C2DFFF;
+    background-color: var(--color-accent-blue);
 
     &:hover:not(:disabled) {
       background-color: #9ACAFF;
     }
 
     &:active:not(:disabled) {
-      background-color: #0046D3;
-      color: #ffffff;
-    }
-
-    &:disabled {
-      background-color: #B5B5B5;
-      color: #ffffff;
-      pointer-events: none;
-      cursor: not-allowed;
+      background-color: var(--color-primary-blue);
+      color: $text-color-accent;
     }
   }
 
   /* серая кнопка */
   &.secondaryButton {
-    background-color: #B5B5B5;
+    background-color: var(--color-bg-secondary);
 
     &:hover:not(:disabled) {
       background-color: #D9D9D9;
     }
 
     &:active:not(:disabled) {
-      background-color: #100F0D;
-      color: #ffffff;
+      background-color: var(--color-text-primary);
+      color: $text-color-accent;
     }
 
     &:disabled {
-      background-color: #B5B5B5;
-      color: #ffffff;
-      border-color: #B5B5B5;
-      pointer-events: none;
-      cursor: not-allowed;
+      border-color: var(--color-bg-secondary);
     }
   }
 
   /* темная акцентная кнопка */
   &.accentDarkButton { 
-    background-color: #100F0D;
-    color: #ffffff;
+    background-color: var(--color-text-primary);
+    color: $text-color-accent;
 
     &:hover:not(:disabled) { 
-      border-color: #0046D3;
+      border-color: var(--color-primary-blue);
     }
 
     &:active:not(:disabled) { 
-      background-color: #0046D3;
-      border-color: #0046D3;
+      background-color: var(--color-primary-blue);
+      border-color: var(--color-primary-blue);
     }
 
-    &:disabled { 
-      background-color: #B5B5B5;
-      color: #ffffff;
-      border-color: #B5B5B5;
-      pointer-events: none;
-      cursor: not-allowed;
-    }
-  }
-
-  /* светло-серая акцентная кнопка - нет состояний в макете*/
-  &.accentLightButton { 
-    background-color: #D9D9D9;
-  }
-
-  /* кнопка загрузки фото контента */
-  &.onFileSelect {
-    border-width: 2px;
-    
-    & > .buttonContent {
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: -0.64px;
+    &:disabled {
+      border-color: var(--color-bg-secondary);
     }
   }
 
   /* размеры */
+
   /* кнопка height 88px */
   &.largeButton {
-    min-height: 88px;
-    border-radius: 48px;
+    min-height: $button-hight-large;
+    border-radius: $borger-radius-large;
     border-width: 6px;
-
-    & > .buttonContent {
-      font-size: 28px;
-      letter-spacing: -1.68px;
-    }
   }
 
   /* кнопка height 48px - кнопка в ЛК Подробнее о заказе*/
   &.mediumButton { 
-    min-height: 48px;
-
-    & > .buttonContent {
-      font-size: 16px;
-      letter-spacing: -0.96px;
-    }
+    min-height: $button-hight-medium;
+    padding-inline: $padding-16;
   }
 
   /* кнопка height 44px */
   &.smallButton {
-    min-height: 44px;
-    padding-inline: 16px;
+    min-height: $button-hight-small;
+    padding-inline: $padding-16;
   }
 
-  /* Мобильная версия */
+  &:disabled {
+    background-color: var(--color-bg-secondary);
+    color: $text-color-accent;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+    /* Мобильная версия */
+
     @media (width <= 375px) {
-    min-height: 40px;
-    padding-inline: 16px;
+    min-height: $button-hight-standart-mobile;
+    padding-inline: $padding-16;
 
     &Content {
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: -0.84px;
+      font-size: $font-size-mobile;
+      font-weight: $font-weight-semi-bold;
     }
 
     &.largeButton {
-      min-height: 60px;
+      min-height: $button-hight-large-mobile;
       border-width: 4px;
-
-      & > .buttonContent {
-        font-size: 16px;
-        font-weight: 700;
-        letter-spacing: -0.96px;
-      }
+      padding-inline: $padding-20;
     }
 
     &.smallButton {
-      min-height: 28px;
+      min-height: $button-hight-small-mobile;
     }
   }
 }
+
+
