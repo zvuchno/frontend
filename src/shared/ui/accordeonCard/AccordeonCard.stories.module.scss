@@ -1,0 +1,25 @@
+.accordeon__container_order {
+  padding: 18px;
+  border-radius: 12px;
+  gap: 5px;
+  width: 648px;
+}
+
+.accordeon__label_order {
+  background-color: inherit;
+  width: 100%;
+  display: grid;
+  margin-right: 50px;
+  grid-template-columns: 3fr 1fr 1fr;
+}
+
+.accordeon__trigger_order {
+  height: 28px;
+  width: 28px;
+}
+
+.accordeon__content_order {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
