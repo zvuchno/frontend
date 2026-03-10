@@ -20,7 +20,7 @@ export const SmallInput: Story = {
         <Input
           value={password}
           id="1"
-          isRequired
+          required
           label="Пароль"
           placeholder="Введите пароль"
           onChange={(e) => setPassword(e.target.value)}
@@ -40,7 +40,7 @@ export const SmallInputWithError: Story = {
         <Input
           value={password}
           id="2"
-          isRequired
+          required
           label="Пароль"
           error
           message='Длина пароля не меньше 4 символов'
@@ -61,7 +61,6 @@ export const LargeInput: Story = {
         <Input
           value={name}
           id="2"
-          isRequired={false}
           label="Название"
           onChange={(e) => setName(e.target.value)}
           inputSize="large"
@@ -81,7 +80,6 @@ export const Textarea: Story = {
           value={name}
           id="3"
           placeholder="Это описание будут видеть ваши слушатели"
-          isRequired={false}
           multiline
           label="Описание"
           onChange={(e) => setName(e.target.value)}
