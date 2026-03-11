@@ -1,4 +1,4 @@
-'use client';
+// 'use client';
 import React, { useState, useId } from 'react';
 import clsx from 'clsx';
 import type { SelectUIProps } from './Select.types';
@@ -8,7 +8,7 @@ import styles from './Select.module.scss';
 
 const defaultSelectIcon: React.ReactNode =  (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 6L10 13L17 6" stroke="#100F0D" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M3 6L10 13L17 6" stroke="#100F0D" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 

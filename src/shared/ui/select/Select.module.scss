@@ -5,19 +5,25 @@
   justify-content: center;
   width: 648px;
   color: var(--color-text-primary);
+  font-family: var(--font-feature-mono, 'Feature Mono', monospace);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.04em;
 }
 
 .select__label {
   padding-block: 2px;
-  font-family: 'Feature Mono', monospace;
-  font-weight: 500;
+  font-family: inherit;
+  font-weight: inherit;
   font-size: 14px;
-  line-height: 16px;
+  line-height: inherit;
 }
 
 .select__wrapper {
   position: relative;
   width: 100%;
+  font-family: inherit;
 }
 
 .select__select {
@@ -32,8 +38,6 @@
   border-radius: 12px; 
   font-family: inherit;
   font-size: 16px;
-  font-weight: 500;
-  line-height: 16px;
   cursor: pointer;
 
   &_visuallyHidden {
