@@ -1,7 +1,8 @@
+import { Title } from '@/shared/ui/Typography/Typography';
 import s from './CardArtist.module.scss';
 import { CardArtistProps } from "./CardArtist.type";
 
-const CardArtist = ({ image, description, onClick }: CardArtistProps) => {
+const CardArtist = ({ image, description, hasButton = true }: CardArtistProps) => {
   return (
     <div className={s.cardWrapper}>
       <div className={s.cardCorner} />
@@ -15,16 +16,15 @@ const CardArtist = ({ image, description, onClick }: CardArtistProps) => {
           />
         )}
 
-        {onClick && (
+        {hasButton && (
           <button 
             className={s.card__button}
-            onClick={onClick}
           />
         )}
 
         {description && (
           <div className={s.card__description}>
-            <h4 className={s.card__description__title}>{description}</h4>
+            <Title Tag='h4' variant='title' className={s.card__description__title}>{description}</Title>
           </div>
         )}
 

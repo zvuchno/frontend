@@ -13,7 +13,7 @@ type Story = StoryObj<typeof CardArtist>;
 export const DefaultCardArtist: Story = {
   render: () => {
     return (
-      <CardArtist />
+      <CardArtist hasButton={false} />
     )
   }
 };
@@ -23,6 +23,7 @@ export const CardArtistWithImage: Story = {
     return (
       <CardArtist
         image="https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg"
+        hasButton={false}
       />
     )
   }
@@ -34,7 +35,6 @@ export const FullCardArtist: Story = {
       <CardArtist
         image="https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg"
         description="Один манул"
-        onClick={() => console.log('Like')}
       />
     )
   }
