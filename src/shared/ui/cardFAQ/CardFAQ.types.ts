@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export interface AccordeonCardUIProps {
+export interface CardFAQUIProps {
   label: ReactNode;
   trigger: ReactNode;
   children: ReactNode;
@@ -8,6 +8,4 @@ export interface AccordeonCardUIProps {
   labelClassName?: string;
   triggerClassName?: string;
   contentClassName?: string;
-  isOpen?: boolean;
-  onClick: () => void;
 }

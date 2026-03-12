@@ -1,4 +1,4 @@
-.accordeon__container {
+.cardFAQ__container {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -10,7 +10,7 @@
   background-color: var(--background);
 }
 
-.accordeon__wrapper {
+.cardFAQ__wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -21,7 +21,7 @@
   border: none;
 }
 
-.accordeon__label {
+.cardFAQ__label {
   background-color: inherit;
   height: 100%;
   font-family: 'Feature Mono', monospace;
@@ -30,7 +30,7 @@
   line-height: 20px;
 }
 
-.accordeon__trigger {
+.cardFAQ__trigger {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,7 +44,7 @@
   }
 }
 
-.accordeon__content {
+.cardFAQ__content {
   height: 100%;
   background-color: inherit;
   border: none;
