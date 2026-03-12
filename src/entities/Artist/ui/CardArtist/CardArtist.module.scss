@@ -49,6 +49,7 @@
   height: 328px;
   background-color: var(--color-accent-blue);
   border: 1px solid var(--outline-color);
+  font-family: var(--font-better-vcr);
 
   &__image {
     width: 100%;
@@ -81,12 +82,9 @@
     z-index: 3;
 
     &__title {
-      font-family: var(--font-better-vcr);
-      font-weight: 400;
       font-size: 24px;
-      line-height: 100%;
-      text-transform: uppercase;
-      color: var(--color-text-primary);
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 }
