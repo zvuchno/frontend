@@ -1,0 +1,31 @@
+.link {
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-feature-mono), monospace;
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+}
+
+.link--basic:hover {
+  color: var(--color-primary-blue);
+}
+
+.link--outlined {
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.625rem 1.25rem;
+  border-radius: 36px;
+  background-color: var(--outline-color);
+  color: var(--color-text-inverse);
+  text-decoration: none;
+}
+
+.link--outlined:hover {
+  background-color: var(--color-accent-blue);
+  color: var(--color-text-primary);
+}
