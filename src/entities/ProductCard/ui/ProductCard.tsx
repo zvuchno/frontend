@@ -22,6 +22,7 @@ export const ProductCard: FC<TProductCardProps> = ({
         alt={image.alt}
         width={327}
         height={327}
+        sizes="327px"
       />
       {likeButton ? (
         <div className={styles.likeButton}>{likeButton}</div>
