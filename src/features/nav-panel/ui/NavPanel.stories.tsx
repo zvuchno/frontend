@@ -35,11 +35,6 @@ const meta = {
   },
   tags: ["autodocs"],
   decorators: [previewDecorator],
-  argTypes: {
-    isCatalogOpen: {
-      control: "boolean",
-    },
-  },
 } satisfies Meta<typeof NavPanel>;
 
 export default meta;
@@ -48,8 +43,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Closed: Story = {};
 
-export const CatalogOpen: Story = {
+export const DropdownOpen: Story = {
   args: {
-    isCatalogOpen: true,
+    defaultOpenItemId: "catalog",
   },
+  render: (args) => <NavPanel key={String(args.defaultOpenItemId)} {...args} />,
 };
