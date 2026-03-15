@@ -14,7 +14,8 @@ const config: StorybookConfig = {
   ],
   "framework": "@storybook/nextjs-vite",
   "staticDirs": [
-    "..//public"
+    "..//public",
+    { from: "../src/app/fonts", to: "/fonts" }
   ]
 };
 export default config;
