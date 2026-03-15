@@ -35,3 +35,9 @@ export default meta;
 type Story = StoryObj<typeof AddImageBlock>;
 
 export const Default: Story = {};
+
+export const WithSeveralImages: Story = {
+  args: {
+    severalImages: true
+  }
+}

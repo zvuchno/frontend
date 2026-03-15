@@ -6,17 +6,18 @@ import { ButtonUI } from "@/shared/ui/button";
 import { type AddImageBlockProps } from "./AddImageBlock.types";
 
 export const AddImageBlock: React.FC<AddImageBlockProps> = ({ 
-  
+  severalImages = false
 }: AddImageBlockProps) => {
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [preview, setPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const additionalInputsRef = useRef<Record<string, HTMLInputElement | null>>({});
+  const [mainPreview, setMainPreview] = useState<string | null>(null);
+  const [additionalPreviews, setAdditionalPreviews] = useState<Record<string, string>>({});
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      console.log('add File: ', objectUrl);
-      setPreview(objectUrl);
+  const handleMainFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    const objectUrl = URL.createObjectURL(file);
+    setMainPreview(objectUrl);
     }
   };
 
@@ -24,12 +25,46 @@ export const AddImageBlock: React.FC<AddImageBlockProps> = ({
     fileInputRef.current?.click();
   };
 
+  const handleAdditionalFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setAdditionalPreviews((prev) => ({ ...prev, [id]: url }));
+    }
+  };
+
+  const renderAdditionalInputs = (id: string) => {
+    const hasImage = !!additionalPreviews[id];
+    
+    return (
+      <div 
+        key={id}
+        className={styles.addImage__additionalInput}
+        style={
+          { 
+            backgroundImage: hasImage ? `url(${additionalPreviews[id]})` : "url('/plus-sign.svg" ,
+            backgroundSize: hasImage ? 'contain' : 'auto' 
+          }    
+        }
+        onClick={() => additionalInputsRef.current[id]?.click()}
+      >      
+        <input
+          type="file"
+          ref={(el) => {(additionalInputsRef.current[id] = el)}}
+          onChange={(e) => handleAdditionalFileChange(e, id)}
+          accept="image/*"
+          hidden
+        />
+      </div>
+    );
+  };
+
   return (
     <div className={styles.addImage__container}>
       <div 
         className={styles.addImage__previewContainer} 
         style={{ 
-            backgroundImage: preview ? `url(${preview})` : "url('/bg-image.png')" }}
+            backgroundImage: mainPreview ? `url(${mainPreview})` : "url('/bg-image.png')" }}
       >
         <label
           htmlFor="image-upload"
@@ -50,11 +85,18 @@ export const AddImageBlock: React.FC<AddImageBlockProps> = ({
         <input 
           type="file" 
           ref={fileInputRef}
-          onChange={handleFileChange}
+          onChange={handleMainFileChange}
           accept="image/*"
           className={styles.addImage__input}
         />
       </div>
+
+      {severalImages && (
+        <div className={styles.addImage__additionalInputsWrapper}>
+          {['side1', 'side2', 'side3'].map((id) => renderAdditionalInputs(id))}
+        </div>
+      )}
+      
       <div className={styles.addImage__requirements}>
         <div className={styles.addImage__requirementsWrapper}>  
           <p>Требования к загрузке обложки:</p>

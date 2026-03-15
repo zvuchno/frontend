@@ -19,7 +19,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  border: 1px solid var(--color-bg-secondary);
+  border: 1px solid var(--color-text-primary);
   font-family: var(--font-feature-mono);
   font-weight: 500;
   font-size: 16px;
@@ -81,4 +81,23 @@
     font-weight: bold;
     display: inline-block;
   }
+}
+
+.addImage__additionalInputsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 61px;
+  justify-content: center;
+  align-items: center;
+}
+
+.addImage__additionalInput {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border: 1px solid var(--color-text-primary);
+  background-repeat: no-repeat;
+  background-position: center;
 }
