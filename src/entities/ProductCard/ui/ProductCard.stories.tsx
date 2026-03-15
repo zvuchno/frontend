@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { ComponentType } from "react";
 
-import { ButtonLike } from "../../../features/ButtonLike";
+import { ButtonLike } from "../../../features";
 import { ProductCard } from "./ProductCard";
 
 const previewDecorator = (Story: ComponentType) => (
@@ -46,7 +46,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     image: {
-      src: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_675ecaaece410104475048da_675ef0290659d0610d0cd3f8/scale_1200",
+      src: "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e",
       alt: "Snowy night cover art",
     },
     title: "ОДИН МАНУЛ",
@@ -61,7 +61,7 @@ export const Default: Story = {
 export const Liked: Story = {
   args: {
     image: {
-      src: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_675ecaaece410104475048da_675ef0290659d0610d0cd3f8/scale_1200",
+      src: "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e",
       alt: "Snowy night cover art",
     },
     title: "ОДИН МАНУЛ",
@@ -76,7 +76,7 @@ export const Liked: Story = {
 export const LongText: Story = {
   args: {
     image: {
-      src: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_675ecaaece410104475048da_675ef0290659d0610d0cd3f8/scale_1200",
+      src: "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e",
       alt: "Snowy night cover art",
     },
     title: "ОДИН МАНУЛ DELUXE EDITION",
