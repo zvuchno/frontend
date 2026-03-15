@@ -1,0 +1,20 @@
+.navPanel {
+  display: inline-flex;
+  gap: 24px;
+}
+
+.placeholder {
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-feature-mono), monospace;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.625rem 1.25rem;
+  border-radius: 36px;
+  background-color: var(--outline-color);
+  color: var(--color-text-inverse);
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+}
