@@ -1,0 +1,84 @@
+.addImage__container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
+  align-items: center;
+}
+
+.addImage__previewContainer {
+  width: 306px;
+  min-width: 306px;
+  height: 306px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+//   background-image: url('/bg-image.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid var(--color-bg-secondary);
+  font-family: var(--font-feature-mono);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: var(--color-text-primary);
+}
+
+.addImage__label {
+  font-family: inherit;
+}
+
+.addImage__button {
+  max-width: 204px;
+}
+
+.addImage__buttonText {
+  font-family: var(--font-feature-mono) !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  letter-spacing: -0.04em !important;
+}
+
+.addImage__input {
+  display: none;
+}
+
+.addImage__requirements {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 30px;
+  font-family: var(--font-feature-mono);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: var(--color-bg-secondary)
+}
+
+.addImage__requirementsWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.addImage__markerPoint {
+  position: relative;
+  padding-left: 20px;
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: -0.04em;
+  line-height: 16px;
+
+  &::before {
+    content: "•";
+    position: absolute;
+    left: 7px;
+    font-weight: bold;
+    display: inline-block;
+  }
+}
