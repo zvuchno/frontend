@@ -6,21 +6,27 @@ import { NavPanel } from "./NavPanel";
 const previewDecorator = (Story: ComponentType) => (
   <div
     style={{
-      minHeight: "320px",
-      padding: "0 0 160px",
+      minHeight: "360px",
       overflow: "hidden",
     }}
   >
     <div
       style={{
-        height: "92px",
-        paddingTop: "28px",
+        height: "36px",
       }}
     />
-    <Story />
     <div
       style={{
-        marginTop: "48px",
+        padding: "18px",
+        border: "2px solid #100f0d",
+        background: "#0046D3",
+      }}
+    >
+      <Story />
+    </div>
+    <div
+      style={{
+        marginTop: "40px",
         height: "220px",
       }}
     />
