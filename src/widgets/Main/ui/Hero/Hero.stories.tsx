@@ -23,6 +23,7 @@ const meta: Meta<typeof HeroUI> = {
           `}
         </style>
         <div style={{ 
+            'width': '1368px',
           '--font-feature-mono': "'Feature Mono Custom', monospace",
           '--font-better-vcr': "'Better VCR Custom', sans-serif"
         } as CSSProperties}>
