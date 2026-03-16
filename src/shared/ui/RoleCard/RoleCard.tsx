@@ -3,12 +3,12 @@ import { Text, Title } from "../Typography/Typography";
 import s from './RoleCard.module.scss';
 import { RoleCardProps } from "./RoleCard.type";
 
-const RoleCard = ({ title, description, image }: RoleCardProps) => {
+const RoleCard = ({ path, title, description, image }: RoleCardProps) => {
 
   const imageSrc = typeof image === 'string' ? image : image.src;
-  
+
   return (
-    <Link href={''} aria-label={`Перейти к роли: ${title}`} className={s.link}>
+    <Link href={path} aria-label={`Перейти к роли: ${title}`} className={s.link}>
       <div className={s.card}>
         <div className={s.card__image}>
           <img

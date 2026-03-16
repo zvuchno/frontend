@@ -16,7 +16,8 @@ const shirtImage = './src/shared/assets/images/shirt.png';
 export const Card: Story = {
   render: () => {
     return (
-      <RoleCard 
+      <RoleCard
+        path=""
         image={cassetteImage} 
         title="Как испольнитель" 
         description="Продавай мерч, делись новыми релизами и общайся со своими фанатами"
@@ -28,7 +29,7 @@ export const Card: Story = {
 export const CardWithoutDescription: Story = {
   render: () => {
     return (
-      <RoleCard image={shirtImage} title="Загрузить мерч"/>
+      <RoleCard path="" image={shirtImage} title="Загрузить мерч"/>
     )
   }
 };
