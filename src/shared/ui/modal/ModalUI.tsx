@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import styles from './modal.module.scss';
 import { TModalUIProps } from './types'
 import { CloseButtonIconX } from '../icons/closeButtonIconX';
@@ -13,6 +13,19 @@ export const ModalUI: FC<TModalUIProps>  = (
     onClose
   }) => {
     if (!isOpen) return;
+    const handleEsc = useCallback((e: KeyboardEvent) => {
+      e.key === 'Escape' && onClose();
+    }, [onClose]);
+
+    useEffect(() => {
+      if(isOpen) {
+      document.addEventListener('keydown', handleEsc);
+      }
+        
+      return () => {
+        document.removeEventListener('keydown', handleEsc);
+      }
+    }, [isOpen, handleEsc]);
     
     return (
       <div className={styles.overlay} onClick={onClose}>
@@ -23,7 +36,7 @@ export const ModalUI: FC<TModalUIProps>  = (
               : <CloseButtonIconX />
             }
           </button>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalContent}>
             {children}
           </div>
         </div>

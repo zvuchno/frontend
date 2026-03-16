@@ -32,17 +32,6 @@ const ModalDemo = ({ children, closeButtonStyle }: { children: React.ReactNode, 
       }
     }
   }, [isOpen]);
-  
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      e.key === 'Escape' && setIsOpen(false);
-    };
-    document.addEventListener('keydown', handleEsc);
-
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-    };
-  }, [isOpen]);
 
   return (
     <div 
