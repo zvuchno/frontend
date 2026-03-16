@@ -1,0 +1,110 @@
+import { forwardRef, useState, FormEvent, ChangeEvent } from 'react';
+import { Text } from '@/shared/ui/Typography/Typography';
+import s from './SearchInput.module.scss';
+import { SearchInputProps } from './SearchInput.type';
+
+const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
+  ({ 
+    value, 
+    placeholder = 'Найти товары', 
+    label,
+    onChange, 
+    onSubmit,
+    onClear,
+    className,
+    disabled = false 
+  }, ref) => {
+    const [localValue, setLocalValue] = useState('');
+
+    const isControlled = value !== undefined;
+    const inputValue = isControlled ? value : localValue;
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      
+      if (!isControlled) {
+        setLocalValue(newValue);
+      }
+      
+      if (onChange) {
+        onChange(newValue);
+      }
+    };
+
+    const handleSubmit = (e: FormEvent) => {
+      e.preventDefault();
+      if (onSubmit) {
+        onSubmit(inputValue);
+      }
+    };
+
+    const handleClear = () => {
+      if (!isControlled) {
+        setLocalValue('');
+      }
+      if (onClear) {
+        onClear();
+      }
+      if (onChange) {
+        onChange('');
+      }
+    };
+
+    return (
+      <div className={s['search-input']}>
+        {label && (
+          <Text
+            Tag="label"
+            variant="normal"
+            className={s['search-input__label']}
+          >
+            {label}
+          </Text>
+        )}
+        
+        <div className={s['search-input__wrapper']}>
+          <form className={s['search-input__field']} onSubmit={handleSubmit}>
+            <input
+              ref={ref}
+              type="text"
+              className={s['search-input__input']}
+              placeholder={placeholder}
+              value={inputValue}
+              onChange={handleChange}
+              disabled={disabled}
+              autoComplete="off"
+            />
+          </form>
+          
+          <button 
+            type="button"
+            className={s['search-input__button']}
+            onClick={handleClear}
+            disabled={disabled}
+            aria-label="Очистить поиск"
+          >
+            <svg 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2" fill="none"/>
+              <path 
+                d="M15 9L9 15M9 9L15 15" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    );
+  }
+);
+
+SearchInput.displayName = 'SearchInput';
+
+export default SearchInput;
