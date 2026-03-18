@@ -12,10 +12,10 @@ const meta: Meta<typeof RoleSelectBlock> = {
 export default meta;
 type Story = StoryObj<typeof RoleSelectBlock>;
 
-const cassetteImage = './src/shared/assets/images/cassette.png';
-const shirtImage = './src/shared/assets/images/shirt.png';
-const earpiecesImage = './src/shared/assets/images/earpieces.png';
-const recordImage = './src/shared/assets/images/record.png';
+const cassetteImage = '/cassette.png';
+const shirtImage = '/shirt.png';
+const earpiecesImage = '/earpieces.png';
+const recordImage = '/record.png';
 
 export const RoleSelectBlockInModal: Story = {
   render: () => {
