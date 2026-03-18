@@ -1,20 +1,14 @@
 import { Link } from '@/shared/ui/Link/Link';
 import { Text } from '@/shared/ui/Typography/Typography';
 import s from './Footer.module.scss';
-import { FooterLink, FooterProps } from './Footer.type';
+import { FooterProps } from './Footer.type';
+import {defaultLinks} from '@/shared/constants/routes'
 
-const defaultLinks: FooterLink[] = [
-  { label: 'Контакты', href: '/contacts' },
-  { label: 'Каталог', href: '/catalog' },
-  { label: 'Для артистов', href: '/for-artists' },
-  { label: 'Для фанатов', href: '/for-fans' },
-  { label: 'Условия использования', href: '/terms' },
-];
 
 const Footer = ({ 
   links = defaultLinks, 
   telegramUrl = 'https://t.me/zvuchno', 
-  copyright = '© 2025 «ЗВУЧНО»',
+  copyright = '© 2026 «ЗВУЧНО»',
   className 
 }: FooterProps) => {
   return (
