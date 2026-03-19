@@ -1,4 +1,4 @@
-import { forwardRef, useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { Text } from "@/shared/ui/Typography/Typography";
 import s from "./SearchInput.module.scss";
 import { SearchInputProps } from "./SearchInput.type";
@@ -6,7 +6,7 @@ import { SearchInputProps } from "./SearchInput.type";
 const SearchInput = ({
   placeholder = "Найти товары",
   label,
-  onSubmit,
+  onClose,
   className,
   disabled = false,
 }: SearchInputProps) => {
@@ -16,17 +16,16 @@ const SearchInput = ({
     setValue(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (onSubmit) {
-      onSubmit(value);
-    }
-  };
-
   const handleClear = () => {
     setValue("");
   };
 
+ const handleClose = (e: FormEvent) => {
+     setValue("");
+    if (onClose) {
+      onClose();
+    }
+  };
   return (
     <div className={s["search-input"]}>
       {label && (
@@ -36,7 +35,6 @@ const SearchInput = ({
       )}
 
       <div className={s["search-input__wrapper"]}>
-        <form className={s["search-input__field"]} onSubmit={handleSubmit}>
           <input
             type="text"
             className={s["search-input__input"]}
@@ -46,14 +44,12 @@ const SearchInput = ({
             disabled={disabled}
             autoComplete="off"
           />
-        </form>
-
         <button
           type="button"
           className={s["search-input__button"]}
-          onClick={handleClear}
+          onClick={handleClose}
           disabled={disabled || !value}
-          aria-label="Очистить поиск"
+          aria-label="Закрыть поиск"
         >
           <svg
             width="24"

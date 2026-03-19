@@ -3,7 +3,7 @@ export interface SearchInputProps {
   placeholder?: string;
   label?: string;
   onChange?: (value: string) => void;
-  onSubmit?: (value: string) => void;
+  onClose?: () => void;
   onClear?: () => void;
   className?: string;
   disabled?: boolean;
