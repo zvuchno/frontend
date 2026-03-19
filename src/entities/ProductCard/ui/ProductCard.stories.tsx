@@ -17,6 +17,9 @@ const previewDecorator = (Story: ComponentType) => (
   </div>
 );
 
+const imageSrc =
+  "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e";
+
 const meta = {
   title: "entities/ProductCard",
   component: ProductCard,
@@ -45,10 +48,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    image: {
-      src: "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e",
-      alt: "Snowy night cover art",
-    },
+    image: imageSrc,
     title: "ОДИН МАНУЛ",
     description: "Винил ОДИН МАНУЛ (LP, 2025)",
     price: "1 000 ₽",
@@ -60,10 +60,7 @@ export const Default: Story = {
 
 export const Liked: Story = {
   args: {
-    image: {
-      src: "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e",
-      alt: "Snowy night cover art",
-    },
+    image: imageSrc,
     title: "ОДИН МАНУЛ",
     description: "Винил ОДИН МАНУЛ (LP, 2025)",
     price: "1 000 ₽",
@@ -75,10 +72,7 @@ export const Liked: Story = {
 
 export const LongText: Story = {
   args: {
-    image: {
-      src: "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e",
-      alt: "Snowy night cover art",
-    },
+    image: imageSrc,
     title: "ОДИН МАНУЛ DELUXE EDITION",
     description: "Винил ОДИН МАНУЛ Deluxe Gatefold Edition (LP, 2025)",
     price: "12 500 ₽",

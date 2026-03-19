@@ -18,8 +18,8 @@ export const ProductCard: FC<TProductCardProps> = ({
     <div className={styles.media}>
       <Image
         className={styles.image}
-        src={image.src}
-        alt={image.alt}
+        src={image}
+        alt={title}
         width={327}
         height={327}
         sizes="327px"
