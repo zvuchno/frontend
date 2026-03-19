@@ -1,15 +1,6 @@
-export type NavPanelDropdownItem = {
-  id: string;
-  href: string;
-  label: string;
-};
-
-export type NavPanelItem = NavPanelDropdownItem & {
-  dropdownItems?: readonly NavPanelDropdownItem[];
-};
+import type { MainNavRoute } from "@/shared/constants/routes";
 
 export type NavPanelProps = {
   className?: string;
-  items?: readonly NavPanelItem[];
-  defaultOpenItemId?: string;
+  items?: readonly MainNavRoute[];
 };

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { ComponentType } from "react";
 
+import { mainNavRoutes } from "@/shared/constants/routes";
+
 import { NavPanel } from "./NavPanel";
 
 const previewDecorator = (Story: ComponentType) => (
@@ -41,17 +43,13 @@ const meta = {
   },
   tags: ["autodocs"],
   decorators: [previewDecorator],
+  args: {
+    items: mainNavRoutes,
+  },
 } satisfies Meta<typeof NavPanel>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Closed: Story = {};
-
-export const DropdownOpen: Story = {
-  args: {
-    defaultOpenItemId: "catalog",
-  },
-  render: (args) => <NavPanel key={String(args.defaultOpenItemId)} {...args} />,
-};
+export const Default: Story = {};

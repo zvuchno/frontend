@@ -1,11 +1,16 @@
 .link {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
   font-family: var(--font-feature-mono), monospace;
   color: var(--color-text-primary);
   font-size: 1.25rem;
   text-decoration: none;
   font-weight: 600;
+  cursor: pointer;
   transition:
     color 0.2s ease,
     background-color 0.2s ease,
@@ -31,4 +36,67 @@
   background-color: var(--color-accent-blue);
   color: var(--color-text-primary);
   border-color: var(--color-accent-blue);
+}
+
+.linkWithItems {
+  position: relative;
+  display: inline-flex;
+}
+
+.linkWithItems:hover>.link--outlined,
+.linkWithItems:focus-within>.link--outlined {
+  border-color: var(--color-accent-blue);
+}
+
+.linkWithItems:hover .linkDropdown,
+.linkWithItems:focus-within .linkDropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.linkDropdown {
+  position: absolute;
+  top: calc(100% + 0.625rem);
+  left: 50%;
+  z-index: 10;
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.75rem;
+  background: var(--background);
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, -0.25rem);
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease,
+    transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.linkDropdown::before {
+  content: "";
+  position: absolute;
+  top: -0.625rem;
+  left: 0;
+  right: 0;
+  height: 0.625rem;
+}
+
+.linkDropdownItem {
+  justify-content: center;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: -0.06em;
+}
+
+.linkDropdownItem:hover,
+.linkDropdownItem:focus-visible {
+  color: var(--color-primary-blue);
 }
