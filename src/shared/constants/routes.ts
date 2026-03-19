@@ -1,4 +1,7 @@
-import { FooterLink} from '@/widgets/layout/ui/Footer/Footer.type';
+export type FooterLink = {
+  label: string;
+  href: string;
+};
 export const defaultLinks: FooterLink[] = [
   { label: 'Контакты', href: '/contacts' },
   { label: 'Каталог', href: '/catalog' },
