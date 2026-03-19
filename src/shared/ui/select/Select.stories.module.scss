@@ -2,8 +2,8 @@
   width: 240px;
 }
 
-.width134 {
-  width: 134px;
+.width136 {
+  width: 136px;
 }
 
 .borderRadius36 {
@@ -12,6 +12,13 @@
 
 .fontSize16 {
   font-size: 16px;
+}
+
+.itemOnLoadingMerch {
+  &:hover, &_selected {
+    background-color: transparent;
+    outline: none;
+  }
 }
 
 .containerOnPersonalAccountPage {
@@ -23,20 +30,15 @@
   border-width: 1px;
   border-radius: 0;
   padding-block: 9px;
-  &[data-placeholder] { color: var(--color-text-primary); }
-}
+  margin-bottom: 7px;
 
-.itemOnLoadingMerch {
-  &:hover, &[data-highlighted] {
-    background-color: transparent;
-    outline: none;
+  &_placeholder {
+    color: var(--color-text-primary); 
   }
 }
 
 .itemListOnPersonalAccountPage {
-  padding: 0px;
-  height: 104px;
-  overflow: hidden;
+  padding: 7px;
   gap: 12px;
   border-width: 1px;
   border-radius: 0;
@@ -46,10 +48,14 @@
 .itemOnPersonalAccountPage {
   padding-block: 7px;
   border-radius: 0;
-  border: none;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
+  font-family: 'Feature Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.04em;
 
-  &:hover, &[data-highlighted] {
+  &[aria-selected="true"], &:hover {
     background-color: var(--color-bg-main);
   }
 }

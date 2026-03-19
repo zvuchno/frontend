@@ -1,0 +1,55 @@
+.productCard {
+  display: grid;
+  gap: 12px;
+  inline-size: min(100%, 327px);
+  color: var(--color-text-primary);
+}
+
+.media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.likeButton {
+  position: absolute;
+  inset-block-start: 24px;
+  inset-inline-end: 24px;
+  z-index: 1;
+}
+
+.content {
+  display: grid;
+  gap: 4px;
+}
+
+.title,
+.description,
+.price {
+  margin: 0;
+  font-family: var(--font-better-vcr), monospace;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.description {
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.price {
+  margin-block-start: 8px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center;
+}

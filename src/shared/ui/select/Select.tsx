@@ -1,24 +1,23 @@
-'use client';
+// 'use client';
+import React, { useState, useId } from 'react';
 import clsx from 'clsx';
-import type {CustomSelectUIProps} from './Select.types';
+import type { SelectUIProps } from './Select.types';
 import styles from './Select.module.scss';
-import * as Select from '@radix-ui/react-select';
-import * as ScrollArea from '@radix-ui/react-scroll-area';
 
-const ShevronIcon = () => (
-  <svg 
-    width="100%" height="100%" viewBox="0 0 24 24" 
-    fill="none" stroke="currentColor" strokeWidth="1"
-  >
-    <path d="M6 9l6 6 6-6" />
+
+
+const defaultSelectIcon: React.ReactNode =  (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 6L10 13L17 6" stroke="#100F0D" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 
-export const CustomSelectUI = ({
+export const SelectUI = ({
   options,
   value,
   onChange,
   label,
+  icon = defaultSelectIcon, 
   name,
   placeholder = 'Выберите...',
   disabled,
@@ -27,48 +26,88 @@ export const CustomSelectUI = ({
   selectClassName,
   iconClassName,
   labelClassName,
-  itemListClassName,
-  itemClassName,
-  itemTextClassName,
-}: CustomSelectUIProps) => {
-  
+  contentClassName,
+  optionClassName,
+}: SelectUIProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const id = useId();
+
+  const selectedLabel = options.find((opt) => opt.value === value)?.label;
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') setIsOpen(false);
+  };
+
+  const handleOptionClick = (val: string) => {
+    if (disabled) return;
+    onChange(val); 
+    setIsOpen(false);
+  };
+
   return (
-    <div className={clsx(styles.customSelect__container, containerClassName)}>
-      {label && <label className={clsx(styles.customSelect__label, labelClassName)}>{label}</label>}
+    <div 
+      className={clsx(styles.select__container, containerClassName)} 
+    >
+      {!!label && (
+        <label className={clsx(styles.select__label, labelClassName)} htmlFor={id}>
+          {label}
+        </label>
+      )}
 
-      <Select.Root value={value} onValueChange={onChange} disabled={disabled} required={required} name={name}>
-        <Select.Trigger 
-          className={clsx(styles.customSelect__trigger, selectClassName)}
+      <div className={styles.select__wrapper}>
+        {/* Нативный селект визуально скрыт от пользователя, но работает для форм */}
+        <select
+          id={id}
+          value={value}
+          name={name}
+          required={required}
+          disabled={disabled}
+          onChange={(e) => onChange(e.target.value)}
+          className={styles.select__select_visuallyHidden}
+        ></select>
+
+        {/* Tо, что видит пользователь вместо нативного селекта */}
+        <div
+          role="button"
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          className={clsx(
+            styles.select__select, 
+            selectClassName, 
+            { [styles.select__select_disabled]: disabled }
+          )}
+          onClick={() => !disabled && setIsOpen((prev) => !prev)}
+          onKeyDown={handleKeyDown}
         >
-          <Select.Value placeholder={placeholder} />
-          <Select.Icon className={clsx(styles.customSelect__icon, iconClassName)}>
-            <ShevronIcon />
-          </Select.Icon>
-        </Select.Trigger>
+          <span className={clsx({[styles.select__select_placeholder]: !selectedLabel})}>
+            {selectedLabel ?? placeholder}
+          </span>
+          <div className={clsx(styles.select__icon, iconClassName, { [styles.select__icon_rotated]: isOpen })}>
+            {icon}
+          </div>
+        </div>
 
-        <Select.Portal>
-          <Select.Content className={clsx(styles.customSelect__content, itemListClassName)} position="popper" sideOffset={4}>
-            <ScrollArea.Root className={styles.scrollArea__root} type="auto">
-              <Select.Viewport asChild>
-                <ScrollArea.Viewport className={styles.scrollArea__viewport}>
-                  {options.map((opt) => (
-                    <Select.Item key={opt.value} value={opt.value} className={clsx(styles.customSelect__item, itemClassName)}>
-                      <Select.ItemText className={clsx(styles.customSelect__itemText, itemTextClassName)}>{opt.label}</Select.ItemText>
-                    </Select.Item>
-                  ))}
-                </ScrollArea.Viewport>
-              </Select.Viewport>
-
-              <ScrollArea.Scrollbar 
-                className={styles.scrollArea__scrollbar} 
-                orientation="vertical"
-              >
-                <ScrollArea.Thumb className={styles.scrollArea__thumb} />
-              </ScrollArea.Scrollbar>
-            </ScrollArea.Root>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
+        {isOpen && !disabled && (
+          <div className={clsx(styles.select__content, contentClassName)}>
+            <ul role="listbox" className={styles.select__list}>
+              {options.map((opt) => (
+                <li
+                  key={opt.value}
+                  role="option"
+                  aria-selected={value === opt.value}
+                  className={clsx(
+                    styles.select__option, optionClassName,
+                    { [styles.select__option_selected]: value === opt.value }
+                  )}
+                  onClick={() => handleOptionClick(opt.value)}
+                >
+                  {opt.label}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
