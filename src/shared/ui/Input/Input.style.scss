@@ -39,7 +39,6 @@
       display: inline-block;
       font-size: 20px;
       font-weight: 700;
-      color: var(--color-text-accent-blue);
       line-height: 100%;
       letter-spacing: 0.6;
     }
@@ -69,27 +68,29 @@
 	&::placeholder {
 		font-size: 16px;
 		font-weight: 400;
-		line-height: 16px;
-		color: #A2A2A2;
+		line-height: 130%;
+		color: #161815;
+    opacity: 40%;
+    letter-spacing: -0.06em;
 	}
 }
 
 .message {
   position: absolute;
-  top: 104%;
+  top: 100%;
   font-family: var(--font-feature-mono);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 400;
-  color: #A2A2A2;
+  color: var(--color-primary-blue);
+  line-height: 140%;
+  letter-spacing: -0.06em;
+
 }
 
 .error {
 	&.input {
 		//outline: 2px solid red;
-		border: 1px solid #FD6D4A;
+		border: 1px solid var(--color-primary-blue);
 	}
 
-  &.message {
-    color: #FD6D4A;
-  }
 }

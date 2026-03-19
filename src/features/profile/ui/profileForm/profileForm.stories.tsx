@@ -1,47 +1,150 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn } from 'storybook/test';
-import { ProfileForm } from './ProfileForm';
-import React from 'react';
-import { ApiRequestStatus } from './types';
+import { ProfileFormUI } from './ProfileForm';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
-const container = (width: string) => {
-  return (Story: React.ComponentType) => (
-    <div style={{
-      width,
-      justifySelf: 'center',
-      border: '1px dotted #a3a3a3'
-    }}>
-      <Story />
-    </div>
-  )
-};
-
-const meta: Meta<typeof ProfileForm> = {
+const meta: Meta<typeof ProfileFormUI> = {
   title: 'features/ProfileForm',
-  component: ProfileForm,
+  component: ProfileFormUI,
   parameters: {
     layout: 'centered',
-    controls: { include: [] },
+    controls: { include: ['role'] },
   },
-  args: { onClick: fn() },
-  argTypes: {}
+  decorators: [
+    (Story, { args }) => {
+      const methods = useForm({
+        defaultValues: { 
+          name: '',
+          phone: '',
+          email: '',
+          password: '',
+          city: '',
+          url: ''
+        },
+      });
+      
+      useEffect(() => {
+        const timer = setTimeout(() => {
+          if (args.errors) {
+            Object.entries(args.errors).forEach(([name, error]: [any, any]) => {
+              methods.setError(name, {
+                type: error.type,
+                message: error.message
+              });
+            });
+          } else {
+            methods.clearErrors();
+          }
+        }, 0);
+
+        return () => clearTimeout(timer);
+      }, [args.errors, methods]);
+
+       useEffect(() => {
+        if (args.values) {
+          Object.entries(args.values).forEach(([name, value]) => {
+            methods.setValue(name as any, value);
+          });
+        }}, [args.values, methods])
+
+      return (
+        <FormProvider {...methods}>
+            <div style={{
+              width: 'clamp(200px, 58.2vw, 836px)',
+              justifySelf: 'center',
+              border: '1px dotted #a3a3a3',
+              fontFamily: 'BetterVCR, monospace'
+            }}>
+              <Story args={{ 
+            ...args, 
+            onSubmit: methods.handleSubmit(() =>
+              alert('Форма отправлена')
+            ) 
+          }} />
+            </div>
+        </FormProvider>
+      )
+    }
+  ]
 };
 
 export default meta;
 
-type StoryType = StoryObj<typeof ProfileForm>;
+type Story = StoryObj<typeof ProfileFormUI>;
 
-export const ProfileFormMain: StoryType = {
+export const ProfileFormNewUser: Story = {
   args: {
-    children: <div style={{width: '100%', height: '266px'}}></div>,
-    requestStatus: ApiRequestStatus.IDLE,
-    title: 'Профиль',
-    error: null,
-    onChange: () => {},
-    onSubmit: () => {},
-    noValidate: false,
+    role: 'artist',
+    isChecked: false,
+    isProfileNew: true
   },
-  argTypes: {},
-  decorators: [container('clamp(200px, 57.92vw, 834px)')]
+};
+
+export const ProfileFormCurrentUser: Story = {
+  args: {
+    role: 'artist',
+    isChecked: false,
+    isProfileNew: false,
+    values: { 
+      name: 'Иван Иванов', 
+      email: 'ivan@yandex.ru',
+      phone: '71111111111',
+      password: '11111111',
+      city: 'Moscow',
+      url: 'http://ivanov-ivan.ru'
+    }
+  },
+  render: (args) => {
+    const [isOnEdit, setIsOnEdit] = useState(args.isProfileNew);
+    return (
+      <ProfileFormUI 
+        {...args} 
+        isOnChange={isOnEdit} 
+        onEdit={() => setIsOnEdit(true)}
+      />
+    );
+  }
+};
+
+export const ProfileFormWithErrors: Story = {
+  args: {
+    role: 'artist',
+    isProfileNew: true,
+    values: { 
+      name: 'И', 
+      email: 'ivan@yandex.ru',
+      password: '11111111',
+      city: 'Moscow',
+      url: 'http://ivanov-ivan.ru'
+    },
+    errors: {
+      phone: {
+        type: 'required', 
+        message: 'Поле обязательно для заполнения'
+      },
+      name: {
+        type: 'required', 
+        message: 'Длина меньше допустимой'
+      },
+    } 
+  },
+};
+
+export const ProfileFormWithoutErrors: Story = {
+  args: {
+    role: 'artist',
+    isChecked: true,
+    isProfileNew: true,
+    isOnChange: false,
+    values: { 
+      name: 'Иван Иванов', 
+      email: 'ivan@yandex.ru',
+      phone: '71111111111',
+      password: '11111111',
+      city: 'Moscow',
+      url: 'http://ivanov-ivan.ru'
+    },
+    onSubmit: () => {alert('njbcjksdf')}
+  },
 };
 

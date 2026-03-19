@@ -17,6 +17,8 @@
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hook-form": "^7.71.2",
+    "react-imask": "^7.6.1",
     "sass": "^1.97.3"
   },
   "devDependencies": {
