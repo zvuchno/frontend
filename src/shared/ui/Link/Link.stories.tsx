@@ -37,3 +37,38 @@ export const Outlined: Story = {
     variant: "outlined",
   },
 };
+
+export const WithDropdown: Story = {
+  args: {
+    href: "/catalog",
+    children: "каталог",
+    items: [
+      {
+        id: "artists",
+        href: "/catalog/artists",
+        label: "артисты",
+      },
+      {
+        id: "merch",
+        href: "/catalog/merch",
+        label: "мерч",
+      },
+      {
+        id: "music",
+        href: "/catalog/music",
+        label: "музыка",
+      },
+    ],
+    variant: "outlined",
+  },
+  render: (args) => (
+    <div
+      style={{
+        minHeight: "220px",
+        padding: "40px",
+      }}
+    >
+      <Link {...args} />
+    </div>
+  ),
+};
