@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
 
-export type TOrderCardListenerPreview = {
+export type TOrderCardListenerPreviewItem = {
   src: string;
   title: string;
 };
@@ -12,6 +12,6 @@ export type TOrderCardListenerProps = Omit<
   orderNumber: number;
   itemsCount: number;
   totalPrice: number;
-  previewImages: readonly TOrderCardListenerPreview[];
+  previewItems: readonly TOrderCardListenerPreviewItem[];
   onDetailsClick: () => void;
 };

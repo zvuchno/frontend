@@ -1,5 +1,6 @@
 .orderCardListener {
   display: grid;
+  inline-size: min(100%, 50.625rem);
   gap: 2.5rem;
 }
 
@@ -15,6 +16,8 @@
 }
 
 .orderSummary {
+  margin: 0;
+  white-space: nowrap;
   color: var(--color-text-primary);
   font-family: var(--font-better-vcr), monospace;
   letter-spacing: -0.06em;
@@ -64,5 +67,11 @@
 }
 
 .detailsButton {
-  inline-size: 35%;
+  inline-size: min(100%, 17.75rem);
+}
+
+@media (width <=48rem) {
+  .detailsButton {
+    inline-size: 100%;
+  }
 }

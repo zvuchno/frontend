@@ -5,17 +5,12 @@ import type { FC } from "react";
 import { ButtonUI } from "@/shared/ui/button";
 
 import styles from "./OrderCardListener.module.scss";
-import type { TOrderCardListenerProps } from "./types";
+import type {
+  TOrderCardListenerPreviewItem,
+  TOrderCardListenerProps,
+} from "./types";
 
-const getOrderNumberLabel = (
-  orderNumber: TOrderCardListenerProps["orderNumber"],
-) => {
-  if (Number.isFinite(orderNumber)) {
-    return String(orderNumber);
-  }
-
-  return null;
-};
+const priceFormatter = new Intl.NumberFormat("ru-RU");
 
 const getItemsLabel = (itemsCount: number) => {
   const remainder100 = itemsCount % 100;
@@ -36,31 +31,11 @@ const getItemsLabel = (itemsCount: number) => {
   return "товаров";
 };
 
-const getItemsCountLabel = (
-  itemsCount: TOrderCardListenerProps["itemsCount"],
-) => {
-  if (
-    typeof itemsCount !== "number"
-    || !Number.isFinite(itemsCount)
-    || itemsCount < 0
-  ) {
-    return null;
-  }
-
-  return `${itemsCount} ${getItemsLabel(itemsCount)}`;
+const getPreviewItemKey = (previewItem: TOrderCardListenerPreviewItem) => {
+  return `${previewItem.src}-${previewItem.title}`;
 };
 
-const getTotalPriceLabel = (
-  totalPrice: TOrderCardListenerProps["totalPrice"],
-) => {
-  if (Number.isFinite(totalPrice)) {
-    return `${new Intl.NumberFormat("ru-RU").format(totalPrice)} ₽`;
-  }
-
-  return null;
-};
-
-const getOrderSummary = ({
+const formatOrderSummary = ({
   orderNumber,
   itemsCount,
   totalPrice,
@@ -68,33 +43,25 @@ const getOrderSummary = ({
   TOrderCardListenerProps,
   "orderNumber" | "itemsCount" | "totalPrice"
 >) => {
-  const orderNumberLabel = getOrderNumberLabel(orderNumber);
-  const itemsCountLabel = getItemsCountLabel(itemsCount);
-  const totalPriceLabel = getTotalPriceLabel(totalPrice);
-  const orderLabel = orderNumberLabel
-    ? `Заказ № ${orderNumberLabel}`
-    : "Заказ";
+  const itemsCountLabel = `${itemsCount} ${getItemsLabel(itemsCount)}`;
+  const totalPriceLabel = `${priceFormatter.format(totalPrice)} ₽`;
 
-  if (itemsCountLabel && totalPriceLabel) {
-    return `${orderLabel}: ${itemsCountLabel} на сумму ${totalPriceLabel}`;
-  }
-
-  return `${orderLabel}: детали уточняются`;
+  return `Заказ № ${orderNumber}: ${itemsCountLabel} на сумму ${totalPriceLabel}`;
 };
 
 export const OrderCardListener: FC<TOrderCardListenerProps> = ({
   orderNumber,
   itemsCount,
   totalPrice,
-  previewImages,
+  previewItems,
   onDetailsClick,
   className,
   ...articleProps
 }) => {
-  const normalizedPreviewImages = previewImages?.filter(
-    (previewImage) => previewImage.src.trim().length > 0,
-  ) ?? [];
-  const orderSummary = getOrderSummary({
+  const normalizedPreviewItems = previewItems.filter(
+    (previewItem) => previewItem.src.trim().length > 0,
+  );
+  const orderSummary = formatOrderSummary({
     orderNumber,
     itemsCount,
     totalPrice,
@@ -113,21 +80,21 @@ export const OrderCardListener: FC<TOrderCardListenerProps> = ({
         <ul
           className={styles.previewList}
           aria-label={
-            normalizedPreviewImages.length > 0
+            normalizedPreviewItems.length > 0
               ? "Превью товаров в заказе"
               : "Превью товаров недоступно"
           }
         >
-          {normalizedPreviewImages.length > 0 ? (
-            normalizedPreviewImages.map((previewImage, index) => (
+          {normalizedPreviewItems.length > 0 ? (
+            normalizedPreviewItems.map((previewItem) => (
               <li
-                key={`${previewImage.src}-${index}`}
+                key={getPreviewItemKey(previewItem)}
                 className={styles.previewItem}
               >
                 <Image
                   className={styles.previewImage}
-                  src={previewImage.src}
-                  alt={previewImage.title}
+                  src={previewItem.src}
+                  alt={previewItem.title.trim() || "Товар из заказа"}
                   width={136}
                   height={136}
                   sizes="8.5rem"
@@ -146,7 +113,6 @@ export const OrderCardListener: FC<TOrderCardListenerProps> = ({
         variant="secondary"
         size="medium"
         className={styles.detailsButton}
-        contentClassName={styles.detailsButtonContent}
         onClick={onDetailsClick}
       >
         Подробнее о заказе

@@ -7,20 +7,27 @@ import { OrderCardListener } from "./OrderCardListener";
 const previewDecorator = (Story: ComponentType) => (
   <div
     style={{
-      width: "min(100vw - 32px, 720px)",
-      padding: "24px",
-      background:
-        "linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(242, 242, 242) 100%)",
+      width: "min(calc(100% - 2rem), 50.625rem)",
+      padding: "1.5rem",
     }}
   >
     <Story />
   </div>
 );
 
-const basePreviewImages = [
-  { src: "/cassette.png", title: "Кассета Odin Manual" },
-  { src: "/record.png", title: "Винил Odin Manual" },
-  { src: "/shirt.png", title: "Футболка Odin Manual" },
+const basePreviewItems = [
+  {
+    src: "/cassette.png",
+    title: "Кассета Odin Manual",
+  },
+  {
+    src: "/record.png",
+    title: "Винил Odin Manual",
+  },
+  {
+    src: "/shirt.png",
+    title: "Футболка Odin Manual",
+  },
 ];
 
 const meta = {
@@ -49,10 +56,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    orderNumber: 2415,
+    orderNumber: 12124245,
     itemsCount: 3,
-    totalPrice: 12500,
-    previewImages: basePreviewImages,
+    totalPrice: 1289,
+    previewItems: basePreviewItems,
   },
 };
 
@@ -61,7 +68,7 @@ export const WithoutImages: Story = {
     orderNumber: 2416,
     itemsCount: 1,
     totalPrice: 4000,
-    previewImages: [],
+    previewItems: [],
   },
 };
 
@@ -70,11 +77,20 @@ export const WithALotOfItems: Story = {
     orderNumber: 452,
     itemsCount: 6,
     totalPrice: 18990,
-    previewImages: [
-      ...basePreviewImages,
-      { src: "/recordPlayer.png", title: "Проигрыватель Odin Manual" },
-      { src: "/cassette.png", title: "Кассета Live Session" },
-      { src: "/record.png", title: "Винил Deluxe Edition" },
+    previewItems: [
+      ...basePreviewItems,
+      {
+        src: "/recordPlayer.png",
+        title: "Проигрыватель Odin Manual",
+      },
+      {
+        src: "/cassette.png",
+        title: "Кассета Live Session",
+      },
+      {
+        src: "/record.png",
+        title: "Винил Deluxe Edition",
+      },
     ],
   },
 };
