@@ -1,0 +1,61 @@
+.width240 {
+  width: 240px;
+}
+
+.width136 {
+  width: 136px;
+}
+
+.borderRadius36 {
+  border-radius: 36px;
+}
+
+.fontSize16 {
+  font-size: 16px;
+}
+
+.itemOnLoadingMerch {
+  &:hover, &_selected {
+    background-color: transparent;
+    outline: none;
+  }
+}
+
+.containerOnPersonalAccountPage {
+  width: 240px;
+  gap: 3px;
+}
+
+.selectOnPersonalAccountPage {
+  border-width: 1px;
+  border-radius: 0;
+  padding-block: 9px;
+  margin-bottom: 7px;
+
+  &_placeholder {
+    color: var(--color-text-primary); 
+  }
+}
+
+.itemListOnPersonalAccountPage {
+  padding: 7px;
+  gap: 12px;
+  border-width: 1px;
+  border-radius: 0;
+  background-color: var(--color-bg-main);
+}
+
+.itemOnPersonalAccountPage {
+  padding-block: 7px;
+  border-radius: 0;
+  margin-bottom: 2px;
+  font-family: 'Feature Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+
+  &[aria-selected="true"], &:hover {
+    background-color: var(--color-bg-main);
+  }
+}

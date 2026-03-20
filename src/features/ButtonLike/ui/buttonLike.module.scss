@@ -1,0 +1,57 @@
+.buttonLike {
+  justify-content: center;
+  align-items: center;
+  inline-size: clamp(18px, 2.5vw, 36px);
+  block-size: clamp(18px, 2.5vw, 36px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-accent-blue);
+  cursor: pointer;
+  filter: drop-shadow(0 1px 2px rgba(16, 15, 13, 0.3));
+}
+
+.icon {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.iconAnimated {
+  animation: buttonLikePop 220ms ease-out;
+}
+
+.iconOutline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.iconFill {
+  fill: currentColor;
+  transition: fill 0.18s ease-out;
+}
+
+@keyframes buttonLikePop {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.16);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iconAnimated {
+    animation: none;
+  }
+
+  .iconOutline,
+  .iconFill {
+    transition: none;
+  }
+}
