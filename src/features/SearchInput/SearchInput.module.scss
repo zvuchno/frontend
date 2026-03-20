@@ -1,0 +1,129 @@
+.search-input {
+  width: 1368px;
+  height: 72px;
+  background: var(--color-accent-blue, #C2DFFF);
+  border-bottom: 2px solid var(--color-text-primary, #100F0D);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 16px 24px;
+
+  &__label {
+    font-family: var(--font-feature-mono), 'Feature Mono', monospace;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: -0.04em;
+    color: rgba(0, 0, 0, 0.48);
+    margin-bottom: 8px;
+  }
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  &__field {
+    width: 670px;
+    height: 40px;
+    background: #FFFFFF;
+    border: 2px solid #100F0D;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__input {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Feature Mono', monospace;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: -0.04em;
+    color: #100F0D !important;
+    -webkit-text-fill-color: #100F0D !important;
+    padding: 0 16px;
+    cursor: text;
+
+    &::placeholder {
+      font-family: 'Feature Mono', monospace;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 16px;
+      letter-spacing: -0.04em;
+      color: rgba(0, 0, 0, 0.48) !important;
+      -webkit-text-fill-color: rgba(0, 0, 0, 0.48) !important;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #100F0D;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    flex-shrink: 0;
+    padding: 0;
+    margin-left: 12px;
+
+    &:hover {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      pointer-events: none;
+    }
+  }
+}
+
+@media (max-width: 1440px) {
+  .search-input {
+    width: 100%;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-input {
+    height: auto;
+    padding: 12px;
+
+    &__field {
+      width: 100%;
+    }
+  }
+}
