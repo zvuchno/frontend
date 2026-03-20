@@ -11,8 +11,16 @@ interface LinkListProps {
   placeholder?: string;
   onAdd: () => void;
   onDelete: (id: string) => void;
+  onChange?: (id: string, value: string) => void;
   addLabel?: string;
 }
+
+const TrashIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20">
+    <path fill="#100f0d" d="M10.75 6.429c0-.395-.336-.715-.75-.715s-.75.32-.75.715v10c0 .394.336.714.75.714s.75-.32.75-.714zm-4.152-.714c.414-.014.762.294.777.688l.375 10c.014.394-.31.725-.723.74-.414.014-.762-.295-.777-.689l-.375-10c-.014-.394.31-.725.723-.74m7.527.74c.014-.394-.31-.725-.723-.74-.414-.013-.762.295-.776.69l-.375 10c-.015.393.308.724.722.738s.762-.294.776-.688z"/>
+    <path fill="#100f0d" fillRule="evenodd" d="M6.391 1.103a1.7 1.7 0 0 0-.141.684v1.07h-4.5c-.414 0-.75.32-.75.714 0 .395.336.715.75.715h.795l.894 13.612C3.504 19.066 4.429 20 5.688 20h8.625c1.27 0 2.174-.942 2.248-2.1l.894-13.614h.795c.414 0 .75-.32.75-.715s-.336-.714-.75-.714h-4.5v-1.07a1.7 1.7 0 0 0-.141-.684 1.8 1.8 0 0 0-.407-.58 1.9 1.9 0 0 0-.61-.388A2 2 0 0 0 11.874 0H8.126c-.246 0-.49.045-.718.135a1.9 1.9 0 0 0-.61.387 1.8 1.8 0 0 0-.407.58m1.732.326a.4.4 0 0 0-.264.103.35.35 0 0 0-.109.252v1.073h4.5V1.784a.34.34 0 0 0-.109-.252.37.37 0 0 0-.264-.103H8.123M7 4.286H4.048l.888 13.527v.008c.026.48.362.75.752.75h8.625c.386 0 .72-.264.75-.757l.889-13.528z" clipRule="evenodd"/>
+  </svg>
+);
 
 export const LinkList = ({
   title,
@@ -20,6 +28,7 @@ export const LinkList = ({
   placeholder = 'booking@gmail.com',
   onAdd,
   onDelete,
+  onChange,
   addLabel = '+ Добавить',
 }: LinkListProps) => {
   return (
@@ -34,7 +43,7 @@ export const LinkList = ({
               type="text"
               value={link.value}
               placeholder={placeholder}
-              readOnly
+              onChange={(e) => onChange?.(link.id, e.target.value)}
             />
             <button
               className={styles.deleteBtn}
@@ -42,7 +51,7 @@ export const LinkList = ({
               aria-label="Удалить ссылку"
               type="button"
             >
-              🗑
+              <TrashIcon />
             </button>
           </div>
         ))}
