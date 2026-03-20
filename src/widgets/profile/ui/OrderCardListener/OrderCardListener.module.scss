@@ -20,25 +20,15 @@
   gap: 8px;
 }
 
-.orderNumber,
-.orderMeta {
+.orderSummary {
   margin: 0;
   color: var(--color-text-primary);
   font-family: var(--font-feature-mono), monospace;
   letter-spacing: -0.06em;
   text-transform: uppercase;
-}
-
-.orderNumber {
   font-size: 28px;
   font-weight: 700;
-  line-height: 1;
-}
-
-.orderMeta {
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1;
+  line-height: 1.15;
 }
 
 .previewList {
@@ -70,6 +60,21 @@
   object-fit: cover;
 }
 
+.previewFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: var(--color-text-primary);
+  font-family: var(--font-feature-mono), monospace;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 @media (width <=768px) {
   .content {
     flex-direction: column;
@@ -91,12 +96,8 @@
     gap: 16px;
   }
 
-  .orderNumber {
+  .orderSummary {
     font-size: 20px;
-  }
-
-  .orderMeta {
-    font-size: 16px;
   }
 
   .previewItem {
