@@ -1,3 +1,14 @@
+export type FooterLink = {
+  label: string;
+  href: string;
+};
+export const defaultLinks: FooterLink[] = [
+  { label: 'Контакты', href: '/contacts' },
+  { label: 'Каталог', href: '/catalog' },
+  { label: 'Для артистов', href: '/artists' },
+  { label: 'Для фанатов', href: '/fans' },
+  { label: 'Условия использования', href: '/terms' },
+];
 import type { ComponentPropsWithoutRef } from "react";
 
 type NextLinkProps = ComponentPropsWithoutRef<
