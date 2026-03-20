@@ -10,12 +10,8 @@ import type { TOrderCardListenerProps } from "./types";
 const getOrderNumberLabel = (
   orderNumber: TOrderCardListenerProps["orderNumber"],
 ) => {
-  if (typeof orderNumber === "number" && Number.isFinite(orderNumber)) {
+  if (Number.isFinite(orderNumber)) {
     return String(orderNumber);
-  }
-
-  if (typeof orderNumber === "string" && orderNumber.trim().length > 0) {
-    return orderNumber.trim();
   }
 
   return null;
@@ -44,9 +40,9 @@ const getItemsCountLabel = (
   itemsCount: TOrderCardListenerProps["itemsCount"],
 ) => {
   if (
-    typeof itemsCount !== "number" ||
-    !Number.isFinite(itemsCount) ||
-    itemsCount < 0
+    typeof itemsCount !== "number"
+    || !Number.isFinite(itemsCount)
+    || itemsCount < 0
   ) {
     return null;
   }
@@ -57,12 +53,8 @@ const getItemsCountLabel = (
 const getTotalPriceLabel = (
   totalPrice: TOrderCardListenerProps["totalPrice"],
 ) => {
-  if (typeof totalPrice === "number" && Number.isFinite(totalPrice)) {
+  if (Number.isFinite(totalPrice)) {
     return `${new Intl.NumberFormat("ru-RU").format(totalPrice)} ₽`;
-  }
-
-  if (typeof totalPrice === "string" && totalPrice.trim().length > 0) {
-    return totalPrice.trim();
   }
 
   return null;
@@ -79,18 +71,12 @@ const getOrderSummary = ({
   const orderNumberLabel = getOrderNumberLabel(orderNumber);
   const itemsCountLabel = getItemsCountLabel(itemsCount);
   const totalPriceLabel = getTotalPriceLabel(totalPrice);
-  const orderLabel = orderNumberLabel ? `Заказ № ${orderNumberLabel}` : "Заказ";
+  const orderLabel = orderNumberLabel
+    ? `Заказ № ${orderNumberLabel}`
+    : "Заказ";
 
   if (itemsCountLabel && totalPriceLabel) {
     return `${orderLabel}: ${itemsCountLabel} на сумму ${totalPriceLabel}`;
-  }
-
-  if (itemsCountLabel) {
-    return `${orderLabel}: ${itemsCountLabel}`;
-  }
-
-  if (totalPriceLabel) {
-    return `${orderLabel} на сумму ${totalPriceLabel}`;
   }
 
   return `${orderLabel}: детали уточняются`;
@@ -105,9 +91,9 @@ export const OrderCardListener: FC<TOrderCardListenerProps> = ({
   className,
   ...articleProps
 }) => {
-  const normalizedPreviewImages =
-    previewImages?.filter((previewImage) => previewImage.trim().length > 0) ??
-    [];
+  const normalizedPreviewImages = previewImages?.filter(
+    (previewImage) => previewImage.src.trim().length > 0,
+  ) ?? [];
   const orderSummary = getOrderSummary({
     orderNumber,
     itemsCount,
@@ -135,17 +121,16 @@ export const OrderCardListener: FC<TOrderCardListenerProps> = ({
           {normalizedPreviewImages.length > 0 ? (
             normalizedPreviewImages.map((previewImage, index) => (
               <li
-                key={`${previewImage}-${index}`}
+                key={`${previewImage.src}-${index}`}
                 className={styles.previewItem}
               >
                 <Image
                   className={styles.previewImage}
-                  src={previewImage}
-                  alt=""
-                  aria-hidden="true"
-                  width={72}
-                  height={72}
-                  sizes="(max-width: 375px) 56px, 72px"
+                  src={previewImage.src}
+                  alt={previewImage.title}
+                  width={136}
+                  height={136}
+                  sizes="8.5rem"
                 />
               </li>
             ))
@@ -157,7 +142,13 @@ export const OrderCardListener: FC<TOrderCardListenerProps> = ({
         </ul>
       </div>
 
-      <ButtonUI variant="secondary" size="medium" onClick={onDetailsClick}>
+      <ButtonUI
+        variant="secondary"
+        size="medium"
+        className={styles.detailsButton}
+        contentClassName={styles.detailsButtonContent}
+        onClick={onDetailsClick}
+      >
         Подробнее о заказе
       </ButtonUI>
     </article>

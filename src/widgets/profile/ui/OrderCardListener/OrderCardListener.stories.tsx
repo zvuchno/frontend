@@ -17,7 +17,11 @@ const previewDecorator = (Story: ComponentType) => (
   </div>
 );
 
-const basePreviewImages = ["/cassette.png", "/record.png", "/shirt.png"];
+const basePreviewImages = [
+  { src: "/cassette.png", title: "Кассета Odin Manual" },
+  { src: "/record.png", title: "Винил Odin Manual" },
+  { src: "/shirt.png", title: "Футболка Odin Manual" },
+];
 
 const meta = {
   title: "widget/profile/ui/OrderCardListener",
@@ -45,36 +49,32 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    orderNumber: "2415",
+    orderNumber: 2415,
     itemsCount: 3,
-    totalPrice: "12 500 ₽",
+    totalPrice: 12500,
     previewImages: basePreviewImages,
   },
 };
 
 export const WithoutImages: Story = {
   args: {
-    orderNumber: "2416",
-    itemsCount: 2,
-    totalPrice: "4 000 ₽",
+    orderNumber: 2416,
+    itemsCount: 1,
+    totalPrice: 4000,
     previewImages: [],
   },
 };
 
-export const WithoutTotalPrice: Story = {
+export const WithALotOfItems: Story = {
   args: {
-    orderNumber: "2417",
-    itemsCount: 1,
-    totalPrice: null,
-    previewImages: ["/recordPlayer.png"],
-  },
-};
-
-export const WithLongOrderNumber: Story = {
-  args: {
-    orderNumber: "2026-03-20-LISTENER-ORDER-00000018452",
-    itemsCount: 4,
-    totalPrice: "18 990 ₽",
-    previewImages: basePreviewImages,
+    orderNumber: 452,
+    itemsCount: 6,
+    totalPrice: 18990,
+    previewImages: [
+      ...basePreviewImages,
+      { src: "/recordPlayer.png", title: "Проигрыватель Odin Manual" },
+      { src: "/cassette.png", title: "Кассета Live Session" },
+      { src: "/record.png", title: "Винил Deluxe Edition" },
+    ],
   },
 };
