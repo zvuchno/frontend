@@ -1,9 +1,5 @@
-import type { ReactNode } from "react";
-
 export type DefinitionProps = {
-  term: ReactNode;
-  description: ReactNode;
+  label: string | number;
+  value: string | number;
   className?: string;
-  termClassName?: string;
-  descriptionClassName?: string;
 };

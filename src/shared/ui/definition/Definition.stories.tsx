@@ -15,20 +15,10 @@ const meta = {
         disable: true,
       },
     },
-    termClassName: {
-      table: {
-        disable: true,
-      },
-    },
-    descriptionClassName: {
-      table: {
-        disable: true,
-      },
-    },
   },
   args: {
-    term: "Статус",
-    description: "Доставлен",
+    label: "Статус",
+    value: "Доставлен",
   },
 } satisfies Meta<typeof Definition>;
 

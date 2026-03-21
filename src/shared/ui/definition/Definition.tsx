@@ -3,21 +3,11 @@ import clsx from "clsx";
 import styles from "./Definition.module.scss";
 import type { DefinitionProps } from "./Definition.types";
 
-export function Definition({
-  term,
-  description,
-  className,
-  termClassName,
-  descriptionClassName,
-}: DefinitionProps) {
+export function Definition({ label, value, className }: DefinitionProps) {
   return (
     <div className={clsx(styles.definition, className)}>
-      <dt className={clsx(styles.definition__term, termClassName)}>{term}</dt>
-      <dd
-        className={clsx(styles.definition__description, descriptionClassName)}
-      >
-        {description}
-      </dd>
+      <dt className={styles.definition__term}>{label}</dt>
+      <dd className={styles.definition__description}>{value}</dd>
     </div>
   );
 }
