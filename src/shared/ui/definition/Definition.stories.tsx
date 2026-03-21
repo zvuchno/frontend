@@ -41,23 +41,31 @@ const meta = {
       options: ["label", "value"],
     },
   },
-  args: {
-    label: "Статус",
-    value: "Доставлен",
-    markerTone: "value",
-  },
 } satisfies Meta<typeof Definition>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    label: "Статус",
+    value: "Доставлен",
+    markerTone: "value",
+  },
+};
 
 export const WithNumericValue: Story = {
   args: {
     label: "Треков",
     value: 12,
+    markerTone: "label",
+  },
+};
+
+export const WithoutLabel: Story = {
+  args: {
+    value: "Доставлен",
     markerTone: "label",
   },
 };
@@ -72,6 +80,10 @@ export const LongContent: Story = {
 
 export const InDefinitionList: Story = {
   decorators: [],
+  args: {
+    value: "",
+    markerTone: "label",
+  },
   render: () => (
     <div
       style={{

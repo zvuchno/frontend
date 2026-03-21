@@ -9,6 +9,9 @@ export function Definition({
   markerTone = "label",
   className,
 }: DefinitionProps) {
+  const hasLabel =
+    label !== undefined && !(typeof label === "string" && label.length === 0);
+
   return (
     <div
       className={clsx(
@@ -17,7 +20,7 @@ export function Definition({
         className,
       )}
     >
-      <dt className={styles.definition__term}>{label}</dt>
+      {hasLabel ? <dt className={styles.definition__term}>{label}</dt> : null}
       <dd className={styles.definition__description}>{value}</dd>
     </div>
   );
