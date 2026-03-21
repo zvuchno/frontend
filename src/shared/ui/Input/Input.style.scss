@@ -13,6 +13,7 @@
 .labelContainer {
   display: flex;
   align-items: center;
+  gap: 11px;
 
     &__label {
       font-family: var(--font-feature-mono);
@@ -39,8 +40,9 @@
       display: inline-block;
       font-size: 20px;
       font-weight: 700;
-      line-height: 100%;
-      letter-spacing: 0.6;
+      line-height: 130%;
+      letter-spacing: -0.06em;
+      font-family: var(--font-feature-mono);
     }
 }
 

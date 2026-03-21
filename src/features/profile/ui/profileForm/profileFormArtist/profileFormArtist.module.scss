@@ -7,19 +7,23 @@
     'cell-3-1 cell-3-2';
   column-gap: 20px;
   row-gap: 28px;
-}
 
-.artistForm > [class*="cell-2-"] {
-  margin-top: 12px;
-}
+  & > [class*="cell-2-"] {
+    margin-top: 12px;
+  }
 
-.artistForm > [class*="cell-"] > * {
-  gap: 0px;
-}
+  & > [class*="cell-"] > * {
+    gap: 0px;
+  }
 
-.artistForm > [class*="cell-"] label {
-  line-height: 130%;
-  letter-spacing: -0.06em;
+  & > [class*="cell-"] label {
+    line-height: 130%;
+    letter-spacing: -0.06em;
+  }
+
+  & input:disabled {
+    opacity: 70%;
+  }
 }
 
 * > .cell-1-1 {

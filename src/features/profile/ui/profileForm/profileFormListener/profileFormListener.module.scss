@@ -5,15 +5,19 @@
     'cell-2-1 cell-2-2';
   column-gap: 20px;
   row-gap: 40px;
-}
 
-.listenerForm > [class*="cell-"] > * {
-  gap: 0px;
-}
+  &  > [class*="cell-"] > * {
+    gap: 0px;
+  }
 
-.listenerForm > [class*="cell-"] label {
-  line-height: 130%;
-  letter-spacing: -0.06em;
+  & > [class*="cell-"] label {
+    line-height: 130%;
+    letter-spacing: -0.06em;
+  }
+
+  & input:disabled {
+    opacity: 70%;
+  }
 }
 
 * > .cell-1-1 {
