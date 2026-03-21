@@ -1,0 +1,52 @@
+.definition {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.definition__term,
+.definition__description {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-feature-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  letter-spacing: -0.04em;
+}
+
+.definition__term {
+  flex: 0 1 auto;
+  color: var(--color-text-primary);
+}
+
+.definition__description {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  color: var(--color-bg-secondary);
+
+  &::before {
+    content: "";
+    flex: none;
+    width: 0.188rem;
+    height: 0.188rem;
+    border-radius: 50%;
+    background-color: var(--color-text-primary);
+  }
+}
+
+.definition_markerTone_value {
+  .definition__description {
+    &::before {
+      background-color: currentColor;
+    }
+  }
+}
