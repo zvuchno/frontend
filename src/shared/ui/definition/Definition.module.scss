@@ -39,6 +39,14 @@
     width: 0.188rem;
     height: 0.188rem;
     border-radius: 50%;
-    background-color: currentColor;
+    background-color: var(--color-text-primary);
+  }
+}
+
+.definition_markerTone_value {
+  .definition__description {
+    &::before {
+      background-color: currentColor;
+    }
   }
 }
