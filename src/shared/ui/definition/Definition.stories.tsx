@@ -33,7 +33,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => (
-    <dl>
+    <dl
+      style={{
+        margin: 0,
+      }}
+    >
       <Definition {...args} />
     </dl>
   ),

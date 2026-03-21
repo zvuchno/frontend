@@ -1,0 +1,30 @@
+.definition__term,
+.definition__description {
+  display: inline;
+  margin: 0;
+  font-family: var(--font-feature-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  letter-spacing: -0.04em;
+}
+
+.definition__term {
+  color: var(--color-text-primary);
+}
+
+.definition__description {
+  color: var(--color-bg-secondary);
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 0.188rem;
+    height: 0.188rem;
+    margin: 0 0.25rem;
+    border-radius: 50%;
+    background-color: currentColor;
+    vertical-align: middle;
+  }
+}
