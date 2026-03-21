@@ -10,6 +10,11 @@ const meta = {
   },
   tags: ["autodocs"],
   argTypes: {
+    className: {
+      table: {
+        disable: true,
+      },
+    },
     termClassName: {
       table: {
         disable: true,
@@ -33,12 +38,19 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => (
-    <dl
+    <div
       style={{
-        margin: 0,
+        width: "min(calc(100vw - 40px), 32rem)",
       }}
     >
-      <Definition {...args} />
-    </dl>
+      <dl
+        style={{
+          margin: 0,
+          width: "100%",
+        }}
+      >
+        <Definition {...args} />
+      </dl>
+    </div>
   ),
 };
