@@ -1,0 +1,77 @@
+.orderCardListener {
+  display: grid;
+  inline-size: min(100%, 50.625rem);
+  gap: 2.5rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.313rem;
+}
+
+.textBlock {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-text-primary);
+}
+
+.orderSummary {
+  margin: 0;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+  font-family: var(--font-better-vcr), monospace;
+  letter-spacing: -0.06em;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 100%;
+}
+
+.previewList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-content: flex-start;
+}
+
+.previewItem {
+  flex: 0 0 8.5rem;
+  inline-size: 8.5rem;
+  block-size: 8.5rem;
+  overflow: hidden;
+}
+
+.previewImage {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.previewFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  font-family: var(--font-feature-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: var(--color-bg-secondary);
+}
+
+.detailsButton {
+  inline-size: min(100%, 17.75rem);
+}
+
+@media (width <=48rem) {
+  .detailsButton {
+    inline-size: 100%;
+  }
+}
