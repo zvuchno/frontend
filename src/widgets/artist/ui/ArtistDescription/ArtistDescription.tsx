@@ -6,7 +6,7 @@ import { ArtistDescriptionProps } from './ArtistDescription.type';
 import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 
-const ArtistDescription = ({ description, title }: ArtistDescriptionProps) => {
+const ArtistDescription = ({ variant, description, title }: ArtistDescriptionProps) => {
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [shouldShowButton, setShouldShowButton] = useState<boolean>(false);
@@ -14,7 +14,7 @@ const ArtistDescription = ({ description, title }: ArtistDescriptionProps) => {
   
   useEffect(() => {
 
-    if (title) return;
+    if (variant === 'profile') return;
 
     const el = textRef.current;
 
@@ -27,7 +27,26 @@ const ArtistDescription = ({ description, title }: ArtistDescriptionProps) => {
       }
     }
 
-  }, [title, description, textRef]);
+  }, []);
+
+  useEffect(() => {
+
+    const el = textRef.current;
+
+    if (!el) return;
+
+    if (isExpanded) {
+      const scrollHeight = el.scrollHeight;
+
+      if (scrollHeight > 500) {
+        el.style.overflowY = 'scroll';
+      }
+      
+    } else {
+      el.style.overflowY = 'hidden';
+    }
+
+  }, [isExpanded]);
 
   const toggleExpend = () => {
     setIsExpanded(prev => !prev);
@@ -35,11 +54,11 @@ const ArtistDescription = ({ description, title }: ArtistDescriptionProps) => {
 
   return (
     <div 
-      className={clsx(s.container, {[s.container_withoutTitle]: !title})}
+      className={clsx(s.container, {[s.container_inCatalog]: variant === 'catalog'})}
     >
 
       <div 
-        className={clsx(s.header, {[s.header_withoutTitle]: !title})}
+        className={clsx(s.header, {[s.header_inCatalog]: variant === 'catalog'})}
       >
         {title && (
           <Title Tag='h4' variant='title' className={s.header__title}>{title}</Title>
@@ -47,12 +66,12 @@ const ArtistDescription = ({ description, title }: ArtistDescriptionProps) => {
       </div>
 
       <div 
-        className={clsx(s.content, {[s.content_withoutTitle]: !title})}
+        className={clsx(s.content, {[s.content_inCatalog]: variant === 'catalog'})}
       >
         
         <div
           ref={textRef}
-          className={clsx({[s.content__textWrapper]: !title}, {[s.content__textWrapper_expended]: isExpanded})}
+          className={clsx({[s.content__textWrapper]: variant === 'catalog'}, {[s.content__textWrapper_expended]: isExpanded})}
         >
           <Text Tag='p' className={s.content__text}>{description}</Text>
         </div>

@@ -5,7 +5,7 @@
   font-family: var(--font-feature-mono);
   color: var(--color-text-primary);
 
-  &_withoutTitle {
+  &_inCatalog {
     border-width: 2px;
   }
 }
@@ -17,7 +17,7 @@
   border-bottom: 2px solid var(--color-bg-main);
   padding: 10px 20px;
 
-  &_withoutTitle {
+  &_inCatalog {
     background-color: var(--color-accent-blue);
     border-bottom: 2px solid var(--outline-color);
   }
@@ -35,9 +35,8 @@
   position: relative;
   width: 100%;
   padding: 20px 30px 37px;
-  height: auto;
 
-  &_withoutTitle {
+  &_inCatalog {
     padding: 40px 30px 81px;
   }
 
