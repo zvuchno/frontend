@@ -5,10 +5,7 @@ import type { FC } from "react";
 import { ButtonUI } from "@/shared/ui/button";
 
 import styles from "./OrderCardListener.module.scss";
-import type {
-  TOrderCardListenerPreviewItem,
-  TOrderCardListenerProps,
-} from "./types";
+import type { TOrderCardListenerProps } from "./types";
 
 const priceFormatter = new Intl.NumberFormat("ru-RU");
 
@@ -31,10 +28,6 @@ const getItemsLabel = (itemsCount: number) => {
   return "товаров";
 };
 
-const getPreviewItemKey = (previewItem: TOrderCardListenerPreviewItem) => {
-  return `${previewItem.src}-${previewItem.title}`;
-};
-
 const formatOrderSummary = ({
   orderNumber,
   itemsCount,
@@ -50,6 +43,7 @@ const formatOrderSummary = ({
 };
 
 export const OrderCardListener: FC<TOrderCardListenerProps> = ({
+  orderId,
   orderNumber,
   itemsCount,
   totalPrice,
@@ -70,6 +64,7 @@ export const OrderCardListener: FC<TOrderCardListenerProps> = ({
   return (
     <article
       className={clsx(styles.orderCardListener, className)}
+      data-order-id={orderId}
       {...articleProps}
     >
       <div className={styles.content}>
@@ -87,10 +82,7 @@ export const OrderCardListener: FC<TOrderCardListenerProps> = ({
         >
           {normalizedPreviewItems.length > 0 ? (
             normalizedPreviewItems.map((previewItem) => (
-              <li
-                key={getPreviewItemKey(previewItem)}
-                className={styles.previewItem}
-              >
+              <li key={previewItem.id} className={styles.previewItem}>
                 <Image
                   className={styles.previewImage}
                   src={previewItem.src}
