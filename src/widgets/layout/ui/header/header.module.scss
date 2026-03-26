@@ -1,0 +1,89 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  color: #ffffff;
+  background-color: var(--color-primary-blue);
+  border-bottom: 2px solid var(--color-text-primary);
+  height: 72px;
+  padding-inline-start: 24px;
+  padding-inline-end: 30px;
+  padding-block-start: 1px;
+  transition: 0.03ms background-color ease;
+
+  & button {
+    border: none;
+    line-height: 0;
+    background-color: transparent;
+  }
+  
+  & ul {
+    list-style: none;
+  }
+
+  &Search {
+    background-color: var(--color-accent-blue);
+    justify-content: center;
+    padding: 0;
+
+    &Element {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      width: 51.61%;
+      max-width: 706px;
+      padding-block-start: 1px;
+    }
+
+    &Input {
+      height: 40px !important;
+      background-color: #ffffff !important;
+      border: 2px solid var(--color-text-primary);
+      width: 100% !important;
+      max-width: 670px !important;
+      padding: 0 16px 0 0 !important;
+
+      & button {
+        display: none;
+      }
+    }
+
+    &CloseButton {
+      cursor: pointer;
+    }
+  }
+
+  &Title {
+    font-family: 'BetterVCR', monospace;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    text-transform: uppercase;
+    margin-block-start: 6px;
+  }
+
+  &Actions {
+    margin-block-start: 4px;
+
+    &Menu {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 29px;
+    }
+  }
+
+  &Action {
+    width: 26px;
+    aspect-ratio: 1;
+
+    & * {
+      cursor: pointer;
+    }
+  }
+}
+
