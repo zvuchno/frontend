@@ -7,4 +7,5 @@ export type {
   ProductCardArtistDefinition,
   ProductCardArtistDefinitions,
   ProductCardArtistProps,
+  ProductCardArtistVariant,
 } from "./order/ui/ProductCardArtist/types";

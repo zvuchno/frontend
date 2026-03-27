@@ -6,20 +6,39 @@ import { Definition } from "@/shared/ui/definition";
 import styles from "./ProductCardArtist.module.scss";
 import type { ProductCardArtistProps } from "./types";
 
+const getDefinitionText = ({
+  label,
+  value,
+}: ProductCardArtistProps["definitions"][number]) =>
+  [label, value]
+    .filter(
+      (part): part is string | number =>
+        part !== undefined && !(typeof part === "string" && part.length === 0),
+    )
+    .map(String)
+    .join(" ");
+
 export const ProductCardArtist: FC<ProductCardArtistProps> = ({
   className,
   id,
   image,
+  imageWidth,
+  imageHeight,
   definitions,
+  variant = "merch",
   ...articleProps
 }) => {
   const primaryDefinition = definitions[0];
-  const productName = String(primaryDefinition.value);
+  const productName = getDefinitionText(primaryDefinition);
 
   return (
     <article
       {...articleProps}
-      className={clsx(styles.productCardArtist, className)}
+      className={clsx(
+        styles.productCardArtist,
+        styles[`productCardArtist_variant_${variant}`],
+        className,
+      )}
       data-product-id={id}
       aria-label={productName}
     >
@@ -28,8 +47,8 @@ export const ProductCardArtist: FC<ProductCardArtistProps> = ({
           className={styles.image}
           src={image}
           alt={productName}
-          width={96}
-          height={96}
+          width={imageWidth}
+          height={imageHeight}
           sizes="96px"
         />
       </div>
