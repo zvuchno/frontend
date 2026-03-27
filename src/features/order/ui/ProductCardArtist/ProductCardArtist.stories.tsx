@@ -17,8 +17,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Placeholder: Story = {
   args: {
-    title: "Placeholder",
-    quantity: 1,
-    attributes: [{ label: "Тип", value: "Черновик" }],
+    id: "product-card-artist-placeholder",
+    image: "/placeholder-product-card-artist.png",
+    definitions: [
+      { value: "Placeholder" },
+      { label: "Тип", value: "Черновик" },
+      { label: "Кол-во", value: "1 шт" },
+    ],
   },
 };
