@@ -15,13 +15,25 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Placeholder: Story = {
+export const Merch: Story = {
   args: {
-    id: "product-card-artist-placeholder",
-    image: "/placeholder-product-card-artist.png",
+    id: "product-card-artist-merch",
+    image: "/shirt.png",
     definitions: [
-      { value: "Placeholder" },
-      { label: "Тип", value: "Черновик" },
+      { value: "Футболка от ACDC" },
+      { label: "Размер", value: "L" },
+      { label: "Кол-во", value: "1 шт" },
+    ],
+  },
+};
+
+export const Vinyl: Story = {
+  args: {
+    id: "product-card-artist-vinyl",
+    image: "/record.png",
+    definitions: [
+      { value: 'Виниловый альбом "Мы не спали, мы...' },
+      { label: "Тип", value: "Винил" },
       { label: "Кол-во", value: "1 шт" },
     ],
   },
