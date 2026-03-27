@@ -2,7 +2,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.25rem;
+  column-gap: 0.25rem;
+  row-gap: 0;
   max-width: 100%;
   min-width: 0;
 }
@@ -22,14 +23,17 @@
 
 .definition__term {
   flex: 0 1 auto;
+  max-width: 100%;
+  min-width: 0;
   color: var(--color-text-primary);
 }
 
 .definition__description {
   display: flex;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   align-items: center;
   gap: 0.25rem;
+  max-width: 100%;
   min-width: 0;
   color: var(--color-bg-secondary);
 
@@ -41,6 +45,19 @@
     border-radius: 50%;
     background-color: var(--color-text-primary);
   }
+}
+
+.definition__termContent,
+.definition__descriptionContent {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.definition__descriptionContent {
+  flex: 1 1 auto;
 }
 
 .definition_markerTone_value {

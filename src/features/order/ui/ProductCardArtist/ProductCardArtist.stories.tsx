@@ -50,7 +50,7 @@ const musicArgs: ProductCardArtistData = {
   imageHeight: 119,
   variant: "music",
   definitions: [
-    { label: "Виниловый альбом", value: '"Мы не..."' },
+    { label: "Виниловый альбом", value: '"Мы не спали, мы смотрели на звезды и ждали утро"' },
     { label: "Тип", value: "Винил" },
     { label: "Кол-во", value: "1 шт" },
   ],
