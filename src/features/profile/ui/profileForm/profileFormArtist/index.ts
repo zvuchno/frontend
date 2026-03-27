@@ -1,0 +1,1 @@
+export { ProfileFormArtistUI } from './ProfileFormArtist'
