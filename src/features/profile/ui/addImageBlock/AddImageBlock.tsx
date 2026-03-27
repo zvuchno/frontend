@@ -42,7 +42,7 @@ export const AddImageBlock: React.FC<AddImageBlockProps> = ({
         className={styles.addImage__additionalInput}
         style={
           { 
-            backgroundImage: hasImage ? `url(${additionalPreviews[id]})` : "url('/plus-sign.svg" ,
+            backgroundImage: hasImage ? `url(${additionalPreviews[id]})` : "url('/plus-sign.svg')" ,
             backgroundSize: hasImage ? 'contain' : 'auto' 
           }    
         }
