@@ -8,7 +8,7 @@ import { ButtonLikeIcon } from "./ButtonLikeIcon";
 import { TButtonLikeProps } from "./types";
 
 export const ButtonLike: FC<TButtonLikeProps> = ({
-  isLiked: initialIsLiked,
+  isLiked: initialIsLiked, className, iconClassName
 }) => {
   const [isLiked, setIsLiked] = useState(() => initialIsLiked);
   const [animationKey, setAnimationKey] = useState(0);
@@ -22,13 +22,13 @@ export const ButtonLike: FC<TButtonLikeProps> = ({
     <button
       type="button"
       className={clsx(styles.buttonLike, {
-        [styles.liked]: isLiked,
-      })}
+        [styles.liked]: isLiked}, className)}
       aria-label={isLiked ? "Убрать лайк" : "Добавить лайк"}
       aria-pressed={isLiked}
       onClick={handleClick}
     >
       <ButtonLikeIcon
+        iconClassName={iconClassName}
         key={animationKey}
         isLiked={isLiked}
         isAnimated={animationKey > 0}

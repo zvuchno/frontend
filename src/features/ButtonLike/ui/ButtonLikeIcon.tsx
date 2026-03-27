@@ -5,6 +5,7 @@ import styles from "./buttonLike.module.scss";
 type TButtonLikeIconProps = {
   isLiked: boolean;
   isAnimated?: boolean;
+  iconClassName?: string;
 };
 
 const HEART_PATH =
@@ -13,6 +14,7 @@ const HEART_PATH =
 export const ButtonLikeIcon = ({
   isLiked,
   isAnimated = false,
+  iconClassName
 }: TButtonLikeIconProps) => (
   <svg
     className={clsx(styles.icon, {
@@ -26,7 +28,7 @@ export const ButtonLikeIcon = ({
     {isLiked ? (
       <path className={styles.iconFill} d={HEART_PATH} />
     ) : (
-      <path className={styles.iconOutline} d={HEART_PATH} />
+      <path className={clsx(styles.iconOutline, iconClassName)} d={HEART_PATH} />
     )}
   </svg>
 );
