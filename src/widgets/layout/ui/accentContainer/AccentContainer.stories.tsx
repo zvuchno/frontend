@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { HeroContainer } from "./HeroContainer";
-import storyStyles from "./HeroContainer.stories.module.scss";
+import { AccentContainer } from "./AccentContainer";
+import storyStyles from "./AccentContainer.stories.module.scss";
 
 const mockContent = {
   eyebrow: "Lorem ipsum dolor sit amet.",
-  title: "HeroContainer",
+  title: "AccentContainer",
   description:
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita, consectetur.",
 };
 
 const meta = {
-  title: "Widgets/Layout/HeroContainer",
-  component: HeroContainer,
+  title: "Widgets/Layout/AccentContainer",
+  component: AccentContainer,
   parameters: {
     layout: "centered",
   },
@@ -29,7 +29,7 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof HeroContainer>;
+} satisfies Meta<typeof AccentContainer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -54,7 +54,8 @@ export const WithCustomPadding: Story = {
         <span>{mockContent.eyebrow}</span>
         <h2>Custom spacing</h2>
         <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt, cum.
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt,
+          cum.
         </p>
       </div>
     ),
