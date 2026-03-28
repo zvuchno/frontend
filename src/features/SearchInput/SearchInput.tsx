@@ -2,6 +2,7 @@ import { useState, FormEvent, ChangeEvent } from "react";
 import { Text } from "@/shared/ui/Typography/Typography";
 import s from "./SearchInput.module.scss";
 import { SearchInputProps } from "./SearchInput.type";
+import clsx from "clsx";
 
 const SearchInput = ({
   placeholder = "Найти товары",
@@ -27,7 +28,7 @@ const SearchInput = ({
     }
   };
   return (
-    <div className={s["search-input"]}>
+    <div className={clsx(s["search-input"], className)}>
       {label && (
         <Text Tag="label" variant="normal" className={s["search-input__label"]}>
           {label}
