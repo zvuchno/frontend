@@ -4,10 +4,11 @@
 
 .roadmap__inner {
   width: min(100%, 1355px);
+  margin-inline: auto;
 }
 
 .roadmap__title {
-  margin-bottom: 2.708vw;
+  margin-bottom: clamp(24px, 2.71vw, 39px);
   font-family: var(--font-better-vcr), monospace;
   font-size: clamp(36px, 4.45vw, 64px);
   font-weight: 400;
@@ -41,27 +42,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(12px, 1.05vw, 15px) minmax(0, 1fr);
   column-gap: clamp(20px, 3vw, 44px);
+  row-gap: clamp(12px, 1.5vw, 20px);
   align-items: start;
-}
-
-.roadmap__content {
-  grid-row: 1;
-  display: grid;
-  gap: clamp(12px, 1.5vw, 20px);
-}
-
-.roadmap__item_left .roadmap__content {
-  grid-column: 1;
-  justify-self: end;
-  max-width: min(100%, 660px);
-  text-align: right;
-}
-
-.roadmap__item_right .roadmap__content {
-  grid-column: 3;
-  justify-self: start;
-  max-width: min(100%, 635px);
-  text-align: left;
 }
 
 .roadmap__marker {
@@ -70,12 +52,12 @@
   grid-column: 2;
   width: clamp(12px, 1.05vw, 15px);
   height: clamp(12px, 1.05vw, 15px);
-  align-self: start;
-  margin-top: calc((clamp(24px, 2.78vw, 40px) - clamp(12px, 1.05vw, 15px)) / 2);
+  align-self: center;
   background: var(--color-primary-blue);
 }
 
 .roadmap__itemTitle {
+  grid-row: 1;
   font-family: var(--font-feature-mono), monospace;
   font-size: clamp(24px, 2.78vw, 40px);
   font-weight: 700;
@@ -86,12 +68,27 @@
 }
 
 .roadmap__itemDescription {
+  grid-row: 2;
   font-family: var(--font-feature-mono), monospace;
   font-size: clamp(18px, 1.95vw, 28px);
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.06em;
   color: var(--color-text-primary);
+}
+
+.roadmap__item_left .roadmap__itemTitle,
+.roadmap__item_left .roadmap__itemDescription {
+  grid-column: 1;
+  justify-self: end;
+  text-align: right;
+}
+
+.roadmap__item_right .roadmap__itemTitle,
+.roadmap__item_right .roadmap__itemDescription {
+  grid-column: 3;
+  justify-self: start;
+  text-align: left;
 }
 
 @media (max-width: 960px) {
@@ -122,9 +119,12 @@
     grid-column: 1;
   }
 
-  .roadmap__content,
-  .roadmap__item_left .roadmap__content,
-  .roadmap__item_right .roadmap__content {
+  .roadmap__itemTitle,
+  .roadmap__itemDescription,
+  .roadmap__item_left .roadmap__itemTitle,
+  .roadmap__item_left .roadmap__itemDescription,
+  .roadmap__item_right .roadmap__itemTitle,
+  .roadmap__item_right .roadmap__itemDescription {
     grid-column: 2;
     max-width: none;
     justify-self: stretch;

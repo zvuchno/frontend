@@ -1,5 +1,3 @@
-"use client";
-
 import clsx from "clsx";
 
 import { Text, Title } from "@/shared/ui/Typography/Typography";
@@ -50,15 +48,13 @@ export const Roadmap = ({
                     : styles.roadmap__item_right,
                 )}
               >
-                <div className={styles.roadmap__content}>
-                  <Title Tag="h3" className={styles.roadmap__itemTitle}>
-                    {item.title}
-                  </Title>
+                <Title Tag="h3" className={styles.roadmap__itemTitle}>
+                  {item.title}
+                </Title>
 
-                  <Text Tag="p" className={styles.roadmap__itemDescription}>
-                    {item.description}
-                  </Text>
-                </div>
+                <Text Tag="p" className={styles.roadmap__itemDescription}>
+                  {item.description}
+                </Text>
 
                 <span className={styles.roadmap__marker} aria-hidden="true" />
               </li>
