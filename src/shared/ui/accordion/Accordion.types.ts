@@ -1,9 +1,13 @@
 import type { ReactNode } from 'react';
 
 export interface AccordionProps {
-  label: ReactNode;
+  artistCardInfo?: {
+    image?: string;
+    description?: string;
+    hasButton?: boolean;
+  };
   trigger?: ReactNode;
-  children: ReactNode;
+  content: string[];
   containerClassName?: string;
   labelClassName?: string;
   triggerClassName?: string;
