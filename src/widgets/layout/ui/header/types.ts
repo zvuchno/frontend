@@ -10,7 +10,6 @@ export type THeaderAction = {
 }
 
 export interface THeaderUIProps {
-  title: string,
   actions: THeaderAction[],
   className?: string,
   style?: React.CSSProperties

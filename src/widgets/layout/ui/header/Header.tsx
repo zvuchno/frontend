@@ -1,3 +1,5 @@
+'use client'
+
 import { THeaderUIProps } from './types'
 import styles from './header.module.scss'
 import { FC, useState } from 'react'
@@ -6,9 +8,10 @@ import { NavPanel } from '@/features'
 import clsx from 'clsx'
 import SearchInput from '@/features/SearchInput/SearchInput'
 import { CloseButtonIconCircledX } from '@/shared/ui/icons/closeButtonIconCircledX'
+import Image from 'next/image'
+
 
 export const HeaderUI: FC<THeaderUIProps> = ({
-  title = 'Звучно',
   actions,
   className
 }) => {
@@ -47,7 +50,11 @@ export const HeaderUI: FC<THeaderUIProps> = ({
       ) : (
         <>
           <Link href={'/'} className={styles.headerTitle}>
-            {title}
+            <Image 
+              src='/logo.svg' 
+              alt='Логотип ЗВУЧНО'
+              width={135}
+              height={32}/>
           </Link>
           <NavPanel className={styles.headerMenu}/>
           <nav className={styles.headerActions}>

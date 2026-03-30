@@ -31,11 +31,6 @@ const meta: Meta<typeof HeaderUI> = {
   parameters: {
     layout: 'centered',
     controls: { include: ['title'] },
-  },
-  argTypes: {
-    title: {
-      control: 'text',
-    }
   }
 };
 
@@ -45,8 +40,7 @@ type StoryType = StoryObj<typeof HeaderUI>;
 
 export const Header: StoryType = {
   args: {
-    actions: DefaultHeaderActions,
-    title: 'звучно'
+    actions: DefaultHeaderActions
   },
   decorators: [container()]
 };
