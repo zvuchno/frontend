@@ -1,17 +1,19 @@
 .card {
+  max-width: 944px;
   display: flex;
   flex-direction: column;
   border: 2px solid var(--color-text-primary);
-  &_opened .content {
-    display: none;
+
+  &_expanded .content {
+    display: flex;
   }
 
-  &_opened .arrow {
+  &_expanded .arrow {
     transform: rotate(180deg);
   }
 
-  &_opened .header {
-    padding-block-end: 20px;
+  &_expanded .header {
+    padding-block-end: 0;
   }
 }
 
@@ -21,10 +23,11 @@
 }
 
 .content {
-  display: flex;
+  display: none;
   flex-direction: column;
-  gap: 20px;
-  padding-inline: 20px;
+  gap: 1.389vw;
+  padding-inline: 1.389vw;
+  padding-block-end: 1.389vw;
 }
 
 .header {
@@ -33,25 +36,21 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  background: none;
-  border: none;
-  outline: none;
-  color: inherit;
-  padding-inline: 20px;
-  padding-block-start: 20px;
+  padding-inline: 1.389vw;
+  padding-block: 1.389vw;
 }
 
 .info {
   width: 55%;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.278vw;
 }
 
 .orderId {
   font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
   letter-spacing: -0.04em;
 }
 
@@ -60,19 +59,19 @@
   display: flex;
   justify-content: space-between;
   font-weight: 500;
-  font-size: 20px;
-  line-height: 20px;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
   letter-spacing: -0.04em;
   font-family: var(--font-feature-mono), monospace;
 }
 
 .products {
   display: flex;
-  gap: 16px;
+  gap: 1.111vw;
 }
 
 .buttons {
   width: 45%;
   display: flex;
-  gap: 20px;
+  gap: 1.389vw;
 }

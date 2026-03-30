@@ -1,14 +1,14 @@
 import { ProductCardArtist } from "@/features";
 import { Definition } from "@/shared/ui/definition";
 import styles from "./CardOrderArtist.module.scss";
-import { CardOrderArtistProps } from "./CardOrderArtist.types";
+import type { CardOrderArtistProps } from "./CardOrderArtist.types";
 import { ButtonUI } from "@/shared/ui/button/ButtonUI";
 import { useState } from "react";
 import { ArrowIcon } from "@/shared/ui/icons/arrowIcon/ArrowIcon";
 import clsx from "clsx";
 
 export const CardOrderArtist = (props: CardOrderArtistProps) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   let status = "";
   switch (props.status) {
     case "delivered":
@@ -21,23 +21,36 @@ export const CardOrderArtist = (props: CardOrderArtistProps) => {
       status = props.status;
       break;
   }
+
+  const formattedTotalPrice = Intl.NumberFormat("ru-RU", {
+    style: "currency",
+    currency: "RUB",
+    maximumFractionDigits: 0,
+  }).format(props.totalPrice);
+
+  const formattedOrderDate = Intl.DateTimeFormat("ru-RU", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(props.orderDate);
+
   return (
     <article
-      className={clsx(styles.card, { [styles.card_opened]: !isCollapsed })}
+      className={clsx(styles.card, { [styles.card_expanded]: isExpanded })}
     >
       <div
         role="button"
         tabIndex={0}
-        aria-expanded={!isCollapsed}
+        aria-expanded={isExpanded}
         aria-controls={`content-${props.orderId}`}
         className={styles.header}
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={() => setIsExpanded(!isExpanded)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            setIsCollapsed(!isCollapsed);
+            setIsExpanded(!isExpanded);
           } else if (e.key === " " || e.code === "Space") {
             e.preventDefault();
-            setIsCollapsed(!isCollapsed);
+            setIsExpanded(!isExpanded);
           }
         }}
       >
@@ -48,10 +61,8 @@ export const CardOrderArtist = (props: CardOrderArtistProps) => {
           </dl>
         </div>
         <div className={styles.summary}>
-          <p className={styles.price}>{props.totalPrice} ₽</p>
-          <p className={styles.date}>
-            {props.orderDate.toLocaleDateString("ru-RU")}
-          </p>
+          <p className={styles.price}>{formattedTotalPrice}</p>
+          <p className={styles.date}>{formattedOrderDate}</p>
           <span className={styles.arrow}>
             <ArrowIcon />
           </span>
