@@ -1,63 +1,123 @@
 .card {
-  max-width: 944px;
   display: flex;
   flex-direction: column;
+  inline-size: min(100%, 59rem);
+  min-inline-size: 0;
   border: 2px solid var(--color-text-primary);
 
   &_expanded .content {
-    display: flex;
+    grid-template-rows: 1fr;
   }
 
   &_expanded .arrow {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
   }
 
   &_expanded .header {
     padding-block-end: 0;
   }
+
+  &_expanded .contentInner {
+    padding-block-end: 1.25rem;
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0.04s, 0s, 0s, 0s;
+  }
 }
 
 .arrow {
-  width: 28px;
-  height: 28px;
+  transform: rotate(180deg);
+  flex: none;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  margin-inline-start: auto;
+  transition: transform 0.28s ease-in-out;
 }
 
 .content {
-  display: none;
+  display: grid;
+  grid-template-rows: 0fr;
+  min-inline-size: 0;
+  overflow: hidden;
+  transition: grid-template-rows 0.28s ease-in-out;
+}
+
+.contentInner {
+  overflow: hidden;
+  display: flex;
   flex-direction: column;
-  gap: 1.389vw;
-  padding-inline: 1.389vw;
-  padding-block-end: 1.389vw;
+  gap: 1.25rem;
+  min-inline-size: 0;
+  min-block-size: 0;
+  padding-inline: 1.25rem;
+  padding-block-end: 0;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.28s ease-in-out,
+    visibility 0s linear 0.28s,
+    pointer-events 0s linear 0.28s;
 }
 
 .header {
   display: flex;
-  text-align: left;
+  gap: 1rem;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
   cursor: pointer;
-  padding-inline: 1.389vw;
-  padding-block: 1.389vw;
+  text-align: left;
+  padding-inline: 1.25rem;
+  padding-block: 1.25rem;
+  transition:
+    background-color 0.2s ease-in-out,
+    outline-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-accent-blue);
+  }
+
+  &:focus-visible {
+    background-color: var(--color-accent-blue);
+    outline: 2px solid var(--color-primary-blue);
+    outline-offset: -2px;
+  }
 }
 
 .info {
-  width: 55%;
+  flex: 1 1 20rem;
   display: flex;
   flex-direction: column;
-  gap: 0.278vw;
+  gap: 0.25rem;
+  min-inline-size: 0;
+
+  dl {
+    margin: 0;
+    min-inline-size: 0;
+  }
 }
 
 .orderId {
+  margin: 0;
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 1.5rem;
   letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
 }
 
 .summary {
-  width: 40%;
   display: flex;
-  justify-content: space-between;
+  flex: 1 1 16rem;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 0.5rem 1.25rem;
+  min-inline-size: 0;
   font-weight: 500;
   font-size: 1.25rem;
   line-height: 1.25rem;
@@ -65,13 +125,103 @@
   font-family: var(--font-feature-mono), monospace;
 }
 
+.price,
+.date {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.contentInner>dl {
+  margin: 0;
+}
+
 .products {
   display: flex;
-  gap: 1.111vw;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.products>* {
+  flex: 1 1 8.1875rem;
+  min-inline-size: min(100%, 8.1875rem);
 }
 
 .buttons {
-  width: 45%;
   display: flex;
-  gap: 1.389vw;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  inline-size: 100%;
+}
+
+.buttons>* {
+  flex: 1 1 14rem;
+  min-inline-size: 0;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .summary {
+    inline-size: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "price arrow"
+      "date arrow";
+    align-items: center;
+    justify-content: stretch;
+    gap: 0.5rem 1rem;
+  }
+
+  .price {
+    grid-area: price;
+  }
+
+  .date {
+    grid-area: date;
+  }
+
+  .price,
+  .date {
+    min-inline-size: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .arrow {
+    grid-area: arrow;
+    margin-inline-start: 0;
+  }
+
+  .buttons>* {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .card_expanded .contentInner {
+    padding-block-end: 1rem;
+  }
+
+  .header {
+    padding-inline: 1rem;
+    padding-block: 1rem;
+  }
+
+  .contentInner {
+    padding-inline: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .arrow,
+  .content,
+  .contentInner,
+  .header {
+    transition: none;
+  }
 }

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { fn } from "storybook/test";
+import type { CardOrderArtistProps } from "./CardOrderArtist.types";
 import { CardOrderArtist } from "./CardOrderArtist";
-import { CardOrderArtistProps } from "./CardOrderArtist.types";
 
 const meta = {
   title: "Widgets/Orders/CardOrderArtist",
@@ -28,9 +29,10 @@ const meta = {
         </style>
         <div
           style={{
-            width: "944px",
+            width: "min(calc(100vw - 2rem), 59rem)",
             minHeight: "455px",
             padding: "24px 0 40px",
+            boxSizing: "border-box",
           }}
         >
           <Story />
@@ -75,16 +77,16 @@ const baseProducts: CardOrderArtistProps["products"] = [
 
 const baseArgs: CardOrderArtistProps = {
   orderId: "35783-95",
-  status: "delivered",
+  statusLabel: "Доставлено",
   address: "Россия, г.Москва, ул.Советская, д.3",
   deliveryType: "Яндекс-доставка",
   recipientFIO: "Костантинов Константин Костантинович",
   totalPrice: 1500,
-  orderDate: new Date(),
+  orderDate: new Date("2025-04-01T00:00:00+03:00"),
   message: "Вы очень крутые !",
   products: baseProducts,
-  onAccepted: () => {},
-  onRejected: () => {},
+  onAccepted: fn(),
+  onRejected: fn(),
 };
 
 export const Default: Story = {

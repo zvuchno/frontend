@@ -2,7 +2,7 @@ import { ProductCardArtistData } from "@/features";
 
 export interface CardOrderArtistProps {
   orderId: string;
-  status: string;
+  statusLabel: string;
   address: string;
   deliveryType: string;
   recipientFIO: string;
