@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  font-family: var(--font-feature-mono);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: -0.06em;
+  color: var(--color-text-primary);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0.5em;
+  background-color: #e4f1ff;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-accent-blue);
+  }
+
+  &_selected {
+    background-color: var(--color-accent-blue);
+    border-color: var(--color-primary-blue);
+  }
+
+  &:disabled {
+    background-color: var(--color-btn-secondary);
+  }
+}
