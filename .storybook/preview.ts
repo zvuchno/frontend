@@ -35,11 +35,20 @@ style.textContent = `
     font-style: normal;
     font-display: swap;
   }
+
+  @font-face {
+    font-family: 'Urbanist';
+    src: url('/fonts/Urbanist.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
   
   /* Определяем CSS-переменные для совместимости */
   :root {
     --font-better-vcr: 'BetterVCR', monospace;
     --font-feature-mono: 'Feature Mono', monospace;
+    --font-urbanist: 'Urbanist', monospace;
   }
 `;
 
