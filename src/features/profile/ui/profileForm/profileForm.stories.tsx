@@ -31,7 +31,7 @@ const meta: Meta<typeof ProfileFormUI> = {
         defaultValues: { 
           name: 'Иван Иванов', 
           email: 'ivan@yandex.ru',
-          phone: '71111111111',
+          phone: '',
           password: '11111111',
           city: 'Moscow',
           url: 'http://ivanov-ivan.ru'
@@ -85,7 +85,10 @@ export const ProfileFormNew: Story = {
 
 export const ProfileFormCurrent: Story = {
   args: {
-    isOnChange: false
+    isOnChange: false,
+    values: {
+      phone: '74951111111',
+    }
   },
   render: (args) => {
     const [isEditMode, setIsEditMode] = useState(args.isOnChange);
@@ -121,6 +124,9 @@ export const ProfileFormWithErrors: Story = {
 export const ProfileFormWithoutErrors: Story = {
   args: {
     children: <ProfileFormArtistUI fieldsDisabled={false} />,
+     values: {
+      phone: '74951111111',
+    },
     isChecked: true,
     onSubmit: (data) => {
     console.log(data), alert('Форма отправлена')}
