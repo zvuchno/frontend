@@ -13,20 +13,6 @@ const meta = {
   decorators: [
     (Story) => (
       <>
-        <style>
-          {`
-            @font-face {
-              font-family: 'Feature Mono Custom';
-              src: url('/fonts/FeatureMono-Regular.ttf') format('truetype');
-              font-weight: 400;
-            }
-            @font-face {
-              font-family: 'Feature Mono Custom';
-              src: url('/fonts/FeatureMono-Bold.ttf') format('truetype');
-              font-weight: 700;
-            }
-          `}
-        </style>
         <div
           style={{
             width: "min(calc(100vw - 2rem), 59rem)",

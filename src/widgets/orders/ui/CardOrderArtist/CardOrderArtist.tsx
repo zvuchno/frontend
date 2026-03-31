@@ -15,7 +15,7 @@ const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
 
 const orderDateFormatter = new Intl.DateTimeFormat("ru-RU", {
   day: "2-digit",
-  month: "long",
+  month: "2-digit",
   year: "numeric",
 });
 

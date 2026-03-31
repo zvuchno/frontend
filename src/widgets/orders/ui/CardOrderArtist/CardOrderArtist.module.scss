@@ -104,6 +104,7 @@
 .orderId {
   margin: 0;
   font-weight: 700;
+  font-family: var(--font-urbanist);
   font-size: 1.25rem;
   line-height: 1.5rem;
   letter-spacing: -0.04em;
@@ -116,7 +117,7 @@
   flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: flex-start;
-  gap: 0.5rem 1.25rem;
+  gap: 6.25rem;
   min-inline-size: 0;
   font-weight: 500;
   font-size: 1.25rem;
@@ -150,53 +151,62 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
-  inline-size: 100%;
+  inline-size: min(100%, 27.5rem);
+  align-self: flex-start;
 }
 
-.buttons>* {
-  flex: 1 1 14rem;
+.buttons > * {
+  flex: 0 0 13.125rem;
   min-inline-size: 0;
 }
 
 @media (max-width: 768px) {
   .header {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "info price arrow"
+      "info date arrow";
+    align-items: center;
+    column-gap: 0.75rem;
+    row-gap: 0.375rem;
   }
 
   .summary {
-    inline-size: 100%;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "price arrow"
-      "date arrow";
-    align-items: center;
-    justify-content: stretch;
-    gap: 0.5rem 1rem;
+    display: contents;
+  }
+
+  .info {
+    grid-area: info;
   }
 
   .price {
     grid-area: price;
+    justify-self: end;
   }
 
   .date {
     grid-area: date;
+    justify-self: end;
   }
 
   .price,
   .date {
     min-inline-size: 0;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
   }
 
   .arrow {
     grid-area: arrow;
+    align-self: center;
     margin-inline-start: 0;
   }
 
-  .buttons>* {
+  .buttons {
+    inline-size: 100%;
+  }
+
+  .buttons > * {
     flex-basis: 100%;
   }
 }
@@ -209,10 +219,21 @@
   .header {
     padding-inline: 1rem;
     padding-block: 1rem;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
   }
 
   .contentInner {
+    gap: 1rem;
     padding-inline: 1rem;
+  }
+
+  .products {
+    gap: 0.75rem;
+  }
+
+  .buttons {
+    gap: 0.75rem;
   }
 }
 
