@@ -1,0 +1,39 @@
+.gallery {
+  display: flex;
+  gap: 12px;
+  max-width: 712px;
+  max-height: 625px;
+  width: 57%;
+  height: 100%;
+
+  & img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    gap: 24px;
+    max-height: 625px;
+    flex: 1;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+
+    &__img {
+      aspect-ratio: 1/1;
+      width: 100px;
+    }
+  }
+
+  &__selected {
+    width: 84%;
+  }
+}
