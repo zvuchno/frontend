@@ -20,8 +20,14 @@ export function Definition({
         className,
       )}
     >
-      {hasLabel ? <dt className={styles.definition__term}>{label}</dt> : null}
-      <dd className={styles.definition__description}>{value}</dd>
+      {hasLabel ? (
+        <dt className={styles.definition__term}>
+          <span className={styles.definition__termContent}>{label}</span>
+        </dt>
+      ) : null}
+      <dd className={styles.definition__description}>
+        <span className={styles.definition__descriptionContent}>{value}</span>
+      </dd>
     </div>
   );
 }
