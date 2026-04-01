@@ -1,10 +1,6 @@
-export type ArtistInfo = {
-  image: string;
-  description: string;
-  content: string[];   
-}
-
 export type ApproveSectionProps = {
+  mainBlock: React.ReactNode;
+  content: string[];
   className?: string;
-  artistInfo: ArtistInfo[];
+  contentClassName?: string;
 }  
