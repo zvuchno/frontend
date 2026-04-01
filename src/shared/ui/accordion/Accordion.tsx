@@ -1,33 +1,38 @@
 'use client';
 
 import clsx from 'clsx';
-import { useState, useId, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { AccordionProps } from './Accordion.types';
 import styles from './Accordion.module.scss';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const defaultAccordionTrigger: ReactNode = <Image src="/arrow-in-circle.svg" alt="trigger" width={40} height={40} />;
+// const defaultAccordionTrigger: ReactNode = <Image src="/arrow-in-circle.svg" alt="trigger" priority width={40} height={40} />;
+const defaultAccordionTrigger: ReactNode = (
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <circle cx="20" cy="20" r="19.5" transform="rotate(90 20 20)" stroke="#100F0D"/>
+   <path d="M28 16L19.5147 24.4853L11.0294 16" stroke="#100F0D" strokeLinecap="round"/>
+  </svg>)
+
 
 export const Accordion: React.FC<AccordionProps> = ({
-  mainBlock,
   trigger = defaultAccordionTrigger,
   content,
-  containerClassName,
+  wrapperClassName,
   triggerClassName,
   contentClassName,
 }: AccordionProps) => {
+  
   const [isOpen, setIsOpen] = useState(false)
-  const id = useId();
+  
   return (
     <div
-      className={clsx(styles.container, containerClassName)}
+      className={clsx(styles.wrapper, wrapperClassName)}
     >
-      <div>{mainBlock}</div>
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            key={id}
+            key={crypto.randomUUID()}
             className={clsx(styles.content, contentClassName)}
             initial={{ opacity: 0.5, height: 0, overflow: 'hidden' }}
             animate={{ opacity: 1, height: 'auto' }}

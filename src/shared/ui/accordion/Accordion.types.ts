@@ -1,10 +1,7 @@
-import type { ReactNode } from 'react';
-
 export interface AccordionProps {
-  mainBlock?: React.ReactNode;
-  trigger?: ReactNode;
+  trigger?: React.ReactNode;
   content: string[];
-  containerClassName?: string;
+  wrapperClassName?: string;
   triggerClassName?: string;
   contentClassName?: string;
 }
