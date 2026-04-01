@@ -6,16 +6,14 @@ import type { AccordionProps } from './Accordion.types';
 import styles from './Accordion.module.scss';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import CardArtist from '@/entities/Artist/ui/CardArtist/CardArtist';
 
 const defaultAccordionTrigger: ReactNode = <Image src="/arrow-in-circle.svg" alt="trigger" width={40} height={40} />;
 
 export const Accordion: React.FC<AccordionProps> = ({
-  artistCardInfo,
+  mainBlock,
   trigger = defaultAccordionTrigger,
   content,
   containerClassName,
-  labelClassName,
   triggerClassName,
   contentClassName,
 }: AccordionProps) => {
@@ -25,9 +23,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     <div
       className={clsx(styles.container, containerClassName)}
     >
-      <div className={labelClassName}>
-        <CardArtist image={artistCardInfo?.image} description={artistCardInfo?.description} hasButton={artistCardInfo?.hasButton}/>
-      </div>
+      <div>{mainBlock}</div>
       <AnimatePresence>
         {isOpen && (
           <motion.div
