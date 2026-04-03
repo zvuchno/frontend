@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { DefaultHeaderActions } from "@/shared/constants/headerActions";
+import Footer from "@/widgets/layout/ui/Footer/Footer";
+import { HeaderUI } from "@/widgets/layout/ui/header";
 import "./globals.scss";
 
 const geistSans = Geist({
@@ -56,9 +59,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable} ${betterVcr.variable}`}>
-        {children}
+    <html lang="ru">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable} ${betterVcr.variable}`}
+      >
+        <div className="app-shell">
+          <HeaderUI actions={DefaultHeaderActions} />
+          <main className="app-main">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
