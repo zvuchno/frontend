@@ -1,15 +1,33 @@
+@use "../shared/ui/Input/Input.style";
 @use "../shared/ui/Typography/Typography.style";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-primary-blue: #0046d3;
+  --color-accent-blue: #c2dfff;
+  --color-text-primary: #100f0d;
+  --color-text-accent-blue:var(--color-primary-blue,#0046D3);
+  --color-text-inverse:var(--background,#ffffff) ;
+  --color-text-accent: #FC9F5B;
+  --color-bg-main: #d9d9d9;
+  --color-bg-secondary: #b5b5b5;
+  --color-bg-form-return: #FCE4D8;
+  --color-btn-primary:var(--color-text-accent-blue,#c2dfff);
+  --color-btn-secondary:var(--color-bg-main,#d9d9d9);
+  --color-btn-accent-grey:var(--color-bg-secondary,#b5b5b5);
+  --color-btn-accent-orange: #F5A864;
+  --search-color-primary: #a8bdf6;
+  --search-color-btn-primary: #e1e782;
+  --search-color-btn-secondary:var(--color-bg-form-return,#fce4d8);
+  --outline-color: var(--color-text-primary,#100f0d);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  // :root {
+  //   // --background: #0a0a0a;
+  //   // --foreground: #ededed;
+  // }
 }
 
 html,

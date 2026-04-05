@@ -1,0 +1,81 @@
+.hiddenInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.checkbox {
+  $root: &;
+
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+
+  &Wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+    cursor: pointer;
+  }
+
+  &Area {
+    width: 18px;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &Label {
+    font-family: 'Feature Mono', monospace;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: calc(16 / 14);
+    letter-spacing: -0.04em;
+    justify-self: left;
+    
+
+    & >p {
+      margin: 0;
+    }
+
+  }
+
+  &.noChecked {
+    opacity: 50%;
+  }
+
+  &.disabled {
+    #{$root}Wrapper {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  } 
+
+  &.radioButton {
+    gap: 8px;
+
+    #{$root}Wrapper {
+      padding: 4px;
+    }
+
+    #{$root}Area {
+      border-radius: 50%;
+      width: 24px;
+    }
+
+    #{$root}Label {
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.08em;
+    }
+  }
+}
