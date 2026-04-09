@@ -8,22 +8,22 @@ const FansLayout = ({ children }: {children: React.ReactNode}) => {
   const fansProfileRoutes = [
     {
       id: 'Профиль',
-      href: '',
+      href: 'fans/profile',
       label: 'Профиль',
     },
     {
       id: 'Избранное',
-      href: '',
+      href: 'fans/favorites',
       label: 'Избранное',
     },
     {
       id: 'Заказы',
-      href: '',
+      href: 'fans/orders',
       label: 'Заказы',
     },
     {
       id: 'Релизы',
-      href: '',
+      href: 'fans/releases',
       label: 'Релизы',
     }
   ];
