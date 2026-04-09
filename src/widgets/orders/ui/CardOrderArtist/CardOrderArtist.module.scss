@@ -25,6 +25,10 @@
     pointer-events: auto;
     transition-delay: 0.04s, 0s, 0s, 0s;
   }
+
+  &:not(.card_expanded) .header:hover {
+    background-color: var(--color-accent-blue);
+  }
 }
 
 .arrow {
@@ -77,12 +81,7 @@
     background-color 0.2s ease-in-out,
     outline-color 0.2s ease-in-out;
 
-  &:hover {
-    background-color: var(--color-accent-blue);
-  }
-
   &:focus-visible {
-    background-color: var(--color-accent-blue);
     outline: 2px solid var(--color-primary-blue);
     outline-offset: -2px;
   }
@@ -155,7 +154,7 @@
   align-self: flex-start;
 }
 
-.buttons > * {
+.buttons>* {
   flex: 0 0 13.125rem;
   min-inline-size: 0;
 }
@@ -206,7 +205,7 @@
     inline-size: 100%;
   }
 
-  .buttons > * {
+  .buttons>* {
     flex-basis: 100%;
   }
 }
