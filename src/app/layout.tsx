@@ -64,8 +64,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable} ${betterVcr.variable}`}
       >
         <div className="app-shell">
-          <HeaderUI actions={DefaultHeaderActions} />
-          <main className="app-main">{children}</main>
+          <div className="app-container">
+            <HeaderUI actions={DefaultHeaderActions} />
+          </div>
+          <main className="app-main">
+            <div className="app-container">{children}</div>
+          </main>
           <Footer />
         </div>
       </body>

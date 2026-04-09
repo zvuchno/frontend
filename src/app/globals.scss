@@ -51,8 +51,16 @@ body {
   min-height: 100dvh;
 }
 
+.app-container {
+  width: 100%;
+  max-width: 1368px;
+  margin: 0 auto;
+  padding-inline: 24px;
+}
+
 .app-main {
   flex: 1 0 auto;
+  width: 100%;
 }
 
 * {
