@@ -73,9 +73,7 @@ export const AlbumDescription: Story = {
       <div 
         style={{
           width: '1368px',
-          height: '706px',
-          padding: '40px 76px 40px 48px',
-          border: '2px solid #000'
+          height: '700px',
         }}
       >
         <ProductDescription variant="album" product={album}/>
@@ -90,9 +88,7 @@ export const MerchDescription: Story = {
       <div 
         style={{
           width: '1368px',
-          height: '706px',
-          padding: '40px 76px 40px 48px',
-          border: '2px solid #000'
+          height: '700px',
         }}
       >
         <ProductDescription variant="merch" product={merch}/>

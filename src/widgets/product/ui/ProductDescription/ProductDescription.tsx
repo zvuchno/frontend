@@ -5,6 +5,7 @@ import TabBar from "../components/TabBar/TabBar";
 import s from "./ProductDescription.module.scss";
 import SizeRange from "../components/SizeRange/SizeRange";
 import { ButtonUI } from "@/shared/ui/button";
+import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
 
 const ProductDescription = ({ variant, product }: ProductDescriptionProps) => {
 
@@ -28,32 +29,34 @@ const ProductDescription = ({ variant, product }: ProductDescriptionProps) => {
   };
 
   return (
-    <div className={s.container}>
+    <AccentContainer className={s.containerWrapper}>
+      <div className={s.container}>
 
-      <Gallery images={product.images} />
+        <Gallery images={product.images} />
 
-      <div className={s.card}>
-        <div className={s.card__artist}>
-          <div className={s.card__artist__img}>
-            <img src={product.artistImage} alt={product.artistName} />
+        <div className={s.card}>
+          <div className={s.card__artist}>
+            <div className={s.card__artist__img}>
+              <img src={product.artistImage} alt={product.artistName} />
+            </div>
+            <Title Tag="h4" className={s.card__artist__name}>{product.artistName}</Title>
           </div>
-          <Title Tag="h4" className={s.card__artist__name}>{product.artistName}</Title>
+          <Title Tag="h3" className={s.card__title}>{product.name}</Title>
+          {variant === 'merch' && (
+            <>
+              <Text Tag="p" className={s.card__itemNumber}>Артикул: {product.itemNumber}</Text>
+              <Text Tag="p" className={s.card__price}>{product.price} ₽</Text>
+              {product.sizes && product.sizes.length > 0 && <SizeRange sizes={product.sizes} onClick={selecSize}/>}
+              <ButtonUI variant="primary" size="standart" className={s.card__button}>В корзину</ButtonUI>
+            </>
+          )}
+          <div className={s.card__tabBar}>
+            <TabBar data={tabsData} />
+          </div>
         </div>
-        <Title Tag="h3" className={s.card__title}>{product.name}</Title>
-        {variant === 'merch' && (
-          <>
-            <Text Tag="p" className={s.card__itemNumber}>Артикул: {product.itemNumber}</Text>
-            <Text Tag="p" className={s.card__price}>{product.price} ₽</Text>
-            {product.sizes && product.sizes.length > 0 && <SizeRange sizes={product.sizes} onClick={selecSize}/>}
-            <ButtonUI variant="primary" size="standart" className={s.card__button}>В корзину</ButtonUI>
-          </>
-        )}
-        <div className={s.card__tabBar}>
-          <TabBar data={tabsData} />
-        </div>
-      </div>
 
-    </div>
+      </div>
+    </AccentContainer>
   )
 };
 
