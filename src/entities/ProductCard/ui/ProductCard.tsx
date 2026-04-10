@@ -41,7 +41,9 @@ export const ProductCard: FC<TProductCardProps> = ({
     <div className={styles.content}>
       <h3 className={styles.title}>{title}</h3>
       <p className={styles.description}>{description}</p>
-      <p className={styles.price}>{formatTotalPrice(Number(price))}</p>
+      {price !== undefined && price !== null ? (
+        <p className={styles.price}>{formatTotalPrice(Number(price))}</p>
+      ) : null}
     </div>
   </article>
 );
