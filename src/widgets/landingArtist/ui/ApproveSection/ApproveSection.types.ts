@@ -1,6 +1,10 @@
-export type ApproveSectionProps = {
-  mainBlock: React.ReactNode;
+export type ArtistInfo = {
+  image: string;
+  description: string;
   content: string[];
+};
+
+export type ApproveSectionProps = {
   className?: string;
-  contentClassName?: string;
-}  
+  artistInfo: ArtistInfo[];
+};

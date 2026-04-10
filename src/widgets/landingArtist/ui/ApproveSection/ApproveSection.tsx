@@ -1,23 +1,36 @@
-import type { ApproveSectionProps } from './ApproveSection.types';
-import styles from './ApproveSection.module.scss';
-import clsx from 'clsx';
-import { Accordion } from '@/shared/ui/accordion/Accordion';
+import type { ApproveSectionProps } from "./ApproveSection.types";
+import styles from "./ApproveSection.module.scss";
+import clsx from "clsx";
+import { Title } from "@/shared/ui/Typography/Typography";
+import { CardApprove } from "@/widgets/landingArtist/ui/CardApprove/CardApprove";
+import CardArtist from "@/entities/Artist/ui/CardArtist/CardArtist";
 
-export const ApproveSection: React.FC<ApproveSectionProps> = ({ 
-  mainBlock,
-  content,
+export const ApproveSection: React.FC<ApproveSectionProps> = ({
   className,
-  contentClassName
+  artistInfo,
 }: ApproveSectionProps) => {
   return (
-    <div
-      className={clsx(styles.container, className)}
-    >
-      <div>{mainBlock}</div>
-      <Accordion 
-        content={content}
-        wrapperClassName={contentClassName}
-      />   
+    <div className={clsx(styles.container, className)}>
+      <Title Tag="h2" className={styles.title}>
+        одобрено музыкантами
+      </Title>
+      <div className={styles.wrapper}>
+        {artistInfo.map((artist) => {
+          return (
+            <CardApprove
+              key={crypto.randomUUID()}
+              mainBlock={
+                <CardArtist
+                  image={artist.image}
+                  description={artist.description}
+                  hasButton={true}
+                />
+              }
+              content={artist.content}
+            />
+          );
+        })}
+      </div>
     </div>
-  )
-}
+  );
+};
