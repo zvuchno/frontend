@@ -1,5 +1,5 @@
 import { FavoritesPageClient } from "./FavoritesPageClient";
 
-export default function ProfilePage() {
+export default function FavoritesPage() {
   return <FavoritesPageClient />;
 }
