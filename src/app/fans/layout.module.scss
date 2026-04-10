@@ -19,7 +19,7 @@
 
   &__content {
     max-height: 39.5rem;
-    overflow-y: auto;
+    overflow-y: visible;
     margin-left: auto;
     margin-right: auto;
   }
@@ -37,7 +37,6 @@
     &__content {
       width: 100%;
       max-height: none;
-      overflow-y: visible;
     }
   }
 }
