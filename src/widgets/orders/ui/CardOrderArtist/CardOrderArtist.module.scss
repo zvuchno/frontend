@@ -1,0 +1,247 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  inline-size: min(100%, 59rem);
+  min-inline-size: 0;
+  border: 2px solid var(--color-text-primary);
+
+  &_expanded .content {
+    grid-template-rows: 1fr;
+  }
+
+  &_expanded .arrow {
+    transform: rotate(0deg);
+  }
+
+  &_expanded .header {
+    padding-block-end: 0;
+  }
+
+  &_expanded .contentInner {
+    padding-block-end: 1.25rem;
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0.04s, 0s, 0s, 0s;
+  }
+
+  &:not(.card_expanded) .header:hover {
+    background-color: var(--color-accent-blue);
+  }
+}
+
+.arrow {
+  transform: rotate(180deg);
+  flex: none;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  margin-inline-start: auto;
+  transition: transform 0.28s ease-in-out;
+}
+
+.content {
+  display: grid;
+  grid-template-rows: 0fr;
+  min-inline-size: 0;
+  overflow: hidden;
+  transition: grid-template-rows 0.28s ease-in-out;
+}
+
+.contentInner {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-inline-size: 0;
+  min-block-size: 0;
+  padding-inline: 1.25rem;
+  padding-block-end: 0;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.28s ease-in-out,
+    visibility 0s linear 0.28s,
+    pointer-events 0s linear 0.28s;
+}
+
+.header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  padding-inline: 1.25rem;
+  padding-block: 1.25rem;
+  transition:
+    background-color 0.2s ease-in-out,
+    outline-color 0.2s ease-in-out;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary-blue);
+    outline-offset: -2px;
+  }
+}
+
+.info {
+  flex: 1 1 20rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-inline-size: 0;
+
+  dl {
+    margin: 0;
+    min-inline-size: 0;
+  }
+}
+
+.orderId {
+  margin: 0;
+  font-weight: 700;
+  font-family: var(--font-feature-mono), monospace;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
+}
+
+.summary {
+  display: flex;
+  flex: 1 1 16rem;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 6.25rem;
+  min-inline-size: 0;
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  letter-spacing: -0.04em;
+  font-family: var(--font-feature-mono), monospace;
+}
+
+.price,
+.date {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.contentInner>dl {
+  margin: 0;
+}
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.products>* {
+  flex: 1 1 8.1875rem;
+  min-inline-size: min(100%, 8.1875rem);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  inline-size: min(100%, 27.5rem);
+  align-self: flex-start;
+}
+
+.buttons>* {
+  flex: 0 0 13.125rem;
+  min-inline-size: 0;
+}
+
+@media (max-width: 768px) {
+  .header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "info price arrow"
+      "info date arrow";
+    align-items: center;
+    column-gap: 0.75rem;
+    row-gap: 0.375rem;
+  }
+
+  .summary {
+    display: contents;
+  }
+
+  .info {
+    grid-area: info;
+  }
+
+  .price {
+    grid-area: price;
+    justify-self: end;
+  }
+
+  .date {
+    grid-area: date;
+    justify-self: end;
+  }
+
+  .price,
+  .date {
+    min-inline-size: 0;
+    white-space: nowrap;
+  }
+
+  .arrow {
+    grid-area: arrow;
+    align-self: center;
+    margin-inline-start: 0;
+  }
+
+  .buttons {
+    inline-size: 100%;
+  }
+
+  .buttons>* {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .card_expanded .contentInner {
+    padding-block-end: 1rem;
+  }
+
+  .header {
+    padding-inline: 1rem;
+    padding-block: 1rem;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
+  }
+
+  .contentInner {
+    gap: 1rem;
+    padding-inline: 1rem;
+  }
+
+  .products {
+    gap: 0.75rem;
+  }
+
+  .buttons {
+    gap: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .arrow,
+  .content,
+  .contentInner,
+  .header {
+    transition: none;
+  }
+}

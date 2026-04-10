@@ -1,0 +1,26 @@
+.container {
+  min-height: 742px;
+  padding: 54px 48px 166px;
+}
+
+.title {
+  font-family: var(--font-better-vcr);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -0.06em;
+  text-transform: none;
+  margin-bottom: 1.75em;
+}
+
+.section {
+  display: flex;
+  gap: 89px;
+
+  &__content {
+    max-height: 632px;
+    overflow-y: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
