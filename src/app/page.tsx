@@ -1,42 +1,10 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import { ApproveSection } from "@/widgets/landingArtist/ui/ApproveSection/ApproveSection";
-import type { ArtistInfo } from "@/widgets/landingArtist/ui/ApproveSection/ApproveSection.types";
-
-const artistInfo: ArtistInfo[] = [
-  {
-    image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
-    description: 'JEW3SS',
-    content: [
-      'Как только услышал о проекте «Звучно», сразу побежал к ним в предложку. Боялся, что уже весь мир инди-рока там, а я проворонил новую молодëжную движуху! Оказалось, я им вообще первый написал и это для меня и для них оказался первый опыт.',
-      'Очень приветливые эти ребята из «Звучно». Чуткие и пунктуальные, приятно с ними иметь дело. Да и в целом крутые чуваки с крутыми идеями и стилем! ',
-    ]
-  },
-  {
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Schwejk_cropped.jpg/1200px-Schwejk_cropped.jpg',
-    description: 'ОДИН МАНУЛ',
-    content: [
-      'Как только услышал о проекте «Звучно», сразу побежал к ним в предложку. Боялся, что уже весь мир инди-рока там, а я проворонил новую молодëжную движуху! Оказалось, я им вообще первый написал и это для меня и для них оказался первый опыт.',
-      'Очень приветливые эти ребята из «Звучно». Чуткие и пунктуальные, приятно с ними иметь дело. Да и в целом крутые чуваки с крутыми идеями и стилем! ',
-      'Прикиньте только, они индустрию перевернуть хотят! Понимание взаимодействия с артистом в стране вообще изменить! Такие темы я очень уважаю, поэтому рад, что наш музыкальный проект приобщился к данной платформе. Надеюсь, что скоро весь мир ахнет от силы низовой самоорганизации!',
-      ''
-    ]
-  },
-  {
-    image: 'https://cdnuploads.aa.com.tr/uploads/Contents/2024/03/23/thumbs_b_c_4e1dc3413e07d9708b3a82f4c626a220.jpg',
-    description: 'САЛЮТ',
-    content: [
-      ''
-    ]
-  } 
-];
 
 export default function Home() {
   return (
     <div className={styles.page}>
-      
       <main className={styles.main}>
-        <ApproveSection artistInfo={artistInfo}/>     
         <Image
           className={styles.logo}
           src="/next.svg"
@@ -49,9 +17,49 @@ export default function Home() {
           <h1>To get started, edit the page.tsx file.</h1>
           <p>
             Looking for a starting point or more instructions? Head over to{" "}
+            <a
+              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Templates
+            </a>{" "}
+            or the{" "}
+            <a
+              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learning
+            </a>{" "}
+            center.
           </p>
         </div>
-        
+        <div className={styles.ctas}>
+          <a
+            className={styles.primary}
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              className={styles.logo}
+              src="/vercel.svg"
+              alt="Vercel logomark"
+              width={16}
+              height={16}
+            />
+            Deploy Now
+          </a>
+          <a
+            className={styles.secondary}
+            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Documentation
+          </a>
+        </div>
       </main>
     </div>
   );
