@@ -23,6 +23,7 @@
   justify-content: space-between;
   background-color: var(--foreground);
   padding: 120px 60px;
+  font-family: 'Feature Mono', monospace;;
 }
 
 .intro {
