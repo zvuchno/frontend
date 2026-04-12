@@ -1,67 +1,79 @@
-import { TAuthResponse, TCurrentUserResponse, TLoginData, TLogoutdata, TNewArtistRequest, TNewListenerRequest, TNewUserResponse } from "./types";
+import { TAuthResponse, TCurrentUserResponse, TFetchProps, TLoginData, TLogoutdata, TNewArtistRequest, TNewListenerRequest, TNewUserResponse } from "./types";
 
 const BASE_URL=process.env.NEXT_PUBLIC_BASE_API_URL;
 
+export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => {
+  const endPoint = BASE_URL + '/v1' + props.url;
+  const res = await fetch (endPoint, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(props.fetchData)
+  })
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || data.detail || props.defaultMessage) 
+  }
+  return data as T
+}
 
 export const registerNewArtist = async (regData: TNewArtistRequest): Promise<TNewUserResponse> => {
-  const res = await fetch (`${BASE_URL}/v1/auth/register/artist/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(regData),
-    })
-  
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message || data.detail || 'Регистрация не удалась') 
-  }
-
-  return data as TNewUserResponse
+  return await createFetchFunction<TNewUserResponse>(
+    { url: '/auth/register/artist/', 
+      fetchData: regData,
+      defaultMessage: 'Регистрация не удалась'
+    }
+  )
 }
 
 export const registerNewListener = async (regData: TNewListenerRequest): Promise<TNewUserResponse> => {
-  const res = await fetch (`${BASE_URL}/v1/auth/register/listener/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(regData),
-    })
-  
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message || data.detail || 'Регистрация не удалась') 
-  }
-
-  return data as TNewUserResponse
+  return await createFetchFunction<TNewUserResponse>(
+    { url: '/auth/register/listener/', 
+      fetchData: regData,
+      defaultMessage: 'Регистрация не удалась'
+    }
+  )
 }
 
 export const logInUser = async (userData: TLoginData): Promise<TAuthResponse> => {
-  const res = await fetch (`${BASE_URL}/v1/auth/token/create/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userData),
-  })
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.detail || data.message || 'Ошибка авторизации');
-  }
-
-  return data as TAuthResponse;
+  return await createFetchFunction<TAuthResponse>(
+    { url: '/auth/token/create/', 
+      fetchData: userData,
+      defaultMessage: 'Ошибка авторизации'
+    }
+  )
 }
 
-export const logOutUser = async (userData: TLogoutdata) => {
-  const res = await fetch (`${BASE_URL}/v1/auth/token/logout/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userData),
-  })
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.detail || data.message || 'Ошибка авторизации');
-  }
+export const refreshToken = async (token: string): Promise<TAuthResponse> => {
+  return await createFetchFunction<TAuthResponse>(
+    { url: '/auth/token/refresh/', 
+      fetchData: {
+        refresh: token,
+      },
+      defaultMessage: 'Ошибка при обновлении сессии'
+    }
+  )
 }
 
+export const verifyToken = async (token: string): Promise<void> => {
+  return await createFetchFunction<void>(
+    { url: '/auth/token/verify/', 
+      fetchData: {
+        token: token,
+      },
+      defaultMessage: 'Ошибка верификации токена'
+    }
+  )
+}
 
+export const logOutUser = async (userData: TLogoutdata): Promise<void> => {
+  return await createFetchFunction<void>(
+    { url: '/auth/token/logout/', 
+      fetchData: userData,
+      defaultMessage: 'Ошибка при выходе из системы'
+    }
+  )
+}
 
 export const getCurrentUser = async (token: string): Promise<TCurrentUserResponse>  => {
   const res = await fetch (`${BASE_URL}/v1/auth/account/me/`, {
@@ -72,11 +84,9 @@ export const getCurrentUser = async (token: string): Promise<TCurrentUserRespons
   });
 
   const data = await res.json();
-
   if (!res.ok) {
     throw new Error (data.message || data.detail || 'Не удалось получить данные пользователя')
   }
-
   return data as TCurrentUserResponse
 }
 

@@ -41,3 +41,9 @@ export type TAuthResponse = {
 export type TLogoutdata = {
   refresh: string
 }
+
+export type TFetchProps = {
+  url: string, 
+  fetchData: any,
+  defaultMessage?: string
+}
