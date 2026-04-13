@@ -35,5 +35,14 @@ export type TProfileFormField = {
 }
 
 export type TProfileFormFieldsProps = {
-  fieldsDisabled: boolean
-}
+  fieldsDisabled: boolean,
+} & (
+  | {
+      showPublishHint?: true,
+      personalDataHref: string,
+    }
+  | {
+      showPublishHint: false,
+      personalDataHref?: never,
+    }
+);

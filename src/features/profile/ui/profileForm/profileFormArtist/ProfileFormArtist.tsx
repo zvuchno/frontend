@@ -7,8 +7,12 @@ import { InputPhone } from '../inputPhone';
 import { FieldError, get, useFormContext } from 'react-hook-form';
 import { registerRules } from '@/features/profile/utils/validation';
 
-export const ProfileFormArtistUI: FC<TProfileFormFieldsProps> = ({fieldsDisabled = false}) => { 
-  const { register, formState: {errors} } = useFormContext<FieldValues>();
+export const ProfileFormArtistUI: FC<TProfileFormFieldsProps> = (props) => {
+  const { fieldsDisabled = false } = props;
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<FieldValues>();
   const fields = artistFormFields;
   
   return (
@@ -46,6 +50,15 @@ export const ProfileFormArtistUI: FC<TProfileFormFieldsProps> = ({fieldsDisabled
           </div>
         )
       })}
+      {props.showPublishHint !== false && (
+        <p className={styles.hint}>
+          Чтобы ваш профиль стал публичным для всех пользователей не забудьте
+          заполнить{' '}
+          <a className={styles.link} href={props.personalDataHref}>
+            Личные данные
+          </a>
+        </p>
+      )}
     </div>
   )
 }

@@ -18,8 +18,8 @@ const meta: Meta<typeof ProfileFormUI> = {
       control: 'radio',
       options: ['artist', 'listener'],
       mapping: {
-        artist: <ProfileFormArtistUI fieldsDisabled={false} />,
-        listener: <ProfileFormListenerUI fieldsDisabled={false} />
+        artist: <ProfileFormArtistUI fieldsDisabled={false} personalDataHref='/' />,
+        listener: <ProfileFormListenerUI fieldsDisabled={false} showPublishHint={false}/>
       }
     }
     
@@ -71,7 +71,7 @@ type Story = StoryObj<typeof ProfileFormUI>;
 export const ProfileFormNew: Story = {
   args: {
     children: 
-      <ProfileFormArtistUI fieldsDisabled={false} />,
+      <ProfileFormArtistUI fieldsDisabled={false} personalDataHref='/'/>,
     values: {
       name: '', 
       email: '',
@@ -97,7 +97,7 @@ export const ProfileFormCurrent: Story = {
         isOnChange={isEditMode}
         onEdit={handleChange}
       >
-        <ProfileFormArtistUI fieldsDisabled={!isEditMode} />
+        <ProfileFormArtistUI fieldsDisabled={!isEditMode} personalDataHref='/'/>
       </ProfileFormUI>
     );
   }
@@ -105,7 +105,7 @@ export const ProfileFormCurrent: Story = {
 
 export const ProfileFormWithErrors: Story = {
   args: {
-    children: <ProfileFormArtistUI fieldsDisabled={false} />,
+    children: <ProfileFormArtistUI fieldsDisabled={false} personalDataHref='/'/>,
     isOnChange: true,
     values: { 
       name: 'И',
@@ -120,10 +120,25 @@ export const ProfileFormWithErrors: Story = {
 
 export const ProfileFormWithoutErrors: Story = {
   args: {
-    children: <ProfileFormArtistUI fieldsDisabled={false} />,
+    children: <ProfileFormArtistUI fieldsDisabled={false} personalDataHref='/'/>,
     isChecked: true,
     onSubmit: (data) => {
     console.log(data), alert('Форма отправлена')}
   },
 };
 
+export const ProfileFormWithoutHint: Story = {
+  args: {
+    children: (
+      <ProfileFormArtistUI fieldsDisabled={false} showPublishHint={false} />
+    ),
+    values: {
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      city: "",
+      url: "",
+    },
+  },
+};
