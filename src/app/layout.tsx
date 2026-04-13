@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
-import { DefaultHeaderActions } from "@/shared/constants/headerActions";
 import Footer from "@/widgets/layout/ui/Footer/Footer";
-import { HeaderUI } from "@/widgets/layout/ui/header";
+import AppHeader from "./AppHeader";
 import "./globals.scss";
 
 const geistSans = Geist({
@@ -65,7 +64,7 @@ export default function RootLayout({
       >
         <div className="app-shell">
           <div className="app-container">
-            <HeaderUI actions={DefaultHeaderActions} />
+            <AppHeader />
           </div>
           <main className="app-main">
             <div className="app-container">{children}</div>
