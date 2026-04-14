@@ -7,28 +7,14 @@ import { ProductCard } from "@/entities";
 import { ButtonLike } from "@/features";
 import BlogCard from "@/entities/blog/ui/BlogCard/BlogCard";
 import SectionFAQ from "./components/SectionFAQ/SectionFAQ";
+import { getListArtists } from "@/api/listArtists/listArtistsApi";
 
-export default function Home() {
+export default async function Home() {
 
-  const artists = [
-    {
-      id: '1',
-      image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
-      description: 'Один манул',
-    },
-    {
-      id: '2',
-      image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
-      description: 'Один манул',
-    },
-    {
-      id: '3',
-      image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
-      description: 'Один манул',
-    }
-  ];
+  const artistsData = await getListArtists(3);
+  const artistsList = artistsData.results;
 
-  const products = [
+  const mockProducts = [
     {
       id: '1',
       image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
@@ -59,7 +45,7 @@ export default function Home() {
     },
   ];
 
-  const blogs = [
+  const mockBlogs = [
     {
       id: '1',
       image: 'https://avatars.mds.yandex.net/i?id=2b49f18a1239d68def51de89f1d3c415c83ea222-8236365-images-thumbs&n=13',
@@ -107,17 +93,17 @@ export default function Home() {
 
       <div className={styles.mainContent}>
         <ListSection title="Артисты" link="">
-          {artists.map(artist => (
+          {artistsList.map(artist => (
             <CardArtist 
-              key={artist.id} 
-              image={artist.image} 
-              description={artist.description}
+              key={artist.name} 
+              image={artist.cover ?? undefined} 
+              description={artist.name}
             />
           ))}
         </ListSection>
 
         <ListSection title="Музыка" link="">
-          {products.map(product => (
+          {mockProducts.map(product => (
             <ProductCard
               key={product.id}
               title={product.title} 
@@ -130,7 +116,7 @@ export default function Home() {
         </ListSection>
 
         <ListSection title="Мерч" link="">
-          {products.map(product => (
+          {mockProducts.map(product => (
             <ProductCard
               key={product.id}
               title={product.title} 
@@ -143,7 +129,7 @@ export default function Home() {
         </ListSection>
 
         <ListSection title="Блог" link="">
-          {blogs.map(blog => (
+          {mockBlogs.map(blog => (
             <BlogCard 
               key={blog.id} 
               image={blog.image} 

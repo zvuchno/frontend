@@ -8,8 +8,8 @@ const SectionFAQ = ({ title, items }: SectionFAQProps) => {
     <section className={s.section}>
       <Title className={s.title}>{title}</Title>
       <div className={s.content}>
-        {items.map(item => (
-          <CardFAQUI containerClassName={s.cardFAQ} label={item.label}>{item.children}</CardFAQUI>
+        {items.map((item, index) => (
+          <CardFAQUI key={index} containerClassName={s.cardFAQ} label={item.label}>{item.children}</CardFAQUI>
         ))}
       </div>
     </section>
