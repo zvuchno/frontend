@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import "./page.module.css";
+import { SessionProviders } from "@/entities/user/providers/providers";
 import { DefaultHeaderActions } from "@/shared/constants/headerActions";
 import Footer from "@/widgets/layout/ui/Footer/Footer";
 import { HeaderUI } from "@/widgets/layout/ui/header";
-import "./globals.scss";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,15 +64,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable} ${betterVcr.variable}`}
       >
-        <div className="app-shell">
-          <div className="app-container">
-            <HeaderUI actions={DefaultHeaderActions} />
+        <SessionProviders>
+          <div className="app-shell">
+            <div className="app-container">
+              <HeaderUI actions={DefaultHeaderActions} />
+            </div>
+            <main className="app-main">
+              <div className="app-container">{children}</div>
+            </main>
+            <Footer />
           </div>
-          <main className="app-main">
-            <div className="app-container">{children}</div>
-          </main>
-          <Footer />
-        </div>
+        </SessionProviders>
       </body>
     </html>
   );
