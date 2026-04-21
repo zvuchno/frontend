@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 
+import { getCurrentArtist, type CurrentArtistResponse } from "@/api/artist";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
 import { ProfileFormArtistUI } from "@/features/profile/ui/profileForm/profileFormArtist";
@@ -15,6 +17,10 @@ import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
 import { HeaderUI } from "@/widgets/layout/ui/header";
 
 import styles from "./page.module.scss";
+import {
+  isArtistPersonalDataComplete,
+  mapArtistToArtistDataSectionProps,
+} from "./utils";
 
 const ARTIST_PROFILE_NAV_LINKS: LinkItem[] = [
   {
@@ -58,15 +64,11 @@ const DEFAULT_FORM_VALUES: FieldValues = {
   url: "zvuchno.space",
 };
 
-const MOCK_ARTIST_DATA = {
-  coverSrc: "https://placehold.co/632x464/png",
-  description:
-    "Летнее «Выгорание» пройдёт 9 и 10 августа в долгожданном и новом для нас формате городского open-air фестиваля на территории арт-кластера! Полноценная уличная сцена Summer Stage, 2 live-сцены и одна электронная, а также лекторий, квесты, маркеты, фудкорт, турниры по консольным играм и многое другое для всех выгоревших москвичей и гостей столицы!",
-  contacts: [{ id: 1, label: "Букинг", value: "booking@gmail.com" }],
-  socials: [{ id: 1, label: "Вконтакте", value: "vk.com/summerstage" }],
-} as const;
-
 export default function ArtistProfilePage() {
+  const accessToken = useUserStore((state) => state.user?.accessToken);
+  const [artist, setArtist] = useState<CurrentArtistResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const methods = useForm<FieldValues>({
@@ -85,15 +87,69 @@ export default function ArtistProfilePage() {
     setIsEditMode(false);
   };
 
-  const dataSectionProps = useMemo(
-    () => ({
-      coverSrc: MOCK_ARTIST_DATA.coverSrc,
-      description: MOCK_ARTIST_DATA.description,
-      contacts: [...MOCK_ARTIST_DATA.contacts],
-      socials: [...MOCK_ARTIST_DATA.socials],
-    }),
-    [],
-  );
+  useEffect(() => {
+    if (!accessToken) {
+      setArtist(null);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+
+    const loadCurrentArtist = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await getCurrentArtist(accessToken);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setArtist(response);
+        setError(null);
+      } catch (requestError) {
+        if (!isMounted) {
+          return;
+        }
+
+        setArtist(null);
+        setError(
+          requestError instanceof Error
+            ? requestError.message
+            : "Не удалось загрузить данные артиста",
+        );
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void loadCurrentArtist();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [accessToken]);
+
+  const isPersonalDataComplete = isArtistPersonalDataComplete(artist);
+  const shouldShowPublishHint =
+    !isLoading && artist !== null && !isPersonalDataComplete;
+  const profileFormArtistProps = shouldShowPublishHint
+    ? {
+        fieldsDisabled: !isEditMode,
+        personalDataHref: "#artist-data" as const,
+      }
+    : {
+        fieldsDisabled: !isEditMode,
+        showPublishHint: false as const,
+      };
+  const artistDataSectionProps = artist
+    ? mapArtistToArtistDataSectionProps(artist)
+    : null;
 
   return (
     <div className={styles.page}>
@@ -119,10 +175,7 @@ export default function ArtistProfilePage() {
                   onSubmit={handleSubmit}
                   onEdit={handleEdit}
                 >
-                  <ProfileFormArtistUI
-                    fieldsDisabled={!isEditMode}
-                    personalDataHref="#artist-data"
-                  />
+                  <ProfileFormArtistUI {...profileFormArtistProps} />
                 </ProfileFormUI>
               </FormProvider>
             </div>
@@ -131,7 +184,15 @@ export default function ArtistProfilePage() {
       </AccentContainer>
 
       <section id="artist-data" className={styles.dataSection}>
-        <ArtistDataSection {...dataSectionProps} />
+        {isLoading && (
+          <p className={styles.stateMessage}>Загрузка данных артиста...</p>
+        )}
+
+        {!isLoading && error && <p className={styles.stateMessage}>{error}</p>}
+
+        {!isLoading && !error && artistDataSectionProps && (
+          <ArtistDataSection {...artistDataSectionProps} />
+        )}
       </section>
     </div>
   );
