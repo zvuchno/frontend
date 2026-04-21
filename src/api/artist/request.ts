@@ -1,17 +1,3 @@
-function getArtistApiBaseUrl(): string {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
-
-  if (!apiBaseUrl) {
-    throw new Error("NEXT_PUBLIC_BASE_API_URL is not configured");
-  }
-
-  return apiBaseUrl.replace(/\/$/, "");
-}
-
-function buildArtistApiUrl(path: string): string {
-  return `${getArtistApiBaseUrl()}${path}`;
-}
-
 function createAuthHeaders(token: string, headers?: HeadersInit): Headers {
   const authHeaders = new Headers(headers);
   authHeaders.set("Authorization", `Bearer ${token}`);
@@ -44,7 +30,7 @@ export async function requestArtist<TResponse>(
   token: string,
   init: RequestInit,
 ): Promise<TResponse> {
-  const response = await fetch(buildArtistApiUrl(path), {
+  const response = await fetch(path, {
     ...init,
     headers: createAuthHeaders(token, init.headers),
   });

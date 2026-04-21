@@ -4,7 +4,7 @@ import {
   UpdateCurrentArtistCoverResponse,
 } from "./types";
 
-const CURRENT_ARTIST_COVER_PATH = "/v1/artists/me/cover/";
+const CURRENT_ARTIST_COVER_PATH = "/api/artist/me/cover";
 
 export async function updateCurrentArtistCover(
   payload: UpdateCurrentArtistCoverPayload,

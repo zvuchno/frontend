@@ -1,5 +1,6 @@
 import type { CurrentArtistResponse } from "@/api/artist";
 import type { ArtistDataSectionProps } from "@/widgets/profile/ui/ArtistDataSection";
+import type { TArtistDataItem } from "@/widgets/profile/ui/ArtistDataSection";
 
 export function mapArtistToArtistDataSectionProps(
   artist: CurrentArtistResponse,
@@ -28,4 +29,23 @@ export function isArtistPersonalDataComplete(
     artist.contacts.length > 0 &&
     artist.socials.length > 0
   );
+}
+
+export function removeArtistDataItem(
+  items: TArtistDataItem[],
+  targetItem: TArtistDataItem,
+): TArtistDataItem[] {
+  const targetIndex = items.findIndex((item) => {
+    if (item.id !== undefined || targetItem.id !== undefined) {
+      return item.id === targetItem.id;
+    }
+
+    return item.label === targetItem.label && item.value === targetItem.value;
+  });
+
+  if (targetIndex === -1) {
+    return items;
+  }
+
+  return items.filter((_, index) => index !== targetIndex);
 }

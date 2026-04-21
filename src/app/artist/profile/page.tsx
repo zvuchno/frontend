@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 
-import { getCurrentArtist, type CurrentArtistResponse } from "@/api/artist";
+import {
+  getCurrentArtist,
+  type CurrentArtistResponse,
+  updateCurrentArtist,
+} from "@/api/artist";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
@@ -12,7 +16,10 @@ import { DefaultHeaderActions } from "@/shared/constants/headerActions";
 import type { FieldValues } from "@/features/profile/ui/profileForm/types";
 import type { LinkItem } from "@/shared/ui/Link/Link.types";
 import { Title } from "@/shared/ui/Typography/Typography";
-import { ArtistDataSection } from "@/widgets/profile/ui/ArtistDataSection";
+import {
+  ArtistDataSection,
+  type TArtistDataItem,
+} from "@/widgets/profile/ui/ArtistDataSection";
 import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
 import { HeaderUI } from "@/widgets/layout/ui/header";
 
@@ -20,6 +27,7 @@ import styles from "./page.module.scss";
 import {
   isArtistPersonalDataComplete,
   mapArtistToArtistDataSectionProps,
+  removeArtistDataItem,
 } from "./utils";
 
 const ARTIST_PROFILE_NAV_LINKS: LinkItem[] = [
@@ -69,6 +77,8 @@ export default function ArtistProfilePage() {
   const [artist, setArtist] = useState<CurrentArtistResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isUpdatingData, setIsUpdatingData] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const methods = useForm<FieldValues>({
@@ -92,6 +102,8 @@ export default function ArtistProfilePage() {
       setArtist(null);
       setError(null);
       setIsLoading(false);
+      setUpdateError(null);
+      setIsUpdatingData(false);
       return;
     }
 
@@ -101,6 +113,7 @@ export default function ArtistProfilePage() {
       try {
         setIsLoading(true);
         setError(null);
+        setUpdateError(null);
 
         const response = await getCurrentArtist(accessToken);
 
@@ -150,6 +163,86 @@ export default function ArtistProfilePage() {
   const artistDataSectionProps = artist
     ? mapArtistToArtistDataSectionProps(artist)
     : null;
+  const sectionError = updateError ?? error;
+
+  const handleArtistDataUpdate = async ({
+    nextContacts = artist?.contacts,
+    nextSocials = artist?.socials,
+  }: {
+    nextContacts?: TArtistDataItem[];
+    nextSocials?: TArtistDataItem[];
+  }) => {
+    if (!artist || !accessToken) {
+      return;
+    }
+
+    try {
+      setIsUpdatingData(true);
+      setUpdateError(null);
+
+      const response = await updateCurrentArtist(
+        {
+          name: artist.name,
+          description: artist.description ?? "",
+          city: artist.city ?? "",
+          url: artist.url ?? "",
+          contacts: nextContacts ?? artist.contacts,
+          socials: nextSocials ?? artist.socials,
+        },
+        accessToken,
+      );
+
+      setArtist(response);
+    } catch (requestError) {
+      setUpdateError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Не удалось обновить данные артиста",
+      );
+    } finally {
+      setIsUpdatingData(false);
+    }
+  };
+
+  const handleAddContact = async (item: TArtistDataItem) => {
+    if (!artist) {
+      return;
+    }
+
+    await handleArtistDataUpdate({
+      nextContacts: [...artist.contacts, item],
+    });
+  };
+
+  const handleAddSocial = async (item: TArtistDataItem) => {
+    if (!artist) {
+      return;
+    }
+
+    await handleArtistDataUpdate({
+      nextSocials: [...artist.socials, item],
+    });
+  };
+
+  const handleDeleteContact = async (item: TArtistDataItem) => {
+    if (!artist) {
+      return;
+    }
+
+    await handleArtistDataUpdate({
+      nextContacts: removeArtistDataItem(artist.contacts, item),
+    });
+  };
+
+  const handleDeleteSocial = async (item: TArtistDataItem) => {
+    if (!artist) {
+      return;
+    }
+
+    await handleArtistDataUpdate({
+      nextSocials: removeArtistDataItem(artist.socials, item),
+    });
+  };
 
   return (
     <div className={styles.page}>
@@ -188,10 +281,22 @@ export default function ArtistProfilePage() {
           <p className={styles.stateMessage}>Загрузка данных артиста...</p>
         )}
 
-        {!isLoading && error && <p className={styles.stateMessage}>{error}</p>}
+        {!isLoading && sectionError && (
+          <p className={styles.stateMessage}>{sectionError}</p>
+        )}
 
-        {!isLoading && !error && artistDataSectionProps && (
-          <ArtistDataSection {...artistDataSectionProps} />
+        {!isLoading && !sectionError && isUpdatingData && (
+          <p className={styles.stateMessage}>Обновление данных артиста...</p>
+        )}
+
+        {!isLoading && artistDataSectionProps && (
+          <ArtistDataSection
+            {...artistDataSectionProps}
+            onAddContactClick={handleAddContact}
+            onAddSocialClick={handleAddSocial}
+            onDeleteContactClick={handleDeleteContact}
+            onDeleteSocialClick={handleDeleteSocial}
+          />
         )}
       </section>
     </div>
