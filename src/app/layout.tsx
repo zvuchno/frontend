@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+
+import { SessionProviders } from "@/entities/user/providers/providers";
 import Footer from "@/widgets/layout/ui/Footer/Footer";
 import AppHeader from "./AppHeader";
 import "./globals.scss";
@@ -14,6 +16,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
 const featureMono = localFont({
   src: [
     {
@@ -35,6 +38,7 @@ const featureMono = localFont({
   variable: "--font-feature-mono",
   display: "swap",
 });
+
 const betterVcr = localFont({
   src: [
     {
@@ -62,15 +66,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable} ${betterVcr.variable}`}
       >
-        <div className="app-shell">
-          <div className="app-container">
-            <AppHeader />
+        <SessionProviders>
+          <div className="app-shell">
+            <div className="app-container">
+              <AppHeader />
+            </div>
+            <main className="app-main">
+              <div className="app-container">{children}</div>
+            </main>
+            <Footer />
           </div>
-          <main className="app-main">
-            <div className="app-container">{children}</div>
-          </main>
-          <Footer />
-        </div>
+        </SessionProviders>
       </body>
     </html>
   );
