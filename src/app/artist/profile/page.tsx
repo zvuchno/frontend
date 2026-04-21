@@ -171,10 +171,12 @@ export default function ArtistProfilePage() {
   const profileFormArtistProps = shouldShowPublishHint
     ? {
         fieldsDisabled: !isEditMode,
+        disabledFields: ["email"] as const,
         personalDataHref: "#artist-data" as const,
       }
     : {
         fieldsDisabled: !isEditMode,
+        disabledFields: ["email"] as const,
         showPublishHint: false as const,
       };
   const artistDataSectionProps = artist
