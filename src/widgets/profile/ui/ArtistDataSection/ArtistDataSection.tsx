@@ -3,6 +3,8 @@
 import { useState } from "react";
 import CardArtist from "@/entities/Artist/ui/CardArtist/CardArtist";
 import { ButtonUI } from "@/shared/ui/button";
+import { DeleteIcon } from "@/shared/ui/icons/deleteIcon";
+import { PlusIcon } from "@/shared/ui/icons/plusIcon";
 import ArtistDescription from "@/widgets/artist/ui/ArtistDescription/ArtistDescription";
 import ModalAddContact from "../ModalAddContact/ModalAddContact";
 import {
@@ -10,14 +12,15 @@ import {
   TArtistDataItem,
 } from "./ArtistDataSection.types";
 import s from "./ArtistDataSection.module.scss";
-import { DeleteIcon } from "@/shared/ui/icons/deleteIcon";
-import { PlusIcon } from "@/shared/ui/icons/plusIcon";
 
 type TArtistDataFormValues = {
   name?: string;
   email?: string;
   url?: string;
 };
+
+const getItemKey = (item: TArtistDataItem) =>
+  item.id !== undefined ? String(item.id) : `${item.label}::${item.value}`;
 
 const ArtistDataSection = ({
   coverSrc,
@@ -26,6 +29,9 @@ const ArtistDataSection = ({
   socials,
   isAddingContact = false,
   isAddingSocial = false,
+  isUploadingCover = false,
+  deletingContactKey = null,
+  deletingSocialKey = null,
   onEditCoverClick,
   onAddContactClick,
   onAddSocialClick,
@@ -58,9 +64,15 @@ const ArtistDataSection = ({
   const renderItem = (item: TArtistDataItem, type: "contact" | "social") => {
     const handleDelete =
       type === "contact" ? onDeleteContactClick : onDeleteSocialClick;
+    const isDeleting =
+      (type === "contact" ? deletingContactKey : deletingSocialKey) ===
+      getItemKey(item);
 
     return (
-      <div key={item.id ?? `${item.label}-${item.value}`} className={s.item}>
+      <div
+        key={item.id ?? `${item.label}-${item.value}`}
+        className={isDeleting ? `${s.item} ${s.itemDeleting}` : s.item}
+      >
         <div className={s.itemMain}>
           <span className={s.itemLabel}>{item.label}</span>
 
@@ -72,10 +84,15 @@ const ArtistDataSection = ({
         <button
           type="button"
           className={s.deleteButton}
+          disabled={isDeleting}
           onClick={() => handleDelete?.(item)}
-          aria-label={`Удалить ${item.label}`}
+          aria-label={isDeleting ? `Удаление ${item.label}` : `Удалить ${item.label}`}
         >
-          <DeleteIcon />
+          {isDeleting ? (
+            <span className={s.deleteSpinner} aria-hidden="true" />
+          ) : (
+            <DeleteIcon />
+          )}
         </button>
       </div>
     );
@@ -92,9 +109,10 @@ const ArtistDataSection = ({
           variant="secondary"
           size="standart"
           onClick={onEditCoverClick}
+          disabled={isUploadingCover}
           className={s.mediaButton}
         >
-          Изменить обложку
+          {isUploadingCover ? "Загрузка..." : "Изменить обложку"}
         </ButtonUI>
       </div>
 

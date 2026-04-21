@@ -11,6 +11,9 @@ export interface ArtistDataSectionProps {
   socials: TArtistDataItem[];
   isAddingContact?: boolean;
   isAddingSocial?: boolean;
+  isUploadingCover?: boolean;
+  deletingContactKey?: string | null;
+  deletingSocialKey?: string | null;
   onEditCoverClick?: () => void;
   onAddContactClick?: (item: TArtistDataItem) => Promise<void> | void;
   onAddSocialClick?: (item: TArtistDataItem) => Promise<void> | void;
