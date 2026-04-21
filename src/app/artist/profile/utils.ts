@@ -11,8 +11,8 @@ export function mapArtistToArtistDataSectionProps(
   return {
     coverSrc: artist.cover ?? "",
     description: artist.description ?? "",
-    contacts: artist.contacts ?? [],
-    socials: artist.socials ?? [],
+    contacts: [...(artist.contacts ?? [])].reverse(),
+    socials: [...(artist.socials ?? [])].reverse(),
   };
 }
 
