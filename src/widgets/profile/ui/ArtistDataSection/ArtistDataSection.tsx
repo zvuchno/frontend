@@ -86,7 +86,9 @@ const ArtistDataSection = ({
           className={s.deleteButton}
           disabled={isDeleting}
           onClick={() => handleDelete?.(item)}
-          aria-label={isDeleting ? `Удаление ${item.label}` : `Удалить ${item.label}`}
+          aria-label={
+            isDeleting ? `Удаление ${item.label}` : `Удалить ${item.label}`
+          }
         >
           {isDeleting ? (
             <span className={s.deleteSpinner} aria-hidden="true" />
@@ -120,6 +122,7 @@ const ArtistDataSection = ({
         <ArtistDescription
           variant="profile"
           description={description}
+          emptyText="Описание пока не заполнено"
           title="Об исполнителе"
         />
 
