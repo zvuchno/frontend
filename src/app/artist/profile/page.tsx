@@ -77,7 +77,8 @@ export default function ArtistProfilePage() {
   const [artist, setArtist] = useState<CurrentArtistResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isUpdatingData, setIsUpdatingData] = useState(false);
+  const [isAddingContact, setIsAddingContact] = useState(false);
+  const [isAddingSocial, setIsAddingSocial] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -103,7 +104,8 @@ export default function ArtistProfilePage() {
       setError(null);
       setIsLoading(false);
       setUpdateError(null);
-      setIsUpdatingData(false);
+      setIsAddingContact(false);
+      setIsAddingSocial(false);
       return;
     }
 
@@ -171,13 +173,12 @@ export default function ArtistProfilePage() {
   }: {
     nextContacts?: TArtistDataItem[];
     nextSocials?: TArtistDataItem[];
-  }) => {
+  }): Promise<boolean> => {
     if (!artist || !accessToken) {
-      return;
+      return false;
     }
 
     try {
-      setIsUpdatingData(true);
       setUpdateError(null);
 
       const response = await updateCurrentArtist(
@@ -193,14 +194,14 @@ export default function ArtistProfilePage() {
       );
 
       setArtist(response);
+      return true;
     } catch (requestError) {
       setUpdateError(
         requestError instanceof Error
           ? requestError.message
           : "Не удалось обновить данные артиста",
       );
-    } finally {
-      setIsUpdatingData(false);
+      return false;
     }
   };
 
@@ -209,9 +210,19 @@ export default function ArtistProfilePage() {
       return;
     }
 
-    await handleArtistDataUpdate({
-      nextContacts: [...artist.contacts, item],
-    });
+    try {
+      setIsAddingContact(true);
+
+      const wasUpdated = await handleArtistDataUpdate({
+        nextContacts: [...artist.contacts, item],
+      });
+
+      if (!wasUpdated) {
+        throw new Error("Artist data update failed");
+      }
+    } finally {
+      setIsAddingContact(false);
+    }
   };
 
   const handleAddSocial = async (item: TArtistDataItem) => {
@@ -219,27 +230,37 @@ export default function ArtistProfilePage() {
       return;
     }
 
-    await handleArtistDataUpdate({
-      nextSocials: [...artist.socials, item],
-    });
+    try {
+      setIsAddingSocial(true);
+
+      const wasUpdated = await handleArtistDataUpdate({
+        nextSocials: [...artist.socials, item],
+      });
+
+      if (!wasUpdated) {
+        throw new Error("Artist data update failed");
+      }
+    } finally {
+      setIsAddingSocial(false);
+    }
   };
 
-  const handleDeleteContact = async (item: TArtistDataItem) => {
+  const handleDeleteContact = (item: TArtistDataItem) => {
     if (!artist) {
       return;
     }
 
-    await handleArtistDataUpdate({
+    void handleArtistDataUpdate({
       nextContacts: removeArtistDataItem(artist.contacts, item),
     });
   };
 
-  const handleDeleteSocial = async (item: TArtistDataItem) => {
+  const handleDeleteSocial = (item: TArtistDataItem) => {
     if (!artist) {
       return;
     }
 
-    await handleArtistDataUpdate({
+    void handleArtistDataUpdate({
       nextSocials: removeArtistDataItem(artist.socials, item),
     });
   };
@@ -285,13 +306,11 @@ export default function ArtistProfilePage() {
           <p className={styles.stateMessage}>{sectionError}</p>
         )}
 
-        {!isLoading && !sectionError && isUpdatingData && (
-          <p className={styles.stateMessage}>Обновление данных артиста...</p>
-        )}
-
         {!isLoading && artistDataSectionProps && (
           <ArtistDataSection
             {...artistDataSectionProps}
+            isAddingContact={isAddingContact}
+            isAddingSocial={isAddingSocial}
             onAddContactClick={handleAddContact}
             onAddSocialClick={handleAddSocial}
             onDeleteContactClick={handleDeleteContact}

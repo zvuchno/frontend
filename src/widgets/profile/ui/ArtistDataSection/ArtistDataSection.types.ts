@@ -9,9 +9,11 @@ export interface ArtistDataSectionProps {
   description: string;
   contacts: TArtistDataItem[];
   socials: TArtistDataItem[];
+  isAddingContact?: boolean;
+  isAddingSocial?: boolean;
   onEditCoverClick?: () => void;
-  onAddContactClick?: (item: TArtistDataItem) => void;
-  onAddSocialClick?: (item: TArtistDataItem) => void;
+  onAddContactClick?: (item: TArtistDataItem) => Promise<void> | void;
+  onAddSocialClick?: (item: TArtistDataItem) => Promise<void> | void;
   onDeleteContactClick?: (item: TArtistDataItem) => void;
   onDeleteSocialClick?: (item: TArtistDataItem) => void;
 }

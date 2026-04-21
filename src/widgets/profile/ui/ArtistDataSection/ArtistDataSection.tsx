@@ -24,6 +24,8 @@ const ArtistDataSection = ({
   description,
   contacts,
   socials,
+  isAddingContact = false,
+  isAddingSocial = false,
   onEditCoverClick,
   onAddContactClick,
   onAddSocialClick,
@@ -43,13 +45,13 @@ const ArtistDataSection = ({
     value: data.url?.trim() || "",
   });
 
-  const handleContactSubmit = (data: TArtistDataFormValues) => {
-    onAddContactClick?.(toContactItem(data));
+  const handleContactSubmit = async (data: TArtistDataFormValues) => {
+    await onAddContactClick?.(toContactItem(data));
     setIsContactModalOpen(false);
   };
 
-  const handleSocialSubmit = (data: TArtistDataFormValues) => {
-    onAddSocialClick?.(toSocialItem(data));
+  const handleSocialSubmit = async (data: TArtistDataFormValues) => {
+    await onAddSocialClick?.(toSocialItem(data));
     setIsSocialModalOpen(false);
   };
 
@@ -143,6 +145,7 @@ const ArtistDataSection = ({
       <ModalAddContact
         variant="contact"
         isOpen={isContactModalOpen}
+        isSubmitting={isAddingContact}
         onClose={() => setIsContactModalOpen(false)}
         onSubmit={handleContactSubmit}
       />
@@ -150,6 +153,7 @@ const ArtistDataSection = ({
       <ModalAddContact
         variant="link"
         isOpen={isSocialModalOpen}
+        isSubmitting={isAddingSocial}
         onClose={() => setIsSocialModalOpen(false)}
         onSubmit={handleSocialSubmit}
       />
