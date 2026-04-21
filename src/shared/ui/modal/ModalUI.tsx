@@ -12,25 +12,49 @@ export const ModalUI: FC<TModalUIProps>  = (
     isOpen = false,
     onClose
   }) => {
-    if (!isOpen) return;
     const handleEsc = useCallback((e: KeyboardEvent) => {
-      e.key === 'Escape' && onClose();
+      if (e.key === 'Escape') {
+        onClose();
+      }
     }, [onClose]);
 
     useEffect(() => {
-      if(isOpen) {
-      document.addEventListener('keydown', handleEsc);
+      if (isOpen) {
+        document.addEventListener('keydown', handleEsc);
       }
-        
+
       return () => {
         document.removeEventListener('keydown', handleEsc);
       }
     }, [isOpen, handleEsc]);
+
+    useEffect(() => {
+      if (!isOpen) {
+        return;
+      }
+
+      const { body } = document;
+      const previousOverflow = body.style.overflow;
+
+      body.style.overflow = 'hidden';
+
+      return () => {
+        body.style.overflow = previousOverflow;
+      };
+    }, [isOpen]);
+
+    if (!isOpen) {
+      return null;
+    }
     
     return (
       <div className={styles.overlay} onClick={onClose}>
         <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-          <button className={styles.modalCloseButton} onClick={onClose}>
+          <button
+            type="button"
+            className={styles.modalCloseButton}
+            onClick={onClose}
+          >
             {closeButtonStyle === 'circledX' 
               ? <CloseButtonIconCircledX /> 
               : <CloseButtonIconX />
