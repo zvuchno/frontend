@@ -21,6 +21,8 @@ export interface TProfileFormUIProps {
   title: string;
   isChecked: boolean;
   isOnChange: boolean;
+  isSubmitting?: boolean;
+  errorMessage?: string | null;
   control?: Control<FieldValues>;
   values?: Partial<FieldValues>;
   errors?: Partial<FieldErrors<FieldValues>>;

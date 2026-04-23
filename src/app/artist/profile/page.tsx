@@ -2,6 +2,7 @@
 
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 
 import {
   getCurrentArtist,
@@ -9,6 +10,7 @@ import {
   updateCurrentArtist,
   updateCurrentArtistCover,
 } from "@/api/artist";
+import { updateAccountPhone } from "@/api/account";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
@@ -88,14 +90,16 @@ const getArtistProfileFormValues = ({
 }): FieldValues => ({
   name: name ?? "",
   email: email ?? "",
-  phone: phone ?? "",
+  phone: phone?.replace(/\D/g, "") ?? "",
   password: "",
   city: city ?? "",
   url: url ?? "",
 });
 
 export default function ArtistProfilePage() {
+  const { update: updateSession } = useSession();
   const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
   const accessToken = user?.accessToken;
   const coverInputRef = useRef<HTMLInputElement | null>(null);
   const [artist, setArtist] = useState<CurrentArtistResponse | null>(null);
@@ -112,6 +116,8 @@ export default function ArtistProfilePage() {
   );
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [profileFormError, setProfileFormError] = useState<string | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const methods = useForm<FieldValues>({
@@ -129,11 +135,90 @@ export default function ArtistProfilePage() {
 
   const handleEdit = () => {
     void methods.trigger();
+    setProfileFormError(null);
     setIsEditMode(true);
   };
 
-  const handleSubmit: SubmitHandler<FieldValues> = () => {
-    setIsEditMode(false);
+  const handleSubmit: SubmitHandler<FieldValues> = async (formData) => {
+    if (!artist || !accessToken || !user) {
+      setProfileFormError("Не удалось подготовить данные профиля к сохранению");
+      return;
+    }
+
+    const nextName = formData.name ?? "";
+    const nextCity = formData.city ?? "";
+    const nextUrl = formData.url ?? "";
+    const nextPhone = (formData.phone ?? "").replace(/\D/g, "");
+    const currentPhone = (user.phone ?? "").replace(/\D/g, "");
+    const hasArtistProfileChanges =
+      nextName !== (artist.name ?? "") ||
+      nextCity !== (artist.city ?? "") ||
+      nextUrl !== (artist.url ?? "");
+    const hasPhoneChange = nextPhone !== currentPhone;
+
+    try {
+      setIsSavingProfile(true);
+      setProfileFormError(null);
+
+      let nextArtist = artist;
+      let nextUser = user;
+
+      if (hasArtistProfileChanges) {
+        nextArtist = await updateCurrentArtist(
+          {
+            name: nextName,
+            description: artist.description ?? "",
+            city: nextCity,
+            url: nextUrl,
+            contacts: artist.contacts,
+            socials: artist.socials,
+          },
+          accessToken,
+        );
+
+        setArtist(nextArtist);
+      }
+
+      if (hasPhoneChange) {
+        const phoneResponse = await updateAccountPhone(
+          {
+            phone: nextPhone,
+          },
+          accessToken,
+        );
+
+        nextUser = {
+          ...user,
+          phone: phoneResponse.phone,
+          isPhoneVerified: false,
+        };
+        await updateSession({
+          phone: nextUser.phone,
+          isPhoneVerified: nextUser.isPhoneVerified,
+        });
+        setUser(nextUser);
+      }
+
+      methods.reset(
+        getArtistProfileFormValues({
+          name: nextArtist.name,
+          email: nextUser.email,
+          phone: nextUser.phone,
+          city: nextArtist.city,
+          url: nextArtist.url,
+        }),
+      );
+      setProfileFormError(null);
+      setIsEditMode(false);
+    } catch (requestError) {
+      setProfileFormError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Не удалось сохранить изменения профиля",
+      );
+    } finally {
+      setIsSavingProfile(false);
+    }
   };
 
   useEffect(() => {
@@ -143,9 +228,11 @@ export default function ArtistProfilePage() {
       setIsLoading(false);
       setUpdateError(null);
       setCoverUploadError(null);
+      setProfileFormError(null);
       setIsAddingContact(false);
       setIsAddingSocial(false);
       setIsUploadingCover(false);
+      setIsSavingProfile(false);
       setDeletingContactKey(null);
       setDeletingSocialKey(null);
       return;
@@ -231,12 +318,12 @@ export default function ArtistProfilePage() {
   const profileFormArtistProps = shouldShowPublishHint
     ? {
         fieldsDisabled: !isEditMode,
-        disabledFields: ["email"] as const,
+        disabledFields: ["email", "password"] as const,
         personalDataHref: "#artist-data" as const,
       }
     : {
         fieldsDisabled: !isEditMode,
-        disabledFields: ["email"] as const,
+        disabledFields: ["email", "password"] as const,
         showPublishHint: false as const,
       };
   const artistDataSectionProps = artist
@@ -437,6 +524,8 @@ export default function ArtistProfilePage() {
                   title="Профиль"
                   isChecked={isEditMode && isFormValid}
                   isOnChange={isEditMode}
+                  isSubmitting={isSavingProfile}
+                  errorMessage={profileFormError}
                   onSubmit={handleSubmit}
                   onEdit={handleEdit}
                 >

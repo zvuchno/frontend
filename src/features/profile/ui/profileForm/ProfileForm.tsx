@@ -11,6 +11,8 @@ export const ProfileFormUI: FC<TProfileFormUIProps> = ({
   title = "Профиль",
   isChecked = false,
   isOnChange = true,
+  isSubmitting = false,
+  errorMessage,
   onSubmit,
   onError,
   onEdit,
@@ -27,21 +29,25 @@ export const ProfileFormUI: FC<TProfileFormUIProps> = ({
         <div className={styles.formContent}>{children}</div>
       </div>
 
+      {errorMessage && <p className={styles.formError}>{errorMessage}</p>}
+
       <div className={styles.formButtons}>
         <ButtonUI
           size="standart"
           variant="primary"
-          disabled={!isChecked || Object.keys(errors).length > 0}
+          disabled={
+            isSubmitting || !isChecked || Object.keys(errors).length > 0
+          }
           type="submit"
         >
-          Сохранить
+          {isSubmitting ? "Сохранение..." : "Сохранить"}
         </ButtonUI>
 
         <ButtonUI
           size="standart"
           variant="secondary"
           onClick={onEdit}
-          disabled={isOnChange}
+          disabled={isOnChange || isSubmitting}
           type="button"
         >
           Изменить
