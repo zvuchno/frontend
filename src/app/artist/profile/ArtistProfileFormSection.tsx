@@ -6,40 +6,18 @@ import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 
 import { updateAccountPhone } from "@/api/account";
 import { type CurrentArtistResponse, updateCurrentArtist } from "@/api/artist";
+import type { UserDataProps } from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
 import { ProfileFormArtistUI } from "@/features/profile/ui/profileForm/profileFormArtist";
 import type { FieldValues } from "@/features/profile/ui/profileForm/types";
-import type { UserDataProps } from "@/entities/user/store/useUserStore";
-
-const EMPTY_PROFILE_FORM_VALUES: FieldValues = {
-  name: "",
-  email: "",
-  phone: "",
-  password: "",
-  city: "",
-  url: "",
-};
-
-const getArtistProfileFormValues = ({
-  name,
-  email,
-  phone,
-  city,
-  url,
-}: {
-  name?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  city?: string | null;
-  url?: string | null;
-}): FieldValues => ({
-  name: name ?? "",
-  email: email ?? "",
-  phone: phone?.replace(/\D/g, "") ?? "",
-  password: "",
-  city: city ?? "",
-  url: url ?? "",
-});
+import {
+  buildArtistProfileUpdatePayload,
+  EMPTY_PROFILE_FORM_VALUES,
+  getArtistProfileFormValues,
+  hasArtistProfileChanges,
+  hasPhoneChange,
+  normalizePhone,
+} from "./form.utils";
 
 type ArtistProfileFormSectionProps = {
   artist: CurrentArtistResponse | null;
@@ -70,11 +48,6 @@ export default function ArtistProfileFormSection({
 
   const isFormValid = methods.formState.isValid;
   const isFormDirty = methods.formState.isDirty;
-  const artistName = artist?.name ?? "";
-  const artistCity = artist?.city ?? "";
-  const artistUrl = artist?.url ?? "";
-  const userEmail = user?.email ?? "";
-  const userPhone = user?.phone ?? "";
 
   const handleEdit = () => {
     void methods.trigger();
@@ -88,16 +61,9 @@ export default function ArtistProfileFormSection({
       return;
     }
 
-    const nextName = formData.name ?? "";
-    const nextCity = formData.city ?? "";
-    const nextUrl = formData.url ?? "";
-    const nextPhone = (formData.phone ?? "").replace(/\D/g, "");
-    const currentPhone = (user.phone ?? "").replace(/\D/g, "");
-    const hasArtistProfileChanges =
-      nextName !== (artist.name ?? "") ||
-      nextCity !== (artist.city ?? "") ||
-      nextUrl !== (artist.url ?? "");
-    const hasPhoneChange = nextPhone !== currentPhone;
+    const nextPhone = normalizePhone(formData.phone);
+    const shouldUpdateArtist = hasArtistProfileChanges(artist, formData);
+    const shouldUpdatePhone = hasPhoneChange(user, formData);
 
     try {
       setIsSavingProfile(true);
@@ -106,23 +72,16 @@ export default function ArtistProfileFormSection({
       let nextArtist = artist;
       let nextUser = user;
 
-      if (hasArtistProfileChanges) {
+      if (shouldUpdateArtist) {
         nextArtist = await updateCurrentArtist(
-          {
-            name: nextName,
-            description: artist.description ?? "",
-            city: nextCity,
-            url: nextUrl,
-            contacts: artist.contacts,
-            socials: artist.socials,
-          },
+          buildArtistProfileUpdatePayload(artist, formData),
           accessToken,
         );
 
         onArtistChange(nextArtist);
       }
 
-      if (hasPhoneChange) {
+      if (shouldUpdatePhone) {
         const phoneResponse = await updateAccountPhone(
           {
             phone: nextPhone,
@@ -179,23 +138,23 @@ export default function ArtistProfileFormSection({
 
     methods.reset(
       getArtistProfileFormValues({
-        name: artistName,
-        email: userEmail,
-        phone: userPhone,
-        city: artistCity,
-        url: artistUrl,
+        name: artist?.name,
+        email: user?.email,
+        phone: user?.phone,
+        city: artist?.city,
+        url: artist?.url,
       }),
     );
   }, [
     accessToken,
-    artistCity,
-    artistName,
-    artistUrl,
+    artist?.city,
+    artist?.name,
+    artist?.url,
     isEditMode,
     isFormDirty,
     methods,
-    userEmail,
-    userPhone,
+    user?.email,
+    user?.phone,
   ]);
 
   const profileFormArtistProps = showPublishHint
