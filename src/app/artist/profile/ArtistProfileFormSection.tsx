@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 
@@ -46,7 +46,7 @@ type ArtistProfileFormSectionProps = {
   user: UserDataProps | null;
   accessToken?: string;
   showPublishHint: boolean;
-  onArtistChange: (artist: CurrentArtistResponse) => void;
+  onArtistChange: Dispatch<SetStateAction<CurrentArtistResponse | null>>;
   onUserChange: (user: UserDataProps) => void;
 };
 
