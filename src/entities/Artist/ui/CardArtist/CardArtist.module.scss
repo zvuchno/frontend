@@ -1,7 +1,8 @@
 .cardWrapper {
   position: relative;
-  width: 404px;
-  height: 362px;
+  width: min(100%, var(--card-artist-width, 404px));
+  height: auto;
+  aspect-ratio: 404 / 362;
   filter: drop-shadow(6px 6px #000);
 
   &::before {
@@ -11,20 +12,16 @@
     left: -3px;
     bottom: 0px;
     right: -6px;
-    background-image: linear-gradient(
-      to bottom,
-      black,
-      black
-    );
+    background-image: linear-gradient(to bottom,
+        black,
+        black);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: -6px 0px;
 
-    mask-image: conic-gradient(
-      from 90deg at 50% 10%,
-      #000 220.7deg,
-      transparent 223deg
-    );
+    mask-image: conic-gradient(from 90deg at 50% 10%,
+        #000 220.7deg,
+        transparent 223deg);
   }
 }
 
@@ -32,21 +29,19 @@
   position: relative;
   width: 100%;
   height: 100%;
-  padding-top: 35px;
+  padding-top: calc(35 / 404 * 100%);
   background-color: var(--color-bg-secondary);
-  mask-image: conic-gradient(
-    from 90deg at 50% 10%,
-    #000 220.7deg,
-    transparent 223deg
-  );
+  mask-image: conic-gradient(from 90deg at 50% 10%,
+      #000 220.7deg,
+      transparent 223deg);
 }
 
 .card {
   position: absolute;
-  top: 34px;
-  left: -3px;
-  width: 408px;
-  height: 328px;
+  top: calc(34 / 362 * 100%);
+  right: calc(-1 / 404 * 100%);
+  bottom: 0;
+  left: calc(-3 / 404 * 100%);
   background-color: var(--color-accent-blue);
   border: 1px solid var(--outline-color);
   font-family: var(--font-better-vcr);
