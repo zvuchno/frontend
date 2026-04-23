@@ -1,8 +1,6 @@
 "use client";
 
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
-import { useSession } from "next-auth/react";
 
 import {
   getCurrentArtist,
@@ -10,12 +8,9 @@ import {
   updateCurrentArtist,
   updateCurrentArtistCover,
 } from "@/api/artist";
-import { updateAccountPhone } from "@/api/account";
 import { useUserStore } from "@/entities/user/store/useUserStore";
+import type { UserDataProps } from "@/entities/user/store/useUserStore";
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
-import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
-import { ProfileFormArtistUI } from "@/features/profile/ui/profileForm/profileFormArtist";
-import type { FieldValues } from "@/features/profile/ui/profileForm/types";
 import type { LinkItem } from "@/shared/ui/Link/Link.types";
 import { DefaultHeaderActions } from "@/shared/constants/headerActions";
 import { Title } from "@/shared/ui/Typography/Typography";
@@ -27,6 +22,7 @@ import {
 } from "@/widgets/profile/ui/ArtistDataSection";
 
 import styles from "./page.module.scss";
+import ArtistProfileFormSection from "./ArtistProfileFormSection";
 import {
   isArtistPersonalDataComplete,
   mapArtistToArtistDataSectionProps,
@@ -66,38 +62,7 @@ const ARTIST_PROFILE_NAV_LINKS: LinkItem[] = [
   },
 ];
 
-const EMPTY_PROFILE_FORM_VALUES: FieldValues = {
-  name: "",
-  email: "",
-  phone: "",
-  password: "",
-  city: "",
-  url: "",
-};
-
-const getArtistProfileFormValues = ({
-  name,
-  email,
-  phone,
-  city,
-  url,
-}: {
-  name?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  city?: string | null;
-  url?: string | null;
-}): FieldValues => ({
-  name: name ?? "",
-  email: email ?? "",
-  phone: phone?.replace(/\D/g, "") ?? "",
-  password: "",
-  city: city ?? "",
-  url: url ?? "",
-});
-
 export default function ArtistProfilePage() {
-  const { update: updateSession } = useSession();
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const accessToken = user?.accessToken;
@@ -116,110 +81,6 @@ export default function ArtistProfilePage() {
   );
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
-  const [isSavingProfile, setIsSavingProfile] = useState(false);
-  const [profileFormError, setProfileFormError] = useState<string | null>(null);
-  const [isEditMode, setIsEditMode] = useState(false);
-
-  const methods = useForm<FieldValues>({
-    mode: "onChange",
-    defaultValues: EMPTY_PROFILE_FORM_VALUES,
-  });
-
-  const isFormValid = methods.formState.isValid;
-  const isFormDirty = methods.formState.isDirty;
-  const artistName = artist?.name ?? "";
-  const artistCity = artist?.city ?? "";
-  const artistUrl = artist?.url ?? "";
-  const userEmail = user?.email ?? "";
-  const userPhone = user?.phone ?? "";
-
-  const handleEdit = () => {
-    void methods.trigger();
-    setProfileFormError(null);
-    setIsEditMode(true);
-  };
-
-  const handleSubmit: SubmitHandler<FieldValues> = async (formData) => {
-    if (!artist || !accessToken || !user) {
-      setProfileFormError("Не удалось подготовить данные профиля к сохранению");
-      return;
-    }
-
-    const nextName = formData.name ?? "";
-    const nextCity = formData.city ?? "";
-    const nextUrl = formData.url ?? "";
-    const nextPhone = (formData.phone ?? "").replace(/\D/g, "");
-    const currentPhone = (user.phone ?? "").replace(/\D/g, "");
-    const hasArtistProfileChanges =
-      nextName !== (artist.name ?? "") ||
-      nextCity !== (artist.city ?? "") ||
-      nextUrl !== (artist.url ?? "");
-    const hasPhoneChange = nextPhone !== currentPhone;
-
-    try {
-      setIsSavingProfile(true);
-      setProfileFormError(null);
-
-      let nextArtist = artist;
-      let nextUser = user;
-
-      if (hasArtistProfileChanges) {
-        nextArtist = await updateCurrentArtist(
-          {
-            name: nextName,
-            description: artist.description ?? "",
-            city: nextCity,
-            url: nextUrl,
-            contacts: artist.contacts,
-            socials: artist.socials,
-          },
-          accessToken,
-        );
-
-        setArtist(nextArtist);
-      }
-
-      if (hasPhoneChange) {
-        const phoneResponse = await updateAccountPhone(
-          {
-            phone: nextPhone,
-          },
-          accessToken,
-        );
-
-        nextUser = {
-          ...user,
-          phone: phoneResponse.phone,
-          isPhoneVerified: false,
-        };
-        await updateSession({
-          phone: nextUser.phone,
-          isPhoneVerified: nextUser.isPhoneVerified,
-        });
-        setUser(nextUser);
-      }
-
-      methods.reset(
-        getArtistProfileFormValues({
-          name: nextArtist.name,
-          email: nextUser.email,
-          phone: nextUser.phone,
-          city: nextArtist.city,
-          url: nextArtist.url,
-        }),
-      );
-      setProfileFormError(null);
-      setIsEditMode(false);
-    } catch (requestError) {
-      setProfileFormError(
-        requestError instanceof Error
-          ? requestError.message
-          : "Не удалось сохранить изменения профиля",
-      );
-    } finally {
-      setIsSavingProfile(false);
-    }
-  };
 
   useEffect(() => {
     if (!accessToken) {
@@ -228,11 +89,9 @@ export default function ArtistProfilePage() {
       setIsLoading(false);
       setUpdateError(null);
       setCoverUploadError(null);
-      setProfileFormError(null);
       setIsAddingContact(false);
       setIsAddingSocial(false);
       setIsUploadingCover(false);
-      setIsSavingProfile(false);
       setDeletingContactKey(null);
       setDeletingSocialKey(null);
       return;
@@ -280,52 +139,9 @@ export default function ArtistProfilePage() {
     };
   }, [accessToken]);
 
-  useEffect(() => {
-    if (!accessToken) {
-      methods.reset(EMPTY_PROFILE_FORM_VALUES);
-      setIsEditMode(false);
-      return;
-    }
-
-    if (isEditMode || isFormDirty) {
-      return;
-    }
-
-    methods.reset(
-      getArtistProfileFormValues({
-        name: artistName,
-        email: userEmail,
-        phone: userPhone,
-        city: artistCity,
-        url: artistUrl,
-      }),
-    );
-  }, [
-    accessToken,
-    artistCity,
-    artistName,
-    artistUrl,
-    isEditMode,
-    isFormDirty,
-    methods,
-    userEmail,
-    userPhone,
-  ]);
-
   const isPersonalDataComplete = isArtistPersonalDataComplete(artist);
   const shouldShowPublishHint =
     !isLoading && artist !== null && !isPersonalDataComplete;
-  const profileFormArtistProps = shouldShowPublishHint
-    ? {
-        fieldsDisabled: !isEditMode,
-        disabledFields: ["email", "password"] as const,
-        personalDataHref: "#artist-data" as const,
-      }
-    : {
-        fieldsDisabled: !isEditMode,
-        disabledFields: ["email", "password"] as const,
-        showPublishHint: false as const,
-      };
   const artistDataSectionProps = artist
     ? mapArtistToArtistDataSectionProps(artist)
     : null;
@@ -519,19 +335,14 @@ export default function ArtistProfilePage() {
             </aside>
 
             <div className={styles.content}>
-              <FormProvider {...methods}>
-                <ProfileFormUI
-                  title="Профиль"
-                  isChecked={isEditMode && isFormValid}
-                  isOnChange={isEditMode}
-                  isSubmitting={isSavingProfile}
-                  errorMessage={profileFormError}
-                  onSubmit={handleSubmit}
-                  onEdit={handleEdit}
-                >
-                  <ProfileFormArtistUI {...profileFormArtistProps} />
-                </ProfileFormUI>
-              </FormProvider>
+              <ArtistProfileFormSection
+                artist={artist}
+                user={user}
+                accessToken={accessToken}
+                showPublishHint={shouldShowPublishHint}
+                onArtistChange={setArtist}
+                onUserChange={(nextUser: UserDataProps) => setUser(nextUser)}
+              />
             </div>
           </section>
         </div>
