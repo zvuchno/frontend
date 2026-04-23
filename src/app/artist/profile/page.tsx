@@ -64,17 +64,39 @@ const ARTIST_PROFILE_NAV_LINKS: LinkItem[] = [
   },
 ];
 
-const DEFAULT_FORM_VALUES: FieldValues = {
-  name: "Summer Stage",
-  email: "booking@gmail.com",
-  phone: "79991234567",
-  password: "password123",
-  city: "Москва",
-  url: "zvuchno.space",
+const EMPTY_PROFILE_FORM_VALUES: FieldValues = {
+  name: "",
+  email: "",
+  phone: "",
+  password: "",
+  city: "",
+  url: "",
 };
 
+const getArtistProfileFormValues = ({
+  name,
+  email,
+  phone,
+  city,
+  url,
+}: {
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  city?: string | null;
+  url?: string | null;
+}): FieldValues => ({
+  name: name ?? "",
+  email: email ?? "",
+  phone: phone ?? "",
+  password: "",
+  city: city ?? "",
+  url: url ?? "",
+});
+
 export default function ArtistProfilePage() {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
+  const user = useUserStore((state) => state.user);
+  const accessToken = user?.accessToken;
   const coverInputRef = useRef<HTMLInputElement | null>(null);
   const [artist, setArtist] = useState<CurrentArtistResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -94,10 +116,16 @@ export default function ArtistProfilePage() {
 
   const methods = useForm<FieldValues>({
     mode: "onChange",
-    defaultValues: DEFAULT_FORM_VALUES,
+    defaultValues: EMPTY_PROFILE_FORM_VALUES,
   });
 
   const isFormValid = methods.formState.isValid;
+  const isFormDirty = methods.formState.isDirty;
+  const artistName = artist?.name ?? "";
+  const artistCity = artist?.city ?? "";
+  const artistUrl = artist?.url ?? "";
+  const userEmail = user?.email ?? "";
+  const userPhone = user?.phone ?? "";
 
   const handleEdit = () => {
     void methods.trigger();
@@ -164,6 +192,38 @@ export default function ArtistProfilePage() {
       isMounted = false;
     };
   }, [accessToken]);
+
+  useEffect(() => {
+    if (!accessToken) {
+      methods.reset(EMPTY_PROFILE_FORM_VALUES);
+      setIsEditMode(false);
+      return;
+    }
+
+    if (isEditMode || isFormDirty) {
+      return;
+    }
+
+    methods.reset(
+      getArtistProfileFormValues({
+        name: artistName,
+        email: userEmail,
+        phone: userPhone,
+        city: artistCity,
+        url: artistUrl,
+      }),
+    );
+  }, [
+    accessToken,
+    artistCity,
+    artistName,
+    artistUrl,
+    isEditMode,
+    isFormDirty,
+    methods,
+    userEmail,
+    userPhone,
+  ]);
 
   const isPersonalDataComplete = isArtistPersonalDataComplete(artist);
   const shouldShowPublishHint =
