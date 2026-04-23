@@ -20,6 +20,11 @@ import {
 } from "@/widgets/profile/ui/ArtistDataSection";
 
 import {
+  buildArtistCoverState,
+  buildArtistDataUpdatePayload,
+  getArtistDataItemKey,
+} from "./data.utils";
+import {
   mapArtistToArtistDataSectionProps,
   removeArtistDataItem,
 } from "./utils";
@@ -98,12 +103,7 @@ export default function ArtistProfileDataSection({
       );
 
       onArtistChange((prevArtist) =>
-        prevArtist
-          ? {
-              ...prevArtist,
-              cover: response.cover,
-            }
-          : prevArtist,
+        buildArtistCoverState(prevArtist, response.cover),
       );
     } catch (requestError) {
       setCoverUploadError(
@@ -133,14 +133,10 @@ export default function ArtistProfileDataSection({
       setCoverUploadError(null);
 
       const response = await updateCurrentArtist(
-        {
-          name: artist.name,
-          description: artist.description ?? "",
-          city: artist.city ?? "",
-          url: artist.url ?? "",
-          contacts: nextContacts ?? artist.contacts,
-          socials: nextSocials ?? artist.socials,
-        },
+        buildArtistDataUpdatePayload(artist, {
+          contacts: nextContacts,
+          socials: nextSocials,
+        }),
         accessToken,
       );
 
@@ -201,8 +197,7 @@ export default function ArtistProfileDataSection({
       return;
     }
 
-    const itemKey =
-      item.id !== undefined ? String(item.id) : `${item.label}::${item.value}`;
+    const itemKey = getArtistDataItemKey(item);
 
     void (async () => {
       try {
@@ -224,8 +219,7 @@ export default function ArtistProfileDataSection({
       return;
     }
 
-    const itemKey =
-      item.id !== undefined ? String(item.id) : `${item.label}::${item.value}`;
+    const itemKey = getArtistDataItemKey(item);
 
     void (async () => {
       try {
