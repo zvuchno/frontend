@@ -1,60 +1,75 @@
 import { create, StateCreator } from "zustand";
-import { immer } from "zustand/middleware/immer";
 
-type TProduct = {
+export type TProduct = {
   id: number;
   image: string | null;
   name: string;
-  article: number;
-  price: number;
-  amount: number;
+  article: string;
+  price: string;
+  amount: string;
   visibility: boolean;
 };
 
+export type TPromoCode = {
+  id: number;
+  name: string;
+  discount: string;
+  period: string;
+  amount: string;
+  visibility: boolean;
+}
+
 interface IActions {
-  setProducts: (items: TProduct[]) => void;
-  changeVisibility: (id: number) => void;
+  toggleVisibilityProduct: (value: boolean, id: number) => void;
   deleteProduct: (id: number) => void;
+  toggleVisibilityPromo: (value: boolean, id: number) => void;
+  deletePromo: (id: number) => void;
 }
 
 interface IInitialState {
   products: TProduct[];
+  promoCodes: TPromoCode[];
 };
 
 interface IShowcaseState extends IInitialState, IActions {};
 
 const initialState: IInitialState = {
-  products: []
+  products: [],
+  promoCodes: [],
 };
 
-const showcaseStore: StateCreator<IShowcaseState, [['zustand/immer', never]]> = (set) => ({
+const showcaseStore: StateCreator<IShowcaseState> = (set) => ({
   ...initialState,
-  setProducts: (items: TProduct[]) => {
-    set({ products: items });
-  },
-  changeVisibility: (id: number) => {
-    set((state) => {
-      const product = state.products.find((product: TProduct) => product.id === id);
-
-      if (product) {
-        product.visibility = !product.visibility
-      }
-    });
+  toggleVisibilityProduct: (value: boolean, id: number) => {
+    set((state) => ({
+      products: state.products.map(product => product.id === id ? { ...product, visibility: value} : product)
+    }));
   },
   deleteProduct: (id: number) => {
-    set((state) => {
-      const index = state.products.findIndex((product: TProduct) => product.id === id);
-
-      if (index !== -1) {
-        state.products.splice(index, 1);
-      }
-    });
+    set((state) => ({
+      products: state.products.filter(product => product.id !== id)
+    }));
+  },
+  toggleVisibilityPromo: (value: boolean, id: number) => {
+    set((state) => ({
+      promoCodes: state.promoCodes.map(promo => promo.id === id ? { ...promo, visibility: value} : promo)
+    }));
+  },
+  deletePromo: (id: number) => {
+    set((state) => ({
+      promoCodes: state.promoCodes.filter(promo => promo.id !== id)
+    }));
   },
 })
 
-const useShowcaseStore = create<IShowcaseState>()(immer(showcaseStore));
+const useShowcaseStore = create<IShowcaseState>()(showcaseStore);
 
-export const getShowcaseProducts = useShowcaseStore((state) => state.products);
-export const setShowcaseProducts = (items: TProduct[]) => useShowcaseStore.getState().setProducts(items);
-export const useChangeVisibility = (id: number) => useShowcaseStore.getState().changeVisibility(id);
+// Селекторы для продуктов
+export const useShowcaseProducts = () => useShowcaseStore((state) => state.products);
+export const useToggleVisibilityProduct = (value: boolean, id: number) => useShowcaseStore.getState().toggleVisibilityProduct(value, id);
 export const useDeleteProduct = (id: number) => useShowcaseStore.getState().deleteProduct(id);
+
+//Селекторы для промокодов
+export const useShowcasePromoCodes = () => useShowcaseStore((state) => state.promoCodes);
+export const useToggleVisibilityPromo = (value: boolean, id: number) => useShowcaseStore.getState().toggleVisibilityPromo(value, id);
+export const useDeletePromo = (id: number) => useShowcaseStore.getState().deletePromo(id);
