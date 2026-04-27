@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardFAQUI } from './CardFAQ';
 
 const meta: Meta<typeof CardFAQUI> = {
-    title: 'shared/ui/AccordeonCard',
+    title: 'shared/ui/CardFAQ',
     component: CardFAQUI,
     args: {
       label: (<p>Когда запуск?</p>),

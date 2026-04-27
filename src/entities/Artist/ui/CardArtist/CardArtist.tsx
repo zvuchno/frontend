@@ -1,8 +1,9 @@
 import { Title } from '@/shared/ui/Typography/Typography';
 import s from './CardArtist.module.scss';
 import { CardArtistProps } from "./CardArtist.type";
+import { ButtonLike } from '@/features';
 
-const CardArtist = ({ image, description, hasButton = true }: CardArtistProps) => {
+const CardArtist = ({ image, description, hasButton = true, isLiked }: CardArtistProps) => {
   return (
     <div className={s.cardWrapper}>
       <div className={s.cardCorner} />
@@ -16,12 +17,7 @@ const CardArtist = ({ image, description, hasButton = true }: CardArtistProps) =
           />
         )}
 
-        {hasButton && (
-          <button 
-            className={s.card__button}
-          />
-        )}
-
+        {hasButton && (<ButtonLike isLiked={isLiked} className={s.card__button}/>)}
         {description && (
           <div className={s.card__description}>
             <Title Tag='h4' variant='title' className={s.card__description__title}>{description}</Title>
