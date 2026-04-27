@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { updateAccountPassword, updateAccountPhone } from "@/api/account";
 import { getListener, updateListener } from "@/api/listener";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
@@ -13,6 +14,7 @@ function normalizePhone(value?: string | null): string {
 
 export function ProfilePageClient() {
   const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
   const accessToken = user?.accessToken;
   const email = user?.email ?? "";
   const phone = user?.phone ?? "";
@@ -27,6 +29,7 @@ export function ProfilePageClient() {
   });
 
   const isDirty = methods.formState.isDirty;
+  const dirtyFields = methods.formState.dirtyFields;
   const reset = methods.reset;
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -94,19 +97,67 @@ export function ProfilePageClient() {
     setProfileError(null);
 
     try {
-      const listener = await updateListener(accessToken, {
-        full_name: data.name ?? "",
-      });
+      const nextPhone = normalizePhone(data.phone);
+      const shouldUpdatePhone = nextPhone !== normalizePhone(phone);
+      const nextPassword = data.password ?? "";
+      let savedName = data.name ?? "";
+
+      let savedPhone = phone;
+      let nextUser = user;
+
+      if (dirtyFields.name) {
+        const listener = await updateListener(accessToken, {
+          full_name: savedName,
+        });
+
+        savedName = listener.full_name;
+      }
+
+      if (shouldUpdatePhone) {
+        const phoneResponse = await updateAccountPhone(
+          {
+            phone: nextPhone,
+          },
+          accessToken,
+        );
+
+        savedPhone = phoneResponse.phone ?? "";
+
+        if (user) {
+          nextUser = {
+            ...user,
+            phone: phoneResponse.phone,
+            isPhoneVerified: false,
+          };
+        }
+      }
+
+      if (nextPassword) {
+        await updateAccountPassword(
+          {
+            password: nextPassword,
+          },
+          accessToken,
+        );
+      }
 
       reset({
-        name: listener.full_name,
+        name: savedName,
         email,
-        phone: normalizePhone(phone),
+        phone: normalizePhone(savedPhone),
         password: "",
       });
       setIsEditMode(false);
-    } catch {
-      setProfileError("Не удалось сохранить профиль");
+
+      if (nextUser && nextUser !== user) {
+        setUser(nextUser);
+      }
+    } catch (requestError) {
+      setProfileError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Не удалось сохранить профиль",
+      );
     } finally {
       setIsProfileSaving(false);
     }
