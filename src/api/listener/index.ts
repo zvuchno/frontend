@@ -1,19 +1,9 @@
 import { ListenerMe, UpdateListenerPayload } from "./types";
 
-function getApiBaseUrl(): string {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
-
-  if (!apiBaseUrl) {
-    throw new Error("NEXT_PUBLIC_BASE_API_URL is not configured");
-  }
-
-  return apiBaseUrl;
-}
+const LISTENER_ME_PATH = "/api/listener/me";
 
 export async function getListener(accessToken: string): Promise<ListenerMe> {
-  const apiBaseUrl = getApiBaseUrl();
-
-  const response = await fetch(`${apiBaseUrl}/v1/listener/me/`, {
+  const response = await fetch(LISTENER_ME_PATH, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -30,9 +20,7 @@ export async function updateListener(
   accessToken: string,
   data: UpdateListenerPayload,
 ): Promise<ListenerMe> {
-  const apiBaseUrl = getApiBaseUrl();
-
-  const response = await fetch(`${apiBaseUrl}/v1/listener/me/`, {
+  const response = await fetch(LISTENER_ME_PATH, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${accessToken}`,

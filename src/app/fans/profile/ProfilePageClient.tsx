@@ -1,11 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { getListener } from "@/api/listener";
+import { getListener, updateListener } from "@/api/listener";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
 import { FieldValues } from "@/features/profile/ui/profileForm/types";
 import { ProfileFormListenerUI } from "@/features/profile/ui/profileForm/profileFormListener";
+
+function normalizePhone(value?: string | null): string {
+  return value?.replace(/\D/g, "") ?? "";
+}
 
 export function ProfilePageClient() {
   const user = useUserStore((state) => state.user);
@@ -27,7 +31,10 @@ export function ProfilePageClient() {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(false);
+  const [isProfileSaving, setIsProfileSaving] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
+
+  const isProfileBusy = isProfileLoading || isProfileSaving;
 
   useEffect(() => {
     let isCurrentRequest = true;
@@ -52,7 +59,7 @@ export function ProfilePageClient() {
         reset({
           name: listener.full_name,
           email,
-          phone,
+          phone: normalizePhone(phone),
           password: "",
         });
       } catch {
@@ -77,23 +84,46 @@ export function ProfilePageClient() {
     setIsEditMode(true);
   };
 
-  const handleSubmitForm = (data: FieldValues) => {
-    reset(data);
-    setIsEditMode(false);
+  const handleSubmitForm = async (data: FieldValues) => {
+    if (!accessToken) {
+      setProfileError("Не удалось сохранить профиль");
+      return;
+    }
+
+    setIsProfileSaving(true);
+    setProfileError(null);
+
+    try {
+      const listener = await updateListener(accessToken, {
+        full_name: data.name ?? "",
+      });
+
+      reset({
+        name: listener.full_name,
+        email,
+        phone: normalizePhone(phone),
+        password: "",
+      });
+      setIsEditMode(false);
+    } catch {
+      setProfileError("Не удалось сохранить профиль");
+    } finally {
+      setIsProfileSaving(false);
+    }
   };
 
   return (
     <FormProvider {...methods}>
       <ProfileFormUI
         title="Профиль"
-        isChecked={isDirty && !isProfileLoading}
-        isOnChange={isEditMode || isProfileLoading}
+        isChecked={isDirty && !isProfileBusy}
+        isOnChange={isEditMode || isProfileBusy}
         onEdit={handleEdit}
         onSubmit={handleSubmitForm}
       >
         {profileError && <p role="alert">{profileError}</p>}
         <ProfileFormListenerUI
-          fieldsDisabled={!isEditMode || isProfileLoading}
+          fieldsDisabled={!isEditMode || isProfileBusy}
           disabledFields={["email"]}
         />
       </ProfileFormUI>
