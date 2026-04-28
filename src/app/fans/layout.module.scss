@@ -1,11 +1,11 @@
 .container {
-  min-height: 742px;
-  padding: 54px 48px 166px;
+  min-height: 46.375rem;
+  padding: 3.375rem 3rem 10.375rem;
 }
 
 .title {
   font-family: var(--font-better-vcr);
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 400;
   line-height: 100%;
   letter-spacing: -0.06em;
@@ -15,12 +15,28 @@
 
 .section {
   display: flex;
-  gap: 89px;
+  gap: 5.5625rem;
 
   &__content {
-    max-height: 632px;
-    overflow-y: auto;
+    max-height: 39.5rem;
+    overflow-y: visible;
     margin-left: auto;
     margin-right: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1rem 6rem;
+  }
+
+  .section {
+    flex-direction: column;
+    gap: 2rem;
+
+    &__content {
+      width: 100%;
+      max-height: none;
+    }
   }
 }
