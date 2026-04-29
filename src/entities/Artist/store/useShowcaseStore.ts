@@ -33,9 +33,51 @@ interface IInitialState {
 
 interface IShowcaseState extends IInitialState, IActions {};
 
+// const initialState: IInitialState = {
+//   products: [],
+//   promoCodes: [],
+// };
+
+//Временное начальное состояние, чтобы посмотреть страницу с товарами
 const initialState: IInitialState = {
-  products: [],
-  promoCodes: [],
+  products: [
+    {
+      id: 1,
+      image: 'https://avatars.yandex.net/get-music-content/17649213/93307982.a.41277295-1/m1000x1000',
+      name: 'Футболка',
+      article: 'артикул 1',
+      price: '1000',
+      amount: '100',
+      visibility: true,
+    },
+    {
+      id: 2,
+      image: 'https://avatars.yandex.net/get-music-content/17649213/93307982.a.41277295-1/m1000x1000',
+      name: 'Футболка',
+      article: 'артикул 1',
+      price: '1000',
+      amount: '100',
+      visibility: true,
+    },
+  ],
+  promoCodes: [
+    {
+      id: 5,
+      name: 'SALE20',
+      discount: '20',
+      period: '01.04 - 25.04',
+      amount: 'неограничено',
+      visibility: false,
+    },
+    {
+      id: 6,
+      name: 'SALE20',
+      discount: '20',
+      period: '01.04 - 25.04',
+      amount: 'неограничено',
+      visibility: false,
+    },
+  ],
 };
 
 const showcaseStore: StateCreator<IShowcaseState> = (set) => ({
