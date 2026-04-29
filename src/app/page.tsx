@@ -8,65 +8,16 @@ import { ButtonLike } from "@/features";
 import BlogCard from "@/entities/blog/ui/BlogCard/BlogCard";
 import SectionFAQ from "./components/SectionFAQ/SectionFAQ";
 import { getListArtists } from "@/api/listArtists/listArtistsApi";
+import { mockBlogs, mockProducts } from "./mocks";
 
 export default async function Home() {
 
   const artistsData = await getListArtists(3);
   const artistsList = artistsData.results;
 
-  const mockProducts = [
-    {
-      id: '1',
-      image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
-      title: 'ОДИН МАНУЛ',
-      description: 'Винил ОДИН МАНУЛ (LP, 2025)',
-      price: '1 000 ₽',
-    },
-    {
-      id: '2',
-      image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
-      title: 'ОДИН МАНУЛ',
-      description: 'Винил ОДИН МАНУЛ (LP, 2025)',
-      price: '1 000 ₽',
-    },
-    {
-      id: '3',
-      image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
-      title: 'ОДИН МАНУЛ',
-      description: 'Винил ОДИН МАНУЛ Deluxe Gatefold Edition (LP, 2025)',
-      price: '12 500 ₽',
-    },
-    {
-      id: '4',
-      image: 'https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg',
-      title: 'ОДИН МАНУЛ',
-      description: 'Винил ОДИН МАНУЛ Deluxe Gatefold Edition (LP, 2025)',
-      price: '12 500 ₽',
-    },
-  ];
+  const products = mockProducts;
 
-  const mockBlogs = [
-    {
-      id: '1',
-      image: 'https://avatars.mds.yandex.net/i?id=2b49f18a1239d68def51de89f1d3c415c83ea222-8236365-images-thumbs&n=13',
-      link: '/blog/example',
-      description: 'Почему музыкальные релизы выходят по пятницам?',
-      hasLink: true,
-    },
-    {
-      id: '2',
-      image: 'https://avatars.mds.yandex.net/i?id=2b49f18a1239d68def51de89f1d3c415c83ea222-8236365-images-thumbs&n=13',
-      description: 'Как создать идеальный плейлист',
-      hasLink: false,
-    },
-    {
-      id: '3',
-      image: 'https://avatars.mds.yandex.net/i?id=2b49f18a1239d68def51de89f1d3c415c83ea222-8236365-images-thumbs&n=13',
-      link: '/blog/long-title',
-      description: 'Почему музыкальные релизы выходят по пятницам и как это влияет на индустрию',
-      hasLink: true,
-    }
-  ];
+  const blogs = mockBlogs;
 
   const questions = [
     {
@@ -116,7 +67,7 @@ export default async function Home() {
         </ListSection>
 
         <ListSection title="Мерч" link="">
-          {mockProducts.map(product => (
+          {products.map(product => (
             <ProductCard
               key={product.id}
               title={product.title} 
@@ -129,7 +80,7 @@ export default async function Home() {
         </ListSection>
 
         <ListSection title="Блог" link="">
-          {mockBlogs.map(blog => (
+          {blogs.map(blog => (
             <BlogCard 
               key={blog.id} 
               image={blog.image} 
