@@ -1,8 +1,11 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import { FormProvider, useForm } from "react-hook-form";
+
 import { updateAccountPassword, updateAccountPhone } from "@/api/account";
-import { getListener, updateListener } from "@/api/listener";
+import { getCurrentListener, updateListener } from "@/api/listener";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
 import { FieldValues } from "@/features/profile/ui/profileForm/types";
@@ -12,10 +15,10 @@ function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
 }
 
-export function ProfilePageClient() {
+export function ListenerProfileFormSection() {
+  const { status } = useSession();
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
-  const accessToken = user?.accessToken;
   const email = user?.email ?? "";
   const phone = user?.phone ?? "";
 
@@ -40,20 +43,30 @@ export function ProfilePageClient() {
   const isProfileBusy = isProfileLoading || isProfileSaving;
 
   useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+
+    if (status === "unauthenticated" || !user) {
+      setIsProfileLoading(false);
+      setProfileError(null);
+      reset({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+      });
+      return;
+    }
+
     let isCurrentRequest = true;
 
     const loadProfile = async () => {
-      if (!accessToken) {
-        setIsProfileLoading(false);
-        setProfileError(null);
-        return;
-      }
-
       setIsProfileLoading(true);
       setProfileError(null);
 
       try {
-        const listener = await getListener(accessToken);
+        const listener = await getCurrentListener();
 
         if (!isCurrentRequest) {
           return;
@@ -81,14 +94,14 @@ export function ProfilePageClient() {
     return () => {
       isCurrentRequest = false;
     };
-  }, [accessToken, email, phone, reset]);
+  }, [email, phone, reset, status, user]);
 
   const handleEdit = () => {
     setIsEditMode(true);
   };
 
   const handleSubmitForm = async (data: FieldValues) => {
-    if (!accessToken) {
+    if (!user) {
       setProfileError("Не удалось сохранить профиль");
       return;
     }
@@ -106,7 +119,7 @@ export function ProfilePageClient() {
       let nextUser = user;
 
       if (dirtyFields.name) {
-        const listener = await updateListener(accessToken, {
+        const listener = await updateListener({
           full_name: savedName,
         });
 
@@ -114,31 +127,23 @@ export function ProfilePageClient() {
       }
 
       if (shouldUpdatePhone) {
-        const phoneResponse = await updateAccountPhone(
-          {
-            phone: nextPhone,
-          },
-          accessToken,
-        );
+        const phoneResponse = await updateAccountPhone({
+          phone: nextPhone,
+        });
 
         savedPhone = phoneResponse.phone ?? "";
 
-        if (user) {
-          nextUser = {
-            ...user,
-            phone: phoneResponse.phone,
-            isPhoneVerified: false,
-          };
-        }
+        nextUser = {
+          ...nextUser,
+          phone: phoneResponse.phone,
+          isPhoneVerified: false,
+        };
       }
 
       if (nextPassword) {
-        await updateAccountPassword(
-          {
-            password: nextPassword,
-          },
-          accessToken,
-        );
+        await updateAccountPassword({
+          password: nextPassword,
+        });
       }
 
       reset({
@@ -149,7 +154,7 @@ export function ProfilePageClient() {
       });
       setIsEditMode(false);
 
-      if (nextUser && nextUser !== user) {
+      if (nextUser !== user) {
         setUser(nextUser);
       }
     } catch (requestError) {

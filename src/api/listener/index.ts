@@ -1,8 +1,10 @@
+import { getApiAccessToken } from "@/api/authToken";
 import { ListenerMe, UpdateListenerPayload } from "./types";
 
 const LISTENER_ME_PATH = "/api/listener/me";
 
-export async function getListener(accessToken: string): Promise<ListenerMe> {
+export async function getCurrentListener(): Promise<ListenerMe> {
+  const accessToken = await getApiAccessToken();
   const response = await fetch(LISTENER_ME_PATH, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -17,9 +19,9 @@ export async function getListener(accessToken: string): Promise<ListenerMe> {
 }
 
 export async function updateListener(
-  accessToken: string,
   data: UpdateListenerPayload,
 ): Promise<ListenerMe> {
+  const accessToken = await getApiAccessToken();
   const response = await fetch(LISTENER_ME_PATH, {
     method: "PATCH",
     headers: {
@@ -35,3 +37,5 @@ export async function updateListener(
 
   return response.json();
 }
+
+export const getListener = getCurrentListener;

@@ -1,5 +1,5 @@
-import { ProfilePageClient } from "./ProfilePageClient";
+import { ListenerProfileFormSection } from "./ListenerProfileFormSection";
 
 export default function ProfilePage() {
-  return <ProfilePageClient />;
+  return <ListenerProfileFormSection />;
 }

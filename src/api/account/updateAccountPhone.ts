@@ -5,11 +5,9 @@ const CURRENT_ACCOUNT_CHANGE_PHONE_PATH = "/api/account/me/change-phone";
 
 export async function updateAccountPhone(
   payload: UpdateAccountPhonePayload,
-  token: string,
 ): Promise<UpdateAccountPhoneResponse> {
   return requestAccount<UpdateAccountPhoneResponse>(
     CURRENT_ACCOUNT_CHANGE_PHONE_PATH,
-    token,
     {
       method: "PATCH",
       headers: {
@@ -19,3 +17,5 @@ export async function updateAccountPhone(
     },
   );
 }
+
+export default updateAccountPhone;
