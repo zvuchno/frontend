@@ -3,11 +3,11 @@ export type FooterLink = {
   href: string;
 };
 export const defaultLinks: FooterLink[] = [
-  { label: 'Контакты', href: '/contacts' },
-  { label: 'Каталог', href: '/catalog' },
-  { label: 'Для артистов', href: '/artists' },
-  { label: 'Для фанатов', href: '/fans' },
-  { label: 'Условия использования', href: '/terms' },
+  { label: "Контакты", href: "/contacts" },
+  { label: "Каталог", href: "/catalog" },
+  { label: "Для артистов", href: "/artists" },
+  { label: "Для фанатов", href: "/fans" },
+  { label: "Условия использования", href: "/terms" },
 ];
 import type { ComponentPropsWithoutRef } from "react";
 
@@ -59,3 +59,36 @@ export const mainNavRoutes = [
     label: "артистам",
   },
 ] satisfies readonly MainNavRoute[];
+
+export const artistProfileNavRoutes = [
+  {
+    id: "profile",
+    href: "/artist/profile",
+    label: "Профиль",
+  },
+  {
+    id: "artist-data",
+    href: "/artist/profile#artist-data",
+    label: "Данные",
+  },
+  {
+    id: "storefront",
+    href: "/artist/profile#storefront",
+    label: "Витрина",
+  },
+  {
+    id: "orders",
+    href: "/artist/profile#orders",
+    label: "Заказы",
+  },
+  {
+    id: "finance",
+    href: "/artist/profile#finance",
+    label: "Финансы",
+  },
+  {
+    id: "settings",
+    href: "/artist/profile#settings",
+    label: "Настройки",
+  },
+] satisfies readonly MainNavRouteItem[];

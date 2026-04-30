@@ -6,10 +6,11 @@ import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 
 import { updateAccountPhone } from "@/api/account";
 import { type CurrentArtistResponse, updateCurrentArtist } from "@/api/artist";
-import type { UserDataProps } from "@/entities/user/store/useUserStore";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
 import { ProfileFormArtistUI } from "@/features/profile/ui/profileForm/profileFormArtist";
 import type { FieldValues } from "@/features/profile/ui/profileForm/types";
+
 import {
   buildArtistProfileUpdatePayload,
   EMPTY_PROFILE_FORM_VALUES,
@@ -21,22 +22,18 @@ import {
 
 type ArtistProfileFormSectionProps = {
   artist: CurrentArtistResponse | null;
-  user: UserDataProps | null;
-  accessToken?: string;
   showPublishHint: boolean;
   onArtistChange: Dispatch<SetStateAction<CurrentArtistResponse | null>>;
-  onUserChange: (user: UserDataProps) => void;
 };
 
 export default function ArtistProfileFormSection({
   artist,
-  user,
-  accessToken,
   showPublishHint,
   onArtistChange,
-  onUserChange,
 }: ArtistProfileFormSectionProps) {
   const { update: updateSession } = useSession();
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileFormError, setProfileFormError] = useState<string | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -56,7 +53,7 @@ export default function ArtistProfileFormSection({
   };
 
   const handleSubmit: SubmitHandler<FieldValues> = async (formData) => {
-    if (!artist || !accessToken || !user) {
+    if (!artist || !user) {
       setProfileFormError("Не удалось подготовить данные профиля к сохранению");
       return;
     }
@@ -75,19 +72,15 @@ export default function ArtistProfileFormSection({
       if (shouldUpdateArtist) {
         nextArtist = await updateCurrentArtist(
           buildArtistProfileUpdatePayload(artist, formData),
-          accessToken,
         );
 
         onArtistChange(nextArtist);
       }
 
       if (shouldUpdatePhone) {
-        const phoneResponse = await updateAccountPhone(
-          {
-            phone: nextPhone,
-          },
-          accessToken,
-        );
+        const phoneResponse = await updateAccountPhone({
+          phone: nextPhone,
+        });
 
         nextUser = {
           ...user,
@@ -98,7 +91,7 @@ export default function ArtistProfileFormSection({
           phone: nextUser.phone,
           isPhoneVerified: nextUser.isPhoneVerified,
         });
-        onUserChange(nextUser);
+        setUser(nextUser);
       }
 
       methods.reset(
@@ -124,7 +117,7 @@ export default function ArtistProfileFormSection({
   };
 
   useEffect(() => {
-    if (!accessToken) {
+    if (!user) {
       methods.reset(EMPTY_PROFILE_FORM_VALUES);
       setProfileFormError(null);
       setIsSavingProfile(false);
@@ -139,22 +132,20 @@ export default function ArtistProfileFormSection({
     methods.reset(
       getArtistProfileFormValues({
         name: artist?.name,
-        email: user?.email,
-        phone: user?.phone,
+        email: user.email,
+        phone: user.phone,
         city: artist?.city,
         url: artist?.url,
       }),
     );
   }, [
-    accessToken,
     artist?.city,
     artist?.name,
     artist?.url,
     isEditMode,
     isFormDirty,
     methods,
-    user?.email,
-    user?.phone,
+    user,
   ]);
 
   const profileFormArtistProps = showPublishHint

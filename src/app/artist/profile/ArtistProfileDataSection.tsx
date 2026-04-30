@@ -32,7 +32,6 @@ import styles from "./page.module.scss";
 
 type ArtistProfileDataSectionProps = {
   artist: CurrentArtistResponse | null;
-  accessToken?: string;
   isLoading: boolean;
   error: string | null;
   onArtistChange: Dispatch<SetStateAction<CurrentArtistResponse | null>>;
@@ -40,7 +39,6 @@ type ArtistProfileDataSectionProps = {
 
 export default function ArtistProfileDataSection({
   artist,
-  accessToken,
   isLoading,
   error,
   onArtistChange,
@@ -59,7 +57,7 @@ export default function ArtistProfileDataSection({
   const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!accessToken) {
+    if (!artist) {
       setUpdateError(null);
       setCoverUploadError(null);
       setIsAddingContact(false);
@@ -68,7 +66,7 @@ export default function ArtistProfileDataSection({
       setDeletingContactKey(null);
       setDeletingSocialKey(null);
     }
-  }, [accessToken]);
+  }, [artist]);
 
   const artistDataSectionProps = artist
     ? mapArtistToArtistDataSectionProps(artist)
@@ -87,7 +85,7 @@ export default function ArtistProfileDataSection({
     const input = event.target;
     const file = input.files?.[0];
 
-    if (!file || !accessToken || !artist) {
+    if (!file || !artist) {
       input.value = "";
       return;
     }
@@ -97,10 +95,7 @@ export default function ArtistProfileDataSection({
       setUpdateError(null);
       setCoverUploadError(null);
 
-      const response = await updateCurrentArtistCover(
-        { cover: file },
-        accessToken,
-      );
+      const response = await updateCurrentArtistCover({ cover: file });
 
       onArtistChange((prevArtist) =>
         buildArtistCoverState(prevArtist, response.cover),
@@ -124,7 +119,7 @@ export default function ArtistProfileDataSection({
     nextContacts?: TArtistDataItem[];
     nextSocials?: TArtistDataItem[];
   }): Promise<boolean> => {
-    if (!artist || !accessToken) {
+    if (!artist) {
       return false;
     }
 
@@ -137,7 +132,6 @@ export default function ArtistProfileDataSection({
           contacts: nextContacts,
           socials: nextSocials,
         }),
-        accessToken,
       );
 
       onArtistChange(response);

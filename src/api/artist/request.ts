@@ -1,3 +1,5 @@
+import { getApiAccessToken } from "@/api/authToken";
+
 function createAuthHeaders(token: string, headers?: HeadersInit): Headers {
   const authHeaders = new Headers(headers);
   authHeaders.set("Authorization", `Bearer ${token}`);
@@ -27,9 +29,9 @@ async function throwArtistApiError(response: Response): Promise<never> {
 
 export async function requestArtist<TResponse>(
   path: string,
-  token: string,
   init: RequestInit,
 ): Promise<TResponse> {
+  const token = await getApiAccessToken();
   const response = await fetch(path, {
     ...init,
     headers: createAuthHeaders(token, init.headers),

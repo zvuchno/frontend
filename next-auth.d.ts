@@ -1,11 +1,11 @@
-import NextAuth from "next-auth"
+import "next-auth";
 
 declare module "next-auth" {
   interface User {
     id: string;
     userName: string;
     email: string;
-    phone: string;
+    phone: string | null;
     isPhoneVerified: boolean;
     isEmailVerified: boolean;
     isListener: boolean;
@@ -14,9 +14,8 @@ declare module "next-auth" {
     accessToken?: string;
   }
 
-  // кастомный User для сессии Next-auth
   interface Session {
-    user: User; 
+    user: User;
   }
 }
 
@@ -25,7 +24,7 @@ declare module "next-auth/jwt" {
     id: string;
     userName: string;
     email: string;
-    phone: string;
+    phone: string | null;
     isPhoneVerified: boolean;
     isEmailVerified: boolean;
     isListener: boolean;

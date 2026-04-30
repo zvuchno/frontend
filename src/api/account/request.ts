@@ -1,3 +1,5 @@
+import { getApiAccessToken } from "@/api/authToken";
+
 function createAuthHeaders(token: string, headers?: HeadersInit): Headers {
   const authHeaders = new Headers(headers);
   authHeaders.set("Authorization", `Bearer ${token}`);
@@ -38,9 +40,9 @@ async function throwAccountApiError(response: Response): Promise<never> {
 
 export async function requestAccount<TResponse>(
   path: string,
-  token: string,
   init: RequestInit,
 ): Promise<TResponse> {
+  const token = await getApiAccessToken();
   const response = await fetch(path, {
     ...init,
     headers: createAuthHeaders(token, init.headers),
@@ -55,9 +57,9 @@ export async function requestAccount<TResponse>(
 
 export async function requestAccountWithoutResponse(
   path: string,
-  token: string,
   init: RequestInit,
 ): Promise<void> {
+  const token = await getApiAccessToken();
   const response = await fetch(path, {
     ...init,
     headers: createAuthHeaders(token, init.headers),
