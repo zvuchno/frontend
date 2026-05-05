@@ -1,5 +1,6 @@
 .listenerForm {
   display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template:
     'cell-1-1 cell-1-2'
     'cell-2-1 cell-2-2';
@@ -17,6 +18,17 @@
 
   & input:disabled {
     opacity: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  .listenerForm {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'cell-1-1'
+      'cell-1-2'
+      'cell-2-1'
+      'cell-2-2';
   }
 }
 

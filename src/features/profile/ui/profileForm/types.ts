@@ -35,5 +35,6 @@ export type TProfileFormField = {
 }
 
 export type TProfileFormFieldsProps = {
-  fieldsDisabled: boolean
+  fieldsDisabled: boolean;
+  disabledFields?: ReadonlyArray<keyof FieldValues>;
 }
