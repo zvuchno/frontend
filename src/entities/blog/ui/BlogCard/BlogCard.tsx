@@ -1,3 +1,5 @@
+'use client';
+
 import { Title } from '@/shared/ui/Typography/Typography';
 import s from './BlogCard.module.scss';
 import { BlogCardProps } from './BlogCard.type';

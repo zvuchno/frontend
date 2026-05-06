@@ -92,7 +92,7 @@ export const listenerFormFields: TProfileFormField[] = [
     name: 'password',
     placeholder: '',
     type: 'password',
-    required: true,
+    required: false,
     row: 2,
     column: 2
   },

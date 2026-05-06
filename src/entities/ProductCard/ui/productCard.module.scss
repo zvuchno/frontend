@@ -27,10 +27,12 @@
 .description,
 .price {
   margin: 0;
-  font-family: var(--font-better-vcr), monospace;
+  font-family: var(--font-feature-mono), monospace;
+  letter-spacing: -0.06em;
 }
 
 .title {
+  text-transform: uppercase;
   font-size: 1.25rem;
   font-weight: 700;
 }

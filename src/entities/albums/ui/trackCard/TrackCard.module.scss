@@ -1,0 +1,77 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  height: 74px;
+
+  & button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 1px solid var(--outline-color);
+    cursor: pointer;
+  }
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  padding: 11px 16px;
+  border: 1px solid #000;
+
+  &__img {
+    width: 50px;
+    height: 50px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+}
+
+.text {
+  font-family: var(--font-feature-mono);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: #1E1E1E;
+  margin: 0;
+  text-transform: none;
+}
+
+.description {
+  color: #A2A2A2;
+}
+
+.editButton {
+  background-color: #E4F1FF;
+
+  &:hover {
+    background-color: var(--color-accent-blue);
+  }
+}
+
+.deleteButton {
+  background-color: var(--color-btn-secondary);
+
+  &:hover {
+    background-color: var(--color-bg-secondary);
+  }
+}
