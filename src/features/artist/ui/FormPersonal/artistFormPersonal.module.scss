@@ -1,7 +1,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  align-items:stretch;
+  align-items: stretch;
   width: 100%;
   gap: 80px;
   padding: 12px;
@@ -11,7 +11,7 @@
   &ContentWrapper {
     display: flex;
     flex-direction: column;
-    align-items:stretch;
+    align-items: stretch;
     width: 100%;
     gap: 28px;
   }
@@ -19,11 +19,15 @@
   &Title {
     padding-block-end: 7px;
     border-bottom: 1px solid var(--color-bg-secondary);
-    font-family: var(--font-better-vcr, 'BetterVCR', monospace);
+    font-family: var(--font-better-vcr, "BetterVCR", monospace);
     font-weight: 400;
     font-size: 24px;
     line-height: 100%;
     letter-spacing: -0.06em;
+
+    &.subtittle {
+      margin-block-start: 72px;
+    }
   }
 
   &Content {
@@ -35,53 +39,59 @@
     height: 100%;
     border: none;
 
-
     &.personalContent {
       grid-template-areas:
-        'cell-1-1 cell-1-2'
-        'cell-2-1 cell-2-2'
-        'cell-3-1 cell-3-1';
-      margin-block-end: 52px;    
+        "cell-1-1 cell-1-2"
+        "cell-2-1 cell-2-2"
+        "cell-3-1 cell-3-1";
+      margin-block-end: 52px;
     }
 
     &.passportlContent {
       grid-template-areas:
-        'cell-1-1 cell-1-2'
-        'cell-2-1 cell-2-2';
-      margin-block-end: 52px;
+        "cell-1-1 cell-1-2"
+        "cell-2-1 cell-2-2";
+      margin-block-end: 20px;
     }
 
     &.paymentlContent {
       grid-template-areas:
-        'cell-1-1 cell-1-2'
-        'cell-2-1 cell-2-2'
-        'cell-3-1 cell-3-2';
+        "cell-1-1 cell-1-2"
+        "cell-2-1 cell-2-2"
+        "cell-3-1 cell-3-2";
+      margin-block-start: 32px;
+      margin-block-end: 20px;
+    }
+
+    &.legalEntityContent {
+      grid-template-areas:
+        "cell-1-1 cell-1-1"
+        "cell-2-1 cell-2-2"
+        "cell-3-1 cell-3-1"
+        "cell-4-1 cell-4-2"
+        "cell-5-1 cell-5-2";
     }
   }
 
   &Buttons {
     display: flex;
     flex-direction: column;
-    align-items:stretch;
+    align-items: stretch;
     width: 100%;
     gap: 16px;
+    //margin-block-start: 20px;
   }
-
-  
 }
 
 .markRequired {
   line-height: 1;
 }
 
-
 label {
   letter-spacing: -0.06em;
 }
 
 .artistForm {
-  
-
   & > [class*="cell-2-"] {
     margin-top: 12px;
   }
@@ -139,16 +149,12 @@ label {
 
 :global(.react-datepicker__input-container) {
   position: relative;
-
-  
 }
-
 
 :global(.react-datepicker__input-container) input {
   height: 40px !important;
-  padding-inline-start: 40px !important; 
-  box-sizing: border-box; 
-
+  padding-inline-start: 40px !important;
+  box-sizing: border-box;
 }
 
 :global(.react-datepicker__calendar-icon) {
@@ -164,10 +170,8 @@ select:invalid {
 }
 
 select option {
-  color: var(--color-text-primary)
+  color: var(--color-text-primary);
 }
-
-
 
 .visuallyHidden {
   position: absolute;
@@ -183,4 +187,28 @@ select option {
 
 #birthday {
   padding-inline-start: 40px !important;
+}
+
+.formSelector {
+  height: 139px;
+  width: 83.46%;
+  max-width: 676px;
+  margin-block-start: 12px;
+  & * {
+font-family: var(--font-better-vcr, "BetterVCR", monospace) !important;
+  font-weight: 400!important;
+  font-size: 24px !important;
+  line-height: 100% !important;
+  letter-spacing: -0.06em !important;
+  }
+  
+}
+
+:global(.calendar) {
+  display: block !important;
+
+  & > :first-child {
+    margin-block-end: 4px;
+  }
+
 }

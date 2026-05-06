@@ -2,7 +2,6 @@ import { HTMLInputTypeAttribute } from "react"
 import { Control, FieldErrors, SubmitErrorHandler, SubmitHandler } from "react-hook-form"
 
 export type TArtistFormPersonalProps = {
-  title: string,
   isChecked: boolean,
   isOnChange: boolean,
   control?: Control<FieldValues>,
@@ -21,20 +20,25 @@ export type TPassportData = {
 }
 
 export type TPaymentData = {
-  taxId?: string,
-  bankName?: string,
-  bic?: string,
-  correspondentAccount?: string,
-  account?: string,
-  taxSystem?: string
-}
+  taxId?: string;
+  registrationNumber?: string;
+  bankName?: string;
+  bic?: string;
+  correspondentAccount?: string;
+  account?: string;
+  typeDetails?: string;
+};
 
 export interface FieldValues {
+  companyName?: string,
+  legalAdress?: string,
   firstName?: string,
   lastName?: string,
   middleName?: string,
   birthDate?: Date | null,
   adress?: string,
+  email?: string,
+  phone?: string,
   passport?: TPassportData,
   paymentDetails?: TPaymentData
 }

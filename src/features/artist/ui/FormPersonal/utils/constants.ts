@@ -1,231 +1,369 @@
 import { Validate } from "react-hook-form";
-import { FieldName, FieldValues, TArtistFormPersonalField } from "../types";
+import { FieldName, FieldValues, TArtistFormPersonalField } from "./types";
+import { validatePhone } from "./validation";
 
-export const artistPersonalMainFields: TArtistFormPersonalField[] = [
+
+export const artistPersonalFields: TArtistFormPersonalField[] = [
   {
-    title: 'Фамилия',
-    name: 'lastName',
-    placeholder: 'Иванов',
-    type: 'text',
+    title: "Фамилия",
+    name: "lastName",
+    placeholder: "Иванов",
+    type: "text",
     required: true,
     disabled: false,
     row: 1,
-    column: 1
+    column: 1,
   },
   {
-    title: 'Имя',
-    name: 'firstName',
-    placeholder: 'Иван',
-    type: 'text',
+    title: "Имя",
+    name: "firstName",
+    placeholder: "Иван",
+    type: "text",
     required: true,
     disabled: false,
     row: 1,
-    column: 2
+    column: 2,
   },
   {
-    title: 'Отчество',
-    name: 'middleName',
-    placeholder: 'Иванович',
-    type: 'text',
+    title: "Отчество",
+    name: "middleName",
+    placeholder: "Иванович",
+    type: "text",
     required: false,
     disabled: false,
     row: 2,
-    column: 1
+    column: 1,
   },
   {
-    title: 'Дата рождения',
-    name: 'birthDate',
-    placeholder: 'дд.мм.гггг',
-    type: 'date',
-    required: true, 
+    title: "Дата рождения",
+    name: "birthDate",
+    placeholder: "дд.мм.гггг",
+    type: "date",
+    required: true,
     disabled: false,
     row: 2,
-    column: 2
+    column: 2,
   },
   {
-    title: 'Адрес регистрации', 
-    name: 'adress',
-    placeholder: 'Москва',
-    type: 'text',
+    title: "Адрес регистрации",
+    name: "adress",
+    placeholder: "Москва",
+    type: "text",
     required: true,
     disabled: false,
     row: 3,
-    column: 1
-  }
-]
-
-export const artistPersonalPasportFields: TArtistFormPersonalField[] = [
+    column: 1,
+  },
   {
-    title: 'Паспорт серия',
-    name: 'passport.series',
-    placeholder: '1111',
-    type: 'text',
+    title: "Email",
+    name: "email",
+    placeholder: "email@email.ru",
+    type: "email",
+    required: true,
+    disabled: false,
+    row: 4,
+    column: 1,
+  },
+  {
+    title: "Телефон",
+    name: "phone",
+    placeholder: "+7(___)___-__-__",
+    type: "tel",
+    required: true,
+    disabled: false,
+    row: 4,
+    column: 2,
+  },
+];
+
+export const artistPasportFields: TArtistFormPersonalField[] = [
+  {
+    title: "Паспорт серия",
+    name: "passport.series",
+    placeholder: "1111",
+    type: "text",
     required: true,
     disabled: false,
     row: 1,
     column: 1,
     maxLength: 4,
-    minLength: 4
+    minLength: 4,
   },
   {
-    title: 'Паспорт номер',
-    name: 'passport.number',
-    placeholder: '111111',
-    type: 'text',
+    title: "Паспорт номер",
+    name: "passport.number",
+    placeholder: "111111",
+    type: "text",
     required: true,
     disabled: false,
     row: 1,
     column: 2,
     maxLength: 6,
-    minLength: 6
+    minLength: 6,
   },
   {
-    title: 'Код подразделения',
-    name: 'passport.issuerCode',
-    placeholder: '111-111',
-    type: 'text',
+    title: "Код подразделения",
+    name: "passport.issuerCode",
+    placeholder: "111-111",
+    type: "text",
     required: true,
     disabled: false,
     row: 2,
     column: 1,
     maxLength: 7,
-    minLength: 7
+    minLength: 7,
   },
   {
-    title: 'Дата выдачи паспорта',
-    name: 'passport.issueDate',
-    placeholder: 'дд.мм.гггг',
-    type: 'date',
-    required: true,
-    disabled: false,
-    row: 2,
-    column: 2
-  }
-]
-
-export const artistPersonalPaymentFields: TArtistFormPersonalField[] = [
-  {
-    title: 'ИНН',
-    name: 'paymentDetails.taxId',
-    placeholder: '0123456789',
-    type: 'text',
-    required: true,
-    disabled: false,
-    row: 1,
-    column: 1,
-    maxLength: 12,
-    minLength: 10
-  },
-  {
-    title: 'Название банка',
-    name: 'paymentDetails.bankName',
-    placeholder: 'Название банка',
-    type: 'text',
-    required: true,
-    disabled: false,
-    row: 1,
-    column: 2
-  },
-  {
-    title: 'БИК',
-    name: 'paymentDetails.bic',
-    placeholder: '123456789',
-    type: 'text',
-    required: true,
-    disabled: false,
-    row: 2,
-    column: 1,
-    maxLength: 9,
-    minLength: 9
-  },
-  {
-    title: 'Корреспондентский счет',
-    name: 'paymentDetails.correspondentAccount',
-    placeholder: '30100000000000000000',
-    type: 'text',
+    title: "Дата выдачи паспорта",
+    name: "passport.issueDate",
+    placeholder: "дд.мм.гггг",
+    type: "date",
     required: true,
     disabled: false,
     row: 2,
     column: 2,
-    maxLength: 20,
-    minLength: 20
   },
-   {
-    title: 'Расчетный счет',
-    name: 'paymentDetails.account',
-    placeholder: '00000000000000000000',
-    type: 'text',
+];
+
+export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
+  {
+    title: "ИНН",
+    name: "paymentDetails.taxId",
+    placeholder: "0123456789",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 2,
+    column: 2,
+    maxLength: 12,
+    minLength: 10,
+  },
+  {
+    title: "Название банка",
+    name: "paymentDetails.bankName",
+    placeholder: "Название банка",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 1,
+    column: 2,
+  },
+  {
+    title: "БИК",
+    name: "paymentDetails.bic",
+    placeholder: "123456789",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 1,
+    column: 1,
+    maxLength: 9,
+    minLength: 9,
+  },
+  {
+    title: "Корреспондентский счет",
+    name: "paymentDetails.correspondentAccount",
+    placeholder: "30100000000000000000",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 2,
+    column: 1,
+    maxLength: 20,
+    minLength: 20,
+  },
+  {
+    title: "Расчетный счет",
+    name: "paymentDetails.account",
+    placeholder: "00000000000000000000",
+    type: "text",
     required: true,
     disabled: false,
     row: 3,
     column: 1,
     maxLength: 20,
-    minLength: 20
+    minLength: 20,
   },
   {
-    title: 'Форма налогообложения',
-    name: 'paymentDetails.taxSystem',
-    placeholder: 'Выберите из справочника',
-    type: 'text',
+    title: "Организационная форма",
+    name: "paymentDetails.typeDetails",
+    placeholder: "ИП / СМЗ",
+    type: "text",
     required: true,
     disabled: false,
     row: 3,
-    column: 2
-  }
-]
+    column: 2,
+  },
+];
+
+export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
+  {
+    title: "Название организации",
+    name: "companyName",
+    placeholder: "Название организации",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 1,
+    column: 1,
+    maxLength: 100,
+    minLength: 2,
+  },
+  {
+    title: "ОГРН",
+    name: "paymentDetails.registrationNumber",
+    placeholder: "0000123456789",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 2,
+    column: 1,
+    maxLength: 15,
+    minLength: 13,
+  },
+  {
+    title: "ИНН",
+    name: "paymentDetails.taxId",
+    placeholder: "0123456789",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 2,
+    column: 2,
+    maxLength: 12,
+    minLength: 10,
+  },
+  {
+    title: "Юридический адрес",
+    name: "legalAdress",
+    placeholder: "Юридический адрес организации",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 3,
+    column: 1,
+    maxLength: 150,
+    minLength: 2,
+  },
+  {
+    title: "БИК",
+    name: "paymentDetails.bic",
+    placeholder: "123456789",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 4,
+    column: 1,
+    maxLength: 9,
+    minLength: 9,
+  },
+  {
+    title: "Название банка",
+    name: "paymentDetails.bankName",
+    placeholder: "Название банка",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 4,
+    column: 2,
+  },
+  {
+    title: "Корреспондентский счет",
+    name: "paymentDetails.correspondentAccount",
+    placeholder: "30100000000000000000",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 5,
+    column: 1,
+    maxLength: 20,
+    minLength: 20,
+  },
+  {
+    title: "Расчетный счет",
+    name: "paymentDetails.account",
+    placeholder: "00000000000000000000",
+    type: "text",
+    required: true,
+    disabled: false,
+    row: 5,
+    column: 2,
+    maxLength: 20,
+    minLength: 20,
+  },
+];
 
 export const errorsMessages = {
-  requiredMessage: 'Обязательное поле',
-  minLengthMessage: 'Min длина поля ',
-  maxLengthMessage: 'Max длина поля ',
-  patternMessage: 'Введите корректные данные',
-  referenceBookMessage: 'Выберите значение из справочника'
-}
+  requiredMessage: "Обязательное поле",
+  minLengthMessage: "Min длина поля ",
+  maxLengthMessage: "Max длина поля ",
+  patternMessage: "Введите корректные данные",
+  referenceBookMessage: "Выберите значение из справочника",
+};
 
-
-
-export const fieldsConfig: Record<FieldName, {
-  required?: boolean;
-  minLength?: number;
-  maxLength?: number;
-  pattern?: RegExp;
-  validate?: Validate<string | undefined, FieldValues>;
-}> = {
+export const fieldsConfig: Record<
+  FieldName,
+  {
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: RegExp;
+    validate?: Validate<string | undefined, FieldValues>;
+  }
+> = {
+  companyName: {
+    required: true,
+    minLength: 2,
+    maxLength: 100,
+  },
+  legalAdress: {
+    required: true,
+    minLength: 2,
+    maxLength: 150,
+  },
   firstName: {
     required: true,
     minLength: 2,
-    maxLength: 50
+    maxLength: 50,
   },
   lastName: {
     required: true,
     minLength: 2,
-    maxLength: 50
+    maxLength: 50,
   },
   middleName: {
     required: false,
     minLength: 2,
-    maxLength: 50
+    maxLength: 50,
   },
   birthDate: {
     required: true,
-    validate: (value: any) => value instanceof Date && !isNaN(value.getTime())
+    validate: (value: any) => value instanceof Date && !isNaN(value.getTime()),
   },
   adress: {
     required: true,
     minLength: 2,
-    maxLength: 50
+    maxLength: 50,
+  },
+  email: {
+    required: true,
+    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  },
+  phone: {
+    required: true,
+    validate: (value, fields) => validatePhone(value, fields),
   },
   "passport.series": {
     required: true,
-    pattern: /^(\d{4})$/
+    pattern: /^(\d{4})$/,
   },
   "passport.number": {
     required: true,
-    pattern: /^(\d{6})$/
+    pattern: /^(\d{6})$/,
   },
   "passport.issuerCode": {
-    required:  true,
-    pattern: /^\d{3}-\d{3}$/
+    required: true,
+    pattern: /^\d{3}-\d{3}$/,
   },
   "passport.issueDate": {
     required: true,
@@ -233,44 +371,32 @@ export const fieldsConfig: Record<FieldName, {
   },
   "paymentDetails.taxId": {
     required: true,
-    pattern: /^(\d{10}|\d{12})$/
+    pattern: /^(\d{10}|\d{12})$/,
   },
   "paymentDetails.bankName": {
     required: true,
     minLength: 2,
-    maxLength: 50
+    maxLength: 50,
   },
   "paymentDetails.bic": {
     required: true,
-    pattern: /^(\d{9})$/
+    pattern: /^(\d{9})$/,
   },
   "paymentDetails.correspondentAccount": {
     required: true,
-    pattern: /^(\d{20})$/
+    pattern: /^(\d{20})$/,
   },
   "paymentDetails.account": {
     required: true,
-    pattern: /^(\d{20})$/
+    pattern: /^(\d{20})$/,
   },
-  "paymentDetails.taxSystem": {
+  "paymentDetails.registrationNumber": {
     required: true,
-    minLength: 2,
-    maxLength: 50
+    pattern: /^(\d{13}|\d{15})$/,
   },
-}
+  "paymentDetails.typeDetails": {
+    required: true,
+  },
+};
 
-
-export const taxSystem = [
-  "ИП (ОСНО)",
-  "ИП (УСН - Доход)",
-  "ИП (УСН - Доход минус Расход)",
-  "ИП (ЕСХН)",
-  "ИП (ПСН)",
-  "ИП (АУСН)",
-  "ИП (НПД)",
-  "ООО (ОСНО)",
-  "ООО (УСН - Доход)",
-  "ООО (УСН - Доход минус Расход)",
-  "ООО (ЕСХН)",
-  "ООО (АУСН)"
-];
+export const typeDetails = ["ИП", "СМЗ"];
