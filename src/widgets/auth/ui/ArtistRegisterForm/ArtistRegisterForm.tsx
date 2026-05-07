@@ -96,7 +96,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
       isLoading={isLoading}
       className={s.artistRegisterForm}
       renderFields={() => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "40px", marginBottom: "20px" }}>
           <Input
             id="title"
             label="Название*"
@@ -176,17 +176,10 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
       )}
       renderPrimaryButton={(loading) => (
         <button
+          className={s.submitButton}
           type="submit"
           disabled={loading}
           style={{
-            width: "100%",
-            height: "44px",
-            borderRadius: "36px",
-            background: "#b5b5b5",
-            border: "1px solid #100f0d",
-            fontFamily: "'Better VCR', sans-serif",
-            fontSize: "16px",
-            color: "#100f0d",
             cursor: loading ? "not-allowed" : "pointer",
             opacity: loading ? 0.6 : 1,
           }}
@@ -244,6 +237,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
           cursor: isLoading ? "not-allowed" : "pointer",
           opacity: isLoading ? 0.5 : 1,
           transition: "all 0.2s ease",
+          marginBottom: "70px",
         };
 
         return (

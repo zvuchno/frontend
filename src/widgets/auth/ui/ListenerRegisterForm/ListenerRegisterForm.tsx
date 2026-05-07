@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import {
   ListenerRegisterFormProps,
@@ -7,6 +9,8 @@ import { BaseForm } from "@/widgets/auth/ui/BaseForm/BaseForm";
 import Input from "@/shared/ui/Input/Input";
 import { Typography } from "@/shared/ui/Typography/Typography";
 import s from "./ListenerRegisterForm.module.scss";
+import { TNewListenerRequest } from "@/entities/user/types";
+import { useRouter } from "next/navigation";
 
 interface FormErrors {
   name?: string;
@@ -33,6 +37,10 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [registerError, setRegisterError] = useState<string | null>(null);
+  const [isRegLoading, setIsRegLoading] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
@@ -80,13 +88,30 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
 
   const handleSubmit = async (data: { email?: string; password?: string }) => {
     if (!validate()) return;
+
+    setIsRegLoading(true);
+    setRegisterError(null);
+
+    try {
+
+      const userData: TNewListenerRequest = {
+        username: formData.name,
+        email: formData.email,
+        phone: formData.phone.replace(/\D/g, ""),
+        password: formData.password,
+      };
+
+      const data = await onSubmit?.(userData);
+
+      if (data) router.push("/signin");
+
+    } catch (error) {
+      if (error instanceof Error) setRegisterError(error.message);
+
+    } finally {
+      setIsRegLoading(false)
+    }
     
-    const fullData: ListenerRegisterFormData = {
-      ...formData,
-      ...data,
-    };
-    
-    await onSubmit?.(fullData);
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,10 +146,10 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
       title="Регистрация"
       onSubmit={handleSubmit}
       onClose={onClose}
-      isLoading={isLoading}
+      isLoading={isRegLoading}
       className={s.listenerRegisterForm}
       renderFields={() => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "40px", marginBottom: "20px" }}>
           <Input
             id="name"
             label="Имя*"
@@ -136,7 +161,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.name}
             message={errors.name}
             inputSize="small"
-            disabled={isLoading}
+            disabled={isRegLoading}
           />
 
           <Input
@@ -150,7 +175,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.email}
             message={errors.email}
             inputSize="small"
-            disabled={isLoading}
+            disabled={isRegLoading}
           />
 
           <Input
@@ -164,7 +189,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.phone}
             message={errors.phone}
             inputSize="small"
-            disabled={isLoading}
+            disabled={isRegLoading}
           />
 
           <Input
@@ -178,7 +203,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.password}
             message={errors.password}
             inputSize="small"
-            disabled={isLoading}
+            disabled={isRegLoading}
           />
 
           <Input
@@ -192,29 +217,22 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.confirmPassword}
             message={errors.confirmPassword}
             inputSize="small"
-            disabled={isLoading}
+            disabled={isRegLoading}
           />
 
-          {error && (
+          {registerError && (
             <Typography variant="normal" className={s.error}>
-              {error}
+              {registerError}
             </Typography>
           )}
         </div>
       )}
       renderPrimaryButton={(loading) => (
         <button
+          className={s.submitButton}
           type="submit"
           disabled={loading}
           style={{
-            width: "100%",
-            height: "44px",
-            borderRadius: "36px",
-            background: "#b5b5b5",
-            border: "1px solid #100f0d",
-            fontFamily: "'Better VCR', sans-serif",
-            fontSize: "16px",
-            color: "#100f0d",
             cursor: loading ? "not-allowed" : "pointer",
             opacity: loading ? 0.6 : 1,
           }}
@@ -269,9 +287,10 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
           fontFamily: "'Better VCR', sans-serif",
           fontSize: "20px",
           color: "#100F0D",
-          cursor: isLoading ? "not-allowed" : "pointer",
-          opacity: isLoading ? 0.5 : 1,
+          cursor: isRegLoading ? "not-allowed" : "pointer",
+          opacity: isRegLoading ? 0.5 : 1,
           transition: "all 0.2s ease",
+          marginBottom: "70px",
         };
 
         return (
@@ -279,7 +298,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             <button
               type="button"
               onClick={() => onSocialLogin?.("yandex")}
-              disabled={isLoading}
+              disabled={isRegLoading}
               style={socialButtonStyle}
               aria-label="Яндекс"
             >
@@ -288,7 +307,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             <button
               type="button"
               onClick={() => onSocialLogin?.("vk")}
-              disabled={isLoading}
+              disabled={isRegLoading}
               style={socialButtonStyle}
               aria-label="VK"
             >
@@ -297,7 +316,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             <button
               type="button"
               onClick={() => onSocialLogin?.("google")}
-              disabled={isLoading}
+              disabled={isRegLoading}
               style={socialButtonStyle}
               aria-label="Google"
             >

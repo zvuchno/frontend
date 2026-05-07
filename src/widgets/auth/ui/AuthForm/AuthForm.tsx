@@ -71,6 +71,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
   return (
     <BaseForm
+      className={s.authForm}
       title={mode === "login" ? "Вход в личный кабинет" : "Регистрация"}
       onSubmit={handleSubmit}
       onClose={onClose}
