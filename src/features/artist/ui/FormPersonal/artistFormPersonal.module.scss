@@ -195,13 +195,12 @@ select option {
   max-width: 676px;
   margin-block-start: 12px;
   & * {
-font-family: var(--font-better-vcr, "BetterVCR", monospace) !important;
-  font-weight: 400!important;
-  font-size: 24px !important;
-  line-height: 100% !important;
-  letter-spacing: -0.06em !important;
+    font-family: var(--font-better-vcr, "BetterVCR", monospace) !important;
+    font-weight: 400 !important;
+    font-size: 24px !important;
+    line-height: 100% !important;
+    letter-spacing: -0.06em !important;
   }
-  
 }
 
 :global(.calendar) {
@@ -210,5 +209,14 @@ font-family: var(--font-better-vcr, "BetterVCR", monospace) !important;
   & > :first-child {
     margin-block-end: 4px;
   }
+}
 
+:global(input:-webkit-autofill),
+:global(input:-webkit-autofill:hover), 
+:global(input:-webkit-autofill:focus),
+:global(input:-webkit-autofill:active) {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: #000 !important; 
+    transition: background-color 5000s ease-in-out 0s; /* Чтобы цвет не возвращался */
 }

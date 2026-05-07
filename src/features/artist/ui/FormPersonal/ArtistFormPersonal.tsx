@@ -23,10 +23,9 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
   onError,
   onEdit,
 }) => {
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useFormContext<FieldValues>();
+
+  const methods = useFormContext<FieldValues>();
+  const { handleSubmit, formState: { errors } } = methods;
   const personalFields = artistPersonalFields;
   const passportFields = artistPasportFields;
   const paymentFields = artistIndividualPaymentFields;
@@ -55,7 +54,9 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
               <legend className={styles.visuallyHidden}>
                 Информация о юридическом лице
               </legend>
-              {legalEntityFields.map(createFormField)}
+              {legalEntityFields.map((field, index) =>
+                createFormField(field, index, methods),
+              )}
             </fieldset>
           )}
 
@@ -64,7 +65,9 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
           ) : (
             <>
               {artistType === "legalEntity" && (
-                <h4 className={clsx(styles.formTitle, styles.subtittle)}>Данные руководителя</h4>
+                <h4 className={clsx(styles.formTitle, styles.subtittle)}>
+                  Данные руководителя
+                </h4>
               )}
 
               <fieldset
@@ -73,7 +76,7 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
                 <legend className={styles.visuallyHidden}>
                   Персональная информация
                 </legend>
-                {personalFields.map(createFormField)}
+                {personalFields.map((field, index) => createFormField(field, index, methods))}
               </fieldset>
 
               <fieldset
@@ -82,7 +85,7 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
                 <legend className={styles.visuallyHidden}>
                   Паспортные данные
                 </legend>
-                {passportFields.map(createFormField)}
+                {passportFields.map((field, index) => createFormField(field, index, methods))}
               </fieldset>
 
               {artistType === "individual" && (
@@ -92,7 +95,7 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
                   <legend className={styles.visuallyHidden}>
                     Платежная информация
                   </legend>
-                  {paymentFields.map(createFormField)}
+                  {paymentFields.map((field, index) => createFormField(field, index, methods))}
                 </fieldset>
               )}
             </>

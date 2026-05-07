@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import type { FieldValues } from "./utils/types";
 import { typeDetails } from "./utils/constants";
 
-
 const meta: Meta<typeof ArtistFormPersonal> = {
   title: "features/ArtistFormPersonal",
   component: ArtistFormPersonal,
@@ -19,8 +18,8 @@ const meta: Meta<typeof ArtistFormPersonal> = {
         defaultValues: {
           companyName: 'ООО "Рога и копыта"',
           legalAdress: "Москва, Красная площадь., д. 1",
-          email: 'rogaandkopyta@email.ru',
-          phone: '1234567890',
+          email: "rogaandkopyta@email.ru",
+          phone: "",
           firstName: "Иван",
           lastName: "Иванов",
           middleName: "Иванович",
@@ -38,17 +37,15 @@ const meta: Meta<typeof ArtistFormPersonal> = {
             correspondentAccount: "00000000000000000000",
             bankName: "Банк всея Руси",
             account: "12345678901234567890",
-            typeDetails: typeDetails[0],
-            registrationNumber: '1234567890000'
+            typeDetails: "",
+            registrationNumber: "1234567890000",
           },
         },
       });
 
       useEffect(() => {
         if (args.values) {
-          Object.entries(args.values).forEach(([name, value]) => {
-            methods.setValue(name as any, value);
-          });
+          methods.reset(args.values);
           if (args.isOnChange === true) methods.trigger();
         }
       }, [args.values, methods]);
@@ -83,7 +80,7 @@ type Story = StoryObj<typeof ArtistFormPersonal>;
 export const ArtistFormPersonalNew: Story = {
   args: {
     values: {
-      companyName: '',
+      companyName: "",
       legalAdress: "",
       email: "",
       phone: "",
@@ -104,8 +101,8 @@ export const ArtistFormPersonalNew: Story = {
         correspondentAccount: "",
         bankName: "",
         account: "",
-        registrationNumber: '',
-        typeDetails: ''
+        registrationNumber: "",
+        typeDetails: "",
       },
     },
   },
@@ -136,7 +133,7 @@ export const ArtistFormPersonalWithErrors: Story = {
     isOnChange: true,
     values: {
       phone: "12345",
-      email: 'roga',
+      email: "roga",
       firstName: "И",
       birthDate: null,
       adress: "М",

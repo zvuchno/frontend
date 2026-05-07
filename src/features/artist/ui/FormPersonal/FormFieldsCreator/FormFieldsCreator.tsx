@@ -10,7 +10,7 @@ import { artistFormPersonalRules } from "../utils/validation";
 import styles from "../artistFormPersonal.module.scss";
 import clsx from "clsx";
 import DatePicker from "react-datepicker";
-import { ru } from "date-fns/locale";
+import { fi, ru } from "date-fns/locale";
 import { IMaskInput } from "react-imask";
 import Input from "@/shared/ui/Input/Input";
 import { typeDetails } from "../utils/constants";
@@ -18,13 +18,14 @@ import { typeDetails } from "../utils/constants";
 export const createFormField = (
   field: TArtistFormPersonalField,
   fieldSet: number,
+  methods: ReturnType<typeof useFormContext<FieldValues>>,
 ) => {
   const {
     register,
     control,
     formState: { errors },
-  } = useFormContext<FieldValues>();
-
+  } = methods;
+  
   const fieldError = get(errors, field.name) as FieldError;
 
   const { onChange, ...registerRest } = register(
@@ -59,7 +60,13 @@ export const createFormField = (
           render={({ field: { onChange, value, name, ref, onBlur } }) => {
             const fieldError = get(errors, name) as FieldError | undefined;
             return (
-              <div className={clsx("field", { ["error"]: !!fieldError }, {['calendar']: field.type === 'date'})}>
+              <div
+                className={clsx(
+                  "field",
+                  { ["error"]: !!fieldError },
+                  { ["calendar"]: field.type === "date" },
+                )}
+              >
                 <div className="labelContainer">
                   <label
                     className="labelContainer__label labelContainer__label_size_small"
@@ -127,11 +134,11 @@ export const createFormField = (
             );
           }}
         />
-      ) : field.name.includes("typeDetails") ? (
+      ) : field.hasOptions ? (
         <div className={clsx("field", { ["error"]: !!fieldError })}>
           <div className={"labelContainer"}>
             <label
-              htmlFor="typeDetails"
+              htmlFor={field.name}
               className="labelContainer__label labelContainer__label_size_small"
             >
               {field.title}
@@ -169,7 +176,7 @@ export const createFormField = (
               issuerCodeFormatter(field, e as any);
             }}
           >
-            <option value="" disabled selected style={{ opacity: "40%" }}>
+            <option value="" disabled style={{ opacity: "40%" }}>
               {field.placeholder}
             </option>
             {typeDetails.map((el) => (

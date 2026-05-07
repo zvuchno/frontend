@@ -57,5 +57,6 @@ export type TArtistFormPersonalField = {
   row: number;
   column: number;
   maxLength?: number;
-  minLength?: number
+  minLength?: number;
+  hasOptions?: boolean;
 }

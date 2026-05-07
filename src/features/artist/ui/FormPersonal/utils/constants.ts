@@ -193,6 +193,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     disabled: false,
     row: 3,
     column: 2,
+    hasOptions: true,
   },
 ];
 
