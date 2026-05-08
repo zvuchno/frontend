@@ -92,3 +92,26 @@ export const artistProfileNavRoutes = [
     label: "Настройки",
   },
 ] satisfies readonly MainNavRouteItem[];
+
+export const fansProfileRoutes = [
+  {
+    id: "Профиль",
+    href: "/fans/profile",
+    label: "Профиль",
+  },
+  {
+    id: "Избранное",
+    href: "/fans/favorites",
+    label: "Избранное",
+  },
+  {
+    id: "Заказы",
+    href: "/fans/orders",
+    label: "Заказы",
+  },
+  {
+    id: "Релизы",
+    href: "/fans/releases",
+    label: "Релизы",
+  },
+] satisfies readonly MainNavRouteItem[];
