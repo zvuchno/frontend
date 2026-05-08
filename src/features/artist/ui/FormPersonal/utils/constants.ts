@@ -2,11 +2,10 @@ import { Validate } from "react-hook-form";
 import { FieldName, FieldValues, TArtistFormPersonalField } from "./types";
 import { validatePhone } from "./validation";
 
-
 export const artistPersonalFields: TArtistFormPersonalField[] = [
   {
     title: "Фамилия",
-    name: "lastName",
+    name: "identity_data.last_name",
     placeholder: "Иванов",
     type: "text",
     required: true,
@@ -16,7 +15,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Имя",
-    name: "firstName",
+    name: "identity_data.first_name",
     placeholder: "Иван",
     type: "text",
     required: true,
@@ -26,7 +25,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Отчество",
-    name: "middleName",
+    name: "identity_data.middle_name",
     placeholder: "Иванович",
     type: "text",
     required: false,
@@ -36,7 +35,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Дата рождения",
-    name: "birthDate",
+    name: "identity_data.birth_date",
     placeholder: "дд.мм.гггг",
     type: "date",
     required: true,
@@ -46,7 +45,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Адрес регистрации",
-    name: "adress",
+    name: "identity_data.registration_address",
     placeholder: "Москва",
     type: "text",
     required: true,
@@ -56,9 +55,9 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Email",
-    name: "email",
+    name: "identity_data.email",
     placeholder: "email@email.ru",
-    type: "email",
+    type: "string",
     required: true,
     disabled: false,
     row: 4,
@@ -66,7 +65,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Телефон",
-    name: "phone",
+    name: "identity_data.phone",
     placeholder: "+7(___)___-__-__",
     type: "tel",
     required: true,
@@ -79,7 +78,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
 export const artistPasportFields: TArtistFormPersonalField[] = [
   {
     title: "Паспорт серия",
-    name: "passport.series",
+    name: "identity_data.passport_series",
     placeholder: "1111",
     type: "text",
     required: true,
@@ -91,7 +90,7 @@ export const artistPasportFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Паспорт номер",
-    name: "passport.number",
+    name: "identity_data.passport_number",
     placeholder: "111111",
     type: "text",
     required: true,
@@ -103,7 +102,7 @@ export const artistPasportFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Код подразделения",
-    name: "passport.issuerCode",
+    name: "identity_data.passport_issued_by",
     placeholder: "111-111",
     type: "text",
     required: true,
@@ -115,7 +114,7 @@ export const artistPasportFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Дата выдачи паспорта",
-    name: "passport.issueDate",
+    name: "identity_data.passport_issue_date",
     placeholder: "дд.мм.гггг",
     type: "date",
     required: true,
@@ -128,19 +127,19 @@ export const artistPasportFields: TArtistFormPersonalField[] = [
 export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
   {
     title: "ИНН",
-    name: "paymentDetails.taxId",
-    placeholder: "0123456789",
+    name: "identity_data.inn",
+    placeholder: "000123456789",
     type: "text",
     required: true,
     disabled: false,
     row: 2,
     column: 2,
     maxLength: 12,
-    minLength: 10,
+    minLength: 12,
   },
   {
     title: "Название банка",
-    name: "paymentDetails.bankName",
+    name: "bank_data.bank_name",
     placeholder: "Название банка",
     type: "text",
     required: true,
@@ -150,7 +149,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "БИК",
-    name: "paymentDetails.bic",
+    name: "bank_data.bik",
     placeholder: "123456789",
     type: "text",
     required: true,
@@ -162,7 +161,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Корреспондентский счет",
-    name: "paymentDetails.correspondentAccount",
+    name: "bank_data.correspondent_account",
     placeholder: "30100000000000000000",
     type: "text",
     required: true,
@@ -174,7 +173,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Расчетный счет",
-    name: "paymentDetails.account",
+    name: "bank_data.checking_account",
     placeholder: "00000000000000000000",
     type: "text",
     required: true,
@@ -186,21 +185,27 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Организационная форма",
-    name: "paymentDetails.typeDetails",
+    name: "legal_profile.recipient_type",
     placeholder: "ИП / СМЗ",
     type: "text",
     required: true,
     disabled: false,
     row: 3,
     column: 2,
-    hasOptions: true,
+    options: [
+      {
+        label: "ИП",
+        value: "individual_entrepreneur",
+      },
+      { label: "СМЗ", value: "self_employed" },
+    ],
   },
 ];
 
 export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
   {
     title: "Название организации",
-    name: "companyName",
+    name: "company_data.company_name",
     placeholder: "Название организации",
     type: "text",
     required: true,
@@ -212,7 +217,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "ОГРН",
-    name: "paymentDetails.registrationNumber",
+    name: "company_data.ogrn",
     placeholder: "0000123456789",
     type: "text",
     required: true,
@@ -224,19 +229,19 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "ИНН",
-    name: "paymentDetails.taxId",
+    name: "company_data.inn",
     placeholder: "0123456789",
     type: "text",
     required: true,
     disabled: false,
     row: 2,
     column: 2,
-    maxLength: 12,
+    maxLength: 10,
     minLength: 10,
   },
   {
     title: "Юридический адрес",
-    name: "legalAdress",
+    name: "company_data.company_address",
     placeholder: "Юридический адрес организации",
     type: "text",
     required: true,
@@ -248,7 +253,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "БИК",
-    name: "paymentDetails.bic",
+    name: "bank_data.bik",
     placeholder: "123456789",
     type: "text",
     required: true,
@@ -260,7 +265,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Название банка",
-    name: "paymentDetails.bankName",
+    name: "bank_data.bank_name",
     placeholder: "Название банка",
     type: "text",
     required: true,
@@ -270,7 +275,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Корреспондентский счет",
-    name: "paymentDetails.correspondentAccount",
+    name: "bank_data.correspondent_account",
     placeholder: "30100000000000000000",
     type: "text",
     required: true,
@@ -282,7 +287,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Расчетный счет",
-    name: "paymentDetails.account",
+    name: "bank_data.checking_account",
     placeholder: "00000000000000000000",
     type: "text",
     required: true,
@@ -312,92 +317,98 @@ export const fieldsConfig: Record<
     validate?: Validate<string | undefined, FieldValues>;
   }
 > = {
-  companyName: {
+  "company_data.company_name": {
     required: true,
     minLength: 2,
     maxLength: 100,
   },
-  legalAdress: {
+  "company_data.company_address": {
     required: true,
     minLength: 2,
     maxLength: 150,
   },
-  firstName: {
+  "identity_data.first_name": {
     required: true,
     minLength: 2,
     maxLength: 50,
   },
-  lastName: {
+  "identity_data.last_name": {
     required: true,
     minLength: 2,
     maxLength: 50,
   },
-  middleName: {
+  "identity_data.middle_name": {
     required: false,
     minLength: 2,
     maxLength: 50,
   },
-  birthDate: {
+  "identity_data.birth_date": {
     required: true,
     validate: (value: any) => value instanceof Date && !isNaN(value.getTime()),
   },
-  adress: {
+  "identity_data.registration_address": {
     required: true,
     minLength: 2,
     maxLength: 50,
   },
-  email: {
+  "identity_data.email": {
     required: true,
     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
-  phone: {
+  "identity_data.phone": {
     required: true,
     validate: (value, fields) => validatePhone(value, fields),
   },
-  "passport.series": {
+  "identity_data.passport_series": {
     required: true,
     pattern: /^(\d{4})$/,
   },
-  "passport.number": {
+  "identity_data.passport_number": {
     required: true,
     pattern: /^(\d{6})$/,
   },
-  "passport.issuerCode": {
+  "identity_data.passport_issued_by": {
     required: true,
     pattern: /^\d{3}-\d{3}$/,
   },
-  "passport.issueDate": {
+  "identity_data.passport_issue_date": {
     required: true,
     validate: (value: any) => value instanceof Date && !isNaN(value.getTime()),
   },
-  "paymentDetails.taxId": {
+  "identity_data.inn": {
     required: true,
-    pattern: /^(\d{10}|\d{12})$/,
+    minLength: 12,
+    maxLength: 12,
+    pattern: /^(\d{12})$/,
   },
-  "paymentDetails.bankName": {
+  "bank_data.bank_name": {
     required: true,
     minLength: 2,
     maxLength: 50,
   },
-  "paymentDetails.bic": {
+  "bank_data.bik": {
     required: true,
     pattern: /^(\d{9})$/,
   },
-  "paymentDetails.correspondentAccount": {
+  "bank_data.correspondent_account": {
     required: true,
     pattern: /^(\d{20})$/,
   },
-  "paymentDetails.account": {
+  "bank_data.checking_account": {
     required: true,
     pattern: /^(\d{20})$/,
   },
-  "paymentDetails.registrationNumber": {
+  "company_data.ogrn": {
     required: true,
     pattern: /^(\d{13}|\d{15})$/,
   },
-  "paymentDetails.typeDetails": {
+  "legal_profile.recipient_type": {
     required: true,
   },
+  "company_data.inn": {
+    required: true,
+    minLength: 10,
+    maxLength: 10,
+    pattern: /^(\d{10})$/,
+  },
 };
-
-export const typeDetails = ["ИП", "СМЗ"];

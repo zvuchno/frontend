@@ -1,55 +1,45 @@
-import { HTMLInputTypeAttribute } from "react"
-import { Control, FieldErrors, SubmitErrorHandler, SubmitHandler } from "react-hook-form"
+import {
+  TArtistLegalData,
+  TBankData,
+  TCompanyData,
+  TIdentityData,
+  TLegalProfile,
+} from "@/entities/Artist/store/types";
+import { HTMLInputTypeAttribute } from "react";
+import {
+  Control,
+  FieldErrors,
+  SubmitErrorHandler,
+  SubmitHandler,
+} from "react-hook-form";
 
 export type TArtistFormPersonalProps = {
-  isChecked: boolean,
-  isOnChange: boolean,
-  control?: Control<FieldValues>,
-  values?: Partial<FieldValues>,
-  errors?: Partial<FieldErrors<FieldValues>>,
-  onSubmit: SubmitHandler<FieldValues>,
-  onError?: SubmitErrorHandler<FieldValues>
-  onEdit: () => void
-}
-
-export type TPassportData = {
-  series?: string,
-  number?: string,
-  issuerCode?: string,
-  issueDate?: Date | null,
-}
-
-export type TPaymentData = {
-  taxId?: string;
-  registrationNumber?: string;
-  bankName?: string;
-  bic?: string;
-  correspondentAccount?: string;
-  account?: string;
-  typeDetails?: string;
+  isChecked: boolean;
+  isOnChange: boolean;
+  control?: Control<FieldValues>;
+  values?: Partial<FieldValues>;
+  errors?: Partial<FieldErrors<FieldValues>>;
+  onSubmit: SubmitHandler<FieldValues>;
+  onError?: SubmitErrorHandler<FieldValues>;
+  onEdit: () => void;
 };
 
-export interface FieldValues {
-  companyName?: string,
-  legalAdress?: string,
-  firstName?: string,
-  lastName?: string,
-  middleName?: string,
-  birthDate?: Date | null,
-  adress?: string,
-  email?: string,
-  phone?: string,
-  passport?: TPassportData,
-  paymentDetails?: TPaymentData
-}
+export type FieldValues = TArtistLegalData;
 
-type PassportKeys = `passport.${keyof TPassportData}`;
-type PaymentKeys = `paymentDetails.${keyof TPaymentData}`;
-export type FieldName = keyof Omit<FieldValues, 'passport' | 'paymentDetails'> | PassportKeys | PaymentKeys
+type LegalProfileKeys = `legal_profile.${keyof TLegalProfile}`;
+type IdentityDataKeys = `identity_data.${keyof TIdentityData}`;
+type BankDataKeys = `bank_data.${keyof TBankData}`;
+type CompanyDataKeys = `company_data.${keyof TCompanyData}`;
+
+export type FieldName =
+  | LegalProfileKeys
+  | IdentityDataKeys
+  | BankDataKeys
+  | CompanyDataKeys;
 
 export type TArtistFormPersonalField = {
   title: string;
-  name: FieldName
+  name: FieldName; 
   placeholder: string;
   type: HTMLInputTypeAttribute;
   required: boolean;
@@ -58,5 +48,5 @@ export type TArtistFormPersonalField = {
   column: number;
   maxLength?: number;
   minLength?: number;
-  hasOptions?: boolean;
-}
+  options?: { label: string; value: string }[];
+};

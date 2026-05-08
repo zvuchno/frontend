@@ -3,7 +3,60 @@ import { ArtistFormPersonal } from "./ArtistFormPersonal";
 import { FormProvider, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import type { FieldValues } from "./utils/types";
-import { typeDetails } from "./utils/constants";
+
+const MOCK_DATA: FieldValues = {
+  legal_profile: {
+    recipient_type: "individual_entrepreneur",
+  },
+  identity_data: {
+    first_name: "Иван",
+    last_name: "Иванов",
+    middle_name: "Иванович",
+    birth_date: new Date("1995-05-08"),
+    registration_address: "г. Москва, ул. Пушкина, д. 10, кв. 45",
+    passport_series: "4510",
+    passport_number: "123456",
+    passport_issued_by: "123-123",
+    passport_issue_date: new Date("2015-05-20"),
+    inn: "770102030405",
+    email: "ivanov@ivanov.ru",
+    phone: "79991234567",
+  },
+  bank_data: {
+    bank_name: "Банк всея Руси",
+    bik: "123456789",
+    checking_account: "40802810000000001234",
+    correspondent_account: "30101810000000000225",
+  },
+  company_data: {
+    company_name: 'ООО "Рога и копыта"',
+    company_address: "г. Москва, ул. Ленина, д. 1",
+    inn: "770102030405",
+    ogrn: "1234567890123",
+  },
+};
+
+const FormWithLogic = (args: any) => {
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const handleEdit = () => setIsEditMode(true);
+
+  const handleSubmit = (data: FieldValues) => {
+    console.log("Данные отправлены:", data);
+    alert("Данные успешно отправлены");
+    setIsEditMode(false);
+  };
+
+  return (
+    <ArtistFormPersonal
+      {...args}
+      isOnChange={!isEditMode}
+      onEdit={handleEdit}
+      onSubmit={handleSubmit}
+      isChecked={true}
+    />
+  );
+};
 
 const meta: Meta<typeof ArtistFormPersonal> = {
   title: "features/ArtistFormPersonal",
@@ -15,37 +68,13 @@ const meta: Meta<typeof ArtistFormPersonal> = {
     (Story, { args }) => {
       const methods = useForm<FieldValues>({
         mode: "onChange",
-        defaultValues: {
-          companyName: 'ООО "Рога и копыта"',
-          legalAdress: "Москва, Красная площадь., д. 1",
-          email: "rogaandkopyta@email.ru",
-          phone: "",
-          firstName: "Иван",
-          lastName: "Иванов",
-          middleName: "Иванович",
-          birthDate: new Date("1999-05-07"),
-          adress: "Москва, Кутузовский пр-т., д. 3, кв. 418",
-          passport: {
-            series: "1234",
-            number: "123456",
-            issuerCode: "111-111",
-            issueDate: new Date("2013-07-25"),
-          },
-          paymentDetails: {
-            taxId: "1111111111",
-            bic: "123456789",
-            correspondentAccount: "00000000000000000000",
-            bankName: "Банк всея Руси",
-            account: "12345678901234567890",
-            typeDetails: "",
-            registrationNumber: "1234567890000",
-          },
-        },
+        defaultValues: undefined,
       });
 
       useEffect(() => {
         if (args.values) {
           methods.reset(args.values);
+          methods.trigger();
           if (args.isOnChange === true) methods.trigger();
         }
       }, [args.values, methods]);
@@ -61,11 +90,7 @@ const meta: Meta<typeof ArtistFormPersonal> = {
               backgroundColor: "#ffffff",
             }}
           >
-            <Story
-              args={{
-                ...args,
-              }}
-            />
+            <Story />
           </div>
         </FormProvider>
       );
@@ -77,83 +102,6 @@ export default meta;
 
 type Story = StoryObj<typeof ArtistFormPersonal>;
 
-export const ArtistFormPersonalNew: Story = {
-  args: {
-    values: {
-      companyName: "",
-      legalAdress: "",
-      email: "",
-      phone: "",
-      firstName: "",
-      lastName: "",
-      middleName: "",
-      birthDate: null,
-      adress: "",
-      passport: {
-        series: "",
-        number: "",
-        issuerCode: "",
-        issueDate: null,
-      },
-      paymentDetails: {
-        taxId: "",
-        bic: "",
-        correspondentAccount: "",
-        bankName: "",
-        account: "",
-        registrationNumber: "",
-        typeDetails: "",
-      },
-    },
-  },
-};
-
-export const ArtistFormPersonalCurrent: Story = {
-  args: {
-    isOnChange: false,
-  },
-  render: (args) => {
-    const [isEditMode, setIsEditMode] = useState(args.isOnChange);
-    const handleChange = () => {
-      setIsEditMode(true);
-    };
-
-    return (
-      <ArtistFormPersonal
-        {...args}
-        isOnChange={isEditMode}
-        onEdit={handleChange}
-      />
-    );
-  },
-};
-
-export const ArtistFormPersonalWithErrors: Story = {
-  args: {
-    isOnChange: true,
-    values: {
-      phone: "12345",
-      email: "roga",
-      firstName: "И",
-      birthDate: null,
-      adress: "М",
-      passport: {
-        series: "bkjb",
-        issuerCode: "111-11",
-      },
-      paymentDetails: {
-        bic: "09585",
-        correspondentAccount: "0000",
-      },
-    },
-  },
-};
-
-export const ArtistFormPersonalWithoutErrors: Story = {
-  args: {
-    isChecked: true,
-    onSubmit: (data) => {
-      (console.log(data), alert("Форма отправлена"));
-    },
-  },
+export const ArtistLegalDataInteractiveForm: Story = {
+  render: (args) => <FormWithLogic {...args} />,
 };

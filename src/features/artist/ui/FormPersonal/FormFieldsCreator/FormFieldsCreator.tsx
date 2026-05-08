@@ -10,10 +10,9 @@ import { artistFormPersonalRules } from "../utils/validation";
 import styles from "../artistFormPersonal.module.scss";
 import clsx from "clsx";
 import DatePicker from "react-datepicker";
-import { fi, ru } from "date-fns/locale";
+import { ru } from "date-fns/locale";
 import { IMaskInput } from "react-imask";
 import Input from "@/shared/ui/Input/Input";
-import { typeDetails } from "../utils/constants";
 
 export const createFormField = (
   field: TArtistFormPersonalField,
@@ -33,11 +32,13 @@ export const createFormField = (
     artistFormPersonalRules(field),
   );
 
+  const currentValue = methods.watch(field.name as FieldPath<FieldValues>);
+
   const issuerCodeFormatter = (
     field: TArtistFormPersonalField,
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (field.name === "passport.issuerCode") {
+    if (field.name === "identity_data.passport_issued_by") {
       const value = e.target.value.replace(/\D/g, "");
       if (value.length > 3) {
         e.target.value = `${value.slice(0, 3)}-${value.slice(3, 6)}`;
@@ -134,7 +135,7 @@ export const createFormField = (
             );
           }}
         />
-      ) : field.hasOptions ? (
+      ) : field.options ? (
         <div className={clsx("field", { ["error"]: !!fieldError })}>
           <div className={"labelContainer"}>
             <label
@@ -161,6 +162,7 @@ export const createFormField = (
             style={{
               height: "40px",
               paddingBlock: "10px",
+              color: !currentValue || currentValue === 'individual_temporary' ? 'rgba(16, 15, 13, 0.4)' : 'inherit',
             }}
             className={clsx("input input_size_small", {
               ["error"]: !!fieldError,
@@ -175,13 +177,17 @@ export const createFormField = (
               onChange(e as React.ChangeEvent<HTMLInputElement>);
               issuerCodeFormatter(field, e as any);
             }}
+            defaultValue=""
           >
-            <option value="" disabled style={{ opacity: "40%" }}>
+            <option
+              value="individual_temporary"
+              disabled
+            >
               {field.placeholder}
             </option>
-            {typeDetails.map((el) => (
-              <option key={el} value={el}>
-                {el}
+            {field.options?.map((el) => (
+              <option key={el.value} value={el.value}>
+                {el.label}
               </option>
             ))}
           </select>

@@ -1,3 +1,5 @@
+import { TArtistLegalData } from "./types";
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export type TFetchProps<T = unknown> = {
@@ -6,32 +8,6 @@ export type TFetchProps<T = unknown> = {
   defaultMessage?: string;
   method?: "PATCH" | "GET";
 };
-
-interface ArtistLegalData {
-  legal_profile?: {
-    recipient_type?: string;
-    recipient_name?: string;
-    taxation_system?: string;
-  };
-  identity_data: {
-    first_name?: string;
-    last_name?: string;
-    middle_name?: string;
-    birth_date?: string;
-    registration_address?: string;
-    passport_series?: string;
-    passport_number?: string;
-    passport_issued_by?: string;
-    passport_issue_date?: string;
-  };
-  bank_data?: {
-    bank_name?: string;
-    bik?: string;
-    inn?: string;
-    correspondent_account?: string;
-    checking_account?: string;
-  };
-}
 
 const createArtistFetchFunction = async <T, D = unknown>(
   props: TFetchProps<D>,
@@ -57,20 +33,19 @@ const createArtistFetchFunction = async <T, D = unknown>(
 };
 
 export const updateArtistLegalData = async (
-  regData: ArtistLegalData,
-): Promise<ArtistLegalData> => {
-  return await createArtistFetchFunction<ArtistLegalData, ArtistLegalData>({
+  regData: Partial<TArtistLegalData>,
+): Promise<Partial<TArtistLegalData>> => {
+  return await createArtistFetchFunction<Partial<TArtistLegalData>>({
     url: "/artists/me/legal",
     fetchData: regData,
-    method: "PATCH",
     defaultMessage: "Ошибка при обновлении данных",
   });
 };
 
-export const getArtistLegalData = async (): Promise<ArtistLegalData> => {
-  return await createArtistFetchFunction<ArtistLegalData>({
+export const getArtistLegalData = async (): Promise<Partial<TArtistLegalData>> => {
+  return await createArtistFetchFunction<Partial<TArtistLegalData>>({
     url: "/artists/me/legal",
     method: "GET",
-    defaultMessage: "Ошибка при получении юридических данных",
+    defaultMessage: "Ошибка при получении юридических данных артиста",
   });
 };

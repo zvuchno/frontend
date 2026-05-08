@@ -12,7 +12,6 @@ import {
 import "react-datepicker/dist/react-datepicker.module.css";
 
 import clsx from "clsx";
-import { useArtistPersonalDataStore } from "@/entities/Artist/store/useArtistPersonalDataStore";
 import { LegalFormSelector } from "./LegalFormSelector/LegalFormSelector";
 import { createFormField } from "./FormFieldsCreator/FormFieldsCreator";
 
@@ -23,31 +22,38 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
   onError,
   onEdit,
 }) => {
-
   const methods = useFormContext<FieldValues>();
-  const { handleSubmit, formState: { errors } } = methods;
+  const {
+    watch,
+    handleSubmit,
+    formState: { errors }
+  } = methods;
   const personalFields = artistPersonalFields;
   const passportFields = artistPasportFields;
   const paymentFields = artistIndividualPaymentFields;
   const legalEntityFields = artistEntityPaymentFields;
 
-  const artistType = useArtistPersonalDataStore(
-    (state) => state.artistPersonalData?.artistType,
-  );
+  const artistType = watch("legal_profile.recipient_type");
+  const isCompany =
+    artistType === "legal_entity";
+
+  const onSubmitе = (data: FieldValues) => {   // только для проверки стора!!! удалить после проверки стора!!! 
+    console.log("Данные из формы для стора:", data);  
+  };
 
   return (
     <>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit, onError)}>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmitе, onError)}>
         <div className={styles.formContentWrapper}>
           <h3 className={styles.formTitle}>
             {!artistType
               ? "Данные профиля"
-              : artistType === "individual"
+              : !isCompany
                 ? "Личные данные"
                 : "Данные юридического лица"}
           </h3>
 
-          {artistType === "legalEntity" && (
+          {artistType === "legal_entity" && (
             <fieldset
               className={clsx(styles.formContent, styles.legalEntityContent)}
             >
@@ -64,7 +70,7 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
             <LegalFormSelector />
           ) : (
             <>
-              {artistType === "legalEntity" && (
+              {artistType === "legal_entity" && (
                 <h4 className={clsx(styles.formTitle, styles.subtittle)}>
                   Данные руководителя
                 </h4>
@@ -76,7 +82,9 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
                 <legend className={styles.visuallyHidden}>
                   Персональная информация
                 </legend>
-                {personalFields.map((field, index) => createFormField(field, index, methods))}
+                {personalFields.map((field, index) =>
+                  createFormField(field, index, methods),
+                )}
               </fieldset>
 
               <fieldset
@@ -85,17 +93,21 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
                 <legend className={styles.visuallyHidden}>
                   Паспортные данные
                 </legend>
-                {passportFields.map((field, index) => createFormField(field, index, methods))}
+                {passportFields.map((field, index) =>
+                  createFormField(field, index, methods),
+                )}
               </fieldset>
 
-              {artistType === "individual" && (
+              {!isCompany && (
                 <fieldset
                   className={clsx(styles.formContent, styles.paymentlContent)}
                 >
                   <legend className={styles.visuallyHidden}>
                     Платежная информация
                   </legend>
-                  {paymentFields.map((field, index) => createFormField(field, index, methods))}
+                  {paymentFields.map((field, index) =>
+                    createFormField(field, index, methods),
+                  )}
                 </fieldset>
               )}
             </>
