@@ -11,6 +11,8 @@ import { Typography } from "@/shared/ui/Typography/Typography";
 import s from "./ListenerRegisterForm.module.scss";
 import { TNewListenerRequest } from "@/entities/user/types";
 import { useRouter } from "next/navigation";
+import { validateField } from "../utils/validateFields";
+import { validateForm } from "../utils/validateForm";
 
 interface FormErrors {
   name?: string;
@@ -18,6 +20,14 @@ interface FormErrors {
   phone?: string;
   password?: string;
   confirmPassword?: string;
+};
+
+const initialFormState: ListenerRegisterFormData = {
+  name: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmPassword: "",
 }
 
 export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
@@ -25,72 +35,73 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
   onSubmit,
   onLoginClick,
   onSocialLogin,
-  isLoading = false,
-  error = null,
 }) => {
-  const [formData, setFormData] = useState<ListenerRegisterFormData>({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [formData, setFormData] = useState<ListenerRegisterFormData>(initialFormState);
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [registerError, setRegisterError] = useState<string | null>(null);
-  const [isRegLoading, setIsRegLoading] = useState<boolean>(false);
+  const [registerError, setRegisterError] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
-
-  const validate = (): boolean => {
-    const newErrors: FormErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = "Введите имя";
-    }
-    
-    if (!formData.email) {
-      newErrors.email = "Введите email";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Введите корректный email";
-    }
-    
-    if (!formData.phone) {
-      newErrors.phone = "Введите телефон";
-    } else if (formData.phone.replace(/\D/g, '').length < 11) {
-      newErrors.phone = "Введите полный номер телефона";
-    }
-    
-    if (!formData.password) {
-      newErrors.password = "Введите пароль";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Минимум 8 символов";
-    }
-    
-    if (formData.confirmPassword !== formData.password) {
-      newErrors.confirmPassword = "Пароли не совпадают";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleChange =
     (field: keyof ListenerRegisterFormData) => (
       e: React.ChangeEvent<HTMLInputElement>
     ) => {
+
+      const id = e.target.id;
+
+      if (id === 'phone') {
+        let value = e.target.value.replace(/\D/g, "");
+    
+        if (value.startsWith("7") || value.startsWith("8")) {
+          value = value.slice(1);
+        }
+        
+        let formattedValue = "+7";
+        if (value.length > 0) {
+          formattedValue += " (" + value.slice(0, 3);
+        }
+        if (value.length >= 3) {
+          formattedValue += ") " + value.slice(3, 6);
+        }
+        if (value.length >= 6) {
+          formattedValue += "-" + value.slice(6, 8);
+        }
+        if (value.length >= 8) {
+          formattedValue += "-" + value.slice(8, 10);
+        }
+        
+        setFormData((prev) => ({ ...prev, phone: formattedValue }));
+
+        const error = validateField<ListenerRegisterFormData>(field, value, formData.password);
+        setErrors((prev) => ({ ...prev, [field]: error || undefined }));
+
+        return;
+      }
+
       const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
-      if (errors[field as keyof FormErrors]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
+
+      const error = validateField<ListenerRegisterFormData>(field, value, formData.password);
+      setErrors((prev) => ({ ...prev, [field]: error || undefined }));
+
+      if (registerError) setRegisterError(undefined);
     };
 
   const handleSubmit = async (data: { email?: string; password?: string }) => {
-    if (!validate()) return;
 
-    setIsRegLoading(true);
-    setRegisterError(null);
+    setIsLoading(true);
+    setRegisterError(undefined);
+    setErrors({});
+
+    const validation = validateForm<ListenerRegisterFormData>(formData)
+
+    if (!validation.isValid) {
+      setRegisterError(validation.errorMessage)
+      setIsLoading(false);
+      return;
+    }
 
     try {
 
@@ -103,42 +114,18 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
 
       const data = await onSubmit?.(userData);
 
-      if (data) router.push("/signin");
+      if (data) {
+        setFormData(initialFormState);
+        router.replace("/signin");
+      } 
 
     } catch (error) {
       if (error instanceof Error) setRegisterError(error.message);
 
     } finally {
-      setIsRegLoading(false)
+      setIsLoading(false)
     }
     
-  };
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, "");
-    
-    if (value.startsWith("7") || value.startsWith("8")) {
-      value = value.slice(1);
-    }
-    
-    let formattedValue = "+7";
-    if (value.length > 0) {
-      formattedValue += " (" + value.slice(0, 3);
-    }
-    if (value.length >= 3) {
-      formattedValue += ") " + value.slice(3, 6);
-    }
-    if (value.length >= 6) {
-      formattedValue += "-" + value.slice(6, 8);
-    }
-    if (value.length >= 8) {
-      formattedValue += "-" + value.slice(8, 10);
-    }
-    
-    setFormData((prev) => ({ ...prev, phone: formattedValue }));
-    if (errors.phone) {
-      setErrors((prev) => ({ ...prev, phone: undefined }));
-    }
   };
 
   return (
@@ -146,7 +133,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
       title="Регистрация"
       onSubmit={handleSubmit}
       onClose={onClose}
-      isLoading={isRegLoading}
+      isLoading={isLoading}
       className={s.listenerRegisterForm}
       renderFields={() => (
         <div style={{ display: "flex", flexDirection: "column", gap: "40px", marginBottom: "20px" }}>
@@ -161,7 +148,8 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.name}
             message={errors.name}
             inputSize="small"
-            disabled={isRegLoading}
+            disabled={isLoading}
+            maxLength={150}
           />
 
           <Input
@@ -175,7 +163,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.email}
             message={errors.email}
             inputSize="small"
-            disabled={isRegLoading}
+            disabled={isLoading}
           />
 
           <Input
@@ -184,12 +172,12 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             type="tel"
             name="phone"
             value={formData.phone}
-            onChange={handlePhoneChange}
+            onChange={handleChange("phone")}
             placeholder="+7 (___) ___-__-__"
             error={!!errors.phone}
             message={errors.phone}
             inputSize="small"
-            disabled={isRegLoading}
+            disabled={isLoading}
           />
 
           <Input
@@ -203,7 +191,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.password}
             message={errors.password}
             inputSize="small"
-            disabled={isRegLoading}
+            disabled={isLoading}
           />
 
           <Input
@@ -217,7 +205,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
             error={!!errors.confirmPassword}
             message={errors.confirmPassword}
             inputSize="small"
-            disabled={isRegLoading}
+            disabled={isLoading}
           />
 
           {registerError && (
@@ -274,55 +262,36 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
         </button>
       )}
       renderSocialLogin={() => {
-        const socialButtonStyle: React.CSSProperties = {
-          boxSizing: "border-box",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "136px",
-          height: "60px",
-          background: "#E4F1FF",
-          border: "1px solid #100F0D",
-          borderRadius: "36px",
-          fontFamily: "'Better VCR', sans-serif",
-          fontSize: "20px",
-          color: "#100F0D",
-          cursor: isRegLoading ? "not-allowed" : "pointer",
-          opacity: isRegLoading ? 0.5 : 1,
-          transition: "all 0.2s ease",
-          marginBottom: "70px",
-        };
-
         return (
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-            <button
-              type="button"
-              onClick={() => onSocialLogin?.("yandex")}
-              disabled={isRegLoading}
-              style={socialButtonStyle}
-              aria-label="Яндекс"
-            >
-              Я
-            </button>
-            <button
-              type="button"
-              onClick={() => onSocialLogin?.("vk")}
-              disabled={isRegLoading}
-              style={socialButtonStyle}
-              aria-label="VK"
-            >
-              VK
-            </button>
-            <button
-              type="button"
-              onClick={() => onSocialLogin?.("google")}
-              disabled={isRegLoading}
-              style={socialButtonStyle}
-              aria-label="Google"
-            >
-              G
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => onSocialLogin?.("yandex")}
+            disabled={isLoading}
+            className={s.socialButton}
+            aria-label="Яндекс"
+          >
+            Я
+          </button>
+          <button
+            type="button"
+            onClick={() => onSocialLogin?.("vk")}
+            disabled={isLoading}
+            className={s.socialButton}
+            aria-label="VK"
+          >
+            VK
+          </button>
+          <button
+            type="button"
+            onClick={() => onSocialLogin?.("google")}
+            disabled={isLoading}
+            className={s.socialButton}
+            aria-label="Google"
+          >
+            G
+          </button>
+        </div>
         );
       }}
     />

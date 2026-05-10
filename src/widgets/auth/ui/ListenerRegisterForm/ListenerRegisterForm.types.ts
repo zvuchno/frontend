@@ -13,6 +13,6 @@ export interface ListenerRegisterFormProps {
   onSubmit?: (data: TNewListenerRequest) => void | Promise<TNewUserResponse>;
   onLoginClick?: () => void;
   onSocialLogin?: (provider: "yandex" | "vk" | "google") => void;
-  isLoading?: boolean;
-  error?: string | null;
+  // isLoading?: boolean;
+  // error?: string | null;
 }

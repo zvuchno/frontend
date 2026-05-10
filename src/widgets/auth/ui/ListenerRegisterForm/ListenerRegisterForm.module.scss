@@ -1,6 +1,7 @@
 .listenerRegisterForm {
   position: relative;
   max-width: 560px;
+  max-height: calc(100vh - 40px);
   padding-inline: 40px;
   padding-block: 0px;
   background: transparent;
@@ -129,15 +130,16 @@
     background: #e4f1ff;
     border: 1px solid #100f0d;
     border-radius: 36px;
-    font-family: "Better VCR", sans-serif;
-    font-weight: 400;
-    font-size: 20px;
+    font-family: var(--font-better-vcr);
+    font-weight: 600;
+    font-size: 16px;
     line-height: 28px;
     letter-spacing: -0.04em;
     color: #100f0d;
     cursor: pointer;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    margin-bottom: 70px;
 
     &:hover:not(:disabled) {
       background: #d4e8ff;
@@ -191,6 +193,20 @@
   letter-spacing: -0.06em;
   color: var(--color-text-primary);
   margin-bottom: 36px;
+
+  &:hover {
+    background-color: var(--color-btn-secondary);
+  }
+
+  &:active {
+    background-color: var(--foreground);
+    color: var(--background);
+  }
+
+  &:disabled {
+    border: transparent;
+    color: var(--background);
+  }
 }
 
 @keyframes spin {

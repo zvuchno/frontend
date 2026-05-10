@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import {
   ArtistRegisterFormProps,
@@ -7,13 +9,27 @@ import { BaseForm } from "@/widgets/auth/ui/BaseForm/BaseForm";
 import Input from "@/shared/ui/Input/Input";
 import { Typography } from "@/shared/ui/Typography/Typography";
 import s from "./ArtistRegisterForm.module.scss";
+import { useRouter } from "next/navigation";
+import { validateField } from "../utils/validateFields";
+import { validateForm } from "../utils/validateForm";
+import { TNewArtistRequest } from "@/entities/user/types";
 
 interface FormErrors {
   title?: string;
   login?: string;
   email?: string;
+  phone?: string;
   password?: string;
   confirmPassword?: string;
+};
+
+const initialFormState: ArtistRegisterFormData = {
+  title: "",
+  login: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmPassword: "",
 }
 
 export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
@@ -21,71 +37,98 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
   onSubmit,
   onLoginClick,
   onSocialLogin,
-  isLoading = false,
-  error = null,
 }) => {
-  const [formData, setFormData] = useState<ArtistRegisterFormData>({
-    title: "",
-    login: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [formData, setFormData] = useState<ArtistRegisterFormData>(initialFormState);
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [registerError, setRegisterError] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const validate = (): boolean => {
-    const newErrors: FormErrors = {};
+  const router = useRouter();
 
-    if (!formData.title.trim()) {
-      newErrors.title = "Введите название";
-    }
-
-    if (!formData.login.trim()) {
-      newErrors.login = "Введите логин";
-    } else if (formData.login.length < 3) {
-      newErrors.login = "Минимум 3 символа";
-    }
-
-    if (!formData.email) {
-      newErrors.email = "Введите email";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Введите корректный email";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Введите пароль";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Минимум 6 символов";
-    }
-
-    if (formData.confirmPassword !== formData.password) {
-      newErrors.confirmPassword = "Пароли не совпадают";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleChange =
     (field: keyof ArtistRegisterFormData) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
+
+      const id = e.target.id;
+      
+      if (id === 'phone') {
+        let value = e.target.value.replace(/\D/g, "");
+    
+        if (value.startsWith("7") || value.startsWith("8")) {
+          value = value.slice(1);
+        }
+        
+        let formattedValue = "+7";
+        if (value.length > 0) {
+          formattedValue += " (" + value.slice(0, 3);
+        }
+        if (value.length >= 3) {
+          formattedValue += ") " + value.slice(3, 6);
+        }
+        if (value.length >= 6) {
+          formattedValue += "-" + value.slice(6, 8);
+        }
+        if (value.length >= 8) {
+          formattedValue += "-" + value.slice(8, 10);
+        }
+        
+        setFormData((prev) => ({ ...prev, phone: formattedValue }));
+
+        const error = validateField<ArtistRegisterFormData>(field, value);
+        setErrors((prev) => ({ ...prev, [field]: error || undefined }));
+
+        return;
+      }
+
+
       const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
-      if (errors[field as keyof FormErrors]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
+
+      const error = validateField<ArtistRegisterFormData>(field, value, formData.password);
+      setErrors((prev) => ({ ...prev, [field]: error || undefined }));
+
+      if (registerError) setRegisterError(undefined);
     };
 
   const handleSubmit = async (data: { email?: string; password?: string }) => {
-    if (!validate()) return;
 
-    const fullData: ArtistRegisterFormData = {
-      ...formData,
-      ...data,
-    };
+    setIsLoading(true);
+    setRegisterError(undefined);
+    setErrors({});
 
-    await onSubmit?.(fullData);
+    const validation = validateForm<ArtistRegisterFormData>(formData);
+
+    if (!validation.isValid) {
+      setRegisterError(validation.errorMessage)
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+
+      const userData: TNewArtistRequest = {
+        name: formData.title,
+        username: formData.login,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+      };
+
+      const data = await onSubmit?.(userData);
+
+      if (data) {
+        setFormData(initialFormState);
+        router.replace("/signin");
+      } 
+
+    } catch (error) {
+      if (error instanceof Error) setRegisterError(error.message);
+
+    } finally {
+      setIsLoading(false)
+    }
   };
 
   return (
@@ -123,6 +166,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
             message={errors.login}
             inputSize="small"
             disabled={isLoading}
+            maxLength={150}
           />
 
           <Input
@@ -135,6 +179,20 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
             placeholder="Текст"
             error={!!errors.email}
             message={errors.email}
+            inputSize="small"
+            disabled={isLoading}
+          />
+
+          <Input
+            id="phone"
+            label="Телефон*"
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange("phone")}
+            placeholder="+7 (___) ___-__-__"
+            error={!!errors.phone}
+            message={errors.phone}
             inputSize="small"
             disabled={isLoading}
           />
@@ -167,9 +225,9 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
             disabled={isLoading}
           />
 
-          {error && (
+          {registerError && (
             <Typography variant="normal" className={s.error}>
-              {error}
+              {registerError}
             </Typography>
           )}
         </div>
@@ -221,25 +279,6 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
         </button>
       )}
       renderSocialLogin={() => {
-        const socialButtonStyle: React.CSSProperties = {
-          boxSizing: "border-box",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "136px",
-          height: "60px",
-          background: "#E4F1FF",
-          border: "1px solid #100F0D",
-          borderRadius: "36px",
-          fontFamily: "'Better VCR', sans-serif",
-          fontSize: "20px",
-          color: "#100F0D",
-          cursor: isLoading ? "not-allowed" : "pointer",
-          opacity: isLoading ? 0.5 : 1,
-          transition: "all 0.2s ease",
-          marginBottom: "70px",
-        };
-
         return (
           <div
             style={{ display: "flex", gap: "12px", justifyContent: "center" }}
@@ -248,7 +287,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
               type="button"
               onClick={() => onSocialLogin?.("yandex")}
               disabled={isLoading}
-              style={socialButtonStyle}
+              className={s.socialButton}
               aria-label="Яндекс"
             >
               Я
@@ -257,7 +296,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
               type="button"
               onClick={() => onSocialLogin?.("vk")}
               disabled={isLoading}
-              style={socialButtonStyle}
+              className={s.socialButton}
               aria-label="VK"
             >
               VK
@@ -266,7 +305,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
               type="button"
               onClick={() => onSocialLogin?.("google")}
               disabled={isLoading}
-              style={socialButtonStyle}
+              className={s.socialButton}
               aria-label="Google"
             >
               G
