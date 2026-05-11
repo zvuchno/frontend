@@ -86,32 +86,32 @@ export const fansProfileRoutes = [
 export const artistsProfileRoutes = [
   {
     id: "profile",
-    href: "/artists/profile",
+    href: "/artist/profile",
     label: "Профиль",
   },
   {
     id: "data",
-    href: "/artists/data",
+    href: "/artist/data",
     label: "Данные",
   },
   {
     id: "showcase",
-    href: "/artists/showcase",
+    href: "/artist/showcase",
     label: "Витрина",
   },
   {
     id: "orders",
-    href: "/artists/orders",
+    href: "/artist/orders",
     label: "Заказы",
   },
   {
     id: "finance",
-    href: "/artists/finance",
+    href: "/artist/finance",
     label: "Финансы",
   },
   {
     id: "settings",
-    href: "/artists/settings",
+    href: "/artist/settings",
     label: "Настройки",
   },
 ] satisfies readonly MainNavRouteItem[];

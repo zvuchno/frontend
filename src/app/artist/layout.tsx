@@ -11,7 +11,7 @@ import { ArtistDataSection } from "./components/ArtistDataSection";
 
 const artistProfilePathnames = ["/artist/profile"];
 
-const ArtistsLayout = ({ children }: { children: React.ReactNode }) => {
+const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const shouldShowArtistInfo = artistProfilePathnames.includes(pathname);
 
@@ -40,4 +40,4 @@ const ArtistsLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default ArtistsLayout;
+export default ArtistLayout;

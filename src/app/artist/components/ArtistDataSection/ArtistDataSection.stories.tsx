@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { ArtistDataSection } from ".";
 
 const meta = {
-  title: "App/Artists/ArtistDataSection",
+  title: "App/Artist/ArtistDataSection",
   component: ArtistDataSection,
   parameters: {
     layout: "centered",
