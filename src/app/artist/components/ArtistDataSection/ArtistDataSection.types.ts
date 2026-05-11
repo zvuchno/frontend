@@ -1,5 +1,5 @@
 export type TArtistDataItem = {
-  id?: number;
+  id?: number | string;
   label: string;
   value: string;
 };

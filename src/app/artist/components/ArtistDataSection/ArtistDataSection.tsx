@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import CardArtist from "@/entities/Artist/ui/CardArtist/CardArtist";
+import { ButtonAddLink } from "@/features/ButtonAddLink";
 import { ButtonUI } from "@/shared/ui/button";
-import { DeleteIcon } from "@/shared/ui/icons/deleteIcon";
-import { PlusIcon } from "@/shared/ui/icons/plusIcon";
 import ArtistDescription from "@/widgets/artist/ui/ArtistDescription/ArtistDescription";
 import ModalAddContact from "@/widgets/profile/ui/ModalAddContact/ModalAddContact";
 import type { TFieldValues } from "@/widgets/profile/ui/ModalAddContact/ModalAddContact.type";
@@ -13,9 +12,6 @@ import {
   TArtistDataItem,
 } from "./ArtistDataSection.types";
 import s from "./ArtistDataSection.module.scss";
-
-const getItemKey = (item: TArtistDataItem) =>
-  item.id !== undefined ? String(item.id) : `${item.label}::${item.value}`;
 
 const ArtistDataSection = ({
   coverSrc,
@@ -56,45 +52,6 @@ const ArtistDataSection = ({
     setIsSocialModalOpen(false);
   };
 
-  const renderItem = (item: TArtistDataItem, type: "contact" | "social") => {
-    const handleDelete =
-      type === "contact" ? onDeleteContactClick : onDeleteSocialClick;
-    const isDeleting =
-      (type === "contact" ? deletingContactKey : deletingSocialKey) ===
-      getItemKey(item);
-
-    return (
-      <div
-        key={item.id ?? `${item.label}-${item.value}`}
-        className={isDeleting ? `${s.item} ${s.itemDeleting}` : s.item}
-      >
-        <div className={s.itemMain}>
-          <span className={s.itemLabel}>{item.label}</span>
-
-          <div className={s.itemField}>
-            <span className={s.itemValue}>{item.value}</span>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className={s.deleteButton}
-          disabled={isDeleting}
-          onClick={() => handleDelete?.(item)}
-          aria-label={
-            isDeleting ? `Удаление ${item.label}` : `Удалить ${item.label}`
-          }
-        >
-          {isDeleting ? (
-            <span className={s.deleteSpinner} aria-hidden="true" />
-          ) : (
-            <DeleteIcon />
-          )}
-        </button>
-      </div>
-    );
-  };
-
   return (
     <section className={s.section}>
       <div className={s.media}>
@@ -122,39 +79,21 @@ const ArtistDataSection = ({
         />
 
         <div className={s.details}>
-          <div className={s.listSection}>
-            {contacts.length > 0 && (
-              <div className={s.listItems}>
-                {contacts.map((contact) => renderItem(contact, "contact"))}
-              </div>
-            )}
+          <ButtonAddLink
+            items={contacts}
+            addButtonText="Добавить контакт"
+            deletingItemKey={deletingContactKey}
+            onAddClick={() => setIsContactModalOpen(true)}
+            onDeleteClick={onDeleteContactClick}
+          />
 
-            <button
-              type="button"
-              className={s.actionButton}
-              onClick={() => setIsContactModalOpen(true)}
-            >
-              <PlusIcon />
-              Добавить контакт
-            </button>
-          </div>
-
-          <div className={s.listSection}>
-            {socials.length > 0 && (
-              <div className={s.listItems}>
-                {socials.map((social) => renderItem(social, "social"))}
-              </div>
-            )}
-
-            <button
-              type="button"
-              className={s.actionButton}
-              onClick={() => setIsSocialModalOpen(true)}
-            >
-              <PlusIcon />
-              Добавить соцсеть
-            </button>
-          </div>
+          <ButtonAddLink
+            items={socials}
+            addButtonText="Добавить соцсеть"
+            deletingItemKey={deletingSocialKey}
+            onAddClick={() => setIsSocialModalOpen(true)}
+            onDeleteClick={onDeleteSocialClick}
+          />
         </div>
       </div>
 
