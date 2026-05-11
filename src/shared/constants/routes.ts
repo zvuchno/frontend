@@ -82,3 +82,36 @@ export const fansProfileRoutes = [
     label: "Релизы",
   },
 ] satisfies readonly MainNavRouteItem[];
+
+export const artistsProfileRoutes = [
+  {
+    id: "profile",
+    href: "/artists/profile",
+    label: "Профиль",
+  },
+  {
+    id: "data",
+    href: "/artists/data",
+    label: "Данные",
+  },
+  {
+    id: "showcase",
+    href: "/artists/showcase",
+    label: "Витрина",
+  },
+  {
+    id: "orders",
+    href: "/artists/orders",
+    label: "Заказы",
+  },
+  {
+    id: "finance",
+    href: "/artists/finance",
+    label: "Финансы",
+  },
+  {
+    id: "settings",
+    href: "/artists/settings",
+    label: "Настройки",
+  },
+] satisfies readonly MainNavRouteItem[];
