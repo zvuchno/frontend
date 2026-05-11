@@ -1,6 +1,5 @@
 .container {
-  width: min(100%, var(--artist-description-width, 483px));
-  max-width: 100%;
+  width: 483px;
   background-color: var(--background);
   border: 1px solid var(--outline-color);
   font-family: var(--font-feature-mono);
@@ -49,7 +48,7 @@
     -webkit-line-clamp: 3;
     line-clamp: 3;
     transition: max-height 0.5s linear;
-
+    
 
     &_expended {
       max-height: 500px;
@@ -63,14 +62,6 @@
     font-weight: 400;
     line-height: 100%;
     letter-spacing: -0.06em;
-  }
-
-  &__emptyText {
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 100%;
-    letter-spacing: -0.06em;
-    color: color-mix(in srgb, var(--color-text-primary) 45%, transparent);
   }
 
   &__button {

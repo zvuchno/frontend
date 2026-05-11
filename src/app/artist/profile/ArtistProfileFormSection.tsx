@@ -22,13 +22,11 @@ import {
 
 type ArtistProfileFormSectionProps = {
   artist: CurrentArtistResponse | null;
-  showPublishHint: boolean;
   onArtistChange: Dispatch<SetStateAction<CurrentArtistResponse | null>>;
 };
 
 export default function ArtistProfileFormSection({
   artist,
-  showPublishHint,
   onArtistChange,
 }: ArtistProfileFormSectionProps) {
   const { update: updateSession } = useSession();
@@ -148,18 +146,6 @@ export default function ArtistProfileFormSection({
     user,
   ]);
 
-  const profileFormArtistProps = showPublishHint
-    ? {
-        fieldsDisabled: !isEditMode,
-        disabledFields: ["email", "password"] as const,
-        personalDataHref: "#artist-data" as const,
-      }
-    : {
-        fieldsDisabled: !isEditMode,
-        disabledFields: ["email", "password"] as const,
-        showPublishHint: false as const,
-      };
-
   return (
     <FormProvider {...methods}>
       <ProfileFormUI
@@ -171,7 +157,11 @@ export default function ArtistProfileFormSection({
         onSubmit={handleSubmit}
         onEdit={handleEdit}
       >
-        <ProfileFormArtistUI {...profileFormArtistProps} />
+        <ProfileFormArtistUI
+          fieldsDisabled={!isEditMode}
+          disabledFields={["email", "password"]}
+          showPublishHint={false}
+        />
       </ProfileFormUI>
     </FormProvider>
   );

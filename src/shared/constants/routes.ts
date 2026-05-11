@@ -60,39 +60,6 @@ export const mainNavRoutes = [
   },
 ] satisfies readonly MainNavRoute[];
 
-export const artistProfileNavRoutes = [
-  {
-    id: "profile",
-    href: "/artist/profile",
-    label: "Профиль",
-  },
-  {
-    id: "artist-data",
-    href: "/artist/profile#artist-data",
-    label: "Данные",
-  },
-  {
-    id: "storefront",
-    href: "/artist/profile#storefront",
-    label: "Витрина",
-  },
-  {
-    id: "orders",
-    href: "/artist/profile#orders",
-    label: "Заказы",
-  },
-  {
-    id: "finance",
-    href: "/artist/profile#finance",
-    label: "Финансы",
-  },
-  {
-    id: "settings",
-    href: "/artist/profile#settings",
-    label: "Настройки",
-  },
-] satisfies readonly MainNavRouteItem[];
-
 export const fansProfileRoutes = [
   {
     id: "Профиль",
