@@ -17,8 +17,38 @@
   display: flex;
   gap: 89px;
 
+  &__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 80px;
+    min-width: 0;
+  }
+
   &__content {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  &__profileInfo {
+    width: 100%;
+    padding: clamp(2.5rem, 5.556vw, 5rem) clamp(3rem, 6.667vw, 6rem) clamp(5.3125rem, 13.194vw, 9.75rem);
+    background-color: var(--background);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column;
+    gap: 32px;
+
+    &__body,
+    &__content {
+      width: 100%;
+    }
+
+    &__profileInfo {
+      padding: 3rem 0 5rem;
+    }
   }
 }
