@@ -49,9 +49,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
       e: React.ChangeEvent<HTMLInputElement>
     ) => {
 
-      const id = e.target.id;
-
-      if (id === 'phone') {
+      if (field === 'phone') {
         let value = e.target.value.replace(/\D/g, "");
     
         if (value.startsWith("7") || value.startsWith("8")) {

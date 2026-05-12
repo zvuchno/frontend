@@ -95,6 +95,9 @@ export const authConfig: AuthOptions = {
       }
       return session
     },
-  }
+  },
 
-  }
+  pages: {
+    signIn: "/signin",
+  },
+};

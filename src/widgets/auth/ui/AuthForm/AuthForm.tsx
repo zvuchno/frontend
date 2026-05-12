@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import {
   AuthFormProps,
   AuthFormData,
@@ -8,65 +10,76 @@ import Input from "@/shared/ui/Input/Input";
 import { ButtonUI } from "@/shared/ui/button/ButtonUI";
 import { Typography } from "@/shared/ui/Typography/Typography";
 import s from "@/widgets/auth/ui/AuthForm/AuthForm.module.scss";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useUserStore } from "@/entities/user/store/useUserStore";
+import { signIn } from "next-auth/react";
 
-interface FormErrors {
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
+const initialFormState: AuthFormData = {
+  email: "",
+  password: "",
 }
 
 export const AuthForm: React.FC<AuthFormProps> = ({
   mode = "login",
+  registerRoute,
   onClose,
   onSubmit,
-  onRegisterClick,
   onLoginClick,
   onSocialLogin,
-  isLoading = false,
-  error = null,
 }) => {
-  const [formData, setFormData] = useState<AuthFormData>({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    rememberMe: false,
-  });
+  const [formData, setFormData] = useState<AuthFormData>(initialFormState);
 
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [authError, setAuthError] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const validate = (): boolean => {
-    const newErrors: FormErrors = {};
-    if (!formData.email) newErrors.email = "Введите email или логин";
-    if (!formData.password) newErrors.password = "Введите пароль";
-    else if (formData.password.length < 6)
-      newErrors.password = "Минимум 6 символов";
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-    if (mode === "register" && formData.confirmPassword !== formData.password) {
-      newErrors.confirmPassword = "Пароли не совпадают";
+  useEffect(() => {
+    if (isAuthorized) {
+      const user = useUserStore.getState().user;
+      const nextRoute = searchParams.get("next");
+      const profileRoute = user?.isArtist ? "/artists/profile" : "/fans/profile";
+      router.replace(nextRoute ?? `${profileRoute}`);
     }
+  }, [isAuthorized]);
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleRegisterClick = () => {
+    router.replace(registerRoute);
   };
 
   const handleChange =
     (field: keyof AuthFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
-      if (errors[field as keyof FormErrors]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
+
+      if (authError) setAuthError(undefined);
     };
 
   const handleSubmit = async (data: { email?: string; password?: string }) => {
-    if (!validate()) return;
 
-    const fullData: AuthFormData = {
-      ...formData,
-      ...data,
-    };
+    setIsLoading(true);
+    setAuthError(undefined);
+    
+    try {
+      const res = await signIn('credentials', {
+        identifier: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
 
-    await onSubmit?.(fullData);
+      if (res?.ok) {
+        setIsAuthorized(true);
+        setFormData(initialFormState);
+      }
+    } catch (error) {
+      if (error instanceof Error) setAuthError(error.message);
+
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -80,14 +93,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <Input
             id="email"
-            label="Почта / Логин"
+            label="Почта"
             type="text"
             name="email"
             value={formData.email}
             onChange={handleChange("email")}
             placeholder="user@example.com"
-            error={!!errors.email}
-            message={errors.email}
             inputSize="small"
             disabled={isLoading}
           />
@@ -100,13 +111,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({
             value={formData.password}
             onChange={handleChange("password")}
             placeholder="••••••••"
-            error={!!errors.password}
-            message={errors.password}
             inputSize="small"
             disabled={isLoading}
           />
 
-          {mode === "register" && (
+          {/* {mode === "register" && (
             <Input
               id="confirmPassword"
               label="Подтвердите пароль"
@@ -120,9 +129,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               inputSize="small"
               disabled={isLoading}
             />
-          )}
+          )} */}
 
-          {mode === "login" && (
+          {/* {mode === "login" && (
             <label
               style={{
                 display: "flex",
@@ -148,14 +157,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               />
               <span>Запомнить меня</span>
             </label>
-          )}
+          )} */}
 
-          {error && (
+          {authError && (
             <Typography
               variant="normal"
               style={{ color: "#dc2626", textAlign: "center" }}
             >
-              {error}
+              {authError}
             </Typography>
           )}
         </div>
@@ -165,7 +174,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           variant="primary"
           type="submit"
           size="small"
-          disabled={loading}
+          disabled={loading || !(formData.email && formData.password)}
           style={{ width: "100%" }}
         >
           {loading ? (
@@ -204,7 +213,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           variant="secondary"
           type="button"
           size="small"
-          onClick={mode === "login" ? onRegisterClick : onLoginClick}
+          onClick={mode === "login" ? handleRegisterClick : onLoginClick}
           disabled={isLoading}
           style={{ width: "100%" }}
         >

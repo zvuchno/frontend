@@ -1,16 +1,8 @@
-"use client";
+import FanSignup from "./FanSignup";
 
-import { ListenerRegisterForm } from "@/widgets/auth/ui/ListenerRegisterForm/ListenerRegisterForm";
-import ModalPage from "../../ModalPage";
-import { registerNewListener } from "@/entities/user/api";
-
-const FanSignupPage = () => {
+export default function FanSignupPage ()  {
 
   return (
-    <ModalPage>
-      <ListenerRegisterForm onSubmit={registerNewListener} />
-    </ModalPage>
+    <FanSignup />
   )
 };
-
-export default FanSignupPage;

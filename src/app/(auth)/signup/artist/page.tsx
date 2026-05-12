@@ -1,15 +1,7 @@
-'use client';
+import ArtistSignup from "./ArtistSignup";
 
-import { ArtistRegisterForm } from "@/widgets/auth/ui/ArtistRegisterForm/ArtistRegisterForm";
-import ModalPage from "../../ModalPage";
-import { registerNewArtist } from "@/entities/user/api";
-
-const ArtistSignupPage = () => {
+export default function ArtistSignupPage() {
   return (
-    <ModalPage>
-      <ArtistRegisterForm onSubmit={registerNewArtist} />
-    </ModalPage>
+    <ArtistSignup />
   )
 };
-
-export default ArtistSignupPage;

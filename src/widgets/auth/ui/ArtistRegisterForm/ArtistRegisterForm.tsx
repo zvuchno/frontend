@@ -50,10 +50,8 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
   const handleChange =
     (field: keyof ArtistRegisterFormData) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
-
-      const id = e.target.id;
       
-      if (id === 'phone') {
+      if (field === 'phone') {
         let value = e.target.value.replace(/\D/g, "");
     
         if (value.startsWith("7") || value.startsWith("8")) {
