@@ -1,5 +1,6 @@
 import {
   TArtistLegalData,
+  TArtistLegalDataForApi,
   TBankData,
   TCompanyData,
   TIdentityData,
@@ -19,7 +20,7 @@ export type TArtistFormPersonalProps = {
   control?: Control<FieldValues>;
   values?: Partial<FieldValues>;
   errors?: Partial<FieldErrors<FieldValues>>;
-  onSubmit: SubmitHandler<FieldValues>;
+  onSubmit: SubmitHandler<TArtistLegalDataForApi>;
   onError?: SubmitErrorHandler<FieldValues>;
   onEdit: () => void;
 };

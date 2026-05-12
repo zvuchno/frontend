@@ -1,6 +1,8 @@
 export type TLegalProfile = {
-  recipient_type: 'individual_entrepreneur' | 'legal_entity' | 'self_employed';
-}
+  email: string;
+  phone: string;
+  recipient_type: "individual_entrepreneur" | "legal_entity" | "self_employed";
+};
 
 export type TIdentityData = {
   first_name: string;
@@ -13,8 +15,11 @@ export type TIdentityData = {
   passport_issued_by: string;
   passport_issue_date: Date;
   inn: string;
-  email?: string; //  свериться с бэком
-  phone?: string; //  свериться с бэком
+};
+
+export type TIdentityDataForApi = Partial<Omit<TIdentityData, "birth_date" | "passport_issue_date">> & {
+  birth_date: string | null;
+  passport_issue_date: string | null;
 };
 
 export type TBankData = {
@@ -32,8 +37,12 @@ export type TCompanyData = {
 }
 
 export type TArtistLegalData = {
-  legal_profile: TLegalProfile;
-  identity_data: TIdentityData;
-  bank_data?: TBankData;
-  company_data?: TCompanyData;
+  legal_profile: Partial<TLegalProfile>;
+  identity_data: Partial<TIdentityData>;
+  bank_data?: Partial<TBankData>;
+  company_data?: Partial<TCompanyData>;
 }
+
+export type TArtistLegalDataForApi = Partial<Omit<TArtistLegalData, "identity_data">> & {
+  identity_data?: TIdentityDataForApi;
+};

@@ -14,6 +14,7 @@ import "react-datepicker/dist/react-datepicker.module.css";
 import clsx from "clsx";
 import { LegalFormSelector } from "./LegalFormSelector/LegalFormSelector";
 import { createFormField } from "./FormFieldsCreator/FormFieldsCreator";
+import { formatDateToApi } from "./utils/formatDate";
 
 export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
   isChecked = false,
@@ -26,7 +27,7 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
   const {
     watch,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = methods;
   const personalFields = artistPersonalFields;
   const passportFields = artistPasportFields;
@@ -34,16 +35,32 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
   const legalEntityFields = artistEntityPaymentFields;
 
   const artistType = watch("legal_profile.recipient_type");
-  const isCompany =
-    artistType === "legal_entity";
+  const isCompany = artistType === "legal_entity";
 
-  const onSubmitе = (data: FieldValues) => {   // только для проверки стора!!! удалить после проверки стора!!! 
-    console.log("Данные из формы для стора:", data);  
+  const onHandleSubmit = (data: FieldValues) => {
+    const formattedData = {
+      ...data,
+      identity_data: {
+        ...data.identity_data,
+        birth_date: formatDateToApi(data.identity_data?.birth_date),
+        passport_issue_date: formatDateToApi(
+          data.identity_data?.passport_issue_date,
+        ),
+      },
+      legal_profile: {
+        ...data.legal_profile,
+        phone: `+${data.legal_profile?.phone}`,
+      },
+    };
+    onSubmit(formattedData);
   };
 
   return (
     <>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmitе, onError)}>
+      <form
+        className={styles.form}
+        onSubmit={handleSubmit(onHandleSubmit, onError)}
+      >
         <div className={styles.formContentWrapper}>
           <h3 className={styles.formTitle}>
             {!artistType

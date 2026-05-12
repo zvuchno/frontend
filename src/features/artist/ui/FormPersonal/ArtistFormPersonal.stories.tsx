@@ -6,6 +6,8 @@ import type { FieldValues } from "./utils/types";
 
 const MOCK_DATA: FieldValues = {
   legal_profile: {
+    email: "ivanov@ivanov.ru",
+    phone: "79991234567",
     recipient_type: "individual_entrepreneur",
   },
   identity_data: {
@@ -19,8 +21,6 @@ const MOCK_DATA: FieldValues = {
     passport_issued_by: "123-123",
     passport_issue_date: new Date("2015-05-20"),
     inn: "770102030405",
-    email: "ivanov@ivanov.ru",
-    phone: "79991234567",
   },
   bank_data: {
     bank_name: "Банк всея Руси",

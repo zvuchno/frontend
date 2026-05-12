@@ -55,7 +55,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Email",
-    name: "identity_data.email",
+    name: "legal_profile.email",
     placeholder: "email@email.ru",
     type: "string",
     required: true,
@@ -65,7 +65,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
   },
   {
     title: "Телефон",
-    name: "identity_data.phone",
+    name: "legal_profile.phone",
     placeholder: "+7(___)___-__-__",
     type: "tel",
     required: true,
@@ -224,7 +224,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
     disabled: false,
     row: 2,
     column: 1,
-    maxLength: 15,
+    maxLength: 13,
     minLength: 13,
   },
   {
@@ -351,11 +351,11 @@ export const fieldsConfig: Record<
     minLength: 2,
     maxLength: 50,
   },
-  "identity_data.email": {
+  "legal_profile.email": {
     required: true,
     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
-  "identity_data.phone": {
+  "legal_profile.phone": {
     required: true,
     validate: (value, fields) => validatePhone(value, fields),
   },
@@ -400,7 +400,7 @@ export const fieldsConfig: Record<
   },
   "company_data.ogrn": {
     required: true,
-    pattern: /^(\d{13}|\d{15})$/,
+    pattern: /^(\d{13})$/,
   },
   "legal_profile.recipient_type": {
     required: true,

@@ -44,8 +44,10 @@ export const validatePhone: Validate<string | undefined, FieldValues> = (value) 
   if (number?.length === 1) {
     return errorsMessages.requiredMessage
   };
-  if (number?.length !== 11) {
-    return errorsMessages.patternMessage
+
+  const isValid = /^79\d{9}$/.test(number);
+  if (!isValid) {
+    return errorsMessages.patternMessage;
   }
   return true;
 }

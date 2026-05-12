@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { TArtistLegalData } from "./types";
 import { getArtistLegalData, updateArtistLegalData } from "./api";
+import { parseDateFromApi } from "@/features/artist/ui/FormPersonal/utils/formatDate";
 
 export interface ArtistLegalDataStoreProps {
   artistLegalData: Partial<TArtistLegalData> | null;
@@ -29,7 +30,19 @@ export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()(
       set({ isLoading: true, error: null });
       try {
         const data = await getArtistLegalData();
-        set({ artistLegalData: data, isLoading: false });
+        const preparedData: Partial<TArtistLegalData> = {
+          ...data,
+          identity_data: {
+            ...data.identity_data,
+            birth_date: parseDateFromApi(
+              data.identity_data?.birth_date as unknown as string,
+            ),
+            passport_issue_date: parseDateFromApi(
+              data.identity_data?.passport_issue_date as unknown as string,
+            ),
+          },
+        };
+        set({ artistLegalData: preparedData, isLoading: false });
       } catch (error) {
         set({ error: (error as Error).message, isLoading: false });
       }
