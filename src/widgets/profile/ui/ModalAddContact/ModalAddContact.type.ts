@@ -16,11 +16,12 @@ export type TAddContactFormField = {
   validation?: Partial<RegisterOptions>;
 };
 
-type TFormVariant = 'contact' | 'link';
+type TFormVariant = "contact" | "link";
 
 export interface ModalAddContactProps {
   variant: TFormVariant;
   isOpen: boolean;
+  isSubmitting?: boolean;
   onClose: () => void;
   onSubmit: SubmitHandler<TFieldValues>;
-};
+}
