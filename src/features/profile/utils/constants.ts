@@ -105,39 +105,42 @@ export const errorsMessages = {
   patternMessage: 'Введите корректные данные'
 }
 
-export const fieldsConfig: Record<keyof FieldValues, {
-  required?: boolean;
-  minLength?: number;
-  maxLength?: number;
-  pattern?: RegExp;
-  validate?: Validate<string | undefined, FieldValues>;
-}> = {
+export const fieldsConfig: Record<
+  keyof FieldValues,
+  {
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: RegExp;
+    validate?: Validate<string | undefined, FieldValues>;
+  }
+> = {
   name: {
     required: true,
     minLength: 2,
-    maxLength: 50
+    maxLength: 50,
   },
   email: {
     required: true,
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
   phone: {
     required: true,
-    validate: validatePhone,
+    validate: (value, fields) => validatePhone(value, fields),
   },
   password: {
     required: true,
     minLength: 8,
-    maxLength: 50
+    maxLength: 50,
   },
   city: {
     required: true,
     minLength: 2,
-    maxLength: 50
+    maxLength: 50,
   },
   url: {
     required: true,
-    pattern: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
-  }
-}
+    pattern: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/,
+  },
+};
 
