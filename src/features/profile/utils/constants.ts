@@ -126,7 +126,7 @@ export const fieldsConfig: Record<
   },
   phone: {
     required: true,
-    validate: validatePhone,
+    validate: (value, fields) => validatePhone(value, fields),
   },
   password: {
     required: true,
