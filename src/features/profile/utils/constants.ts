@@ -49,10 +49,10 @@ export const artistFormFields: TProfileFormField[] = [
     column: 1,
   },
   {
-    title: "URL",
+    title: "URL артиста",
     name: "url",
     placeholder: "Текст",
-    type: "url",
+    type: "text",
     required: true,
     row: 3,
     column: 2,
@@ -140,6 +140,7 @@ export const fieldsConfig: Record<
   },
   url: {
     required: true,
-    pattern: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/,
+    pattern:
+      /^(?:[a-z0-9]+(?:[-_][a-z0-9]+)*|(?:https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?)$/i,
   },
 };

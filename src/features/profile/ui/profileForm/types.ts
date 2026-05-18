@@ -17,6 +17,7 @@ export interface FieldValues {
 
 export interface TProfileFormUIProps {
   children: React.ReactNode;
+  className?: string;
   role?: "artist" | "listener";
   title: string;
   isChecked: boolean;
@@ -44,13 +45,6 @@ export type TProfileFormField = {
 export type TProfileFormFieldsProps = {
   fieldsDisabled: boolean;
   disabledFields?: ReadonlyArray<keyof FieldValues>;
-} & (
-  | {
-      showPublishHint?: true;
-      personalDataHref: string;
-    }
-  | {
-      showPublishHint: false;
-      personalDataHref?: never;
-    }
-);
+  showPublishHint?: boolean;
+  personalDataHref?: string;
+};

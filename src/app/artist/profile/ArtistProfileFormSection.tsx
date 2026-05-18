@@ -19,6 +19,7 @@ import {
   hasPhoneChange,
   normalizePhone,
 } from "./form.utils";
+import styles from "./page.module.scss";
 
 type ArtistProfileFormSectionProps = {
   artist: CurrentArtistResponse | null;
@@ -149,6 +150,7 @@ export default function ArtistProfileFormSection({
   return (
     <FormProvider {...methods}>
       <ProfileFormUI
+        className={styles.profileForm}
         title="Профиль"
         isChecked={isEditMode && isFormValid}
         isOnChange={isEditMode}
@@ -160,7 +162,7 @@ export default function ArtistProfileFormSection({
         <ProfileFormArtistUI
           fieldsDisabled={!isEditMode}
           disabledFields={["email", "password"]}
-          showPublishHint={false}
+          personalDataHref="/artist/data"
         />
       </ProfileFormUI>
     </FormProvider>

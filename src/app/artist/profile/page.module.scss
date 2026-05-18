@@ -36,6 +36,19 @@
   min-width: 0;
 }
 
+.profileForm {
+  padding: 0;
+
+  button:disabled {
+    color: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+  }
+
+  button:first-of-type:disabled {
+    background-color: var(--color-accent-blue);
+  }
+}
+
 @media (max-width: 1024px) {
   .layout {
     gap: 32px;

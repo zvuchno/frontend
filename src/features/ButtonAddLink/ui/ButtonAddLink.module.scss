@@ -87,17 +87,18 @@
 .actionButton {
   display: flex;
   align-items: center;
-  gap: clamp(12px, 2vw, 16px);
+  gap: 16px;
   width: 100%;
-  padding: 0.556vw clamp(12px, 2vw, 16px);
+  min-height: 36px;
+  padding: 8px 16px;
   border: none;
   background: transparent;
   color: var(--color-text-primary);
   cursor: pointer;
   font-family: var(--font-feature-mono), monospace;
-  font-size: clamp(18px, 2vw, 20px);
+  font-size: 20px;
   font-weight: 500;
-  line-height: 1.389vw;
+  line-height: 20px;
   letter-spacing: -0.04em;
   transition: color 0.2s ease;
 

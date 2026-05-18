@@ -52,6 +52,7 @@
 
 .hint {
   grid-column: 1 / -1;
+  margin-top: -8px;
   font-family: var(--font-feature-mono);
   font-weight: 700;
   letter-spacing: -0.06em;
@@ -63,4 +64,45 @@
 .link {
   color: var(--color-primary-blue);
   text-decoration-line: underline;
+}
+
+.urlField {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  &__body {
+    display: grid;
+    grid-template-columns: auto minmax(0, 242px);
+    align-items: end;
+  }
+
+  &__prefix {
+    padding-bottom: 4px;
+    color: var(--color-text-primary);
+    font-family: var(--font-feature-mono);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 106%;
+    letter-spacing: -0.06em;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .artistForm {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'cell-1-1'
+      'cell-1-2'
+      'cell-2-1'
+      'cell-2-2'
+      'cell-3-1'
+      'cell-3-2';
+  }
+
+  .urlField__body {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }

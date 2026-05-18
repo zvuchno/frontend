@@ -27,6 +27,40 @@ export const ProfileFormArtistUI: FC<TProfileFormFieldsProps> = (props) => {
           <div className={`cell-${field.row}-${field.column}`} key={field.name}>
             {field.type === "tel" ? (
               <InputPhone field={field} disabled={isFieldDisabled} />
+            ) : field.name === "url" ? (
+              <div className={styles.urlField}>
+                <div className="labelContainer">
+                  <label
+                    className="labelContainer__label labelContainer__label_size_small"
+                    htmlFor={`${field.row}.${field.column}`}
+                  >
+                    {field.title}
+                  </label>
+                  {field.required && (
+                    <span className="labelContainer__markRequired">*</span>
+                  )}
+                </div>
+                <div className={styles.urlField__body}>
+                  <span className={styles.urlField__prefix}>
+                    zvuchno.space.
+                  </span>
+                  <Input
+                    {...register(field.name, registerRules(field))}
+                    id={`${field.row}.${field.column}`}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    style={{
+                      height: "40px",
+                    }}
+                    error={!!fieldError}
+                    message={fieldError?.message}
+                    disabled={isFieldDisabled}
+                    aria-disabled={isFieldDisabled}
+                    required={field.required}
+                    aria-required={field.required}
+                  />
+                </div>
+              </div>
             ) : (
               <Input
                 {...register(field.name, registerRules(field))}
@@ -52,7 +86,7 @@ export const ProfileFormArtistUI: FC<TProfileFormFieldsProps> = (props) => {
         <p className={styles.hint}>
           Чтобы ваш профиль стал публичным для всех пользователей не забудьте
           заполнить{" "}
-          <a className={styles.link} href={props.personalDataHref}>
+          <a className={styles.link} href={props.personalDataHref ?? "/artist/data"}>
             Личные данные
           </a>
         </p>

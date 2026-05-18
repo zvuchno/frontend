@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ChangeEvent, useRef, useState } from "react";
 import CardArtist from "@/entities/Artist/ui/CardArtist/CardArtist";
 import { ButtonAddLink } from "@/features/ButtonAddLink";
 import { ButtonUI } from "@/shared/ui/button";
@@ -23,6 +23,8 @@ const ArtistDataSection = ({
   isUploadingCover = false,
   deletingContactKey = null,
   deletingSocialKey = null,
+  errorMessage = null,
+  onCoverChange,
   onEditCoverClick,
   onAddContactClick,
   onAddSocialClick,
@@ -31,6 +33,7 @@ const ArtistDataSection = ({
 }: ArtistDataSectionProps) => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isSocialModalOpen, setIsSocialModalOpen] = useState(false);
+  const coverInputRef = useRef<HTMLInputElement | null>(null);
 
   const toContactItem = (data: TFieldValues): TArtistDataItem => ({
     label: data.name?.trim() || "Контакт",
@@ -52,6 +55,28 @@ const ArtistDataSection = ({
     setIsSocialModalOpen(false);
   };
 
+  const handleCoverButtonClick = () => {
+    if (onCoverChange) {
+      coverInputRef.current?.click();
+      return;
+    }
+
+    onEditCoverClick?.();
+  };
+
+  const handleCoverInputChange = async (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) {
+      return;
+    }
+
+    await onCoverChange?.(file);
+  };
+
   return (
     <section className={s.section}>
       <div className={s.media}>
@@ -62,12 +87,22 @@ const ArtistDataSection = ({
         <ButtonUI
           variant="secondary"
           size="standart"
-          onClick={onEditCoverClick}
+          onClick={handleCoverButtonClick}
           disabled={isUploadingCover}
           className={s.mediaButton}
         >
           {isUploadingCover ? "Загрузка..." : "Изменить обложку"}
         </ButtonUI>
+
+        {onCoverChange ? (
+          <input
+            ref={coverInputRef}
+            className={s.fileInput}
+            type="file"
+            accept="image/*"
+            onChange={handleCoverInputChange}
+          />
+        ) : null}
       </div>
 
       <div className={s.content}>
@@ -95,6 +130,12 @@ const ArtistDataSection = ({
             onDeleteClick={onDeleteSocialClick}
           />
         </div>
+
+        {errorMessage ? (
+          <p className={s.error} role="alert">
+            {errorMessage}
+          </p>
+        ) : null}
       </div>
 
       <ModalAddContact

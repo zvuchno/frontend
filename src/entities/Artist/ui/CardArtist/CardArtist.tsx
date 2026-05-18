@@ -17,7 +17,7 @@ const CardArtist = ({ image, description, hasButton = true, isLiked }: CardArtis
           />
         )}
 
-        {hasButton && (<ButtonLike isLiked={isLiked} className={s.card__button}/>)}
+        {hasButton && (<ButtonLike isLiked={Boolean(isLiked)} className={s.card__button}/>)}
         {description && (
           <div className={s.card__description}>
             <Title Tag='h4' variant='title' className={s.card__description__title}>{description}</Title>

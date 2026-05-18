@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useFormContext } from "react-hook-form";
+import clsx from "clsx";
 
 import { ButtonUI } from "@/shared/ui/button";
 
@@ -8,6 +9,7 @@ import styles from "./profileForm.module.scss";
 
 export const ProfileFormUI: FC<TProfileFormUIProps> = ({
   children,
+  className,
   title = "Профиль",
   isChecked = false,
   isOnChange = true,
@@ -23,7 +25,10 @@ export const ProfileFormUI: FC<TProfileFormUIProps> = ({
   } = useFormContext<FieldValues>();
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmit, onError)}>
+    <form
+      className={clsx(styles.form, className)}
+      onSubmit={handleSubmit(onSubmit, onError)}
+    >
       <div className={styles.formContentWrapper}>
         <h3 className={styles.formTitle}>{title}</h3>
         <div className={styles.formContent}>{children}</div>

@@ -9,6 +9,11 @@
   &_inCatalog {
     border-width: 2px;
   }
+
+  &_inProfile {
+    min-height: 317px;
+    border: 2px solid var(--color-bg-main);
+  }
 }
 
 .header {
@@ -21,6 +26,10 @@
   &_inCatalog {
     background-color: var(--color-accent-blue);
     border-bottom: 2px solid var(--outline-color);
+  }
+
+  &_inProfile {
+    padding-inline: 40px;
   }
 
   &__title {
@@ -39,6 +48,10 @@
 
   &_inCatalog {
     padding: 40px 30px 81px;
+  }
+
+  &_inProfile {
+    padding-block: 18px 37px;
   }
 
   &__textWrapper {
