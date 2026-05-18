@@ -1,6 +1,19 @@
+.page {
+  width: 100%;
+  padding-top: 28px;
+  padding-bottom: 200px;
+}
+
 .container {
-  min-height: 742px;
-  padding: 54px 48px 166px;
+  min-height: 866px;
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+}
+
+.body {
+  min-height: 794px;
+  padding: 54px 116px 84px 48px;
+  background-color: var(--background);
 }
 
 .title {
@@ -15,40 +28,59 @@
 
 .section {
   display: flex;
-  gap: 89px;
-
-  &__body {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    gap: 80px;
-    min-width: 0;
-  }
+  align-items: flex-start;
+  gap: 196px;
 
   &__content {
-    margin-left: auto;
-    margin-right: auto;
+    flex: 0 1 810px;
+    width: min(100%, 810px);
+    min-width: 0;
+  }
+}
+
+.profileInfo {
+  min-height: 897px;
+  margin-top: 28px;
+  padding: 80px 95px 188px 96px;
+  background-color: var(--background);
+}
+
+@media (max-width: 1200px) {
+  .body {
+    padding-right: 48px;
   }
 
-  &__profileInfo {
-    width: 100%;
-    padding: clamp(2.5rem, 5.556vw, 5rem) clamp(3rem, 6.667vw, 6rem) clamp(5.3125rem, 13.194vw, 9.75rem);
-    background-color: var(--background);
+  .section {
+    gap: 72px;
   }
 }
 
 @media (max-width: 768px) {
+  .page {
+    padding-top: 16px;
+    padding-bottom: 80px;
+  }
+
+  .container {
+    min-height: auto;
+  }
+
+  .body {
+    min-height: auto;
+    padding: 32px 16px 64px;
+  }
+
   .section {
     flex-direction: column;
     gap: 32px;
 
-    &__body,
     &__content {
       width: 100%;
     }
+  }
 
-    &__profileInfo {
-      padding: 3rem 0 5rem;
-    }
+  .profileInfo {
+    min-height: auto;
+    padding: 48px 16px 72px;
   }
 }

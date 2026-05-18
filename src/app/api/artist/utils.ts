@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
 
-function getAccountApiBaseUrl(): string {
+function getArtistApiBaseUrl(): string {
   const apiBaseUrl =
     process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
   if (!apiBaseUrl) {
-    throw new Error("Account API base URL is not configured");
+    throw new Error("Artist API base URL is not configured");
   }
 
   return apiBaseUrl.replace(/\/$/, "");
 }
 
-export function buildAccountApiUrl(path: string): string {
-  return `${getAccountApiBaseUrl()}${path}`;
+export function buildArtistApiUrl(path: string): string {
+  return `${getArtistApiBaseUrl()}${path}`;
 }
 
 export function getAuthorizationHeader(

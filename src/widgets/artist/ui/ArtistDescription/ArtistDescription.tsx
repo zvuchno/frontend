@@ -66,11 +66,13 @@ const ArtistDescription = ({
     <div
       className={clsx(s.container, {
         [s.container_inCatalog]: variant === "catalog",
+        [s.container_inProfile]: variant === "profile",
       })}
     >
       <div
         className={clsx(s.header, {
           [s.header_inCatalog]: variant === "catalog",
+          [s.header_inProfile]: variant === "profile",
         })}
       >
         {title && (
@@ -83,6 +85,7 @@ const ArtistDescription = ({
       <div
         className={clsx(s.content, {
           [s.content_inCatalog]: variant === "catalog",
+          [s.content_inProfile]: variant === "profile",
         })}
       >
         <div
