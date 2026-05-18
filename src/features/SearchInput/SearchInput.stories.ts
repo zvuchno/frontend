@@ -26,10 +26,10 @@ const meta = {
       action: 'changed',
       description: 'Обработчик изменения значения',
     },
-    onSubmit: {
+    /*onSubmit: {
       action: 'submitted',
       description: 'Обработчик отправки формы',
-    },
+    },*/
     onClear: {
       action: 'cleared',
       description: 'Обработчик очистки поля',
@@ -46,7 +46,7 @@ const meta = {
   },
   args: { 
     onChange: fn(), 
-    onSubmit: fn(),
+    //onSubmit: fn(),
     onClear: fn()
   },
 } satisfies Meta<typeof SearchInput>;
