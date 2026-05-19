@@ -16,7 +16,7 @@ const meta: Meta<typeof HeroUI> = {
               font-weight: 700;
             }
             @font-face {
-              font-family: 'Better VCR Custom';
+              font-family: 'Better VCR';
               src: url('/fonts/BetterVCR.woff2') format('woff2');
               font-weight: 400;
             }
@@ -25,7 +25,7 @@ const meta: Meta<typeof HeroUI> = {
         <div style={{ 
             'width': '1368px',
           '--font-feature-mono': "'Feature Mono Custom', monospace",
-          '--font-better-vcr': "'Better VCR Custom', sans-serif"
+          '--font-better-vcr': "'Better VCR', sans-serif"
         } as CSSProperties}>
           <Story />
         </div>

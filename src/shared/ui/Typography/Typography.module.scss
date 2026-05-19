@@ -1,0 +1,17 @@
+.typography {
+  // Базовые стили для любого текста, если нужны
+  -webkit-font-smoothing: antialiased;
+}
+
+.typography--normal {
+  font-family: var(--font-feat); // Наш FeatureMono
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.typography--title {
+  font-family: var(--font-vcr);  // Наш пиксельный BetterVCR!
+  font-size: 4rem;               // Размер заголовка
+  font-weight: 400;
+  text-transform: uppercase;
+}
