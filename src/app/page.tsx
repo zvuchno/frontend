@@ -9,11 +9,13 @@ import BlogCard from "@/entities/blog/ui/BlogCard/BlogCard";
 import SectionFAQ from "./components/SectionFAQ/SectionFAQ";
 import { getListArtists } from "@/api/listArtists/listArtistsApi";
 import { mockBlogs, mockProducts } from "./mocks";
+import { getListAlbums } from "@/api/listAlbums/listAlbumsApi";
 
 export default async function Home() {
 
-  const artistsData = await getListArtists(3);
-  const artistsList = artistsData.results;
+  const artistsList = (await getListArtists(3)).results;
+  
+  const albumsList = (await getListAlbums(4)).results
 
   const products = mockProducts;
 
@@ -54,13 +56,13 @@ export default async function Home() {
         </ListSection>
 
         <ListSection title="Музыка" link="">
-          {mockProducts.map(product => (
+          {albumsList.map(item => (
             <ProductCard
-              key={product.id}
-              title={product.title} 
-              image={product.image} 
-              description={product.description} 
-              price={product.price}
+              key={item.id}
+              title={item.name} 
+              image={item.cover_image} 
+              description={item.description} 
+              price={item.price ?? undefined}
               likeButton={<ButtonLike isLiked={false}/>}
             />
           ))}
@@ -79,17 +81,19 @@ export default async function Home() {
           ))}
         </ListSection>
 
-        <ListSection title="Блог" link="">
-          {blogs.map(blog => (
-            <BlogCard 
-              key={blog.id} 
-              image={blog.image} 
-              description={blog.description} 
-              link={blog.link} 
-              hasLink={blog.hasLink}
-            />
-          ))}
-        </ListSection>
+        {blogs.length > 0 && (
+          <ListSection title="Блог" link="">
+            {blogs.map(blog => (
+              <BlogCard 
+                key={blog.id} 
+                image={blog.image} 
+                description={blog.description} 
+                link={blog.link} 
+                hasLink={blog.hasLink}
+              />
+            ))}
+          </ListSection>
+        )}
 
         <SectionFAQ title="FAQ" items={questions} />
       </div>
