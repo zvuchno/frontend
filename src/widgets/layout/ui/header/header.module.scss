@@ -66,6 +66,10 @@
     margin-block-start: 6px;
   }
 
+  &Menu {
+    display: flex;
+  }
+
   &Actions {
     margin-block-start: 4px;
 
@@ -87,3 +91,27 @@
   }
 }
 
+@media (max-width: 768px) {
+  .header {
+    padding-inline: 20px;
+    gap: 16px;
+
+    &Menu {
+      display: none !important;
+    }
+
+    &ActionsMenu {
+      gap: 20px;
+    }
+  }
+}
+
+@media (max-width: 420px) {
+  .header {
+    padding-inline: 16px;
+
+    &ActionsMenu {
+      gap: 16px;
+    }
+  }
+}

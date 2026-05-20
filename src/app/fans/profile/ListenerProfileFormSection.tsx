@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { updateAccountPassword, updateAccountPhone } from "@/api/account";
+import { updateAccountPhone } from "@/api/account";
 import { getCurrentListener, updateListener } from "@/api/listener";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
@@ -44,7 +44,9 @@ export function ListenerProfileFormSection() {
   const [isProfileSaving, setIsProfileSaving] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
 
-  const isProfileBusy = isProfileLoading || isProfileSaving;
+  const hasProfileUser = status !== "unauthenticated" && Boolean(user);
+  const isProfileBusy = hasProfileUser && (isProfileLoading || isProfileSaving);
+  const visibleProfileError = hasProfileUser ? profileError : null;
 
   useEffect(() => {
     if (status === "loading") {
@@ -52,8 +54,6 @@ export function ListenerProfileFormSection() {
     }
 
     if (status === "unauthenticated" || !user) {
-      setIsProfileLoading(false);
-      setProfileError(null);
       reset({
         name: "",
         email: "",
@@ -118,7 +118,6 @@ export function ListenerProfileFormSection() {
     try {
       const nextPhone = normalizePhone(data.phone);
       const shouldUpdatePhone = nextPhone !== normalizePhone(phone);
-      const nextPassword = data.password ?? "";
       let savedName = data.name ?? "";
 
       let savedPhone = phone;
@@ -144,12 +143,6 @@ export function ListenerProfileFormSection() {
           phone: phoneResponse.phone,
           isPhoneVerified: false,
         };
-      }
-
-      if (nextPassword) {
-        await updateAccountPassword({
-          password: nextPassword,
-        });
       }
 
       reset({
@@ -183,10 +176,10 @@ export function ListenerProfileFormSection() {
         onEdit={handleEdit}
         onSubmit={handleSubmitForm}
       >
-        {profileError && <p role="alert">{profileError}</p>}
+        {visibleProfileError && <p role="alert">{visibleProfileError}</p>}
         <ProfileFormListenerUI
           fieldsDisabled={!isEditMode || isProfileBusy}
-          disabledFields={["email"]}
+          disabledFields={["email", "password"]}
         />
       </ProfileFormUI>
     </FormProvider>

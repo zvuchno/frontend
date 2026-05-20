@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 import { BaseForm } from "./BaseForm";
 import { Typography } from "@/shared/ui/Typography/Typography";
 import { ButtonUI } from "@/shared/ui/button/ButtonUI";

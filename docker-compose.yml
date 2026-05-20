@@ -1,0 +1,27 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_BASE_API_URL: "https://zvuchno-dev.duckdns.org/api"
+        NEXTAUTH_URL: "http://localhost:3000"
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_SECRET=${GOOGLE_SECRET}
+      - YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}
+      - YANDEX_SECRET=${YANDEX_SECRET}
+      - VK_CLIENT_ID=${VK_CLIENT_ID}
+      - VK_SECRET=${VK_SECRET}
+
+    volumes:
+      - next_image_cache:/app/.next/cache/images
+
+    restart: always
+
+volumes:
+  next_image_cache:

@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 
 function getAccountApiBaseUrl(): string {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+  const apiBaseUrl =
+    process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
   if (!apiBaseUrl) {
-    throw new Error("NEXT_PUBLIC_BASE_API_URL is not configured");
+    throw new Error("Account API base URL is not configured");
   }
 
   return apiBaseUrl.replace(/\/$/, "");

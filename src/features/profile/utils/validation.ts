@@ -1,5 +1,5 @@
 import { RegisterOptions, Validate } from "react-hook-form";
-import { FieldValues, TProfileFormField } from "../ui/profileForm/types";
+import type { FieldValues, TProfileFormField } from "../ui/profileForm/types";
 import { errorsMessages, fieldsConfig } from "./constants";
 
 export const validatePhone: Validate<string | undefined, FieldValues> = (

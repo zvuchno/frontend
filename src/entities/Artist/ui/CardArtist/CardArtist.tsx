@@ -8,25 +8,26 @@ const CardArtist = ({ image, description, hasButton = true, isLiked }: CardArtis
     <div className={s.cardWrapper}>
       <div className={s.cardCorner} />
       <div className={s.card}>
-
         {image && (
-          <img 
-            className={s.card__image} 
-            src={image}
-            alt="Фото артиста"
-          />
+          <img className={s.card__image} src={image} alt="Фото артиста" />
         )}
 
-        {hasButton && (<ButtonLike isLiked={isLiked} className={s.card__button}/>)}
+        {hasButton &&
+          isLiked && (<ButtonLike isLiked={isLiked} className={s.card__button} />)}
         {description && (
           <div className={s.card__description}>
-            <Title Tag='h4' variant='title' className={s.card__description__title}>{description}</Title>
+            <Title
+              Tag="h4"
+              variant="title"
+              className={s.card__description__title}
+            >
+              {description}
+            </Title>
           </div>
         )}
-
       </div>
     </div>
-  )
+  );
 };
 
 export default CardArtist;

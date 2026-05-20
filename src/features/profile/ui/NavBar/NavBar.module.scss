@@ -1,16 +1,19 @@
 .container {
-  max-width: 10.1rem;
+  width: 162px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 20px;
 }
 
 .link {
+  width: 100%;
+  min-height: 48px;
   font-size: 1.5rem;
   font-weight: 500;
-  line-height: 1rem;
+  line-height: 1;
   letter-spacing: -0.04em;
-  padding: 0.8rem 1.9rem;
+  padding: 8px 16px;
+  border-width: 1px;
 
   &:hover {
     outline: 0.0625rem solid var(--outline-color);
