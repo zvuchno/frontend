@@ -4,3 +4,10 @@
   gap: 5rem;
   width: 100%;
 }
+
+.stateMessage {
+  font-family: var(--font-feature-mono), "Feature Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}

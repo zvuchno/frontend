@@ -5,6 +5,13 @@
   overflow: hidden;
 }
 
+.stateMessage {
+  font-family: var(--font-feature-mono), "Feature Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+
 .downloadButton {
   display: flex;
   align-items: center;
@@ -17,6 +24,11 @@
   border: 0;
   cursor: pointer;
   filter: drop-shadow(0 1px 2px rgb(16 15 13 / 30%));
+}
+
+.downloadButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .downloadButton svg {

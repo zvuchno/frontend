@@ -1,13 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { Session } from "next-auth";
 import { useSession } from "next-auth/react";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { usePathname, useRouter } from "next/navigation";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 
-import { updateAccountPhone } from "@/api/account";
+import {
+  getCurrentAccount,
+  type CurrentAccountResponse,
+  updateAccountPhone,
+} from "@/api/account";
 import { getCurrentListener, updateListener } from "@/api/listener";
-import { useUserStore } from "@/entities/user/store/useUserStore";
+import {
+  type UserDataProps,
+  useUserStore,
+} from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
 import { FieldValues } from "@/features/profile/ui/profileForm/types";
 import { ProfileFormListenerUI } from "@/features/profile/ui/profileForm/profileFormListener";
@@ -17,12 +25,58 @@ function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
 }
 
+function toUserStoreData(
+  account: CurrentAccountResponse,
+  accessToken?: string,
+): UserDataProps {
+  return {
+    id: account.id,
+    userName: account.username,
+    email: account.email,
+    phone: account.phone,
+    isPhoneVerified: account.is_phone_verified,
+    isEmailVerified: account.is_email_verified,
+    isListener: account.is_listener,
+    isArtist: account.is_artist,
+    accessToken,
+  };
+}
+
+function shouldSyncSessionAccount(
+  sessionUser: Session["user"] | undefined,
+  account: CurrentAccountResponse,
+) {
+  if (!sessionUser) {
+    return false;
+  }
+
+  return (
+    sessionUser.userName !== account.username ||
+    sessionUser.email !== account.email ||
+    sessionUser.phone !== account.phone ||
+    sessionUser.isPhoneVerified !== account.is_phone_verified ||
+    sessionUser.isEmailVerified !== account.is_email_verified ||
+    sessionUser.isListener !== account.is_listener ||
+    sessionUser.isArtist !== account.is_artist
+  );
+}
+
+function getSessionAccountPatch(account: CurrentAccountResponse) {
+  return {
+    userName: account.username,
+    email: account.email,
+    phone: account.phone,
+    isPhoneVerified: account.is_phone_verified,
+    isEmailVerified: account.is_email_verified,
+    isListener: account.is_listener,
+    isArtist: account.is_artist,
+  };
+}
+
 export function ListenerProfileFormSection() {
-  const { status, update: updateSession } = useSession();
-  const user = useUserStore((state) => state.user);
+  const { data: session, status, update: updateSession } = useSession();
   const setUser = useUserStore((state) => state.setUser);
-  const email = user?.email ?? "";
-  const phone = user?.phone ?? "";
+  const sessionUser = session?.user;
 
   const router = useRouter();
   const pathname = usePathname();
@@ -42,13 +96,14 @@ export function ListenerProfileFormSection() {
   const dirtyFields = methods.formState.dirtyFields;
   const reset = methods.reset;
 
+  const [account, setAccount] = useState<CurrentAccountResponse | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [isProfileSaving, setIsProfileSaving] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
 
-  const hasProfileUser = status !== "unauthenticated" && Boolean(user);
-  const isProfileBusy = hasProfileUser && (isProfileLoading || isProfileSaving);
+  const hasProfileUser = status === "authenticated";
+  const isProfileBusy = isProfileLoading || isProfileSaving;
   const visibleProfileError = hasProfileUser ? profileError : null;
 
   useEffect(() => {
@@ -56,7 +111,7 @@ export function ListenerProfileFormSection() {
       return;
     }
 
-    if (status === "unauthenticated" || !user) {
+    if (status === "unauthenticated") {
       reset({
         name: "",
         email: "",
@@ -64,7 +119,12 @@ export function ListenerProfileFormSection() {
         password: "",
       });
 
-      router.push(`/signin?next=${encodeURIComponent(pathname)}`);
+      router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
+      return;
+    }
+
+    if (sessionUser?.isListener === false) {
+      router.replace("/artist/profile");
       return;
     }
 
@@ -75,21 +135,38 @@ export function ListenerProfileFormSection() {
       setProfileError(null);
 
       try {
-        const listener = await getCurrentListener();
+        const [listener, accountResponse] = await Promise.all([
+          getCurrentListener(),
+          getCurrentAccount(),
+        ]);
 
         if (!isCurrentRequest) {
           return;
         }
 
+        setAccount(accountResponse);
+        setUser(toUserStoreData(accountResponse, sessionUser?.accessToken));
+
+        if (shouldSyncSessionAccount(sessionUser, accountResponse)) {
+          void updateSession(getSessionAccountPatch(accountResponse)).catch(
+            () => undefined,
+          );
+        }
+
         reset({
           name: listener.full_name,
-          email,
-          phone: normalizePhone(phone),
+          email: accountResponse.email,
+          phone: normalizePhone(accountResponse.phone),
           password: "",
         });
-      } catch {
+      } catch (requestError) {
         if (isCurrentRequest) {
-          setProfileError("Не удалось загрузить профиль");
+          setAccount(null);
+          setProfileError(
+            requestError instanceof Error
+              ? requestError.message
+              : "Не удалось загрузить профиль",
+          );
         }
       } finally {
         if (isCurrentRequest) {
@@ -103,7 +180,7 @@ export function ListenerProfileFormSection() {
     return () => {
       isCurrentRequest = false;
     };
-  }, [email, pathname, phone, reset, router, status, user]);
+  }, [pathname, reset, router, sessionUser, setUser, status, updateSession]);
 
   const handleEdit = () => {
     void methods.trigger();
@@ -112,8 +189,8 @@ export function ListenerProfileFormSection() {
   };
 
   const handleSubmitForm: SubmitHandler<FieldValues> = async (data) => {
-    if (!user) {
-      setProfileError("Не удалось сохранить профиль");
+    if (!account) {
+      setProfileError("Не удалось подготовить данные профиля к сохранению");
       return;
     }
 
@@ -122,13 +199,11 @@ export function ListenerProfileFormSection() {
 
     try {
       const nextPhone = normalizePhone(data.phone);
-      const shouldUpdatePhone = nextPhone !== normalizePhone(phone);
-      let savedName = data.name ?? "";
+      const shouldUpdatePhone = nextPhone !== normalizePhone(account.phone);
+      let nextAccount = account;
+      let savedName = data.name?.trim() ?? "";
 
-      let savedPhone = phone;
-      let nextUser = user;
-
-      if (dirtyFields.name) {
+      if (dirtyFields.name && savedName) {
         const listener = await updateListener({
           full_name: savedName,
         });
@@ -141,24 +216,24 @@ export function ListenerProfileFormSection() {
           phone: nextPhone,
         });
 
-        savedPhone = phoneResponse.phone ?? "";
-
-        nextUser = {
-          ...nextUser,
+        nextAccount = {
+          ...nextAccount,
           phone: phoneResponse.phone,
-          isPhoneVerified: false,
+          is_phone_verified: false,
         };
-        await updateSession({
-          phone: nextUser.phone,
-          isPhoneVerified: nextUser.isPhoneVerified,
-        });
-        setUser(nextUser);
+
+        void updateSession({
+          phone: nextAccount.phone,
+          isPhoneVerified: nextAccount.is_phone_verified,
+        }).catch(() => undefined);
       }
 
+      setAccount(nextAccount);
+      setUser(toUserStoreData(nextAccount, sessionUser?.accessToken));
       reset({
         name: savedName,
-        email,
-        phone: normalizePhone(savedPhone),
+        email: nextAccount.email,
+        phone: normalizePhone(nextAccount.phone),
         password: "",
       });
       setIsEditMode(false);
@@ -186,7 +261,7 @@ export function ListenerProfileFormSection() {
         onSubmit={handleSubmitForm}
       >
         <ProfileFormListenerUI
-          fieldsDisabled={!isEditMode || isProfileBusy}
+          fieldsDisabled={!isEditMode || isProfileBusy || !account}
           disabledFields={["email", "password"]}
         />
       </ProfileFormUI>
