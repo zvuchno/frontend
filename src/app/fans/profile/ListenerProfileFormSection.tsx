@@ -11,6 +11,7 @@ import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
 import { FieldValues } from "@/features/profile/ui/profileForm/types";
 import { ProfileFormListenerUI } from "@/features/profile/ui/profileForm/profileFormListener";
+import styles from "./ListenerProfileFormSection.module.scss";
 
 function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
@@ -175,6 +176,7 @@ export function ListenerProfileFormSection() {
   return (
     <FormProvider {...methods}>
       <ProfileFormUI
+        className={styles.profileForm}
         title="Профиль"
         isChecked={isEditMode && isDirty && isValid && !isProfileBusy}
         isOnChange={isEditMode || isProfileBusy}
