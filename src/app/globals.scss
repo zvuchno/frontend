@@ -43,7 +43,7 @@ body {
   background: var(--color-bg-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --font-vcr: var(--font-better-vcr), sans-serif; 
+  --font-vcr: var(--font-better-vcr), sans-serif;
   --font-feat: var(--font-feature-mono), monospace;
   font-family: var(--font-feat);
 }
@@ -58,6 +58,14 @@ body {
   width: 100%;
   max-width: 1368px;
   margin: 0 auto;
+}
+
+.app-header-container {
+  margin-block-start: 28px;
+}
+
+.app-header-container:empty {
+  margin-block-start: 0;
 }
 
 .app-main {

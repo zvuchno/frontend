@@ -1,27 +1,40 @@
 "use client";
 
 import { ProductCard } from "@/entities";
+import { DownloadIcon } from "@/shared/ui/icons/downloadIcon";
 import styles from "./releasesPageClient.module.scss";
+
+function DownloadButton() {
+  return (
+    <button
+      type="button"
+      className={styles.downloadButton}
+      aria-label="Скачать релиз"
+    >
+      <DownloadIcon />
+    </button>
+  );
+}
 
 export function ReleasesPageClient() {
   const mockCards = [
     {
       id: 1,
-      image: "/cassette.png",
+      image: "/favorite-cassette.png",
       title: "Окна",
       description: "Кассета ОДИН МАНУЛ (LP, 2025)",
     },
     {
       id: 2,
-      image: "/shirt.png",
-      title: "JEW3SS",
-      description: "Футболка ВЫХИНО (2025)",
+      image: "/favorite-cassette.png",
+      title: "Окна",
+      description: "Кассета ОДИН МАНУЛ (LP, 2025)",
     },
     {
       id: 3,
-      image: "/earpieces.png",
-      title: "ДОКТОР АЛЕКСАНДРОВ",
-      description: "Сингл STOP NARKOTICS (2025)",
+      image: "/favorite-cassette.png",
+      title: "Окна",
+      description: "Кассета ОДИН МАНУЛ (LP, 2025)",
     },
   ];
 
@@ -33,6 +46,7 @@ export function ReleasesPageClient() {
           image={card.image}
           title={card.title}
           description={card.description}
+          actionButton={<DownloadButton />}
         />
       ))}
     </div>
