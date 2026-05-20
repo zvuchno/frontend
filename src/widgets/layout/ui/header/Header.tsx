@@ -2,20 +2,35 @@
 
 import { THeaderUIProps } from './types'
 import styles from './header.module.scss'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { NavPanel } from '@/features'
 import clsx from 'clsx'
 import SearchInput from '@/features/SearchInput/SearchInput'
 import { CloseButtonIconCircledX } from '@/shared/ui/icons/closeButtonIconCircledX'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 
 
 export const HeaderUI: FC<THeaderUIProps> = ({
   actions,
   className
 }) => {
+  const { data: session, status } = useSession();
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+
   const [isSearchOpen, setSearchOpen] = useState(false)
+
+  useEffect(() => {
+
+    if (status === 'authenticated') {
+      setIsAuthorized(true)
+
+    } else if (status === 'unauthenticated') {
+      setIsAuthorized(false)
+    }
+
+  }, [status]);
   
   const handleSearchOpen = () => {
     setSearchOpen(true)
@@ -66,6 +81,14 @@ export const HeaderUI: FC<THeaderUIProps> = ({
                   }
                 };
 
+                const href = action.title === 'Профиль' 
+                  ? isAuthorized
+                    ? session?.user.isArtist
+                      ? "/artisis/profile"
+                      : "/fans/profile"
+                    : "/role"
+                  : action.href
+
                 return (
                   <li 
                     key={action.title}
@@ -85,7 +108,7 @@ export const HeaderUI: FC<THeaderUIProps> = ({
                       {action.type === 'link' && action.href && 
                         <Link
                           title={action.title} 
-                          href={action.href}
+                          href={href ?? action.href}
                         >
                           {action.children}
                         </Link>

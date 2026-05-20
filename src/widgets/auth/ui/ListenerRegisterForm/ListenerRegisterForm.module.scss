@@ -1,19 +1,18 @@
 .listenerRegisterForm {
   position: relative;
-  width: 560px;
   max-width: 560px;
-  min-width: 560px;
-  padding: 32px 40px;
-  background: #ffffff;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  max-height: calc(100vh - 40px);
+  padding-inline: 40px;
+  padding-block: 0px;
+  background: transparent;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
   flex-shrink: 0;
   flex-grow: 0;
-  z-index: 1000;
   border-radius: 8px;
-  height: 950px;
 
   :global(.baseForm__title) {
     margin: 0;
@@ -131,15 +130,16 @@
     background: #e4f1ff;
     border: 1px solid #100f0d;
     border-radius: 36px;
-    font-family: "Better VCR", sans-serif;
-    font-weight: 400;
-    font-size: 20px;
+    font-family: var(--font-better-vcr);
+    font-weight: 600;
+    font-size: 16px;
     line-height: 28px;
     letter-spacing: -0.04em;
     color: #100f0d;
     cursor: pointer;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    margin-bottom: 70px;
 
     &:hover:not(:disabled) {
       background: #d4e8ff;
@@ -177,6 +177,35 @@
     width: 18px;
     height: 18px;
     animation: spin 0.8s linear infinite;
+  }
+}
+
+.submitButton {
+  width: 100%;
+  height: 44px;
+  border-radius: 36px;
+  background-color: var(--color-btn-accent-grey);
+  border: 1px solid var(--outline-color);
+  font-family: var(--font-feature-mono);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: -0.06em;
+  color: var(--color-text-primary);
+  margin-bottom: 36px;
+
+  &:hover {
+    background-color: var(--color-btn-secondary);
+  }
+
+  &:active {
+    background-color: var(--foreground);
+    color: var(--background);
+  }
+
+  &:disabled {
+    border: transparent;
+    color: var(--background);
   }
 }
 

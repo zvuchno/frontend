@@ -10,6 +10,7 @@ import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
 import { FieldValues } from "@/features/profile/ui/profileForm/types";
 import { ProfileFormListenerUI } from "@/features/profile/ui/profileForm/profileFormListener";
+import { usePathname, useRouter } from "next/navigation";
 
 function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
@@ -21,6 +22,9 @@ export function ListenerProfileFormSection() {
   const setUser = useUserStore((state) => state.setUser);
   const email = user?.email ?? "";
   const phone = user?.phone ?? "";
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   const methods = useForm<FieldValues>({
     defaultValues: {
@@ -56,6 +60,8 @@ export function ListenerProfileFormSection() {
         phone: "",
         password: "",
       });
+
+      router.push("/signin?next=" + pathname);
       return;
     }
 

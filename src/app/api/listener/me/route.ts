@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 const LISTENER_ME_PATH = "/v1/listener/me/";
 
 function getListenerApiBaseUrl(): string {
-  const apiBaseUrl = process.env.BASE_API_URL;
+  const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
   if (!apiBaseUrl) {
-    throw new Error("BASE_API_URL is not configured");
+    throw new Error("NEXT_PUBLIC_BASE_API_URL is not configured");
   }
 
   return apiBaseUrl.replace(/\/$/, "");

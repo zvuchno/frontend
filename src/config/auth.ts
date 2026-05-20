@@ -122,8 +122,11 @@ export const authConfig: AuthOptions = {
         session.user.accessToken = token.accessToken;
         session.user.artistName = token.artistName;
       }
-
-      return session;
+      return session
     },
+  },
+
+  pages: {
+    signIn: "/signin",
   },
 };
