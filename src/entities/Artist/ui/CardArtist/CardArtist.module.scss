@@ -43,6 +43,7 @@
   background-color: var(--card-artist-background, var(--color-accent-blue));
   border: 1px solid var(--outline-color);
   font-family: var(--font-better-vcr);
+  text-transform: uppercase;
 
   &__image {
     width: 100%;
