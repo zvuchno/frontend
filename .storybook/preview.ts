@@ -2,7 +2,7 @@ import type { Preview } from "@storybook/nextjs-vite";
 
 import "../src/app/globals.scss";
 
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
   @font-face {
     font-family: 'BetterVCR';
@@ -11,7 +11,7 @@ style.textContent = `
     font-style: normal;
     font-display: swap;
   }
-  
+
   @font-face {
     font-family: 'Feature Mono';
     src: url('/fonts/FeatureMono-Regular.ttf') format('truetype');
@@ -19,7 +19,7 @@ style.textContent = `
     font-style: normal;
     font-display: swap;
   }
-  
+
   @font-face {
     font-family: 'Feature Mono';
     src: url('/fonts/FeatureMono-Medium.ttf') format('truetype');
@@ -27,7 +27,7 @@ style.textContent = `
     font-style: normal;
     font-display: swap;
   }
-  
+
   @font-face {
     font-family: 'Feature Mono';
     src: url('/fonts/FeatureMono-Bold.ttf') format('truetype');
@@ -35,8 +35,7 @@ style.textContent = `
     font-style: normal;
     font-display: swap;
   }
-  
-  /* Определяем CSS-переменные для совместимости */
+
   :root {
     --font-better-vcr: 'BetterVCR', monospace;
     --font-feature-mono: 'Feature Mono', monospace;
@@ -54,9 +53,6 @@ const preview: Preview = {
       },
     },
     a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
       test: "todo",
     },
   },

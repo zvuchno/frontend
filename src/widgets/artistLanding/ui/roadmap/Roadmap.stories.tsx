@@ -70,7 +70,7 @@ const meta = {
               font-weight: 700;
             }
             @font-face {
-              font-family: 'Better VCR Custom';
+              font-family: 'Better VCR';
               src: url('/fonts/BetterVCR.woff2') format('woff2');
               font-weight: 400;
             }
@@ -82,7 +82,7 @@ const meta = {
             {
               minHeight: "100vh",
               "--font-feature-mono": "'Feature Mono Custom', monospace",
-              "--font-better-vcr": "'Better VCR Custom', monospace",
+              "--font-better-vcr": "'Better VCR', monospace",
             } as CSSProperties
           }
         >

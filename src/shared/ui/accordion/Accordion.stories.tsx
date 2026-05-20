@@ -1,0 +1,48 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Accordion } from './Accordion';
+
+const content: string[] = [
+  'Как только услышал о проекте «Звучно», сразу побежал к ним в предложку. Боялся, что уже весь мир инди-рока там, а я проворонил новую молодëжную движуху! Оказалось, я им вообще первый написал и это для меня и для них оказался первый опыт.',
+  'Очень приветливые эти ребята из «Звучно». Чуткие и пунктуальные, приятно с ними иметь дело. Да и в целом крутые чуваки с крутыми идеями и стилем! ',
+  'Прикиньте только, они индустрию перевернуть хотят! Понимание взаимодействия с артистом в стране вообще изменить! Такие темы я очень уважаю, поэтому рад, что наш музыкальный проект приобщился к данной платформе. Надеюсь, что скоро весь мир ахнет от силы низовой самоорганизации!',
+  ''
+];
+
+const meta: Meta<typeof Accordion> = {
+  title: 'shared/ui/Accordion',
+  component: Accordion,
+  args: {
+    content: content,
+  },
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <>
+        <div style={{backgroundColor: '#b9b9b9', padding: '20px', height: '100vw', width: 'min-content'}}>
+          <Story/>
+        </div>
+      </>
+    )
+  ]
+}
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+  }
+};
+
+export const WithMainBlock: Story = {
+  decorators: [
+    (Story) => (
+      <>
+        <div style={{backgroundColor: '#b9b9b9', padding: '20px', height: '100vw', width: 'min-content'}}>
+          <div style={{backgroundColor: '#f1d8a9', height: '200px', width: '500px'}}/>
+          <Story/>
+        </div>
+      </>
+    )
+  ]
+};

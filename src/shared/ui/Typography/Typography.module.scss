@@ -1,0 +1,13 @@
+.typography {
+  -webkit-font-smoothing: antialiased;
+}
+
+.typography--normal {
+  font-family: var(--font-feat);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.typography--title {
+  font-family: var(--font-vcr);
+}

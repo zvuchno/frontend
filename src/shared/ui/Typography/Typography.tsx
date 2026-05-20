@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { ElementType, JSX } from "react";
+import styles from "./Typography.module.scss";
 
 import type {
   TextTag,
@@ -24,9 +25,11 @@ const withTypography = <
   }: TypographyProps<TTag>): JSX.Element {
     const Component = (Tag ?? defaults.Tag ?? "span") as ElementType;
     const resolvedVariant = variant ?? defaults.variant ?? "normal";
+    
+
     const resolvedClassName = clsx(
-      "typography",
-      `typography--${resolvedVariant}`,
+      styles.typography,
+      styles[`typography--${resolvedVariant}`],
       className,
     );
 
