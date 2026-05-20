@@ -81,18 +81,38 @@
 @media (max-width: 768px) {
   .previewList {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, 8.5rem);
   }
 
   .previewItem {
-    flex: none;
-    inline-size: 100%;
-    block-size: auto;
-    aspect-ratio: 1 / 1;
+    inline-size: 8.5rem;
+    block-size: 8.5rem;
   }
 
   .detailsButton {
     inline-size: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .orderCardListener {
+    gap: 2rem;
+  }
+
+  .orderSummary {
+    font-size: 1.25rem;
+    line-height: 1.1;
+  }
+
+  .previewList {
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .previewItem {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 1 / 1;
   }
 }
 

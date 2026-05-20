@@ -55,3 +55,26 @@
   object-fit: cover;
   object-position: center;
 }
+
+@media (max-width: 480px) {
+  .productCard {
+    gap: 10px;
+  }
+
+  .actionButton {
+    inset-block-start: 18px;
+    inset-inline-end: 18px;
+  }
+
+  .title,
+  .description {
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  .price {
+    margin-block-start: 6px;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+}
