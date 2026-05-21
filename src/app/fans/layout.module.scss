@@ -1,33 +1,64 @@
+.page {
+  width: 100%;
+  padding-top: 28px;
+  padding-bottom: 200px;
+}
+
 .container {
-  min-height: 46.375rem;
+  min-height: 866px;
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+}
+
+.body {
+  min-height: 794px;
   padding: 3.375rem 3rem 10.375rem;
+  background-color: var(--background);
 }
 
 .title {
   font-family: var(--font-better-vcr);
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 400;
   line-height: 100%;
-  letter-spacing: -0.06em;
+  letter-spacing: 0;
   text-transform: none;
-  margin-bottom: 1.75em;
+  margin-bottom: 3.125rem;
 }
 
 .section {
   display: flex;
   gap: 5.5625rem;
+  align-items: flex-start;
 
   &__content {
-    max-height: 39.5rem;
-    overflow-y: visible;
-    margin-left: auto;
-    margin-right: auto;
+    flex: 1 1 auto;
+    inline-size: min(100%, 63.8125rem);
+    min-inline-size: 0;
+    max-height: none;
+    overflow: visible;
+    margin: 0;
   }
 }
 
 @media (max-width: 768px) {
+  .page {
+    padding-top: 16px;
+    padding-bottom: 80px;
+  }
+
   .container {
+    min-height: auto;
+  }
+
+  .body {
+    min-height: auto;
     padding: 2rem 1rem 6rem;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
   }
 
   .section {

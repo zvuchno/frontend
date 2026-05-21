@@ -5,9 +5,11 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
+import { DefaultHeaderActions } from "@/shared/constants/headerActions";
 import { fansProfileRoutes } from "@/shared/constants/routes";
 import { Title } from "@/shared/ui/Typography/Typography";
 import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
+import { HeaderUI } from "@/widgets/layout/ui/header";
 import s from "./layout.module.scss";
 
 const FansLayout = ({ children }: { children: React.ReactNode }) => {
@@ -31,15 +33,21 @@ const FansLayout = ({ children }: { children: React.ReactNode }) => {
   }, [pathname, router, session?.user.isListener, status]);
 
   return (
-    <AccentContainer className={s.container}>
-      <Title Tag="h2" className={s.title}>
-        Личный кабинет
-      </Title>
-      <section className={s.section}>
-        <NavBar links={fansProfileRoutes} />
-        <div className={s.section__content}>{children}</div>
-      </section>
-    </AccentContainer>
+    <div className={s.page}>
+      <AccentContainer className={s.container}>
+        <HeaderUI actions={DefaultHeaderActions} />
+
+        <div className={s.body}>
+          <Title Tag="h2" className={s.title}>
+            Личный кабинет
+          </Title>
+          <section className={s.section}>
+            <NavBar links={fansProfileRoutes} />
+            <div className={s.section__content}>{children}</div>
+          </section>
+        </div>
+      </AccentContainer>
+    </div>
   );
 };
 

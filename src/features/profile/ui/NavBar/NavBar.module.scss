@@ -1,19 +1,20 @@
 .container {
-  width: 162px;
+  inline-size: 10.125rem;
+  flex: 0 0 10.125rem;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .link {
   width: 100%;
-  min-height: 48px;
+  min-height: 3rem;
   font-size: 1.5rem;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.04em;
-  padding: 8px 16px;
-  border-width: 1px;
+  letter-spacing: 0;
+  padding: 0.5rem 1rem;
+  border-width: 0.0625rem;
 
   &:hover {
     outline: 0.0625rem solid var(--outline-color);
@@ -29,7 +30,8 @@
 @media (max-width: 768px) {
   .container {
     max-width: none;
-    width: 100%;
+    inline-size: 100%;
+    flex-basis: auto;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 0.75rem;
