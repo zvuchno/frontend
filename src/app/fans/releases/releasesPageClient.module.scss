@@ -1,8 +1,19 @@
 .container {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 20.4375rem);
   gap: 1.25rem;
-  overflow: hidden;
+  align-items: start;
+  justify-content: start;
+  inline-size: min(100%, 63.8125rem);
+  overflow: visible;
+}
+
+.stateMessage {
+  inline-size: min(100%, 50.625rem);
+  font-family: var(--font-feature-mono), "Feature Mono", monospace;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--color-text-primary);
 }
 
 .downloadButton {
@@ -17,6 +28,12 @@
   border: 0;
   cursor: pointer;
   filter: drop-shadow(0 1px 2px rgb(16 15 13 / 30%));
+  text-decoration: none;
+}
+
+.downloadButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .downloadButton svg {
@@ -26,12 +43,14 @@
 
 @media (max-width: 1024px) {
   .container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 20.4375rem));
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .container {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 20.4375rem);
+    justify-content: center;
+    justify-items: center;
   }
 }

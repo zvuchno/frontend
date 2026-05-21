@@ -9,7 +9,7 @@ import { HeaderUI } from "@/widgets/layout/ui/header";
 export const AppHeader = () => {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/artist")) {
+  if (pathname.startsWith("/artist") || pathname.startsWith("/fans")) {
     return null;
   }
 
