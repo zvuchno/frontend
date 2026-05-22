@@ -19,31 +19,36 @@ export const ProductCard: FC<TProductCardProps> = ({
   title,
   description,
   price,
+  actionButton,
   likeButton,
   className,
   ...articleProps
-}) => (
-  <article className={clsx(styles.productCard, className)} {...articleProps}>
-    <div className={styles.media}>
-      <Image
-        className={styles.image}
-        src={image}
-        alt={title}
-        width={327}
-        height={327}
-        sizes="327px"
-      />
-      {likeButton ? (
-        <div className={styles.likeButton}>{likeButton}</div>
-      ) : null}
-    </div>
+}) => {
+  const mediaAction = actionButton ?? likeButton;
 
-    <div className={styles.content}>
-      <h3 className={styles.title}>{title}</h3>
-      <p className={styles.description}>{description}</p>
-      {price !== undefined && price !== null ? (
-        <p className={styles.price}>{formatTotalPrice(Number(price))}</p>
-      ) : null}
-    </div>
-  </article>
-);
+  return (
+    <article className={clsx(styles.productCard, className)} {...articleProps}>
+      <div className={styles.media}>
+        <Image
+          className={styles.image}
+          src={image}
+          alt={title}
+          width={327}
+          height={327}
+          sizes="327px"
+        />
+        {mediaAction ? (
+          <div className={styles.actionButton}>{mediaAction}</div>
+        ) : null}
+      </div>
+
+      <div className={styles.content}>
+        <h3 className={styles.title}>{title}</h3>
+        <p className={styles.description}>{description}</p>
+        {price !== undefined && price !== null ? (
+          <p className={styles.price}>{formatTotalPrice(Number(price))}</p>
+        ) : null}
+      </div>
+    </article>
+  );
+};

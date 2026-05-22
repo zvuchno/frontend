@@ -1,7 +1,7 @@
 "use client";
 
 import { OrderCardListener } from "@/widgets/profile/ui/OrderCardListener/OrderCardListener";
-import styles from './ordersPageClient.module.scss'
+import styles from "./ordersPageClient.module.scss";
 
 export function OrdersPageClient() {
   const mockOrders = [
@@ -11,11 +11,11 @@ export function OrdersPageClient() {
       itemsCount: 3,
       totalPrice: 1289,
       previewItems: [
-        { id: 1, src: "/cassette.png", title: "title" },
-        { id: 2, src: "/cassette.png", title: "title" },
-        { id: 3, src: "/cassette.png", title: "title"}
+        { id: 1, src: "/favorite-cassette.png", title: "title" },
+        { id: 2, src: "/favorite-cassette.png", title: "title" },
+        { id: 3, src: "/favorite-cassette.png", title: "title" },
       ],
-      onDetailsClick: () => {}
+      onDetailsClick: () => {},
     },
     {
       orderId: 121242456,
@@ -23,17 +23,17 @@ export function OrdersPageClient() {
       itemsCount: 3,
       totalPrice: 1289,
       previewItems: [
-        { id: 1, src: "/cassette.png", title: "title" },
-        { id: 2, src: "/cassette.png", title: "title" },
-        { id: 3, src: "/cassette.png", title: "title"}
+        { id: 1, src: "/favorite-cassette.png", title: "title" },
+        { id: 2, src: "/favorite-cassette.png", title: "title" },
+        { id: 3, src: "/favorite-cassette.png", title: "title" },
       ],
-      onDetailsClick: () => {}
-    }
+      onDetailsClick: () => {},
+    },
   ];
 
   return (
     <div className={styles.container}>
-      {mockOrders.map(order => (
+      {mockOrders.map((order) => (
         <OrderCardListener
           key={order.orderId}
           orderId={order.orderId}

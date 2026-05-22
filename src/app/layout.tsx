@@ -68,7 +68,7 @@ export default function RootLayout({
       >
         <SessionProviders>
           <div className="app-shell">
-            <div className="app-container">
+            <div className="app-container app-header-container">
               <AppHeader />
             </div>
             <main className="app-main">

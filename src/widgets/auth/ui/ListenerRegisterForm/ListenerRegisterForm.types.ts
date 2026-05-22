@@ -1,3 +1,5 @@
+import { TNewListenerRequest, TNewUserResponse } from "@/entities/user/types";
+
 export interface ListenerRegisterFormData {
   name: string;
   email: string;
@@ -8,9 +10,9 @@ export interface ListenerRegisterFormData {
 
 export interface ListenerRegisterFormProps {
   onClose?: () => void;
-  onSubmit?: (data: ListenerRegisterFormData) => void | Promise<void>;
+  onSubmit?: (data: TNewListenerRequest) => void | Promise<TNewUserResponse>;
   onLoginClick?: () => void;
   onSocialLogin?: (provider: "yandex" | "vk" | "google") => void;
-  isLoading?: boolean;
-  error?: string | null;
+  // isLoading?: boolean;
+  // error?: string | null;
 }

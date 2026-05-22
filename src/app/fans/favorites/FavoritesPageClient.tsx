@@ -8,21 +8,21 @@ export function FavoritesPageClient() {
   const mockCards = [
     {
       id: 1,
-      image: "/cassette.png",
+      image: "/favorite-cassette.png",
       title: "Окна",
       description: "Кассета ОДИН МАНУЛ (LP, 2025)",
       price: "1000",
     },
     {
       id: 2,
-      image: "/shirt.png",
+      image: "/favorite-shirt.png",
       title: "JEW3SS",
       description: "Футболка ВЫХИНО (2025)",
       price: "1000",
     },
     {
       id: 3,
-      image: "/earpieces.png",
+      image: "/favorite-pins.png",
       title: "ДОКТОР АЛЕКСАНДРОВ",
       description: "Сингл STOP NARKOTICS (2025)",
       price: "1000",

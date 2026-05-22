@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { usePathname, useRouter } from "next/navigation";
 
 import { updateAccountPhone } from "@/api/account";
 import { getCurrentListener, updateListener } from "@/api/listener";
@@ -16,13 +17,17 @@ function normalizePhone(value?: string | null): string {
 }
 
 export function ListenerProfileFormSection() {
-  const { status } = useSession();
+  const { status, update: updateSession } = useSession();
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const email = user?.email ?? "";
   const phone = user?.phone ?? "";
 
+  const router = useRouter();
+  const pathname = usePathname();
+
   const methods = useForm<FieldValues>({
+    mode: "onChange",
     defaultValues: {
       name: "",
       email: "",
@@ -32,6 +37,7 @@ export function ListenerProfileFormSection() {
   });
 
   const isDirty = methods.formState.isDirty;
+  const isValid = methods.formState.isValid;
   const dirtyFields = methods.formState.dirtyFields;
   const reset = methods.reset;
 
@@ -56,6 +62,8 @@ export function ListenerProfileFormSection() {
         phone: "",
         password: "",
       });
+
+      router.push(`/signin?next=${encodeURIComponent(pathname)}`);
       return;
     }
 
@@ -94,13 +102,15 @@ export function ListenerProfileFormSection() {
     return () => {
       isCurrentRequest = false;
     };
-  }, [email, phone, reset, status, user]);
+  }, [email, pathname, phone, reset, router, status, user]);
 
   const handleEdit = () => {
+    void methods.trigger();
+    setProfileError(null);
     setIsEditMode(true);
   };
 
-  const handleSubmitForm = async (data: FieldValues) => {
+  const handleSubmitForm: SubmitHandler<FieldValues> = async (data) => {
     if (!user) {
       setProfileError("Не удалось сохранить профиль");
       return;
@@ -137,6 +147,11 @@ export function ListenerProfileFormSection() {
           phone: phoneResponse.phone,
           isPhoneVerified: false,
         };
+        await updateSession({
+          phone: nextUser.phone,
+          isPhoneVerified: nextUser.isPhoneVerified,
+        });
+        setUser(nextUser);
       }
 
       reset({
@@ -146,10 +161,6 @@ export function ListenerProfileFormSection() {
         password: "",
       });
       setIsEditMode(false);
-
-      if (nextUser !== user) {
-        setUser(nextUser);
-      }
     } catch (requestError) {
       setProfileError(
         requestError instanceof Error
@@ -165,12 +176,13 @@ export function ListenerProfileFormSection() {
     <FormProvider {...methods}>
       <ProfileFormUI
         title="Профиль"
-        isChecked={isDirty && !isProfileBusy}
+        isChecked={isEditMode && isDirty && isValid && !isProfileBusy}
         isOnChange={isEditMode || isProfileBusy}
+        isSubmitting={isProfileSaving}
+        errorMessage={visibleProfileError}
         onEdit={handleEdit}
         onSubmit={handleSubmitForm}
       >
-        {visibleProfileError && <p role="alert">{visibleProfileError}</p>}
         <ProfileFormListenerUI
           fieldsDisabled={!isEditMode || isProfileBusy}
           disabledFields={["email", "password"]}

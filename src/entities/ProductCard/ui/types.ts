@@ -8,5 +8,6 @@ export type TProductCardProps = Omit<
   title: string;
   description: string;
   price?: string | number;
+  actionButton?: ReactNode;
   likeButton?: ReactNode;
 };

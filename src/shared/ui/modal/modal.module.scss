@@ -23,7 +23,13 @@
   padding: 20px;
   background-color: #ffffff;
   box-shadow: 4px 4px 4px 0px color-mix(in srgb, #000000 25%, transparent);
+  max-height: 100vh;
+  overflow-y: auto;
   z-index: 2;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 
   &CloseButton {
     position: absolute;
@@ -35,6 +41,7 @@
     background-color: transparent;
     border: none;
     line-height: 0;
+    z-index: 10;
   }
 
   &Content {
