@@ -8,16 +8,17 @@ import { ButtonLike } from "@/features";
 import BlogCard from "@/entities/blog/ui/BlogCard/BlogCard";
 import SectionFAQ from "./components/SectionFAQ/SectionFAQ";
 import { getListArtists } from "@/api/listArtists/listArtistsApi";
-import { mockBlogs, mockProducts } from "./mocks";
+import { mockBlogs } from "./mocks";
 import { getListAlbums } from "@/api/listAlbums/listAlbumsApi";
+import { getListMerch } from "@/api/listMerch/listMerchApi";
 
 export default async function Home() {
 
   const artistsList = (await getListArtists(3)).results;
   
-  const albumsList = (await getListAlbums(4)).results
+  const albumsList = (await getListAlbums(4)).results;
 
-  const products = mockProducts;
+  const merchList = (await getListMerch(4)).results;
 
   const blogs = mockBlogs;
 
@@ -25,17 +26,22 @@ export default async function Home() {
     {
       id: '1',
       label: 'Когда запуск?',
-      children: 'Если ты это читаешь, то бета уже в релизе. Полноценный релиз выкатим в следующем году',
+      children: 'Если ты это читаешь, то бета уже в релизе. Полноценный релиз выкатим уже летом этого года.',
     },
     {
       id: '2',
       label: 'Ещё один стриминг?',
-      children: 'Если ты это читаешь, то бета уже в релизе. Полноценный релиз выкатим в следующем году',
+      children: 'Нет. Мы концентрируемся на взаимодействии фанатов с артистами и прямой поддержке.',
     },
     {
       id: '3',
+      label: 'Это безопасно?',
+      children: 'Да. По секрету, у нас не было выбора, мы не можем не заботиться о ваших данных. А еще у нас нет рекламы, вот и думайте.',
+    },
+    {
+      id: '4',
       label: 'А моя поддержка точно поступит артисту?',
-      children: 'Если ты это читаешь, то бета уже в релизе. Полноценный релиз выкатим в следующем году',
+      children: 'Да. Все наши артисты верифицированы, и мы сделали все, чтобы защитить их права и данные.',
     },
   ];
 
@@ -45,7 +51,7 @@ export default async function Home() {
       <HeroUI />
 
       <div className={styles.mainContent}>
-        <ListSection title="Артисты" link="">
+        <ListSection title="Артисты" link={`/catalog/artists`}>
           {artistsList.map(artist => (
             <CardArtist 
               key={artist.name} 
@@ -55,7 +61,7 @@ export default async function Home() {
           ))}
         </ListSection>
 
-        <ListSection title="Музыка" link="">
+        <ListSection title="Музыка" link={`/catalog/music`}>
           {albumsList.map(item => (
             <ProductCard
               key={item.id}
@@ -68,14 +74,14 @@ export default async function Home() {
           ))}
         </ListSection>
 
-        <ListSection title="Мерч" link="">
-          {products.map(product => (
+        <ListSection title="Мерч" link={`/catalog/merch`}>
+          {merchList.map(item => (
             <ProductCard
-              key={product.id}
-              title={product.title} 
-              image={product.image} 
-              description={product.description} 
-              price={product.price}
+              key={item.id}
+              title={item.name} 
+              image={item.main_image} 
+              description={item.description} 
+              price={item.price}
               likeButton={<ButtonLike isLiked={false}/>}
             />
           ))}
