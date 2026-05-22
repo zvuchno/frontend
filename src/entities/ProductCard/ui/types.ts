@@ -4,7 +4,7 @@ export type TProductCardProps = Omit<
   ComponentPropsWithoutRef<"article">,
   "children" | "title"
 > & {
-  image: string;
+  image: string | null;
   title: string;
   description: string;
   price?: string | number;
