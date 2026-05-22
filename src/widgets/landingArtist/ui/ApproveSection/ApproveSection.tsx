@@ -18,12 +18,13 @@ export const ApproveSection: React.FC<ApproveSectionProps> = ({
         {artistInfo.map((artist) => {
           return (
             <CardApprove
-              key={crypto.randomUUID()}
+              key={artist.description}
               mainBlock={
                 <CardArtist
                   image={artist.image}
                   description={artist.description}
                   hasButton={true}
+                  isLiked={true}
                 />
               }
               content={artist.content}

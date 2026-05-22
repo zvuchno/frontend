@@ -12,8 +12,9 @@ const CardArtist = ({ image, description, hasButton = true, isLiked }: CardArtis
           <img className={s.card__image} src={image} alt="Фото артиста" />
         )}
 
-        {hasButton &&
-          isLiked && (<ButtonLike isLiked={isLiked} className={s.card__button} />)}
+        {hasButton && (
+          <ButtonLike isLiked={isLiked || false} className={s.card__button} />
+        )}
         {description && (
           <div className={s.card__description}>
             <Title

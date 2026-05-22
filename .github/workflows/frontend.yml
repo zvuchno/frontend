@@ -9,7 +9,6 @@ on:
   push:
     branches:
       - dev
-      - chore/production-deploy
 
 jobs:
   build_and_push:

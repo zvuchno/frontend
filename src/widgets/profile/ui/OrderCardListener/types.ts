@@ -11,7 +11,7 @@ export type TOrderCardListenerProps = Omit<
   "children"
 > & {
   orderId: string | number;
-  orderNumber: number;
+  orderNumber: string | number;
   itemsCount: number;
   totalPrice: number;
   previewItems: readonly TOrderCardListenerPreviewItem[];

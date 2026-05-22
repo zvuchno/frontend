@@ -4,14 +4,14 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  gap:62px;
+  gap: clamp(24px, 4.53vw, 62px); 
 }
 
 .title {
   font-family: var(--font-better-vcr);
   font-weight: 400;
-  line-height: 64px;
-  font-size: 64px;
+  line-height: 1; 
+  font-size: clamp(32px, 4.67vw, 64px);
   text-transform: uppercase;
   letter-spacing: -0.06em;
 }
@@ -19,8 +19,24 @@
 .wrapper {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: space-between;
   gap: calc(100% * 72 / 1368);
   width: 100%;
+
+  & > * {
+    flex: 1; 
+    min-width: 0;
+  }
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+
+    & > * {
+      width: 100%; 
+      max-width: var(--card-artist-width, 404px); 
+    }
+  }
 }

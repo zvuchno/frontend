@@ -8,23 +8,36 @@ import { ButtonLikeIcon } from "./ButtonLikeIcon";
 import { TButtonLikeProps } from "./types";
 
 export const ButtonLike: FC<TButtonLikeProps> = ({
-  isLiked: initialIsLiked, className, iconClassName
+  isLiked: initialIsLiked,
+  className,
+  iconClassName,
+  disabled = false,
+  onToggle,
 }) => {
   const [isLiked, setIsLiked] = useState(() => initialIsLiked);
   const [animationKey, setAnimationKey] = useState(0);
 
   const handleClick = () => {
-    setIsLiked((prevIsLiked) => !prevIsLiked);
+    const nextIsLiked = !isLiked;
+
+    setIsLiked(nextIsLiked);
     setAnimationKey((prevAnimationKey) => prevAnimationKey + 1);
+    onToggle?.(nextIsLiked);
   };
 
   return (
     <button
       type="button"
-      className={clsx(styles.buttonLike, {
-        [styles.liked]: isLiked}, className)}
+      className={clsx(
+        styles.buttonLike,
+        {
+          [styles.liked]: isLiked,
+        },
+        className,
+      )}
       aria-label={isLiked ? "Убрать лайк" : "Добавить лайк"}
       aria-pressed={isLiked}
+      disabled={disabled}
       onClick={handleClick}
     >
       <ButtonLikeIcon
