@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
 
-import { getCurrentUser, logInUser } from "@/entities/user/api";
+import { getCurrentUser, isTokenValid, logInUser, refreshToken } from "@/entities/user/api";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -54,8 +54,10 @@ export const authConfig: AuthOptions = {
             isArtist: user.is_artist,
             isListener: user.is_listener,
             accessToken: tokens.access,
+            refreshToken: tokens.refresh
           } as User;
         } catch (error: unknown) {
+          console.log('Ошибка аутентификации', error)
           throw new Error(
             error instanceof Error ? error.message : "Ошибка аутентификации",
           );
@@ -77,6 +79,26 @@ export const authConfig: AuthOptions = {
         token.isArtist = user.isArtist;
         token.accessToken = user.accessToken;
         token.artistName = user.artistName;
+        token.refreshToken = user.refreshToken
+      }
+
+      if (token.accessToken && !(await isTokenValid(token.accessToken))) {
+        console.log('Token expired, refreshing...');
+
+        try {
+          const refreshed = await refreshToken(token.refreshToken as string);
+
+          token.accessToken = refreshed.access;
+          token.refreshToken = refreshed.refresh;
+
+          console.log('Token successfully updated');
+
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+
+          token.accessToken = undefined;
+          token.refreshToken = undefined;
+        }
       }
 
       if (trigger === "update" && session) {
@@ -110,7 +132,7 @@ export const authConfig: AuthOptions = {
     },
 
     async session({ session, token }) {
-      if (session.user) {
+      if (token) {
         session.user.id = token.id;
         session.user.userName = token.userName;
         session.user.email = token.email;
@@ -124,6 +146,10 @@ export const authConfig: AuthOptions = {
       }
       return session
     },
+  },
+
+  session: {
+    strategy: 'jwt'
   },
 
   pages: {

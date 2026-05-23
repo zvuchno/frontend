@@ -90,3 +90,15 @@ export const getCurrentUser = async (token: string): Promise<TCurrentUserRespons
   return data as TCurrentUserResponse
 }
 
+export const isTokenValid = async (token: string): Promise<boolean> => {
+
+  try {
+    await verifyToken(token);
+    console.log('Token still valid');
+    return true;
+    
+  } catch (error) {
+    console.log('Token expired or invalid:', error);
+    return false;
+  }
+};
