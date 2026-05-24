@@ -33,7 +33,7 @@ export const mainNavRoutes = [
   },
   {
     id: "catalog",
-    href: "/catalog",
+    href: "/catalog/all",
     label: "каталог",
     items: [
       {

@@ -5,8 +5,9 @@ import s from "./FiltersBlock.module.scss";
 import clsx from "clsx";
 import { TagUI } from "@/shared/ui/tag/Tag";
 import { FilterBlockProps } from "./FilterBlock.type";
+import { Link } from "@/shared/ui/Link/Link";
 
-const FiltersBlock = ({ genre, category, sortType, onChangeGenre, onChangeCategory, onChangeSortType }: FilterBlockProps) => {
+const FiltersBlock = ({ genre, category, sortType }: FilterBlockProps) => {
 
   const genres = [
     {
@@ -34,19 +35,23 @@ const FiltersBlock = ({ genre, category, sortType, onChangeGenre, onChangeCatego
   const categories = [
     {
       id: 1,
-      name: 'Все'
+      name: 'Все',
+      slug: 'all'
     },
     {
       id: 2,
-      name: 'Мерч'
+      name: 'Мерч',
+      slug: 'merch'
     },
     {
       id: 3,
-      name: 'Музыка'
+      name: 'Музыка',
+      slug: 'music'
     },
     {
       id: 4,
-      name: 'Артисты'
+      name: 'Артисты',
+      slug: 'atrists'
     },
   ]
 
@@ -63,9 +68,22 @@ const FiltersBlock = ({ genre, category, sortType, onChangeGenre, onChangeCatego
       id: 3,
       name: 'Удиви меня'
     },
-  ]
+  ];
+
+  const onChangeGenre = () => {
+    console.log('кликнули на жанр')
+  }
+
+  const onChangeCategory = () => {
+    console.log('кликнули на категорию')
+  }
+
+  const onChangeSortType = () => {
+    console.log('сортировка')
+  }
   return (
     <div className={s.container}>
+
       <div className={clsx(s.filterGroup, s.genreFilter)}>
         <Title Tag="h2" className={s.filterGroup__title}>Жанры</Title>
         <div className={s.filterGroup__tags}>
@@ -79,7 +97,9 @@ const FiltersBlock = ({ genre, category, sortType, onChangeGenre, onChangeCatego
         <Title Tag="h2" className={s.filterGroup__title}>Категории</Title>
         <div className={s.filterGroup__tags}>
           {categories.map(item => (
-            <TagUI key={item.id} title={item.name} onTagClick={onChangeCategory} isActive={category === item.name}/>
+            <Link key={item.id} href={`/catalog/${item.slug}`}>
+              <TagUI  title={item.name} onTagClick={onChangeCategory} isActive={category === item.name}/>
+            </Link>
           ))}
         </div>
       </div>
@@ -92,6 +112,7 @@ const FiltersBlock = ({ genre, category, sortType, onChangeGenre, onChangeCatego
           ))}
         </div>
       </div>
+
     </div>
   )
 };
