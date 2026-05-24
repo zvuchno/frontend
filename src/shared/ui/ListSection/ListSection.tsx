@@ -2,10 +2,11 @@ import { Link } from "../Link/Link";
 import { Title } from "../Typography/Typography";
 import { ListSectionProps } from "./ListSection.type";
 import s from "./ListSection.module.scss";
+import clsx from "clsx";
 
-const ListSection = ({ title, link, children }: ListSectionProps) => {
+const ListSection = ({ title, link, children, className }: ListSectionProps) => {
   return (
-    <section className={s.section}>
+    <section className={clsx(s.section, className)}>
       <div className={s.header}>
         <Title className={s.header__title} Tag="h2">{title}</Title>
         <Link className={s.header__link} href={link}>смотреть все</Link>

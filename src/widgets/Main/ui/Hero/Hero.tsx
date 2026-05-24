@@ -25,42 +25,50 @@ export const HeroUI: React.FC<HeroUIProps> = ({
   return (
     <div className={clsx(styles.hero__container, className)}>
       {centerText && (
-        <Title Tag="h4" variant="title">
+        <Title
+          Tag="h4"
+          variant="title"
+          className={clsx(styles.hero__text, styles.hero__text_center)}
+        >
           {centerText}
         </Title>
       )}
-      <Title
-        Tag="h4"
-        variant="title"
-        className={clsx(styles.hero__text, styles.hero__text_left)}
-      >
-        {leftText.firstPart}
-        <br />
-        {leftText.secondPart}
-      </Title>
+      {(leftText.firstPart || leftText.secondPart) && (
+        <Title
+          Tag="h4"
+          variant="title"
+          className={clsx(styles.hero__text, styles.hero__text_left)}
+        >
+          {leftText.firstPart}
+          <br />
+          {leftText.secondPart}
+        </Title>
+      )}
       {mainTitle && (
         <Title Tag="h1" variant="title" className={styles.hero__h1}>
           {mainTitle}
         </Title>
       )}
       {children}
-      <Title
-        Tag="h4"
-        variant="title"
-        className={clsx(styles.hero__text, styles.hero__text_right)}
-      >
-        <span
-          dangerouslySetInnerHTML={
-            rightText.firstPart
-              ? {
-                  __html: highlightBrand(rightText.firstPart),
-                }
-              : undefined
-          }
-        />
-        <br />
-        {rightText.secondPart}
-      </Title>
+      {(rightText.firstPart || rightText.secondPart) && (
+        <Title
+          Tag="h4"
+          variant="title"
+          className={clsx(styles.hero__text, styles.hero__text_right)}
+        >
+          <span
+            dangerouslySetInnerHTML={
+              rightText.firstPart
+                ? {
+                    __html: highlightBrand(rightText.firstPart),
+                  }
+                : undefined
+            }
+          />
+          <br />
+          {rightText.secondPart}
+        </Title>
+      )}
       {mainTitle === "ЗВУЧНО" && (
         <div className={styles.hero__image}>
           <img src="image_main_hero.png" />
