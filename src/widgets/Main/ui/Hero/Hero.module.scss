@@ -50,6 +50,18 @@
     color: var(--color-text-primary);
     text-align: right;
   }
+
+  &_center {
+    color: var(--color-text-primary);
+    text-align: center;
+    font-family: var(--font-better-vcr), monospace;
+    font-weight: 400;
+    font-size: clamp(18px, 2.5vw, 36px);
+    line-height: 100%;
+    letter-spacing: -0.06em;
+    text-transform: none;
+
+  }
 }
 
 .hero__h1 {
