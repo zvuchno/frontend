@@ -1,6 +1,9 @@
 import { Suspense } from "react";
 import CatalogList from "../components/catalogList/CatalogList";
 import { TRANSLATIONS } from "@/shared/utils/translations";
+import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
+import FiltersBlock from "../components/filtersBlock/FiltersBlock";
+import Hero from "../components/hero/Hero";
 
 export async function generateMetaData({
   params
@@ -16,12 +19,16 @@ export async function generateMetaData({
 // searchParams тоже получать в пропсах
 
 const CategoryPage = async ({ 
-  params 
+  params,
+  searchParams
 }: {
-  params: Promise<{ category: string }>
+  params: Promise<{ category: string }>,
+  searchParams: Promise<{filter?: string | string[]}>
 }) => {
 
   const { category } = await params;
+  const resolvedSearchParams = await searchParams;
+  const activeFilter = resolvedSearchParams.filter;
 
   // const products = [
   //   {
@@ -34,13 +41,21 @@ const CategoryPage = async ({
   // ]
 
   return (
-    <Suspense fallback={<div>Загрузка товаров...</div>}>
-      <div>Страница категории: {category}</div>
-      <CatalogList
-        category={category} 
-        //basePath={`/catalog/${category}`} 
-      />
-    </Suspense>
+    <>
+      <AccentContainer>
+        <Hero />
+        <FiltersBlock initialCategory={category} basePath={`/catalog/${category}/`}/>
+      </AccentContainer>
+      <Suspense fallback={<div>Загрузка товаров...</div>}>
+        <div>Страница категории: {category}</div>
+        <CatalogList
+          category={category} 
+          searchParams={Promise.resolve(resolvedSearchParams)}
+          filter={activeFilter}
+          //basePath={`/catalog/${category}`} 
+        />
+      </Suspense>
+    </>
   )
 }
 

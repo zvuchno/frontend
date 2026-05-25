@@ -1,5 +1,6 @@
 export interface FilterBlockProps {
-  genre: string;
-  category: string;
-  sortType?: string;
+  initialCategory: string;
+  basePath: string;
 }
+
+export type TCategory = 'all' | 'artists' | 'albums' | 'merch'

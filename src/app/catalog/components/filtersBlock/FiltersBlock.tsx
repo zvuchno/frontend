@@ -1,117 +1,163 @@
 'use client'
 
-import { Title } from "@/shared/ui/Typography/Typography";
 import s from "./FiltersBlock.module.scss";
-import clsx from "clsx";
-import { TagUI } from "@/shared/ui/tag/Tag";
-import { FilterBlockProps } from "./FilterBlock.type";
-import { Link } from "@/shared/ui/Link/Link";
+import { FilterBlockProps, TCategory } from "./FilterBlock.type";
+import { useState } from "react";
+import FiltersGroup from "./ui/filtersGroup/FiltersGroup";
+import { useSearchParams } from "next/navigation";
 
-const FiltersBlock = ({ genre, category, sortType }: FilterBlockProps) => {
+const GENERS = [
+  {
+    name: 'Электронная музыка',
+    slug: 'Electronic music'
+  },
+  {
+    name: 'Хип-хоп',
+    slug: 'Hip-hop'
+  },
+  {
+    name: 'рок',
+    slug: 'rock'
+  },
+];
 
-  const genres = [
-    {
-      id: 1,
-      name: 'Все'
-    },
-    {
-      id: 2,
-      name: 'Электронная музыка'
-    },
-    {
-      id: 3,
-      name: 'Хип-хоп'
-    },
-    {
-      id: 4,
-      name: 'рок'
-    },
-    {
-      id: 5,
-      name: 'рок'
-    },
-  ];
+const CATEGORIES = [
+  {
+    name: 'Все',
+    slug: 'all'
+  },
+  {
+    name: 'Мерч',
+    slug: 'merch'
+  },
+  {
+    name: 'Музыка',
+    slug: 'albums'
+  },
+  {
+    name: 'Артисты',
+    slug: 'atrists'
+  },
+];
 
-  const categories = [
-    {
-      id: 1,
-      name: 'Все',
-      slug: 'all'
-    },
-    {
-      id: 2,
-      name: 'Мерч',
-      slug: 'merch'
-    },
-    {
-      id: 3,
-      name: 'Музыка',
-      slug: 'music'
-    },
-    {
-      id: 4,
-      name: 'Артисты',
-      slug: 'atrists'
-    },
-  ]
+const MERCH_SUBCATEGORIES = [
+  {
+    name: 'Футболки',
+    slug: 't-shirts'
+  },
+  {
+    name: 'Винил',
+    slug: 'vinyl'
+  },
+  {
+    name: 'Компакт диски',
+    slug: 'CDs'
+  },
+  {
+    name: 'Кассеты',
+    slug: 'сassettes'
+  },
+];
 
-  const sort = [
-    {
-      id: 1,
-      name: 'Новинки'
-    },
-    {
-      id: 2,
-      name: 'Популярное'
-    },
-    {
-      id: 3,
-      name: 'Удиви меня'
-    },
-  ];
+const SORT = [
+  {
+    name: 'Новинки',
+    slug: 'new'
+  },
+  {
+    name: 'Популярное',
+    slug: 'popular'
+  },
+  {
+    name: 'Удиви меня',
+    slug: 'random'
+  },
+];
 
-  const onChangeGenre = () => {
-    console.log('кликнули на жанр')
-  }
+const FiltersBlock = ({ initialCategory, basePath }: FilterBlockProps) => {
 
-  const onChangeCategory = () => {
-    console.log('кликнули на категорию')
-  }
+  // const [genre, setGenre] = useState<string>('all');
+  // const [sortType, setSortType] = useState<string>('');
+  const [category, setCategory] = useState<string>(initialCategory);
+  // const [merchSubcategory, setMerchSubcategory] = useState<string>('');
 
-  const onChangeSortType = () => {
-    console.log('сортировка')
-  }
+  const searchParams = useSearchParams(); // хук для доступа к серч параметрам 
+  const currentFilters = searchParams.getAll('filter'); // извлекаем все серч параметры с пометками 'filter' (массив)
+
+  const buildFilterLink = (filterKey: string) => {
+    const params = new URLSearchParams(searchParams.toString()); // создаем копию текущих параметров URL
+
+    if (currentFilters.includes(filterKey)) {
+      params.delete('filter');
+      currentFilters.filter((f)=> f !== filterKey).forEach((f) => params.append('filter', f))
+    } else {
+      params.append('filter', filterKey)
+    }
+
+    return `${basePath}?${params.toString()}`
+  };
+
+  const isActiveFilter = (filterKey: string): boolean => currentFilters.includes(filterKey);
+
+  const isActiveCategory = (value: string): boolean => category === value;
+
+  
+
+
+  // const handleChangeGenre = (genre: string) => {
+  //   setGenre(genre);
+  // };
+
+  // const handleChangeCategory = (category: string) => {
+  //   setCategory(category);
+  // };
+
+  // const handleChangeSortType = (sortType: string) => {
+  //   setSortType(sortType);
+  // };
+
+  // const handleChangeMerchSubcategory = (subcategory: string) => {
+  //   setMerchSubcategory(subcategory)
+  // };
+
   return (
     <div className={s.container}>
 
-      <div className={clsx(s.filterGroup, s.genreFilter)}>
-        <Title Tag="h2" className={s.filterGroup__title}>Жанры</Title>
-        <div className={s.filterGroup__tags}>
-          {genres.map(item => (
-            <TagUI key={item.id} title={item.name} onTagClick={onChangeGenre} isActive={genre === item.name}/>
-          ))}
-        </div>
+      <div className={s.genreFilter}>
+        <FiltersGroup 
+          title="Жанры" 
+          items={GENERS} 
+           
+          buildLink={buildFilterLink} 
+          isActiveFilter={isActiveFilter}
+        />
       </div>
+      
+      <div className={s.categoryFilter}>
+        <FiltersGroup 
+          title="Категории" 
+          items={CATEGORIES} 
+          
+          isActiveFilter={isActiveCategory}
+        />
+        {category === 'merch' && (
+          <FiltersGroup 
+            items={MERCH_SUBCATEGORIES} 
+            isSecondary
+            buildLink={buildFilterLink} 
+            isActiveFilter={isActiveFilter}
+          />
+        )}
+      </div>
+      
 
-      <div className={s.filterGroup}>
-        <Title Tag="h2" className={s.filterGroup__title}>Категории</Title>
-        <div className={s.filterGroup__tags}>
-          {categories.map(item => (
-            <Link key={item.id} href={`/catalog/${item.slug}`}>
-              <TagUI  title={item.name} onTagClick={onChangeCategory} isActive={category === item.name}/>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      <div className={s.filterGroup}>
-        <Title Tag="h2" className={s.filterGroup__title}>Сортировка</Title>
-        <div className={s.filterGroup__tags}>
-          {sort.map(item => (
-            <TagUI key={item.id} title={item.name} onTagClick={onChangeSortType} isActive={sortType ? sortType === item.name : false}/>
-          ))}
-        </div>
-      </div>
+      <FiltersGroup 
+        title="Сортировка" 
+        items={SORT} 
+        
+        buildLink={buildFilterLink} 
+        isActiveFilter={isActiveFilter}
+      />
 
     </div>
   )

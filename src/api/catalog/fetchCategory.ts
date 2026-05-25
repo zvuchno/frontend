@@ -1,43 +1,83 @@
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
-type TCard = {
-  id: number;
-  image: string;
-  title: string;
+export type TAlbum = {
+  id: number
+  name: string;
+  price: number | null;
   description: string;
-  price?: string | number;
-}
+  cover_image: string | null;
+};
 
-interface GategoryListResponse {
+export type TArtist = {
+  name: string;
+  description: string;
+  cover: string | null;
+  city: string;
+  url: string;
+  slug: string;
+};
+
+export type TMerch = {
+  id: number
+  name: string;
+  description: string;
+  price: number;
+  main_image: string | null;
+};
+
+type TProduct = TAlbum | TArtist | TMerch;
+
+interface CategoryListResponse {
   count: number;
   next: string | null;
   previous: string | null;
-  results: TCard[];
+  results: TProduct[];
 };
 
 export const fetchProductsByCategory = async (
   category: string,
-  limit?: number, 
-  offset?: number
-): Promise<GategoryListResponse> => {
-
-  const params = new URLSearchParams();
-
-  if (limit !== undefined) {
-    params.append('limit', limit.toString());
+  options: {
+    limit?: number,
+    offset?: number,
+    filter?: string | string[] | undefined
   }
+   
+  
+): Promise<CategoryListResponse> => {
 
-  if (offset !== undefined) {
-    params.append('offset', offset.toString());
+  const { limit, offset, filter } = options;
+
+  try {
+
+    let url: string;
+
+    const params = new URLSearchParams();
+
+    if (limit !== undefined) {
+      params.append('limit', limit.toString());
+    }
+
+    if (offset !== undefined) {
+      params.append('offset', offset.toString());
+    }
+
+    if (category === 'artists') {
+      url = `${baseUrl}/v1/${category}/?${params.toString()}`;
+
+    } else {
+      url = `${baseUrl}/v1/store/${category}/?${params.toString()}`;
+    }
+
+  
+    const response = await fetch(url);
+
+    if (!response.ok) throw new Error(`Ошибка получения продуктов категории: ${category}`);
+
+    const products = await response.json();
+
+    return products;
+
+  } catch (error) {
+    throw error;
   }
-
-  const url = `${baseUrl}/v1/${category}?${params.toString()}`;
-
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("Faild to fetch category data");
-  }
-
-  return response.json();
 }

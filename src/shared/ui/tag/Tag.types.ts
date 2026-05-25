@@ -2,7 +2,7 @@ export type TagUIProps = {
   className?: string;
   isActive: boolean;
   isSecondary?: boolean;  // для тегов второго уровня 
-  onTagClick: () => void;
+  onTagClick?: () => void;
   title: string;
   titleClassName?: string;
   icon?: 'arrow' | 'x-circle';

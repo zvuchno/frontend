@@ -24,7 +24,18 @@ function getApiImageRemotePattern() {
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
-    remotePatterns: [getApiImageRemotePattern()],
+    remotePatterns: [getApiImageRemotePattern(),
+      {
+        protocol: "http",
+        hostname: "zvuchno-dev.duckdns.org",
+        pathname: "/media/**",
+      },
+      {
+        protocol: "https",
+        hostname: "zvuchno-dev.duckdns.org",
+        pathname: "/media/**",
+      }
+    ],
   },
   /* config options here */
 };
