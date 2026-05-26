@@ -25,7 +25,7 @@ export type TMerch = {
   main_image: string | null;
 };
 
-type TProduct = TAlbum | TArtist | TMerch;
+export type TProduct = TAlbum | TArtist | TMerch;
 
 interface CategoryListResponse {
   count: number;
@@ -37,15 +37,18 @@ interface CategoryListResponse {
 export const fetchProductsByCategory = async (
   category: string,
   options: {
-    limit?: number,
-    offset?: number,
-    filter?: string | string[] | undefined
+    limit?: string,
+    offset?: string,
+    filterByGenre?: string | string[];
+    filterBySubcategory?: string | string[];
+    orderingFilter?: string;
   }
    
   
 ): Promise<CategoryListResponse> => {
 
-  const { limit, offset, filter } = options;
+  const { limit, offset, filterByGenre, filterBySubcategory, orderingFilter } = options;
+  console.log('Опиции получаемые функцией', options)
 
   try {
 
@@ -60,6 +63,7 @@ export const fetchProductsByCategory = async (
     if (offset !== undefined) {
       params.append('offset', offset.toString());
     }
+
 
     if (category === 'artists') {
       url = `${baseUrl}/v1/${category}/?${params.toString()}`;

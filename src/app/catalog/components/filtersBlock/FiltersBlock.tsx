@@ -82,43 +82,53 @@ const FiltersBlock = ({ initialCategory, basePath }: FilterBlockProps) => {
   // const [merchSubcategory, setMerchSubcategory] = useState<string>('');
 
   const searchParams = useSearchParams(); // хук для доступа к серч параметрам 
-  const currentFilters = searchParams.getAll('filter'); // извлекаем все серч параметры с пометками 'filter' (массив)
+  const currentFiltersByGenre = searchParams.getAll('genre'); // извлекаем все серч параметры с пометками 'genre' (массив)
+  const currentFiltersBySubcategory = searchParams.getAll('kind'); // извлекаем все серч параметры с пометками 'kind' (массив)
+  const currenOrderingFilter = searchParams.get('ordering'); // извлекаем все серч параметры с пометками 'kind' (массив)
 
-  const buildFilterLink = (filterKey: string) => {
+
+  const buildFilterByGenreLink = (filterKey: string) => {
+    const params = new URLSearchParams(searchParams.toString()); // создаем копию текущих параметров URL
+    
+    if (currentFiltersByGenre.includes(filterKey)) {
+      params.delete('genre');
+      currentFiltersByGenre.filter((f)=> f !== filterKey).forEach((f) => params.append('genre', f))
+    } else {
+      params.append('genre', filterKey)
+    }
+
+    // может использовать route чтобы не было перерендера
+
+    return `${basePath}?${params.toString()}`
+  };
+
+  const buildFilterBySubcategoryLink = (filterKey: string) => {
     const params = new URLSearchParams(searchParams.toString()); // создаем копию текущих параметров URL
 
-    if (currentFilters.includes(filterKey)) {
-      params.delete('filter');
-      currentFilters.filter((f)=> f !== filterKey).forEach((f) => params.append('filter', f))
+    if (currentFiltersBySubcategory.includes(filterKey)) {
+      params.delete('kind');
+      currentFiltersBySubcategory.filter((f)=> f !== filterKey).forEach((f) => params.append('kind', f))
     } else {
-      params.append('filter', filterKey)
+      params.append('kind', filterKey)
     }
 
     return `${basePath}?${params.toString()}`
   };
 
-  const isActiveFilter = (filterKey: string): boolean => currentFilters.includes(filterKey);
+  const buildOrderingLink = (filterKey: string) => {
+    const params = new URLSearchParams(searchParams.toString()); // создаем копию текущих параметров URL
+
+    params.set('ordering', filterKey)
+
+    return `${basePath}?${params.toString()}`
+  };
+
+  const isActiveFilterByGenre = (filterKey: string): boolean => currentFiltersByGenre.includes(filterKey);
+  const isActiveFilterBySubcategory = (filterKey: string): boolean => currentFiltersBySubcategory.includes(filterKey);
+  const isActiveOrderingFilters = (filterKey: string): boolean => currenOrderingFilter === filterKey;
 
   const isActiveCategory = (value: string): boolean => category === value;
 
-  
-
-
-  // const handleChangeGenre = (genre: string) => {
-  //   setGenre(genre);
-  // };
-
-  // const handleChangeCategory = (category: string) => {
-  //   setCategory(category);
-  // };
-
-  // const handleChangeSortType = (sortType: string) => {
-  //   setSortType(sortType);
-  // };
-
-  // const handleChangeMerchSubcategory = (subcategory: string) => {
-  //   setMerchSubcategory(subcategory)
-  // };
 
   return (
     <div className={s.container}>
@@ -127,9 +137,8 @@ const FiltersBlock = ({ initialCategory, basePath }: FilterBlockProps) => {
         <FiltersGroup 
           title="Жанры" 
           items={GENERS} 
-           
-          buildLink={buildFilterLink} 
-          isActiveFilter={isActiveFilter}
+          buildLink={buildFilterByGenreLink} 
+          isActiveFilter={isActiveFilterByGenre}
         />
       </div>
       
@@ -137,15 +146,14 @@ const FiltersBlock = ({ initialCategory, basePath }: FilterBlockProps) => {
         <FiltersGroup 
           title="Категории" 
           items={CATEGORIES} 
-          
           isActiveFilter={isActiveCategory}
         />
         {category === 'merch' && (
           <FiltersGroup 
             items={MERCH_SUBCATEGORIES} 
             isSecondary
-            buildLink={buildFilterLink} 
-            isActiveFilter={isActiveFilter}
+            buildLink={buildFilterBySubcategoryLink} 
+            isActiveFilter={isActiveFilterBySubcategory}
           />
         )}
       </div>
@@ -154,9 +162,8 @@ const FiltersBlock = ({ initialCategory, basePath }: FilterBlockProps) => {
       <FiltersGroup 
         title="Сортировка" 
         items={SORT} 
-        
-        buildLink={buildFilterLink} 
-        isActiveFilter={isActiveFilter}
+        buildLink={buildOrderingLink} 
+        isActiveFilter={isActiveOrderingFilters}
       />
 
     </div>

@@ -1,20 +1,57 @@
-import { Link } from "@/shared/ui/Link/Link";
-import s from "./CatalogList.module.scss";
-import { CatalogListProps } from "./CatalogList.types";
+"use client";
+
+import { TAlbum, TArtist, TMerch, TProduct } from "@/api/catalog/fetchCategory";
 import { ProductCard } from "@/entities";
-import { fetchProductsByCategory, TAlbum, TArtist, TMerch } from "@/api/catalog/fetchCategory";
+import { useEffect, useState } from "react";
+import s from "./ProductsList.module.scss";
 
-const CatalogList = async ({ category, filter }: CatalogListProps) => {
+interface ProductsListResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: []
+};
 
-  try {
-    const data = await fetchProductsByCategory(category, {limit: 10, filter: filter} );
+const ProductsList = ({ products, link }: {products: TProduct[], link: string | null}) => {
 
-    const products = data.results;
+  const [allProducts, setAllProducts] = useState<TProduct[] | []>([]);
+  const [nextLink, setNextLink] = useState<string | null>(link);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    setAllProducts(products)
+  }, [products]);
+
+  const handleLoadMore = async (link: string) => {
+    setIsLoading(true);
+    
+    try {
+      const res = await fetch(link);
+
+      if (!res.ok) throw new Error('Ошибка получения продуктов продуктов');
+
+      const data: ProductsListResponse = await res.json();
+
+      setAllProducts(prev => [...prev, ...data.results]);
+      setNextLink(data.next);
+      
+    } catch (error) {
+      throw error
+      
+    } finally {
+      setIsLoading(false)
+    }
+  };
+
+  if (products.length < 0) {
+    return (
+      <div>Ничего не найдено</div>
+    )
+  } else {
     return (
       <div className={s.container}>
         <ul className={s.cardList}>
-          {products.map(product => {
+          {allProducts.map(product => {
             const isAlbum = 'cover_image' in product;
             const isMerch = 'main_image' in product;
             const isArtist = 'city' in product;
@@ -54,15 +91,12 @@ const CatalogList = async ({ category, filter }: CatalogListProps) => {
             }
           })}
         </ul>
-        <Link className={s.header__link} href={''}>смотреть ещё</Link>
+        {nextLink && (
+          <button className={s.button} onClick={() => handleLoadMore(nextLink)} >{isLoading ? 'Загрузка...' : 'смотреть ещё'}</button>
+        )}
       </div>
-    )
-  } catch (error) {
-    console.log('Ошибка получения продуктов категории:', error)
-    return (
-      <div>{`Не удалось загрузить продукты в категории ${category}`}</div>
     )
   }
 };
 
-export default CatalogList;
+export default ProductsList;
