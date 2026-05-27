@@ -5,9 +5,11 @@ type TItem = {
 
 export interface FiltersGroupProps {
   items: TItem[];
+  filterType?: string;
   title?: string;
   isSecondary?: boolean;
+  isClearFilters?: boolean; 
   isActiveFilter: (value: string) => boolean;
-  onClick?: (value: string) => void;
-  buildLink?: (value: string) => string;
+  buildLink?: (filter: string, value: string) => void;
+  clearFilters?: () => void;
 }

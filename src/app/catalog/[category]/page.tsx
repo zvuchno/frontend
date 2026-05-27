@@ -4,10 +4,14 @@ import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
 import FiltersBlock from "../components/filtersBlock/FiltersBlock";
 import Hero from "../components/hero/Hero";
 import GenericCatalogList from "../components/genericCatalogList/GenericCatalogList";
+import { getGenresKinds } from "@/api/genresKinds/genresKindsApi";
+import { getMerchKinds } from "@/api/merchKinds/merchKindsApi";
+import { Metadata } from "next";
+import s from "./page.module.scss";
 
-export async function generateMetaData({
+export async function generateMetadata({
   params
-}: { params: Promise<{ category: string }> }) {
+}: { params: Promise<{ category: string }> }): Promise<Metadata> {
 
   const { category } = await params;
   return {
@@ -15,8 +19,6 @@ export async function generateMetaData({
     description: `Музыкальные товары в категории: "${TRANSLATIONS[category] || category}" магазина "Звучно"`
   }
 };
-
-// searchParams тоже получать в пропсах
 
 const CategoryPage = async ({ 
   params,
@@ -26,8 +28,12 @@ const CategoryPage = async ({
   searchParams: Promise<{genre?: string | string[], kind?: string | string[], ordering?: string, offset?: string}>
 }) => {
 
+  const genresKinds = await getGenresKinds();
+  const merchKinds = await getMerchKinds();
+
   const { category } = await params;
   const resolvedSearchParams = await searchParams;
+
   const activeFilterByGenre = resolvedSearchParams.genre;
   const activeFilterBySubcategory = resolvedSearchParams.kind;
   const activeOrderingFilter = resolvedSearchParams.ordering;
@@ -37,16 +43,15 @@ const CategoryPage = async ({
     <>
       <AccentContainer>
         <Hero />
-        <FiltersBlock initialCategory={category} basePath={`/catalog/${category}/`}/>
+        <FiltersBlock сategory={category} basePath={`/catalog/${category}/`} genresList={genresKinds} merchList={merchKinds}/>
       </AccentContainer>
-      <Suspense fallback={<div>Загрузка товаров...</div>}>
+      <Suspense fallback={<div className={s.message}>Загрузка карточек...</div>}>
         <GenericCatalogList 
           category={category}
           filterByGenre={activeFilterByGenre}
           filterBySubcategory={activeFilterBySubcategory}
           orderingFilter={activeOrderingFilter}
           offset={offset}
-          basePath={`/catalog/${category}`}
         />
       </Suspense>
     </>

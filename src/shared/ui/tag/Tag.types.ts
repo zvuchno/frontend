@@ -6,6 +6,7 @@ export type TagUIProps = {
   title: string;
   titleClassName?: string;
   icon?: 'arrow' | 'x-circle';
+  hasIcon?: boolean;
   iconClassName?: string;
   onIconClick?: () => void;
 }

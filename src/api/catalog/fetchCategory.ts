@@ -1,5 +1,3 @@
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
-
 export type TAlbum = {
   id: number
   name: string;
@@ -34,6 +32,8 @@ interface CategoryListResponse {
   results: TProduct[];
 };
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+
 export const fetchProductsByCategory = async (
   category: string,
   options: {
@@ -48,20 +48,39 @@ export const fetchProductsByCategory = async (
 ): Promise<CategoryListResponse> => {
 
   const { limit, offset, filterByGenre, filterBySubcategory, orderingFilter } = options;
-  console.log('Опиции получаемые функцией', options)
-
+  
   try {
 
     let url: string;
 
     const params = new URLSearchParams();
 
-    if (limit !== undefined) {
-      params.append('limit', limit.toString());
+    if (limit) {
+      params.append('limit', limit);
     }
 
-    if (offset !== undefined) {
-      params.append('offset', offset.toString());
+    if (offset) {
+      params.append('offset', offset);
+    }
+
+    if (orderingFilter) {
+      params.append('ordering', orderingFilter);
+    }
+
+    if (filterByGenre) {
+      if (Array.isArray(filterByGenre)) {
+        filterByGenre.forEach((f) => params.append('genre', f));
+      } else {
+        params.append('genre', filterByGenre);
+      }
+    }
+
+    if (filterBySubcategory) {
+      if (Array.isArray(filterBySubcategory)) {
+        filterBySubcategory.forEach((f) => params.append('kind', f));
+      } else {
+        params.append('kind', filterBySubcategory);
+      }
     }
 
 

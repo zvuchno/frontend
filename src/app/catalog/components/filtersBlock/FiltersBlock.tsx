@@ -1,25 +1,9 @@
 'use client'
 
 import s from "./FiltersBlock.module.scss";
-import { FilterBlockProps, TCategory } from "./FilterBlock.type";
-import { useState } from "react";
+import { FilterBlockProps } from "./FilterBlock.type";
 import FiltersGroup from "./ui/filtersGroup/FiltersGroup";
-import { useSearchParams } from "next/navigation";
-
-const GENERS = [
-  {
-    name: 'Электронная музыка',
-    slug: 'Electronic music'
-  },
-  {
-    name: 'Хип-хоп',
-    slug: 'Hip-hop'
-  },
-  {
-    name: 'рок',
-    slug: 'rock'
-  },
-];
+import { useRouter, useSearchParams } from "next/navigation";
 
 const CATEGORIES = [
   {
@@ -36,33 +20,14 @@ const CATEGORIES = [
   },
   {
     name: 'Артисты',
-    slug: 'atrists'
+    slug: 'artists'
   },
 ];
 
-const MERCH_SUBCATEGORIES = [
-  {
-    name: 'Футболки',
-    slug: 't-shirts'
-  },
-  {
-    name: 'Винил',
-    slug: 'vinyl'
-  },
-  {
-    name: 'Компакт диски',
-    slug: 'CDs'
-  },
-  {
-    name: 'Кассеты',
-    slug: 'сassettes'
-  },
-];
-
-const SORT = [
+const ORDERING = [
   {
     name: 'Новинки',
-    slug: 'new'
+    slug: 'created_ad'
   },
   {
     name: 'Популярное',
@@ -74,61 +39,61 @@ const SORT = [
   },
 ];
 
-const FiltersBlock = ({ initialCategory, basePath }: FilterBlockProps) => {
+const FiltersBlock = ({ сategory, basePath, genresList, merchList }: FilterBlockProps) => {
 
-  // const [genre, setGenre] = useState<string>('all');
-  // const [sortType, setSortType] = useState<string>('');
-  const [category, setCategory] = useState<string>(initialCategory);
-  // const [merchSubcategory, setMerchSubcategory] = useState<string>('');
+  const router = useRouter();
 
-  const searchParams = useSearchParams(); // хук для доступа к серч параметрам 
-  const currentFiltersByGenre = searchParams.getAll('genre'); // извлекаем все серч параметры с пометками 'genre' (массив)
-  const currentFiltersBySubcategory = searchParams.getAll('kind'); // извлекаем все серч параметры с пометками 'kind' (массив)
-  const currenOrderingFilter = searchParams.get('ordering'); // извлекаем все серч параметры с пометками 'kind' (массив)
+  const searchParams = useSearchParams();
+  const currentFiltersByGenre = searchParams.getAll('genre');
+  const currentFiltersBySubcategory = searchParams.getAll('kind');
+  const currenOrderingFilter = searchParams.get('ordering');
 
+  const buildFiltersLink = (filter: string, filterKey: string) => {
+    const params = new URLSearchParams(searchParams.toString());
 
-  const buildFilterByGenreLink = (filterKey: string) => {
-    const params = new URLSearchParams(searchParams.toString()); // создаем копию текущих параметров URL
-    
-    if (currentFiltersByGenre.includes(filterKey)) {
-      params.delete('genre');
-      currentFiltersByGenre.filter((f)=> f !== filterKey).forEach((f) => params.append('genre', f))
-    } else {
-      params.append('genre', filterKey)
+    if (filter === 'ordering') {
+      if (currenOrderingFilter === filterKey) {
+        params.delete(filter);
+      } else {
+        params.set(filter, filterKey);
+      }
+
+    } else if (filter === 'genre') {
+      if (currentFiltersByGenre.includes(filterKey)) {
+        params.delete(filter);
+        currentFiltersByGenre.filter((f)=> f !== filterKey).forEach((f) => params.append(filter, f));
+      } else {
+        params.append(filter, filterKey);
+      }
+
+    } else if (filter === 'kind') {
+      if (currentFiltersBySubcategory.includes(filterKey)) {
+        params.delete(filter);
+        currentFiltersBySubcategory.filter((f)=> f !== filterKey).forEach((f) => params.append(filter, f));
+      } else {
+        params.append(filter, filterKey);
+      }
     }
 
-    // может использовать route чтобы не было перерендера
-
-    return `${basePath}?${params.toString()}`
+    router.push(`${basePath}?${params.toString()}`, { scroll: false });
   };
 
-  const buildFilterBySubcategoryLink = (filterKey: string) => {
-    const params = new URLSearchParams(searchParams.toString()); // создаем копию текущих параметров URL
+  const buildClearFiltersLink = () => {
+    console.log('удаляю жанры')
+    const params = new URLSearchParams(searchParams.toString());
 
-    if (currentFiltersBySubcategory.includes(filterKey)) {
-      params.delete('kind');
-      currentFiltersBySubcategory.filter((f)=> f !== filterKey).forEach((f) => params.append('kind', f))
-    } else {
-      params.append('kind', filterKey)
-    }
+    params.delete('genre');
 
-    return `${basePath}?${params.toString()}`
-  };
-
-  const buildOrderingLink = (filterKey: string) => {
-    const params = new URLSearchParams(searchParams.toString()); // создаем копию текущих параметров URL
-
-    params.set('ordering', filterKey)
-
-    return `${basePath}?${params.toString()}`
-  };
+    router.push(`${basePath}?${params.toString()}`, { scroll: false })
+  }
 
   const isActiveFilterByGenre = (filterKey: string): boolean => currentFiltersByGenre.includes(filterKey);
   const isActiveFilterBySubcategory = (filterKey: string): boolean => currentFiltersBySubcategory.includes(filterKey);
   const isActiveOrderingFilters = (filterKey: string): boolean => currenOrderingFilter === filterKey;
 
-  const isActiveCategory = (value: string): boolean => category === value;
+  const isActiveCategory = (value: string): boolean => сategory === value;
 
+  const hasGenreFilters = currentFiltersByGenre.length === 0
 
   return (
     <div className={s.container}>
@@ -136,33 +101,37 @@ const FiltersBlock = ({ initialCategory, basePath }: FilterBlockProps) => {
       <div className={s.genreFilter}>
         <FiltersGroup 
           title="Жанры" 
-          items={GENERS} 
-          buildLink={buildFilterByGenreLink} 
+          items={genresList} 
+          filterType={'genre'}
+          buildLink={buildFiltersLink} 
           isActiveFilter={isActiveFilterByGenre}
+          clearFilters={buildClearFiltersLink}
+          isClearFilters={hasGenreFilters}
         />
       </div>
       
       <div className={s.categoryFilter}>
         <FiltersGroup 
           title="Категории" 
-          items={CATEGORIES} 
+          items={CATEGORIES}
           isActiveFilter={isActiveCategory}
         />
-        {category === 'merch' && (
+        {сategory === 'merch' && (
           <FiltersGroup 
-            items={MERCH_SUBCATEGORIES} 
+            items={merchList} 
+            filterType="kind"
             isSecondary
-            buildLink={buildFilterBySubcategoryLink} 
+            buildLink={buildFiltersLink} 
             isActiveFilter={isActiveFilterBySubcategory}
           />
         )}
       </div>
-      
 
       <FiltersGroup 
         title="Сортировка" 
-        items={SORT} 
-        buildLink={buildOrderingLink} 
+        items={ORDERING} 
+        filterType="ordering"
+        buildLink={buildFiltersLink} 
         isActiveFilter={isActiveOrderingFilters}
       />
 

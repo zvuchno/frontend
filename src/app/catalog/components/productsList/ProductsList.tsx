@@ -4,31 +4,26 @@ import { TAlbum, TArtist, TMerch, TProduct } from "@/api/catalog/fetchCategory";
 import { ProductCard } from "@/entities";
 import { useEffect, useState } from "react";
 import s from "./ProductsList.module.scss";
+import { ProductsListProps, ProductsListResponse } from "./ProductsList.types";
 
-interface ProductsListResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: []
-};
-
-const ProductsList = ({ products, link }: {products: TProduct[], link: string | null}) => {
+const ProductsList = ({ products, link }: ProductsListProps) => {
 
   const [allProducts, setAllProducts] = useState<TProduct[] | []>([]);
-  const [nextLink, setNextLink] = useState<string | null>(link);
+  const [nextLink, setNextLink] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setAllProducts(products)
-  }, [products]);
+    setNextLink(link)
+  }, [products, link]);
 
-  const handleLoadMore = async (link: string) => {
+  const handleLoadMore = async (url: string) => {
     setIsLoading(true);
     
     try {
-      const res = await fetch(link);
+      const res = await fetch(url);
 
-      if (!res.ok) throw new Error('Ошибка получения продуктов продуктов');
+      if (!res.ok) throw new Error('Ошибка получения карточек каталога');
 
       const data: ProductsListResponse = await res.json();
 
@@ -43,9 +38,9 @@ const ProductsList = ({ products, link }: {products: TProduct[], link: string | 
     }
   };
 
-  if (products.length < 0) {
+  if (products.length === 0) {
     return (
-      <div>Ничего не найдено</div>
+      <div className={s.message}>Ничего не найдено</div>
     )
   } else {
     return (
@@ -92,7 +87,7 @@ const ProductsList = ({ products, link }: {products: TProduct[], link: string | 
           })}
         </ul>
         {nextLink && (
-          <button className={s.button} onClick={() => handleLoadMore(nextLink)} >{isLoading ? 'Загрузка...' : 'смотреть ещё'}</button>
+          <button className={s.button} onClick={() => handleLoadMore(nextLink)}>{isLoading ? 'загрузка...' : 'смотреть ещё'}</button>
         )}
       </div>
     )
