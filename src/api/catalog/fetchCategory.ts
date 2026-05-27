@@ -43,12 +43,11 @@ export const fetchProductsByCategory = async (
     filterBySubcategory?: string | string[];
     orderingFilter?: string;
   }
-   
   
 ): Promise<CategoryListResponse> => {
 
   const { limit, offset, filterByGenre, filterBySubcategory, orderingFilter } = options;
-  
+
   try {
 
     let url: string;
@@ -56,33 +55,32 @@ export const fetchProductsByCategory = async (
     const params = new URLSearchParams();
 
     if (limit) {
-      params.append('limit', limit);
+      params.set('limit', limit);
     }
 
     if (offset) {
-      params.append('offset', offset);
+      params.set('offset', offset);
     }
 
     if (orderingFilter) {
-      params.append('ordering', orderingFilter);
+      params.set('ordering', orderingFilter);
     }
 
     if (filterByGenre) {
       if (Array.isArray(filterByGenre)) {
-        filterByGenre.forEach((f) => params.append('genre', f));
+        params.set('genre', filterByGenre.join(','));
       } else {
-        params.append('genre', filterByGenre);
+        params.set('genre', filterByGenre);
       }
     }
 
     if (filterBySubcategory) {
       if (Array.isArray(filterBySubcategory)) {
-        filterBySubcategory.forEach((f) => params.append('kind', f));
+        params.set('kind', filterBySubcategory.join(','));
       } else {
-        params.append('kind', filterBySubcategory);
+        params.set('kind', filterBySubcategory);
       }
     }
-
 
     if (category === 'artists') {
       url = `${baseUrl}/v1/${category}/?${params.toString()}`;
@@ -90,7 +88,6 @@ export const fetchProductsByCategory = async (
     } else {
       url = `${baseUrl}/v1/store/${category}/?${params.toString()}`;
     }
-
   
     const response = await fetch(url);
 
