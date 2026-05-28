@@ -61,7 +61,7 @@ export default async function Home() {
           ))}
         </ListSection>
 
-        <ListSection title="Музыка" link={`/catalog/music`}>
+        <ListSection title="Музыка" link={`/catalog/albums`}>
           {albumsList.map(item => (
             <ProductCard
               key={item.id}

@@ -2,7 +2,7 @@ type TMerch = {
   id: number
   name: string;
   description: string;
-  price: number;
+  price: string;
   main_image: string | null;
 };
 

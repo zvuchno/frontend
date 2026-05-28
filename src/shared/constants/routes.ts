@@ -33,7 +33,7 @@ export const mainNavRoutes = [
   },
   {
     id: "catalog",
-    href: "/catalog",
+    href: "/catalog/all",
     label: "каталог",
     items: [
       {
@@ -48,7 +48,7 @@ export const mainNavRoutes = [
       },
       {
         id: "music",
-        href: "/catalog/music",
+        href: "/catalog/albums",
         label: "музыка",
       },
     ],
