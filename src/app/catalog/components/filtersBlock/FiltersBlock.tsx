@@ -27,7 +27,7 @@ const CATEGORIES = [
 const ORDERING = [
   {
     name: 'Новинки',
-    slug: 'created_ad'
+    slug: 'created_at'
   },
   {
     name: 'Популярное',
@@ -79,13 +79,12 @@ const FiltersBlock = ({ сategory, basePath, genresList, merchList }: FilterBloc
   };
 
   const buildClearFiltersLink = () => {
-    console.log('удаляю жанры')
     const params = new URLSearchParams(searchParams.toString());
 
     params.delete('genre');
 
     router.push(`${basePath}?${params.toString()}`, { scroll: false })
-  }
+  };
 
   const isActiveFilterByGenre = (filterKey: string): boolean => currentFiltersByGenre.includes(filterKey);
   const isActiveFilterBySubcategory = (filterKey: string): boolean => currentFiltersBySubcategory.includes(filterKey);
@@ -93,7 +92,7 @@ const FiltersBlock = ({ сategory, basePath, genresList, merchList }: FilterBloc
 
   const isActiveCategory = (value: string): boolean => сategory === value;
 
-  const hasGenreFilters = currentFiltersByGenre.length === 0
+  const hasGenreFilters = currentFiltersByGenre.length === 0;
 
   return (
     <div className={s.container}>
@@ -116,7 +115,7 @@ const FiltersBlock = ({ сategory, basePath, genresList, merchList }: FilterBloc
           items={CATEGORIES}
           isActiveFilter={isActiveCategory}
         />
-        {сategory === 'merch' && (
+        {сategory === 'merch' && merchList && (
           <FiltersGroup 
             items={merchList} 
             filterType="kind"

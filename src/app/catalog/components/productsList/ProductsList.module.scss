@@ -16,6 +16,16 @@
   list-style: none;
 }
 
+.errorBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.retryButton {
+  max-width: 350px;
+}
+
 .button {
   background-color: var(--color-bg-secondary);
   border-radius: 36px;

@@ -28,9 +28,6 @@ const CategoryPage = async ({
   searchParams: Promise<{genre?: string | string[], kind?: string | string[], ordering?: string, offset?: string}>
 }) => {
 
-  const genresKinds = await getGenresKinds();
-  const merchKinds = await getMerchKinds();
-
   const { category } = await params;
   const resolvedSearchParams = await searchParams;
 
@@ -38,6 +35,15 @@ const CategoryPage = async ({
   const activeFilterBySubcategory = resolvedSearchParams.kind;
   const activeOrderingFilter = resolvedSearchParams.ordering;
   const offset = resolvedSearchParams.offset;
+
+  let merchKinds
+
+  if (category === 'merch') {
+    merchKinds = await getMerchKinds();
+  }
+
+  const genresKinds = await getGenresKinds();
+
 
   return (
     <>

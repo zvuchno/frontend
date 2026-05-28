@@ -5,7 +5,7 @@ export interface FilterBlockProps {
   сategory: string;
   basePath: string;
   genresList: TGenreKind[];
-  merchList: TMerchKind[];
+  merchList?: TMerchKind[];
 }
 
 export type TCategory = 'all' | 'artists' | 'albums' | 'merch'

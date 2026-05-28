@@ -5,20 +5,24 @@ import { ProductCard } from "@/entities";
 import { useEffect, useState } from "react";
 import s from "./ProductsList.module.scss";
 import { ProductsListProps, ProductsListResponse } from "./ProductsList.types";
+import { ButtonUI } from "@/shared/ui/button";
 
 const ProductsList = ({ products, link }: ProductsListProps) => {
 
   const [allProducts, setAllProducts] = useState<TProduct[] | []>([]);
   const [nextLink, setNextLink] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setAllProducts(products)
-    setNextLink(link)
+    setAllProducts(products);
+    setNextLink(link);
+    setError(null);
   }, [products, link]);
 
   const handleLoadMore = async (url: string) => {
     setIsLoading(true);
+    setError(null);
     
     try {
       const res = await fetch(url);
@@ -31,10 +35,10 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
       setNextLink(data.next);
       
     } catch (error) {
-      throw error
+      setError('Не удалось загрузить данные');
       
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -75,7 +79,8 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
               )
             } else if (isArtist) {
               return (
-                <li key={(product as TArtist).name}>
+                // TODO: заменить slug на id (когда на бэке изменят)
+                <li key={(product as TArtist).slug}>
                   <ProductCard 
                     image={(product as TArtist).cover} 
                     title={(product as TArtist).name} 
@@ -86,8 +91,28 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
             }
           })}
         </ul>
-        {nextLink && (
-          <button className={s.button} onClick={() => handleLoadMore(nextLink)}>{isLoading ? 'загрузка...' : 'смотреть ещё'}</button>
+
+        {error && (
+          <div className={s.errorBlock}>
+            <p className={s.message}>{error}</p>
+            <ButtonUI
+              variant="primary"
+              className={s.retryButton}
+              onClick={() => nextLink && handleLoadMore(nextLink)}
+            >
+              Повторить запрос
+            </ButtonUI>
+          </div>
+        )}
+
+        {nextLink && !error && (
+          <button 
+            className={s.button} 
+            onClick={() => handleLoadMore(nextLink)}
+            disabled={isLoading}
+          >
+            {isLoading ? 'загрузка...' : 'смотреть ещё'}
+          </button>
         )}
       </div>
     )
