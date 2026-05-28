@@ -9,7 +9,9 @@ import clsx from 'clsx'
 import SearchInput from '@/features/SearchInput/SearchInput'
 import { CloseButtonIconCircledX } from '@/shared/ui/icons/closeButtonIconCircledX'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
+import { ButtonUI } from '@/shared/ui/button'
+import { ModalUI } from '@/shared/ui/modal'
 
 
 export const HeaderUI: FC<THeaderUIProps> = ({
@@ -20,6 +22,10 @@ export const HeaderUI: FC<THeaderUIProps> = ({
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
   const [isSearchOpen, setSearchOpen] = useState(false)
+
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
 
@@ -39,6 +45,30 @@ export const HeaderUI: FC<THeaderUIProps> = ({
   const handleSearchClose = () => {
     setSearchOpen(false)
   }
+
+  const handleConfirmModalOpen = () => {
+    setError(null);
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleLogOut = async () => {
+    setIsLoading(true);
+
+    try {
+      await signOut({
+        redirect: true,
+        callbackUrl: '/'
+      });
+
+      setIsConfirmModalOpen(false);
+    } catch (error) {
+      console.error('Ошибка выхода:', error);
+      setError('Не удалось выйти из аккаунта. Попробуйте снова')
+
+    } finally {
+      setIsLoading(false)
+    }
+  };
 
   return(
     <header className={clsx(
@@ -117,7 +147,35 @@ export const HeaderUI: FC<THeaderUIProps> = ({
                 )
               })}
             </ul>
+            {isAuthorized && (
+              <ButtonUI 
+                variant='secondary' 
+                onClick={handleConfirmModalOpen}
+                size='small'
+              >
+                Выйти
+              </ButtonUI>
+            )}
           </nav>
+         
+          <ModalUI 
+            isOpen={isConfirmModalOpen} 
+            onClose={() => setIsConfirmModalOpen(false)} 
+            closeButtonStyle='circledX'
+          >
+            <div className={styles.confirmModal}>
+              <p className={styles.confirmModal__text}>{error ? 'error' : 'Вы уверены, что хотите выйти?'}</p>
+              <ButtonUI 
+                variant='primary' 
+                className={styles.confirmModal__button} 
+                size='small' 
+                onClick={handleLogOut}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Выход...' : 'Выйти'}
+              </ButtonUI>
+            </div>
+          </ModalUI>
         </>
       )}
     </header>

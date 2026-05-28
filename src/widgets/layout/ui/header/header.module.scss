@@ -72,6 +72,9 @@
 
   &Actions {
     margin-block-start: 4px;
+    //временные стили из-за кнопки "Выйти"
+    display: flex;
+    gap: 30px;
 
     &Menu {
       display: flex;
@@ -88,6 +91,19 @@
     & * {
       cursor: pointer;
     }
+  }
+}
+
+.confirmModal {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 30px;
+  align-items: center;
+
+  &__text {
+    color: var(--color-text-primary);
+    font-size: 24px;
   }
 }
 
