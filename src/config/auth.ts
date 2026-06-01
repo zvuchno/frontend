@@ -151,7 +151,13 @@ export const authConfig: AuthOptions = {
   events: {
     async signOut({ token }) {
       if (token.refreshToken) {
-        await logOutUser({refresh: token.refreshToken});
+        try {
+          await logOutUser({refresh: token.refreshToken});
+          
+        } catch (error) {
+          throw new Error(error instanceof Error ? error.message : 'Ошибка выхода из аккаунта' )
+        }
+        
       }
     },
   },
