@@ -72,6 +72,9 @@
 
   &Actions {
     margin-block-start: 4px;
+    //временные стили из-за кнопки "Выйти"
+    display: flex;
+    gap: 30px;
 
     &Menu {
       display: flex;

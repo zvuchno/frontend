@@ -9,7 +9,10 @@ import clsx from 'clsx'
 import SearchInput from '@/features/SearchInput/SearchInput'
 import { CloseButtonIconCircledX } from '@/shared/ui/icons/closeButtonIconCircledX'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
+import { ButtonUI } from '@/shared/ui/button'
+import { ModalUI } from '@/shared/ui/modal'
+import LogoutButton from '@/features/logoutButton/LogoutButton'
 
 
 export const HeaderUI: FC<THeaderUIProps> = ({
@@ -117,6 +120,9 @@ export const HeaderUI: FC<THeaderUIProps> = ({
                 )
               })}
             </ul>
+            {isAuthorized && (
+              <LogoutButton />
+            )}
           </nav>
         </>
       )}

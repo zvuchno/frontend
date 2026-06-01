@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
 
-import { getCurrentUser, isTokenValid, logInUser, refreshToken } from "@/entities/user/api";
+import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken } from "@/entities/user/api";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -145,6 +145,20 @@ export const authConfig: AuthOptions = {
         session.user.artistName = token.artistName;
       }
       return session
+    },
+  },
+
+  events: {
+    async signOut({ token }) {
+      if (token.refreshToken) {
+        try {
+          await logOutUser({refresh: token.refreshToken});
+          
+        } catch (error) {
+          throw new Error(error instanceof Error ? error.message : 'Ошибка выхода из аккаунта' )
+        }
+        
+      }
     },
   },
 
