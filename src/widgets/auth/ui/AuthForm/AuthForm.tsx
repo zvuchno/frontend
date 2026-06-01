@@ -73,7 +73,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       if (res?.ok) {
         setIsAuthorized(true);
         setFormData(initialFormState);
+      } else {
+        throw new Error(res?.error || 'Ошибка авторизации. Проверьте корректность введённых данных.')
       }
+
     } catch (error) {
       if (error instanceof Error) setAuthError(error.message);
 

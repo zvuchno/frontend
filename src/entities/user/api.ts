@@ -12,7 +12,6 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
 
   const data = await res.json();
   if (!res.ok) {
-    console.log('Ошибка регистрации:', res.statusText)
     throw new Error(props.defaultMessage || res.statusText) 
   }
   return data as T
@@ -40,7 +39,7 @@ export const logInUser = async (userData: TLoginData): Promise<TAuthResponse> =>
   return await createFetchFunction<TAuthResponse>(
     { url: '/auth/token/create/', 
       fetchData: userData,
-      defaultMessage: 'Ошибка авторизации'
+      defaultMessage: 'Ошибка авторизации. Проверьте корректность введённых данных.'
     }
   )
 }
