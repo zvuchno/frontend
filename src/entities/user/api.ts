@@ -12,7 +12,8 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
 
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data.message || data.detail || props.defaultMessage) 
+    console.log('Ошибка регистрации:', res.statusText)
+    throw new Error(props.defaultMessage || res.statusText) 
   }
   return data as T
 }
@@ -21,7 +22,7 @@ export const registerNewArtist = async (regData: TNewArtistRequest): Promise<TNe
   return await createFetchFunction<TNewUserResponse>(
     { url: '/auth/register/artist/', 
       fetchData: regData,
-      defaultMessage: 'Регистрация не удалась'
+      defaultMessage: 'Регистрация не удалась. Попробуйте снова'
     }
   )
 }
@@ -30,7 +31,7 @@ export const registerNewListener = async (regData: TNewListenerRequest): Promise
   return await createFetchFunction<TNewUserResponse>(
     { url: '/auth/register/listener/', 
       fetchData: regData,
-      defaultMessage: 'Регистрация не удалась'
+      defaultMessage: 'Регистрация не удалась. Попробуйте снова'
     }
   )
 }

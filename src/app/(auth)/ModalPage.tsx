@@ -8,7 +8,7 @@ const ModalPage = ({ children }: {children: React.ReactNode}) => {
   const router = useRouter();
   
   const handleCloseModal = () => {
-    router.push("/");
+    router.replace("/");
   };
 
   return (
@@ -16,6 +16,7 @@ const ModalPage = ({ children }: {children: React.ReactNode}) => {
       isOpen={true} 
       closeButtonStyle="circledX" 
       onClose={handleCloseModal}
+      hasClickOnOverlay={false}
     >
       {children}
     </ModalUI>
