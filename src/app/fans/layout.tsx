@@ -35,7 +35,6 @@ const FansLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={s.page}>
       <AccentContainer className={s.container}>
-        <HeaderUI actions={DefaultHeaderActions} />
 
         <div className={s.body}>
           <Title Tag="h2" className={s.title}>

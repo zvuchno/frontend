@@ -43,6 +43,8 @@
 .description {
   font-size: 1.25rem;
   font-weight: 400;
+  min-width: 0px;
+  overflow-wrap: break-word;
 }
 
 .price {
