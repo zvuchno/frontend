@@ -1,0 +1,188 @@
+.page {
+  width: 100%;
+  max-width: 810px;
+  padding-bottom: 170px;
+  color: var(--color-text-primary, #100f0d);
+}
+
+.title {
+  width: 100%;
+  margin: 0 0 28px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-bg-secondary, #b5b5b5);
+  font-family: var(--font-better-vcr), var(--font-vcr), sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.status,
+.errorMessage {
+  margin: 0 0 24px;
+  font-family: var(--font-feature-mono), var(--font-feat), monospace;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.status {
+  color: rgba(16, 15, 13, 0.6);
+}
+
+.errorMessage {
+  color: #0046d3;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+.field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fieldWide {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-family: var(--font-feature-mono), var(--font-feat), monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: #100f0d;
+}
+
+.input {
+  width: 100%;
+  min-height: 42px;
+  padding: 11px 32px;
+  border: 1px solid #100f0d;
+  border-radius: 0;
+  background-color: #ffffff;
+  color: #100f0d;
+  font-family: var(--font-feature-mono), var(--font-feat), monospace;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+  outline: none;
+
+  &::placeholder {
+    color: rgba(16, 15, 13, 0.4);
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0046d3;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    border-color: #100f0d;
+    background-color: #ffffff;
+    color: rgba(16, 15, 13, 0.4);
+    cursor: default;
+    opacity: 1;
+  }
+}
+
+.inputInvalid {
+  border-color: #0046d3;
+}
+
+.error {
+  min-height: 16px;
+  color: #0046d3;
+  font-family: var(--font-feature-mono), var(--font-feat), monospace;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-top: 80px;
+}
+
+.submitButton,
+.editButton {
+  min-height: 60px;
+}
+
+.submitButton:disabled {
+  border-color: #100f0d;
+  background-color: #c2dfff;
+  color: #100f0d;
+}
+
+.editButton {
+  background-color: #b5b5b5;
+}
+
+.editButton:disabled {
+  border-color: #100f0d;
+  background-color: #b5b5b5;
+  color: #100f0d;
+}
+
+@media (max-width: 900px) {
+  .page {
+    max-width: none;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fieldWide {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .title {
+    margin-bottom: 24px;
+    font-size: 22px;
+  }
+
+  .form {
+    gap: 0;
+  }
+
+  .label {
+    font-size: 16px;
+  }
+
+  .input {
+    min-height: 40px;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .submitButton,
+  .editButton {
+    min-height: 48px;
+  }
+}
