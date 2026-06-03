@@ -18,8 +18,8 @@ export type TIdentityData = {
 };
 
 export type TIdentityDataForApi = Partial<Omit<TIdentityData, "birth_date" | "passport_issue_date">> & {
-  birth_date: string | null;
-  passport_issue_date: string | null;
+  birth_date?: string | null;
+  passport_issue_date?: string | null;
 };
 
 export type TBankData = {

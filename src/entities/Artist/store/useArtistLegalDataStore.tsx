@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { TArtistLegalData } from "./types";
+import { TArtistLegalData, TArtistLegalDataForApi } from "./types";
 import { getArtistLegalData, updateArtistLegalData } from "./api";
 import { parseDateFromApi } from "@/features/artist/ui/FormPersonal/utils/formatDate";
 
@@ -9,7 +9,7 @@ export interface ArtistLegalDataStoreProps {
   error: string | null;
 
   fetchArtistLegalData: () => Promise<void>;
-  updateArtistLegalData: (data: Partial<TArtistLegalData>) => Promise<void>;
+  updateArtistLegalData: (data: TArtistLegalDataForApi) => Promise<void>;
 
   setArtistLegalData: (
     artistLegalData: Partial<TArtistLegalData> | null,
@@ -17,6 +17,35 @@ export interface ArtistLegalDataStoreProps {
 
   clearStore: () => void;
 }
+
+const parseLegalDataDate = (value: Date | string | null | undefined) => {
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? undefined : value;
+  }
+
+  if (!value) {
+    return undefined;
+  }
+
+  const date = parseDateFromApi(value);
+
+  return Number.isNaN(date.getTime()) ? undefined : date;
+};
+
+const prepareArtistLegalData = (
+  data: Partial<TArtistLegalData>,
+): Partial<TArtistLegalData> => ({
+  ...data,
+  identity_data: data.identity_data
+    ? {
+        ...data.identity_data,
+        birth_date: parseLegalDataDate(data.identity_data.birth_date),
+        passport_issue_date: parseLegalDataDate(
+          data.identity_data.passport_issue_date,
+        ),
+      }
+    : data.identity_data,
+});
 
 export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()(
   (set) => ({
@@ -30,18 +59,7 @@ export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()(
       set({ isLoading: true, error: null });
       try {
         const data = await getArtistLegalData();
-        const preparedData: Partial<TArtistLegalData> = {
-          ...data,
-          identity_data: {
-            ...data.identity_data,
-            birth_date: parseDateFromApi(
-              data.identity_data?.birth_date as unknown as string,
-            ),
-            passport_issue_date: parseDateFromApi(
-              data.identity_data?.passport_issue_date as unknown as string,
-            ),
-          },
-        };
+        const preparedData = prepareArtistLegalData(data);
         set({ artistLegalData: preparedData, isLoading: false });
       } catch (error) {
         set({ error: (error as Error).message, isLoading: false });
@@ -52,10 +70,11 @@ export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()(
       set({ isLoading: true, error: null });
       try {
         const updatedData = await updateArtistLegalData(newData);
+        const preparedData = prepareArtistLegalData(updatedData);
         set((state) => ({
           artistLegalData: state.artistLegalData
-            ? { ...state.artistLegalData, ...updatedData }
-            : updatedData,
+            ? { ...state.artistLegalData, ...preparedData }
+            : preparedData,
           isLoading: false,
         }));
       } catch (error) {

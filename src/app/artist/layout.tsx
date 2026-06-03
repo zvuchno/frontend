@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import {
@@ -52,7 +52,8 @@ const getRequestErrorMessage = (error: unknown, fallback: string) =>
 
 const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const { status } = useSession();
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const shouldShowArtistInfo = artistProfilePathnames.includes(pathname);
   const [artist, setArtist] = useState<CurrentArtistResponse | null>(null);
   const [artistDataError, setArtistDataError] = useState<string | null>(null);
@@ -65,6 +66,21 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const [deletingSocialKey, setDeletingSocialKey] = useState<string | null>(
     null,
   );
+
+  useEffect(() => {
+    if (status === "loading") {
+      return;
+    }
+
+    if (status === "unauthenticated") {
+      router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
+      return;
+    }
+
+    if (session?.user.isListener === true) {
+      router.replace("/fans/profile");
+    }
+  }, [pathname, router, session?.user.isListener, status]);
 
   useEffect(() => {
     if (!shouldShowArtistInfo || status === "loading") {

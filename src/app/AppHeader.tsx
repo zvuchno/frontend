@@ -6,12 +6,19 @@ import { DefaultHeaderActions } from "@/shared/constants/headerActions";
 import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
 import { HeaderUI } from "@/widgets/layout/ui/header";
 
-export const AppHeader = () => {
-  /*const pathname = usePathname();
+const accountRoutePrefixes = ["/artist", "/fans"];
 
-  if (pathname.startsWith("/artist") || pathname.startsWith("/fans")) {
+const isAccountRoute = (pathname: string) =>
+  accountRoutePrefixes.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+
+export const AppHeader = () => {
+  const pathname = usePathname();
+
+  if (isAccountRoute(pathname)) {
     return null;
-  }*/
+  }
 
   return (
     <AccentContainer>
