@@ -4,7 +4,6 @@ import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
 import FiltersBlock from "../components/filtersBlock/FiltersBlock";
 import Hero from "../components/hero/Hero";
 import GenericCatalogList from "../components/genericCatalogList/GenericCatalogList";
-import { getGenresKinds } from "@/api/genresKinds/genresKindsApi";
 import { getMerchKinds } from "@/api/merchKinds/merchKindsApi";
 import { Metadata } from "next";
 import s from "./page.module.scss";
@@ -42,14 +41,11 @@ const CategoryPage = async ({
     merchKinds = await getMerchKinds();
   }
 
-  const genresKinds = await getGenresKinds();
-
-
   return (
     <>
       <AccentContainer>
         <Hero />
-        <FiltersBlock сategory={category} basePath={`/catalog/${category}/`} genresList={genresKinds} merchList={merchKinds}/>
+        <FiltersBlock сategory={category} basePath={`/catalog/${category}/`} merchList={merchKinds}/>
       </AccentContainer>
       <Suspense fallback={<div className={s.message}>Загрузка карточек...</div>}>
         <GenericCatalogList 

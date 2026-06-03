@@ -4,6 +4,7 @@ import s from "./FiltersBlock.module.scss";
 import { FilterBlockProps } from "./FilterBlock.type";
 import FiltersGroup from "./ui/filtersGroup/FiltersGroup";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useFilters } from "../../provider/useFilters";
 
 const CATEGORIES = [
   {
@@ -39,9 +40,11 @@ const ORDERING = [
   },
 ];
 
-const FiltersBlock = ({ сategory, basePath, genresList, merchList }: FilterBlockProps) => {
+const FiltersBlock = ({ сategory, basePath, merchList }: FilterBlockProps) => {
 
   const router = useRouter();
+
+  const { genresList } = useFilters();
 
   const searchParams = useSearchParams();
   const currentFiltersByGenre = searchParams.getAll('genre');

@@ -4,7 +4,7 @@ import { TMerchKind } from "@/api/merchKinds/merchKindsApi.types";
 export interface FilterBlockProps {
   сategory: string;
   basePath: string;
-  genresList: TGenreKind[];
+  //genresList: TGenreKind[];
   merchList?: TMerchKind[];
 }
 
