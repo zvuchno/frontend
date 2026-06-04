@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import { InputProps } from "./Input.types";
 import clsx from "clsx";
+import { IMaskInput } from "react-imask";
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({

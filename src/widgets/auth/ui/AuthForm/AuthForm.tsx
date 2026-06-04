@@ -65,7 +65,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     
     try {
       const res = await signIn('credentials', {
-        identifier: formData.email,
+        identifier: formData.email.toLowerCase(),
         password: formData.password,
         redirect: false,
       });
@@ -73,7 +73,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       if (res?.ok) {
         setIsAuthorized(true);
         setFormData(initialFormState);
+      } else {
+        throw new Error(res?.error || 'Ошибка авторизации. Проверьте корректность введённых данных.')
       }
+
     } catch (error) {
       if (error instanceof Error) setAuthError(error.message);
 

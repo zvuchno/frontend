@@ -20,7 +20,7 @@ export const validateField = <T extends Record<keyof T, string>>(
     return "Введите корректный email";
   } 
   
-  if (fieldName === 'phone' && value.replace(/\D/g, '').length < 10) {
+  if (fieldName === 'phone' && value.replace(/\D/g, '').length < 11) {
     return "Введите полный номер телефона";
   } 
   

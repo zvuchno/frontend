@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { validateField } from "../utils/validateFields";
 import { validateForm } from "../utils/validateForm";
 import { TNewArtistRequest } from "@/entities/user/types";
+import PhoneInput from "@/shared/ui/Input/phoneInput/PhoneInput";
 
 interface FormErrors {
   title?: string;
@@ -49,39 +50,10 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
 
   const handleChange =
     (field: keyof ArtistRegisterFormData) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      
-      if (field === 'phone') {
-        let value = e.target.value.replace(/\D/g, "");
-    
-        if (value.startsWith("7") || value.startsWith("8")) {
-          value = value.slice(1);
-        }
-        
-        let formattedValue = "+7";
-        if (value.length > 0) {
-          formattedValue += " (" + value.slice(0, 3);
-        }
-        if (value.length >= 3) {
-          formattedValue += ") " + value.slice(3, 6);
-        }
-        if (value.length >= 6) {
-          formattedValue += "-" + value.slice(6, 8);
-        }
-        if (value.length >= 8) {
-          formattedValue += "-" + value.slice(8, 10);
-        }
-        
-        setFormData((prev) => ({ ...prev, phone: formattedValue }));
+    (e: React.ChangeEvent<HTMLInputElement> | string) => {
 
-        const error = validateField<ArtistRegisterFormData>(field, value);
-        setErrors((prev) => ({ ...prev, [field]: error || undefined }));
+      const value = typeof e === 'string' ? e : e.target.value;
 
-        return;
-      }
-
-
-      const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
 
       const error = validateField<ArtistRegisterFormData>(field, value, formData.password);
@@ -174,23 +146,20 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
             name="email"
             value={formData.email}
             onChange={handleChange("email")}
-            placeholder="Текст"
+            placeholder="user@example.com"
             error={!!errors.email}
             message={errors.email}
             inputSize="small"
             disabled={isLoading}
           />
 
-          <Input
+          <PhoneInput 
             id="phone"
             label="Телефон*"
-            type="tel"
-            name="phone"
             value={formData.phone}
             onChange={handleChange("phone")}
-            placeholder="+7 (___) ___-__-__"
-            error={!!errors.phone}
-            message={errors.phone}
+            hasError={!!errors.phone}
+            errorMessage={errors.phone}
             inputSize="small"
             disabled={isLoading}
           />

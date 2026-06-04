@@ -8,6 +8,7 @@ export const ModalUI: FC<TModalUIProps> = ({
   closeButtonStyle = "circledX",
   children,
   isOpen = false,
+  hasClickOnOverlay = true,
   onClose,
 }) => {
   const handleEsc = useCallback(
@@ -49,7 +50,7 @@ export const ModalUI: FC<TModalUIProps> = ({
   }
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={styles.overlay} onClick={hasClickOnOverlay ? onClose : undefined}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <button
           type="button"
