@@ -5,11 +5,9 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
-import { DefaultHeaderActions } from "@/shared/constants/headerActions";
 import { fansProfileRoutes } from "@/shared/constants/routes";
 import { Title } from "@/shared/ui/Typography/Typography";
 import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
-import { HeaderUI } from "@/widgets/layout/ui/header";
 import s from "./layout.module.scss";
 
 const FansLayout = ({ children }: { children: React.ReactNode }) => {

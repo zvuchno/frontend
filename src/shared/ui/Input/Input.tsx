@@ -13,8 +13,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     style,
     multiline = false,
     rows = 5,
-    inputType = 'text',
-    onChangePhone,
     ...otherProps
   }, 
     ref
@@ -42,7 +40,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref as React.Ref<HTMLTextAreaElement>}
             
           />
-        ) : inputType === 'text' ? (
+        ) : (
           <input
             id={id}
             className={inputClassName}
@@ -50,19 +48,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             type="text"
             ref={ref as React.Ref<HTMLInputElement>}
             {...otherProps}
-          />
-        ) : (
-          <IMaskInput
-            mask="+{7} (000) 000-00-00"
-            placeholder="+7 (___) ___-__-__"
-            id={id}
-            className={inputClassName}
-            style={style}
-            ref={ref as React.Ref<HTMLInputElement>}
-            type="text"
-            inputMode="tel"
-            unmask={false}
-            onChange={onChangePhone}
           />
         )}
         

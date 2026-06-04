@@ -65,7 +65,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     
     try {
       const res = await signIn('credentials', {
-        identifier: formData.email,
+        identifier: formData.email.toLowerCase(),
         password: formData.password,
         redirect: false,
       });

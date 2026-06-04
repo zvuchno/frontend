@@ -12,10 +12,8 @@ import {
   type CurrentArtistResponse,
   type UpdateCurrentArtistPayload,
 } from "@/api/artist";
-import { DefaultHeaderActions } from "@/shared/constants/headerActions";
 import { artistsProfileRoutes } from "@/shared/constants/routes";
 import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
-import { HeaderUI } from "@/widgets/layout/ui/header";
 import { Title } from "@/shared/ui/Typography/Typography";
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
 import {

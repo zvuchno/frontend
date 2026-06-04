@@ -12,7 +12,7 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
 
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(props.defaultMessage || res.statusText) 
+    throw new Error(data.message || data.detail || data.phone || data.email || props.defaultMessage) 
   }
   return data as T
 }

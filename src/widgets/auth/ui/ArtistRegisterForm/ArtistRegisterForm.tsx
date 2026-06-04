@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { validateField } from "../utils/validateFields";
 import { validateForm } from "../utils/validateForm";
 import { TNewArtistRequest } from "@/entities/user/types";
+import PhoneInput from "@/shared/ui/Input/phoneInput/PhoneInput";
 
 interface FormErrors {
   title?: string;
@@ -49,9 +50,10 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
 
   const handleChange =
     (field: keyof ArtistRegisterFormData) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement> | string) => {
 
-      const value = e.target.value;
+      const value = typeof e === 'string' ? e : e.target.value;
+
       setFormData((prev) => ({ ...prev, [field]: value }));
 
       const error = validateField<ArtistRegisterFormData>(field, value, formData.password);
@@ -144,24 +146,22 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
             name="email"
             value={formData.email}
             onChange={handleChange("email")}
-            placeholder="Текст"
+            placeholder="user@example.com"
             error={!!errors.email}
             message={errors.email}
             inputSize="small"
             disabled={isLoading}
           />
 
-          <Input
+          <PhoneInput 
             id="phone"
             label="Телефон*"
-            name="phone"
             value={formData.phone}
-            onChangePhone={handleChange("phone")}
-            error={!!errors.phone}
-            message={errors.phone}
+            onChange={handleChange("phone")}
+            hasError={!!errors.phone}
+            errorMessage={errors.phone}
             inputSize="small"
             disabled={isLoading}
-            inputType="tel"
           />
 
           <Input
