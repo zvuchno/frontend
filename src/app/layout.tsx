@@ -67,6 +67,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${featureMono.variable} ${betterVcr.variable}`}
       >
         <SessionProviders>
+          <div className="global-noise"/>
           <div className="app-shell">
             <div className="app-container app-header-container">
               <AppHeader />

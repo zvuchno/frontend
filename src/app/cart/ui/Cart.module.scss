@@ -1,0 +1,29 @@
+.cart {
+  color: var(--color-text-primary);
+  
+  &Main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: stretch;
+    gap: 40px;
+    padding: 40px 48px;
+    font-family: var(--font-feature-mono), monospace;
+
+  }
+
+  &Title {
+    font-family: var(--font-better-vcr), monospace;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.06em;
+  }
+
+  &Content {
+    display: flex;
+    width: 100%;
+    gap: 40px;
+    justify-content: space-between;
+    
+  }
+}

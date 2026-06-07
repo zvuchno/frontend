@@ -10,12 +10,11 @@ const config: StorybookConfig = {
     "@storybook/addon-vitest",
     "@storybook/addon-a11y",
     "@storybook/addon-docs",
-    "@storybook/addon-onboarding"
+    "@storybook/addon-mcp"
   ],
   "framework": "@storybook/nextjs-vite",
   "staticDirs": [
-    "../public",
-    { from: "../src/app/fonts", to: "/fonts" }
+    "../public"
   ]
 };
 export default config;
