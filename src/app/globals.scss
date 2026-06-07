@@ -89,3 +89,20 @@ a {
     color-scheme: dark;
   }
 }
+
+.global-noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 1;
+
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='pixelNoise'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.99' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pixelNoise)'/%3E%3C/svg%3E");
+  
+  background-size: 100px 100px; 
+  background-repeat: repeat;
+  image-rendering: pixelated; 
+  image-rendering: crisp-edges;
+  will-change: transform;
+  transform: translateZ(0);
+}

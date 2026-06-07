@@ -1,0 +1,12 @@
+.cartItemsList {
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+  
+  &Menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    list-style: none;
+  }
+}
