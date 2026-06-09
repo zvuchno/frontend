@@ -1,7 +1,6 @@
 import clsx from "clsx";
 
-import { DeleteIcon } from "@/shared/ui/icons/deleteIcon";
-import { PlusIcon } from "@/shared/ui/icons/plusIcon";
+import { DeleteIcon, PlusIcon } from "@/shared/ui/Icons";
 import s from "./ButtonAddLink.module.scss";
 import type { TButtonAddLinkItem, TButtonAddLinkProps } from "./types";
 

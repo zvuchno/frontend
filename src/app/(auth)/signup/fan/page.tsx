@@ -1,8 +1,5 @@
-import FanSignup from "./FanSignup";
+import { FanSignup } from "@/screens/auth";
 
-export default function FanSignupPage ()  {
-
-  return (
-    <FanSignup />
-  )
-};
+export default function FanSignupPage() {
+  return <FanSignup />;
+}

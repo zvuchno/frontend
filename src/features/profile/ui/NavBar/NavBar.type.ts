@@ -1,4 +1,4 @@
-import { LinkItem } from "@/shared/ui/Link/Link.types";
+import type { LinkItem } from "@/shared/ui";
 
 export interface NavBarProps {
   links: readonly LinkItem[];

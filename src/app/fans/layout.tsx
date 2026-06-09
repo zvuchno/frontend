@@ -5,9 +5,8 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
-import { fansProfileRoutes } from "@/shared/constants/routes";
-import { Title } from "@/shared/ui/Typography/Typography";
-import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
+import { fansProfileRoutes } from "@/shared/constants";
+import { Title, AccentContainer } from "@/shared/ui";
 import s from "./layout.module.scss";
 
 const FansLayout = ({ children }: { children: React.ReactNode }) => {
@@ -33,7 +32,6 @@ const FansLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={s.page}>
       <AccentContainer className={s.container}>
-
         <div className={s.body}>
           <Title Tag="h2" className={s.title}>
             Личный кабинет

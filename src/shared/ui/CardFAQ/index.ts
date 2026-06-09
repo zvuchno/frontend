@@ -1,0 +1,1 @@
+export { CardFAQUI } from "./CardFAQ";

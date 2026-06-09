@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { ComponentType } from "react";
 
-import { mainNavRoutes } from "@/shared/constants/routes";
+import { mainNavRoutes } from "@/shared/constants";
 
 import { NavPanel } from "./NavPanel";
 

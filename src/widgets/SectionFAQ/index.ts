@@ -1,0 +1,1 @@
+export { SectionFAQ } from './ui/SectionFAQ';

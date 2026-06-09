@@ -1,16 +1,15 @@
-import ModalPage from "../ModalPage";
+import { AuthFormClient } from "@/screens/auth";
+import { AuthModal } from "@/widgets/AuthModal";
 import { Suspense } from "react";
-import { AuthFormClient } from "./AuthFormClient";
 
 const SigninPage = () => {
-
   return (
-    <ModalPage>
+    <AuthModal>
       <Suspense fallback={<div>Loading authentication form...</div>}>
         <AuthFormClient />
       </Suspense>
-    </ModalPage>
-  )
+    </AuthModal>
+  );
 };
 
 export default SigninPage;

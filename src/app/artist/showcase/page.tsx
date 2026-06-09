@@ -1,27 +1,23 @@
 "use client";
 
-import { 
-  useDeleteProduct, 
-  useDeletePromo, 
-  useShowcaseProducts, 
-  useShowcasePromoCodes, 
-  useToggleVisibilityProduct, 
-  useToggleVisibilityPromo 
+import {
+  useDeleteProduct,
+  useDeletePromo,
+  useShowcaseProducts,
+  useShowcasePromoCodes,
+  useToggleVisibilityProduct,
+  useToggleVisibilityPromo,
 } from "@/entities/Artist/store/useShowcaseStore";
 import RoleSelectBlock from "@/features/auth/ui/RoleSelectBlock/RoleSelectBlock";
-import RoleCard from "@/shared/ui/RoleCard/RoleCard";
 import s from "./page.module.scss";
-import { Text, Title } from "@/shared/ui/Typography/Typography";
+import { RoleCard, Text, Title, ButtonUI, SelectUI } from "@/shared/ui";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import ShowcaseCard from "@/entities/Artist/ui/ShowcaseCard/ShowcaseCard";
-import { ButtonUI } from "@/shared/ui/button";
-import { SelectUI } from "@/shared/ui/select/Select";
 
-type TProducts = "product" | "promo"
+type TProducts = "product" | "promo";
 
 const ShowcasePage = () => {
-
   //состояние для отображение списка товаров или списка промокодов
   const [productsType, setProductTypes] = useState<TProducts>("product");
 
@@ -29,9 +25,9 @@ const ShowcasePage = () => {
   const isPromo = productsType === "promo";
 
   // для селекта "тип товаров"
-  const [type, setType] = useState<string>('');
+  const [type, setType] = useState<string>("");
   // для селекта "наличие"
-  const [availability, setAvailability] = useState<string>('');
+  const [availability, setAvailability] = useState<string>("");
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -48,13 +44,13 @@ const ShowcasePage = () => {
     };
 
     if (isPopupOpen) {
-      document.addEventListener('click', handleClickOutside);
+      document.addEventListener("click", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
-    }
-  }, [isPopupOpen])
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isPopupOpen]);
 
   const handleChangeType = (value: string) => {
     setType(value);
@@ -69,58 +65,60 @@ const ShowcasePage = () => {
   };
 
   const handleShowPromo = () => {
-    setProductTypes('promo');
-  }
+    setProductTypes("promo");
+  };
 
   const handleEditPromo = () => {
-    console.log('EditPromo')
+    console.log("EditPromo");
   };
 
   return (
     <div className={s.container}>
       {shocaseProducts.length === 0 ? (
         <RoleSelectBlock>
-          <RoleCard 
-            path=""
-            image={"/cassette.png"} 
-            title="Загрузить сингл"
-          />
-          <RoleCard 
-            path=""
-            image={"/record.png"} 
-            title="Загрузить альбом"
-          />
-          <RoleCard 
-            path=""
-            image={"/shirt.png"} 
-            title="Загрузить мерч"
-          />
+          <RoleCard path="" image={"/images/cassette.png"} title="Загрузить сингл" />
+          <RoleCard path="" image={"/images/record.png"} title="Загрузить альбом" />
+          <RoleCard path="" image={"/images/shirt.png"} title="Загрузить мерч" />
         </RoleSelectBlock>
       ) : (
         <div className={s.container}>
-
           <div className={s.actions}>
             <div className={s.actions__buttons}>
-              <ButtonUI variant="primary" size="standart" className={s.button} >Добавить товар</ButtonUI>
-              <ButtonUI variant="primary" size="standart" className={s.button} onClick={handlePopupOpen} >
+              <ButtonUI variant="primary" size="standart" className={s.button}>
+                Добавить товар
+              </ButtonUI>
+              <ButtonUI
+                variant="primary"
+                size="standart"
+                className={s.button}
+                onClick={handlePopupOpen}
+              >
                 Промокоды
               </ButtonUI>
               {isPopupOpen && (
                 <div className={s.popup} ref={popupRef}>
-                  <button type="button" className={s.popup__item}>создать промокод</button>
-                  <button type="button" className={s.popup__item} onClick={handleShowPromo}>все промокоды</button>
+                  <button type="button" className={s.popup__item}>
+                    создать промокод
+                  </button>
+                  <button
+                    type="button"
+                    className={s.popup__item}
+                    onClick={handleShowPromo}
+                  >
+                    все промокоды
+                  </button>
                 </div>
               )}
             </div>
 
             <div className={s.actions__select}>
-              <SelectUI 
+              <SelectUI
                 value={type}
                 onChange={handleChangeType}
                 options={[
-                  {value:'all', label:'все'},
-                  {value:'merch', label:'мерч'},
-                  {value:'music', label:'музыка'},
+                  { value: "all", label: "все" },
+                  { value: "merch", label: "мерч" },
+                  { value: "music", label: "музыка" },
                 ]}
                 placeholder="тип товара"
                 containerClassName={s.containerOnPersonalAccountPage}
@@ -129,13 +127,13 @@ const ShowcasePage = () => {
                 optionClassName={s.itemOnPersonalAccountPage}
                 iconClassName={s.selectIcon}
               />
-              <SelectUI 
+              <SelectUI
                 value={availability}
                 onChange={handleChangeAvailability}
                 options={[
-                  {value:'all', label:'все'},
-                  {value:'inStock', label:'в наличии'},
-                  {value:'outOfStock', label:'закончились'},
+                  { value: "all", label: "все" },
+                  { value: "inStock", label: "в наличии" },
+                  { value: "outOfStock", label: "закончились" },
                 ]}
                 placeholder="наличие"
                 containerClassName={s.containerOnPersonalAccountPage}
@@ -147,49 +145,77 @@ const ShowcasePage = () => {
             </div>
           </div>
 
-          {isPromo && <Title Tag="h4" className={s.title}>Промокоды</Title>}
+          {isPromo && (
+            <Title Tag="h4" className={s.title}>
+              Промокоды
+            </Title>
+          )}
 
           <div className={s.heading}>
-            <Text className={s.heading__text}>{isProduct ? "Фото" : "Промокод"}</Text>
-            <Text className={clsx(s.heading__text, {[s.heading__text_span]: isProduct})}>
+            <Text className={s.heading__text}>
+              {isProduct ? "Фото" : "Промокод"}
+            </Text>
+            <Text
+              className={clsx(s.heading__text, {
+                [s.heading__text_span]: isProduct,
+              })}
+            >
               {isProduct ? "Наименование" : "Скидка"}
             </Text>
-            <Text className={s.heading__text}>{isProduct ? "Артикул" : "Период"}</Text>
-            <Text className={s.heading__text}>{isProduct ? "Цена" : "Количество"}</Text>
-            <Text className={clsx(s.heading__text, {[s.heading__text_rightAligned]: isPromo}, {[s.heading__text_leftAligned]: isPromo})}>
+            <Text className={s.heading__text}>
+              {isProduct ? "Артикул" : "Период"}
+            </Text>
+            <Text className={s.heading__text}>
+              {isProduct ? "Цена" : "Количество"}
+            </Text>
+            <Text
+              className={clsx(
+                s.heading__text,
+                { [s.heading__text_rightAligned]: isPromo },
+                { [s.heading__text_leftAligned]: isPromo },
+              )}
+            >
               {isProduct ? "Остаток" : "Видимость"}
             </Text>
-            {isProduct && <Text className={clsx(s.heading__text, s.heading__text_span, s.heading__text_leftAligned)}>Видимость</Text>}
+            {isProduct && (
+              <Text
+                className={clsx(
+                  s.heading__text,
+                  s.heading__text_span,
+                  s.heading__text_leftAligned,
+                )}
+              >
+                Видимость
+              </Text>
+            )}
           </div>
 
           <ul className={s.cardList}>
-            {!isProduct ? (
-              shocasePromoCodes.map((item) => (
-                <ShowcaseCard 
-                  key={item.id}
-                  variant="promo"
-                  promoCode={item}
-                  onToggleVisibility={useToggleVisibilityPromo}
-                  onDelete={useDeletePromo}
-                  onEdit={handleEditPromo}
-                />
-              ))
-            ) : (
-              shocaseProducts.map((item) => (
-                <ShowcaseCard 
-                  key={item.id} 
-                  variant="product" 
-                  product={item}
-                  onToggleVisibility={useToggleVisibilityProduct} 
-                  onDelete={useDeleteProduct}
-                />
-              ))
-            )}
+            {!isProduct
+              ? shocasePromoCodes.map((item) => (
+                  <ShowcaseCard
+                    key={item.id}
+                    variant="promo"
+                    promoCode={item}
+                    onToggleVisibility={useToggleVisibilityPromo}
+                    onDelete={useDeletePromo}
+                    onEdit={handleEditPromo}
+                  />
+                ))
+              : shocaseProducts.map((item) => (
+                  <ShowcaseCard
+                    key={item.id}
+                    variant="product"
+                    product={item}
+                    onToggleVisibility={useToggleVisibilityProduct}
+                    onDelete={useDeleteProduct}
+                  />
+                ))}
           </ul>
         </div>
       )}
     </div>
-  )
+  );
 };
 
 export default ShowcasePage;

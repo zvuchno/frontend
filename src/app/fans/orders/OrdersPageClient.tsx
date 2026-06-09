@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 import { getOrdersWithDetails, type StoreOrderDetail } from "@/api/store";
-import { OrderCardListener } from "@/widgets/profile/ui/OrderCardListener/OrderCardListener";
+import { OrderCardListener } from "@/widgets/profile";
 import styles from "./ordersPageClient.module.scss";
 
-const FALLBACK_PRODUCT_IMAGE = "/favorite-cassette.png";
+const FALLBACK_PRODUCT_IMAGE = "/images/favorite-cassette.png";
 
 export function OrdersPageClient() {
   const { status } = useSession();

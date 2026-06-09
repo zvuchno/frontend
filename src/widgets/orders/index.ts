@@ -1,0 +1,1 @@
+export { CardOrderArtist } from "./CardOrderArtist/ui/CardOrderArtist";

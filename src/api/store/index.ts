@@ -10,7 +10,7 @@ import type {
 } from "@/api/store/types";
 
 const DEFAULT_LIMIT = 100;
-const FALLBACK_PRODUCT_IMAGE = "/favorite-cassette.png";
+const FALLBACK_PRODUCT_IMAGE = "/images/favorite-cassette.png";
 
 function formatPrice(value?: string | number | null): string | number | null {
   if (value === undefined || value === null || value === "") {

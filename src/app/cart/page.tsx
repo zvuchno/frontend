@@ -1,7 +1,7 @@
-import { Cart } from "./ui";
+import { CartPage } from "@/screens/cart";
 
-const CartPage = () => (
-  <Cart />
-)
+function Cart() {
+  return <CartPage />;
+}
 
-export default CartPage;
+export default Cart;

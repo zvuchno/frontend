@@ -12,7 +12,7 @@ import clsx from "clsx";
 import DatePicker from "react-datepicker";
 import { ru } from "date-fns/locale";
 import { IMaskInput } from "react-imask";
-import Input from "@/shared/ui/Input/Input";
+import { CustomInput } from "@/shared/ui";
 
 export const createFormField = (
   field: TArtistFormPersonalField,
@@ -24,7 +24,7 @@ export const createFormField = (
     control,
     formState: { errors },
   } = methods;
-  
+
   const fieldError = get(errors, field.name) as FieldError;
 
   const { onChange, ...registerRest } = register(
@@ -162,7 +162,10 @@ export const createFormField = (
             style={{
               height: "40px",
               paddingBlock: "10px",
-              color: !currentValue || currentValue === 'individual_temporary' ? 'rgba(16, 15, 13, 0.4)' : 'inherit',
+              color:
+                !currentValue || currentValue === "individual_temporary"
+                  ? "rgba(16, 15, 13, 0.4)"
+                  : "inherit",
             }}
             className={clsx("input input_size_small", {
               ["error"]: !!fieldError,
@@ -179,10 +182,7 @@ export const createFormField = (
             }}
             defaultValue=""
           >
-            <option
-              value="individual_temporary"
-              disabled
-            >
+            <option value="individual_temporary" disabled>
               {field.placeholder}
             </option>
             {field.options?.map((el) => (
@@ -193,7 +193,7 @@ export const createFormField = (
           </select>
         </div>
       ) : (
-        <Input
+        <CustomInput
           {...register(
             field.name as FieldPath<FieldValues>,
             artistFormPersonalRules(field),

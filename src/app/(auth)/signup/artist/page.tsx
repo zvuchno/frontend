@@ -1,7 +1,5 @@
-import ArtistSignup from "./ArtistSignup";
+import { ArtistSignup } from "@/screens/auth";
 
 export default function ArtistSignupPage() {
-  return (
-    <ArtistSignup />
-  )
-};
+  return <ArtistSignup />;
+}

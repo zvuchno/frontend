@@ -12,9 +12,8 @@ import {
   type CurrentArtistResponse,
   type UpdateCurrentArtistPayload,
 } from "@/api/artist";
-import { artistsProfileRoutes } from "@/shared/constants/routes";
-import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
-import { Title } from "@/shared/ui/Typography/Typography";
+import { artistsProfileRoutes } from "@/shared/constants";
+import { AccentContainer, Title } from "@/shared/ui";
 import NavBar from "@/features/profile/ui/NavBar/NavBar";
 import {
   ArtistDataSection,
@@ -247,7 +246,6 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={s.page}>
       <AccentContainer className={s.container}>
-
         <div className={s.body}>
           <Title Tag="h2" className={s.title}>
             Личный кабинет

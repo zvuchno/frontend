@@ -1,0 +1,1 @@
+export { ForArtists } from './ForArtists'

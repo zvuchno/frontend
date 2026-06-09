@@ -1,4 +1,4 @@
-import { ButtonUI } from "@/shared/ui/button";
+import { ButtonUI } from "@/shared/ui";
 import styles from "../artistFormPersonal.module.scss";
 import { useFormContext } from "react-hook-form";
 
@@ -18,15 +18,17 @@ export const LegalFormSelector = () => {
       <ButtonUI
         className={styles.formSelector}
         variant="primary"
-        children={"Юридическое лицо"}
         onClick={() => handleSelect("legal_entity")}
-      />
+      >
+        Юридическое лицо
+      </ButtonUI>
       <ButtonUI
         className={styles.formSelector}
         variant="primary"
-        children={"Физическое лицо"}
         onClick={() => handleSelect("individual_temporary")}
-      />
+      >
+        Физическое лицо
+      </ButtonUI>
     </div>
   );
 };

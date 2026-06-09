@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
-import { mainNavRoutes } from "@/shared/constants/routes";
-import { Link } from "@/shared/ui/Link/Link";
+import { mainNavRoutes } from "@/shared/constants";
+import { Link } from "@/shared/ui";
 
 import styles from "./NavPanel.module.scss";
 import type { NavPanelProps } from "./types";

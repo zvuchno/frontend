@@ -1,5 +1,5 @@
 import { useState, FormEvent, ChangeEvent } from "react";
-import { Text } from "@/shared/ui/Typography/Typography";
+import { Text } from "@/shared/ui";
 import s from "./SearchInput.module.scss";
 import { SearchInputProps } from "./SearchInput.type";
 import clsx from "clsx";
@@ -21,8 +21,8 @@ const SearchInput = ({
     setValue("");
   };
 
- const handleClose = (e: FormEvent) => {
-     setValue("");
+  const handleClose = (e: FormEvent) => {
+    setValue("");
     if (onClose) {
       onClose();
     }
@@ -36,15 +36,15 @@ const SearchInput = ({
       )}
 
       <div className={s["search-input__wrapper"]}>
-          <input
-            type="text"
-            className={s["search-input__input"]}
-            placeholder={placeholder}
-            value={value}
-            onChange={handleChange}
-            disabled={disabled}
-            autoComplete="off"
-          />
+        <input
+          type="text"
+          className={s["search-input__input"]}
+          placeholder={placeholder}
+          value={value}
+          onChange={handleChange}
+          disabled={disabled}
+          autoComplete="off"
+        />
         <button
           type="button"
           className={s["search-input__button"]}

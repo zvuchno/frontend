@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 import { getPurchasedReleases, type FanProductCardData } from "@/api/store";
 import { ProductCard } from "@/entities";
-import { DownloadIcon } from "@/shared/ui/icons/downloadIcon";
+import { DownloadIcon } from "@/shared/ui/Icons";
 import styles from "./releasesPageClient.module.scss";
 
 function DownloadButton({ href }: { href?: string | null }) {

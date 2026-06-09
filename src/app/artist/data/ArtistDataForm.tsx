@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
 import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
-import { ButtonUI } from "@/shared/ui/button";
+import { ButtonUI } from "@/shared/ui";
 import { ArtistDataField } from "./ArtistDataField";
 import {
   artistDataFieldGroups,

@@ -1,0 +1,1 @@
+export { TagUI } from "./Tag";

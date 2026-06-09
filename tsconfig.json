@@ -24,11 +24,13 @@
   },
   "include": [
     "next-env.d.ts",
+    "declarations.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "src/shared/ui/descriptionArea"  ],
+    "**/*.mts",
+    "src/shared/ui/DescriptionArea"
+  ],
   "exclude": ["node_modules"]
 }

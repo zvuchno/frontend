@@ -4,18 +4,23 @@ import { ListSectionProps } from "./ListSection.type";
 import s from "./ListSection.module.scss";
 import clsx from "clsx";
 
-const ListSection = ({ title, link, children, className }: ListSectionProps) => {
+export const ListSection = ({
+  title,
+  link,
+  children,
+  className,
+}: ListSectionProps) => {
   return (
     <section className={clsx(s.section, className)}>
       <div className={s.header}>
-        <Title className={s.header__title} Tag="h2">{title}</Title>
-        <Link className={s.header__link} href={link}>смотреть все</Link>
+        <Title className={s.header__title} Tag="h2">
+          {title}
+        </Title>
+        <Link className={s.header__link} href={link}>
+          смотреть все
+        </Link>
       </div>
-      <div className={s.content}>
-        {children}
-      </div>
+      <div className={s.content}>{children}</div>
     </section>
-  )
+  );
 };
-
-export default ListSection;

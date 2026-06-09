@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
 
-import { ButtonUI } from "@/shared/ui/button";
+import { ButtonUI } from "@/shared/ui";
 
 import { FieldValues, TProfileFormUIProps } from "./types";
 import styles from "./profileForm.module.scss";

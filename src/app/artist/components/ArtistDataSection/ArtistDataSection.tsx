@@ -3,10 +3,10 @@
 import { type ChangeEvent, useRef, useState } from "react";
 import CardArtist from "@/entities/Artist/ui/CardArtist/CardArtist";
 import { ButtonAddLink } from "@/features/ButtonAddLink";
-import { ButtonUI } from "@/shared/ui/button";
-import ArtistDescription from "@/widgets/artist/ui/ArtistDescription/ArtistDescription";
-import ModalAddContact from "@/widgets/profile/ui/ModalAddContact/ModalAddContact";
-import type { TFieldValues } from "@/widgets/profile/ui/ModalAddContact/ModalAddContact.type";
+import { ButtonUI } from "@/shared/ui";
+import { ArtistDescription } from "@/widgets/ArtistDescription";
+import { ModalAddContact } from "@/widgets/profile";
+import type { TFieldValues } from "@/widgets/profile";
 import {
   ArtistDataSectionProps,
   TArtistDataItem,

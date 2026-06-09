@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { TRANSLATIONS } from "@/shared/utils/translations";
-import { AccentContainer } from "@/widgets/layout/ui/accentContainer";
+import { TRANSLATIONS } from "@/shared/constants";
+import { AccentContainer } from "@/shared/ui";
 import FiltersBlock from "../components/filtersBlock/FiltersBlock";
 import Hero from "../components/hero/Hero";
 import GenericCatalogList from "../components/genericCatalogList/GenericCatalogList";
@@ -9,24 +9,29 @@ import { Metadata } from "next";
 import s from "./page.module.scss";
 
 export async function generateMetadata({
-  params
-}: { params: Promise<{ category: string }> }): Promise<Metadata> {
-
+  params,
+}: {
+  params: Promise<{ category: string }>;
+}): Promise<Metadata> {
   const { category } = await params;
   return {
     title: TRANSLATIONS[category] || category,
-    description: `Музыкальные товары в категории: "${TRANSLATIONS[category] || category}" магазина "Звучно"`
-  }
-};
+    description: `Музыкальные товары в категории: "${TRANSLATIONS[category] || category}" магазина "Звучно"`,
+  };
+}
 
-const CategoryPage = async ({ 
+const CategoryPage = async ({
   params,
-  searchParams
+  searchParams,
 }: {
-  params: Promise<{ category: string }>,
-  searchParams: Promise<{genre?: string | string[], kind?: string | string[], ordering?: string, offset?: string}>
+  params: Promise<{ category: string }>;
+  searchParams: Promise<{
+    genre?: string | string[];
+    kind?: string | string[];
+    ordering?: string;
+    offset?: string;
+  }>;
 }) => {
-
   const { category } = await params;
   const resolvedSearchParams = await searchParams;
 
@@ -35,9 +40,9 @@ const CategoryPage = async ({
   const activeOrderingFilter = resolvedSearchParams.ordering;
   const offset = resolvedSearchParams.offset;
 
-  let merchKinds
+  let merchKinds;
 
-  if (category === 'merch') {
+  if (category === "merch") {
     merchKinds = await getMerchKinds();
   }
 
@@ -45,10 +50,16 @@ const CategoryPage = async ({
     <>
       <AccentContainer>
         <Hero />
-        <FiltersBlock сategory={category} basePath={`/catalog/${category}/`} merchList={merchKinds}/>
+        <FiltersBlock
+          сategory={category}
+          basePath={`/catalog/${category}/`}
+          merchList={merchKinds}
+        />
       </AccentContainer>
-      <Suspense fallback={<div className={s.message}>Загрузка карточек...</div>}>
-        <GenericCatalogList 
+      <Suspense
+        fallback={<div className={s.message}>Загрузка карточек...</div>}
+      >
+        <GenericCatalogList
           category={category}
           filterByGenre={activeFilterByGenre}
           filterBySubcategory={activeFilterBySubcategory}
@@ -57,7 +68,7 @@ const CategoryPage = async ({
         />
       </Suspense>
     </>
-  )
-}
+  );
+};
 
 export default CategoryPage;
