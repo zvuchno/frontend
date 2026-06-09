@@ -41,7 +41,11 @@ export function NotFoundPage() {
             </div>
           </div>
           <ButtonUI variant={"accentDark"} className={styles.not_found__button}>
-            <Link href={"/catalog/all"} className={styles.button_text}>
+            <Link
+              href={"/catalog/all"}
+              className={styles.button_text}
+              prefetch={false}
+            >
               На главную
             </Link>
           </ButtonUI>

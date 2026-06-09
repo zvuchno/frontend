@@ -39,7 +39,13 @@ const FiltersGroup = ({
 
       <div className={s.filterGroup__tags}>
         {clearFilters && (
-          <Link href={""} onClick={handleClearFilters} scroll={false} passHref>
+          <Link
+            href={""}
+            onClick={handleClearFilters}
+            scroll={false}
+            passHref
+            prefetch={false}
+          >
             <TagUI
               title="Все"
               isActive={isClearFilters ? isClearFilters : false}

@@ -16,7 +16,7 @@ export const ListSection = ({
         <Title className={s.header__title} Tag="h2">
           {title}
         </Title>
-        <Link className={s.header__link} href={link}>
+        <Link className={s.header__link} href={link} prefetch={false}>
           смотреть все
         </Link>
       </div>

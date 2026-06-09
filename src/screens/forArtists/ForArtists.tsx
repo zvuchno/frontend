@@ -27,7 +27,9 @@ export const ForArtists = () => (
         <>
           <div className={styles.headerSectionButton}>
             <ButtonUI variant={"primary"} size="large">
-              <Link href={"/role"}>присоединиться к бете</Link>
+              <Link href={"/role"} prefetch={false}>
+                присоединиться к бете
+              </Link>
             </ButtonUI>
           </div>
           <div className={styles.sectionImage}>
@@ -189,7 +191,9 @@ export const ForArtists = () => (
             <div className={styles.content}>
               <span>Присоединиться к бете</span>
               <ButtonUI variant={"accentDark"} size="large">
-                <Link href={"/role"}>присоединиться</Link>
+                <Link href={"/role"} prefetch={false}>
+                  присоединиться
+                </Link>
               </ButtonUI>
             </div>
           </DescriptionArea>

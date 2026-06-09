@@ -3,6 +3,7 @@
 import { Title } from "@/shared/ui";
 import s from "./BlogCard.module.scss";
 import { BlogCardProps } from "./BlogCard.type";
+import Link from "next/link";
 
 const BlogCard = ({
   image,
@@ -48,9 +49,14 @@ const BlogCard = ({
       <div className={s.cardCorner} />
       <div className={s.card}>
         {hasLink && link ? (
-          <a href={link} className={s.card__link} onClick={handleClick}>
+          <Link
+            href={link}
+            className={s.card__link}
+            onClick={handleClick}
+            prefetch={false}
+          >
             {CardContent}
-          </a>
+          </Link>
         ) : (
           <div
             className={s.card__content}

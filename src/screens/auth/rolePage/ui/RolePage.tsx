@@ -15,7 +15,12 @@ export const RolePage = () => {
         renderText={() => (
           <Text Tag="p" className={s.text}>
             У вас уже есть аккаунт?{" "}
-            <Link variant="basic" href="/signin" className={s.link}>
+            <Link
+              variant="basic"
+              href="/signin"
+              className={s.link}
+              prefetch={false}
+            >
               Войдите
             </Link>
           </Text>

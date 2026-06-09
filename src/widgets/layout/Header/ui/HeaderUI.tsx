@@ -58,7 +58,7 @@ export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
         </div>
       ) : (
         <>
-          <Link href={"/"} className={styles.headerTitle}>
+          <Link href={"/"} className={styles.headerTitle} prefetch={false}>
             <Image
               src="/icons/logo.svg"
               alt="Логотип ЗВУЧНО"
@@ -103,7 +103,11 @@ export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
                       </button>
                     )}
                     {action.type === "link" && action.href && (
-                      <Link title={action.title} href={href ?? action.href}>
+                      <Link
+                        title={action.title}
+                        href={href ?? action.href}
+                        prefetch={false}
+                      >
                         {action.children}
                       </Link>
                     )}

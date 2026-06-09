@@ -32,7 +32,9 @@ export const CartPage = () => {
       <div style={{ width: "400px", padding: "20px" }}>
         <h1 className={styles.cartTitle}>Корзина пока пуста</h1>
         <ButtonUI variant={"primary"} size={"standart"}>
-          <Link href={"/"}>Начать покупки</Link>
+          <Link href={"/"} prefetch={false}>
+            Начать покупки
+          </Link>
         </ButtonUI>
       </div>
     );

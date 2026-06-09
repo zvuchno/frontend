@@ -29,7 +29,7 @@ export const JoinSection = ({
           </>
         )}
       </Title>
-      <Link className={s.link} href={link} variant="outlined">
+      <Link className={s.link} href={link} variant="outlined" prefetch={false}>
         {joinIcon}
         {linkText ?? "Присоединиться"}
       </Link>

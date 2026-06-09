@@ -49,7 +49,9 @@ export const CartSummary = () => {
           </ButtonUI>
         </div>
         <ButtonUI variant={"primary"} className={styles.cartSummaryButton}>
-          <Link href={"/order"}>Перейти к оформлению</Link>
+          <Link href={"/order"} prefetch={false}>
+            Перейти к оформлению
+          </Link>
         </ButtonUI>
       </div>
     </div>
