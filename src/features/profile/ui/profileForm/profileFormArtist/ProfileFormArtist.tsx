@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styles from "./profileFormArtist.module.scss";
 import { FieldValues, TProfileFormFieldsProps } from "../types";
-import Input from "@/shared/ui/Input/Input";
+import { CustomInput } from "@/shared/ui";
 import { artistFormFields } from "@/features/profile/utils/constants";
 import { InputPhone } from "../inputPhone";
 import { FieldError, get, useFormContext } from "react-hook-form";
@@ -44,7 +44,7 @@ export const ProfileFormArtistUI: FC<TProfileFormFieldsProps> = (props) => {
                   <span className={styles.urlField__prefix}>
                     zvuchno.space.
                   </span>
-                  <Input
+                  <CustomInput
                     {...register(field.name, registerRules(field))}
                     id={`${field.row}.${field.column}`}
                     type={field.type}
@@ -62,7 +62,7 @@ export const ProfileFormArtistUI: FC<TProfileFormFieldsProps> = (props) => {
                 </div>
               </div>
             ) : (
-              <Input
+              <CustomInput
                 {...register(field.name, registerRules(field))}
                 id={`${field.row}.${field.column}`}
                 type={field.type}
@@ -86,7 +86,10 @@ export const ProfileFormArtistUI: FC<TProfileFormFieldsProps> = (props) => {
         <p className={styles.hint}>
           Чтобы ваш профиль стал публичным для всех пользователей не забудьте
           заполнить{" "}
-          <a className={styles.link} href={props.personalDataHref ?? "/artist/data"}>
+          <a
+            className={styles.link}
+            href={props.personalDataHref ?? "/artist/data"}
+          >
             Личные данные
           </a>
         </p>

@@ -1,34 +1,31 @@
-@use "../shared/ui/Input/Input.style";
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
   --color-primary-blue: #0046d3;
   --color-accent-blue: #c2dfff;
   --color-text-primary: #100f0d;
-  --color-text-accent-blue: var(--color-primary-blue, #0046D3);
+  --color-text-accent-blue: var(--color-primary-blue, #0046d3);
   --color-text-inverse: var(--background, #ffffff);
-  --color-text-accent: #FC9F5B;
+  --color-text-accent: #fc9f5b;
   --color-bg-main: #d9d9d9;
   --color-bg-secondary: #b5b5b5;
-  --color-bg-form-return: #FCE4D8;
+  --color-bg-form-return: #fce4d8;
   --color-btn-primary: var(--color-text-accent-blue, #c2dfff);
   --color-btn-secondary: var(--color-bg-main, #d9d9d9);
   --color-btn-accent-grey: var(--color-bg-secondary, #b5b5b5);
-  --color-btn-accent-orange: #F5A864;
+  --color-btn-accent-orange: #f5a864;
   --search-color-primary: #a8bdf6;
   --search-color-btn-primary: #e1e782;
   --search-color-btn-secondary: var(--color-bg-form-return, #fce4d8);
   --outline-color: var(--color-text-primary, #100f0d);
-  --font-vcr: 'BetterVCR', sans-serif;
-  --font-feat: 'FeatureMono', monospace;
+  --font-vcr: "BetterVCR", sans-serif;
+  --font-feat: "FeatureMono", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  // :root {
-  //   // --background: #0a0a0a;
-  //   // --foreground: #ededed;
-  // }
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 html,
@@ -73,35 +70,29 @@ body {
   width: 100%;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
 a {
   color: inherit;
   text-decoration: none;
 }
 
+/*стили для темной темы*/
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
 }
 
+/*стили для слоя "шума" на всех страницах приложения - мелкая серая рябь*/
 .global-noise {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9999;
   opacity: 1;
-
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='pixelNoise'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.99' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pixelNoise)'/%3E%3C/svg%3E");
-  
-  background-size: 100px 100px; 
+  background-size: 100px 100px;
   background-repeat: repeat;
-  image-rendering: pixelated; 
+  image-rendering: pixelated;
   image-rendering: crisp-edges;
   will-change: transform;
   transform: translateZ(0);

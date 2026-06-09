@@ -40,7 +40,7 @@ export const Outlined: Story = {
 
 export const WithDropdown: Story = {
   args: {
-    href: "/catalog",
+    href: "/catalog/all",
     children: "каталог",
     items: [
       {

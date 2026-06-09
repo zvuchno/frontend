@@ -1,7 +1,7 @@
 import { FC } from "react";
 import type { TArtistFormPersonalProps, FieldValues } from "./utils/types";
 import styles from "./artistFormPersonal.module.scss";
-import { ButtonUI } from "@/shared/ui/button";
+import { ButtonUI } from "@/shared/ui";
 import { useFormContext } from "react-hook-form";
 import {
   artistPersonalFields,
@@ -135,20 +135,22 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
             <ButtonUI
               size="standart"
               variant="primary"
-              children={"Сохранить"}
               disabled={
                 !isChecked || (errors && Object.keys(errors).length > 0)
               }
               type="submit"
-            />
+            >
+              Сохранить
+            </ButtonUI>
             <ButtonUI
               size="standart"
               variant="secondary"
-              children={"Изменить"}
               onClick={onEdit}
               disabled={isOnChange}
               type="button"
-            />
+            >
+              Изменить
+            </ButtonUI>
           </div>
         )}
       </form>

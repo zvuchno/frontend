@@ -32,7 +32,7 @@ type Story = StoryObj<typeof meta>;
 
 const merchArgs: ProductCardArtistData = {
   id: "product-card-artist-merch",
-  image: "/shirt.png",
+  image: "/images/shirt.png",
   imageWidth: 139,
   imageHeight: 139,
   variant: "merch",
@@ -45,7 +45,7 @@ const merchArgs: ProductCardArtistData = {
 
 const musicArgs: ProductCardArtistData = {
   id: "product-card-artist-music",
-  image: "/record.png",
+  image: "/images/record.png",
   imageWidth: 126,
   imageHeight: 119,
   variant: "music",

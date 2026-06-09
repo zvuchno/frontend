@@ -1,5 +1,5 @@
-import { ForArtists } from "@/widgets/layout/ui/ForArtists/ForArtists";
+import { ForArtists } from "@/screens/forArtists";
 
 export default function ForArtistsLanding() {
-  return <ForArtists />
+  return <ForArtists />;
 }

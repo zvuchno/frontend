@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import type { FC } from "react";
 
-import { Definition } from "@/shared/ui/definition";
+import { Definition } from "@/shared/ui";
 import styles from "./ProductCardArtist.module.scss";
 import type { ProductCardArtistProps } from "./types";
 

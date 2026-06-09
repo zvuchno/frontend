@@ -1,15 +1,25 @@
-import { Title } from '@/shared/ui/Typography/Typography';
-import s from './CardArtist.module.scss';
+import { Title } from "@/shared/ui";
+import s from "./CardArtist.module.scss";
 import { CardArtistProps } from "./CardArtist.type";
-import { ButtonLike } from '@/features';
+import { ButtonLike } from "@/features";
 
-const CardArtist = ({ image, description, hasButton = true, isLiked }: CardArtistProps) => {
+const CardArtist = ({
+  image,
+  description,
+  hasButton = true,
+  isLiked,
+}: CardArtistProps) => {
   return (
     <div className={s.cardWrapper}>
       <div className={s.cardCorner} />
       <div className={s.card}>
         {image && (
-          <img className={s.card__image} src={image} alt="Фото артиста" />
+          <img
+            className={s.card__image}
+            src={image}
+            alt="Фото артиста"
+            loading="lazy"
+          />
         )}
 
         {hasButton && (

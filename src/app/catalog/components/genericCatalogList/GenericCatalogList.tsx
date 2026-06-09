@@ -1,18 +1,23 @@
+import ProductsList from "../productsList/ProductsList";
 import s from "./GenericCatalogList.module.scss";
 import { CatalogListProps } from "./GenericCatalogList.types";
 import { fetchProductsByCategory } from "@/api/catalog/fetchCategory";
-import ProductsList from "../productsList/ProductsList";
-import { TRANSLATIONS } from "@/shared/utils/translations";
+import { TRANSLATIONS } from "@/shared/constants";
 
-const GenericCatalogList = async ({ category, filterByGenre, filterBySubcategory, orderingFilter, offset }: CatalogListProps) => {
-
+const GenericCatalogList = async ({
+  category,
+  filterByGenre,
+  filterBySubcategory,
+  orderingFilter,
+  offset,
+}: CatalogListProps) => {
   try {
     const data = await fetchProductsByCategory(category, {
-      limit: '16',
+      limit: "16",
       offset,
       filterByGenre,
       filterBySubcategory,
-      orderingFilter
+      orderingFilter,
     });
 
     const nextLink = data.next;
@@ -23,10 +28,12 @@ const GenericCatalogList = async ({ category, filterByGenre, filterBySubcategory
     )
     
   } catch (error) {
-    console.log('Ошибка получения карточек категории:', error)
+    console.log("Ошибка получения карточек категории:", error);
     return (
-      <div className={s.message}>{`Не удалось загрузить категорию: ${TRANSLATIONS[category]}`}</div>
-    )
+      <div
+        className={s.message}
+      >{`Не удалось загрузить категорию: ${TRANSLATIONS[category]}`}</div>
+    );
   }
 };
 

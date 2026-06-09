@@ -1,13 +1,11 @@
 "use client";
 
-import { ButtonUI } from "@/shared/ui/button";
-import { ModalUI } from "@/shared/ui/modal";
+import { ButtonUI, ModalUI } from "@/shared/ui";
 import s from "./LogoutButton.module.scss";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 
 const LogoutButton = () => {
-
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,45 +21,45 @@ const LogoutButton = () => {
     try {
       await signOut({
         redirect: true,
-        callbackUrl: '/'
+        callbackUrl: "/",
       });
-
     } catch (error) {
-      console.error('Ошибка выхода:', error);
-      setError('Не удалось выйти из аккаунта. Попробуйте снова')
-
+      console.error("Ошибка выхода:", error);
+      setError("Не удалось выйти из аккаунта. Попробуйте снова");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
   return (
     <>
-      <ButtonUI 
-        variant='secondary' 
+      <ButtonUI
+        variant="secondary"
         onClick={handleConfirmModalOpen}
-        size='small'
+        size="small"
       >
         Выйти
       </ButtonUI>
-       <ModalUI 
-          isOpen={isConfirmModalOpen} 
-          onClose={() => setIsConfirmModalOpen(false)} 
-          closeButtonStyle='circledX'
-        >
-          <div className={s.confirmModal}>
-            <p className={s.confirmModal__text}>{error ? 'error' : 'Вы уверены, что хотите выйти?'}</p>
-            <ButtonUI 
-              variant='primary' 
-              size='small' 
-              onClick={handleLogOut}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Выход...' : 'Выйти'}
-            </ButtonUI>
-          </div>
-        </ModalUI>
+      <ModalUI
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        closeButtonStyle="circledX"
+      >
+        <div className={s.confirmModal}>
+          <p className={s.confirmModal__text}>
+            {error ? "error" : "Вы уверены, что хотите выйти?"}
+          </p>
+          <ButtonUI
+            variant="primary"
+            size="small"
+            onClick={handleLogOut}
+            disabled={isLoading}
+          >
+            {isLoading ? "Выход..." : "Выйти"}
+          </ButtonUI>
+        </div>
+      </ModalUI>
     </>
-  )
+  );
 };
 
 export default LogoutButton;

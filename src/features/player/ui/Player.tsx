@@ -91,7 +91,7 @@ export const PlayerUI: FC<PlayerUIProps> = ({
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={() => setIsPlaying(false)}
       />
-      <div onClick={togglePlay} className={styles.playButton} style={{ backgroundImage: isPlaying ? "url('/pause.svg')" : "url('/play.svg')" }}></div>
+      <div onClick={togglePlay} className={styles.playButton} style={{ backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')" }}></div>
       <div className={styles.controls}>
         <span>{formatTime(currentTime)}</span>
         <input 

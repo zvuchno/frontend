@@ -1,0 +1,55 @@
+.descriptionArea {
+  &.border {
+    border: 2px solid var(--color-text-primary);
+  }
+}
+
+.headerArea {
+  height: 66px;
+  width: 100%;
+  padding: 10px 32px;
+  border-bottom: 2px solid var(--color-text-primary);
+
+  &.blue {
+    background-color: var(--color-accent-blue);
+  }
+
+  &.grey {
+    background-color: var(--color-bg-secondary);
+  }
+
+  &Icons {
+    display: flex;
+    gap: 16px;
+    justify-content: end;
+  }
+
+  &Icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #100F0D;
+    background-color: var(--color-bg-main);
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &.subtract {
+      background-image: url(/icons/Subtract.svg);
+      
+    }
+
+    &.maximize {
+      background-image: url(/icons/Maximize.svg);
+    }
+
+    &.close {
+      background-image: url(/icons/Close.svg);
+    }
+  }
+}
+
+.content {
+  background-color: #fff;
+}

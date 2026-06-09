@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
-import { Link } from "@/shared/ui/Link/Link";
+import { Link } from "@/shared/ui";
 import { NavBarProps } from "./NavBar.type";
 import s from "./NavBar.module.scss";
 

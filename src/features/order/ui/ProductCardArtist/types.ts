@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react";
-import type { DefinitionProps } from "@/shared/ui/definition";
+import type { DefinitionProps } from "@/shared/ui";
 
 export type ProductCardArtistVariant = "merch" | "music";
 export type ProductCardArtistDefinition = DefinitionProps;

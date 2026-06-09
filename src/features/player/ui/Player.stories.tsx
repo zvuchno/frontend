@@ -5,7 +5,7 @@ const meta: Meta<typeof PlayerUI> = {
   title: 'features/player',
   component: PlayerUI,
   args: {
-  image: '/artist-image.png',
+  image: '/images/artist-image.png',
   title: 'Втюрилась',
   artistName: 'ДОРА',
   audioTrack: 'https://cs9-20v4.vkuseraudio.ru/s/v1/acmp/YYXp9PRxLc2NuG0RvWFUvT96lUULjeVoxXZVyWNjH_wtEzuT0w1NWR8I2b7E9bnMftpesWvmp14AcmMsykpXAkN75LecqAqy7rcOB7RC5A3iYxRXoXly4Emysoe-j4w8S3hd-Ad-ZphCtxrznNf4GdCtS_zzdpO_7riXFehpytdxVxZ1Zg.mp3?siren=1',

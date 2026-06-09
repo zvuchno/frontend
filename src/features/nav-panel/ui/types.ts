@@ -1,4 +1,4 @@
-import type { MainNavRoute } from "@/shared/constants/routes";
+import type { MainNavRoute } from "@/shared/constants";
 
 export type NavPanelProps = {
   className?: string;
