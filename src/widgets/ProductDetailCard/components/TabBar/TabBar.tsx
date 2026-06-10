@@ -1,9 +1,9 @@
-'use client';
+"use client"
 
-import { TabBarProps } from "./TabBar.type";
-import s from "./TabBar.module.scss";
 import { useState } from "react";
+import { TabBarProps } from "./TabBar.types";
 import clsx from "clsx";
+import s from "./TabBar.module.scss";
 
 const TabBar = ({ data }: TabBarProps) => {
 

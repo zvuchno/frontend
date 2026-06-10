@@ -27,7 +27,7 @@ export async function HomePage() {
         <ListSection title="Артисты" link={`/catalog/artists`}>
           {artistsList.map((artist, index) => (
             <CardArtist
-              key={`${artist.name}-${index}`}
+              key={artist.slug}
               image={artist.cover ?? undefined}
               description={artist.name}
             />

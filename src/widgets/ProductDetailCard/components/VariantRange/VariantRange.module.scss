@@ -1,6 +1,7 @@
 .container {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .button {
@@ -27,5 +28,6 @@
 
   &:disabled {
     background-color: var(--color-btn-secondary);
+    cursor: default;
   }
 }
