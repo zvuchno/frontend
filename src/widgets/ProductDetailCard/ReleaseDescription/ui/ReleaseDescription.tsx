@@ -44,7 +44,7 @@ export const ReleaseDescription = ({ release, selected_variant_id }: ReleaseDesc
   const defaultImage = [
     {
       id: 1,
-      image: '/recordPlayer.png',
+      image: '/images/recordPlayer.png',
       is_main: true
     }
   ]

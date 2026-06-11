@@ -1,0 +1,75 @@
+.container {
+  display: flex;
+  align-items: center;
+  background-color: var(--background);
+  border: 1px solid var(--outline-color);
+  padding: 6px 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.playButton {
+  width: 24px;
+  height: 24px;
+  background-position: center;
+  background-repeat: no-repeat ;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.image {
+  width: 32px;
+  height: 32px;
+  background-position: center;
+  background-repeat: no-repeat ;
+  background-size: cover;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.text {
+  font-family: var(--font-feature-mono);
+  letter-spacing: -0.05em;
+  line-height: 100%;
+  text-transform: lowercase;
+  color: var(--color-text-primary);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.artistName {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.cartButton {
+  width: 24px;
+  height: 24px;
+  background-image: url('/icons/cart.svg');
+  background-position: center;
+  background-repeat: no-repeat ;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.likeButton {
+  width: 24px;
+  height: 24px;
+
+  &__icon {
+    stroke: var(--outline-color);
+  }
+}
