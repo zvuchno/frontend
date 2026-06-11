@@ -1,4 +1,4 @@
-import ArtistDetail from "./artistDetail/ArtistDetail";
+import ArtistDetail from "./components/ArtistDetail";
 
 const ArtistPageContent = () => {
   return (

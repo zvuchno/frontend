@@ -26,7 +26,7 @@ const VariantRange = ({ variants, type, onClick }: VariantRangeProps) => {
             type="button" 
             className={clsx(s.button, {[s.button_selected]: variant.property_value === isSelected})}
             onClick={() => hanleClick(variant.property_value, variant.sku, variant.variant_id)}
-            disabled={variant.stock === null}
+            disabled={variant.property_value !== 'Диджитал' && variant.stock === null}
           >
             {variant.property_value}
           </button>

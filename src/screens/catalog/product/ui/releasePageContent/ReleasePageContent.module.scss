@@ -1,0 +1,23 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  margin-bottom: 200px;
+}
+
+.title {
+  font-family: var(--font-better-vcr);
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 68px;
+  letter-spacing: -0.06em;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  margin-bottom: 80px;
+}
+
+.tracksContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
