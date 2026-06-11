@@ -20,5 +20,9 @@
     letter-spacing: inherit;
     color: inherit;
 
+    &:hover {
+      cursor: pointer;
+    }
+
   }
 }

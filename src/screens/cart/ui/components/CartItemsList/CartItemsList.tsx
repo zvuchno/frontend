@@ -1,19 +1,18 @@
 import Link from "next/link";
 import { CartItem } from "../CartItem/CartItem";
-import { TCartItem } from "../../../model/types";
-import styles from './CartItemsList.module.scss'
+import type { CartItemRespond } from "@/entities/cart";
+import styles from "./CartItemsList.module.scss";
 
-export const CartItemsList = ({ cartItems }: { cartItems: TCartItem[] }) => (
+export const CartItemsList = ({
+  cartItems,
+}: {
+  cartItems: CartItemRespond[];
+}) => (
   <div className={styles.cartItemsList}>
     <ul className={styles.cartItemsListMenu}>
       {cartItems.map((item) => (
-        <li key={item.id} className={styles.cartItemsListItem}>
-          <Link
-            href={`/catalog/${item.id}`}
-            className={styles.cartItemsListItemLink}
-          >
-            <CartItem item={item} />
-          </Link>
+        <li key={item.product_variant} className={styles.cartItemsListItem}>
+          <CartItem item={item} />
         </li>
       ))}
     </ul>

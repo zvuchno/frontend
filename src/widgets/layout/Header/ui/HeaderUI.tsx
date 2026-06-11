@@ -2,29 +2,21 @@
 
 import { THeaderUIProps } from "../model/types";
 import styles from "./header.module.scss";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Link from "next/link";
 import { NavPanel } from "@/features";
 import clsx from "clsx";
 import SearchInput from "@/features/SearchInput/SearchInput";
 import { CloseButtonIconCircledX } from "@/shared/ui/Icons";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 import LogoutButton from "@/features/logoutButton/LogoutButton";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 
 export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
-  const { data: session, status } = useSession();
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const user = useUserStore((state) => state.user);
+  const isAuthorized = !!user?.id;
 
   const [isSearchOpen, setSearchOpen] = useState(false);
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      setIsAuthorized(true);
-    } else if (status === "unauthenticated") {
-      setIsAuthorized(false);
-    }
-  }, [status]);
 
   const handleSearchOpen = () => {
     setSearchOpen(true);
@@ -67,6 +59,7 @@ export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
             />
           </Link>
           <NavPanel className={styles.headerMenu} />
+
           <nav className={styles.headerActions}>
             <ul className={styles.headerActionsMenu}>
               {actions.map((action) => {
@@ -79,7 +72,7 @@ export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
                 const href =
                   action.title === "Профиль"
                     ? isAuthorized
-                      ? session?.user.isArtist
+                      ? user?.isArtist
                         ? "/artisis/profile"
                         : "/fans/profile"
                       : "/role"
