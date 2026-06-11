@@ -1,21 +1,11 @@
-.cart {
+.order {
   margin-block-end: clamp(40px, 13.89vw, 200px);;
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: clamp(20px, 6.94vw, 100px);
+  gap: 26px;
   color: var(--color-text-primary);
-  
-  &Main {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    justify-content: stretch;
-    gap: 40px;
-    padding: 40px 48px;
-    font-family: var(--font-feature-mono), monospace;
-
-  }
+  padding: 54px 48px;
 
   &Title {
     font-family: var(--font-better-vcr), monospace;
@@ -24,15 +14,13 @@
     letter-spacing: -0.06em;
   }
 
-  &Content {
+  &Wrapper {
     display: flex;
-    width: 100%;
-    gap: 40px;
     justify-content: space-between;
-    
+    gap: 68px;
   }
-}
 
-.buttonEmpty {
-  width: 300px;
+  &Summary {
+    width: 394px;
+  }
 }

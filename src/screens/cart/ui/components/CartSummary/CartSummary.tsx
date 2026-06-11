@@ -2,30 +2,65 @@
 
 import { ButtonUI } from "@/shared/ui";
 import styles from "./CartSummary.module.scss";
-import { useState } from "react";
 import Link from "next/link";
 import clsx from "clsx";
+import { useCart } from "@/entities/cart";
+import {
+  useApplyCartPromoCode,
+  useRemoveCartPromoCode,
+} from "@/entities/cart/model/useCart";
+import { ChangeEvent, useState } from "react";
+import { mockData } from "@/screens/cart/mockData";
 
 export const CartSummary = () => {
-  const [isApplied, setIsApplied] = useState(false);
-  const sum = null;
-  const totalSum = null;
+  /** моковые данные mockData, удалить, когда будет реализован механизм добавления товара в корзину и поменять на data из useCard*/
+
+  //const { data } = useCart();
+
+  const [promocode, setPromocode] = useState("");
+
+  const data = mockData;
+  const hasPromoCode = Number(data?.discount_promocode) > 0;
+  const itemsSum = data?.subtotal;
+  const totalSum = data?.total;
+  const discountSum = data?.discount_promocode ?? 0;
+
+  const applyPromo = useApplyCartPromoCode();
+  const removePromo = useRemoveCartPromoCode();
+
+  const promoValue = promocode?.trim();
+  const isPromoLoading = applyPromo.isPending || removePromo.isPending;
+
+  const handleTogglePromo = () => {
+    if (hasPromoCode) {
+      removePromo.mutate(undefined, {
+        onSuccess: () => setPromocode(""),
+      });
+      return;
+    }
+
+    if (promoValue) {
+      applyPromo.mutate(promoValue);
+    }
+  };
 
   return (
     <div className={styles.cartSummary}>
       <div className={styles.cartSummaryDetails}>
         <div className={clsx(styles.cartSummarySubtotalSum, styles.mainText)}>
           <span>Товары</span>
-          <span>{sum ? sum : 0} ₽</span>
+          <span>{itemsSum ?? 0} ₽</span>
         </div>
         <div className={clsx(styles.cartSummaryDeliverySum, styles.mainText)}>
           <span>Доставка</span>
-          <span>{sum ? sum : 0} ₽</span>
+          <span>{0} ₽</span>
         </div>
-        <div className={clsx(styles.cartSummaryDiscountSum, styles.mainText)}>
-          <span>Промокод</span>
-          <span>{sum ? sum : 0} ₽</span>
-        </div>
+        {hasPromoCode && (
+          <div className={clsx(styles.cartSummaryDiscountSum, styles.mainText)}>
+            <span>Промокод</span>
+            <span>{hasPromoCode ? `-${discountSum}` : 0} ₽</span>
+          </div>
+        )}
         <div className={styles.deliveryInfo}>
           Стоимость доставки рассчитывается при оформлении заказа
         </div>
@@ -39,13 +74,19 @@ export const CartSummary = () => {
           <input
             className={styles.cartSummaryDiscountInput}
             placeholder="Ввести промокод"
+            value={promocode}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPromocode(e.target.value)
+            }
+            disabled={isPromoLoading || hasPromoCode}
           />
           <ButtonUI
-            variant={"primary"}
+            variant={!hasPromoCode ? "primary" : "secondary"}
             className={styles.cartSummaryDiscountButton}
-            onClick={() => setIsApplied(!isApplied)}
+            onClick={() => handleTogglePromo()}
+            disabled={isPromoLoading || (hasPromoCode && !promoValue)}
           >
-            {isApplied ? "Применить" : "Удалить"}
+            {hasPromoCode ? "Удалить" : "Применить"}
           </ButtonUI>
         </div>
         <ButtonUI variant={"primary"} className={styles.cartSummaryButton}>

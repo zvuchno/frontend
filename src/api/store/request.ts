@@ -1,6 +1,6 @@
 import { getApiAccessToken } from "@/api/authToken";
 
-function createAuthHeaders(token: string, headers?: HeadersInit): Headers {
+export function createAuthHeaders(token: string, headers?: HeadersInit): Headers {
   const authHeaders = new Headers(headers);
   authHeaders.set("Authorization", `Bearer ${token}`);
 

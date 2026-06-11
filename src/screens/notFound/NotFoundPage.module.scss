@@ -1,5 +1,9 @@
 .not_found {
-  margin-block-end: 200px;
+  margin-block-end: clamp(40px, 13.89vw, 200px);;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: clamp(20px, 6.94vw, 100px);
 
   .not_found__banner {
     padding-block: clamp(10px, 4.514vw, 65px);
@@ -7,7 +11,6 @@
     align-items: center;
     background-color: var(--color-accent-blue);
     height: max-content;
-   
 
     .not_found__container {
       display: flex;
@@ -16,7 +19,7 @@
       width: 65%;
       max-width: 809px;
       gap: clamp(15px, 3vw, 43px);
-      
+
       .not_found__content {
         position: relative;
         display: flex;

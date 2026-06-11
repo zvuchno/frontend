@@ -1,0 +1,71 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 32px;
+  padding: 60px 40px 70px;
+  border: 1px solid var(--color-text-primary);
+  width: 100%;
+
+  &Title {
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    font-family: var(--font-better-vcr), monospace;
+    padding-block-end: 18px;
+    border-bottom: 1px solid var(--color-text-primary);
+  }
+
+  &Details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+
+    & .mainText {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: -0.08em;
+      opacity: 60%;
+    }
+
+    & .deliveryInfo {
+      width: 100%;
+      background-color: var(--color-bg-main);
+      font-size: 20px;
+      letter-spacing: -0.08em;
+      line-height: 0.95;
+      padding-block: 4px;
+      text-align: center;
+      margin-block-end: 12px;
+      opacity: 60%;
+    }
+  }
+
+  &Total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    opacity: 1;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    font-family: var(--font-better-vcr), monospace;
+    margin-block-start: 12px;
+    margin-block-end: 22px;
+  }
+
+  
+
+   
+
+      
+
+      &Button {
+        font-family: initial
+      }
+    }

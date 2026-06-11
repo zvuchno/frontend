@@ -25,9 +25,9 @@ export async function HomePage() {
 
       <div className={styles.mainContent}>
         <ListSection title="Артисты" link={`/catalog/artists`}>
-          {artistsList.map((artist) => (
+          {artistsList.map((artist, index) => (
             <CardArtist
-              key={artist.name}
+              key={`${artist.name}-${index}`}
               image={artist.cover ?? undefined}
               description={artist.name}
             />

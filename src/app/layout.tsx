@@ -5,6 +5,7 @@ import { SessionProviders } from "@/entities/user/providers/providers";
 import { Footer } from "@/widgets/layout/Footer";
 import { AppHeader } from "@/widgets/layout/Header";
 import "./globals.scss";
+import { QueryProvider } from "./providers/QueryClientProvider";
 
 const featureMono = localFont({
   src: [
@@ -54,21 +55,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body
-        className={`${featureMono.variable} ${betterVcr.variable}`}
-      >
-        <SessionProviders>
-          <div className="global-noise" />
-          <div className="app-shell">
-            <div className="app-container app-header-container">
-              <AppHeader />
+      <body className={`${featureMono.variable} ${betterVcr.variable}`}>
+        <QueryProvider>
+          <SessionProviders>
+            <div className="global-noise" />
+            <div className="app-shell">
+              <div className="app-container app-header-container">
+                <AppHeader />
+              </div>
+              <main className="app-main">
+                <div className="app-container">{children}</div>
+              </main>
+              <Footer />
             </div>
-            <main className="app-main">
-              <div className="app-container">{children}</div>
-            </main>
-            <Footer />
-          </div>
-        </SessionProviders>
+          </SessionProviders>
+        </QueryProvider>
       </body>
     </html>
   );
