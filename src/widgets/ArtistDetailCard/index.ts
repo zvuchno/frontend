@@ -1,0 +1,1 @@
+export { ArtistDetailCard } from "./ui/ArtistDetailCard";
