@@ -1,28 +1,8 @@
-import { TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription";
-import { TDetailRelease } from "@/widgets/ProductDetailCard/ReleaseDescription";
-
-type TContact = {
-  id: number;
-  label: string;
-  value: string;
-}
-
-type TArtist = {
-  contacts: TContact[];
-  socials: TContact[];
-  name: string;
-  description: string;
-  cover: string | null;
-  city: string;
-  url: string;
-  slug: string;
-}
-
-type TDetailCardResponse = TDetailMerch | TDetailRelease | TArtist;
+import { TDetailCardResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
-export const fetchCardById = async (
+export const getCardById = async (
   kind: 'merch' | 'release' | 'artists',
   id: string
 ): Promise<TDetailCardResponse> => {

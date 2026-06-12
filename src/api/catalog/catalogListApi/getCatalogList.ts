@@ -1,41 +1,8 @@
+import { TCatalogListRequest, TCatalogListResponse } from "./types";
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
-type Target = {
-  type: string;
-  url: string;
-  selected_variant_id: number;
-}
-
-type TCatalogCard = {
-  product_id: number
-  name: string;
-  artist_name: string;
-  kind: string;
-  year: number;
-  price: string;
-  image: string;
-  is_favorite: boolean;
-  target: Target;
-}
-
-type TCatalogListResponse = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: TCatalogCard[];
-}
-
-type TCatalogListRequest = {
-  type?: 'album' | 'all' | 'merch',
-  artist?: string,
-  genre?: string,
-  kind?: string,
-  limit?: number, 
-  offset?: number,
-  ordering?: '-created_at' | 'random',
-}
-
-export async function fetchCatalogList({
+export async function getCatalogList({
   type, 
   artist, 
   genre, 

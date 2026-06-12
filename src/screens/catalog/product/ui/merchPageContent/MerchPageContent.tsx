@@ -3,7 +3,7 @@
 import { MerchDescription, TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription";
 import s from "./MerchPageContent.module.scss";
 import { ListSection } from "@/shared/ui";
-import { fetchCatalogList } from "@/api/catalog/fetchCatalog/fetchCatalog";
+import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import { Suspense } from "react";
 import { ProductCard } from "@/entities";
 import { ButtonLike } from "@/features";
@@ -15,14 +15,14 @@ interface MerchPageContentProps {
 
 const MerchPageContent = ({merch}: MerchPageContentProps) => {
 
-  // const recomendations = (await fetchCatalogList({ordering: 'random', limit: 4})).results
-
   const query = useQuery({ 
-    queryKey: ['recom'], 
-    queryFn: () => fetchCatalogList({
+    queryKey: ['recom', 'merch'], 
+    queryFn: () => getCatalogList({
+      type: 'merch',
       ordering: 'random',
       limit: 4
-    }) 
+    }),
+    refetchOnWindowFocus: false,
   });
 
   const recomendations = query.data?.results
@@ -31,7 +31,7 @@ const MerchPageContent = ({merch}: MerchPageContentProps) => {
     <div className={s.page}>
       <MerchDescription product={merch}/>
       <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
-        <ListSection title="Вам может понравиться" link="">
+        <ListSection title="Вам также может понравиться" link="">
           {recomendations && recomendations.map(item => (
             <ProductCard 
               key={item.product_id}
@@ -44,7 +44,6 @@ const MerchPageContent = ({merch}: MerchPageContentProps) => {
           ))}
         </ListSection>
       </Suspense>
-      
     </div>
   )
 };

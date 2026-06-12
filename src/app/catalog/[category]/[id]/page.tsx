@@ -1,4 +1,4 @@
-import { fetchCardById } from "@/api/catalog/fetchCardById";
+import { getCardById } from "@/api/catalog/cardByIdApi/getCardById";
 import { DetailPage } from "@/screens/catalog/product";
 import { Suspense } from "react";
 
@@ -13,7 +13,7 @@ async function Detail({
   const { id } = await params;
   const kind = (await searchParams).kind;
 
-  const card = await fetchCardById(kind, id);
+  const card = await getCardById(kind, id);
 
   return (
     <Suspense fallback={<div>Загрузка...</div>}>

@@ -2,12 +2,12 @@
 
 import { ReleaseDescription, TDetailRelease } from "@/widgets/ProductDetailCard/ReleaseDescription";
 import s from "./ReleasePageContent.module.scss";
-import { getTracksListByAlbum } from "@/api/catalog/fetchTracksListByAlbum";
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
 import { Track } from "@/shared/ui/Track";
 import { useQuery } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
 import { ListSection, Title } from "@/shared/ui";
-import { fetchCatalogList } from "@/api/catalog/fetchCatalog/fetchCatalog";
+import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import { ProductCard } from "@/entities";
 import { ButtonLike } from "@/features";
 
@@ -21,21 +21,25 @@ const ReleasePageContent = ({release}: ReleasePageContentProps) => {
 
   const tracksQuery = useQuery({ 
     queryKey: ['tracks', release.id], 
-    queryFn: () => getTracksListByAlbum({
+    queryFn: () => getTracksList({
       albumId: release.id
-    }) 
+    }),
+    enabled: !release.is_single,
+    refetchOnWindowFocus: false,
   });
 
   const recomQuery = useQuery({ 
-      queryKey: ['recom'], 
-      queryFn: () => fetchCatalogList({
+      queryKey: ['recom', 'album'], 
+      queryFn: () => getCatalogList({
+        type: 'album',
         ordering: 'random',
         limit: 4
-      }) 
+      }),
+      refetchOnWindowFocus: false,
     });
 
   const tracks = tracksQuery.data?.results;
-  const recomendations = recomQuery.data?.results;
+  const recommendations = recomQuery.data?.results;
 
   const handlePlay = (id: number) => {
 
@@ -57,11 +61,13 @@ const ReleasePageContent = ({release}: ReleasePageContentProps) => {
   return (
     <div className={s.page}>
       <ReleaseDescription release={release}/>
+
       {tracksQuery.isLoading && (
-        <div>Загрузка треков</div>
+        <div>Загрузка треков...</div>
       )}
+
       {!release.is_single && tracks && tracks.length > 0 && (
-        <>
+        <section className={s.tracksSection}>
           <Title className={s.title}>Плеер</Title>
           <div className={s.tracksContainer}>
             {tracks.map(track => {
@@ -69,9 +75,9 @@ const ReleasePageContent = ({release}: ReleasePageContentProps) => {
                 <Track 
                   key={track.id}
                   title={track.name}
-                  artistName={track.name}
-                  image=""
-                  isLiked={false}
+                  artistName={track.artist_name || ''}
+                  image={track.image}
+                  isLiked={track.is_favorite}
                   isPlaying={playingTrack === track.id}
                   onPlayClick={() => handlePlay(track.id)}
                   onCartClick={handleAddtoCart}
@@ -80,11 +86,11 @@ const ReleasePageContent = ({release}: ReleasePageContentProps) => {
               )
             })}
           </div>
-        </>
+        </section>
       )}
       <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
-        <ListSection title="Вам может понравиться" link="">
-          {recomendations && recomendations.map(item => (
+        <ListSection title="Вам также может понравиться" link="">
+          {recommendations && recommendations.map(item => (
             <ProductCard 
               key={item.product_id}
               title={item.artist_name}
