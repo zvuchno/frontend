@@ -1,0 +1,6 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, -0.5106rem + 7.5117vw, 6.25rem); // 100px;
+  margin-bottom: clamp(2.5rem, -1.0211rem + 15.0235vw, 12.5rem); // 200px;
+}

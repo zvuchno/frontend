@@ -1,6 +1,8 @@
 .cardWrapper {
   position: relative;
-  width: min(100%, var(--card-artist-width, 404px));
+  width: 100%;
+  max-width: var(--card-artist-width, 404px);
+  //width: min(100%, var(--card-artist-width, 404px));
   height: auto;
   aspect-ratio: var(--card-artist-aspect-ratio, 404 / 362);
   filter: drop-shadow(var(--card-artist-shadow, 6px 6px #000));
