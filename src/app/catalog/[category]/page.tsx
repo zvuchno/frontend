@@ -1,12 +1,6 @@
-import { Suspense } from "react";
 import { TRANSLATIONS } from "@/shared/constants";
-import { AccentContainer } from "@/shared/ui";
-import FiltersBlock from "../components/filtersBlock/FiltersBlock";
-import Hero from "../components/hero/Hero";
-import GenericCatalogList from "../components/genericCatalogList/GenericCatalogList";
-import { getMerchKinds } from "@/api/merchKinds/merchKindsApi";
 import { Metadata } from "next";
-import s from "./page.module.scss";
+import { CategoryPage } from "@/screens/catalog/category";
 
 export async function generateMetadata({
   params,
@@ -18,9 +12,9 @@ export async function generateMetadata({
     title: TRANSLATIONS[category] || category,
     description: `Музыкальные товары в категории: "${TRANSLATIONS[category] || category}" магазина "Звучно"`,
   };
-}
+};
 
-const CategoryPage = async ({
+async function Catalog ({
   params,
   searchParams,
 }: {
@@ -31,7 +25,7 @@ const CategoryPage = async ({
     ordering?: string;
     offset?: string;
   }>;
-}) => {
+}) {
   const { category } = await params;
   const resolvedSearchParams = await searchParams;
 
@@ -40,35 +34,15 @@ const CategoryPage = async ({
   const activeOrderingFilter = resolvedSearchParams.ordering;
   const offset = resolvedSearchParams.offset;
 
-  let merchKinds;
-
-  if (category === "merch") {
-    merchKinds = await getMerchKinds();
-  }
-
   return (
-    <>
-      <AccentContainer>
-        <Hero />
-        <FiltersBlock
-          сategory={category}
-          basePath={`/catalog/${category}/`}
-          merchList={merchKinds}
-        />
-      </AccentContainer>
-      <Suspense
-        fallback={<div className={s.message}>Загрузка карточек...</div>}
-      >
-        <GenericCatalogList
-          category={category}
-          filterByGenre={activeFilterByGenre}
-          filterBySubcategory={activeFilterBySubcategory}
-          orderingFilter={activeOrderingFilter}
-          offset={offset}
-        />
-      </Suspense>
-    </>
-  );
+    <CategoryPage
+      category={category} 
+      genre={activeFilterByGenre}
+      kind={activeFilterBySubcategory}
+      ordering={activeOrderingFilter}
+      offset={offset}
+    />
+  )
 };
 
-export default CategoryPage;
+export default Catalog;
