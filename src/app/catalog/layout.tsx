@@ -1,4 +1,4 @@
-import { getGenresKinds } from "@/api/genresKinds/genresKindsApi";
+import { getGenresKinds } from "@/api/catalog/genresKindApi/getGenresKinds";
 import { FiltersProvider } from "@/screens/catalog/category";
 import { Suspense } from "react";
 

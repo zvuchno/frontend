@@ -1,4 +1,4 @@
-import { GenresKindsResponse } from "./genresKindsApi.types";
+import { GenresKindsResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 

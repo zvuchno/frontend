@@ -1,8 +1,9 @@
+import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import ProductsList from "../productsList/ProductsList";
 import s from "./GenericCatalogList.module.scss";
 import { CatalogListProps } from "./GenericCatalogList.types";
-import { fetchProductsByCategory } from "@/api/catalog/fetchCategory";
 import { TRANSLATIONS } from "@/shared/constants";
+import { getArtistsList } from "@/api/catalog/artistsListApi/getArtistsList";
 
 const GenericCatalogList = async ({
   category,
@@ -12,16 +13,34 @@ const GenericCatalogList = async ({
   offset,
 }: CatalogListProps) => {
   try {
-    const data = await fetchProductsByCategory(category, {
-      limit: "16",
-      offset,
-      filterByGenre,
-      filterBySubcategory,
-      orderingFilter,
-    });
 
-    const nextLink = data.next;
-    const products = data.results;
+    let products;
+    let nextLink;
+
+    if (category === 'artists') {
+      const data = await getArtistsList({
+        genre: filterByGenre,
+        limit: "15",
+        offset: offset,
+        ordering: orderingFilter,
+      });
+
+      products = data.results;
+      nextLink = data.next;
+
+    } else {
+      const data = await getCatalogList({
+        type: category,
+        genre: filterByGenre, 
+        kind: filterBySubcategory, 
+        limit: "16", 
+        offset: offset, 
+        ordering: orderingFilter
+      });
+
+      products = data.results;
+      nextLink = data.next;
+    }
 
     return (
       <ProductsList products={products} link={nextLink} />

@@ -8,12 +8,16 @@
 
 .cardList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width, 320px), 1fr));
   row-gap: 40px;
   column-gap: 20px;
   justify-items: center;
   align-content: start;
   list-style: none;
+}
+
+.artistsGrid {
+  --card-min-width: 408px;
 }
 
 .errorBlock {

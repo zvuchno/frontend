@@ -18,11 +18,11 @@ async function Catalog ({
   params,
   searchParams,
 }: {
-  params: Promise<{ category: string }>;
+  params: Promise<{ category: 'album' | 'all' | 'merch' | 'artists' }>;
   searchParams: Promise<{
     genre?: string | string[];
     kind?: string | string[];
-    ordering?: string;
+    ordering?: "-created_at" | "random";
     offset?: string;
   }>;
 }) {

@@ -1,4 +1,4 @@
-import { MerchKindsResponse } from "./merchKindsApi.types";
+import { MerchKindsResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 

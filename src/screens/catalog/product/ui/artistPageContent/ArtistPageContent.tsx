@@ -19,7 +19,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
     queryFn: () => getCatalogList({
       type: 'album',
       ordering: 'random',
-      limit: 4
+      limit: "4"
     }),
     refetchOnWindowFocus: false,
   });
@@ -29,7 +29,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
     queryFn: () => getCatalogList({
       type: 'merch',
       ordering: 'random',
-      limit: 4
+      limit: "4"
     }),
     refetchOnWindowFocus: false,
   });

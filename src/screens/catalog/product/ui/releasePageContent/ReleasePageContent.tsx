@@ -33,7 +33,7 @@ const ReleasePageContent = ({release}: ReleasePageContentProps) => {
       queryFn: () => getCatalogList({
         type: 'album',
         ordering: 'random',
-        limit: 4
+        limit: "4"
       }),
       refetchOnWindowFocus: false,
     });

@@ -7,17 +7,25 @@ import { ProductCard } from "@/entities";
 import { ButtonLike } from "@/features";
 import BlogCard from "@/entities/blog/ui/BlogCard/BlogCard";
 import { SectionFAQ } from "@/widgets/SectionFAQ";
-import { getListArtists } from "@/api/listArtists/listArtistsApi";
 import { mockBlogs, questions } from "@/shared/constants";
-import { getListAlbums } from "@/api/listAlbums/listAlbumsApi";
-import { getListMerch } from "@/api/listMerch/listMerchApi";
+import { getArtistsList } from "@/api/catalog/artistsListApi/getArtistsList";
+import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 
 export async function HomePage() {
-  const artistsList = (await getListArtists(3)).results;
+  
+  const artistsList = (await getArtistsList({
+    limit: "3"
+  })).results;
 
-  const albumsList = (await getListAlbums(4)).results;
+  const albumsList = (await getCatalogList({
+    type: "album",
+    limit: "4"
+  })).results;
 
-  const merchList = (await getListMerch(4)).results;
+  const merchList = (await getCatalogList({
+    type: "merch",
+    limit: "4"
+  })).results;
 
   return (
     <div className={styles.page}>
@@ -34,15 +42,15 @@ export async function HomePage() {
           ))}
         </ListSection>
 
-        <ListSection title="Музыка" link={`/catalog/albums`}>
+        <ListSection title="Музыка" link={`/catalog/album`}>
           {albumsList.map((item) => (
             <ProductCard
-              key={item.id}
-              title={item.name}
-              image={item.cover_image}
-              description={item.description}
+              key={item.product_id}
+              title={item.artist_name}
+              image={item.image}
+              description={item.name}
               price={item.price ?? undefined}
-              likeButton={<ButtonLike isLiked={false} />}
+              likeButton={<ButtonLike isLiked={item.is_favorite} />}
             />
           ))}
         </ListSection>
@@ -50,12 +58,12 @@ export async function HomePage() {
         <ListSection title="Мерч" link={`/catalog/merch`}>
           {merchList.map((item) => (
             <ProductCard
-              key={item.id}
-              title={item.name}
-              image={item.main_image}
-              description={item.description}
-              price={item.price}
-              likeButton={<ButtonLike isLiked={false} />}
+              key={item.product_id}
+              title={item.artist_name}
+              image={item.image}
+              description={item.name}
+              price={item.price ?? undefined}
+              likeButton={<ButtonLike isLiked={item.is_favorite} />}
             />
           ))}
         </ListSection>

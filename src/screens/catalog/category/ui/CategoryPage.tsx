@@ -3,14 +3,14 @@ import Hero from "../components/hero/Hero";
 import FiltersBlock from "../components/filtersBlock/FiltersBlock";
 import { Suspense } from "react";
 import GenericCatalogList from "../components/genericCatalogList/GenericCatalogList";
-import { getMerchKinds } from "@/api/merchKinds/merchKindsApi";
+import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
 import s from "./CategoryPage.module.scss";
 
 interface CategoryPageProps {
-  category: string;
+  category: 'album' | 'all' | 'merch' | 'artists';
   genre?: string | string[];
   kind?: string | string[];
-  ordering?: string;
+  ordering?: '-created_at' | 'random';
   offset?: string;
 }
 
