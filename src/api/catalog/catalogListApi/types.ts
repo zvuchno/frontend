@@ -2,9 +2,9 @@ type Target = {
   type: string;
   url: string;
   selected_variant_id: number;
-}
+};
 
-type TCatalogCard = {
+export type TCatalogCard = {
   product_id: number
   name: string;
   artist_name: string;
@@ -14,21 +14,21 @@ type TCatalogCard = {
   image: string;
   is_favorite: boolean;
   target: Target;
-}
+};
 
 export type TCatalogListResponse = {
   count: number;
   next: string | null;
   previous: string | null;
   results: TCatalogCard[];
-}
+};
 
 export type TCatalogListRequest = {
   type?: 'album' | 'all' | 'merch',
-  artist?: string,
-  genre?: string,
-  kind?: string,
-  limit?: number, 
-  offset?: number,
+  genre?: string | string[],
+  kind?: string | string[],
+  artist?: string;
+  limit?: string, 
+  offset?: string,
   ordering?: '-created_at' | 'random',
-}
+};

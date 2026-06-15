@@ -1,13 +1,19 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VariantRangeProps } from "./VariantRange.types";
 import s from "./VariantRange.module.scss";
 import clsx from "clsx";
 
-const VariantRange = ({ variants, type, onClick }: VariantRangeProps) => {
+const VariantRange = ({ variants, type, selectadVariant, onClick }: VariantRangeProps) => {
 
   const [isSelected, setIsSelected] = useState<string>(variants[0].property_value);
+
+  useEffect(() => {
+    if (selectadVariant) {
+      setIsSelected(selectadVariant);
+    }
+  }, [selectadVariant])
 
   const hanleClick = (value: string, sku: string, id: number) => {
     setIsSelected(value);

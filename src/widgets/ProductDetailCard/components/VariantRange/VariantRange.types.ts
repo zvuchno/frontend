@@ -8,5 +8,6 @@ type TVariant = {
 export interface VariantRangeProps {
   type: string;
   variants: TVariant[];
+  selectadVariant?: string;
   onClick: (value: string, sku: string, id: number) => void;
 };

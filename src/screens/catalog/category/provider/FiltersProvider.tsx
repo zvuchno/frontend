@@ -1,6 +1,6 @@
 'use client';
 
-import { TGenreKind } from "@/api/genresKinds/genresKindsApi.types";
+import { TGenreKind } from "@/api/catalog/genresKindApi/types";
 import { createContext } from "react";
 
 type FiltersContextType = {

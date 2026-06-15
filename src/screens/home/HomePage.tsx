@@ -7,17 +7,26 @@ import { ProductCard } from "@/entities";
 import { ButtonLike } from "@/features";
 import BlogCard from "@/entities/blog/ui/BlogCard/BlogCard";
 import { SectionFAQ } from "@/widgets/SectionFAQ";
-import { getListArtists } from "@/api/listArtists/listArtistsApi";
 import { mockBlogs, questions } from "@/shared/constants";
-import { getListAlbums } from "@/api/listAlbums/listAlbumsApi";
-import { getListMerch } from "@/api/listMerch/listMerchApi";
+import { getArtistsList } from "@/api/catalog/artistsListApi/getArtistsList";
+import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
+import Link from "next/link";
 
 export async function HomePage() {
-  const artistsList = (await getListArtists(3)).results;
+  
+  const artistsList = (await getArtistsList({
+    limit: "3"
+  })).results;
 
-  const albumsList = (await getListAlbums(4)).results;
+  const albumsList = (await getCatalogList({
+    type: "album",
+    limit: "4"
+  })).results;
 
-  const merchList = (await getListMerch(4)).results;
+  const merchList = (await getCatalogList({
+    type: "merch",
+    limit: "4"
+  })).results;
 
   return (
     <div className={styles.page}>
@@ -26,38 +35,51 @@ export async function HomePage() {
       <div className={styles.mainContent}>
         <ListSection title="Артисты" link={`/catalog/artists`}>
           {artistsList.map((artist) => (
-            <CardArtist
-              key={artist.slug}
-              image={artist.cover ?? undefined}
-              description={artist.name}
-            />
+            <Link key={artist.slug} href={`/catalog/artists/${artist.slug}/?kind=artists`}>
+              <CardArtist
+                image={artist.cover ?? undefined}
+                description={artist.name}
+              />
+            </Link>
           ))}
         </ListSection>
 
-        <ListSection title="Музыка" link={`/catalog/albums`}>
-          {albumsList.map((item) => (
-            <ProductCard
-              key={item.id}
-              title={item.name}
-              image={item.cover_image}
-              description={item.description}
-              price={item.price ?? undefined}
-              likeButton={<ButtonLike isLiked={false} />}
-            />
-          ))}
+        <ListSection title="Музыка" link={`/catalog/album`}>
+          {albumsList.map((item) => {
+            const url = item.target.url;
+            const match = url.match(/(\d+)\/$/);
+            const id = match ? match[1] : null;
+            const selected = item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined
+            return (
+              <ProductCard
+                key={item.product_id}
+                title={item.artist_name}
+                image={item.image}
+                description={item.name}
+                price={item.price ?? undefined}
+                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+              />
+          )})}
         </ListSection>
 
         <ListSection title="Мерч" link={`/catalog/merch`}>
-          {merchList.map((item) => (
-            <ProductCard
-              key={item.id}
-              title={item.name}
-              image={item.main_image}
-              description={item.description}
-              price={item.price}
-              likeButton={<ButtonLike isLiked={false} />}
-            />
-          ))}
+          {merchList.map((item) => {
+            const url = item.target.url;
+            const match = url.match(/(\d+)\/$/);
+            const id = match ? match[1] : null;
+            const selected = item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined
+            return (
+              <ProductCard
+                key={item.product_id}
+                title={item.artist_name}
+                image={item.image}
+                description={item.name}
+                price={item.price ?? undefined}
+                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+              />
+          )})}
         </ListSection>
 
         {mockBlogs.length > 0 && (

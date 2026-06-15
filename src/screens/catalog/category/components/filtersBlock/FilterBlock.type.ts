@@ -1,5 +1,5 @@
-import { TGenreKind } from "@/api/genresKinds/genresKindsApi.types";
-import { TMerchKind } from "@/api/merchKinds/merchKindsApi.types";
+import { TGenreKind } from "@/api/catalog/genresKindApi/types";
+import { TMerchKind } from "@/api/catalog/merchKindsApi/types";
 
 export interface FilterBlockProps {
   сategory: string;

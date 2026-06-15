@@ -17,7 +17,7 @@ const CATEGORIES = [
   },
   {
     name: 'Музыка',
-    slug: 'albums'
+    slug: 'album'
   },
   {
     name: 'Артисты',

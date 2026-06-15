@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   max-width: var(--card-artist-width, 404px);
+  min-width: var(--card-artist-min-width, 408px);
   //width: min(100%, var(--card-artist-width, 404px));
   height: auto;
   aspect-ratio: var(--card-artist-aspect-ratio, 404 / 362);
@@ -66,8 +67,9 @@
 
   &__description {
     position: absolute;
-    top: 236px;
+    top: 75%; // 236px;
     left: 50%;
+    max-width: 90%;
     transform: translate(-50%);
     text-align: center;
     padding: 15px 28px;
@@ -79,6 +81,7 @@
       font-size: 24px;
       white-space: nowrap;
       text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 }

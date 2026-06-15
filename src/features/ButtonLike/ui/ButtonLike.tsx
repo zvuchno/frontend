@@ -17,7 +17,9 @@ export const ButtonLike: FC<TButtonLikeProps> = ({
   const [isLiked, setIsLiked] = useState(() => initialIsLiked);
   const [animationKey, setAnimationKey] = useState(0);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     const nextIsLiked = !isLiked;
 
     setIsLiked(nextIsLiked);
