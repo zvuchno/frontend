@@ -15,9 +15,10 @@ interface IArtistPageContentProps {
 const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
 
   const queryAlbums = useQuery({ 
-    queryKey: ['recom', 'album'], 
+    queryKey: ['recom', 'album', artist.slug], 
     queryFn: () => getCatalogList({
       type: 'album',
+      artist: artist.slug,
       ordering: 'random',
       limit: "4"
     }),
@@ -25,9 +26,10 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   });
 
   const queryMerch = useQuery({ 
-    queryKey: ['recom', 'merch'], 
+    queryKey: ['recom', 'merch', artist.slug], 
     queryFn: () => getCatalogList({
       type: 'merch',
+      artist: artist.slug,
       ordering: 'random',
       limit: "4"
     }),
@@ -40,32 +42,44 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   return (
     <>
       <ArtistDetailCard artist={artist} />
-      {albumsRecommend && (
-        <ListSection title="Музыка" link=''>
-          {albumsRecommend.map((item) => (
-            <ProductCard 
-              key={item.product_id}
-              title={item.artist_name}
-              description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
-              image={item.image}
-              price={item.price}
-              likeButton={<ButtonLike isLiked={item.is_favorite} />}
-            />
-          ))}
+      {albumsRecommend && albumsRecommend.length > 0 && (
+        <ListSection title="Музыка" link={`/catalog/album/?artist=${artist.slug}`}>
+          {albumsRecommend.map((item) => {
+            const url = item.target.url;
+            const match = url.match(/(\d+)\/$/);
+            const id = match ? match[1] : null;
+            const selected = item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined
+            return (
+              <ProductCard 
+                key={item.product_id}
+                title={item.artist_name}
+                description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
+                image={item.image}
+                price={item.price}
+                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+              />
+          )})}
         </ListSection>
       )}
-      {merchRecommend && (
-        <ListSection title="Мерч" link="">
-          {merchRecommend.map((item) => (
-            <ProductCard 
-              key={item.product_id}
-              title={item.artist_name}
-              description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
-              image={item.image}
-              price={item.price}
-              likeButton={<ButtonLike isLiked={item.is_favorite} />}
-            />
-          ))}
+      {merchRecommend && merchRecommend.length > 0 && (
+        <ListSection title="Мерч" link={`/catalog/merch?artist=${artist.slug}`}>
+          {merchRecommend.map((item) => {
+            const url = item.target.url;
+            const match = url.match(/(\d+)\/$/);
+            const id = match ? match[1] : null;
+            const selected = item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined
+            return (
+              <ProductCard 
+                key={item.product_id}
+                title={item.artist_name}
+                description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
+                image={item.image}
+                price={item.price}
+                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+              />
+          )})}
         </ListSection>
       )}
     </>

@@ -6,6 +6,7 @@ export async function getCatalogList({
   type,
   genre, 
   kind, 
+  artist,
   limit, 
   offset, 
   ordering
@@ -25,6 +26,10 @@ export async function getCatalogList({
 
     if (offset !== undefined) {
       params.append('offset', offset.toString());
+    }
+
+    if (artist !== undefined) {
+      params.append('artist', artist.toString());
     }
 
     if (genre !== undefined) {
@@ -52,8 +57,6 @@ export async function getCatalogList({
     }
 
     const url = `${baseUrl}/v1/store/catalog/?${params.toString()}`;
-
-    console.log('url:', `${baseUrl}/v1/store/catalog/?${params.toString()}`)
 
     const response = await fetch(url);
 

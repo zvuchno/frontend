@@ -26,5 +26,5 @@ export type TDetailRelease = {
 
 export interface ReleaseDescriptionProps {
   release: TDetailRelease;
-  selected_variant_id?: number;
+  selected_variant_id?: string;
 };

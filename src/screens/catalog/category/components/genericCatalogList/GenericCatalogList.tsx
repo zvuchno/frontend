@@ -9,6 +9,7 @@ const GenericCatalogList = async ({
   category,
   filterByGenre,
   filterBySubcategory,
+  filterByArtist,
   orderingFilter,
   offset,
 }: CatalogListProps) => {
@@ -33,6 +34,7 @@ const GenericCatalogList = async ({
         type: category,
         genre: filterByGenre, 
         kind: filterBySubcategory, 
+        artist: filterByArtist,
         limit: "16", 
         offset: offset, 
         ordering: orderingFilter

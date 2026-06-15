@@ -7,7 +7,15 @@ import { TDetalArtist } from "@/widgets/ArtistDetailCard/model/ArtistDetailCard.
 import s from "./DetailPage.module.scss";
 
 
-export const DetailPage = ({ card, kind }: { card: TDetailMerch | TDetailRelease | TDetalArtist, kind: 'merch' | 'release' | 'artists' }) => {
+export const DetailPage = ({
+   card, 
+   kind,
+   selected
+  }: { 
+    card: TDetailMerch | TDetailRelease | TDetalArtist, 
+    kind: 'merch' | 'release' | 'artists',
+    selected: string | undefined
+  }) => {
 
   const isMerch = kind === 'merch';
   const isRelease = kind === 'release';
@@ -16,7 +24,7 @@ export const DetailPage = ({ card, kind }: { card: TDetailMerch | TDetailRelease
   return (
     <div className={s.page}>
       {isMerch && <MerchPageContent merch={card as TDetailMerch}/>}
-      {isRelease && <ReleasePageContent release={card as TDetailRelease} />}
+      {isRelease && <ReleasePageContent release={card as TDetailRelease} selected={selected} />}
       {isArtist && <ArtistPageContent artist={card as TDetalArtist}/>}
     </div>
   )

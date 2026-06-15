@@ -22,6 +22,7 @@ async function Catalog ({
   searchParams: Promise<{
     genre?: string | string[];
     kind?: string | string[];
+    artist?: string;
     ordering?: "-created_at" | "random";
     offset?: string;
   }>;
@@ -31,6 +32,7 @@ async function Catalog ({
 
   const activeFilterByGenre = resolvedSearchParams.genre;
   const activeFilterBySubcategory = resolvedSearchParams.kind;
+  const activeFilterByArtist = resolvedSearchParams.artist;
   const activeOrderingFilter = resolvedSearchParams.ordering;
   const offset = resolvedSearchParams.offset;
 
@@ -39,6 +41,7 @@ async function Catalog ({
       category={category} 
       genre={activeFilterByGenre}
       kind={activeFilterBySubcategory}
+      artistFilter={activeFilterByArtist}
       ordering={activeOrderingFilter}
       offset={offset}
     />

@@ -8,18 +8,18 @@ async function Detail({
   searchParams
 }: {
   params: Promise<{ id: string }>,
-  searchParams: Promise<{kind: 'merch' | 'release' | 'artists'}>
+  searchParams: Promise<{kind: 'merch' | 'release' | 'artists', selected?: string}>
 }) {
 
   try {
     const { id } = await params;
-    const kind = (await searchParams).kind;
+    const { kind, selected } = await searchParams;
 
     const card = await getCardById(kind, id);
 
     return (
       <Suspense fallback={<div>Загрузка...</div>}>
-        <DetailPage card={card} kind={kind}/>
+        <DetailPage card={card} kind={kind} selected={selected}/>
       </Suspense>
     )
   } catch {

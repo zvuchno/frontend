@@ -10,6 +10,7 @@ interface CategoryPageProps {
   category: 'album' | 'all' | 'merch' | 'artists';
   genre?: string | string[];
   kind?: string | string[];
+  artistFilter?: string;
   ordering?: '-created_at' | 'random';
   offset?: string;
 }
@@ -18,6 +19,7 @@ export const CategoryPage = async ({
   category,
   genre,
   kind,
+  artistFilter,
   ordering,
   offset
 }: CategoryPageProps) => {
@@ -45,6 +47,7 @@ export const CategoryPage = async ({
           category={category}
           filterByGenre={genre}
           filterBySubcategory={kind}
+          filterByArtist={artistFilter}
           orderingFilter={ordering}
           offset={offset}
         />

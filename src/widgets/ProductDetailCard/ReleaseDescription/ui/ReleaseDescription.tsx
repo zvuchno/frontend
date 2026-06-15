@@ -20,7 +20,7 @@ export const ReleaseDescription = ({ release, selected_variant_id }: ReleaseDesc
       return;
 
     } else {
-      const index = release.variants.findIndex(variant => variant.variant_id === selected_variant_id);
+      const index = release.variants.findIndex(variant => variant.variant_id === Number(selected_variant_id));
       if (index !== -1) setProduct(release.variants[index]);
     }
 
@@ -84,7 +84,12 @@ export const ReleaseDescription = ({ release, selected_variant_id }: ReleaseDesc
           </Text>
           <Text Tag="p" className={s.card__price}>{product?.price} ₽</Text>
           
-          <VariantRange type='Носители' variants={release.variants} onClick={selectVariant}/>
+          <VariantRange 
+            type='Носители' 
+            selectadVariant={product.property_value}
+            variants={release.variants} 
+            onClick={selectVariant}
+          />
 
           {(product?.stock !== null || product?.property_value === 'Диджитал') ?  (
             <ButtonUI variant="primary" size="standart" className={s.card__button}>В корзину</ButtonUI>

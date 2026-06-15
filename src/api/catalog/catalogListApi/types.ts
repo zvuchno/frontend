@@ -27,6 +27,7 @@ export type TCatalogListRequest = {
   type?: 'album' | 'all' | 'merch',
   genre?: string | string[],
   kind?: string | string[],
+  artist?: string;
   limit?: string, 
   offset?: string,
   ordering?: '-created_at' | 'random',

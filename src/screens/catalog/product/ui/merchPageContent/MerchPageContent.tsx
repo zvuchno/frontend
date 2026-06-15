@@ -31,17 +31,23 @@ const MerchPageContent = ({merch}: MerchPageContentProps) => {
       <MerchDescription product={merch}/>
       <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
         {recomendations && (
-          <ListSection title="Вам также может понравиться" link="">
-            {recomendations.map(item => (
-              <ProductCard 
-                key={item.product_id}
-                title={item.artist_name}
-                description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
-                image={item.image}
-                price={item.price}
-                likeButton={<ButtonLike isLiked={item.is_favorite} />}
-              />
-            ))}
+          <ListSection title="Вам также может понравиться" link={`/catalog/merch`}>
+            {recomendations.map(item => {
+              const url = item.target.url;
+              const match = url.match(/(\d+)\/$/);
+              const id = match ? match[1] : null;
+              const selected = item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined
+              return (
+                <ProductCard 
+                  key={item.product_id}
+                  title={item.artist_name}
+                  description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
+                  image={item.image}
+                  price={item.price}
+                  likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                  link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+                />
+            )})}
           </ListSection>
         )}
       </Suspense>
