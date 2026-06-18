@@ -5,7 +5,7 @@ export type TTrack = {
   album: number;
   duration: number | null;
   position: number;
-  price: number;
+  price: string;
   image: string;
   is_favorite: boolean;
 }

@@ -4,7 +4,7 @@ function getApiImageRemotePattern() {
   try {
     const apiBaseUrl =
       process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
-    const apiUrl = new URL(apiBaseUrl ?? "https://zvuchno-dev.duckdns.org/api");
+    const apiUrl = new URL(apiBaseUrl ?? "https://dev.zvuchno.space/api");
 
     return {
       protocol: apiUrl.protocol.replace(":", "") as "http" | "https",
@@ -15,7 +15,7 @@ function getApiImageRemotePattern() {
   } catch {
     return {
       protocol: "https" as const,
-      hostname: "zvuchno-dev.duckdns.org",
+      hostname: "dev.zvuchno.space",
       pathname: "/media/**",
     };
   }
@@ -27,14 +27,24 @@ const nextConfig: NextConfig = {
     remotePatterns: [getApiImageRemotePattern(),
       {
         protocol: "http",
-        hostname: "zvuchno-dev.duckdns.org",
+        hostname: "dev.zvuchno.space",
         pathname: "/media/**",
       },
       {
         protocol: "https",
-        hostname: "zvuchno-dev.duckdns.org",
+        hostname: "dev.zvuchno.space",
         pathname: "/media/**",
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "storage.yandexcloud.net",
+        pathname: "/zvuchno-platform-public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "storage.yandexcloud.net",
+        pathname: "/zvuchno-platform-private/**",
+      },
     ],
   },
   /* config options here */

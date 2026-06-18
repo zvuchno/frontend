@@ -1,3 +1,5 @@
+import { TDataForModal } from "@/features/addToCartModal";
+
 export type TReleaseImage = {
   id: number;
   image: string;
@@ -27,4 +29,5 @@ export type TDetailRelease = {
 export interface ReleaseDescriptionProps {
   release: TDetailRelease;
   selected_variant_id?: string;
+  onClick: (data: TDataForModal) => void;
 };

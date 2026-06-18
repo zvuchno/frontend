@@ -8,7 +8,9 @@ export const getGenresKinds = async (): Promise<GenresKindsResponse> => {
 
   try {
   
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: { revalidate: 3600 }
+    });
 
     if (!response.ok) throw new Error(`Ошибка получения типов жанров`);
 

@@ -55,7 +55,11 @@ export async function HomePage() {
                 key={item.product_id}
                 title={item.artist_name}
                 image={item.image}
-                description={item.name}
+                description={
+                  item.year === null 
+                    ? `${item.kind} ${item.name}` 
+                    : `${item.kind} ${item.name} (${item.year.toString()})`
+                }
                 price={item.price ?? undefined}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
@@ -74,7 +78,11 @@ export async function HomePage() {
                 key={item.product_id}
                 title={item.artist_name}
                 image={item.image}
-                description={item.name}
+                description={
+                  item.year === null 
+                    ? `${item.kind} ${item.name}` 
+                    : `${item.kind} ${item.name} (${item.year.toString()})`
+                }
                 price={item.price ?? undefined}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}

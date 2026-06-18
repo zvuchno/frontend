@@ -53,7 +53,11 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
               <ProductCard 
                 key={item.product_id}
                 title={item.artist_name}
-                description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
+                description={
+                  item.year === null 
+                    ? `${item.kind} ${item.name}` 
+                    : `${item.kind} ${item.name} (${item.year.toString()})`
+                }
                 image={item.image}
                 price={item.price}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
@@ -73,7 +77,11 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
               <ProductCard 
                 key={item.product_id}
                 title={item.artist_name}
-                description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
+                description={
+                  item.year === null 
+                    ? `${item.kind} ${item.name}` 
+                    : `${item.kind} ${item.name} (${item.year.toString()})`
+                }
                 image={item.image}
                 price={item.price}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
