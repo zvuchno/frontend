@@ -39,7 +39,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       const profileRoute = user?.isArtist
         ? "/artists/profile"
         : "/fans/profile";
-      router.replace(nextRoute ?? `${profileRoute}`);
+      router.replace(nextRoute ?? profileRoute);
     }
   }, [isAuthorized]);
 

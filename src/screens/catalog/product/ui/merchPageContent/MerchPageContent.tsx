@@ -9,7 +9,7 @@ import { ButtonLike } from "@/features";
 import { useQuery } from "@tanstack/react-query";
 import { AddToCartModal, TDataForModal } from "@/features/addToCartModal";
 import { useUserStore } from "@/entities/user/store/useUserStore";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface MerchPageContentProps {
   merch: TDetailMerch;
@@ -19,7 +19,9 @@ const MerchPageContent = ({merch}: MerchPageContentProps) => {
 
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;
-  
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -43,12 +45,15 @@ const MerchPageContent = ({merch}: MerchPageContentProps) => {
   }
 
   const handleOpenAddtoCartModal = (data: TDataForModal) => {
-      // if (!isAuthorized) {
-      //   router.push('/signin')
-      // } else {сетить данные, открывать модалку}
+      if (!isAuthorized) {
+        const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ''}`;
+        router.push(`/signin?next=${encodeURIComponent(currentUrl)}`);
+
+      } else {
+        setDataForModl(data);
+      setIsModalOpen(true);
+      }
       
-      setDataForModl(data);
-      if (dataForModal) setIsModalOpen(true);
     };
 
   return (

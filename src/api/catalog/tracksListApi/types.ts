@@ -8,6 +8,7 @@ export type TTrack = {
   price: string;
   image: string;
   is_favorite: boolean;
+  allow_overpay: boolean;
 }
 
 export type TracksListResponse = {

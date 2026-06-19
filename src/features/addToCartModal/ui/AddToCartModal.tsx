@@ -24,6 +24,8 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
   const [newPrice, setNewPrice] = useState<string>('');
   const [comment, setComment] = useState<string>('');
 
+  const { isPending, error, mutate: addToCart } = useAddCartItem();
+
   useEffect(() => {
     setNewPrice('');
   }, [data])
@@ -39,22 +41,21 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
   };
 
   const handleAddToCart = () => {
-    
-    // после успешной отправки вызывать onClose чтобы закрыть модалку
 
     const itemForCart: TCartItem = {
       product_variant: data.product_variant,
       quantity: 1,
-      price_with_donation: newPrice ? (parseFloat(newPrice) < parseFloat(data.price)) ? data.price : newPrice : data.price,
+      price_with_donation: newPrice ? (parseFloat(newPrice) < parseFloat(data.price)) ? null : newPrice : null,
       comment: comment,
       is_artist_subscription: checkStatus
-    }
+    };
 
-    //const { isPending, isSuccess, error } = useAddCartItem(itemForCart)
-
-    
-    console.log('itemForCart:', itemForCart)
-  }
+    addToCart(itemForCart, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
+  };
 
   return (
     <ModalUI isOpen={isOpen} onClose={onClose} closeButtonStyle="circledX" >
@@ -78,7 +79,7 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
           />
           
           <div className={s.content__data}>
-            {data.allow_overpay &&(
+            {data.allow_overpay && (
               <div className={s.field}>
                 <div className={s.field__labelContainer}>
                   <label className={clsx(s.text, s.field__labelContainer__label)} htmlFor="price" >
@@ -131,7 +132,14 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
             <CheckboxUI type="checkbox" isChecked={checkStatus} onChange={handleCheckStatusChange}>
               Подписаться на новости артиста и дать согласие на получение рассылки рекламных материалов
             </CheckboxUI>
-            <ButtonUI variant="primary" onClick={handleAddToCart}>В корзину</ButtonUI>
+            <ButtonUI 
+              variant="primary" 
+              onClick={handleAddToCart}
+              disabled={isPending}
+            >
+              {isPending ? 'Добавляем...' : 'В корзину'}
+            </ButtonUI>
+            {error && <span>Ошибка добавления: попробуте еще раз</span>}
           </div>
         </div>
       </div>

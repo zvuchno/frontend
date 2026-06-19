@@ -7,7 +7,7 @@ export const AuthModal = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   const handleCloseModal = () => {
-    router.replace("/");
+    router.back();
   };
 
   return (

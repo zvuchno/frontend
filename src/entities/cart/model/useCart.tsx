@@ -32,12 +32,12 @@ export function useCart(options?: UseCartOptions) {
   });
 }
 
-export function useAddCartItem(item: TCartItem) {
+export function useAddCartItem() {
   const accessToken = useUserStore((state) => state.user?.accessToken);
   const queryClient = useQueryClient();
 
-  return useMutation<TCart, Error>({
-    mutationFn: () => addCartItem(item, accessToken),
+  return useMutation<TCart, Error, TCartItem>({
+    mutationFn: (item: TCartItem) => addCartItem(item, accessToken),
     onSuccess: (cart) => {
       queryClient.setQueryData(cartQueryKeys.current(), cart);
     },

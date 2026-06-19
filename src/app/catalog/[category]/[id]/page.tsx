@@ -94,7 +94,7 @@ async function Detail({
     const card = await getCardById(kind, id);
 
     return (
-      <Suspense fallback={<div>Загрузка...</div>}>
+      <Suspense fallback={<div className={s.message}>Загрузка...</div>}>
         <DetailPage card={card} kind={kind} selected={selected}/>
       </Suspense>
     )

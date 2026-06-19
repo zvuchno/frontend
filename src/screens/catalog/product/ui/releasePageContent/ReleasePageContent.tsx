@@ -12,7 +12,7 @@ import { ProductCard } from "@/entities";
 import { ButtonLike } from "@/features";
 import { AddToCartModal, TDataForModal } from "@/features/addToCartModal";
 import { useUserStore } from "@/entities/user/store/useUserStore";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ReleasePageContentProps {
   release: TDetailRelease;
@@ -24,6 +24,8 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;
 
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   const [playingTrack, setPlayingTrack] = useState<number | null>(null);
@@ -65,17 +67,15 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
     }
   };
 
-  const handleAddToCart = () => {
-    console.log('Добавить трек в корзину')
-  }
-
   const handleOpenAddtoCartModal = (data: TDataForModal) => {
-    // if (!isAuthorized) {
-    //   router.push('/signin')
-    // } else {сетить данные, открывать модалку}
-    
-    setDataForModl(data);
-    setIsModalOpen(true);
+    if (!isAuthorized) {
+      const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ''}`;
+      router.push(`/signin?next=${encodeURIComponent(currentUrl)}`);
+
+    } else {
+      setDataForModl(data);
+      setIsModalOpen(true);
+    }
   };
 
   const handleLike = () => {
@@ -111,7 +111,7 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
                     name: `"${track.name}"`,
                     image: track.image,
                     price: track.price,
-                    allow_overpay: false,
+                    allow_overpay: track.allow_overpay,
                   })}
                   onLikeClick={handleLike}
                 />
