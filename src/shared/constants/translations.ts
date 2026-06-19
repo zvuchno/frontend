@@ -1,6 +1,6 @@
 export const TRANSLATIONS: Record<string, string> = {
-  all: 'Все',
+  all: 'Все музыкальные товары',
   artists: 'Артисты',
   merch: 'Мерч',
-  albums: 'Музыка'
+  album: 'Музыка'
 }

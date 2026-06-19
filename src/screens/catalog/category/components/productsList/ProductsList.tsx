@@ -80,7 +80,11 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                   <ProductCard
                     image={product.image}
                     title={product.artist_name}
-                    description={product.year === null ? product.name : `${product.name} (${product.year.toString()})`}
+                    description={
+                      product.year === null 
+                        ? `${product.kind} ${product.name}` 
+                        : `${product.kind} ${product.name} (${product.year.toString()})`
+                    }
                     price={product.price}
                     likeButton={<ButtonLike isLiked={product.is_favorite} />}
                     link={`/catalog/album/${id}/?kind=${product.target.type}&selected=${selected}`}

@@ -5,12 +5,14 @@ import { CategoryPage } from "@/screens/catalog/category";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ category: string }>;
+  params: Promise<{ category: 'album' | 'all' | 'merch' | 'artists' }>;
 }): Promise<Metadata> {
   const { category } = await params;
   return {
     title: TRANSLATIONS[category] || category,
-    description: `Музыкальные товары в категории: "${TRANSLATIONS[category] || category}" магазина "Звучно"`,
+    description: category === 'artists' 
+      ? `Артисты магазина "Звучно"`
+      : `Музыкальные товары в категории: "${TRANSLATIONS[category] || category}" магазина "Звучно"`,
   };
 };
 

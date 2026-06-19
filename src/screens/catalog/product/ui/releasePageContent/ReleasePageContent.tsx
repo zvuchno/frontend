@@ -10,6 +10,9 @@ import { ListSection, Title } from "@/shared/ui";
 import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import { ProductCard } from "@/entities";
 import { ButtonLike } from "@/features";
+import { AddToCartModal, TDataForModal } from "@/features/addToCartModal";
+import { useUserStore } from "@/entities/user/store/useUserStore";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface ReleasePageContentProps {
   release: TDetailRelease;
@@ -18,7 +21,16 @@ interface ReleasePageContentProps {
 
 const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
 
-  const [playingTrack, setPlayingTrack] = useState<number | null>(null)
+  const user = useUserStore((state) => state.user);
+  const isAuthorized = !!user?.id;
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [playingTrack, setPlayingTrack] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [dataForModal, setDataForModl] = useState<TDataForModal | null>(null);
 
   const tracksQuery = useQuery({ 
     queryKey: ['tracks', release.id], 
@@ -42,6 +54,10 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
   const tracks = tracksQuery.data?.results;
   const recommendations = recomQuery.data?.results;
 
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
+
   const handlePlay = (id: number) => {
 
     if (id === playingTrack) {
@@ -51,8 +67,15 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
     }
   };
 
-  const handleAddtoCart = () => {
-    console.log('Добавить в корзину')
+  const handleOpenAddtoCartModal = (data: TDataForModal) => {
+    if (!isAuthorized) {
+      const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ''}`;
+      router.push(`/signin?next=${encodeURIComponent(currentUrl)}`);
+
+    } else {
+      setDataForModl(data);
+      setIsModalOpen(true);
+    }
   };
 
   const handleLike = () => {
@@ -61,7 +84,7 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
 
   return (
     <>
-      <ReleaseDescription release={release} selected_variant_id={selected}/>
+      <ReleaseDescription release={release} selected_variant_id={selected} onClick={handleOpenAddtoCartModal}/>
 
       {tracksQuery.isLoading && (
         <div>Загрузка треков...</div>
@@ -80,8 +103,16 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
                   image={track.image}
                   isLiked={track.is_favorite}
                   isPlaying={playingTrack === track.id}
+                  hasCart={!!track.price}
                   onPlayClick={() => handlePlay(track.id)}
-                  onCartClick={handleAddtoCart}
+                  onCartClick={() => handleOpenAddtoCartModal({
+                    product_variant: track.id,
+                    type: 'Трек',
+                    name: `"${track.name}"`,
+                    image: track.image,
+                    price: track.price,
+                    allow_overpay: track.allow_overpay,
+                  })}
                   onLikeClick={handleLike}
                 />
               )
@@ -101,7 +132,11 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
                 <ProductCard 
                   key={item.product_id}
                   title={item.artist_name}
-                  description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
+                  description={
+                    item.year === null 
+                      ? `${item.kind} ${item.name}` 
+                      : `${item.kind} ${item.name} (${item.year.toString()})`
+                  }
                   image={item.image}
                   price={item.price}
                   likeButton={<ButtonLike isLiked={item.is_favorite} />}
@@ -111,6 +146,10 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
           </ListSection>
         )}
       </Suspense>
+
+      {dataForModal && (
+        <AddToCartModal isOpen={isModalOpen} data={dataForModal} onClose={handleClose}/>
+      )}
     </>
   )
 };

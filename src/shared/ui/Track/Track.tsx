@@ -3,6 +3,7 @@
 import { ButtonLike } from "@/features";
 import s from "./Track.module.scss";
 import clsx from "clsx";
+import { TDataForModal } from "@/features/addToCartModal";
 
 interface TrackProps {
   isLiked: boolean;
@@ -10,8 +11,9 @@ interface TrackProps {
   image: string;
   title: string;
   artistName: string;
+  hasCart: boolean;
   onPlayClick: () => void;
-  onCartClick: () => void;
+  onCartClick?: () => void;
   onLikeClick: (value: boolean) => void;
 }
 
@@ -21,6 +23,7 @@ export const Track = ({
   image, 
   title, 
   artistName, 
+  hasCart,
   onPlayClick, 
   onCartClick, 
   onLikeClick 
@@ -46,11 +49,13 @@ export const Track = ({
       </div>
       
       <div className={s.actions}>
-        <div 
-          className={s.cartButton} 
-          onClick={onCartClick}
-          aria-label="button" 
-        />
+        {hasCart && onCartClick && (
+          <div 
+            className={s.cartButton} 
+            onClick={onCartClick}
+            aria-label="button" 
+          />
+        )}
         <ButtonLike 
           isLiked={isLiked} 
           className={s.likeButton}

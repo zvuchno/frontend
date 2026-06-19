@@ -1,7 +1,7 @@
 export type TCartItem = {
   product_variant: number;
   quantity: number;
-  price_with_donation: string;
+  price_with_donation: string | null;
   comment: string;
   is_artist_subscription: boolean;
 };

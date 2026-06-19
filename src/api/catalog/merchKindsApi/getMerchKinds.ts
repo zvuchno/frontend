@@ -8,7 +8,9 @@ export const getMerchKinds = async (): Promise<MerchKindsResponse> => {
 
   try {
   
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: { revalidate: 3600 }
+    });
 
     if (!response.ok) throw new Error(`Ошибка получения типов мерча`);
 

@@ -3,16 +3,30 @@
 import { MerchDescription, TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription";
 import { ListSection } from "@/shared/ui";
 import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { ProductCard } from "@/entities";
 import { ButtonLike } from "@/features";
 import { useQuery } from "@tanstack/react-query";
+import { AddToCartModal, TDataForModal } from "@/features/addToCartModal";
+import { useUserStore } from "@/entities/user/store/useUserStore";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface MerchPageContentProps {
   merch: TDetailMerch;
 }
 
 const MerchPageContent = ({merch}: MerchPageContentProps) => {
+
+  const user = useUserStore((state) => state.user);
+  const isAuthorized = !!user?.id;
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [dataForModal, setDataForModl] = useState<TDataForModal | null>(null)
+  
 
   const query = useQuery({ 
     queryKey: ['recom', 'merch'], 
@@ -26,9 +40,25 @@ const MerchPageContent = ({merch}: MerchPageContentProps) => {
 
   const recomendations = query.data?.results;
 
+  const handleClose = () => {
+    setIsModalOpen(false);
+  }
+
+  const handleOpenAddtoCartModal = (data: TDataForModal) => {
+      if (!isAuthorized) {
+        const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ''}`;
+        router.push(`/signin?next=${encodeURIComponent(currentUrl)}`);
+
+      } else {
+        setDataForModl(data);
+      setIsModalOpen(true);
+      }
+      
+    };
+
   return (
     <>
-      <MerchDescription product={merch}/>
+      <MerchDescription product={merch} onClick={handleOpenAddtoCartModal}/>
       <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
         {recomendations && (
           <ListSection title="Вам также может понравиться" link={`/catalog/merch`}>
@@ -41,7 +71,11 @@ const MerchPageContent = ({merch}: MerchPageContentProps) => {
                 <ProductCard 
                   key={item.product_id}
                   title={item.artist_name}
-                  description={item.year === null ? item.name : `${item.name} (${item.year.toString()})`}
+                  description={
+                    item.year === null 
+                      ? `${item.kind} ${item.name}` 
+                      : `${item.kind} ${item.name} (${item.year.toString()})`
+                  }
                   image={item.image}
                   price={item.price}
                   likeButton={<ButtonLike isLiked={item.is_favorite} />}
@@ -51,6 +85,10 @@ const MerchPageContent = ({merch}: MerchPageContentProps) => {
           </ListSection>
         )}
       </Suspense>
+
+      {dataForModal && (
+        <AddToCartModal isOpen={isModalOpen} data={dataForModal} onClose={handleClose}/>
+      )}
     </>
   )
 };

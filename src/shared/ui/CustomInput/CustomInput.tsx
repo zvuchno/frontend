@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import { InputProps } from "./CustomInput.types";
 import clsx from "clsx";
+import s from "./CustomInput.module.scss";
 
 export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
   ({
@@ -16,23 +17,23 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
   }, 
     ref
   ) => {
-    const inputClassName = clsx('input', { ['error']: error }, [`input_size_${inputSize}`]);
-    const labelClassName = clsx('labelContainer__label', [`labelContainer__label_size_${inputSize}`], { ['labelContainer__label_size_large']: multiline});
+    const inputClassName = clsx(s.input, { [s.error]: error }, s[`input_size_${inputSize}`]);
+    const labelClassName = clsx(s.labelContainer__label, s[`labelContainer__label_size_${inputSize}`], { [s.labelContainer__label_size_large]: multiline});
       
     return (
-      <div className={clsx('field', { ['field_multiline']: multiline })}>
+      <div className={clsx(s.field, { [s.field_multiline]: multiline })}>
 
         {label && (
-          <div className={'labelContainer'}>
+          <div className={s.labelContainer}>
             <label className={labelClassName} htmlFor={id}>{label}</label>
-            {otherProps.required && <span className={'labelContainer__markRequired'}>*</span>}
+            {otherProps.required && <span className={s.labelContainer__markRequired}>*</span>}
         </div>
         )}
 
         {multiline ? (
           <textarea
             id={id}
-            className={'input_multiline'}
+            className={s.input_multiline}
             style={style}
             placeholder={otherProps.placeholder}
             rows={rows}
@@ -51,7 +52,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
         )}
         
         {message && (
-          <span className={clsx('message', { ['error']: error })}>{message}</span>
+          <span className={clsx(s.message, { [s.error]: error })}>{message}</span>
         )}
       </div>
     )

@@ -7,12 +7,14 @@ import { AccentContainer, ButtonUI, Text, Title } from "@/shared/ui";
 import Gallery from "../../components/Gallery/Gallery";
 import VariantRange from "../../components/VariantRange/VariantRange";
 import TabBar from "../../components/TabBar/TabBar";
+import { TDataForModal } from "@/features/addToCartModal";
 
 // Компонент отображает карточку обычного мерча, не относящегося к носителям
 
-export const MerchDescription = ({ product }: MerchDescriptionProps) => {
+export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) => {
 
   const [sku, setSku] = useState<string>(product.variants[0].sku);
+  const [selectedVariant, setSelectedVariant] = useState<number>(product.variants[0].variant_id)
 
   const tabsData = [
     {
@@ -29,8 +31,24 @@ export const MerchDescription = ({ product }: MerchDescriptionProps) => {
     }
   ];
 
-  const selectVariant = (variant: string, sku: string) => {
+  const selectVariant = (_variant: string, sku: string, id: number) => {
     setSku(sku);
+    setSelectedVariant(id);
+  };
+
+  const handleAddToCart = () => {
+      
+    const data: TDataForModal = {
+      product_variant: selectedVariant,
+      type: product.kind,
+      name: product.name,
+      image: product.images[0].image,
+      price: product.price.toString(),
+      allow_overpay: product.allow_overpay
+
+    };
+
+    onClick(data);
   };
 
   return (
@@ -48,7 +66,7 @@ export const MerchDescription = ({ product }: MerchDescriptionProps) => {
           </div>
 
           <Title Tag="h3" className={s.card__title}>
-            {product.kind} "{product.name}"
+            {`${product.kind} "${product.name}"`}
           </Title>
 
           <Text Tag="p" className={s.card__itemNumber}>
@@ -62,7 +80,14 @@ export const MerchDescription = ({ product }: MerchDescriptionProps) => {
           )}
 
           { product.stock !== null ? (
-            <ButtonUI variant="primary" size="standart" className={s.card__button}>В корзину</ButtonUI>
+            <ButtonUI 
+              variant="primary" 
+              size="standart" 
+              className={s.card__button} 
+              onClick={handleAddToCart}
+            >
+              В корзину
+            </ButtonUI>
           ) : <span style={{fontSize: '24px', textAlign: 'center'}}>Нет в наличии</span>}
 
           <div className={s.card__tabBar}>

@@ -19,7 +19,9 @@ export const getCardById = async (
     }
     
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: { revalidate: 3600 },
+    });
 
     if (!response.ok) throw new Error(`Ошибка получения данных продукта типа: ${kind}`);
 

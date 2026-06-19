@@ -1,3 +1,5 @@
+import { TDataForModal } from "@/features/addToCartModal";
+
 export type TMerchImage = {
   id: number;
   image: string;
@@ -29,4 +31,5 @@ export type TDetailMerch = {
 
 export interface MerchDescriptionProps {
   product: TDetailMerch;
+  onClick: (data: TDataForModal) => void;
 };
