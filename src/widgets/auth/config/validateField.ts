@@ -7,12 +7,8 @@ export const validateField = <T extends Record<keyof T, string>>(
     return "Введите название";
   }
 
-  if (fieldName === "login" && !/^[\w.@+-]+$/.test(value)) {
-    return "Только латинские буквы, цифры и символы @/./+/-/_";
-  }
-
-  if (fieldName === "name" && !/^[\w.@+-]+$/.test(value)) {
-    return "Только латинские буквы, цифры и символы @/./+/-/_";
+  if (fieldName === "login" && !/^[а-яА-Яa-zA-Z0-9@./\-_+]+$/.test(value)) {
+    return "Допустимы буквы, цифры и символы: @./-_+";
   }
 
   if (fieldName === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
@@ -25,9 +21,9 @@ export const validateField = <T extends Record<keyof T, string>>(
 
   if (
     fieldName === "password" &&
-    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value)
+    !/^(?=\S{8,}$)[a-zA-Z0-9\W]*$/.test(value)
   ) {
-    return "Минимум 8 символов, включая заглавные, строчные буквы и цифры";
+    return "Минимум 8 символов: латинские буквы, цифры, спецсимволы (без пробелов)";
   }
 
   if (fieldName === "confirmPassword" && value !== compareWith) {

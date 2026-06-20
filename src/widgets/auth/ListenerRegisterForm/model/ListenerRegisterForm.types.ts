@@ -1,7 +1,7 @@
 import { TNewListenerRequest, TNewUserResponse } from "@/entities/user/types";
 
 export interface ListenerRegisterFormData {
-  name: string;
+  login: string;
   email: string;
   phone: string;
   password: string;
