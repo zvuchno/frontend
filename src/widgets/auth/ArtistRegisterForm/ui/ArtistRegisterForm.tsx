@@ -187,7 +187,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
 
           <CustomInput
             id="confirmPassword"
-            label="Повторите пароль"
+            label="Повторите пароль*"
             type="password"
             name="confirmPassword"
             value={formData.confirmPassword}
