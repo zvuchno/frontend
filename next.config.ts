@@ -24,6 +24,7 @@ function getApiImageRemotePattern() {
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
+    unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [getApiImageRemotePattern(),
       {
         protocol: "http",
