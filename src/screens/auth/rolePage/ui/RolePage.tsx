@@ -35,7 +35,7 @@ export const RolePage = () => {
         <RoleCard
           path="/signup/artist"
           image="/images/cassette.png"
-          title="Как испольнитель"
+          title="Как исполнитель"
           description="Продавай мерч, делись новыми релизами и общайся со своими фанатами"
         />
         <RoleCard

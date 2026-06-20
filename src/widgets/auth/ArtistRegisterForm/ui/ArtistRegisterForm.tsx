@@ -133,7 +133,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
 
           <CustomInput
             id="login"
-            label="Логин*"
+            label="Имя пользователя*"
             type="text"
             name="login"
             value={formData.login}

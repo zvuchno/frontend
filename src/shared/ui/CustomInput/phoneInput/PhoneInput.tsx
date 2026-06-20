@@ -80,7 +80,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
         />
         
         {errorMessage && (
-          <span className={clsx('message', { ['error']: hasError })}>{errorMessage}</span>
+          <span className={clsx(s.message, { [s.error]: hasError })}>{errorMessage}</span>
         )}
       </div>
     )

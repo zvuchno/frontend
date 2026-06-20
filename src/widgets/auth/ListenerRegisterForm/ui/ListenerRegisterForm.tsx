@@ -14,7 +14,7 @@ import { validateField } from "../../config/validateField";
 import { validateForm } from "../../config/validateForm";
 
 interface FormErrors {
-  name?: string;
+  login?: string;
   email?: string;
   phone?: string;
   password?: string;
@@ -22,7 +22,7 @@ interface FormErrors {
 }
 
 const initialFormState: ListenerRegisterFormData = {
-  name: "",
+  login: "",
   email: "",
   phone: "",
   password: "",
@@ -78,7 +78,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
 
     try {
       const userData: TNewListenerRequest = {
-        username: formData.name,
+        username: formData.login,
         email: formData.email,
         phone: formData.phone.replace(/\D/g, ""),
         password: formData.password,
@@ -114,15 +114,15 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
           }}
         >
           <CustomInput
-            id="name"
-            label="Имя*"
+            id="login"
+            label="Имя пользователя*"
             type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange("name")}
+            name="login"
+            value={formData.login}
+            onChange={handleChange("login")}
             placeholder="Текст"
-            error={!!errors.name}
-            message={errors.name}
+            error={!!errors.login}
+            message={errors.login}
             inputSize="small"
             disabled={isLoading}
             maxLength={150}

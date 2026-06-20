@@ -13,26 +13,13 @@ export const validateForm = <T>(
   if ("login" in data && !data.login.trim()) {
     return {
       isValid: false,
-      errorMessage: "Введите логин",
+      errorMessage: "Введите имя пользователя",
     };
-  } else if (!/^[a-zA-Z0-9@./\-_+]+$/.test(data.login)) {
+  } else if (!/^[а-яА-Яa-zA-Z0-9@./\-_+]+$/.test(data.login)) {
     return {
       isValid: false,
       errorMessage:
-        "Логин должен содержать латинские буквы, цифры и символы @/./+/-/_",
-    };
-  }
-
-  if ("name" in data && !data.name.trim()) {
-    return {
-      isValid: false,
-      errorMessage: "Введите имя",
-    };
-  } else if (!/^[a-zA-Z0-9@./\-_+]+$/.test(data.name)) {
-    return {
-      isValid: false,
-      errorMessage:
-        "Имя должно содержать латинские буквы, цифры и символы @/./+/-/_",
+        "Допустимы буквы, цифры и символы: @./-_+",
     };
   }
 
@@ -65,11 +52,11 @@ export const validateForm = <T>(
       isValid: false,
       errorMessage: "Введите пароль",
     };
-  } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(data.password)) {
+  } else if (!/^(?=\S{8,}$)[a-zA-Z0-9\W]*$/.test(data.password)) {
     return {
       isValid: false,
       errorMessage:
-        "Минимум 8 символов, включая заглавные, строчные буквы и цифры",
+        "Минимум 8 символов: латинские буквы, цифры, спецсимволы (без пробелов)",
     };
   }
 
