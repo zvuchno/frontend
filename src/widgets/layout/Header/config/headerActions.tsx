@@ -27,7 +27,7 @@ export const DefaultHeaderActions: THeaderAction[] = [
   {
     title: "Профиль",
     type: "link",
-    href: "/role",
+    href: "/profile",
     children: <ProfileIcon />,
   },
 ];

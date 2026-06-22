@@ -6,7 +6,6 @@ import { BaseForm } from "@/widgets/auth/BaseForm";
 import { CustomInput, ButtonUI, Typography } from "@/shared/ui";
 import s from "./AuthForm.module.scss";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useUserStore } from "@/entities/user/store/useUserStore";
 import { signIn } from "next-auth/react";
 
 const initialFormState: AuthFormData = {
@@ -34,12 +33,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
   useEffect(() => {
     if (isAuthorized) {
-      const user = useUserStore.getState().user;
       const nextRoute = searchParams.get("next");
-      const profileRoute = user?.isArtist
-        ? "/artists/profile"
-        : "/fans/profile";
-      router.replace(nextRoute ?? profileRoute);
+      router.replace(nextRoute ?? '/');
     }
   }, [isAuthorized]);
 
