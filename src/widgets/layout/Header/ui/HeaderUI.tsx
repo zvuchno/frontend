@@ -11,10 +11,15 @@ import { CloseButtonIconCircledX } from "@/shared/ui/Icons";
 import Image from "next/image";
 import LogoutButton from "@/features/logoutButton/LogoutButton";
 import { useUserStore } from "@/entities/user/store/useUserStore";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ''}`;
 
   const [isSearchOpen, setSearchOpen] = useState(false);
 
@@ -71,12 +76,14 @@ export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
 
                 const href =
                   action.title === "Профиль"
-                    ? isAuthorized
-                      ? user?.isArtist
-                        ? "/artisis/profile"
-                        : "/fans/profile"
-                      : "/role"
+                    ? user?.isArtist
+                      ? "/artisis/profile"
+                      : "/fans/profile"
                     : action.href;
+
+                if (action.title === "Профиль" && !isAuthorized) {
+                  return null;
+                }
 
                 return (
                   <li
@@ -108,6 +115,14 @@ export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
                 );
               })}
             </ul>
+            {!isAuthorized && (
+              <Link 
+                href={`/signin?next=${encodeURIComponent(currentUrl)}`} 
+                aria-label="Вход" 
+              >
+                Войти
+              </Link>
+            )}
             {isAuthorized && <LogoutButton />}
           </nav>
         </>

@@ -37,7 +37,7 @@ export const mainNavRoutes = [
       },
       {
         id: "music",
-        href: "/catalog/albums",
+        href: "/catalog/album",
         label: "музыка",
       },
     ],
