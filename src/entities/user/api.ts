@@ -1,4 +1,4 @@
-import { TAuthResponse, TCurrentUserResponse, TFetchProps, TLoginData, TLogoutdata, TNewArtistRequest, TNewListenerRequest, TNewUserResponse } from "./types";
+import { TAuthResponse, TCurrentUserResponse, TFetchProps, TLoginData, TLogoutdata, TNewArtistRequest, TNewListenerRequest, TNewUserResponse, TVerifyEmailRequest } from "./types";
 
 const BASE_URL=process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -101,4 +101,13 @@ export const isTokenValid = async (token: string): Promise<boolean> => {
     console.log('Token expired or invalid:', error);
     return false;
   }
+};
+
+export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
+  return await createFetchFunction<void>(
+    { url: '/auth/account/verify-email/', 
+      fetchData: data,
+      defaultMessage: 'Ошибка подтверждения почты.'
+    }
+  )
 };

@@ -9,7 +9,7 @@ import { BaseForm } from "@/widgets/auth/BaseForm";
 import { CustomInput, PhoneInput, Typography } from "@/shared/ui";
 import s from "./ListenerRegisterForm.module.scss";
 import { TNewListenerRequest } from "@/entities/user/types";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { validateField } from "../../config/validateField";
 import { validateForm } from "../../config/validateForm";
 
@@ -44,6 +44,7 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   const handleChange =
@@ -86,9 +87,24 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
 
       const data = await onSubmit?.(userData);
 
+      // из ответа сервера получать данные и отправлять их в стор для хранения данных регистрации
+
       if (data) {
+        sessionStorage.setItem('email', data.email);
+
+        const nextRoute = searchParams.get("next");
+        let route: string;
+        const verifyRoute = "/verify/verify-email";
+        if (nextRoute) {
+          const params = new URLSearchParams();
+          params.append('next', encodeURIComponent(nextRoute));
+          route = `${verifyRoute}?${params.toString()}`;
+        } else {
+          route = verifyRoute;
+        }
+
         setFormData(initialFormState);
-        router.replace("/signin");
+        router.replace(route);
       }
     } catch (error) {
       if (error instanceof Error) setRegisterError(error.message);

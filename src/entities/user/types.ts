@@ -47,3 +47,8 @@ export type TFetchProps = {
   fetchData: any,
   defaultMessage?: string
 }
+
+export type TVerifyEmailRequest = {
+  uid: string;
+  token: string;
+}
