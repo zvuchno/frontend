@@ -1,6 +1,6 @@
 "use client";
 
-import { ButtonUI, Link, Text, Title } from "@/shared/ui";
+import { ButtonUI, Text, Title } from "@/shared/ui";
 import { AuthModal } from "@/widgets/AuthModal";
 import { useRouter, useSearchParams } from "next/navigation";
 import s from "./VeryfyEmail.module.scss";
