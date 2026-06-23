@@ -1,10 +1,12 @@
-import { ArtistSignup } from "@/screens/auth";
+import { VerifyEmailPage } from "@/screens/auth";
 import { Suspense } from "react";
 
-export default function ArtistSignupPage() {
+function Verify () {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
-      <ArtistSignup />
+      <VerifyEmailPage />
     </Suspense>
   )
-}
+};
+
+export default Verify;

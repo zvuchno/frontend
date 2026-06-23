@@ -7,6 +7,7 @@ import { CustomInput, ButtonUI, Typography } from "@/shared/ui";
 import s from "./AuthForm.module.scss";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 
 const initialFormState: AuthFormData = {
   email: "",
@@ -26,7 +27,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   const [authError, setAuthError] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const user = useUserStore((state) => state.user);
+  const isAuthorized = !!user?.id;
+
+  //const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -39,7 +43,19 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   }, [isAuthorized]);
 
   const handleRegisterClick = () => {
-    router.replace(registerRoute);
+    const nextRoute = searchParams.get("next");
+
+    let route: string;
+
+    if (nextRoute) {
+      const params = new URLSearchParams();
+      params.append('next', encodeURIComponent(nextRoute));
+      route = `${registerRoute}?${params.toString()}`
+    } else {
+      route = registerRoute;
+    }
+
+    router.replace(route);
   };
 
   const handleChange =
@@ -62,7 +78,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       });
 
       if (res?.ok) {
-        setIsAuthorized(true);
+        //setIsAuthorized(true);
         setFormData(initialFormState);
       } else {
         throw new Error(
