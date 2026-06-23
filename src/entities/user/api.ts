@@ -12,7 +12,7 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
 
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data.message || data.detail || data.phone || data.email || props.defaultMessage) 
+    throw new Error(data.message || data.detail || data.phone || data.email || data.token ||data.uid || props.defaultMessage) 
   }
   return data as T
 }
@@ -110,4 +110,19 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
       defaultMessage: 'Ошибка подтверждения почты.'
     }
   )
+};
+
+export const resendEmailForVerify = async (token: string): Promise<void> => {
+  const res = await fetch (`${BASE_URL}/v1/auth/account/me/resend-email`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error (data.message || data.detail || 'Не удалось отправить письмо')
+  }
 };
