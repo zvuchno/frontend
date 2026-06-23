@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { validateForm } from "../../config/validateForm";
 import { TNewArtistRequest } from "@/entities/user/types";
 import { validateField } from "../../config/validateField";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 
 interface FormErrors {
   title?: string;
@@ -49,6 +50,8 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
 
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const setTempEmail = useUserStore((store) => store.setTempEmail);
 
   const handleChange =
     (field: keyof ArtistRegisterFormData) =>
@@ -92,8 +95,7 @@ export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
       const data = await onSubmit?.(userData);
 
       if (data) {
-
-        sessionStorage.setItem('email', data.email);
+        setTempEmail(data.email);
         
         const nextRoute = searchParams.get("next");
         let route: string;

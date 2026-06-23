@@ -12,6 +12,7 @@ import { TNewListenerRequest } from "@/entities/user/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { validateField } from "../../config/validateField";
 import { validateForm } from "../../config/validateForm";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 
 interface FormErrors {
   login?: string;
@@ -46,6 +47,8 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
 
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const setTempEmail = useUserStore((store) => store.setTempEmail);
 
   const handleChange =
     (field: keyof ListenerRegisterFormData) =>
@@ -87,10 +90,8 @@ export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
 
       const data = await onSubmit?.(userData);
 
-      // из ответа сервера получать данные и отправлять их в стор для хранения данных регистрации
-
       if (data) {
-        sessionStorage.setItem('email', data.email);
+        setTempEmail(data.email);
 
         const nextRoute = searchParams.get("next");
         let route: string;

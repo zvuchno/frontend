@@ -5,10 +5,11 @@ import { AuthModal } from "@/widgets/AuthModal";
 import { useRouter, useSearchParams } from "next/navigation";
 import s from "./VeryfyEmail.module.scss";
 import clsx from "clsx";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 
 export const VerifyEmailPage = () => {
 
-  const email = sessionStorage.getItem('email');
+  const email = useUserStore((store) => store.tempEmail);
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -35,7 +36,10 @@ export const VerifyEmailPage = () => {
       <div className={s.container}>
         <Title Tag="h2" className={s.text}>Вам отправлено письмо!</Title>
         <Text Tag="p" className={s.text}>
-          Мы отпрвили email с подтверждением на <span className={clsx(s.text, s.accent)}>{email}</span>. Пожалуйста, проверьте и следуйте инструкциям.
+          Мы отпрвили email с подтверждением на{' '}
+          <span className={clsx(s.text, s.accent)}>
+            {email || 'указанный адрес'}
+          </span>. Пожалуйста, проверьте и следуйте инструкциям.
         </Text>
         <ButtonUI variant="primary" onClick={handleLogin}>Перейти к авторизации</ButtonUI>
       </div>
