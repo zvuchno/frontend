@@ -1,6 +1,6 @@
 "use client"
 
-import { verifyEmail } from "@/entities/user/api";
+import { resendEmailForVerify, verifyEmail } from "@/entities/user/api";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ButtonUI, Text, Title } from "@/shared/ui"
 import { AuthModal } from "@/widgets/AuthModal"
@@ -12,6 +12,7 @@ import clsx from "clsx";
 export const VerifySuccessPage = () => {
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;
+  const token = user?.accessToken;
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -48,6 +49,20 @@ export const VerifySuccessPage = () => {
     }
   }, [data.uid, data.token]);
 
+  const resendEmail = useCallback(async (token: string) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      await resendEmailForVerify(token);
+      router.replace('/verify/verify-email');
+    } catch (error) { 
+      setError(error instanceof Error ? error.message : 'Неизвестная ошибка')
+
+    } finally {
+      setIsLoading(false);
+    }
+  }, [token]);
+
   useEffect(() => {
     if (!hasSentInitialRequest.current && data.uid && data.token) {
       hasSentInitialRequest.current = true;
@@ -79,8 +94,17 @@ export const VerifySuccessPage = () => {
     router.replace(route);
   };
 
-  const handleResend = () => {
+  const handleRetry = () => {
     verifyAccount();
+  };
+
+  const handleResend = () => {
+    if (!token) return;
+    resendEmail(token);
+  };
+
+  const handleToLogin = () => {
+    router.replace('signin');
   };
 
   return (
@@ -94,19 +118,41 @@ export const VerifySuccessPage = () => {
       ) : error ? (
         <div className={s.container}>
           <Title Tag="h2" className={s.text}>Ошибка!</Title>
-          <Text Tag="p" className={s.text}>{error}</Text>
-          <ButtonUI variant="primary" onClick={handleClick}>
-            Перейти {isAuthorized ? 'на главную' : 'к авторизации'}
-          </ButtonUI>
-          <ButtonUI variant="primary" onClick={handleResend}>
-            Попробовать снова
-          </ButtonUI>
+          <Text Tag="p" className={s.text}>
+            {error.includes('Ссылка не действительна') 
+              ? isAuthorized 
+                ? `${error}: запросите отправку нового письма.` 
+                : `${error}: пройдите авторизацию и снова перейдите по ссылке из письма.`
+              : error.includes('Пользователь не найден') 
+                ? error 
+                : `${error}: попробуйте снова.`} 
+          </Text>
+          {error.includes('Ссылка не действительна') && isAuthorized && (
+            <ButtonUI variant="primary" onClick={handleResend}>
+              Отправить новое письмо
+            </ButtonUI>
+          )}
+          {error.includes('Ссылка не действительна') && !isAuthorized && (
+            <ButtonUI variant="primary" onClick={handleToLogin}>
+              Перейти к авторизации
+            </ButtonUI>
+          )}
+          {!error.includes('Ссылка не действительна') && !error.includes('Пользователь не найден') && (
+            <>
+              <ButtonUI variant="primary" onClick={handleClick}>
+                Перейти {isAuthorized ? 'на главную' : 'к авторизации'}
+              </ButtonUI>
+              <ButtonUI variant="primary" onClick={handleRetry}>
+                Попробовать снова
+              </ButtonUI>
+            </>
+          )}
         </div>
       ) : isVerified ? (
         <div className={s.container}>
-          <Title Tag="h2" className={s.text}>Email успешно подтвержден!</Title>
+          <Title Tag="h2" className={s.text}>Email успешно подтверждён!</Title>
           <Text Tag="p" className={s.text}>
-            Ваш адрес электронной почты был успешно подтвержден. Теперь вы можете продолжить покупки.
+            Ваш адрес электронной почты был успешно подтверждён. Теперь вы можете продолжить покупки.
           </Text>
           <ButtonUI variant="primary" onClick={handleClick}>
             Перейти {isAuthorized ? 'на главную' : 'к авторизации'}
