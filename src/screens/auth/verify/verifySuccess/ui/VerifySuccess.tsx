@@ -21,7 +21,7 @@ export const VerifySuccessPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isVerified, setVerified] = useState<boolean>(false);
   const hasSentInitialRequest = useRef<boolean>(false);
-  const [secondsLeft, setSecondsLeft] = useState<number>(10);
+  const [secondsLeft, setSecondsLeft] = useState<number>(5);
 
   const uidFromLink = searchParams.get('uid');
   const tokenFromLink = searchParams.get('token');
@@ -74,8 +74,9 @@ export const VerifySuccessPage = () => {
     if (isVerified) {
 
       const timer = setTimeout(() => {
-        router.replace('/');
-      }, 10000);
+        const route = isAuthorized ? '/' : '/signin';
+        router.replace(route);
+      }, 5000);
 
       const interval = setInterval(() => {
         setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
@@ -87,6 +88,11 @@ export const VerifySuccessPage = () => {
       };
     }
   }, [isVerified, isAuthorized, router]);
+
+  const handleClick = () => {
+    const route = isAuthorized ? '/' : '/signin';
+    router.replace(route);
+  }
 
   const handleRetry = () => {
     verifyAccount();
@@ -152,14 +158,9 @@ export const VerifySuccessPage = () => {
           <Text Tag="p" className={s.text}>
             Ваш адрес электронной почты был успешно подтверждён. Теперь вы можете продолжить покупки.
           </Text>
-          <ButtonUI variant="primary" onClick={handleToMain}>
-            Перейти на главную
+          <ButtonUI variant="primary" onClick={handleClick}>
+            Перейти {isAuthorized ? 'на главную' : 'к авторизации'}
           </ButtonUI>
-          {!isAuthorized && (
-            <ButtonUI variant="primary" onClick={handleToLogin}>
-              Перейти к авторизации
-            </ButtonUI>
-          )}
           <Text Tag="p" className={clsx(s.text, s.leftText)}>
             Автоматический переход через {secondsLeft}{" "}
             {secondsLeft % 10 === 1 && secondsLeft % 100 !== 11
