@@ -14,11 +14,14 @@ export const ForgotPasswordPage = () => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<boolean>(false);
 
-  const handleSubmit = async () => {
+  console.log('email:', email)
+
+  const handleSubmit = async (e: React.SubmitEvent) => {
+    e.preventDefault();
     setIsLoading(true);
     setError(undefined);
 
-    const validation = validateForm<{email: string}>({email: email});
+    const validation = validateForm<{ email: string }>({ email: email });
     
     if (!validation.isValid) {
       setError(validation.errorMessage);
@@ -44,15 +47,17 @@ export const ForgotPasswordPage = () => {
 
   if (success) {
     return (
-      <div className={s.container}>
-        <Title Tag="h2" className={s.title}>Проверьте вашу почту!</Title>
-        <Text Tag="p" className={s.text}>
-          На ваш email{' '}
-          <span className={clsx(s.text, s.accent)}>
-            {email}{' '}
-          </span>было отправлено письмо с инструкциями по сбросу пароля.
-        </Text>
-      </div>
+      <AuthModal>
+        <div className={s.container}>
+          <Title Tag="h2" className={s.title}>Проверьте вашу почту!</Title>
+          <Text Tag="p" className={s.text}>
+            На ваш email{' '}
+            <span className={clsx(s.text, s.accent)}>
+              {email}{' '}
+            </span>было отправлено письмо с инструкциями по сбросу пароля.
+          </Text>
+        </div>
+      </AuthModal>
     )
   }
 

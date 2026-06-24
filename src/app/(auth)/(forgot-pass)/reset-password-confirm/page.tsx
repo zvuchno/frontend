@@ -1,7 +1,7 @@
 import { ResetPasswordPage } from "@/screens/auth";
 import { Suspense } from "react";
 
-function ResetPassword () {
+function ResetPasswordConfirm () {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
       <ResetPasswordPage />
@@ -9,4 +9,4 @@ function ResetPassword () {
   )
 };
 
-export default ResetPassword;
+export default ResetPasswordConfirm;
