@@ -43,7 +43,7 @@ export const ResetPasswordPage = () => {
     token: tokenFromLink || '',
   };
 
-  const [isLoadingVerify, setIsLoadingVerify] = useState<boolean>(false);
+  const [isLoadingVerify, setIsLoadingVerify] = useState<boolean>(true);
   const [verifyError, setVeryfyError] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const hasSentInitialRequest = useRef<boolean>(false);
@@ -93,7 +93,7 @@ export const ResetPasswordPage = () => {
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    
+
     setIsLoading(true);
     setConfirmError(undefined);
     setErrors({});
