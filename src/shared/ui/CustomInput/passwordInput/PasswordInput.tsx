@@ -13,20 +13,27 @@ const IconVision = ({ showPassword }: { showPassword: boolean }) => {
       fill="none" 
       viewBox="0 0 24 24"
     >
-      <path 
-        stroke="#000" 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
-        strokeWidth="2" 
-        d="m2 2 20 20M6.713 6.723C3.665 8.795 2 12 2 12s3.636 7 10 7c2.05 0 3.817-.727 5.271-1.712M11 5.058A9 9 0 0 1 12 5c6.364 0 10 7 10 7s-.692 1.332-2 2.834"
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M6.713 6.723C3.665 8.795 2 12 2 12s3.636 7 10 7c2.05 0 3.817-.727 5.271-1.712M11 5.058A9 9 0 0 1 12 5c6.364 0 10 7 10 7s-.692 1.332-2 2.834"
+      />
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M14 14.236a3 3 0 0 1-4.13-4.348"
       />
       {!showPassword && (
-        <path 
-          stroke="#000" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-          strokeWidth="2" 
-          d="M14 14.236a3 3 0 0 1-4.13-4.348"
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="m2 2 20 20"
         />
       )}
     </svg>
@@ -39,8 +46,6 @@ interface PasswordInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   message?: string;
   style?: React.CSSProperties;
-  // showPassword: boolean;
-  // togglePasswordVisibility: () => void;
 }
 
 export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
@@ -50,8 +55,6 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     error,
     message,
     style,
-    // showPassword,
-    // togglePasswordVisibility,
     ...otherProps
   }, 
     ref
@@ -69,7 +72,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           </div>
         )}
 
-        <div>
+        <div className={s.inputContainer}>
           <input
             id={id}
             className={inputClassName}
@@ -78,7 +81,11 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             ref={ref as React.Ref<HTMLInputElement>}
             {...otherProps}
           />
-          <button type="button" onClick={() => setShowPassword(!showPassword)}>
+          <button 
+            type="button" 
+            className={s.inputContainer__button}
+            onClick={() => setShowPassword(!showPassword)}
+          >
             <IconVision showPassword={showPassword} />
           </button>
         </div>

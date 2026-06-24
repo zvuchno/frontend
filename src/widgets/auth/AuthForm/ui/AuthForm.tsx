@@ -12,6 +12,7 @@ import { useUserStore } from "@/entities/user/store/useUserStore";
 const initialFormState: AuthFormData = {
   email: "",
   password: "",
+  rememberMe: false,
 };
 
 export const AuthForm: React.FC<AuthFormProps> = ({
@@ -29,8 +30,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;
-
-  //const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -78,7 +77,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       });
 
       if (res?.ok) {
-        //setIsAuthorized(true);
         setFormData(initialFormState);
       } else {
         throw new Error(
@@ -91,6 +89,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleToForgotPassword = () => {
+    router.replace('/forgot-password');
   };
 
   return (
@@ -125,6 +127,43 @@ export const AuthForm: React.FC<AuthFormProps> = ({
             inputSize="small"
             disabled={isLoading}
           />
+
+          <div 
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          > 
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                cursor: "pointer",
+                fontSize: "14px",
+                color: "#171717",
+              }}
+            >
+              <input
+                type="checkbox"
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    rememberMe: e.target.checked,
+                  }))
+                }
+                disabled={isLoading}
+                style={{ width: "16px", height: "16px", cursor: "pointer" }}
+              />
+              <span>Запомнить меня</span>
+            </label>
+            <button type='button' className={s.forgotButton} onClick={handleToForgotPassword}>
+              <span className={s.forgotButton__text}>Забыли пароль?</span>
+            </button>
+          </div>
 
           {/* {mode === "register" && (
             <Input

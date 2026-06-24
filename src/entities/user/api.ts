@@ -1,4 +1,4 @@
-import { TAuthResponse, TCurrentUserResponse, TFetchProps, TLoginData, TLogoutdata, TNewArtistRequest, TNewListenerRequest, TNewUserResponse, TVerifyEmailRequest } from "./types";
+import { TAuthResponse, TCurrentUserResponse, TFetchProps, TLoginData, TLogoutdata, TNewArtistRequest, TNewListenerRequest, TNewUserResponse, TResetPasswordConfirmRequest, TResetPasswordRequest, TResetPasswordVerifyRequest, TVerifyEmailRequest } from "./types";
 
 const BASE_URL=process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -126,3 +126,30 @@ export const resendEmailForVerify = async (token: string): Promise<void> => {
     throw new Error (data.message || data.detail || 'Не удалось отправить письмо')
   }
 };
+
+export const resetPassword = async (data: TResetPasswordRequest): Promise<void> => {
+  return await createFetchFunction<void>(
+    { url: '/auth/account/reset-password/', 
+      fetchData: data,
+      defaultMessage: 'Ошибка запроса смены пароля.'
+    }
+  )
+}; 
+
+export const resetPasswordVerify = async (data: TResetPasswordVerifyRequest): Promise<void> => {
+  return await createFetchFunction<void>(
+    { url: '/auth/account/reset-password-verify/', 
+      fetchData: data,
+      defaultMessage: 'Ссылка для смены пароля не действительна.'
+    }
+  )
+}; 
+
+export const resetPasswordConfirm = async (data: TResetPasswordConfirmRequest): Promise<void> => {
+  return await createFetchFunction<void>(
+    { url: '/auth/account/reset-password-confirm/', 
+      fetchData: data,
+      defaultMessage: 'Оибка восстановления пароля.'
+    }
+  )
+}; 
