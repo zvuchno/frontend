@@ -14,8 +14,6 @@ export const ForgotPasswordPage = () => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<boolean>(false);
 
-  console.log('email:', email)
-
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setIsLoading(true);
