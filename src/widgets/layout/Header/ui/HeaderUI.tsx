@@ -2,7 +2,7 @@
 
 import { THeaderUIProps } from "../model/types";
 import styles from "./header.module.scss";
-import { FC, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { NavPanel } from "@/features";
 import clsx from "clsx";
@@ -13,7 +13,7 @@ import LogoutButton from "@/features/logoutButton/LogoutButton";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import { usePathname, useSearchParams } from "next/navigation";
 
-export const HeaderUI: FC<THeaderUIProps> = ({ actions, className }) => {
+export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;
 

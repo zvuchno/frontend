@@ -3,7 +3,7 @@ services:
     build:
       context: .
       args:
-        NEXT_PUBLIC_BASE_API_URL: "https://zvuchno-dev.duckdns.org/api"
+        NEXT_PUBLIC_BASE_API_URL: "https://dev.zvuchno.space/api"
         NEXTAUTH_URL: "http://localhost:3000"
 
     ports:

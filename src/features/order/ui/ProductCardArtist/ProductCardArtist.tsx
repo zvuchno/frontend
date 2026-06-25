@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import Image from "next/image";
-import type { FC } from "react";
 
 import { Definition } from "@/shared/ui";
 import styles from "./ProductCardArtist.module.scss";
@@ -18,7 +17,7 @@ const getDefinitionText = ({
     .map(String)
     .join(" ");
 
-export const ProductCardArtist: FC<ProductCardArtistProps> = ({
+export const ProductCardArtist = ({
   className,
   id,
   image,
@@ -27,7 +26,7 @@ export const ProductCardArtist: FC<ProductCardArtistProps> = ({
   definitions,
   variant = "merch",
   ...articleProps
-}) => {
+}: ProductCardArtistProps) => {
   const primaryDefinition = definitions[0];
   const productName = getDefinitionText(primaryDefinition);
 

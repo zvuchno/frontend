@@ -6,6 +6,10 @@ export type TCartItem = {
   is_artist_subscription: boolean;
 };
 
+export interface UpdateCartPayload {
+  items: Partial<TCartItem>[]
+}
+
 export interface CartItemRespond extends Omit<
   TCartItem,
   "comment" | "price_with_donation"

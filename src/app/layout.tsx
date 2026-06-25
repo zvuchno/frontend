@@ -6,6 +6,7 @@ import { Footer } from "@/widgets/layout/Footer";
 import { AppHeader } from "@/widgets/layout/Header";
 import "./globals.scss";
 import { QueryProvider } from "./providers/QueryClientProvider";
+import { Toaster } from "react-hot-toast";
 
 const featureMono = localFont({
   src: [
@@ -45,7 +46,7 @@ const betterVcr = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_API_URL || 'http://localhost:3000'
+    process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:3000",
   ),
   title: "Звучно",
   description: "Маркетплейс цифровой музыки для СНГ артисов",
@@ -73,6 +74,9 @@ export default function RootLayout({
             </div>
           </SessionProviders>
         </QueryProvider>
+
+        {/* вывод сообшений об ошибках от сервера либо кастомных в попап уведомлении для пользователя */}
+        <Toaster position="top-center" toastOptions={{style: {fontFamily: "FeatureMono", border: "1px solid currentColor"}}}/>
       </body>
     </html>
   );

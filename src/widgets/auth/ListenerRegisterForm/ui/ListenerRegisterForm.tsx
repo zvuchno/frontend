@@ -29,12 +29,12 @@ const initialFormState: ListenerRegisterFormData = {
   confirmPassword: "",
 };
 
-export const ListenerRegisterForm: React.FC<ListenerRegisterFormProps> = ({
+export const ListenerRegisterForm = ({
   onClose,
   onSubmit,
   onLoginClick,
   onSocialLogin,
-}) => {
+}: ListenerRegisterFormProps) => {
   const [formData, setFormData] =
     useState<ListenerRegisterFormData>(initialFormState);
 

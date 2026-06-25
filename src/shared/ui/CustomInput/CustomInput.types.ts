@@ -22,4 +22,5 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   style?: React.CSSProperties;
   multiline?: boolean;
   rows?: number;
+  className?: string;
 };

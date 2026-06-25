@@ -13,14 +13,14 @@ const initialFormState: AuthFormData = {
   password: "",
 };
 
-export const AuthForm: React.FC<AuthFormProps> = ({
+export const AuthForm = ({
   mode = "login",
   registerRoute,
   onClose,
   onSubmit,
   onLoginClick,
   onSocialLogin,
-}) => {
+}: AuthFormProps) => {
   const [formData, setFormData] = useState<AuthFormData>(initialFormState);
 
   const [authError, setAuthError] = useState<string | undefined>(undefined);

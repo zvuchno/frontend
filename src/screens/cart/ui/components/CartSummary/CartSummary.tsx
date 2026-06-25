@@ -10,16 +10,13 @@ import {
   useRemoveCartPromoCode,
 } from "@/entities/cart/model/useCart";
 import { ChangeEvent, useState } from "react";
-import { mockData } from "@/screens/cart/mockData";
 
 export const CartSummary = () => {
-  /** моковые данные mockData, удалить, когда будет реализован механизм добавления товара в корзину и поменять на data из useCard*/
 
-  //const { data } = useCart();
+  const { data } = useCart();
 
   const [promocode, setPromocode] = useState("");
 
-  const data = mockData;
   const hasPromoCode = Number(data?.discount_promocode) > 0;
   const itemsSum = data?.subtotal;
   const totalSum = data?.total;

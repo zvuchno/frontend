@@ -32,12 +32,12 @@ const initialFormState: ArtistRegisterFormData = {
   confirmPassword: "",
 };
 
-export const ArtistRegisterForm: React.FC<ArtistRegisterFormProps> = ({
+export const ArtistRegisterForm = ({
   onClose,
   onSubmit,
   onLoginClick,
   onSocialLogin,
-}) => {
+}: ArtistRegisterFormProps) => {
   const [formData, setFormData] =
     useState<ArtistRegisterFormData>(initialFormState);
 

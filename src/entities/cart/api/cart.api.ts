@@ -1,6 +1,6 @@
 import { createAuthHeaders } from "@/api/store/request";
 
-import type { TCart, TCartItem } from "../model/types";
+import type { TCart, TCartItem, UpdateCartPayload } from "../model/types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 const CART_PATH = "/v1/store/cart";
@@ -53,7 +53,7 @@ export async function addCartItem(
 }
 
 export async function updateCart(
-  payload: Partial<TCartItem>,
+  payload: UpdateCartPayload,
   token?: string,
 ): Promise<TCart> {
   const init: RequestInit = {
@@ -106,12 +106,12 @@ export async function removeCartItem(
 }
 
 export async function applyCartPromoCode(
-  code: string,
+  promo: string,
   token?: string,
 ): Promise<TCart> {
   const init: RequestInit = {
     method: "POST",
-    body: JSON.stringify(code),
+    body: JSON.stringify({ code: promo }),
     headers: {
       "Content-Type": "application/json",
     },
@@ -127,7 +127,26 @@ export async function applyCartPromoCode(
   });
 
   if (!response.ok) {
-    throw new Error(`Ошибка добавления промокода: ${response.status}`);
+    let serverErrorMessage = "";
+    
+    try {
+      const errorData = await response.json();
+
+      if (errorData && typeof errorData === "object") {
+        serverErrorMessage =
+          errorData.detail ||
+          errorData.message ||
+          Object.values(errorData).flat().join(", ");
+        
+      }
+    } catch {}
+
+    if (serverErrorMessage) {
+      throw new Error(serverErrorMessage);
+    }
+      throw new Error(
+        `Ошибка ${response.status}: Не удалось применить промокод`,
+      );
   }
 
   return response.json() as Promise<TCart>;

@@ -29,7 +29,7 @@ const defaultAccordionTrigger: ReactNode = (
   </svg>
 );
 
-export const Accordion: React.FC<AccordionProps> = ({
+export const Accordion = ({
   trigger = defaultAccordionTrigger,
   content,
   wrapperClassName,

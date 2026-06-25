@@ -12,10 +12,12 @@ import {
 } from "../api/cart.api";
 import type { TCart, TCartItem } from "./types";
 import { useUserStore } from "@/entities/user/store/useUserStore";
+import toast from "react-hot-toast";
 
 export const cartQueryKeys = {
   all: ["cart"] as const,
   current: () => [...cartQueryKeys.all, "current"] as const,
+  promocode: ["promo"] as const,
 };
 
 type UseCartOptions = {
@@ -26,9 +28,9 @@ export function useCart(options?: UseCartOptions) {
   const accessToken = useUserStore((state) => state.user?.accessToken);
 
   return useQuery<TCart>({
-    queryKey: [...cartQueryKeys.current(), accessToken],
+    queryKey: [...cartQueryKeys.current(), { isAuth: !!accessToken }],
     queryFn: () => getCart(accessToken),
-    enabled: options?.enabled ?? true,
+    enabled: (options?.enabled ?? true) && !!accessToken,
   });
 }
 
@@ -38,8 +40,8 @@ export function useAddCartItem() {
 
   return useMutation<TCart, Error, TCartItem>({
     mutationFn: (item: TCartItem) => addCartItem(item, accessToken),
-    onSuccess: (cart) => {
-      queryClient.setQueryData(cartQueryKeys.current(), cart);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
     },
   });
 }
@@ -49,9 +51,9 @@ export function useUpdateCart() {
   const queryClient = useQueryClient();
 
   return useMutation<TCart, Error, Partial<TCartItem>>({
-    mutationFn: (item: Partial<TCartItem>) => updateCart(item, accessToken),
-    onSuccess: (cart) => {
-      queryClient.setQueryData(cartQueryKeys.current(), cart);
+    mutationFn: (item) => updateCart({ items: [item]}, accessToken),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
     },
   });
 }
@@ -64,6 +66,7 @@ export function useRemoveCartItem() {
     mutationFn: (variantId: number) => removeCartItem(variantId, accessToken),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+      toast.success("Товар удален из корзины");
     },
   });
 }
@@ -76,7 +79,12 @@ export function useApplyCartPromoCode() {
     mutationFn: (code: string) => applyCartPromoCode(code, accessToken),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+       toast.success("Промокод успешно применен");
+
     },
+    onError: (error) => {
+      toast.error(error.message || "Не удалось применить промокод")
+    }
   });
 }
 
@@ -88,6 +96,7 @@ export function useRemoveCartPromoCode() {
     mutationFn: () => removeCartPromoCode(accessToken),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+      toast.success("Промокод удален");
     },
   });
 }

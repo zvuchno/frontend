@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import Image from "next/image";
-import type { FC } from "react";
 
 import { ButtonUI } from "@/shared/ui";
 
@@ -42,7 +41,7 @@ const formatOrderSummary = ({
   return `Заказ № ${orderNumber}: ${itemsCountLabel} на сумму ${totalPriceLabel}`;
 };
 
-export const OrderCardListener: FC<TOrderCardListenerProps> = ({
+export const OrderCardListener = ({
   orderId,
   orderNumber,
   itemsCount,
@@ -51,7 +50,7 @@ export const OrderCardListener: FC<TOrderCardListenerProps> = ({
   onDetailsClick,
   className,
   ...articleProps
-}) => {
+}: TOrderCardListenerProps) => {
   const normalizedPreviewItems = previewItems.filter(
     (previewItem) => previewItem.src.trim().length > 0,
   );

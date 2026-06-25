@@ -1,17 +1,32 @@
+"use client";
+
 import { AccentContainer } from "@/shared/ui";
 import styles from "./OrderPage.module.scss";
 import { OrderSummary } from "./components/OrderSummary";
+import { OrderDetails } from "./components/OrderDetails";
+import { FormProvider, useForm } from "react-hook-form";
 
 export const OrderPage = () => {
+  const methods = useForm({
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+    },
+  });
   return (
-    <AccentContainer className={styles.order}>
-      <h1 className={styles.orderTitle}>Оформление заказа</h1>
-      <div className={styles.orderWrapper}>
-        <section className={styles.orderDetails}></section>
-        <section className={styles.orderSummary}>
-          <OrderSummary />
-        </section>
-      </div>
-    </AccentContainer>
+    <FormProvider {...methods}>
+      <AccentContainer className={styles.order}>
+        <h1 className={styles.orderTitle}>Оформление заказа</h1>
+        <div className={styles.orderWrapper}>
+          <section className={styles.orderDetails}>
+            <OrderDetails />
+          </section>
+          <section className={styles.orderSummary}>
+            <OrderSummary />
+          </section>
+        </div>
+      </AccentContainer>
+    </FormProvider>
   );
-};
+}

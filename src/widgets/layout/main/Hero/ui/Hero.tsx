@@ -3,7 +3,7 @@ import { Title } from "@/shared/ui";
 import clsx from "clsx";
 import styles from "./Hero.module.scss";
 
-export const HeroUI: React.FC<HeroUIProps> = ({
+export const HeroUI = ({
   mainTitle = "ЗВУЧНО",
   leftText = {
     firstPart: "маркетплейс цифровой музыки",
@@ -16,7 +16,7 @@ export const HeroUI: React.FC<HeroUIProps> = ({
   className,
   centerText,
   children,
-}) => {
+}: HeroUIProps) => {
   const highlightBrand = (text: string) => {
     if (!text) return "";
     return text.replace(/(ЗВУЧНО)/gi, `<span class="brand-word">$1</span>`);

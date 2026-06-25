@@ -32,9 +32,9 @@ export interface TProfileFormUIProps {
   onEdit: () => void;
 }
 
-export type TProfileFormField = {
+export type TProfileFormField<T extends FieldValues = FieldValues> = {
   title: string;
-  name: keyof FieldValues;
+  name: keyof T;
   placeholder: string;
   type: HTMLInputTypeAttribute;
   required: boolean;

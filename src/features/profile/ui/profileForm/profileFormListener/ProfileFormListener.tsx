@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { FieldValues, TProfileFormFieldsProps } from "../types";
 import styles from "./profileFormListener.module.scss";
 import { CustomInput } from "@/shared/ui";
@@ -7,10 +6,10 @@ import { listenerFormFields } from "@/features/profile/utils/constants";
 import { InputPhone } from "../inputPhone";
 import { registerRules } from "@/features/profile/utils/validation";
 
-export const ProfileFormListenerUI: FC<TProfileFormFieldsProps> = ({
+export const ProfileFormListenerUI = ({
   fieldsDisabled = false,
   disabledFields,
-}) => {
+}: TProfileFormFieldsProps) => {
   const {
     register,
     formState: { errors },

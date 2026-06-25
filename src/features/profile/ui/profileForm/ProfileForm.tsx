@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
 
@@ -7,7 +6,7 @@ import { ButtonUI } from "@/shared/ui";
 import { FieldValues, TProfileFormUIProps } from "./types";
 import styles from "./profileForm.module.scss";
 
-export const ProfileFormUI: FC<TProfileFormUIProps> = ({
+export const ProfileFormUI = ({
   children,
   className,
   title = "Профиль",
@@ -18,7 +17,7 @@ export const ProfileFormUI: FC<TProfileFormUIProps> = ({
   onSubmit,
   onError,
   onEdit,
-}) => {
+}: TProfileFormUIProps) => {
   const {
     handleSubmit,
     formState: { errors },

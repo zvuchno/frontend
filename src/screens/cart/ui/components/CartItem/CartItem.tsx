@@ -9,6 +9,7 @@ import {
 import styles from "./CartItem.module.scss";
 import { ItemsCounter } from "../ItemsCounter";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export const CartItem = ({ item }: { item: CartItemRespond }) => {
   const { mutate: updateCount } = useUpdateCart();
@@ -17,28 +18,27 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
   const handleUpdateItemCount = (type: "increment" | "decrement") => {
     const currentCount = item.quantity;
     const availableCount = item.stock;
-   if (type === "increment") {
-    if (currentCount >= availableCount) {
-      console.log("недостаточно товара");
-      return;
-    }
-    return updateCount(
-      { 
-        product_variant: item.product_variant, 
-        quantity: currentCount + 1 
+
+    if (type === "increment") {
+      if (currentCount >= availableCount) {
+        toast.error("недостаточно товара");
+        return;
       }
-    );
-  }
+      const newCount = currentCount + 1;
+      return updateCount({
+        product_variant: item.product_variant,
+        quantity: newCount,
+      });
+    }
     if (type === "decrement") {
       if (currentCount > 1) {
-        return updateCount(
-          {
-            product_variant: item.product_variant,
-            quantity: currentCount - 1,
-          },
-        );
+        return updateCount({
+          product_variant: item.product_variant,
+          quantity: currentCount - 1,
+        });
       }
       return removeCartItem(item.product_variant);
+
     }
   };
 

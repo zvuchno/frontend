@@ -13,6 +13,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
     style,
     multiline = false,
     rows = 5,
+    className,
     ...otherProps
   }, 
     ref
@@ -21,7 +22,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
     const labelClassName = clsx(s.labelContainer__label, s[`labelContainer__label_size_${inputSize}`], { [s.labelContainer__label_size_large]: multiline});
       
     return (
-      <div className={clsx(s.field, { [s.field_multiline]: multiline })}>
+      <div className={clsx(s.field, { [s.field_multiline]: multiline }, className)}>
 
         {label && (
           <div className={s.labelContainer}>

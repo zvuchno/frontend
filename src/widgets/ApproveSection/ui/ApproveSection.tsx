@@ -5,7 +5,7 @@ import { Title } from "@/shared/ui";
 import { CardApprove } from "@/widgets/CardApprove";
 import CardArtist from "@/entities/Artist/ui/CardArtist/CardArtist";
 
-export const ApproveSection: React.FC<ApproveSectionProps> = ({
+export const ApproveSection = ({
   className,
   artistInfo,
 }: ApproveSectionProps) => {

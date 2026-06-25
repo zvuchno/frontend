@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CartItem } from "../CartItem/CartItem";
 import type { CartItemRespond } from "@/entities/cart";
 import styles from "./CartItemsList.module.scss";

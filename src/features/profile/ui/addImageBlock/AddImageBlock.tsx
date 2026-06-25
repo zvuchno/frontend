@@ -5,7 +5,7 @@ import styles from "./AddImageBlock.module.scss";
 import { ButtonUI } from "@/shared/ui";
 import { type AddImageBlockProps } from "./AddImageBlock.types";
 
-export const AddImageBlock: React.FC<AddImageBlockProps> = ({
+export const AddImageBlock = ({
   severalImages = false,
 }: AddImageBlockProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);

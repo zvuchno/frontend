@@ -1,4 +1,3 @@
-import { FC } from "react";
 import type { TArtistFormPersonalProps, FieldValues } from "./utils/types";
 import styles from "./artistFormPersonal.module.scss";
 import { ButtonUI } from "@/shared/ui";
@@ -16,13 +15,13 @@ import { LegalFormSelector } from "./LegalFormSelector/LegalFormSelector";
 import { createFormField } from "./FormFieldsCreator/FormFieldsCreator";
 import { formatDateToApi } from "./utils/formatDate";
 
-export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
+export const ArtistFormPersonal = ({
   isChecked = false,
   isOnChange = true,
   onSubmit,
   onError,
   onEdit,
-}) => {
+}: TArtistFormPersonalProps) => {
   const methods = useFormContext<FieldValues>();
   const {
     watch,

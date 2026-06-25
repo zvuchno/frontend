@@ -1,11 +1,10 @@
-import type { FC } from "react";
 import { useRef, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import styles from './Player.module.scss'
 import type { PlayerUIProps } from "./Player.types";
 import { ButtonLike } from "@/features/ButtonLike";
 
-export const PlayerUI: FC<PlayerUIProps> = ({
+export const PlayerUI = ({
     className, 
     image, 
     title, 

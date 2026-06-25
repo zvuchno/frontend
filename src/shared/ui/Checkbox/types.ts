@@ -5,5 +5,6 @@ export type TCheckboxUIProps = {
   disabled?: boolean;
   onChange?: (checked: boolean) => void;
   name?: string;
-  value?: string 
+  value?: string;
+  className?: string 
 }
