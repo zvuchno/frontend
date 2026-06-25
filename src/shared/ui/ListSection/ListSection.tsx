@@ -9,6 +9,7 @@ export const ListSection = ({
   link,
   children,
   hasMore = true,
+  gap = '20px',
   className,
 }: ListSectionProps) => {
   return (
@@ -23,7 +24,7 @@ export const ListSection = ({
           </Link>
         )}
       </div>
-      <div className={s.content}>{children}</div>
+      <div className={s.content} style={{ columnGap: gap }}>{children}</div>
     </section>
   );
 };

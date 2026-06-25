@@ -33,7 +33,7 @@ export async function HomePage() {
       <HeroUI />
 
       <div className={styles.mainContent}>
-        <ListSection title="Артисты" link={`/catalog/artists`}>
+        <ListSection title="Артисты" link={`/catalog/artists`} gap="70px">
           {artistsList.map((artist) => (
             <Link key={artist.slug} href={`/catalog/artists/${artist.slug}/?kind=artists`}>
               <CardArtist
