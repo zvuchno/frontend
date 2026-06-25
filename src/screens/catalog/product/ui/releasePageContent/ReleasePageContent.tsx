@@ -37,7 +37,6 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
     queryFn: () => getTracksList({
       albumId: release.id
     }),
-    enabled: !release.is_single,
     refetchOnWindowFocus: false,
   });
 
@@ -53,6 +52,7 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
 
   const tracks = tracksQuery.data?.results;
   const recommendations = recomQuery.data?.results;
+  const hasMoreRecommendations = !!recomQuery.data?.next
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -90,7 +90,7 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
         <div>Загрузка треков...</div>
       )}
 
-      {!release.is_single && tracks && tracks.length > 0 && (
+      {tracks && tracks.length > 0 && (
         <section className={s.tracksSection}>
           <Title className={s.title}>Плеер</Title>
           <div className={s.tracksContainer}>
@@ -122,7 +122,11 @@ const ReleasePageContent = ({release, selected}: ReleasePageContentProps) => {
       )}
       <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
         {recommendations && (
-          <ListSection title="Вам также может понравиться" link={`/catalog/album`}>
+          <ListSection 
+            title="Вам также может понравиться" 
+            link={`/catalog/album`} 
+            hasMore={hasMoreRecommendations}
+          >
             {recommendations.map(item => {
               const url = item.target.url;
               const match = url.match(/(\d+)\/$/);

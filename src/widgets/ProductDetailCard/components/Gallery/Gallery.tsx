@@ -6,10 +6,10 @@ import s from "./Gallery.module.scss";
 
 const Gallery = ({ images }: GalleryProps) => {
 
-  const [selectedImg, setSelectedImg] = useState<string>(images[0].image);
+  const [selectedImg, setSelectedImg] = useState<string | null>(images.length > 0 ? images[0].image : null);
 
   useEffect(() => {
-    setSelectedImg(images[0].image);
+    setSelectedImg(images.length > 0 ? images[0].image : null);
   }, [images])
 
   const handleImageClick = (img: string) => {
@@ -23,7 +23,7 @@ const Gallery = ({ images }: GalleryProps) => {
           {images.map((image, index) => {
             return (
               <img 
-                key={image.id} 
+                key={image.id ? image.id : index} 
                 src={image.image} 
                 className={s.gallery__container__img} 
                 onClick={() => handleImageClick(image.image)}
@@ -35,7 +35,12 @@ const Gallery = ({ images }: GalleryProps) => {
         </div>
       )}
       <div className={s.gallery__selected}>
-        <img src={selectedImg} alt="Крупное фото выбранного изображения" />
+        {selectedImg ? (
+          <img src={selectedImg} alt="Крупное фото выбранного изображения" />
+        ) : (
+          <div className={s.gallery__selected__noPhoto}>Нет изображения</div>
+        )}
+        
       </div>
     </div>
   )

@@ -37,13 +37,19 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   });
 
   const albumsRecommend = queryAlbums.data?.results;
+  const hasMoreAlbums = !!queryAlbums.data?.next;
   const merchRecommend = queryMerch.data?.results;
+  const hasMoreMerch = !!queryMerch.data?.next;
 
   return (
     <>
       <ArtistDetailCard artist={artist} />
       {albumsRecommend && albumsRecommend.length > 0 && (
-        <ListSection title="Музыка" link={`/catalog/album/?artist=${artist.slug}`}>
+        <ListSection 
+          title="Музыка" 
+          link={`/catalog/album/?artist=${artist.slug}`} 
+          hasMore={hasMoreAlbums}
+        >
           {albumsRecommend.map((item) => {
             const url = item.target.url;
             const match = url.match(/(\d+)\/$/);
@@ -67,7 +73,11 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
         </ListSection>
       )}
       {merchRecommend && merchRecommend.length > 0 && (
-        <ListSection title="Мерч" link={`/catalog/merch?artist=${artist.slug}`}>
+        <ListSection 
+          title="Мерч" 
+          link={`/catalog/merch?artist=${artist.slug}`} 
+          hasMore={hasMoreMerch}
+        >
           {merchRecommend.map((item) => {
             const url = item.target.url;
             const match = url.match(/(\d+)\/$/);
