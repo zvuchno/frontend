@@ -3,5 +3,6 @@ export interface ListSectionProps {
   link: string;
   children: React.ReactNode;
   hasMore?: boolean;
+  gap?: string;
   className?: string
 };
