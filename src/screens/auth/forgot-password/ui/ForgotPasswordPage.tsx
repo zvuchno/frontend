@@ -5,7 +5,7 @@ import { AuthModal } from "@/widgets/AuthModal"
 import { useState } from "react";
 import s from "./ForgotPasswordPage.module.scss";
 import clsx from "clsx";
-import { resetPassword } from "@/entities/user/api";
+import { resetPassword } from "@/entities/user";
 import { validateForm } from "@/widgets/auth/config/validateForm";
 
 export const ForgotPasswordPage = () => {

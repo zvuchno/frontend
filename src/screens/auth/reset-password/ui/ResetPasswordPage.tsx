@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { validateField } from "@/widgets/auth/config/validateField";
 import { validateForm } from "@/widgets/auth/config/validateForm";
 import { useRouter, useSearchParams } from "next/navigation";
-import { resetPasswordConfirm, resetPasswordVerify } from "@/entities/user/api";
+import { resetPasswordConfirm, resetPasswordVerify } from "@/entities/user";
 import clsx from "clsx";
 
 interface FormErrors {
