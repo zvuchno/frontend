@@ -1,6 +1,5 @@
 "use client"
 
-import { resendEmailForVerify, verifyEmail } from "@/entities/user/api";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 import { ButtonUI, Text, Title } from "@/shared/ui"
 import { AuthModal } from "@/widgets/AuthModal"
@@ -8,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import s from "./VerifySuccess.module.scss";
 import clsx from "clsx";
+import { resendEmailForVerify, verifyEmail } from "@/entities/user";
 
 export const VerifySuccessPage = () => {
   const user = useUserStore((state) => state.user);

@@ -8,4 +8,9 @@ export {
   logInUser,
   logOutUser,
   refreshToken,
+  verifyEmail,
+  resendEmailForVerify,
+  resetPassword,
+  resetPasswordVerify,
+  resetPasswordConfirm
 } from "./api/api";
