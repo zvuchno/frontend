@@ -50,7 +50,7 @@ const LogoutButton = () => {
           <ButtonUI
             variant='primary'
             size='small'
-            onClick={() => handleLogOut}
+            onClick={handleLogOut}
             disabled={isLoading}
           >
             {isLoading ? "Выход..." : "Выйти"}
