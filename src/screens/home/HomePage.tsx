@@ -1,5 +1,3 @@
-import { getArtistsList } from "@/api/catalog/artistsListApi/getArtistsList";
-import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import Link from "next/link";
 
 import { SectionFAQ } from "@/widgets/SectionFAQ";
@@ -16,27 +14,16 @@ import { mockBlogs, questions } from "@/shared/constants";
 import { ListSection } from "@/shared/ui";
 
 import styles from "./HomePage.module.scss";
+import { TArtistCard } from "@/api/catalog/artistsListApi/types";
+import { TCatalogCard } from "@/api/catalog/catalogListApi/types";
 
-export async function HomePage() {
-  const artistsList = (
-    await getArtistsList({
-      limit: "3",
-    })
-  ).results;
+interface HomePageProps {
+  artists: TArtistCard[];
+  albums: TCatalogCard[];
+  merch: TCatalogCard[];
+};
 
-  const albumsList = (
-    await getCatalogList({
-      type: "album",
-      limit: "4",
-    })
-  ).results;
-
-  const merchList = (
-    await getCatalogList({
-      type: "merch",
-      limit: "4",
-    })
-  ).results;
+export function HomePage({ artists, albums, merch }: HomePageProps) {
 
   return (
     <div className={styles.page}>
@@ -44,7 +31,7 @@ export async function HomePage() {
 
       <div className={styles.mainContent}>
         <ListSection title="Артисты" link={`/catalog/artists`} gap="70px">
-          {artistsList.map((artist) => (
+          {artists.map((artist) => (
             <Link key={artist.slug} href={`/catalog/artists/${artist.slug}/?kind=artists`}>
               <CardArtist image={artist.cover ?? undefined} description={artist.name} />
             </Link>
@@ -52,7 +39,7 @@ export async function HomePage() {
         </ListSection>
 
         <ListSection title='Музыка' link={`/catalog/album`}>
-          {albumsList.map((item) => {
+          {albums.map((item) => {
             const url = item.target.url;
             const match = url.match(/(\d+)\/$/);
             const id = match ? match[1] : null;
@@ -79,7 +66,7 @@ export async function HomePage() {
         </ListSection>
 
         <ListSection title='Мерч' link={`/catalog/merch`}>
-          {merchList.map((item) => {
+          {merch.map((item) => {
             const url = item.target.url;
             const match = url.match(/(\d+)\/$/);
             const id = match ? match[1] : null;
