@@ -1,11 +1,11 @@
 import clsx from "clsx";
 import NextLink from "next/link";
 
-import "./Link.module.scss";
+import s from "./Link.module.scss";
 import type { LinkProps } from "./Link.types";
 
 export function Link({ className, children, items, variant = "basic", ...linkProps }: LinkProps) {
-  const composedClassName = clsx("link", `link--${variant}`, className);
+  const composedClassName = clsx(s.link, s[`link--${variant}`], className);
 
   if (!items?.length) {
     return (
@@ -16,16 +16,16 @@ export function Link({ className, children, items, variant = "basic", ...linkPro
   }
 
   return (
-    <span className='linkWithItems'>
+    <span className={s.linkWithItems}>
       <NextLink className={composedClassName} {...linkProps}>
         {children}
       </NextLink>
-      <span className='linkDropdown'>
+      <span className={s.linkDropdown}>
         {items.map((item) => (
           <NextLink
             key={item.id}
             href={item.href}
-            className={clsx("link", "link--basic", "linkDropdownItem")}
+            className={clsx(s.link, s[`link--basic`], s.linkDropdownItem)}
           >
             {item.label}
           </NextLink>
