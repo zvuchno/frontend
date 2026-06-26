@@ -1,4 +1,4 @@
-import { TAddContactFormField } from "../ui/ModalAddContact/model/ModalAddContact.type";
+import { type TAddContactFormField } from "../ui/ModalAddContact/model/ModalAddContact.type";
 
 export const addContactFormFields: TAddContactFormField[] = [
   {

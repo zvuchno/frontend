@@ -1,40 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { ArtistFormPersonal } from "./ArtistFormPersonal";
-import { FormProvider, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import type { FieldValues } from "./utils/types";
+import { FormProvider, useForm } from "react-hook-form";
 
-const MOCK_DATA: FieldValues = {
-  legal_profile: {
-    email: "ivanov@ivanov.ru",
-    phone: "79991234567",
-    recipient_type: "individual_entrepreneur",
-  },
-  identity_data: {
-    first_name: "Иван",
-    last_name: "Иванов",
-    middle_name: "Иванович",
-    birth_date: new Date("1995-05-08"),
-    registration_address: "г. Москва, ул. Пушкина, д. 10, кв. 45",
-    passport_series: "4510",
-    passport_number: "123456",
-    passport_issued_by: "123-123",
-    passport_issue_date: new Date("2015-05-20"),
-    inn: "770102030405",
-  },
-  bank_data: {
-    bank_name: "Банк всея Руси",
-    bik: "123456789",
-    checking_account: "40802810000000001234",
-    correspondent_account: "30101810000000000225",
-  },
-  company_data: {
-    company_name: 'ООО "Рога и копыта"',
-    company_address: "г. Москва, ул. Ленина, д. 1",
-    inn: "770102030405",
-    ogrn: "1234567890123",
-  },
-};
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+
+import { ArtistFormPersonal } from "./ArtistFormPersonal";
+import type { FieldValues } from "./utils/types";
 
 const FormWithLogic = (args: any) => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -77,7 +47,7 @@ const meta: Meta<typeof ArtistFormPersonal> = {
           methods.trigger();
           if (args.isOnChange === true) methods.trigger();
         }
-      }, [args.values, methods]);
+      }, [args.values, methods, args.isOnChange]);
 
       return (
         <FormProvider {...methods}>

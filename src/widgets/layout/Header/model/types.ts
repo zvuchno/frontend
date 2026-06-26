@@ -1,4 +1,4 @@
-import { THeaderAction } from "@/widgets/layout/Header/config/headerActions";
+import { type THeaderAction } from "../config/headerActions";
 
 export interface THeaderUIProps {
   actions: THeaderAction[];

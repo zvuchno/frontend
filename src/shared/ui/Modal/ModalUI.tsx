@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from "react";
 import styles from "./modal.module.scss";
-import { TModalUIProps } from "./types";
+import { type TModalUIProps } from "./types";
 import { CloseButtonIconX } from "../Icons/closeButtonIconX";
 import { CloseButtonIconCircledX } from "../Icons/closeButtonIconCircledX";
 

@@ -1,6 +1,8 @@
-import { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { CustomInput } from "./CustomInput";
 import { useState } from "react";
+
+import { type Meta, type StoryObj } from "@storybook/nextjs-vite";
+
+import { CustomInput } from "./CustomInput";
 
 const meta: Meta<typeof CustomInput> = {
   title: "shared/Input",
@@ -19,12 +21,12 @@ export const SmallInput: Story = {
       <div style={{ width: 440 }}>
         <CustomInput
           value={password}
-          id="1"
+          id='1'
           required
-          label="Пароль"
-          placeholder="Введите пароль"
+          label='Пароль'
+          placeholder='Введите пароль'
           onChange={(e) => setPassword(e.target.value)}
-          inputSize="small"
+          inputSize='small'
         />
       </div>
     );
@@ -39,13 +41,13 @@ export const SmallInputWithError: Story = {
       <div style={{ width: 440 }}>
         <CustomInput
           value={password}
-          id="2"
+          id='2'
           required
-          label="Пароль"
+          label='Пароль'
           error
-          message="Длина пароля не меньше 4 символов"
+          message='Длина пароля не меньше 4 символов'
           onChange={(e) => setPassword(e.target.value)}
-          inputSize="small"
+          inputSize='small'
         />
       </div>
     );
@@ -60,10 +62,10 @@ export const LargeInput: Story = {
       <div style={{ width: 440 }}>
         <CustomInput
           value={name}
-          id="2"
-          label="Название"
+          id='2'
+          label='Название'
           onChange={(e) => setName(e.target.value)}
-          inputSize="large"
+          inputSize='large'
         />
       </div>
     );
@@ -78,10 +80,10 @@ export const Textarea: Story = {
       <div style={{ width: 950 }}>
         <CustomInput
           value={name}
-          id="3"
-          placeholder="Это описание будут видеть ваши слушатели"
+          id='3'
+          placeholder='Это описание будут видеть ваши слушатели'
           multiline
-          label="Описание"
+          label='Описание'
           onChange={(e) => setName(e.target.value)}
         />
       </div>

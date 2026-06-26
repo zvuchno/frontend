@@ -1,6 +1,8 @@
-import { Meta, StoryObj } from "@storybook/nextjs-vite";
-import RoleSelectBlock from "./RoleSelectBlock";
-import { Text, Title, RoleCard } from "@/shared/ui";
+import { type Meta, type StoryObj } from "@storybook/nextjs-vite";
+
+import { RoleCard, Text, Title } from "@/shared/ui";
+
+import { RoleSelectBlock } from "./RoleSelectBlock";
 
 const meta: Meta<typeof RoleSelectBlock> = {
   title: "features/auth/RoleSelectBlock",
@@ -22,36 +24,36 @@ export const RoleSelectBlockInModal: Story = {
       <RoleSelectBlock
         renderTitle={() => (
           <Title
-            Tag="h5"
-            variant="title"
+            Tag='h5'
+            variant='title'
             style={{ fontSize: 24, textTransform: "none", lineHeight: "36px" }}
           >
             Войдите или зарегестрируйте новый аккаунт
           </Title>
         )}
         renderText={() => (
-          <Text Tag="p" style={{ fontSize: 16, fontWeight: 500 }}>
+          <Text Tag='p' style={{ fontSize: 16, fontWeight: 500 }}>
             У вас уже есть аккаунт? <a>Войдите</a>
           </Text>
         )}
       >
         <RoleCard
-          path=""
+          path=''
           image={cassetteImage}
-          title="Как испольнитель"
-          description="Продавай мерч, делись новыми релизами и общайся со своими фанатами"
+          title='Как испольнитель'
+          description='Продавай мерч, делись новыми релизами и общайся со своими фанатами'
         />
         <RoleCard
-          path=""
+          path=''
           image={recordImage}
-          title="Как испольнитель"
-          description="Продавай мерч, делись новыми релизами и общайся со своими фанатами"
+          title='Как испольнитель'
+          description='Продавай мерч, делись новыми релизами и общайся со своими фанатами'
         />
         <RoleCard
-          path=""
+          path=''
           image={earpiecesImage}
-          title="Как испольнитель"
-          description="Продавай мерч, делись новыми релизами и общайся со своими фанатами"
+          title='Как испольнитель'
+          description='Продавай мерч, делись новыми релизами и общайся со своими фанатами'
         />
       </RoleSelectBlock>
     );
@@ -62,9 +64,9 @@ export const RoleSelectBlockInPersonalAccount: Story = {
   render: () => {
     return (
       <RoleSelectBlock>
-        <RoleCard path="" image={shirtImage} title="Загрузить мерч" />
-        <RoleCard path="" image={shirtImage} title="Загрузить мерч" />
-        <RoleCard path="" image={shirtImage} title="Загрузить мерч" />
+        <RoleCard path='' image={shirtImage} title='Загрузить мерч' />
+        <RoleCard path='' image={shirtImage} title='Загрузить мерч' />
+        <RoleCard path='' image={shirtImage} title='Загрузить мерч' />
       </RoleSelectBlock>
     );
   },

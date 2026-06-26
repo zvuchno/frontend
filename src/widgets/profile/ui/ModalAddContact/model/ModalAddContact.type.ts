@@ -1,5 +1,5 @@
-import { HTMLInputTypeAttribute } from "react";
-import { RegisterOptions, SubmitHandler } from "react-hook-form";
+import { type HTMLInputTypeAttribute } from "react";
+import { type RegisterOptions, type SubmitHandler } from "react-hook-form";
 
 export type TFieldValues = {
   name?: string;

@@ -1,18 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  ArtistRegisterFormProps,
-  ArtistRegisterFormData,
-} from "@/widgets/auth/ArtistRegisterForm";
-import { BaseForm } from "@/widgets/auth/BaseForm";
-import { CustomInput, Typography, PhoneInput } from "@/shared/ui";
-import s from "./ArtistRegisterForm.module.scss";
+
 import { useRouter } from "next/navigation";
 
-import { validateForm } from "../../config/validateForm";
-import { TNewArtistRequest } from "@/entities/user/types";
+import { type TNewArtistRequest } from "@/entities/user";
+
+import { CustomInput, PhoneInput, Typography } from "@/shared/ui";
+
+import { BaseForm } from "../../BaseForm";
 import { validateField } from "../../config/validateField";
+import { validateForm } from "../../config/validateForm";
+import {
+  type ArtistRegisterFormData,
+  type ArtistRegisterFormProps,
+} from "../model/ArtistRegisterForm.types";
+import s from "./ArtistRegisterForm.module.scss";
 
 interface FormErrors {
   title?: string;
@@ -35,38 +38,29 @@ const initialFormState: ArtistRegisterFormData = {
 export const ArtistRegisterForm = ({
   onClose,
   onSubmit,
-  onLoginClick,
   onSocialLogin,
 }: ArtistRegisterFormProps) => {
-  const [formData, setFormData] =
-    useState<ArtistRegisterFormData>(initialFormState);
+  const [formData, setFormData] = useState<ArtistRegisterFormData>(initialFormState);
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [registerError, setRegisterError] = useState<string | undefined>(
-    undefined,
-  );
+  const [registerError, setRegisterError] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
   const handleChange =
-    (field: keyof ArtistRegisterFormData) =>
-    (e: React.ChangeEvent<HTMLInputElement> | string) => {
+    (field: keyof ArtistRegisterFormData) => (e: React.ChangeEvent<HTMLInputElement> | string) => {
       const value = typeof e === "string" ? e : e.target.value;
 
       setFormData((prev) => ({ ...prev, [field]: value }));
 
-      const error = validateField<ArtistRegisterFormData>(
-        field,
-        value,
-        formData.password,
-      );
+      const error = validateField<ArtistRegisterFormData>(field, value, formData.password);
       setErrors((prev) => ({ ...prev, [field]: error || undefined }));
 
       if (registerError) setRegisterError(undefined);
     };
 
-  const handleSubmit = async (data: { email?: string; password?: string }) => {
+  const handleSubmit = async () => {
     setIsLoading(true);
     setRegisterError(undefined);
     setErrors({});
@@ -103,8 +97,8 @@ export const ArtistRegisterForm = ({
 
   return (
     <BaseForm
-      title="Регистрация"
-      onSubmit={handleSubmit}
+      title='Регистрация'
+      onSubmit={() => handleSubmit}
       onClose={onClose}
       isLoading={isLoading}
       className={s.artistRegisterForm}
@@ -118,89 +112,89 @@ export const ArtistRegisterForm = ({
           }}
         >
           <CustomInput
-            id="title"
-            label="Название*"
-            type="text"
-            name="title"
+            id='title'
+            label='Название*'
+            type='text'
+            name='title'
             value={formData.title}
             onChange={handleChange("title")}
-            placeholder="Текст"
+            placeholder='Текст'
             error={!!errors.title}
             message={errors.title}
-            inputSize="small"
+            inputSize='small'
             disabled={isLoading}
           />
 
           <CustomInput
-            id="login"
-            label="Имя пользователя*"
-            type="text"
-            name="login"
+            id='login'
+            label='Имя пользователя*'
+            type='text'
+            name='login'
             value={formData.login}
             onChange={handleChange("login")}
-            placeholder="Текст"
+            placeholder='Текст'
             error={!!errors.login}
             message={errors.login}
-            inputSize="small"
+            inputSize='small'
             disabled={isLoading}
             maxLength={150}
           />
 
           <CustomInput
-            id="email"
-            label="Почта*"
-            type="email"
-            name="email"
+            id='email'
+            label='Почта*'
+            type='email'
+            name='email'
             value={formData.email}
             onChange={handleChange("email")}
-            placeholder="user@example.com"
+            placeholder='user@example.com'
             error={!!errors.email}
             message={errors.email}
-            inputSize="small"
+            inputSize='small'
             disabled={isLoading}
           />
 
           <PhoneInput
-            id="phone"
-            label="Телефон*"
+            id='phone'
+            label='Телефон*'
             value={formData.phone}
             onChange={handleChange("phone")}
             hasError={!!errors.phone}
             errorMessage={errors.phone}
-            inputSize="small"
+            inputSize='small'
             disabled={isLoading}
           />
 
           <CustomInput
-            id="password"
-            label="Пароль*"
-            type="password"
-            name="password"
+            id='password'
+            label='Пароль*'
+            type='password'
+            name='password'
             value={formData.password}
             onChange={handleChange("password")}
-            placeholder="Длина пароля не менее 6 символов......."
+            placeholder='Длина пароля не менее 6 символов.......'
             error={!!errors.password}
             message={errors.password}
-            inputSize="small"
+            inputSize='small'
             disabled={isLoading}
           />
 
           <CustomInput
-            id="confirmPassword"
-            label="Повторите пароль*"
-            type="password"
-            name="confirmPassword"
+            id='confirmPassword'
+            label='Повторите пароль*'
+            type='password'
+            name='confirmPassword'
             value={formData.confirmPassword}
             onChange={handleChange("confirmPassword")}
-            placeholder=""
+            placeholder=''
             error={!!errors.confirmPassword}
             message={errors.confirmPassword}
-            inputSize="small"
+            inputSize='small'
             disabled={isLoading}
           />
 
           {registerError && (
-            <Typography variant="normal" className={s.error}>
+            <Typography variant='normal' className={s.error}>
               {registerError}
             </Typography>
           )}
@@ -209,7 +203,7 @@ export const ArtistRegisterForm = ({
       renderPrimaryButton={(loading) => (
         <button
           className={s.submitButton}
-          type="submit"
+          type='submit'
           disabled={loading}
           style={{
             cursor: loading ? "not-allowed" : "pointer",
@@ -220,9 +214,9 @@ export const ArtistRegisterForm = ({
             <>
               <svg
                 className={s.spinner}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
                 style={{
                   display: "inline-block",
                   width: "18px",
@@ -232,17 +226,17 @@ export const ArtistRegisterForm = ({
                 }}
               >
                 <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
+                  className='opacity-25'
+                  cx='12'
+                  cy='12'
+                  r='10'
+                  stroke='currentColor'
+                  strokeWidth='4'
                 />
                 <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  className='opacity-75'
+                  fill='currentColor'
+                  d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                 />
               </svg>
               Обработка...
@@ -254,33 +248,31 @@ export const ArtistRegisterForm = ({
       )}
       renderSocialLogin={() => {
         return (
-          <div
-            style={{ display: "flex", gap: "12px", justifyContent: "center" }}
-          >
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
-              type="button"
+              type='button'
               onClick={() => onSocialLogin?.("yandex")}
               disabled={isLoading}
               className={s.socialButton}
-              aria-label="Яндекс"
+              aria-label='Яндекс'
             >
               Я
             </button>
             <button
-              type="button"
+              type='button'
               onClick={() => onSocialLogin?.("vk")}
               disabled={isLoading}
               className={s.socialButton}
-              aria-label="VK"
+              aria-label='VK'
             >
               VK
             </button>
             <button
-              type="button"
+              type='button'
               onClick={() => onSocialLogin?.("google")}
               disabled={isLoading}
               className={s.socialButton}
-              aria-label="Google"
+              aria-label='Google'
             >
               G
             </button>

@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { InputProps } from "./CustomInput.types";
+import { type InputProps } from "./CustomInput.types";
 import clsx from "clsx";
 import s from "./CustomInput.module.scss";
 
@@ -47,7 +47,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
             className={inputClassName}
             style={style}
             type="text"
-            ref={ref as React.Ref<HTMLInputElement>}
+            ref={ref}
             {...otherProps}
           />
         )}

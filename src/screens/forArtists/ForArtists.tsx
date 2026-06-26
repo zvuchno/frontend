@@ -1,19 +1,22 @@
-import { HeroUI } from "@/widgets/layout/main/Hero";
-import { AccentContainer, ButtonUI, Title, DescriptionArea } from "@/shared/ui";
-import { Roadmap } from "@/widgets/Roadmap";
-import { roadmapItems } from "@/widgets/Roadmap/config/roadmapItems";
-import { ApproveSection } from "@/widgets/ApproveSection";
-import { SectionFAQ } from "@/widgets/SectionFAQ";
-import { FAQItemsForArtists, artistInfo } from "@/shared/constants";
-import styles from "./ForArtists.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
+
+import { ApproveSection } from "@/widgets/ApproveSection";
+import { Roadmap } from "@/widgets/Roadmap";
+import { roadmapItems } from "@/widgets/Roadmap";
+import { SectionFAQ } from "@/widgets/SectionFAQ";
+import { HeroUI } from "@/widgets/layout/main/Hero";
+
+import { FAQItemsForArtists, artistInfo } from "@/shared/constants";
+import { AccentContainer, ButtonUI, DescriptionArea, Title } from "@/shared/ui";
+
+import styles from "./ForArtists.module.scss";
 
 export const ForArtists = () => (
   <>
     <section>
       <HeroUI
-        mainTitle=""
+        mainTitle=''
         leftText={{
           firstPart: "Зарабатывай на музыке,",
           secondPart: "оставаясь артистом",
@@ -26,21 +29,21 @@ export const ForArtists = () => (
       >
         <>
           <div className={styles.headerSectionButton}>
-            <ButtonUI variant={"primary"} size="large">
+            <ButtonUI variant={"primary"} size='large'>
               <Link href={"/role"} prefetch={false}>
                 присоединиться к бете
               </Link>
             </ButtonUI>
           </div>
           <div className={styles.sectionImage}>
-            <img src="/images/image_for-artists_header_bg.png" loading="lazy" />
+            <img src='/images/image_for-artists_header_bg.png' loading='lazy' />
           </div>
         </>
       </HeroUI>
     </section>
     <section className={clsx(styles.mainSection)}>
       <section className={clsx(styles.sectionArea, styles.firstSection)}>
-        <Title Tag="h2" className={styles.mainSectionTitle}>
+        <Title Tag='h2' className={styles.mainSectionTitle}>
           С заботой о музыкантах
           <br />и их фанатах
         </Title>
@@ -48,31 +51,25 @@ export const ForArtists = () => (
           <DescriptionArea headerwithIcons={false} colorOption={"blue"} border>
             <div className={styles.content}>
               <p>
-                Артист в текущих реалиях практически бесплатно обслуживает
-                стриминги и соцсети. Вместо творчества он вынужден клепать
-                контент и драться с равнодушными алгоритмами. А фанаты, которые
-                хотят поддержать любимого музыканта, приносят прибыль только
+                Артист в текущих реалиях практически бесплатно обслуживает стриминги и соцсети.
+                Вместо творчества он вынужден клепать контент и драться с равнодушными алгоритмами.
+                А фанаты, которые хотят поддержать любимого музыканта, приносят прибыль только
                 корпорациям и агрегаторам.
               </p>
               <p>
-                ЗВУЧНО - первый на российском рынке сервис прямой поддержки
-                артистов.
+                ЗВУЧНО - первый на российском рынке сервис прямой поддержки артистов.
                 <br />
-                Это не очередной стриминг - мы хотим, чтобы музыка приносила
-                тебе деньги.
+                Это не очередной стриминг - мы хотим, чтобы музыка приносила тебе деньги.
               </p>
             </div>
           </DescriptionArea>
           <div className={styles.sectionImage}>
-            <img src="/images/for-artists_main-bg-1.png" loading="lazy" />
+            <img src='/images/for-artists_main-bg-1.png' loading='lazy' />
           </div>
         </div>
       </section>
       <section className={clsx(styles.sectionArea, styles.secondSection)}>
-        <Title
-          Tag="h2"
-          className={clsx(styles.mainSectionTitle, styles.textRight)}
-        >
+        <Title Tag='h2' className={clsx(styles.mainSectionTitle, styles.textRight)}>
           На «Звучно» можно
         </Title>
         <AccentContainer className={styles.content}>
@@ -80,8 +77,8 @@ export const ForArtists = () => (
             <li className={styles.listItem}>
               <h3 className={styles.listItemTitle}>продавать музыку</h3>
               <p>
-                как на Bandcamp, но без проблем с оплатами: легально, безопасно
-                и без танцев с бубном
+                как на Bandcamp, но без проблем с оплатами: легально, безопасно и без танцев с
+                бубном
               </p>
             </li>
             <li className={styles.listItem}>
@@ -99,20 +96,19 @@ export const ForArtists = () => (
                 на концертах
               </h3>
               <p>
-                преврати стойку мерча в ПВЗ - фанаты купят онлайн, а мерчер
-                выдаст по коду в тг-боте
+                преврати стойку мерча в ПВЗ - фанаты купят онлайн, а мерчер выдаст по коду в тг-боте
               </p>
             </li>
           </ul>
         </AccentContainer>
         <div className={styles.sectionImage}>
-          <img src="/images/for-artists_main-bg-2.png" loading="lazy" />
+          <img src='/images/for-artists_main-bg-2.png' loading='lazy' />
         </div>
       </section>
       <section className={clsx(styles.sectionArea, styles.thirdSection)}>
         <div className={styles.content}>
           <div className={styles.sectionContentImage}>
-            <img src="/images/for-artists_white-page.png" loading="lazy" />
+            <img src='/images/for-artists_white-page.png' loading='lazy' />
             <div className={clsx(styles.contentText)}>
               <p className={clsx(styles.textBold, styles.highlightedText)}>
                 Без принудительных скидок,
@@ -135,7 +131,7 @@ export const ForArtists = () => (
           </div>
 
           <div className={styles.sectionImage}>
-            <img src="/images/for-artists_main-bg-3.png" loading="lazy" />
+            <img src='/images/for-artists_main-bg-3.png' loading='lazy' />
           </div>
         </div>
         <span className={styles.sectionText}>
@@ -147,23 +143,18 @@ export const ForArtists = () => (
         </span>
       </section>
       <section className={clsx(styles.sectionArea, styles.forthSection)}>
-        <Title
-          Tag="h2"
-          className={clsx(styles.mainSectionTitle, styles.textCenter)}
-        >
+        <Title Tag='h2' className={clsx(styles.mainSectionTitle, styles.textCenter)}>
           КОГо мы ищем?
         </Title>
         <AccentContainer>
           <DescriptionArea headerwithIcons={true} colorOption={"blue"}>
             <div className={styles.content}>
               <p>
-                Сейчас мы отбираем проекты по заявкам - ищем активных артистов с
-                живой аудиторией
+                Сейчас мы отбираем проекты по заявкам - ищем активных артистов с живой аудиторией
               </p>
               <p>
-                Потом у нас появится больше ресурсов для помощи начинающим
-                музыкантам, мы выйдем из беты, и пользователем ЗВУЧНО сможет
-                стать кто угодно
+                Потом у нас появится больше ресурсов для помощи начинающим музыкантам, мы выйдем из
+                беты, и пользователем ЗВУЧНО сможет стать кто угодно
               </p>
             </div>
           </DescriptionArea>
@@ -176,12 +167,12 @@ export const ForArtists = () => (
         <AccentContainer className={styles.content}>
           <h3>МЫ ЗА ИСКРЕННЕЕ САМОВЫРАЖЕНИЕ</h3>
           <p>
-            Команда ЗВУЧНО ценит человека, его жизнь и эмоции, которые стоят за
-            творчеством. Поэтому ни в бете, ни после мы не допустим на нашу
-            платформу музыку, которая полность или частично сделана с ИИ.
+            Команда ЗВУЧНО ценит человека, его жизнь и эмоции, которые стоят за творчеством. Поэтому
+            ни в бете, ни после мы не допустим на нашу платформу музыку, которая полность или
+            частично сделана с ИИ.
           </p>
           <div className={styles.sectionImage}>
-            <img src="/images/for-artists_record-type.png" loading="lazy" />
+            <img src='/images/for-artists_record-type.png' loading='lazy' />
           </div>
         </AccentContainer>
       </section>
@@ -190,7 +181,7 @@ export const ForArtists = () => (
           <DescriptionArea headerwithIcons={true} colorOption={"grey"}>
             <div className={styles.content}>
               <span>Присоединиться к бете</span>
-              <ButtonUI variant={"accentDark"} size="large">
+              <ButtonUI variant={"accentDark"} size='large'>
                 <Link href={"/role"} prefetch={false}>
                   присоединиться
                 </Link>

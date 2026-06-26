@@ -1,12 +1,13 @@
-import styles from "./OrderDetails.module.scss";
-import { useGetDeliveryOptions } from "@/entities";
 import { useState } from "react";
-import { OrderDetailsPersonal } from "./componenents/OrderDetailsPersonal";
-import { OrderDeliveryOptions } from "./componenents/OrderDeliveryOptions";
+
+import { useGetDeliveryOptions } from "@/entities/order";
+
+import styles from "./OrderDetails.module.scss";
 import { OrderAddressDetails } from "./componenents/OrderAddressDetails";
+import { OrderDeliveryOptions } from "./componenents/OrderDeliveryOptions";
+import { OrderDetailsPersonal } from "./componenents/OrderDetailsPersonal";
 
 export const OrderDetails = ({ fieldsDisabled = false }) => {
- 
   const { data } = useGetDeliveryOptions();
 
   const [selected, setIsSelected] = useState("");
@@ -25,9 +26,7 @@ export const OrderDetails = ({ fieldsDisabled = false }) => {
           optionChecked={selected}
         />
       )}
-      {selected === "courier" && (
-        <OrderAddressDetails fieldsDisabled={fieldsDisabled} />
-      )}
+      {selected === "courier" && <OrderAddressDetails fieldsDisabled={fieldsDisabled} />}
     </div>
   );
 };

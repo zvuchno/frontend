@@ -54,7 +54,7 @@ function toProductCardData(
     id: string | number;
     favoriteId?: number;
     targetUrl?: string;
-  },
+  }
 ): FanProductCardData {
   return {
     id: options.id,
@@ -68,13 +68,8 @@ function toProductCardData(
   };
 }
 
-function toReleaseCardData(
-  item: StoreOrderItem,
-  detail?: StoreCatalogItem,
-): FanProductCardData {
-  const detailImage = detail
-    ? detail.cover_image || detail.main_image || null
-    : null;
+function toReleaseCardData(item: StoreOrderItem, detail?: StoreCatalogItem): FanProductCardData {
+  const detailImage = detail ? detail.cover_image || detail.main_image || null : null;
 
   return {
     id: `${item.target_url}-${item.sku}`,
@@ -88,14 +83,10 @@ function toReleaseCardData(
 }
 
 function isReleaseTarget(targetUrl: string): boolean {
-  return (
-    targetUrl.includes("/store/albums/") || targetUrl.includes("/store/tracks/")
-  );
+  return targetUrl.includes("/store/albums/") || targetUrl.includes("/store/tracks/");
 }
 
-async function getStoreItemByTargetUrl(
-  targetUrl: string,
-): Promise<StoreCatalogItem | null> {
+async function getStoreItemByTargetUrl(targetUrl: string): Promise<StoreCatalogItem | null> {
   if (!targetUrl) {
     return null;
   }
@@ -104,7 +95,7 @@ async function getStoreItemByTargetUrl(
     `/api/store/item?targetUrl=${encodeURIComponent(targetUrl)}`,
     {
       method: "GET",
-    },
+    }
   );
 }
 
@@ -113,7 +104,7 @@ export async function getFavoriteProducts(): Promise<FanProductCardData[]> {
     `/api/store/me/favorites?limit=${DEFAULT_LIMIT}`,
     {
       method: "GET",
-    },
+    }
   );
 
   const cards = await Promise.all(
@@ -129,7 +120,7 @@ export async function getFavoriteProducts(): Promise<FanProductCardData[]> {
         favoriteId: favorite.id,
         targetUrl: favorite.target_url,
       });
-    }),
+    })
   );
 
   return cards.filter((card): card is FanProductCardData => card !== null);
@@ -146,15 +137,13 @@ export async function getOrders(): Promise<StoreOrder[]> {
     `/api/store/orders?limit=${DEFAULT_LIMIT}`,
     {
       method: "GET",
-    },
+    }
   );
 
   return orders.results;
 }
 
-export async function getOrderDetail(
-  orderId: string | number,
-): Promise<StoreOrderDetail> {
+export async function getOrderDetail(orderId: string | number): Promise<StoreOrderDetail> {
   return requestStore<StoreOrderDetail>(`/api/store/orders/${orderId}`, {
     method: "GET",
   });
@@ -175,14 +164,14 @@ export async function getOrdersWithDetails(): Promise<StoreOrderDetail[]> {
         order_number: detail.order_number ?? order.order_number,
         created_at: detail.created_at ?? order.created_at,
       };
-    }),
+    })
   );
 }
 
 export async function getPurchasedReleases(): Promise<FanProductCardData[]> {
   const orders = await getOrdersWithDetails();
   const releaseItems = orders.flatMap((order) =>
-    order.items.filter((item) => isReleaseTarget(item.target_url)),
+    order.items.filter((item) => isReleaseTarget(item.target_url))
   );
 
   const cards = await Promise.all(
@@ -190,15 +179,10 @@ export async function getPurchasedReleases(): Promise<FanProductCardData[]> {
       const detail = await getStoreItemByTargetUrl(item.target_url);
 
       return toReleaseCardData(item, detail ?? undefined);
-    }),
+    })
   );
 
   return cards;
 }
 
-export type {
-  FanProductCardData,
-  StoreOrder,
-  StoreOrderDetail,
-  StoreOrderItem,
-};
+export type { FanProductCardData, StoreOrder, StoreOrderDetail, StoreOrderItem };

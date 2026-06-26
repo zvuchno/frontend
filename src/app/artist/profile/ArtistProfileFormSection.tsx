@@ -1,19 +1,21 @@
 "use client";
 
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 
 import { updateAccountPhone } from "@/api/account";
 import { type CurrentArtistResponse, updateCurrentArtist } from "@/api/artist";
+import { useSession } from "next-auth/react";
+
+import { ProfileFormUI } from "@/features/profile";
+import { ProfileFormArtistUI } from "@/features/profile";
+import type { FieldValues } from "@/features/profile";
+
 import { useUserStore } from "@/entities/user/store/useUserStore";
-import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
-import { ProfileFormArtistUI } from "@/features/profile/ui/profileForm/profileFormArtist";
-import type { FieldValues } from "@/features/profile/ui/profileForm/types";
 
 import {
-  buildArtistProfileUpdatePayload,
   EMPTY_PROFILE_FORM_VALUES,
+  buildArtistProfileUpdatePayload,
   getArtistProfileFormValues,
   hasArtistProfileChanges,
   hasPhoneChange,
@@ -69,9 +71,7 @@ export default function ArtistProfileFormSection({
       let nextUser = user;
 
       if (shouldUpdateArtist) {
-        nextArtist = await updateCurrentArtist(
-          buildArtistProfileUpdatePayload(artist, formData),
-        );
+        nextArtist = await updateCurrentArtist(buildArtistProfileUpdatePayload(artist, formData));
 
         onArtistChange(nextArtist);
       }
@@ -100,7 +100,7 @@ export default function ArtistProfileFormSection({
           phone: nextUser.phone,
           city: nextArtist.city,
           url: nextArtist.url,
-        }),
+        })
       );
       setProfileFormError(null);
       setIsEditMode(false);
@@ -108,7 +108,7 @@ export default function ArtistProfileFormSection({
       setProfileFormError(
         requestError instanceof Error
           ? requestError.message
-          : "Не удалось сохранить изменения профиля",
+          : "Не удалось сохранить изменения профиля"
       );
     } finally {
       setIsSavingProfile(false);
@@ -135,23 +135,15 @@ export default function ArtistProfileFormSection({
         phone: user.phone,
         city: artist?.city,
         url: artist?.url,
-      }),
+      })
     );
-  }, [
-    artist?.city,
-    artist?.name,
-    artist?.url,
-    isEditMode,
-    isFormDirty,
-    methods,
-    user,
-  ]);
+  }, [artist?.city, artist?.name, artist?.url, isEditMode, isFormDirty, methods, user]);
 
   return (
     <FormProvider {...methods}>
       <ProfileFormUI
         className={styles.profileForm}
-        title="Профиль"
+        title='Профиль'
         isChecked={isEditMode && isFormValid}
         isOnChange={isEditMode}
         isSubmitting={isSavingProfile}
@@ -162,7 +154,7 @@ export default function ArtistProfileFormSection({
         <ProfileFormArtistUI
           fieldsDisabled={!isEditMode}
           disabledFields={["email", "password"]}
-          personalDataHref="/artist/data"
+          personalDataHref='/artist/data'
         />
       </ProfileFormUI>
     </FormProvider>

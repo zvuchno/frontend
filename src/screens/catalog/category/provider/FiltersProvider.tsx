@@ -1,29 +1,19 @@
-'use client';
+"use client";
 
-import { TGenreKind } from "@/api/catalog/genresKindApi/types";
-import { createContext } from "react";
+import { type TGenreKind } from "@/api/catalog/genresKindApi/types";
 
-type FiltersContextType = {
-  genresList: TGenreKind[];
-};
+import { FiltersContext } from "./FiltersContext";
 
-export const FiltersContext = createContext<FiltersContextType | undefined>(undefined);
-
-export function FiltersProvider ({ 
-  genresList, 
-  children 
+export function FiltersProvider({
+  genresList,
+  children,
 }: {
-  genresList: TGenreKind[],
-  children: React.ReactNode
+  genresList: TGenreKind[];
+  children: React.ReactNode;
 }) {
-
   const value = {
-    genresList: genresList
+    genresList: genresList,
   };
 
-  return (
-    <FiltersContext.Provider value={value}>
-      {children}
-    </FiltersContext.Provider>
-  )
-};
+  return <FiltersContext.Provider value={value}>{children}</FiltersContext.Provider>;
+}

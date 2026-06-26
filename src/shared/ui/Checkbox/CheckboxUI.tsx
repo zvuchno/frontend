@@ -1,6 +1,6 @@
-import { ChangeEvent } from "react";
+import { type ChangeEvent } from "react";
 import styles from "./checkbox.module.scss";
-import { TCheckboxUIProps } from "./types";
+import { type TCheckboxUIProps } from "./types";
 import clsx from "clsx";
 import { CheckBoxIcon } from "../Icons/checkBoxIcon";
 import { RadioButtonIcon } from "../Icons/radioButtonIcon";

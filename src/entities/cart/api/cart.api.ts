@@ -8,9 +8,7 @@ const CART_PATH = "/v1/store/cart";
 export async function getCart(token?: string): Promise<TCart> {
   const init: RequestInit = { method: "GET" };
 
-  const headers = token
-    ? createAuthHeaders(token, init.headers)
-    : init.headers || {};
+  const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
   const response = await fetch(`${baseUrl}${CART_PATH}/me/`, {
     ...init,
@@ -24,10 +22,7 @@ export async function getCart(token?: string): Promise<TCart> {
   return response.json() as Promise<TCart>;
 }
 
-export async function addCartItem(
-  payload: TCartItem,
-  token?: string,
-): Promise<TCart> {
+export async function addCartItem(payload: TCartItem, token?: string): Promise<TCart> {
   const init: RequestInit = {
     method: "POST",
     body: JSON.stringify(payload),
@@ -36,9 +31,7 @@ export async function addCartItem(
     },
   };
 
-  const headers = token
-    ? createAuthHeaders(token, init.headers)
-    : init.headers || {};
+  const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
   const response = await fetch(`${baseUrl}${CART_PATH}/me/add/`, {
     ...init,
@@ -52,10 +45,7 @@ export async function addCartItem(
   return response.json() as Promise<TCart>;
 }
 
-export async function updateCart(
-  payload: UpdateCartPayload,
-  token?: string,
-): Promise<TCart> {
+export async function updateCart(payload: UpdateCartPayload, token?: string): Promise<TCart> {
   const init: RequestInit = {
     method: "PATCH",
     body: JSON.stringify(payload),
@@ -64,9 +54,7 @@ export async function updateCart(
     },
   };
 
-  const headers = token
-    ? createAuthHeaders(token, init.headers)
-    : init.headers || {};
+  const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
   const response = await fetch(`${baseUrl}${CART_PATH}/me/`, {
     ...init,
@@ -80,23 +68,15 @@ export async function updateCart(
   return response.json() as Promise<TCart>;
 }
 
-export async function removeCartItem(
-  variantId: number,
-  token?: string,
-): Promise<void> {
+export async function removeCartItem(variantId: number, token?: string): Promise<void> {
   const init: RequestInit = { method: "DELETE" };
 
-  const headers = token
-    ? createAuthHeaders(token, init.headers)
-    : init.headers || {};
+  const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
-  const response = await fetch(
-    `${baseUrl}${CART_PATH}/me/remove/${variantId}`,
-    {
-      ...init,
-      headers: headers,
-    },
-  );
+  const response = await fetch(`${baseUrl}${CART_PATH}/me/remove/${variantId}`, {
+    ...init,
+    headers: headers,
+  });
 
   if (!response.ok) {
     throw new Error(`Ошибка удаления товара из корзины: ${response.status}`);
@@ -105,10 +85,7 @@ export async function removeCartItem(
   return;
 }
 
-export async function applyCartPromoCode(
-  promo: string,
-  token?: string,
-): Promise<TCart> {
+export async function applyCartPromoCode(promo: string, token?: string): Promise<TCart> {
   const init: RequestInit = {
     method: "POST",
     body: JSON.stringify({ code: promo }),
@@ -117,9 +94,7 @@ export async function applyCartPromoCode(
     },
   };
 
-  const headers = token
-    ? createAuthHeaders(token, init.headers)
-    : init.headers || {};
+  const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
   const response = await fetch(`${baseUrl}${CART_PATH}/apply-promocode/`, {
     ...init,
@@ -127,37 +102,23 @@ export async function applyCartPromoCode(
   });
 
   if (!response.ok) {
-    let serverErrorMessage = "";
-    
-    try {
-      const errorData = await response.json();
+    const errorData = (await response.json()) as Error;
 
-      if (errorData && typeof errorData === "object") {
-        serverErrorMessage =
-          errorData.detail ||
-          errorData.message ||
-          Object.values(errorData).flat().join(", ");
-        
-      }
-    } catch {}
-
-    if (serverErrorMessage) {
-      throw new Error(serverErrorMessage);
-    }
+    if (errorData && typeof errorData === "object") {
       throw new Error(
-        `Ошибка ${response.status}: Не удалось применить промокод`,
+        errorData.message || `Ошибка ${response.status}: Не удалось применить промокод`
       );
+    }
+    throw new Error(`Ошибка ${response.status}: Не удалось применить промокод`);
   }
 
-  return response.json() as Promise<TCart>;
+  return (await response.json()) as Promise<TCart>;
 }
 
 export async function removeCartPromoCode(token?: string): Promise<TCart> {
   const init: RequestInit = { method: "POST" };
 
-  const headers = token
-    ? createAuthHeaders(token, init.headers)
-    : init.headers || {};
+  const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
   const response = await fetch(`${baseUrl}${CART_PATH}/remove-promocode/`, {
     ...init,

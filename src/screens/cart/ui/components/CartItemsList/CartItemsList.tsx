@@ -1,12 +1,9 @@
-import { CartItem } from "../CartItem/CartItem";
 import type { CartItemRespond } from "@/entities/cart";
+
+import { CartItem } from "../CartItem/CartItem";
 import styles from "./CartItemsList.module.scss";
 
-export const CartItemsList = ({
-  cartItems,
-}: {
-  cartItems: CartItemRespond[];
-}) => (
+export const CartItemsList = ({ cartItems }: { cartItems: CartItemRespond[] }) => (
   <div className={styles.cartItemsList}>
     <ul className={styles.cartItemsListMenu}>
       {cartItems.map((item) => (

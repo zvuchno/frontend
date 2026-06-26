@@ -2,17 +2,15 @@ import clsx from "clsx";
 import Image from "next/image";
 
 import { Definition } from "@/shared/ui";
+
 import styles from "./ProductCardArtist.module.scss";
 import type { ProductCardArtistProps } from "./types";
 
-const getDefinitionText = ({
-  label,
-  value,
-}: ProductCardArtistProps["definitions"][number]) =>
+const getDefinitionText = ({ label, value }: ProductCardArtistProps["definitions"][number]) =>
   [label, value]
     .filter(
       (part): part is string | number =>
-        part !== undefined && !(typeof part === "string" && part.length === 0),
+        part !== undefined && !(typeof part === "string" && part.length === 0)
     )
     .map(String)
     .join(" ");
@@ -36,7 +34,7 @@ export const ProductCardArtist = ({
       className={clsx(
         styles.productCardArtist,
         styles[`productCardArtist_variant_${variant}`],
-        className,
+        className
       )}
       data-product-id={id}
       aria-label={productName}
@@ -48,7 +46,7 @@ export const ProductCardArtist = ({
           alt={productName}
           width={imageWidth}
           height={imageHeight}
-          sizes="96px"
+          sizes='96px'
         />
       </div>
 

@@ -1,12 +1,15 @@
+import { Toaster } from "react-hot-toast";
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
-import { SessionProviders } from "@/entities/user/providers/providers";
 import { Footer } from "@/widgets/layout/Footer";
 import { AppHeader } from "@/widgets/layout/Header";
+
+import { SessionProviders } from "@/entities/user/providers/providers";
+
 import "./globals.scss";
 import { QueryProvider } from "./providers/QueryClientProvider";
-import { Toaster } from "react-hot-toast";
 
 const featureMono = localFont({
   src: [
@@ -45,9 +48,7 @@ const betterVcr = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:3000",
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:3000"),
   title: "Звучно",
   description: "Маркетплейс цифровой музыки для СНГ артисов",
 };
@@ -58,17 +59,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
+    <html lang='ru'>
       <body className={`${featureMono.variable} ${betterVcr.variable}`}>
         <QueryProvider>
           <SessionProviders>
-            <div className="global-noise" />
-            <div className="app-shell">
-              <div className="app-container app-header-container">
+            <div className='global-noise' />
+            <div className='app-shell'>
+              <div className='app-container app-header-container'>
                 <AppHeader />
               </div>
-              <main className="app-main">
-                <div className="app-container">{children}</div>
+              <main className='app-main'>
+                <div className='app-container'>{children}</div>
               </main>
               <Footer />
             </div>
@@ -76,7 +77,10 @@ export default function RootLayout({
         </QueryProvider>
 
         {/* вывод сообшений об ошибках от сервера либо кастомных в попап уведомлении для пользователя */}
-        <Toaster position="top-center" toastOptions={{style: {fontFamily: "FeatureMono", border: "1px solid currentColor"}}}/>
+        <Toaster
+          position='top-center'
+          toastOptions={{ style: { fontFamily: "FeatureMono", border: "1px solid currentColor" } }}
+        />
       </body>
     </html>
   );

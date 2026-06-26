@@ -1,10 +1,11 @@
 import { useFormContext } from "react-hook-form";
+
 import clsx from "clsx";
 
 import { ButtonUI } from "@/shared/ui";
 
-import { FieldValues, TProfileFormUIProps } from "./types";
 import styles from "./profileForm.module.scss";
+import { type FieldValues, type TProfileFormUIProps } from "./types";
 
 export const ProfileFormUI = ({
   children,
@@ -26,7 +27,9 @@ export const ProfileFormUI = ({
   return (
     <form
       className={clsx(styles.form, className)}
-      onSubmit={handleSubmit(onSubmit, onError)}
+      onSubmit={() => {
+        handleSubmit(onSubmit, onError);
+      }}
     >
       <div className={styles.formContentWrapper}>
         <h3 className={styles.formTitle}>{title}</h3>
@@ -37,22 +40,20 @@ export const ProfileFormUI = ({
 
       <div className={styles.formButtons}>
         <ButtonUI
-          size="standart"
-          variant="primary"
-          disabled={
-            isSubmitting || !isChecked || Object.keys(errors).length > 0
-          }
-          type="submit"
+          size='standart'
+          variant='primary'
+          disabled={isSubmitting || !isChecked || Object.keys(errors).length > 0}
+          type='submit'
         >
           {isSubmitting ? "Сохранение..." : "Сохранить"}
         </ButtonUI>
 
         <ButtonUI
-          size="standart"
-          variant="secondary"
+          size='standart'
+          variant='secondary'
           onClick={onEdit}
           disabled={isOnChange || isSubmitting}
-          type="button"
+          type='button'
         >
           Изменить
         </ButtonUI>

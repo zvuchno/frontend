@@ -1,18 +1,17 @@
 "use client";
 
-import { ButtonUI } from "@/shared/ui";
-import styles from "./CartSummary.module.scss";
-import Link from "next/link";
+import { type ChangeEvent, useState } from "react";
+
 import clsx from "clsx";
-import { useCart } from "@/entities/cart";
-import {
-  useApplyCartPromoCode,
-  useRemoveCartPromoCode,
-} from "@/entities/cart/model/useCart";
-import { ChangeEvent, useState } from "react";
+import Link from "next/link";
 
-export const CartSummary = () => {
+import { useApplyCartPromoCode, useCart, useRemoveCartPromoCode } from "@/entities/cart";
 
+import { ButtonUI } from "@/shared/ui";
+
+import styles from "./CartSummary.module.scss";
+
+export function CartSummary() {
   const { data } = useCart();
 
   const [promocode, setPromocode] = useState("");
@@ -70,11 +69,9 @@ export const CartSummary = () => {
         <div className={styles.cartSummaryDiscount}>
           <input
             className={styles.cartSummaryDiscountInput}
-            placeholder="Ввести промокод"
+            placeholder='Ввести промокод'
             value={promocode}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setPromocode(e.target.value)
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPromocode(e.target.value)}
             disabled={isPromoLoading || hasPromoCode}
           />
           <ButtonUI
@@ -94,4 +91,4 @@ export const CartSummary = () => {
       </div>
     </div>
   );
-};
+}

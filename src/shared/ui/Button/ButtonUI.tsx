@@ -1,4 +1,4 @@
-import { TButtonUIProps } from "./types";
+import { type TButtonUIProps } from "./types";
 import styles from "./button.module.scss";
 import clsx from "clsx";
 

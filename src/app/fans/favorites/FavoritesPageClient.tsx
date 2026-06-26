@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
+import { type FanProductCardData, deleteFavorite, getFavoriteProducts } from "@/api/store";
 import { useSession } from "next-auth/react";
 
-import {
-  deleteFavorite,
-  getFavoriteProducts,
-  type FanProductCardData,
-} from "@/api/store";
-import { ProductCard } from "@/entities";
-import { ButtonLike } from "@/features";
+import { ButtonLike } from "@/features/ButtonLike";
+
+import { ProductCard } from "@/entities/ProductCard";
+
 import styles from "./favoritesPageClient.module.scss";
 
 export function FavoritesPageClient() {
@@ -17,9 +16,7 @@ export function FavoritesPageClient() {
   const [cards, setCards] = useState<FanProductCardData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [deletingFavoriteId, setDeletingFavoriteId] = useState<number | null>(
-    null,
-  );
+  const [deletingFavoriteId, setDeletingFavoriteId] = useState<number | null>(null);
 
   useEffect(() => {
     if (status !== "authenticated") {
@@ -41,9 +38,7 @@ export function FavoritesPageClient() {
       } catch (requestError) {
         if (isCurrentRequest) {
           setErrorMessage(
-            requestError instanceof Error
-              ? requestError.message
-              : "Не удалось загрузить избранное",
+            requestError instanceof Error ? requestError.message : "Не удалось загрузить избранное"
           );
         }
       } finally {
@@ -60,10 +55,7 @@ export function FavoritesPageClient() {
     };
   }, [status]);
 
-  const handleFavoriteToggle = async (
-    favoriteId: number | undefined,
-    isLiked: boolean,
-  ) => {
+  const handleFavoriteToggle = async (favoriteId: number | undefined, isLiked: boolean) => {
     if (!favoriteId || isLiked) {
       return;
     }
@@ -73,14 +65,10 @@ export function FavoritesPageClient() {
 
     try {
       await deleteFavorite(favoriteId);
-      setCards((currentCards) =>
-        currentCards.filter((card) => card.favoriteId !== favoriteId),
-      );
+      setCards((currentCards) => currentCards.filter((card) => card.favoriteId !== favoriteId));
     } catch (requestError) {
       setErrorMessage(
-        requestError instanceof Error
-          ? requestError.message
-          : "Не удалось удалить из избранного",
+        requestError instanceof Error ? requestError.message : "Не удалось удалить из избранного"
       );
     } finally {
       setDeletingFavoriteId(null);
@@ -112,9 +100,7 @@ export function FavoritesPageClient() {
             <ButtonLike
               isLiked={true}
               disabled={deletingFavoriteId === card.favoriteId}
-              onToggle={(isLiked) =>
-                void handleFavoriteToggle(card.favoriteId, isLiked)
-              }
+              onToggle={(isLiked) => void handleFavoriteToggle(card.favoriteId, isLiked)}
             />
           }
         />

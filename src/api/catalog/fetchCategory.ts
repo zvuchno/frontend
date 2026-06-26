@@ -1,5 +1,5 @@
 export type TAlbum = {
-  id: number
+  id: number;
   name: string;
   price: number | null;
   description: string;
@@ -16,7 +16,7 @@ export type TArtist = {
 };
 
 export type TMerch = {
-  id: number
+  id: number;
   name: string;
   description: string;
   price: number;
@@ -30,74 +30,63 @@ interface CategoryListResponse {
   next: string | null;
   previous: string | null;
   results: TProduct[];
-};
+}
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export const fetchProductsByCategory = async (
   category: string,
   options: {
-    limit?: string,
-    offset?: string,
+    limit?: string;
+    offset?: string;
     filterByGenre?: string | string[];
     filterBySubcategory?: string | string[];
     orderingFilter?: string;
   }
-  
 ): Promise<CategoryListResponse> => {
-
   const { limit, offset, filterByGenre, filterBySubcategory, orderingFilter } = options;
 
-  try {
+  let url: string;
 
-    let url: string;
+  const params = new URLSearchParams();
 
-    const params = new URLSearchParams();
-
-    if (limit) {
-      params.set('limit', limit);
-    }
-
-    if (offset) {
-      params.set('offset', offset);
-    }
-
-    if (orderingFilter) {
-      params.set('ordering', orderingFilter);
-    }
-
-    if (filterByGenre) {
-      if (Array.isArray(filterByGenre)) {
-        params.set('genre', filterByGenre.join(','));
-      } else {
-        params.set('genre', filterByGenre);
-      }
-    }
-
-    if (filterBySubcategory) {
-      if (Array.isArray(filterBySubcategory)) {
-        params.set('kind', filterBySubcategory.join(','));
-      } else {
-        params.set('kind', filterBySubcategory);
-      }
-    }
-
-    if (category === 'artists') {
-      url = `${baseUrl}/v1/${category}/?${params.toString()}`;
-
-    } else {
-      url = `${baseUrl}/v1/store/${category}/?${params.toString()}`;
-    }
-  
-    const response = await fetch(url);
-
-    if (!response.ok) throw new Error(`Ошибка получения продуктов категории: ${category}`);
-
-    const products = await response.json();
-
-    return products;
-
-  } catch (error) {
-    throw error;
+  if (limit) {
+    params.set("limit", limit);
   }
-}
+
+  if (offset) {
+    params.set("offset", offset);
+  }
+
+  if (orderingFilter) {
+    params.set("ordering", orderingFilter);
+  }
+
+  if (filterByGenre) {
+    if (Array.isArray(filterByGenre)) {
+      params.set("genre", filterByGenre.join(","));
+    } else {
+      params.set("genre", filterByGenre);
+    }
+  }
+
+  if (filterBySubcategory) {
+    if (Array.isArray(filterBySubcategory)) {
+      params.set("kind", filterBySubcategory.join(","));
+    } else {
+      params.set("kind", filterBySubcategory);
+    }
+  }
+
+  if (category === "artists") {
+    url = `${baseUrl}/v1/${category}/?${params.toString()}`;
+  } else {
+    url = `${baseUrl}/v1/store/${category}/?${params.toString()}`;
+  }
+
+  const response = await fetch(url);
+
+  if (!response.ok) throw new Error(`Ошибка получения продуктов категории: ${category}`);
+
+  return (await response.json()) as CategoryListResponse;
+};

@@ -1,4 +1,4 @@
-import { TNewArtistRequest, TNewUserResponse } from "@/entities/user/types";
+import { type TNewArtistRequest, type TNewUserResponse } from "@/entities/user";
 
 export interface ArtistRegisterFormData {
   title: string;

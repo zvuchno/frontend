@@ -1,15 +1,11 @@
 "use client";
 
-import { ModalUI, Title, CustomInput, ButtonUI } from "@/shared/ui";
-import {
-  ModalAddContactProps,
-  TFieldValues,
-} from "../model/ModalAddContact.type";
 import { useForm } from "react-hook-form";
-import {
-  addContactFormFields,
-  addLinkFormFields,
-} from "../../../config/constants";
+
+import { ButtonUI, CustomInput, ModalUI, Title } from "@/shared/ui";
+
+import { addContactFormFields, addLinkFormFields } from "../../../config/constants";
+import { type ModalAddContactProps, type TFieldValues } from "../model/ModalAddContact.type";
 import s from "./ModalAddContact.module.scss";
 
 export const ModalAddContact = ({
@@ -48,13 +44,16 @@ export const ModalAddContact = ({
   };
 
   return (
-    <ModalUI onClose={onClose} isOpen={isOpen} closeButtonStyle="circledX">
+    <ModalUI onClose={onClose} isOpen={isOpen} closeButtonStyle='circledX'>
       <div className={s.container}>
-        <form className={s.form} onSubmit={handleSubmit(onSave)}>
-          <Title className={s.form__title} Tag="h5" variant="title">
-            {variant === "contact"
-              ? "Добавление контакта"
-              : "Добавление ссылки"}
+        <form
+          className={s.form}
+          onSubmit={() => {
+            handleSubmit(onSave);
+          }}
+        >
+          <Title className={s.form__title} Tag='h5' variant='title'>
+            {variant === "contact" ? "Добавление контакта" : "Добавление ссылки"}
           </Title>
 
           {fields.map((field) => {
@@ -77,9 +76,9 @@ export const ModalAddContact = ({
           })}
 
           <ButtonUI
-            size="small"
-            variant="primary"
-            type="submit"
+            size='small'
+            variant='primary'
+            type='submit'
             disabled={!isValid || isSubmitting}
           >
             {isSubmitting ? "Добавление..." : "Сохранить"}

@@ -1,8 +1,10 @@
-import { Controller, FieldError, get, useFormContext } from "react-hook-form";
-import { FieldValues, TProfileFormField } from "../types";
-import clsx from "clsx";
+import { Controller, type FieldError, get, useFormContext } from "react-hook-form";
 import { IMaskInput } from "react-imask";
-import { registerRules } from "@/features/profile/utils/validation";
+
+import clsx from "clsx";
+
+import { registerRules } from "../../../utils/validation";
+import { type FieldValues, type TProfileFormField } from "../types";
 import styles from "./InputPhone.module.scss";
 
 type TIputPhoneProps = {
@@ -24,32 +26,28 @@ export const InputPhone = ({ field, disabled, className }: TIputPhoneProps) => {
       name={field.name}
       rules={registerRules(field)}
       render={({ field: { onChange, value, ref, onBlur } }) => (
-        <div
-          className={clsx(styles.field, { ["error"]: !!fieldError }, className)}
-        >
+        <div className={clsx(styles.field, { ["error"]: !!fieldError }, className)}>
           {field.title && (
             <div className={styles.labelContainer}>
               <label
                 className={clsx(
                   styles.labelContainer__label,
-                  styles.labelContainer__label_size_small,
+                  styles.labelContainer__label_size_small
                 )}
                 htmlFor={`${field.row}.${field.column}`}
               >
                 {field.title}
               </label>
-              {field.required && (
-                <span className={styles.labelContainer__markRequired}>*</span>
-              )}
+              {field.required && <span className={styles.labelContainer__markRequired}>*</span>}
             </div>
           )}
           <IMaskInput
-            mask="+{7}(000)000-00-00"
+            mask='+{7}(000)000-00-00'
             lazy={false}
-            placeholderChar="_"
+            placeholderChar='_'
             value={value || ""}
-            type="text"
-            inputMode="tel"
+            type='text'
+            inputMode='tel'
             unmask={true}
             onAccept={(val) => onChange(val)}
             onBlur={onBlur}
@@ -62,7 +60,7 @@ export const InputPhone = ({ field, disabled, className }: TIputPhoneProps) => {
               border: "1px solid currentColor",
               padding: "12px 32px",
               fontFamily: "var(--font-feature-mono)",
-              fontSize: "16px"
+              fontSize: "16px",
             }}
             id={`${field.row}.${field.column}`}
             disabled={disabled}
@@ -70,9 +68,7 @@ export const InputPhone = ({ field, disabled, className }: TIputPhoneProps) => {
             required={field.required}
             aria-required={field.required}
           />
-          {fieldError ? (
-            <span className="message error">{fieldError.message}</span>
-          ) : null}
+          {fieldError ? <span className='message error'>{fieldError.message}</span> : null}
         </div>
       )}
     />

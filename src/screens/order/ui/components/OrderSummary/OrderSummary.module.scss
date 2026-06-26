@@ -3,8 +3,7 @@
   flex-direction: column;
   align-items: stretch;
   gap: 32px;
-  padding: clamp(20px, 4.17vw, 60px) clamp(15px, 2.5vw, 40px)
-    clamp(20px, 4.86vw, 70px);
+  padding: clamp(20px, 4.17vw, 60px) clamp(15px, 2.5vw, 40px) clamp(20px, 4.86vw, 70px);
   border: 1px solid var(--color-text-primary);
   width: 100%;
 
@@ -68,7 +67,7 @@
       font-size: 22px;
     }
 
-     @media (max-width: 800px) {
+    @media (max-width: 800px) {
       font-size: 24px;
     }
   }

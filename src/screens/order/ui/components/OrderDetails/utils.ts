@@ -1,7 +1,10 @@
-import { TProfileFormField } from "@/features/profile/ui/profileForm/types";
-import { FieldValues } from "@/screens/order/model/types";
-import { Validate } from "react-hook-form";
-import { validatePhone } from "./validation";
+import { type Validate } from "react-hook-form";
+
+import { type FieldValues } from "@/screens/order/model/types";
+
+import { type TProfileFormField } from "@/features/profile";
+
+import { validatePhone } from "@/shared/utils/validatePhone";
 
 export const orderPersonalFormFields: TProfileFormField<FieldValues>[] = [
   {
@@ -121,5 +124,5 @@ export const fieldsConfig: Record<
     required: true,
     minLength: 2,
     maxLength: 50,
-  }
+  },
 };

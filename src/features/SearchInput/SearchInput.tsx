@@ -1,8 +1,11 @@
-import { useState, FormEvent, ChangeEvent } from "react";
-import { Text } from "@/shared/ui";
-import s from "./SearchInput.module.scss";
-import { SearchInputProps } from "./SearchInput.type";
+import { type ChangeEvent, useState } from "react";
+
 import clsx from "clsx";
+
+import { Text } from "@/shared/ui";
+
+import s from "./SearchInput.module.scss";
+import { type SearchInputProps } from "./SearchInput.type";
 
 const SearchInput = ({
   placeholder = "Найти товары",
@@ -17,11 +20,7 @@ const SearchInput = ({
     setValue(e.target.value);
   };
 
-  const handleClear = () => {
-    setValue("");
-  };
-
-  const handleClose = (e: FormEvent) => {
+  const handleClose = () => {
     setValue("");
     if (onClose) {
       onClose();
@@ -30,48 +29,41 @@ const SearchInput = ({
   return (
     <div className={clsx(s["search-input"], className)}>
       {label && (
-        <Text Tag="label" variant="normal" className={s["search-input__label"]}>
+        <Text Tag='label' variant='normal' className={s["search-input__label"]}>
           {label}
         </Text>
       )}
 
       <div className={s["search-input__wrapper"]}>
         <input
-          type="text"
+          type='text'
           className={s["search-input__input"]}
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
           disabled={disabled}
-          autoComplete="off"
+          autoComplete='off'
         />
         <button
-          type="button"
+          type='button'
           className={s["search-input__button"]}
           onClick={handleClose}
           disabled={disabled || !value}
-          aria-label="Закрыть поиск"
+          aria-label='Закрыть поиск'
         >
           <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
           >
-            <circle
-              cx="12"
-              cy="12"
-              r="11"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-            />
+            <circle cx='12' cy='12' r='11' stroke='currentColor' strokeWidth='2' fill='none' />
             <path
-              d="M15 9L9 15M9 9L15 15"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
+              d='M15 9L9 15M9 9L15 15'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
             />
           </svg>
         </button>

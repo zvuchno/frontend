@@ -1,23 +1,76 @@
-import {
-  Controller,
-  FieldError,
-  FieldPath,
-  get,
-  useFormContext,
-} from "react-hook-form";
-import { FieldValues, TArtistFormPersonalField } from "../utils/types";
-import { artistFormPersonalRules } from "../utils/validation";
-import styles from "../artistFormPersonal.module.scss";
-import clsx from "clsx";
 import DatePicker from "react-datepicker";
-import { ru } from "date-fns/locale";
+import { Controller, type FieldError, type FieldPath, type RegisterOptions, get, type useFormContext } from "react-hook-form";
 import { IMaskInput } from "react-imask";
+
+
+
+import clsx from "clsx";
+import { ru } from "date-fns/locale";
+
+
+
+import { type TArtistLegalData } from "@/entities/Artist/store/types";
+
+
+
 import { CustomInput } from "@/shared/ui";
+
+
+
+import styles from "../artistFormPersonal.module.scss";
+import { type FieldValues, type TArtistFormPersonalField } from "../utils/types";
+import { artistFormPersonalRules } from "../utils/validation";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const createFormField = (
   field: TArtistFormPersonalField,
   fieldSet: number,
-  methods: ReturnType<typeof useFormContext<FieldValues>>,
+  methods: ReturnType<typeof useFormContext<FieldValues>>
 ) => {
   const {
     register,
@@ -29,14 +82,14 @@ export const createFormField = (
 
   const { onChange, ...registerRest } = register(
     field.name as FieldPath<FieldValues>,
-    artistFormPersonalRules(field),
+    artistFormPersonalRules(field)
   );
 
   const currentValue = methods.watch(field.name as FieldPath<FieldValues>);
 
   const issuerCodeFormatter = (
     field: TArtistFormPersonalField,
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (field.name === "identity_data.passport_issued_by") {
       const value = e.target.value.replace(/\D/g, "");
@@ -49,15 +102,12 @@ export const createFormField = (
   };
 
   return (
-    <div
-      className={styles[`cell-${field.row}-${field.column}`]}
-      key={`${field.name}-${fieldSet}`}
-    >
+    <div className={styles[`cell-${field.row}-${field.column}`]} key={`${field.name}-${fieldSet}`}>
       {field.type === "date" || field.type === "tel" ? (
         <Controller
           control={control}
-          name={field.name as FieldPath<FieldValues>}
-          rules={artistFormPersonalRules(field)}
+          name={field.name}
+          rules={artistFormPersonalRules(field) as Record<string, any>}
           render={({ field: { onChange, value, name, ref, onBlur } }) => {
             const fieldError = get(errors, name) as FieldError | undefined;
             return (
@@ -65,23 +115,18 @@ export const createFormField = (
                 className={clsx(
                   "field",
                   { ["error"]: !!fieldError },
-                  { ["calendar"]: field.type === "date" },
+                  { ["calendar"]: field.type === "date" }
                 )}
               >
-                <div className="labelContainer">
+                <div className='labelContainer'>
                   <label
-                    className="labelContainer__label labelContainer__label_size_small"
+                    className='labelContainer__label labelContainer__label_size_small'
                     htmlFor={name}
                   >
                     {field.title}
                   </label>
                   {field.required && (
-                    <span
-                      className={clsx(
-                        "labelContainer__markRequired",
-                        styles.markRequired,
-                      )}
-                    >
+                    <span className={clsx("labelContainer__markRequired", styles.markRequired)}>
                       *
                     </span>
                   )}
@@ -93,26 +138,26 @@ export const createFormField = (
                       ["error"]: !!fieldError,
                     })}
                     wrapperClassName={styles.datePickerWrapper}
-                    dateFormat="dd.MM.yyyy"
+                    dateFormat='dd.MM.yyyy'
                     locale={ru}
                     selected={value instanceof Date ? value : null}
                     onChange={(date: Date | null) => onChange(date)}
-                    placeholderText="дд.мм.гггг"
+                    placeholderText='дд.мм.гггг'
                     peekNextMonth
                     showMonthDropdown
                     showYearDropdown
-                    dropdownMode="select"
+                    dropdownMode='select'
                     showIcon
                   />
                 )}
                 {field.type === "tel" && (
                   <IMaskInput
-                    mask="+{7}(000)000-00-00"
+                    mask='+{7}(000)000-00-00'
                     lazy={false}
-                    placeholderChar="_"
+                    placeholderChar='_'
                     value={(value as string) || ""}
-                    type="text"
-                    inputMode="tel"
+                    type='text'
+                    inputMode='tel'
                     unmask={true}
                     onAccept={(val) => onChange(val)}
                     onBlur={onBlur}
@@ -128,9 +173,7 @@ export const createFormField = (
                     aria-required={field.required}
                   />
                 )}
-                {fieldError && (
-                  <span className="message error">{fieldError.message}</span>
-                )}
+                {fieldError && <span className='message error'>{fieldError.message}</span>}
               </div>
             );
           }}
@@ -140,19 +183,12 @@ export const createFormField = (
           <div className={"labelContainer"}>
             <label
               htmlFor={field.name}
-              className="labelContainer__label labelContainer__label_size_small"
+              className='labelContainer__label labelContainer__label_size_small'
             >
               {field.title}
             </label>
             {field.required && (
-              <span
-                className={clsx(
-                  "labelContainer__markRequired",
-                  styles.markRequired,
-                )}
-              >
-                *
-              </span>
+              <span className={clsx("labelContainer__markRequired", styles.markRequired)}>*</span>
             )}
           </div>
           <select
@@ -174,15 +210,13 @@ export const createFormField = (
             aria-disabled={field.disabled}
             required={field.required}
             aria-required={field.required}
-            onChange={(
-              e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
-            ) => {
-              onChange(e as React.ChangeEvent<HTMLInputElement>);
-              issuerCodeFormatter(field, e as any);
+            onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+              onChange(e);
+              issuerCodeFormatter(field, e as React.ChangeEvent<HTMLInputElement>);
             }}
-            defaultValue=""
+            defaultValue=''
           >
-            <option value="individual_temporary" disabled>
+            <option value='individual_temporary' disabled>
               {field.placeholder}
             </option>
             {field.options?.map((el) => (
@@ -194,10 +228,7 @@ export const createFormField = (
         </div>
       ) : (
         <CustomInput
-          {...register(
-            field.name as FieldPath<FieldValues>,
-            artistFormPersonalRules(field),
-          )}
+          {...register(field.name as FieldPath<FieldValues>, artistFormPersonalRules(field))}
           id={`${field.row}.${field.column}`}
           type={field.type}
           label={field.title}

@@ -1,6 +1,8 @@
-import { Meta, StoryObj } from "@storybook/nextjs-vite";
-import NavBar from "./NavBar";
-import { ComponentType } from "react";
+import { type ComponentType } from "react";
+
+import { type Meta, type StoryObj } from "@storybook/nextjs-vite";
+
+import { NavBar } from "./NavBar";
 
 const previewDecorator = (Story: ComponentType) => (
   <div
@@ -16,9 +18,9 @@ const previewDecorator = (Story: ComponentType) => (
 );
 
 const meta: Meta<typeof NavBar> = {
-  title: 'features/profile/ui/NavBar',
+  title: "features/profile/ui/NavBar",
   component: NavBar,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   decorators: [previewDecorator],
 };
 
@@ -27,31 +29,29 @@ type Story = StoryObj<typeof NavBar>;
 
 const profileRoutes = [
   {
-      id: 'Профиль',
-      href: '',
-      label: 'Профиль',
-    },
-    {
-      id: 'Витрина',
-      href: '',
-      label: 'Витрина',
-    },
-    {
-      id: 'Заказы',
-      href: '',
-      label: 'Заказы',
-    },
-    {
-      id: 'Финансы',
-      href: '',
-      label: 'Финансы',
-    }
+    id: "Профиль",
+    href: "",
+    label: "Профиль",
+  },
+  {
+    id: "Витрина",
+    href: "",
+    label: "Витрина",
+  },
+  {
+    id: "Заказы",
+    href: "",
+    label: "Заказы",
+  },
+  {
+    id: "Финансы",
+    href: "",
+    label: "Финансы",
+  },
 ];
 
 export const NavBarInProfile: Story = {
   render: () => {
-    return (
-      <NavBar links={profileRoutes}/>
-    )
-  }
+    return <NavBar links={profileRoutes} />;
+  },
 };

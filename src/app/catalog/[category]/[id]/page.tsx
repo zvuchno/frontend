@@ -2,10 +2,10 @@ import { getCardById } from "@/api/catalog/cardByIdApi/getCardById";
 import { DetailPage } from "@/screens/catalog/product";
 import { Suspense } from "react";
 import s from "./page.module.scss";
-import { Metadata } from "next";
-import { TDetalArtist } from "@/widgets/ArtistDetailCard/model/ArtistDetailCard.types";
-import { TDetailRelease } from "@/widgets/ProductDetailCard/ReleaseDescription";
-import { TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription";
+import { type Metadata } from "next";
+import { type TDetalArtist } from "@/widgets/ArtistDetailCard/model/ArtistDetailCard.types";
+import { type TDetailRelease } from "@/widgets/ProductDetailCard/ReleaseDescription";
+import { type TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription";
 
 export async function generateMetadata({
   params,

@@ -1,53 +1,45 @@
-import { RegisterOptions, Validate } from "react-hook-form";
+import { type FieldPath, type RegisterOptions, type Validate } from "react-hook-form";
+
+import { errorsMessages } from "@/shared/constants/formErrorMessages";
+
+import { fieldsConfig } from "../config/fields-config";
 import type { FieldValues, TArtistFormPersonalField } from "./types";
-import { errorsMessages, fieldsConfig } from "./constants";
 
 export const artistFormPersonalRules = (
-  field: TArtistFormPersonalField,
-): RegisterOptions<FieldValues> => {
+  field: TArtistFormPersonalField
+): RegisterOptions<FieldValues, FieldPath<FieldValues>> => {
   const config = fieldsConfig;
-  const rules: any = {};
+  const rules: RegisterOptions<FieldValues, FieldPath<FieldValues>> = {};
 
-  if (field.required) {
-    rules.required = errorsMessages.requiredMessage;
-  }
-  if (config[field.name].minLength) {
+  rules.required = errorsMessages.requiredMessage;
+
+  const fieldConfig = config[field.name];
+
+  if (!fieldConfig) return {};
+
+  if ("minLength" in fieldConfig && fieldConfig.minLength) {
     rules.minLength = {
-      value: config[field.name].minLength,
-      message: errorsMessages.minLengthMessage + config[field.name].minLength,
+      value: fieldConfig.minLength,
+      message: errorsMessages.minLengthMessage + fieldConfig.minLength,
     };
   }
-  if (config[field.name].maxLength) {
+  if ("maxLength" in fieldConfig && fieldConfig.maxLength) {
     rules.maxLength = {
-      value: config[field.name].maxLength,
-      message: errorsMessages.maxLengthMessage + config[field.name].maxLength,
+      value: fieldConfig.maxLength,
+      message: errorsMessages.maxLengthMessage + fieldConfig.maxLength,
     };
   }
-  if (config[field.name].pattern) {
+  if ("pattern" in fieldConfig && fieldConfig.pattern) {
     rules.pattern = {
-      value: config[field.name].pattern,
+      value: fieldConfig.pattern,
       message: errorsMessages.patternMessage,
     };
   }
-  if(config[field.name].validate) {
-    rules.validate = {
-      validate: config[field.name].validate
-    }
+  if ("validate" in fieldConfig && fieldConfig.validate) {
+    rules.validate = fieldConfig.validate as
+      | Validate<unknown, FieldValues>
+      | Record<string, Validate<unknown, FieldValues>>;
   }
 
   return rules;
 };
-
-
-export const validatePhone: Validate<string | undefined, FieldValues> = (value) => {
-  const number = value?.replace(/\D/g,'') || '';
-  if (number?.length === 1) {
-    return errorsMessages.requiredMessage
-  };
-
-  const isValid = /^79\d{9}$/.test(number);
-  if (!isValid) {
-    return errorsMessages.patternMessage;
-  }
-  return true;
-}

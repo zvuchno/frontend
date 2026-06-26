@@ -1,13 +1,14 @@
 "use client";
 
-import { ButtonUI } from "@/shared/ui";
-import styles from "./OrderSummary.module.scss";
 import clsx from "clsx";
 
 import { useCart } from "@/entities/cart";
 
-export const OrderSummary = () => {
+import { ButtonUI } from "@/shared/ui";
 
+import styles from "./OrderSummary.module.scss";
+
+export const OrderSummary = () => {
   const { data } = useCart();
 
   const itemsSum = data?.subtotal;

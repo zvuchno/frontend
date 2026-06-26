@@ -1,5 +1,4 @@
-import { TGenreKind } from "@/api/catalog/genresKindApi/types";
-import { TMerchKind } from "@/api/catalog/merchKindsApi/types";
+import { type TMerchKind } from "@/api/catalog/merchKindsApi/types";
 
 export interface FilterBlockProps {
   сategory: string;
@@ -8,4 +7,4 @@ export interface FilterBlockProps {
   merchList?: TMerchKind[];
 }
 
-export type TCategory = 'all' | 'artists' | 'albums' | 'merch'
+export type TCategory = "all" | "artists" | "albums" | "merch";

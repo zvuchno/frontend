@@ -1,16 +1,19 @@
-import { useRef, useState, useEffect } from 'react';
-import clsx from 'clsx';
-import styles from './Player.module.scss'
-import type { PlayerUIProps } from "./Player.types";
+import { useEffect, useRef, useState } from "react";
+
+import clsx from "clsx";
+
 import { ButtonLike } from "@/features/ButtonLike";
 
+import styles from "./Player.module.scss";
+import type { PlayerUIProps } from "./Player.types";
+
 export const PlayerUI = ({
-    className, 
-    image, 
-    title, 
-    artistName,
-    audioTrack,
-    isLiked = false,
+  className,
+  image,
+  title,
+  artistName,
+  audioTrack,
+  isLiked = false,
 }: PlayerUIProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -22,22 +25,22 @@ export const PlayerUI = ({
   const [isTitleOverflowing, setIsTitleOverflowing] = useState(false);
   const [isNameOverflowing, setIsNameOverflowing] = useState(false);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     if (isPlaying) {
       audioRef.current?.pause();
     } else {
-      audioRef.current?.play();
+      await audioRef.current?.play();
     }
     setIsPlaying(!isPlaying);
-
   };
 
   const formatTime = (time: number) => {
-    if (isNaN(time)) return '0:00';
+    if (isNaN(time)) return "0:00";
     const timeInSeconds = Math.floor(time);
-    const minutes = timeInSeconds > 0 ? Math.floor(timeInSeconds / 60) : Math.ceil(timeInSeconds / 60);
+    const minutes =
+      timeInSeconds > 0 ? Math.floor(timeInSeconds / 60) : Math.ceil(timeInSeconds / 60);
     const seconds = Math.abs(Math.floor(timeInSeconds % 60));
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
   const handleTimeUpdate = () => {
@@ -65,48 +68,70 @@ export const PlayerUI = ({
       setIsTitleOverflowing(titleRef.current.scrollWidth > containerRef.current.clientWidth);
     }
   }, [title]);
-  
+
   useEffect(() => {
     if (containerRef.current && nameRef.current) {
       setIsNameOverflowing(nameRef.current.scrollWidth > containerRef.current.clientWidth);
     }
   }, [title]);
-  
 
   return (
-  <div className={clsx(styles.container, className)}>
-    <div className={styles.infoWrapper}>
-      <div className={styles.image} style={{ backgroundImage: `url(${image})` }}></div>
-      <div className={styles.info} ref={containerRef}>
-        <span className={clsx(styles.title, {[styles.animatedText]: isTitleOverflowing})} ref={titleRef}>{title}</span>
-        <span className={clsx(styles.name, {[styles.animatedText]: isNameOverflowing})} ref={nameRef}>{artistName}</span>
+    <div className={clsx(styles.container, className)}>
+      <div className={styles.infoWrapper}>
+        <div className={styles.image} style={{ backgroundImage: `url(${image})` }}></div>
+        <div className={styles.info} ref={containerRef}>
+          <span
+            className={clsx(styles.title, { [styles.animatedText]: isTitleOverflowing })}
+            ref={titleRef}
+          >
+            {title}
+          </span>
+          <span
+            className={clsx(styles.name, { [styles.animatedText]: isNameOverflowing })}
+            ref={nameRef}
+          >
+            {artistName}
+          </span>
+        </div>
       </div>
-    </div>
-    <div className={styles.player}>
-      <audio 
-        ref={audioRef} 
-        src={audioTrack} 
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={() => setIsPlaying(false)}
-      />
-      <div onClick={togglePlay} className={styles.playButton} style={{ backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')" }}></div>
-      <div className={styles.controls}>
-        <span>{formatTime(currentTime)}</span>
-        <input 
-          type="range"
-          min={0}
-          max={totalDuration}
-          value={currentTime} 
-          onChange={handleSet} 
-          className={styles.progressBar}
+      <div className={styles.player}>
+        <audio
+          ref={audioRef}
+          src={audioTrack}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata}
+          onEnded={() => setIsPlaying(false)}
         />
-        <span className={styles.timer}>{formatTime(currentTime - totalDuration)}</span>
+        <div
+          onClick={() => togglePlay}
+          className={styles.playButton}
+          style={{
+            backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')",
+          }}
+        ></div>
+        <div className={styles.controls}>
+          <span>{formatTime(currentTime)}</span>
+          <input
+            type='range'
+            min={0}
+            max={totalDuration}
+            value={currentTime}
+            onChange={handleSet}
+            className={styles.progressBar}
+          />
+          <span className={styles.timer}>{formatTime(currentTime - totalDuration)}</span>
+        </div>
+        <div className={styles.likeContainer}>
+          <ButtonLike
+            isLiked={isLiked}
+            className={styles.buttonLike}
+            iconClassName={styles.iconLike}
+          />
+        </div>
       </div>
-      <div className={styles.likeContainer}><ButtonLike isLiked={isLiked} className={styles.buttonLike} iconClassName={styles.iconLike}/></div>
     </div>
-  </div>)
-}
+  );
+};
 
 //  моки для отладки
 // 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Schwejk_cropped.jpg/1200px-Schwejk_cropped.jpg'

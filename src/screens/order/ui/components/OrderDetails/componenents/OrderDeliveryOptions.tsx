@@ -1,7 +1,8 @@
-import { TDeliveryOption } from "@/entities";
+import type { TDeliveryOption } from "@/entities/order";
+
 import { CheckboxUI } from "@/shared/ui";
 
-import styles from '../OrderDetails.module.scss'
+import styles from "../OrderDetails.module.scss";
 
 export const OrderDeliveryOptions = ({
   options,

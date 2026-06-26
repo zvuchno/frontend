@@ -1,5 +1,5 @@
 import { Text, Title, Link } from "@/shared/ui";
-import { JoinSectionProps } from "../model/JoinSection.type";
+import { type JoinSectionProps } from "../model/JoinSection.type";
 import s from "./JoinSection.module.scss";
 
 const joinIcon: React.ReactNode = (

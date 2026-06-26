@@ -1,6 +1,8 @@
-import { Validate } from "react-hook-form";
-import { TProfileFormField, FieldValues } from "../ui/profileForm/types";
-import { validatePhone } from "./validation";
+import { type Validate } from "react-hook-form";
+
+import { validatePhone } from "@/shared/utils/validatePhone";
+
+import { type FieldValues, type TProfileFormField } from "../ui/profileForm/types";
 
 export const artistFormFields: TProfileFormField[] = [
   {
@@ -88,22 +90,15 @@ export const listenerFormFields: TProfileFormField[] = [
     column: 1,
   },
   {
-    title: 'Пароль',
-    name: 'password',
-    placeholder: '',
-    type: 'password',
+    title: "Пароль",
+    name: "password",
+    placeholder: "",
+    type: "password",
     required: false,
     row: 2,
     column: 2,
   },
 ];
-
-export const errorsMessages = {
-  requiredMessage: "Обязательное поле",
-  minLengthMessage: "Min длина поля ",
-  maxLengthMessage: "Max длина поля ",
-  patternMessage: "Введите корректные данные",
-};
 
 export const fieldsConfig: Record<
   keyof FieldValues,

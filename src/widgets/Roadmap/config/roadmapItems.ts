@@ -1,4 +1,4 @@
-import { RoadmapItem } from "../model/Roadmap.types";
+import { type RoadmapItem } from "../model/Roadmap.types";
 
 
 export const roadmapItems: RoadmapItem[] = [

@@ -1,6 +1,6 @@
 import { Link } from "../Link/Link";
 import { Title } from "../Typography/Typography";
-import { ListSectionProps } from "./ListSection.type";
+import { type ListSectionProps } from "./ListSection.type";
 import s from "./ListSection.module.scss";
 import clsx from "clsx";
 

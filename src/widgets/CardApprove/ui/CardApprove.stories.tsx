@@ -1,16 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
+import { CardArtist } from "@/entities/Artist";
+
 import { CardApprove } from "../CardApprove";
-import CardArtist from "@/entities/Artist/ui/CardArtist/CardArtist";
 
 const narrowMainBlock: React.ReactNode = (
-  <div
-    style={{ backgroundColor: "#c0eeb7", height: "100px", width: "200px" }}
-  ></div>
+  <div style={{ backgroundColor: "#c0eeb7", height: "100px", width: "200px" }}></div>
 );
 const wideMainBlock: React.ReactNode = (
-  <div
-    style={{ backgroundColor: "#b8e7e3", height: "200px", width: "1000px" }}
-  ></div>
+  <div style={{ backgroundColor: "#b8e7e3", height: "200px", width: "1000px" }}></div>
 );
 
 const content: string[] = [

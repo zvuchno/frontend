@@ -1,18 +1,19 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useUserStore } from "../../user";
 import {
   addCartItem,
+  applyCartPromoCode,
   getCart,
   removeCartItem,
-  updateCart,
-  applyCartPromoCode,
   removeCartPromoCode,
+  updateCart,
 } from "../api/cart.api";
 import type { TCart, TCartItem } from "./types";
-import { useUserStore } from "@/entities/user/store/useUserStore";
-import toast from "react-hot-toast";
 
 export const cartQueryKeys = {
   all: ["cart"] as const,
@@ -40,8 +41,8 @@ export function useAddCartItem() {
 
   return useMutation<TCart, Error, TCartItem>({
     mutationFn: (item: TCartItem) => addCartItem(item, accessToken),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
     },
   });
 }
@@ -51,9 +52,9 @@ export function useUpdateCart() {
   const queryClient = useQueryClient();
 
   return useMutation<TCart, Error, Partial<TCartItem>>({
-    mutationFn: (item) => updateCart({ items: [item]}, accessToken),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+    mutationFn: (item) => updateCart({ items: [item] }, accessToken),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
     },
   });
 }
@@ -64,8 +65,8 @@ export function useRemoveCartItem() {
 
   return useMutation({
     mutationFn: (variantId: number) => removeCartItem(variantId, accessToken),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
       toast.success("Товар удален из корзины");
     },
   });
@@ -77,14 +78,13 @@ export function useApplyCartPromoCode() {
 
   return useMutation({
     mutationFn: (code: string) => applyCartPromoCode(code, accessToken),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
-       toast.success("Промокод успешно применен");
-
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+      toast.success("Промокод успешно применен");
     },
     onError: (error) => {
-      toast.error(error.message || "Не удалось применить промокод")
-    }
+      toast.error(error.message || "Не удалось применить промокод");
+    },
   });
 }
 
@@ -94,8 +94,8 @@ export function useRemoveCartPromoCode() {
 
   return useMutation({
     mutationFn: () => removeCartPromoCode(accessToken),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
       toast.success("Промокод удален");
     },
   });

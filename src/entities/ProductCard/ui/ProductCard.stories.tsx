@@ -1,7 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { ComponentType } from "react";
 
-import { ButtonLike } from "../../../features";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+
+import { ButtonLike } from "@/features/ButtonLike";
 import { ProductCard } from "./ProductCard";
 
 const previewDecorator = (Story: ComponentType) => (
@@ -17,8 +18,7 @@ const previewDecorator = (Story: ComponentType) => (
   </div>
 );
 
-const imageSrc =
-  "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e";
+const imageSrc = "https://i.scdn.co/image/7c04200539a69e2a0948836809b484501098c56e";
 
 const meta = {
   title: "entities/ProductCard",
@@ -53,9 +53,7 @@ export const Default: Story = {
     description: "Винил ОДИН МАНУЛ (LP, 2025)",
     price: "1000",
   },
-  render: (args) => (
-    <ProductCard {...args} likeButton={<ButtonLike isLiked={false} />} />
-  ),
+  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isLiked={false} />} />,
 };
 
 export const Liked: Story = {
@@ -65,9 +63,7 @@ export const Liked: Story = {
     description: "Винил ОДИН МАНУЛ (LP, 2025)",
     price: "1000",
   },
-  render: (args) => (
-    <ProductCard {...args} likeButton={<ButtonLike isLiked />} />
-  ),
+  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isLiked />} />,
 };
 
 export const LongText: Story = {
@@ -77,7 +73,5 @@ export const LongText: Story = {
     description: "Винил ОДИН МАНУЛ Deluxe Gatefold Edition (LP, 2025)",
     price: "12500",
   },
-  render: (args) => (
-    <ProductCard {...args} likeButton={<ButtonLike isLiked={false} />} />
-  ),
+  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isLiked={false} />} />,
 };

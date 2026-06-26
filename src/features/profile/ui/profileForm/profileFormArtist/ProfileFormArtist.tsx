@@ -1,10 +1,12 @@
-import styles from "./profileFormArtist.module.scss";
-import { FieldValues, TProfileFormFieldsProps } from "../types";
+import { type FieldError, get, useFormContext } from "react-hook-form";
+
 import { CustomInput } from "@/shared/ui";
-import { artistFormFields } from "@/features/profile/utils/constants";
+
+import { artistFormFields } from "../../../utils/constants";
+import { registerRules } from "../../../utils/validation";
 import { InputPhone } from "../inputPhone";
-import { FieldError, get, useFormContext } from "react-hook-form";
-import { registerRules } from "@/features/profile/utils/validation";
+import { type FieldValues, type TProfileFormFieldsProps } from "../types";
+import styles from "./profileFormArtist.module.scss";
 
 export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
   const { fieldsDisabled = false, disabledFields } = props;
@@ -18,9 +20,7 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
     <div className={styles.artistForm}>
       {fields.map((field) => {
         const fieldError = get(errors, field.name) as FieldError;
-        const isFieldDisabled = Boolean(
-          fieldsDisabled || disabledFields?.includes(field.name),
-        );
+        const isFieldDisabled = Boolean(fieldsDisabled || disabledFields?.includes(field.name));
 
         return (
           <div className={`cell-${field.row}-${field.column}`} key={field.name}>
@@ -28,21 +28,17 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
               <InputPhone field={field} disabled={isFieldDisabled} />
             ) : field.name === "url" ? (
               <div className={styles.urlField}>
-                <div className="labelContainer">
+                <div className='labelContainer'>
                   <label
-                    className="labelContainer__label labelContainer__label_size_small"
+                    className='labelContainer__label labelContainer__label_size_small'
                     htmlFor={`${field.row}.${field.column}`}
                   >
                     {field.title}
                   </label>
-                  {field.required && (
-                    <span className="labelContainer__markRequired">*</span>
-                  )}
+                  {field.required && <span className='labelContainer__markRequired'>*</span>}
                 </div>
                 <div className={styles.urlField__body}>
-                  <span className={styles.urlField__prefix}>
-                    zvuchno.space.
-                  </span>
+                  <span className={styles.urlField__prefix}>zvuchno.space.</span>
                   <CustomInput
                     {...register(field.name, registerRules(field))}
                     id={`${field.row}.${field.column}`}
@@ -83,12 +79,8 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
       })}
       {props.showPublishHint !== false && (
         <p className={styles.hint}>
-          Чтобы ваш профиль стал публичным для всех пользователей не забудьте
-          заполнить{" "}
-          <a
-            className={styles.link}
-            href={props.personalDataHref ?? "/artist/data"}
-          >
+          Чтобы ваш профиль стал публичным для всех пользователей не забудьте заполнить{" "}
+          <a className={styles.link} href={props.personalDataHref ?? "/artist/data"}>
             Личные данные
           </a>
         </p>

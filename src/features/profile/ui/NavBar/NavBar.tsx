@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
 import { Link } from "@/shared/ui";
-import { NavBarProps } from "./NavBar.type";
+import { type NavBarProps } from "./NavBar.type";
 import s from "./NavBar.module.scss";
 
-const NavBar = ({ links }: NavBarProps) => {
+export const NavBar = ({ links }: NavBarProps) => {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
 
@@ -57,5 +57,3 @@ const NavBar = ({ links }: NavBarProps) => {
     </nav>
   );
 };
-
-export default NavBar;

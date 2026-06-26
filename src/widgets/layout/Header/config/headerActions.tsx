@@ -1,7 +1,8 @@
-import { SearchIcon } from "../../../../shared/ui/Icons/searchIcon";
-import { CartIcon } from "../../../../shared/ui/Icons/cartIcon";
-import { ProfileIcon } from "../../../../shared/ui/Icons/profileIcon";
-import { Url } from "next/dist/shared/lib/router/router";
+import { type Url } from "next/dist/shared/lib/router/router";
+
+import { CartIcon } from "@/shared/ui/Icons/cartIcon";
+import { ProfileIcon } from "@/shared/ui/Icons/profileIcon";
+import { SearchIcon } from "@/shared/ui/Icons/searchIcon";
 
 export type THeaderAction = {
   title: string;

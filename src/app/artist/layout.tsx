@@ -1,24 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 
 import {
-  getCurrentArtist,
-  updateCurrentArtist,
-  updateCurrentArtistCover,
   type ArtistApiDataItem,
   type CurrentArtistResponse,
   type UpdateCurrentArtistPayload,
+  getCurrentArtist,
+  updateCurrentArtist,
+  updateCurrentArtistCover,
 } from "@/api/artist";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+
+import { NavBar } from "@/features/profile";
+
 import { artistsProfileRoutes } from "@/shared/constants";
 import { AccentContainer, Title } from "@/shared/ui";
-import NavBar from "@/features/profile/ui/NavBar/NavBar";
-import {
-  ArtistDataSection,
-  type TArtistDataItem,
-} from "./components/ArtistDataSection";
+
+import { ArtistDataSection, type TArtistDataItem } from "./components/ArtistDataSection";
 import s from "./layout.module.scss";
 
 const artistProfilePathnames = ["/artist/profile"];
@@ -34,7 +34,7 @@ const toApiDataItem = (item: TArtistDataItem): ArtistApiDataItem => ({
 
 const buildArtistUpdatePayload = (
   artist: CurrentArtistResponse,
-  overrides: Partial<Pick<CurrentArtistResponse, "contacts" | "socials">>,
+  overrides: Partial<Pick<CurrentArtistResponse, "contacts" | "socials">>
 ): UpdateCurrentArtistPayload => ({
   name: artist.name,
   description: artist.description ?? "",
@@ -57,12 +57,8 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [isAddingSocial, setIsAddingSocial] = useState(false);
-  const [deletingContactKey, setDeletingContactKey] = useState<string | null>(
-    null,
-  );
-  const [deletingSocialKey, setDeletingSocialKey] = useState<string | null>(
-    null,
-  );
+  const [deletingContactKey, setDeletingContactKey] = useState<string | null>(null);
+  const [deletingSocialKey, setDeletingSocialKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "loading") {
@@ -124,11 +120,11 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const saveArtistData = async (
-    overrides: Partial<Pick<CurrentArtistResponse, "contacts" | "socials">>,
+    overrides: Partial<Pick<CurrentArtistResponse, "contacts" | "socials">>
   ) => {
     const currentArtist = requireLoadedArtist();
     const nextArtist = await updateCurrentArtist(
-      buildArtistUpdatePayload(currentArtist, overrides),
+      buildArtistUpdatePayload(currentArtist, overrides)
     );
 
     setArtist(nextArtist);
@@ -150,12 +146,10 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
               ...currentArtist,
               cover: response.cover,
             }
-          : currentArtist,
+          : currentArtist
       );
     } catch (error) {
-      setArtistDataError(
-        getRequestErrorMessage(error, "Не удалось загрузить обложку"),
-      );
+      setArtistDataError(getRequestErrorMessage(error, "Не удалось загрузить обложку"));
     } finally {
       setIsUploadingCover(false);
     }
@@ -171,9 +165,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
         contacts: [...currentArtist.contacts, toApiDataItem(item)],
       });
     } catch (error) {
-      setArtistDataError(
-        getRequestErrorMessage(error, "Не удалось добавить контакт"),
-      );
+      setArtistDataError(getRequestErrorMessage(error, "Не удалось добавить контакт"));
       throw error;
     } finally {
       setIsAddingContact(false);
@@ -190,9 +182,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
         socials: [...currentArtist.socials, toApiDataItem(item)],
       });
     } catch (error) {
-      setArtistDataError(
-        getRequestErrorMessage(error, "Не удалось добавить соцсеть"),
-      );
+      setArtistDataError(getRequestErrorMessage(error, "Не удалось добавить соцсеть"));
       throw error;
     } finally {
       setIsAddingSocial(false);
@@ -209,13 +199,11 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
 
       await saveArtistData({
         contacts: currentArtist.contacts.filter(
-          (contact) => getArtistDataItemKey(contact) !== itemKey,
+          (contact) => getArtistDataItemKey(contact) !== itemKey
         ),
       });
     } catch (error) {
-      setArtistDataError(
-        getRequestErrorMessage(error, "Не удалось удалить контакт"),
-      );
+      setArtistDataError(getRequestErrorMessage(error, "Не удалось удалить контакт"));
     } finally {
       setDeletingContactKey(null);
     }
@@ -230,14 +218,10 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
       setArtistDataError(null);
 
       await saveArtistData({
-        socials: currentArtist.socials.filter(
-          (social) => getArtistDataItemKey(social) !== itemKey,
-        ),
+        socials: currentArtist.socials.filter((social) => getArtistDataItemKey(social) !== itemKey),
       });
     } catch (error) {
-      setArtistDataError(
-        getRequestErrorMessage(error, "Не удалось удалить соцсеть"),
-      );
+      setArtistDataError(getRequestErrorMessage(error, "Не удалось удалить соцсеть"));
     } finally {
       setDeletingSocialKey(null);
     }
@@ -247,7 +231,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
     <div className={s.page}>
       <AccentContainer className={s.container}>
         <div className={s.body}>
-          <Title Tag="h2" className={s.title}>
+          <Title Tag='h2' className={s.title}>
             Личный кабинет
           </Title>
           <section className={s.section}>
@@ -273,8 +257,8 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
             onCoverChange={handleCoverChange}
             onAddContactClick={handleAddContact}
             onAddSocialClick={handleAddSocial}
-            onDeleteContactClick={handleDeleteContact}
-            onDeleteSocialClick={handleDeleteSocial}
+            onDeleteContactClick={() => handleDeleteContact}
+            onDeleteSocialClick={() => handleDeleteSocial}
           />
         </div>
       ) : null}

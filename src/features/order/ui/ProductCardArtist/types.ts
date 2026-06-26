@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react";
+
 import type { DefinitionProps } from "@/shared/ui";
 
 export type ProductCardArtistVariant = "merch" | "music";
@@ -17,8 +18,5 @@ export type ProductCardArtistData = {
   variant?: ProductCardArtistVariant;
 };
 
-export type ProductCardArtistProps = Omit<
-  ComponentPropsWithoutRef<"article">,
-  "children" | "id"
-> &
+export type ProductCardArtistProps = Omit<ComponentPropsWithoutRef<"article">, "children" | "id"> &
   ProductCardArtistData;

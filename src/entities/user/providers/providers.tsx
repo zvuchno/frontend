@@ -1,10 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { SessionProvider } from "next-auth/react";
 import { useSession } from "next-auth/react";
+
 import { useUserStore } from "../store/useUserStore";
-import { useEffect } from "react";
-import { User } from "next-auth";
 
 const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession();
@@ -13,7 +14,7 @@ const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
-      const userData = session.user as User;
+      const userData = session.user;
       setUser({
         id: Number(userData.id),
         userName: userData.userName,
@@ -34,11 +35,7 @@ const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-export const SessionProviders = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const SessionProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <SessionProvider>
       <SessionWatcher>{children}</SessionWatcher>

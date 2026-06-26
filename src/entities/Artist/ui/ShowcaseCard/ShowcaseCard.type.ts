@@ -1,6 +1,6 @@
-import { TProduct, TPromoCode } from "@/entities/Artist/store/useShowcaseStore";
+import { type TProduct, type TPromoCode } from "../../store/useShowcaseStore";
 
-type TShowcaseItem = 'product' | 'promo';
+type TShowcaseItem = "product" | "promo";
 
 export interface ShowcaseCardProps {
   variant: TShowcaseItem;
@@ -9,4 +9,4 @@ export interface ShowcaseCardProps {
   onToggleVisibility: (value: boolean, id: number) => void;
   onDelete: (id: number) => void;
   onEdit?: (id: number) => void;
-};
+}

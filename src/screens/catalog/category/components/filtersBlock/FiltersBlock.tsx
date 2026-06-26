@@ -1,7 +1,7 @@
 'use client'
 
 import s from "./FiltersBlock.module.scss";
-import { FilterBlockProps } from "./FilterBlock.type";
+import { type FilterBlockProps } from "./FilterBlock.type";
 import FiltersGroup from "./ui/filtersGroup/FiltersGroup";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useFilters } from "../../provider/useFilters";

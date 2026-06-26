@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { HeaderUI } from "./HeaderUI";
 import React from "react";
-import { DefaultHeaderActions } from "@/widgets/layout/Header/config/headerActions";
+import { DefaultHeaderActions } from "../config/headerActions";
 
 const meta: Meta<typeof HeaderUI> = {
   title: "WIDGETS/Header",

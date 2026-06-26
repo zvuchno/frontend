@@ -1,13 +1,8 @@
 import { NextResponse } from "next/server";
 
-import {
-  buildAccountApiUrl,
-  getAuthorizationHeader,
-  toProxyResponse,
-} from "../../utils";
+import { buildAccountApiUrl, getAuthorizationHeader, toProxyResponse } from "../../utils";
 
-const CURRENT_ACCOUNT_CHANGE_USERNAME_PATH =
-  "/v1/auth/account/me/change-username/";
+const CURRENT_ACCOUNT_CHANGE_USERNAME_PATH = "/v1/auth/account/me/change-username/";
 
 export async function PATCH(request: Request) {
   try {
@@ -18,18 +13,15 @@ export async function PATCH(request: Request) {
     }
 
     const payload = await request.json();
-    const response = await fetch(
-      buildAccountApiUrl(CURRENT_ACCOUNT_CHANGE_USERNAME_PATH),
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: authorizationHeader,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-        cache: "no-store",
+    const response = await fetch(buildAccountApiUrl(CURRENT_ACCOUNT_CHANGE_USERNAME_PATH), {
+      method: "PATCH",
+      headers: {
+        Authorization: authorizationHeader,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
 
     return toProxyResponse(response);
   } catch (error) {
@@ -40,7 +32,7 @@ export async function PATCH(request: Request) {
             ? error.message
             : "Failed to proxy account username update request",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

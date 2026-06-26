@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import styles from "./buttonLike.module.scss";
 import { ButtonLikeIcon } from "./ButtonLikeIcon";
-import { TButtonLikeProps } from "./types";
+import { type TButtonLikeProps } from "./types";
 
 export const ButtonLike = ({
   isLiked: initialIsLiked,

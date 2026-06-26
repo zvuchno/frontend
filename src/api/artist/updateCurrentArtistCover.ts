@@ -1,7 +1,7 @@
 import { requestArtist } from "./request";
 import {
-  UpdateCurrentArtistCoverPayload,
-  UpdateCurrentArtistCoverResponse,
+  type UpdateCurrentArtistCoverPayload,
+  type UpdateCurrentArtistCoverResponse,
 } from "./types";
 
 const CURRENT_ARTIST_COVER_PATH = "/api/artist/me/cover";

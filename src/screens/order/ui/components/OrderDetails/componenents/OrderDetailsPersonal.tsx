@@ -1,18 +1,17 @@
-import { FieldError, useFormContext } from "react-hook-form";
-import { orderPersonalFormFields } from "../utils";
-import { InputPhone } from "@/features/profile/ui/profileForm/inputPhone";
+import { useState } from "react";
+import { type FieldError, useFormContext } from "react-hook-form";
+
+import { type FieldValues } from "@/screens/order/model/types";
+
+import { InputPhone } from "@/features/profile";
+
 import { CheckboxUI, CustomInput } from "@/shared/ui";
-import { orderPersonalFormRules } from "../validation";
-import { FieldValues } from "@/screens/order/model/types";
 
 import styles from "../OrderDetails.module.scss";
-import { useState } from "react";
+import { orderPersonalFormFields } from "../utils";
+import { orderPersonalFormRules } from "../validation";
 
-export const OrderDetailsPersonal = ({
-  fieldsDisabled,
-}: {
-  fieldsDisabled: boolean;
-}) => {
+export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boolean }) => {
   const {
     register,
     formState: { errors },
@@ -30,16 +29,9 @@ export const OrderDetailsPersonal = ({
           const fieldError = errors[field.name] as FieldError;
           const isFieldDisabled = fieldsDisabled || false;
           return (
-            <div
-              className={`cell-${field.row}-${field.column}`}
-              key={field.name}
-            >
+            <div className={`cell-${field.row}-${field.column}`} key={field.name}>
               {field.type === "tel" ? (
-                <InputPhone
-                  field={field}
-                  disabled={false}
-                  className={styles.orderFormField}
-                />
+                <InputPhone field={field} disabled={false} className={styles.orderFormField} />
               ) : (
                 <CustomInput
                   {...register(field.name, orderPersonalFormRules(field))}
@@ -65,13 +57,12 @@ export const OrderDetailsPersonal = ({
       </div>
       <div>
         <CheckboxUI
-          type="checkbox"
+          type='checkbox'
           onChange={toggleConfirm}
           isChecked={isChecked}
           className={styles.confirmationMessagge}
         >
-          Дать согласие на обработку персональных данных в соответствии с
-          политикой обработки{" "}
+          Дать согласие на обработку персональных данных в соответствии с политикой обработки{" "}
         </CheckboxUI>
       </div>
     </section>

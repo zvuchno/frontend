@@ -1,8 +1,9 @@
 "use client";
 
-import { ArtistRegisterForm } from "@/widgets/auth/ArtistRegisterForm";
-import { registerNewArtist } from "@/entities/user/api";
 import { AuthModal } from "@/widgets/AuthModal";
+import { ArtistRegisterForm } from "@/widgets/auth/ArtistRegisterForm";
+
+import { registerNewArtist } from "@/entities/user";
 
 export const ArtistSignup = () => {
   return (

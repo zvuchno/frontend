@@ -1,4 +1,4 @@
-import { TNewListenerRequest, TNewUserResponse } from "@/entities/user/types";
+import { type TNewListenerRequest, type TNewUserResponse } from "@/entities/user";
 
 export interface ListenerRegisterFormData {
   login: string;

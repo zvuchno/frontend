@@ -1,7 +1,7 @@
 import { requestAccountWithoutResponse } from "./request";
 import {
-  UpdateAccountPasswordPayload,
-  UpdateAccountPasswordResponse,
+  type UpdateAccountPasswordPayload,
+  type UpdateAccountPasswordResponse,
 } from "./types";
 
 const CURRENT_ACCOUNT_CHANGE_PASSWORD_PATH = "/api/account/me/change-password";

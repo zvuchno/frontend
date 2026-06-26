@@ -1,7 +1,9 @@
 import { create } from "zustand";
-import { TArtistLegalData, TArtistLegalDataForApi } from "./types";
+
+import { parseDateFromApi } from "@/shared/utils/formatDate";
+
 import { getArtistLegalData, updateArtistLegalData } from "./api";
-import { parseDateFromApi } from "@/features/artist/ui/FormPersonal/utils/formatDate";
+import { type TArtistLegalData, type TArtistLegalDataForApi } from "./types";
 
 export interface ArtistLegalDataStoreProps {
   artistLegalData: Partial<TArtistLegalData> | null;
@@ -11,9 +13,7 @@ export interface ArtistLegalDataStoreProps {
   fetchArtistLegalData: () => Promise<void>;
   updateArtistLegalData: (data: TArtistLegalDataForApi) => Promise<void>;
 
-  setArtistLegalData: (
-    artistLegalData: Partial<TArtistLegalData> | null,
-  ) => void;
+  setArtistLegalData: (artistLegalData: Partial<TArtistLegalData> | null) => void;
 
   clearStore: () => void;
 }
@@ -32,62 +32,56 @@ const parseLegalDataDate = (value: Date | string | null | undefined) => {
   return Number.isNaN(date.getTime()) ? undefined : date;
 };
 
-const prepareArtistLegalData = (
-  data: Partial<TArtistLegalData>,
-): Partial<TArtistLegalData> => ({
+const prepareArtistLegalData = (data: Partial<TArtistLegalData>): Partial<TArtistLegalData> => ({
   ...data,
   identity_data: data.identity_data
     ? {
         ...data.identity_data,
         birth_date: parseLegalDataDate(data.identity_data.birth_date),
-        passport_issue_date: parseLegalDataDate(
-          data.identity_data.passport_issue_date,
-        ),
+        passport_issue_date: parseLegalDataDate(data.identity_data.passport_issue_date),
       }
     : data.identity_data,
 });
 
-export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()(
-  (set) => ({
-    artistLegalData: null,
-    isLoading: false,
-    error: null,
+export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()((set) => ({
+  artistLegalData: null,
+  isLoading: false,
+  error: null,
 
-    setArtistLegalData: (legalData) => set({ artistLegalData: legalData }),
+  setArtistLegalData: (legalData) => set({ artistLegalData: legalData }),
 
-    fetchArtistLegalData: async () => {
-      set({ isLoading: true, error: null });
-      try {
-        const data = await getArtistLegalData();
-        const preparedData = prepareArtistLegalData(data);
-        set({ artistLegalData: preparedData, isLoading: false });
-      } catch (error) {
-        set({ error: (error as Error).message, isLoading: false });
-      }
-    },
+  fetchArtistLegalData: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const data = await getArtistLegalData();
+      const preparedData = prepareArtistLegalData(data);
+      set({ artistLegalData: preparedData, isLoading: false });
+    } catch (error) {
+      set({ error: (error as Error).message, isLoading: false });
+    }
+  },
 
-    updateArtistLegalData: async (newData) => {
-      set({ isLoading: true, error: null });
-      try {
-        const updatedData = await updateArtistLegalData(newData);
-        const preparedData = prepareArtistLegalData(updatedData);
-        set((state) => ({
-          artistLegalData: state.artistLegalData
-            ? { ...state.artistLegalData, ...preparedData }
-            : preparedData,
-          isLoading: false,
-        }));
-      } catch (error) {
-        set({ error: (error as Error).message, isLoading: false });
-        throw error;
-      }
-    },
-
-    clearStore: () =>
-      set({
-        artistLegalData: null,
+  updateArtistLegalData: async (newData) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedData = await updateArtistLegalData(newData);
+      const preparedData = prepareArtistLegalData(updatedData);
+      set((state) => ({
+        artistLegalData: state.artistLegalData
+          ? { ...state.artistLegalData, ...preparedData }
+          : preparedData,
         isLoading: false,
-        error: null,
-      }),
-  }),
-);
+      }));
+    } catch (error) {
+      set({ error: (error as Error).message, isLoading: false });
+      throw error;
+    }
+  },
+
+  clearStore: () =>
+    set({
+      artistLegalData: null,
+      isLoading: false,
+      error: null,
+    }),
+}));

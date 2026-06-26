@@ -1,8 +1,9 @@
 "use client";
 
 import clsx from "clsx";
-import type { TagUIProps } from "./Tag.types";
+
 import styles from "./Tag.module.scss";
+import type { TagUIProps } from "./Tag.types";
 
 export const TagUI = ({
   className,
@@ -14,14 +15,7 @@ export const TagUI = ({
   icon = "x-circle",
   iconClassName,
   hasIcon = true,
-  onIconClick,
 }: TagUIProps) => {
-  const iconClickHandler = (event: React.SyntheticEvent) => {
-    event.stopPropagation();
-    if (!onIconClick) return;
-    onIconClick();
-  };
-
   return (
     <>
       <div
@@ -31,7 +25,7 @@ export const TagUI = ({
             [styles.container_secondary]: isSecondary,
             [styles.container_active]: isActive,
           },
-          className,
+          className
         )}
         onClick={onTagClick}
       >
@@ -44,7 +38,7 @@ export const TagUI = ({
                 [styles.icon_arrow]: icon === "arrow",
                 [styles.icon_xCircle]: icon === "x-circle",
               },
-              iconClassName,
+              iconClassName
             )}
           ></div>
         )}

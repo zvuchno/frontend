@@ -1,10 +1,10 @@
-import type { AuthOptions, User } from "next-auth";
+import type { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
 
-import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken } from "@/entities/user/api";
+import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken } from "@/entities/user";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -54,13 +54,11 @@ export const authConfig: AuthOptions = {
             isArtist: user.is_artist,
             isListener: user.is_listener,
             accessToken: tokens.access,
-            refreshToken: tokens.refresh
-          } as User;
+            refreshToken: tokens.refresh,
+          };
         } catch (error: unknown) {
-          console.log('Ошибка аутентификации', error)
-          throw new Error(
-            error instanceof Error ? error.message : "Ошибка аутентификации",
-          );
+          console.log("Ошибка аутентификации", error);
+          throw new Error(error instanceof Error ? error.message : "Ошибка аутентификации");
         }
       },
     }),
@@ -79,11 +77,11 @@ export const authConfig: AuthOptions = {
         token.isArtist = user.isArtist;
         token.accessToken = user.accessToken;
         token.artistName = user.artistName;
-        token.refreshToken = user.refreshToken
+        token.refreshToken = user.refreshToken;
       }
 
       if (token.accessToken && !(await isTokenValid(token.accessToken))) {
-        console.log('Token expired, refreshing...');
+        console.log("Token expired, refreshing...");
 
         try {
           const refreshed = await refreshToken(token.refreshToken as string);
@@ -91,10 +89,9 @@ export const authConfig: AuthOptions = {
           token.accessToken = refreshed.access;
           token.refreshToken = refreshed.refresh;
 
-          console.log('Token successfully updated');
-
+          console.log("Token successfully updated");
         } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
+          console.error("Token refresh failed:", refreshError);
 
           token.accessToken = undefined;
           token.refreshToken = undefined;
@@ -144,7 +141,7 @@ export const authConfig: AuthOptions = {
         session.user.accessToken = token.accessToken;
         session.user.artistName = token.artistName;
       }
-      return session
+      return session;
     },
   },
 
@@ -152,18 +149,16 @@ export const authConfig: AuthOptions = {
     async signOut({ token }) {
       if (token.refreshToken) {
         try {
-          await logOutUser({refresh: token.refreshToken});
-          
+          await logOutUser({ refresh: token.refreshToken });
         } catch (error) {
-          throw new Error(error instanceof Error ? error.message : 'Ошибка выхода из аккаунта' )
+          throw new Error(error instanceof Error ? error.message : "Ошибка выхода из аккаунта");
         }
-        
       }
     },
   },
 
   session: {
-    strategy: 'jwt'
+    strategy: "jwt",
   },
 
   pages: {

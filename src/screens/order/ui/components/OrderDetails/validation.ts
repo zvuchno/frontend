@@ -1,53 +1,46 @@
-import { RegisterOptions, Validate } from "react-hook-form";
-import { errorsMessages, fieldsConfig } from "./utils";
-import { FieldValues, TOrderPersonalFormField } from "@/screens/order/model/types";
+import { type FieldPath, type RegisterOptions } from "react-hook-form";
+
+import { type FieldValues, type TOrderPersonalFormField } from "@/screens/order/model/types";
+
+import { errorsMessages } from "@/shared/constants/formErrorMessages";
+
+import { fieldsConfig } from "./utils";
 
 export const orderPersonalFormRules = (
-  field: TOrderPersonalFormField,
+  field: TOrderPersonalFormField
 ): RegisterOptions<FieldValues> => {
-  const config = fieldsConfig;
-  const rules: any = {};
+  const fieldConfig = fieldsConfig[field.name];
+  const rules: RegisterOptions<FieldValues, FieldPath<FieldValues>> = {};
+
+  if (!fieldConfig) return rules;
 
   if (field.required) {
     rules.required = errorsMessages.requiredMessage;
   }
-  if (config[field.name].minLength) {
+
+  if (fieldConfig.minLength) {
     rules.minLength = {
-      value: config[field.name].minLength,
-      message: errorsMessages.minLengthMessage + config[field.name].minLength,
+      value: fieldConfig.minLength,
+      message: errorsMessages.minLengthMessage + fieldConfig.minLength,
     };
   }
-  if (config[field.name].maxLength) {
+  if (fieldConfig.maxLength) {
     rules.maxLength = {
-      value: config[field.name].maxLength,
-      message: errorsMessages.maxLengthMessage + config[field.name].maxLength,
+      value: fieldConfig.maxLength,
+      message: errorsMessages.maxLengthMessage + fieldConfig.maxLength,
     };
   }
-  if (config[field.name].pattern) {
+  if (fieldConfig.pattern) {
     rules.pattern = {
-      value: config[field.name].pattern,
+      value: fieldConfig.pattern,
       message: errorsMessages.patternMessage,
     };
   }
-  if(config[field.name].validate) {
+  if (fieldConfig.validate) {
     rules.validate = {
-      validate: config[field.name].validate
-    }
+      validate: fieldConfig.validate,
+    };
   }
 
   return rules;
 };
-
-
-export const validatePhone: Validate<string | undefined, FieldValues> = (value) => {
-  const number = value?.replace(/\D/g,'') || '';
-  if (number?.length === 1) {
-    return errorsMessages.requiredMessage
-  };
-
-  const isValid = /^79\d{9}$/.test(number);
-  if (!isValid) {
-    return errorsMessages.patternMessage;
-  }
-  return true;
-}

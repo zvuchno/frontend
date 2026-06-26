@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CSSProperties } from 'react';
+import { type CSSProperties } from 'react';
 import { HeroUI } from './Hero';
 
 const meta: Meta<typeof HeroUI> = {

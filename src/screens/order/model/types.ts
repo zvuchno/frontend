@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from "react";
+import { type HTMLInputTypeAttribute } from "react";
 
 export interface FieldValues {
   fullName?: string;

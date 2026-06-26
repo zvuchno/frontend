@@ -1,37 +1,21 @@
-import { Title } from "@/shared/ui";
-import s from "./CardArtist.module.scss";
-import { CardArtistProps } from "./CardArtist.type";
-import { ButtonLike } from "@/features";
+import { ButtonLike } from "@/features/ButtonLike";
 
-const CardArtist = ({
-  image,
-  description,
-  hasButton = true,
-  isLiked,
-}: CardArtistProps) => {
+import { Title } from "@/shared/ui";
+
+import s from "./CardArtist.module.scss";
+import { type CardArtistProps } from "./CardArtist.type";
+
+export const CardArtist = ({ image, description, hasButton = true, isLiked }: CardArtistProps) => {
   return (
     <div className={s.cardWrapper}>
       <div className={s.cardCorner} />
       <div className={s.card}>
-        {image && (
-          <img
-            className={s.card__image}
-            src={image}
-            alt="Фото артиста"
-            loading="lazy"
-          />
-        )}
+        {image && <img className={s.card__image} src={image} alt='Фото артиста' loading='lazy' />}
 
-        {hasButton && (
-          <ButtonLike isLiked={isLiked || false} className={s.card__button} />
-        )}
+        {hasButton && <ButtonLike isLiked={isLiked || false} className={s.card__button} />}
         {description && (
           <div className={s.card__description}>
-            <Title
-              Tag="h4"
-              variant="title"
-              className={s.card__description__title}
-            >
+            <Title Tag='h4' variant='title' className={s.card__description__title}>
               {description}
             </Title>
           </div>
@@ -40,5 +24,3 @@ const CardArtist = ({
     </div>
   );
 };
-
-export default CardArtist;

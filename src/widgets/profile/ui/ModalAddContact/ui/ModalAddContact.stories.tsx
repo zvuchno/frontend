@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { useState } from "react";
 import { fn } from "storybook/test";
 import { ModalAddContact } from "./ModalAddContact";
-import { TFieldValues } from "../model/ModalAddContact.type";
+import { type TFieldValues } from "../model/ModalAddContact.type";
 
 const meta: Meta<typeof ModalAddContact> = {
   title: "widgets/profile/ui/ModalAddContact",

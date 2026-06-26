@@ -1,9 +1,9 @@
-import { HTMLInputTypeAttribute } from "react";
+import { type HTMLInputTypeAttribute } from "react";
 import {
-  Control,
-  FieldErrors,
-  SubmitErrorHandler,
-  SubmitHandler,
+  type Control,
+  type FieldErrors,
+  type SubmitErrorHandler,
+  type SubmitHandler,
 } from "react-hook-form";
 
 export interface FieldValues {

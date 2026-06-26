@@ -1,8 +1,10 @@
-import { AccentContainer, ButtonUI } from "@/shared/ui";
+import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+
+import { AccentContainer, ButtonUI } from "@/shared/ui";
+
 import styles from "../../CartPage.module.scss";
-import clsx from "clsx";
 
 export const EmptyCart = () => (
   <AccentContainer
@@ -35,11 +37,7 @@ export const EmptyCart = () => (
       />
     </div>
 
-    <ButtonUI
-      variant={"accentDark"}
-      size={"standart"}
-      className={styles.buttonEmpty}
-    >
+    <ButtonUI variant={"accentDark"} size={"standart"} className={styles.buttonEmpty}>
       <Link href={"/"} prefetch={false} style={{ width: "100%" }}>
         Назад к покупкам
       </Link>

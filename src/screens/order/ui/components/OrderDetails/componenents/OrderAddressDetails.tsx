@@ -1,16 +1,14 @@
-import { FieldValues } from "@/screens/order/model/types";
+import { type FieldError, useFormContext } from "react-hook-form";
+
+import { type FieldValues } from "@/screens/order/model/types";
+
 import { CustomInput } from "@/shared/ui";
-import { FieldError, useFormContext } from "react-hook-form";
+
+import styles from "../OrderDetails.module.scss";
 import { orderAddressFormFields } from "../utils";
 import { orderPersonalFormRules } from "../validation";
 
-import styles from "../OrderDetails.module.scss";
-
-export const OrderAddressDetails = ({
-  fieldsDisabled,
-}: {
-  fieldsDisabled: boolean;
-}) => {
+export const OrderAddressDetails = ({ fieldsDisabled }: { fieldsDisabled: boolean }) => {
   const {
     register,
     formState: { errors },
@@ -24,10 +22,7 @@ export const OrderAddressDetails = ({
           const fieldError = errors[field.name] as FieldError;
           const isFieldDisabled = fieldsDisabled || false;
           return (
-            <div
-              className={`cell-${field.row}-${field.column}`}
-              key={field.name}
-            >
+            <div className={`cell-${field.row}-${field.column}`} key={field.name}>
               <CustomInput
                 {...register(field.name, orderPersonalFormRules(field))}
                 id={`${field.row}.${field.column}`}

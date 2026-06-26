@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
-import NavBar from "@/features/profile/ui/NavBar/NavBar";
+import { NavBar } from "@/features/profile";
+
 import { fansProfileRoutes } from "@/shared/constants";
-import { Title, AccentContainer } from "@/shared/ui";
+import { AccentContainer, Title } from "@/shared/ui";
+
 import s from "./layout.module.scss";
 
 const FansLayout = ({ children }: { children: React.ReactNode }) => {
@@ -33,7 +36,7 @@ const FansLayout = ({ children }: { children: React.ReactNode }) => {
     <div className={s.page}>
       <AccentContainer className={s.container}>
         <div className={s.body}>
-          <Title Tag="h2" className={s.title}>
+          <Title Tag='h2' className={s.title}>
             Личный кабинет
           </Title>
           <section className={s.section}>
