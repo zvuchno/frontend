@@ -49,14 +49,6 @@ export const ReleaseDescription = ({
     },
   ];
 
-  const defaultImage = [
-    {
-      id: 1,
-      image: "/images/recordPlayer.png",
-      is_main: true,
-    },
-  ];
-
   const selectVariant = (_value: string, _sku: string, id: number) => {
     const index = release.variants.findIndex((variant) => variant.variant_id === id);
     if (index !== -1) setProduct(release.variants[index]);
@@ -75,10 +67,15 @@ export const ReleaseDescription = ({
     onClick(data);
   };
 
+  const imagesForGallery = [...product.images].sort((a, b) => {
+    if (a.is_main === b.is_main) return 0;
+    return a.is_main ? -1 : 1;
+  });
+
   return (
     <AccentContainer className={s.containerWrapper}>
       <div className={s.container}>
-        <Gallery images={product?.images ?? defaultImage} />
+        <Gallery images={imagesForGallery} />
 
         <div className={s.card}>
           <div className={s.card__artist}>

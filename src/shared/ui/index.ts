@@ -26,3 +26,4 @@ export { RoleCard } from "./RoleCard";
 export { SelectUI } from "./Select";
 export { TagUI } from "./Tag";
 export { Text, Title, Typography } from "./Typography";
+export { VerifyLoader } from "./VerifyLoader";

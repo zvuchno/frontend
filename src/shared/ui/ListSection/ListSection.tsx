@@ -8,6 +8,8 @@ export const ListSection = ({
   title,
   link,
   children,
+  hasMore = true,
+  gap = '20px',
   className,
 }: ListSectionProps) => {
   return (
@@ -16,11 +18,13 @@ export const ListSection = ({
         <Title className={s.header__title} Tag="h2">
           {title}
         </Title>
-        <Link className={s.header__link} href={link} prefetch={false}>
-          смотреть все
-        </Link>
+        {hasMore && (
+          <Link className={s.header__link} href={link} prefetch={false}>
+            смотреть все
+          </Link>
+        )}
       </div>
-      <div className={s.content}>{children}</div>
+      <div className={s.content} style={{ columnGap: gap }}>{children}</div>
     </section>
   );
 };

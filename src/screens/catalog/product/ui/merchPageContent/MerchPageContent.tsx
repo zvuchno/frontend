@@ -43,6 +43,7 @@ const MerchPageContent = ({ merch }: MerchPageContentProps) => {
   });
 
   const recomendations = query.data?.results;
+  const hasMoreRecommendations = !!query.data?.next
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -63,8 +64,12 @@ const MerchPageContent = ({ merch }: MerchPageContentProps) => {
       <MerchDescription product={merch} onClick={handleOpenAddtoCartModal} />
       <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
         {recomendations && (
-          <ListSection title='Вам также может понравиться' link={`/catalog/merch`}>
-            {recomendations.map((item) => {
+          <ListSection 
+            title="Вам также может понравиться" 
+            link={`/catalog/merch`} 
+            hasMore={hasMoreRecommendations}
+          >
+            {recomendations.map(item => {
               const url = item.target.url;
               const match = url.match(/(\d+)\/$/);
               const id = match ? match[1] : null;

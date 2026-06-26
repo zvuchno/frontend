@@ -19,7 +19,7 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
   const tabsData = [
     {
       title: 'Описание',
-      description: product.description
+      description: product.description ? product.description : 'У этого товара нет описания'
     },
     {
       title: 'Доставка',
@@ -51,11 +51,16 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
     onClick(data);
   };
 
+  const imagesForGallery = [...product.images].sort((a, b) => {
+    if (a.is_main === b.is_main) return 0;
+    return a.is_main ? -1 : 1;
+  });
+
   return (
     <AccentContainer className={s.containerWrapper}>
       <div className={s.container}>
 
-        <Gallery images={product.images} />
+        <Gallery images={imagesForGallery} />
 
         <div className={s.card}>
           <div className={s.card__artist}>

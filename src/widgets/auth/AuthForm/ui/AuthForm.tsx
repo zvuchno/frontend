@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { useUserStore } from "@/entities/user/store/useUserStore";
+
 import { ButtonUI, CustomInput, Typography } from "@/shared/ui";
 
 import { BaseForm } from "../../BaseForm";
@@ -14,6 +16,7 @@ import s from "./AuthForm.module.scss";
 const initialFormState: AuthFormData = {
   email: "",
   password: "",
+  rememberMe: false,
 };
 
 export const AuthForm = ({
@@ -28,7 +31,8 @@ export const AuthForm = ({
   const [authError, setAuthError] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const user = useUserStore((state) => state.user);
+  const isAuthorized = !!user?.id;
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -41,7 +45,19 @@ export const AuthForm = ({
   }, [isAuthorized, router, searchParams]);
 
   const handleRegisterClick = () => {
-    router.replace(registerRoute);
+    const nextRoute = searchParams.get("next");
+
+    let route: string;
+
+    if (nextRoute) {
+      const params = new URLSearchParams();
+      params.append("next", encodeURIComponent(nextRoute));
+      route = `${registerRoute}?${params.toString()}`;
+    } else {
+      route = registerRoute;
+    }
+
+    router.replace(route);
   };
 
   const handleChange = (field: keyof AuthFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +79,6 @@ export const AuthForm = ({
       });
 
       if (res?.ok) {
-        setIsAuthorized(true);
         setFormData(initialFormState);
       } else {
         throw new Error(
@@ -75,6 +90,10 @@ export const AuthForm = ({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleToForgotPassword = () => {
+    router.replace("/forgot-password");
   };
 
   return (
@@ -109,6 +128,43 @@ export const AuthForm = ({
             inputSize='small'
             disabled={isLoading}
           />
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                cursor: "pointer",
+                fontSize: "14px",
+                color: "#171717",
+              }}
+            >
+              <input
+                type='checkbox'
+                name='rememberMe'
+                checked={formData.rememberMe}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    rememberMe: e.target.checked,
+                  }))
+                }
+                disabled={isLoading}
+                style={{ width: "16px", height: "16px", cursor: "pointer" }}
+              />
+              <span>Запомнить меня</span>
+            </label>
+            <button type='button' className={s.forgotButton} onClick={handleToForgotPassword}>
+              <span className={s.forgotButton__text}>Забыли пароль?</span>
+            </button>
+          </div>
 
           {/* {mode === "register" && (
             <Input

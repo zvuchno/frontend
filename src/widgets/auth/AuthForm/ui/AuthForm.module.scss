@@ -217,6 +217,24 @@
   }
 }
 
+.forgotButton {
+  background-color: transparent;
+  border: none;
+  color: var(--color-primary-blue);
+  cursor: pointer;
+
+  &__text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: -0.04em;
+  }
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

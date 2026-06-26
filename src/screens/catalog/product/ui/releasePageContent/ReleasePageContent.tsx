@@ -40,13 +40,11 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataForModal, setDataForModl] = useState<TDataForModal | null>(null);
 
-  const tracksQuery = useQuery({
-    queryKey: ["tracks", release.id],
-    queryFn: () =>
-      getTracksList({
-        albumId: release.id,
-      }),
-    enabled: !release.is_single,
+  const tracksQuery = useQuery({ 
+    queryKey: ['tracks', release.id], 
+    queryFn: () => getTracksList({
+      albumId: release.id
+    }),
     refetchOnWindowFocus: false,
   });
 
@@ -63,6 +61,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
 
   const tracks = tracksQuery.data?.results;
   const recommendations = recomQuery.data?.results;
+  const hasMoreRecommendations = !!recomQuery.data?.next
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -100,7 +99,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
 
       {tracksQuery.isLoading && <div>Загрузка треков...</div>}
 
-      {!release.is_single && tracks && tracks.length > 0 && (
+      {tracks && tracks.length > 0 && (
         <section className={s.tracksSection}>
           <Title className={s.title}>Плеер</Title>
           <div className={s.tracksContainer}>
@@ -134,8 +133,17 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
       )}
       <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
         {recommendations && (
+<<<<<<< HEAD
           <ListSection title='Вам также может понравиться' link={`/catalog/album`}>
             {recommendations.map((item) => {
+=======
+          <ListSection 
+            title="Вам также может понравиться" 
+            link={`/catalog/album`} 
+            hasMore={hasMoreRecommendations}
+          >
+            {recommendations.map(item => {
+>>>>>>> 77da19b9fb7ea1870be2686ccc233bbc46741cb9
               const url = item.target.url;
               const match = url.match(/(\d+)\/$/);
               const id = match ? match[1] : null;

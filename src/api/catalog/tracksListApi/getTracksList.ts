@@ -17,15 +17,15 @@ export async function getTracksList({
   }
 
   if (artist !== undefined) {
-    params.append("album", artist);
+    params.append('artist', artist);
   }
 
   if (genre !== undefined) {
-    params.append("album", genre);
+    params.append('genre', genre);
   }
 
   if (name !== undefined) {
-    params.append("album", name);
+    params.append('name', name);
   }
 
   if (limit !== undefined) {

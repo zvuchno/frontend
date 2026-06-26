@@ -18,12 +18,15 @@ export interface UserStoreProps {
   isUserAuthorized: boolean;
   isLoading: boolean;
   error: string | null;
+  // email на этапе регистрации для модального окна о письме подтверждения
+  tempEmail: string | null;
   
   setUser: (user: UserDataProps | null) => void;
   setIsUserAuthorized: (auth: boolean) => void;
   setIsLoading: (load: boolean) => void;
   setError: (error: string | null) => void;
   clearStore: () => void;
+  setTempEmail: (email: string) => void;
 }
     
 export const useUserStore = create<UserStoreProps>()((set) => ({
@@ -31,6 +34,7 @@ export const useUserStore = create<UserStoreProps>()((set) => ({
   isUserAuthorized: false,
   isLoading: false,
   error: null,
+  tempEmail: null,
 
   setUser: (user) => set({ 
     user,
@@ -45,5 +49,8 @@ export const useUserStore = create<UserStoreProps>()((set) => ({
     isUserAuthorized: false,
     isLoading: false,
     error: null
+  }),
+  setTempEmail: (email) => set({
+    tempEmail: email,
   })
 }))

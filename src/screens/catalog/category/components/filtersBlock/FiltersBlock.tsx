@@ -28,7 +28,7 @@ const CATEGORIES = [
 const ORDERING = [
   {
     name: 'Новинки',
-    slug: 'created_at'
+    slug: '-created_at'
   },
   {
     name: 'Популярное',

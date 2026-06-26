@@ -47,3 +47,24 @@ export type TFetchProps = {
   fetchData: any,
   defaultMessage?: string
 }
+
+export type TVerifyEmailRequest = {
+  uid: string;
+  token: string;
+}
+
+export type TResetPasswordRequest = {
+  email: string;
+}
+
+export type TResetPasswordVerifyRequest = {
+  uid: string;
+  token: string;
+}
+
+export type TResetPasswordConfirmRequest = {
+  uid: string;
+  token: string;
+  new_password: string;
+  retype_new_password: string;
+}
