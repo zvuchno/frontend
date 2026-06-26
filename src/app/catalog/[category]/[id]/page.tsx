@@ -35,20 +35,20 @@ export async function generateMetadata({
             : `Альбом "${release.variants[index].name}"`
             : `${release.variants[index].property_value} "${release.variants[index].name}"`;
 
-        productDescription = `${release.variants[index].description}`;
-        productImage = `${release.variants[index].images[0]}`;
+        productDescription = release.variants[index].description;
+        productImage = release.variants[index].images[0].image;
       
     } else if (!selected && kind === 'release') {
       const release = card as TDetailRelease;
       productName = `${release.is_single ? 'Сингл' : 'Альбом'} "${release.variants[0].name}"`;
-      productDescription = `${release.variants[0].description}"`;
-      productImage = `${release.variants[0].images[0]}"`;
+      productDescription = release.variants[0].description;
+      productImage = release.variants[0].images[0].image;
 
     } else if (kind === 'merch') {
       const merch = card as TDetailMerch;
       productName = `${merch.kind} "${merch.name}"`;
-      productDescription = `${merch.description}`
-      productImage = `${merch.images[0].image}`
+      productDescription = merch.description
+      productImage = merch.images[0].image
     }
 
     const name = kind === 'artists' 
