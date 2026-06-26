@@ -1,62 +1,76 @@
-import { Controller, FieldError, get, useFormContext } from "react-hook-form"
-import { FieldValues, TProfileFormField } from "../types";
-import clsx from "clsx";
+import { Controller, type FieldError, get, useFormContext } from "react-hook-form";
 import { IMaskInput } from "react-imask";
-import { FC } from "react";
-import { registerRules } from "@/features/profile/utils/validation";
+
+import clsx from "clsx";
+
+import { registerRules } from "../../../utils/validation";
+import { type FieldValues, type TProfileFormField } from "../types";
+import styles from "./InputPhone.module.scss";
 
 type TIputPhoneProps = {
-  field: TProfileFormField, 
-  disabled: boolean,
-}
+  field: TProfileFormField;
+  disabled: boolean;
+  className?: string;
+};
 
-export const InputPhone: FC<TIputPhoneProps> = ({ field, disabled }) => {
-  const { control, formState: {errors} } = useFormContext<FieldValues>();
-  const fieldError = get(errors, field.name) as FieldError;  
-  
+export const InputPhone = ({ field, disabled, className }: TIputPhoneProps) => {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<FieldValues>();
+  const fieldError = get(errors, field.name) as FieldError;
+
   return (
     <Controller
       control={control}
       name={field.name}
       rules={registerRules(field)}
       render={({ field: { onChange, value, ref, onBlur } }) => (
-        <div className={clsx('field', { ['error']: !!fieldError })}>
+        <div className={clsx(styles.field, { ["error"]: !!fieldError }, className)}>
           {field.title && (
-            <div className='labelContainer'>
-              <label 
-                className='labelContainer__label labelContainer__label_size_small'
-                htmlFor={`${field.row}.${field.column}`}>
+            <div className={styles.labelContainer}>
+              <label
+                className={clsx(
+                  styles.labelContainer__label,
+                  styles.labelContainer__label_size_small
+                )}
+                htmlFor={`${field.row}.${field.column}`}
+              >
                 {field.title}
               </label>
-              {field.required && <span className='labelContainer__markRequired'>*</span>}
+              {field.required && <span className={styles.labelContainer__markRequired}>*</span>}
             </div>
           )}
           <IMaskInput
-            mask="+{7}(000)000-00-00"
+            mask='+{7}(000)000-00-00'
             lazy={false}
-            placeholderChar="_"
-            value={value || ''}
+            placeholderChar='_'
+            value={value || ""}
             type='text'
             inputMode='tel'
-            unmask={true} 
-            onAccept={(val) =>
-              onChange(val)
-            }
+            unmask={true}
+            onAccept={(val) => onChange(val)}
             onBlur={onBlur}
             inputRef={ref}
-            className={clsx('input input_size_small', {['error']: !!fieldError})} 
-            style={{ height: '40px' }}
+            className={clsx("input input_size_small", {
+              ["error"]: !!fieldError,
+            })}
+            style={{
+              height: "40px",
+              border: "1px solid currentColor",
+              padding: "12px 32px",
+              fontFamily: "var(--font-feature-mono)",
+              fontSize: "16px",
+            }}
             id={`${field.row}.${field.column}`}
             disabled={disabled}
             aria-disabled={disabled}
             required={field.required}
             aria-required={field.required}
           />
-          {fieldError ? (
-            <span className='message error'>{fieldError.message}</span>
-            ) : null}
+          {fieldError ? <span className='message error'>{fieldError.message}</span> : null}
         </div>
       )}
     />
-  )
-}
+  );
+};

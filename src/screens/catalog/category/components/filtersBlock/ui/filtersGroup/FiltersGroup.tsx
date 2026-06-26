@@ -1,6 +1,6 @@
 import { TagUI, Title, Link } from "@/shared/ui";
 import s from "./FiltersGroup.module.scss";
-import { FiltersGroupProps } from "./FiltersGroup.types";
+import { type FiltersGroupProps } from "./FiltersGroup.types";
 
 const FiltersGroup = ({
   title,

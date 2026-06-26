@@ -5,7 +5,8 @@
   width: 100%;
   gap: 26px;
   color: var(--color-text-primary);
-  padding: 54px 48px;
+  padding: 54px 46px 123px;
+  border-top: none;
 
   &Title {
     font-family: var(--font-better-vcr), monospace;
@@ -17,10 +18,23 @@
   &Wrapper {
     display: flex;
     justify-content: space-between;
-    gap: 68px;
+    gap: clamp(25px, 4.72vw, 68px);
+
+    @media (max-width: 800px) {
+      flex-direction: column;
+    }
   }
 
   &Summary {
-    width: 394px;
+    width: clamp(280px, 28vw, 394px);
+    flex-shrink: 0;
+
+    @media (max-width: 800px) {
+      width: 100%;
+    }
+  }
+
+  &Details {
+    width: 100%;
   }
 }

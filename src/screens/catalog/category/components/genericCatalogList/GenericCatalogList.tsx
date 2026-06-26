@@ -1,7 +1,7 @@
 import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import ProductsList from "../productsList/ProductsList";
 import s from "./GenericCatalogList.module.scss";
-import { CatalogListProps } from "./GenericCatalogList.types";
+import { type CatalogListProps } from "./GenericCatalogList.types";
 import { TRANSLATIONS } from "@/shared/constants";
 import { getArtistsList } from "@/api/catalog/artistsListApi/getArtistsList";
 

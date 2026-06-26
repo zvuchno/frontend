@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import Image from "next/image";
-import type { FC } from "react";
 
 import styles from "./productCard.module.scss";
 import type { TProductCardProps } from "./types";
@@ -15,7 +14,7 @@ const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
 const formatTotalPrice = (totalPrice: number) =>
   totalPriceFormatter.format(totalPrice);
 
-export const ProductCard: FC<TProductCardProps> = ({
+export const ProductCard = ({
   image,
   title,
   description,
@@ -25,7 +24,7 @@ export const ProductCard: FC<TProductCardProps> = ({
   className,
   link,
   ...articleProps
-}) => {
+}: TProductCardProps) => {
   const mediaAction = actionButton ?? likeButton;
 
   return (

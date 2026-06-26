@@ -1,20 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
+import { type FanProductCardData, getPurchasedReleases } from "@/api/store";
 import { useSession } from "next-auth/react";
 
-import { getPurchasedReleases, type FanProductCardData } from "@/api/store";
-import { ProductCard } from "@/entities";
+import { ProductCard } from "@/entities/ProductCard";
+
 import { DownloadIcon } from "@/shared/ui/Icons";
+
 import styles from "./releasesPageClient.module.scss";
 
 function DownloadButton({ href }: { href?: string | null }) {
   if (!href) {
     return (
       <button
-        type="button"
+        type='button'
         className={styles.downloadButton}
-        aria-label="Файл релиза недоступен"
+        aria-label='Файл релиза недоступен'
         disabled
       >
         <DownloadIcon />
@@ -26,9 +29,9 @@ function DownloadButton({ href }: { href?: string | null }) {
     <a
       className={styles.downloadButton}
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Скачать релиз"
+      target='_blank'
+      rel='noopener noreferrer'
+      aria-label='Скачать релиз'
     >
       <DownloadIcon />
     </a>
@@ -61,9 +64,7 @@ export function ReleasesPageClient() {
       } catch (requestError) {
         if (isCurrentRequest) {
           setErrorMessage(
-            requestError instanceof Error
-              ? requestError.message
-              : "Не удалось загрузить релизы",
+            requestError instanceof Error ? requestError.message : "Не удалось загрузить релизы"
           );
         }
       } finally {

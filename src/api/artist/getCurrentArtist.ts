@@ -1,5 +1,5 @@
 import { requestArtist } from "./request";
-import { CurrentArtistResponse } from "./types";
+import { type CurrentArtistResponse } from "./types";
 
 const CURRENT_ARTIST_PATH = "/api/artist/me";
 

@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
-import { SessionProvider } from 'next-auth/react'
+import { useEffect } from "react";
+
+import { SessionProvider } from "next-auth/react";
 import { useSession } from "next-auth/react";
-import { useUserStore } from '../store/useUserStore'
-import { useEffect } from 'react';
-import { User } from 'next-auth';
 
+import { useUserStore } from "../store/useUserStore";
 
 const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession();
-  const setUser = useUserStore((state) => state.setUser)
-  const clearStore = useUserStore((state) => state.clearStore)
+  const setUser = useUserStore((state) => state.setUser);
+  const clearStore = useUserStore((state) => state.clearStore);
 
   useEffect(() => {
-    if (status === 'authenticated' && session?.user) {
-      const userData = session.user as User;
+    if (status === "authenticated" && session?.user) {
+      const userData = session.user;
       setUser({
         id: Number(userData.id),
         userName: userData.userName,
@@ -25,24 +25,20 @@ const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
         isListener: userData.isListener,
         isArtist: userData.isArtist,
         accessToken: userData.accessToken,
-        artistName: userData.artistName
+        artistName: userData.artistName,
       });
-      console.log(userData)
-    } else if (status === 'unauthenticated') {
+    } else if (status === "unauthenticated") {
       clearStore();
     }
   }, [session, status, setUser, clearStore]);
-  
-  console.log(session);
-  
+
   return <>{children}</>;
 };
 
-
-export const SessionProviders = ({children}: {children: React.ReactNode}) => {
-  return <SessionProvider>
-    <SessionWatcher>
-      {children}
-    </SessionWatcher>
-  </SessionProvider>
-}
+export const SessionProviders = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <SessionProvider>
+      <SessionWatcher>{children}</SessionWatcher>
+    </SessionProvider>
+  );
+};

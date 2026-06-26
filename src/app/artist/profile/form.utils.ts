@@ -1,9 +1,8 @@
-import type {
-  CurrentArtistResponse,
-  UpdateCurrentArtistPayload,
-} from "@/api/artist";
+import type { CurrentArtistResponse, UpdateCurrentArtistPayload } from "@/api/artist";
+
+import type { FieldValues } from "@/features/profile";
+
 import type { UserDataProps } from "@/entities/user/store/useUserStore";
-import type { FieldValues } from "@/features/profile/ui/profileForm/types";
 
 type ArtistProfileFormValueSource = {
   name?: string | null;
@@ -45,7 +44,7 @@ export function getArtistProfileFormValues({
 
 export function hasArtistProfileChanges(
   artist: CurrentArtistResponse,
-  formData: FieldValues,
+  formData: FieldValues
 ): boolean {
   return (
     (formData.name ?? "") !== (artist.name ?? "") ||
@@ -54,16 +53,13 @@ export function hasArtistProfileChanges(
   );
 }
 
-export function hasPhoneChange(
-  user: UserDataProps,
-  formData: FieldValues,
-): boolean {
+export function hasPhoneChange(user: UserDataProps, formData: FieldValues): boolean {
   return normalizePhone(formData.phone) !== normalizePhone(user.phone);
 }
 
 export function buildArtistProfileUpdatePayload(
   artist: CurrentArtistResponse,
-  formData: FieldValues,
+  formData: FieldValues
 ): UpdateCurrentArtistPayload {
   return {
     name: formData.name ?? "",

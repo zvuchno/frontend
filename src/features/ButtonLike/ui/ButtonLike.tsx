@@ -1,19 +1,19 @@
 "use client";
 
 import clsx from "clsx";
-import { FC, useState } from "react";
+import { useState } from "react";
 
 import styles from "./buttonLike.module.scss";
 import { ButtonLikeIcon } from "./ButtonLikeIcon";
-import { TButtonLikeProps } from "./types";
+import { type TButtonLikeProps } from "./types";
 
-export const ButtonLike: FC<TButtonLikeProps> = ({
+export const ButtonLike = ({
   isLiked: initialIsLiked,
   className,
   iconClassName,
   disabled = false,
   onToggle,
-}) => {
+}: TButtonLikeProps) => {
   const [isLiked, setIsLiked] = useState(() => initialIsLiked);
   const [animationKey, setAnimationKey] = useState(0);
 

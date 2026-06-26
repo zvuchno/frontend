@@ -1,18 +1,19 @@
+import { type HTMLInputTypeAttribute } from "react";
 import {
-  TArtistLegalData,
-  TArtistLegalDataForApi,
-  TBankData,
-  TCompanyData,
-  TIdentityData,
-  TLegalProfile,
-} from "@/entities/Artist/store/types";
-import { HTMLInputTypeAttribute } from "react";
-import {
-  Control,
-  FieldErrors,
-  SubmitErrorHandler,
-  SubmitHandler,
+  type Control,
+  type FieldErrors,
+  type SubmitErrorHandler,
+  type SubmitHandler,
 } from "react-hook-form";
+
+import {
+  type TArtistLegalData,
+  type TArtistLegalDataForApi,
+  type TBankData,
+  type TCompanyData,
+  type TIdentityData,
+  type TLegalProfile,
+} from "@/entities/Artist/store/types";
 
 export type TArtistFormPersonalProps = {
   isChecked: boolean;
@@ -32,15 +33,11 @@ type IdentityDataKeys = `identity_data.${keyof TIdentityData}`;
 type BankDataKeys = `bank_data.${keyof TBankData}`;
 type CompanyDataKeys = `company_data.${keyof TCompanyData}`;
 
-export type FieldName =
-  | LegalProfileKeys
-  | IdentityDataKeys
-  | BankDataKeys
-  | CompanyDataKeys;
+export type FieldName = LegalProfileKeys | IdentityDataKeys | BankDataKeys | CompanyDataKeys;
 
 export type TArtistFormPersonalField = {
   title: string;
-  name: FieldName; 
+  name: FieldName;
   placeholder: string;
   type: HTMLInputTypeAttribute;
   required: boolean;

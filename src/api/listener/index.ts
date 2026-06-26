@@ -1,5 +1,6 @@
 import { getApiAccessToken } from "@/api/authToken";
-import { ListenerMe, UpdateListenerPayload } from "./types";
+
+import { type ListenerMe, type UpdateListenerPayload } from "./types";
 
 const LISTENER_ME_PATH = "/api/listener/me";
 
@@ -38,8 +39,7 @@ async function throwListenerApiError(response: Response): Promise<never> {
 
   if (responseBody) {
     try {
-      message =
-        getListenerApiErrorMessage(JSON.parse(responseBody)) ?? responseBody;
+      message = getListenerApiErrorMessage(JSON.parse(responseBody)) ?? responseBody;
     } catch {
       message = responseBody;
     }
@@ -60,12 +60,10 @@ export async function getCurrentListener(): Promise<ListenerMe> {
     return throwListenerApiError(response);
   }
 
-  return response.json();
+  return (await response.json()) as ListenerMe;
 }
 
-export async function updateListener(
-  data: UpdateListenerPayload,
-): Promise<ListenerMe> {
+export async function updateListener(data: UpdateListenerPayload): Promise<ListenerMe> {
   const accessToken = await getApiAccessToken();
   const response = await fetch(LISTENER_ME_PATH, {
     method: "PATCH",
@@ -80,7 +78,7 @@ export async function updateListener(
     return throwListenerApiError(response);
   }
 
-  return response.json();
+  return (await response.json()) as ListenerMe;
 }
 
 export const getListener = getCurrentListener;

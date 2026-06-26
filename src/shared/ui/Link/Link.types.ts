@@ -1,8 +1,8 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
-type NextLinkProps = ComponentPropsWithoutRef<
-  typeof import("next/link").default
->;
+import type Link from "next/link";
+
+type NextLinkProps = ComponentPropsWithoutRef<typeof Link>;
 
 export type LinkVariant = "basic" | "outlined";
 

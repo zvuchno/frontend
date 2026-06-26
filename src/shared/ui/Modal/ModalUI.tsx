@@ -1,18 +1,18 @@
-'use client'
+"use client";
 
-import { FC, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import styles from "./modal.module.scss";
-import { TModalUIProps } from "./types";
+import { type TModalUIProps } from "./types";
 import { CloseButtonIconX } from "../Icons/closeButtonIconX";
 import { CloseButtonIconCircledX } from "../Icons/closeButtonIconCircledX";
 
-export const ModalUI: FC<TModalUIProps> = ({
+export const ModalUI = ({
   closeButtonStyle = "circledX",
   children,
   isOpen = false,
   hasClickOnOverlay = true,
   onClose,
-}) => {
+}: TModalUIProps) => {
   const handleEsc = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {

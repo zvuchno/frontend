@@ -1,5 +1,5 @@
 import { requestAccount } from "./request";
-import { UpdateAccountPhonePayload, UpdateAccountPhoneResponse } from "./types";
+import { type UpdateAccountPhonePayload, type UpdateAccountPhoneResponse } from "./types";
 
 const CURRENT_ACCOUNT_CHANGE_PHONE_PATH = "/api/account/me/change-phone";
 

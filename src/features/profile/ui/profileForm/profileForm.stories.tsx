@@ -1,10 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { FormProvider, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+
 import { ProfileFormUI } from "./ProfileForm";
 import { ProfileFormArtistUI } from "./profileFormArtist";
 import { ProfileFormListenerUI } from "./profileFormListener";
-import { FieldValues } from "./types";
+import { type FieldValues } from "./types";
 
 const ARTIST_DISABLED_FIELDS = ["email"] as const;
 
@@ -24,15 +26,10 @@ const meta: Meta<typeof ProfileFormUI> = {
           <ProfileFormArtistUI
             fieldsDisabled={false}
             disabledFields={ARTIST_DISABLED_FIELDS}
-            personalDataHref="/"
+            personalDataHref='/'
           />
         ),
-        listener: (
-          <ProfileFormListenerUI
-            fieldsDisabled={false}
-            showPublishHint={false}
-          />
-        ),
+        listener: <ProfileFormListenerUI fieldsDisabled={false} showPublishHint={false} />,
       },
     },
   },
@@ -53,10 +50,7 @@ const meta: Meta<typeof ProfileFormUI> = {
       useEffect(() => {
         if (args.values) {
           Object.entries(args.values).forEach(([name, value]) => {
-            methods.setValue(
-              name as keyof FieldValues,
-              value as FieldValues[keyof FieldValues],
-            );
+            methods.setValue(name as keyof FieldValues, value);
           });
 
           if (args.isOnChange === true) {
@@ -93,7 +87,7 @@ export const ProfileFormNew: Story = {
       <ProfileFormArtistUI
         fieldsDisabled={false}
         disabledFields={ARTIST_DISABLED_FIELDS}
-        personalDataHref="/"
+        personalDataHref='/'
       />
     ),
     values: {
@@ -122,7 +116,7 @@ export const ProfileFormCurrent: Story = {
         <ProfileFormArtistUI
           fieldsDisabled={!isEditMode}
           disabledFields={ARTIST_DISABLED_FIELDS}
-          personalDataHref="/"
+          personalDataHref='/'
         />
       </ProfileFormUI>
     );
@@ -135,7 +129,7 @@ export const ProfileFormWithErrors: Story = {
       <ProfileFormArtistUI
         fieldsDisabled={false}
         disabledFields={ARTIST_DISABLED_FIELDS}
-        personalDataHref="/"
+        personalDataHref='/'
       />
     ),
     isOnChange: true,
@@ -156,7 +150,7 @@ export const ProfileFormWithoutErrors: Story = {
       <ProfileFormArtistUI
         fieldsDisabled={false}
         disabledFields={ARTIST_DISABLED_FIELDS}
-        personalDataHref="/"
+        personalDataHref='/'
       />
     ),
     isChecked: true,

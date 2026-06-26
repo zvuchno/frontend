@@ -1,9 +1,10 @@
 "use client";
 
-import { ButtonLike } from "@/features";
-import s from "./Track.module.scss";
 import clsx from "clsx";
-import { TDataForModal } from "@/features/addToCartModal";
+
+import { ButtonLike } from "@/features/ButtonLike";
+
+import s from "./Track.module.scss";
 
 interface TrackProps {
   isLiked: boolean;
@@ -17,52 +18,49 @@ interface TrackProps {
   onLikeClick: (value: boolean) => void;
 }
 
-export const Track = ({ 
-  isLiked, 
-  isPlaying, 
-  image, 
-  title, 
-  artistName, 
+export const Track = ({
+  isLiked,
+  isPlaying,
+  image,
+  title,
+  artistName,
   hasCart,
-  onPlayClick, 
-  onCartClick, 
-  onLikeClick 
+  onPlayClick,
+  onCartClick,
+  onLikeClick,
 }: TrackProps) => {
   return (
     <div className={s.container}>
       <div className={s.actions}>
-        <div 
-          className={s.playButton} 
-          aria-label="button" 
-          style={{ backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play-in-circle.svg')" }}
+        <div
+          className={s.playButton}
+          aria-label='button'
+          style={{
+            backgroundImage: isPlaying
+              ? "url('/icons/pause.svg')"
+              : "url('/icons/play-in-circle.svg')",
+          }}
           onClick={onPlayClick}
         />
-        <div 
-          className={s.image} 
-          style={{ backgroundImage: `url(${image})` }} 
-        />
+        <div className={s.image} style={{ backgroundImage: `url(${image})` }} />
       </div>
 
       <div className={s.info}>
         <span className={clsx(s.title, s.text)}>{title}</span>
         <span className={clsx(s.artistName, s.text)}>{artistName}</span>
       </div>
-      
+
       <div className={s.actions}>
         {hasCart && onCartClick && (
-          <div 
-            className={s.cartButton} 
-            onClick={onCartClick}
-            aria-label="button" 
-          />
+          <div className={s.cartButton} onClick={onCartClick} aria-label='button' />
         )}
-        <ButtonLike 
-          isLiked={isLiked} 
+        <ButtonLike
+          isLiked={isLiked}
           className={s.likeButton}
           iconClassName={s.likeButton__icon}
           onToggle={onLikeClick}
         />
       </div>
     </div>
-  )
+  );
 };

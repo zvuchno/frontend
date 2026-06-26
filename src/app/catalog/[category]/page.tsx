@@ -1,5 +1,5 @@
 import { TRANSLATIONS } from "@/shared/constants";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import { CategoryPage } from "@/screens/catalog/category";
 
 export async function generateMetadata({

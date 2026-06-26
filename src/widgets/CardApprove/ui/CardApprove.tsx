@@ -3,7 +3,7 @@ import styles from "./CardApprove.module.scss";
 import clsx from "clsx";
 import { Accordion } from "@/shared/ui";
 
-export const CardApprove: React.FC<CardApproveProps> = ({
+export const CardApprove = ({
   mainBlock,
   content,
   className,

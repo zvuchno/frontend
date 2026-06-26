@@ -1,58 +1,47 @@
-import { HeroUI } from "@/widgets/layout/main/Hero";
-import styles from "./NotFoundPage.module.scss";
-import { ButtonUI, ListSection } from "@/shared/ui";
-import Link from "next/link";
-import s from "@/widgets/layout/main/Hero/ui/Hero.module.scss"; // изменить структуру
 import clsx from "clsx";
-import { ProductCard } from "@/entities";
-import { ButtonLike } from "@/features";
+import Link from "next/link";
+
+import { HeroUI } from "@/widgets/layout/main/Hero";
+import s from "@/widgets/layout/main/Hero/ui/Hero.module.scss";
+
+import { ButtonLike } from "@/features/ButtonLike";
+
+import { ProductCard } from "@/entities/ProductCard";
+
 import { mockProducts } from "@/shared/constants";
+import { ButtonUI, ListSection } from "@/shared/ui";
+
+import styles from "./NotFoundPage.module.scss";
 
 export function NotFoundPage() {
   return (
     <div className={clsx(styles.page, styles.not_found)}>
       <HeroUI
-        centerText="Упс! Кажется что-то пошло не так"
-        mainTitle=""
+        centerText='Упс! Кажется что-то пошло не так'
+        mainTitle=''
         leftText={{}}
         rightText={{}}
         className={styles.not_found__banner}
       >
         <div className={styles.not_found__container}>
           <div className={styles.not_found__content}>
-            <span className={clsx(s.hero__h1, styles.not_found__contentText)}>
-              4
-            </span>
-            <span
-              className={clsx(
-                s.hero__h1,
-                styles.not_found__contentText,
-                styles.secondSymbol,
-              )}
-            >
+            <span className={clsx(s.hero__h1, styles.not_found__contentText)}>4</span>
+            <span className={clsx(s.hero__h1, styles.not_found__contentText, styles.secondSymbol)}>
               4
             </span>
             <div className={styles.image_container}>
-              <img
-                src="/images/404-image.png"
-                alt="На главную"
-                loading="lazy"
-              />
+              <img src='/images/404-image.png' alt='На главную' loading='lazy' />
             </div>
           </div>
           <ButtonUI variant={"accentDark"} className={styles.not_found__button}>
-            <Link
-              href={"/catalog/all"}
-              className={styles.button_text}
-              prefetch={false}
-            >
+            <Link href={"/catalog/all"} className={styles.button_text} prefetch={false}>
               На главную
             </Link>
           </ButtonUI>
         </div>
       </HeroUI>
       <ListSection
-        title="вам может понравиться"
+        title='вам может понравиться'
         link={`/`}
         className={styles.not_found__main_section}
       >

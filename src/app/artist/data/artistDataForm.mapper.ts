@@ -3,6 +3,7 @@ import type {
   TArtistLegalDataForApi,
   TLegalProfile,
 } from "@/entities/Artist/store/types";
+
 import { defaultArtistData } from "./artistDataForm.config";
 import type { ArtistDataFormValues } from "./artistDataForm.types";
 
@@ -67,8 +68,7 @@ const formatDateForApi = (value: string) => {
   return `${match[3]}-${match[2]}-${match[1]}`;
 };
 
-const toRecipientType = (value: string) =>
-  recipientTypeValues[value.trim().toLowerCase()];
+const toRecipientType = (value: string) => recipientTypeValues[value.trim().toLowerCase()];
 
 const toRecipientTypeLabel = (value?: string) => {
   if (!value) {
@@ -79,7 +79,7 @@ const toRecipientTypeLabel = (value?: string) => {
 };
 
 export const toArtistDataFormValues = (
-  data?: Partial<TArtistLegalData> | null,
+  data?: Partial<TArtistLegalData> | null
 ): ArtistDataFormValues => {
   if (!data) {
     return defaultArtistData;
@@ -94,29 +94,21 @@ export const toArtistDataFormValues = (
     firstName: identity?.first_name ?? defaultArtistData.firstName,
     middleName: identity?.middle_name ?? defaultArtistData.middleName,
     birthDate: formatDateForForm(identity?.birth_date),
-    registrationAddress:
-      identity?.registration_address ?? defaultArtistData.registrationAddress,
-    passportSeries:
-      identity?.passport_series ?? defaultArtistData.passportSeries,
-    passportNumber:
-      identity?.passport_number ?? defaultArtistData.passportNumber,
-    departmentCode:
-      identity?.passport_issued_by ?? defaultArtistData.departmentCode,
+    registrationAddress: identity?.registration_address ?? defaultArtistData.registrationAddress,
+    passportSeries: identity?.passport_series ?? defaultArtistData.passportSeries,
+    passportNumber: identity?.passport_number ?? defaultArtistData.passportNumber,
+    departmentCode: identity?.passport_issued_by ?? defaultArtistData.departmentCode,
     passportIssueDate: formatDateForForm(identity?.passport_issue_date),
     inn: identity?.inn ?? defaultArtistData.inn,
     bankName: bank?.bank_name ?? defaultArtistData.bankName,
     bik: bank?.bik ?? defaultArtistData.bik,
-    correspondentAccount:
-      bank?.correspondent_account ?? defaultArtistData.correspondentAccount,
-    checkingAccount:
-      bank?.checking_account ?? defaultArtistData.checkingAccount,
+    correspondentAccount: bank?.correspondent_account ?? defaultArtistData.correspondentAccount,
+    checkingAccount: bank?.checking_account ?? defaultArtistData.checkingAccount,
     taxSystem: toRecipientTypeLabel(legal?.recipient_type),
   };
 };
 
-export const toArtistLegalDataPayload = (
-  values: ArtistDataFormValues,
-): TArtistLegalDataForApi => {
+export const toArtistLegalDataPayload = (values: ArtistDataFormValues): TArtistLegalDataForApi => {
   const recipientType = toRecipientType(values.taxSystem);
 
   return {

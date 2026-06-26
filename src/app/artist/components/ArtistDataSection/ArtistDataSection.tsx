@@ -1,17 +1,19 @@
 "use client";
 
 import { type ChangeEvent, useRef, useState } from "react";
-import CardArtist from "@/entities/Artist/ui/CardArtist/CardArtist";
-import { ButtonAddLink } from "@/features/ButtonAddLink";
-import { ButtonUI } from "@/shared/ui";
+
 import { ArtistDescription } from "@/widgets/ArtistDescription";
 import { ModalAddContact } from "@/widgets/profile";
 import type { TFieldValues } from "@/widgets/profile";
-import {
-  ArtistDataSectionProps,
-  TArtistDataItem,
-} from "./ArtistDataSection.types";
+
+import { ButtonAddLink } from "@/features/ButtonAddLink";
+
+import { CardArtist } from "@/entities/Artist";
+
+import { ButtonUI } from "@/shared/ui";
+
 import s from "./ArtistDataSection.module.scss";
+import { type ArtistDataSectionProps, type TArtistDataItem } from "./ArtistDataSection.types";
 
 const ArtistDataSection = ({
   coverSrc,
@@ -64,9 +66,7 @@ const ArtistDataSection = ({
     onEditCoverClick?.();
   };
 
-  const handleCoverInputChange = async (
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleCoverInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
 
@@ -85,8 +85,8 @@ const ArtistDataSection = ({
         </div>
 
         <ButtonUI
-          variant="secondary"
-          size="standart"
+          variant='secondary'
+          size='standart'
           onClick={handleCoverButtonClick}
           disabled={isUploadingCover}
           className={s.mediaButton}
@@ -98,25 +98,25 @@ const ArtistDataSection = ({
           <input
             ref={coverInputRef}
             className={s.fileInput}
-            type="file"
-            accept="image/*"
-            onChange={handleCoverInputChange}
+            type='file'
+            accept='image/*'
+            onChange={() => handleCoverInputChange}
           />
         ) : null}
       </div>
 
       <div className={s.content}>
         <ArtistDescription
-          variant="profile"
+          variant='profile'
           description={description}
-          emptyText="Описание пока не заполнено"
-          title="Об исполнителе"
+          emptyText='Описание пока не заполнено'
+          title='Об исполнителе'
         />
 
         <div className={s.details}>
           <ButtonAddLink
             items={contacts}
-            addButtonText="Добавить контакт"
+            addButtonText='Добавить контакт'
             deletingItemKey={deletingContactKey}
             onAddClick={() => setIsContactModalOpen(true)}
             onDeleteClick={onDeleteContactClick}
@@ -124,7 +124,7 @@ const ArtistDataSection = ({
 
           <ButtonAddLink
             items={socials}
-            addButtonText="Добавить соцсеть"
+            addButtonText='Добавить соцсеть'
             deletingItemKey={deletingSocialKey}
             onAddClick={() => setIsSocialModalOpen(true)}
             onDeleteClick={onDeleteSocialClick}
@@ -132,14 +132,14 @@ const ArtistDataSection = ({
         </div>
 
         {errorMessage ? (
-          <p className={s.error} role="alert">
+          <p className={s.error} role='alert'>
             {errorMessage}
           </p>
         ) : null}
       </div>
 
       <ModalAddContact
-        variant="contact"
+        variant='contact'
         isOpen={isContactModalOpen}
         isSubmitting={isAddingContact}
         onClose={() => setIsContactModalOpen(false)}
@@ -147,7 +147,7 @@ const ArtistDataSection = ({
       />
 
       <ModalAddContact
-        variant="link"
+        variant='link'
         isOpen={isSocialModalOpen}
         isSubmitting={isAddingSocial}
         onClose={() => setIsSocialModalOpen(false)}

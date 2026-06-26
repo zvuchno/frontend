@@ -1,16 +1,10 @@
 import clsx from "clsx";
 import NextLink from "next/link";
 
+import "./Link.module.scss";
 import type { LinkProps } from "./Link.types";
-import "./Link.style.scss";
 
-export function Link({
-  className,
-  children,
-  items,
-  variant = "basic",
-  ...linkProps
-}: LinkProps) {
+export function Link({ className, children, items, variant = "basic", ...linkProps }: LinkProps) {
   const composedClassName = clsx("link", `link--${variant}`, className);
 
   if (!items?.length) {
@@ -22,11 +16,11 @@ export function Link({
   }
 
   return (
-    <span className="linkWithItems">
+    <span className='linkWithItems'>
       <NextLink className={composedClassName} {...linkProps}>
         {children}
       </NextLink>
-      <span className="linkDropdown">
+      <span className='linkDropdown'>
         {items.map((item) => (
           <NextLink
             key={item.id}

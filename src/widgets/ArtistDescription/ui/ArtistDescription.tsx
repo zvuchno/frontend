@@ -1,10 +1,13 @@
 "use client";
 
-import { Text, Title } from "@/shared/ui";
-import s from "./ArtistDescription.module.scss";
-import { ArtistDescriptionProps } from "../model/ArtistDescription.type";
-import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
+
+import clsx from "clsx";
+
+import { Text, Title } from "@/shared/ui";
+
+import { type ArtistDescriptionProps } from "../model/ArtistDescription.type";
+import s from "./ArtistDescription.module.scss";
 
 export const ArtistDescription = ({
   variant,
@@ -76,7 +79,7 @@ export const ArtistDescription = ({
         })}
       >
         {title && (
-          <Title Tag="h4" variant="title" className={s.header__title}>
+          <Title Tag='h4' variant='title' className={s.header__title}>
             {title}
           </Title>
         )}
@@ -92,39 +95,30 @@ export const ArtistDescription = ({
           ref={textRef}
           className={clsx(
             { [s.content__textWrapper]: variant === "catalog" },
-            { [s.content__textWrapper_expended]: isExpanded },
+            { [s.content__textWrapper_expended]: isExpanded }
           )}
         >
-          <Text
-            Tag="p"
-            className={
-              isProfileEmptyState ? s.content__emptyText : s.content__text
-            }
-          >
+          <Text Tag='p' className={isProfileEmptyState ? s.content__emptyText : s.content__text}>
             {contentText}
           </Text>
         </div>
 
         {shouldShowButton && (
           <button
-            type="button"
+            type='button'
             className={clsx(s.content__button, {
               [s.content__button_rotate]: isExpanded,
             })}
             onClick={toggleExpend}
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="10"
-              height="6"
-              fill="none"
-              viewBox="0 0 10 6"
+              xmlns='http://www.w3.org/2000/svg'
+              width='10'
+              height='6'
+              fill='none'
+              viewBox='0 0 10 6'
             >
-              <path
-                stroke="#100f0d"
-                strokeLinecap="round"
-                d="M8.984.5 4.742 4.743.499.5"
-              />
+              <path stroke='#100f0d' strokeLinecap='round' d='M8.984.5 4.742 4.743.499.5' />
             </svg>
           </button>
         )}

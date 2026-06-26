@@ -1,11 +1,13 @@
 "use client";
 
-import { Text } from "@/shared/ui";
-import s from "./ShowcaseCard.module.scss";
 import clsx from "clsx";
-import { ShowcaseCardProps } from "./ShowcaseCard.type";
 
-const ShowcaseCard = ({
+import { Text } from "@/shared/ui";
+
+import s from "./ShowcaseCard.module.scss";
+import { type ShowcaseCardProps } from "./ShowcaseCard.type";
+
+export const ShowcaseCard = ({
   variant,
   product,
   promoCode,
@@ -31,9 +33,7 @@ const ShowcaseCard = ({
     <div className={s.card}>
       {variant === "product" && (
         <div className={s.imgContainer}>
-          {product?.image && (
-            <img src={product.image} alt={product.name} loading="lazy" />
-          )}
+          {product?.image && <img src={product.image} alt={product.name} loading='lazy' />}
         </div>
       )}
 
@@ -50,12 +50,10 @@ const ShowcaseCard = ({
         {(product?.amount && `${product.amount} шт`) || promoCode?.amount}
       </Text>
 
-      <div
-        className={clsx(s.actions, { [s.actions_span]: variant === "promo" })}
-      >
+      <div className={clsx(s.actions, { [s.actions_span]: variant === "promo" })}>
         <label className={s.checkboxContainer}>
           <input
-            type="checkbox"
+            type='checkbox'
             className={s.visuallyHidden}
             checked={product?.visibility ?? promoCode?.visibility}
             onChange={handleToggleVisibility}
@@ -64,19 +62,11 @@ const ShowcaseCard = ({
         </label>
         <div className={s.buttons}>
           {variant === "promo" && (
-            <button
-              type="button"
-              className={clsx(s.text, s.actions__button)}
-              onClick={handleEdit}
-            >
+            <button type='button' className={clsx(s.text, s.actions__button)} onClick={handleEdit}>
               изменить
             </button>
           )}
-          <button
-            type="button"
-            className={clsx(s.text, s.actions__button)}
-            onClick={handleDelete}
-          >
+          <button type='button' className={clsx(s.text, s.actions__button)} onClick={handleDelete}>
             удалить
           </button>
         </div>

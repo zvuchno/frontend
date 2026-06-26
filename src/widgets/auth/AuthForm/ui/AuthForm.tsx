@@ -1,13 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { AuthFormProps, AuthFormData } from "@/widgets/auth/AuthForm";
-import { BaseForm } from "@/widgets/auth/BaseForm";
-import { CustomInput, ButtonUI, Typography } from "@/shared/ui";
-import s from "./AuthForm.module.scss";
-import { useRouter, useSearchParams } from "next/navigation";
+
 import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { useUserStore } from "@/entities/user/store/useUserStore";
+
+import { ButtonUI, CustomInput, Typography } from "@/shared/ui";
+
+import { BaseForm } from "../../BaseForm";
+import { type AuthFormData, type AuthFormProps } from "../model/AuthForm.types";
+import s from "./AuthForm.module.scss";
 
 const initialFormState: AuthFormData = {
   email: "",
@@ -15,14 +19,13 @@ const initialFormState: AuthFormData = {
   rememberMe: false,
 };
 
-export const AuthForm: React.FC<AuthFormProps> = ({
+export const AuthForm = ({
   mode = "login",
   registerRoute,
   onClose,
-  onSubmit,
   onLoginClick,
   onSocialLogin,
-}) => {
+}: AuthFormProps) => {
   const [formData, setFormData] = useState<AuthFormData>(initialFormState);
 
   const [authError, setAuthError] = useState<string | undefined>(undefined);
@@ -37,9 +40,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   useEffect(() => {
     if (isAuthorized) {
       const nextRoute = searchParams.get("next");
-      router.replace(nextRoute ?? '/');
+      router.replace(nextRoute ?? "/");
     }
-  }, [isAuthorized]);
+  }, [isAuthorized, router, searchParams]);
 
   const handleRegisterClick = () => {
     const nextRoute = searchParams.get("next");
@@ -48,8 +51,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     if (nextRoute) {
       const params = new URLSearchParams();
-      params.append('next', encodeURIComponent(nextRoute));
-      route = `${registerRoute}?${params.toString()}`
+      params.append("next", encodeURIComponent(nextRoute));
+      route = `${registerRoute}?${params.toString()}`;
     } else {
       route = registerRoute;
     }
@@ -57,15 +60,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     router.replace(route);
   };
 
-  const handleChange =
-    (field: keyof AuthFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleChange = (field: keyof AuthFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, [field]: value }));
 
-      if (authError) setAuthError(undefined);
-    };
+    if (authError) setAuthError(undefined);
+  };
 
-  const handleSubmit = async (data: { email?: string; password?: string }) => {
+  const handleSubmit = async () => {
     setIsLoading(true);
     setAuthError(undefined);
 
@@ -80,8 +82,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         setFormData(initialFormState);
       } else {
         throw new Error(
-          res?.error ||
-            "Ошибка авторизации. Проверьте корректность введённых данных.",
+          res?.error || "Ошибка авторизации. Проверьте корректность введённых данных."
         );
       }
     } catch (error) {
@@ -92,49 +93,49 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   };
 
   const handleToForgotPassword = () => {
-    router.replace('/forgot-password');
+    router.replace("/forgot-password");
   };
 
   return (
     <BaseForm
       className={s.authForm}
       title={mode === "login" ? "Вход в личный кабинет" : "Регистрация"}
-      onSubmit={handleSubmit}
+      onSubmit={() => handleSubmit}
       onClose={onClose}
       isLoading={isLoading}
       renderFields={() => (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <CustomInput
-            id="email"
-            label="Почта"
-            type="text"
-            name="email"
+            id='email'
+            label='Почта'
+            type='text'
+            name='email'
             value={formData.email}
             onChange={handleChange("email")}
-            placeholder="user@example.com"
-            inputSize="small"
+            placeholder='user@example.com'
+            inputSize='small'
             disabled={isLoading}
           />
 
           <CustomInput
-            id="password"
-            label="Пароль"
-            type="password"
-            name="password"
+            id='password'
+            label='Пароль'
+            type='password'
+            name='password'
             value={formData.password}
             onChange={handleChange("password")}
-            placeholder="••••••••"
-            inputSize="small"
+            placeholder='••••••••'
+            inputSize='small'
             disabled={isLoading}
           />
 
-          <div 
+          <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
             }}
-          > 
+          >
             <label
               style={{
                 display: "flex",
@@ -146,8 +147,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               }}
             >
               <input
-                type="checkbox"
-                name="rememberMe"
+                type='checkbox'
+                name='rememberMe'
                 checked={formData.rememberMe}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -210,10 +211,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           )} */}
 
           {authError && (
-            <Typography
-              variant="normal"
-              style={{ color: "#dc2626", textAlign: "center" }}
-            >
+            <Typography variant='normal' style={{ color: "#dc2626", textAlign: "center" }}>
               {authError}
             </Typography>
           )}
@@ -221,32 +219,32 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       )}
       renderPrimaryButton={(loading) => (
         <ButtonUI
-          variant="primary"
-          type="submit"
-          size="small"
+          variant='primary'
+          type='submit'
+          size='small'
           disabled={loading || !(formData.email && formData.password)}
           style={{ width: "100%" }}
         >
           {loading ? (
             <>
               <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
+                className='animate-spin -ml-1 mr-2 h-4 w-4'
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
               >
                 <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
+                  className='opacity-25'
+                  cx='12'
+                  cy='12'
+                  r='10'
+                  stroke='currentColor'
+                  strokeWidth='4'
                 />
                 <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  className='opacity-75'
+                  fill='currentColor'
+                  d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                 />
               </svg>
               Обработка...
@@ -260,9 +258,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       )}
       renderSecondaryButton={() => (
         <ButtonUI
-          variant="secondary"
-          type="button"
-          size="small"
+          variant='secondary'
+          type='button'
+          size='small'
           onClick={mode === "login" ? handleRegisterClick : onLoginClick}
           disabled={isLoading}
           style={{ width: "100%" }}
@@ -294,21 +292,18 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         };
 
         return (
-          <div
-            style={{ display: "flex", gap: "12px", justifyContent: "center" }}
-          >
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
-              type="button"
+              type='button'
               onClick={() => onSocialLogin?.("yandex")}
-              aria-label="Яндекс"
+              aria-label='Яндекс'
               disabled={isLoading}
               style={socialButtonStyle}
               onMouseEnter={(e) => {
                 if (!isLoading) {
                   e.currentTarget.style.background = "#d4e8ff";
                   e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 8px rgba(16, 15, 13, 0.15)";
+                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(16, 15, 13, 0.15)";
                 }
               }}
               onMouseLeave={(e) => {
@@ -320,17 +315,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               Я
             </button>
             <button
-              type="button"
+              type='button'
               onClick={() => onSocialLogin?.("vk")}
-              aria-label="VK"
+              aria-label='VK'
               disabled={isLoading}
               style={socialButtonStyle}
               onMouseEnter={(e) => {
                 if (!isLoading) {
                   e.currentTarget.style.background = "#d4e8ff";
                   e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 8px rgba(16, 15, 13, 0.15)";
+                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(16, 15, 13, 0.15)";
                 }
               }}
               onMouseLeave={(e) => {
@@ -342,17 +336,16 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               VK
             </button>
             <button
-              type="button"
+              type='button'
               onClick={() => onSocialLogin?.("google")}
-              aria-label="Google"
+              aria-label='Google'
               disabled={isLoading}
               style={socialButtonStyle}
               onMouseEnter={(e) => {
                 if (!isLoading) {
                   e.currentTarget.style.background = "#d4e8ff";
                   e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 8px rgba(16, 15, 13, 0.15)";
+                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(16, 15, 13, 0.15)";
                 }
               }}
               onMouseLeave={(e) => {

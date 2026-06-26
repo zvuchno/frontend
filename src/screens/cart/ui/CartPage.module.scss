@@ -1,20 +1,24 @@
 .cart {
-  margin-block-end: clamp(40px, 13.89vw, 200px);;
+  margin-block-end: clamp(40px, 13.89vw, 200px);
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: clamp(20px, 6.94vw, 100px);
   color: var(--color-text-primary);
-  
+
   &Main {
     display: flex;
     flex-direction: column;
     width: 100%;
     justify-content: stretch;
     gap: 40px;
-    padding: 40px 48px;
+    padding: 38px clamp(20px, 3vw, 48px);
     font-family: var(--font-feature-mono), monospace;
+    border-top: none;
 
+    &.emptyCart {
+      background-color: transparent;
+    }
   }
 
   &Title {
@@ -22,17 +26,51 @@
     font-size: 32px;
     font-weight: 400;
     letter-spacing: -0.06em;
+
+    &.emptyCartTitle {
+     font-size: clamp(26px, 2.5vw, 36px);
+     margin-block-end: 5px; 
+    }
   }
 
   &Content {
     display: flex;
     width: 100%;
-    gap: 40px;
+    gap: clamp(40px, 8.75vw, 126px);
     justify-content: space-between;
-    
+
+    @media (max-width: 800px) {
+      flex-direction: column;
+    }
   }
 }
 
 .buttonEmpty {
-  width: 300px;
+  width: 320px;
+  margin-block-start: -5px;
+}
+
+.emptyCartImages {
+  width: 63.68vw;
+  max-width: 917px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  margin-block-start: 5px;
+}
+
+.emptyCartImage {
+  height: auto;
+  object-fit: contain;
+  grid-area: 1/1;
+}
+
+.emptyCartBanner {
+  width: 40.79%;
+}
+
+.emptyCartBannerCover {
+  width: 100%;
+  margin-block-start: -20px;
+  margin-inline-start: 40px;
 }

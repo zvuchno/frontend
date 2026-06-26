@@ -1,20 +1,16 @@
 "use client";
 
-import { ButtonUI } from "@/shared/ui";
-import styles from "./OrderSummary.module.scss";
-import Link from "next/link";
 import clsx from "clsx";
 
 import { useCart } from "@/entities/cart";
 
-import { mockData } from "@/screens/cart/mockData";
+import { ButtonUI } from "@/shared/ui";
+
+import styles from "./OrderSummary.module.scss";
 
 export const OrderSummary = () => {
-  /** моковые данные mockData, удалить, когда будет реализован механизм добавления товара в корзину и поменять на data из useCart*/
+  const { data } = useCart();
 
-  //const { data } = useCart();
-
-  const data = mockData;
   const itemsSum = data?.subtotal;
   const totalSum = data?.total;
 

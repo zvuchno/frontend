@@ -1,5 +1,5 @@
 import { requestArtist } from "@/api/artist/request";
-import { TArtistLegalData, TArtistLegalDataForApi } from "./types";
+import { type TArtistLegalData, type TArtistLegalDataForApi } from "./types";
 
 const ARTIST_LEGAL_PATH = "/api/artist/me/legal";
 

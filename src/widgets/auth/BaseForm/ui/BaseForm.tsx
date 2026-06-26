@@ -1,9 +1,9 @@
-import { FormEvent } from "react";
+import { type FormEvent } from "react";
 import { Typography } from "@/shared/ui";
 import { CloseButtonIconX } from "@/shared/ui/Icons";
 import clsx from "clsx";
 import s from "./BaseForm.module.scss";
-import { BaseFormProps } from "../model/BaseForm.types";
+import { type BaseFormProps } from "../model/BaseForm.types";
 
 export const BaseForm = ({
   title,

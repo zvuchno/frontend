@@ -1,7 +1,7 @@
 import { requestAccount } from "./request";
 import {
-  UpdateAccountUsernamePayload,
-  UpdateAccountUsernameResponse,
+  type UpdateAccountUsernamePayload,
+  type UpdateAccountUsernameResponse,
 } from "./types";
 
 const CURRENT_ACCOUNT_CHANGE_USERNAME_PATH = "/api/account/me/change-username";

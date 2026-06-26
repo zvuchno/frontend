@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { type Meta, type StoryObj } from "@storybook/nextjs-vite";
 import { AddImageBlock } from "./AddImageBlock";
-import { CSSProperties } from 'react';
+import { type CSSProperties } from 'react';
 
 const meta: Meta<typeof AddImageBlock> = {
   title: 'features/profile/ui/AddImageBlock',

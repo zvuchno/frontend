@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Link, Text } from "@/shared/ui";
 import s from "./Footer.module.scss";
-import { FooterProps } from "../model/Footer.type";
+import { type FooterProps } from "../model/Footer.type";
 import { mainNavRoutes } from "@/shared/constants";
 
 export const Footer = ({

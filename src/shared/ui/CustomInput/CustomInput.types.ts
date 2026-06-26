@@ -11,7 +11,7 @@
  * rows — количество строк для многострочного инпута
  */
 
-import { InputHTMLAttributes } from "react";
+import { type InputHTMLAttributes } from "react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -22,4 +22,5 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   style?: React.CSSProperties;
   multiline?: boolean;
   rows?: number;
+  className?: string;
 };

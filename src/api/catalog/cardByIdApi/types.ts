@@ -1,5 +1,5 @@
-import { TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription";
-import { TDetailRelease } from "@/widgets/ProductDetailCard/ReleaseDescription";
+import { type TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription";
+import { type TDetailRelease } from "@/widgets/ProductDetailCard/ReleaseDescription";
 
 type TContact = {
   id: number;

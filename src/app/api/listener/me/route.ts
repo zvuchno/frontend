@@ -20,10 +20,7 @@ function getAuthorizationHeader(request: Request): string | NextResponse {
   const authorizationHeader = request.headers.get("Authorization");
 
   if (!authorizationHeader) {
-    return NextResponse.json(
-      { detail: "Authorization header is required" },
-      { status: 401 },
-    );
+    return NextResponse.json({ detail: "Authorization header is required" }, { status: 401 });
   }
 
   return authorizationHeader;
@@ -64,12 +61,9 @@ export async function GET(request: Request) {
   } catch (error) {
     return NextResponse.json(
       {
-        detail:
-          error instanceof Error
-            ? error.message
-            : "Failed to proxy listener request",
+        detail: error instanceof Error ? error.message : "Failed to proxy listener request",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -97,12 +91,9 @@ export async function PATCH(request: Request) {
   } catch (error) {
     return NextResponse.json(
       {
-        detail:
-          error instanceof Error
-            ? error.message
-            : "Failed to proxy listener update request",
+        detail: error instanceof Error ? error.message : "Failed to proxy listener update request",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

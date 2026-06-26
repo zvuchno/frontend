@@ -1,0 +1,77 @@
+.title {
+  width: 100%;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-bg-secondary, #b5b5b5);
+  font-family: var(--font-better-vcr), var(--font-vcr), sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.orderDetails {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 6.25vw, 90px);
+  width: 100%;
+  padding-block-start: 24px;
+
+  &Personal {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &DeliveryOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 41px;
+
+    &List {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+  }
+
+  &DeliveryAddress {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  & .orderPersonal {
+    margin-block-end: 27px;
+  }
+
+  & .orderPersonal,
+  .orderDeliveryAddress {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+    row-gap: clamp(20px, 3vw, 40px);
+
+    @media (max-width: 860px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+}
+
+.orderFormField {
+  gap: 0;
+
+  & label {
+    letter-spacing: -0.06em;
+    line-height: 1.3;
+  }
+}
+
+label.confirmationMessagge * {
+  font: var(--font-feature-mono);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.confirmationMessagge span span {
+  width: 22px;
+}

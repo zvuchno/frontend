@@ -1,5 +1,5 @@
-import { TArtistCard } from "@/api/catalog/artistsListApi/types";
-import { TCatalogCard } from "@/api/catalog/catalogListApi/types";
+import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
+import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 
 export interface ProductsListProps {
   products: TCatalogCard[] | TArtistCard[];

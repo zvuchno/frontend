@@ -1,13 +1,13 @@
 "use client"
 
 import { useState } from "react";
-import { MerchDescriptionProps } from "../model/MerchDescription.types";
+import { type MerchDescriptionProps } from "../model/MerchDescription.types";
 import s from "./MerchDescription.module.scss";
 import { AccentContainer, ButtonUI, Text, Title } from "@/shared/ui";
 import Gallery from "../../components/Gallery/Gallery";
 import VariantRange from "../../components/VariantRange/VariantRange";
 import TabBar from "../../components/TabBar/TabBar";
-import { TDataForModal } from "@/features/addToCartModal";
+import { type TDataForModal } from "@/features/addToCartModal";
 
 // Компонент отображает карточку обычного мерча, не относящегося к носителям
 

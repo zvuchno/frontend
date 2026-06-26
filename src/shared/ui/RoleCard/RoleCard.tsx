@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Text, Title } from "../Typography/Typography";
 import s from "./RoleCard.module.scss";
-import { RoleCardProps } from "./RoleCard.type";
+import { type RoleCardProps } from "./RoleCard.type";
 
 export const RoleCard = ({
   path,

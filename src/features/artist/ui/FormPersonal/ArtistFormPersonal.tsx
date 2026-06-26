@@ -1,28 +1,29 @@
-import { FC } from "react";
-import type { TArtistFormPersonalProps, FieldValues } from "./utils/types";
-import styles from "./artistFormPersonal.module.scss";
-import { ButtonUI } from "@/shared/ui";
-import { useFormContext } from "react-hook-form";
-import {
-  artistPersonalFields,
-  artistPasportFields,
-  artistIndividualPaymentFields,
-  artistEntityPaymentFields,
-} from "./utils/constants";
 import "react-datepicker/dist/react-datepicker.module.css";
+import { useFormContext } from "react-hook-form";
 
 import clsx from "clsx";
-import { LegalFormSelector } from "./LegalFormSelector/LegalFormSelector";
-import { createFormField } from "./FormFieldsCreator/FormFieldsCreator";
-import { formatDateToApi } from "./utils/formatDate";
 
-export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
+import { ButtonUI } from "@/shared/ui";
+import { formatDateToApi } from "@/shared/utils/formatDate";
+
+import { createFormField } from "./FormFieldsCreator/FormFieldsCreator";
+import { LegalFormSelector } from "./LegalFormSelector/LegalFormSelector";
+import styles from "./artistFormPersonal.module.scss";
+import {
+  artistEntityPaymentFields,
+  artistIndividualPaymentFields,
+  artistPasportFields,
+  artistPersonalFields,
+} from "./utils/constants";
+import type { FieldValues, TArtistFormPersonalProps } from "./utils/types";
+
+export const ArtistFormPersonal = ({
   isChecked = false,
   isOnChange = true,
   onSubmit,
   onError,
   onEdit,
-}) => {
+}: TArtistFormPersonalProps) => {
   const methods = useFormContext<FieldValues>();
   const {
     watch,
@@ -43,9 +44,7 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
       identity_data: {
         ...data.identity_data,
         birth_date: formatDateToApi(data.identity_data?.birth_date),
-        passport_issue_date: formatDateToApi(
-          data.identity_data?.passport_issue_date,
-        ),
+        passport_issue_date: formatDateToApi(data.identity_data?.passport_issue_date),
       },
       legal_profile: {
         ...data.legal_profile,
@@ -59,7 +58,9 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
     <>
       <form
         className={styles.form}
-        onSubmit={handleSubmit(onHandleSubmit, onError)}
+        onSubmit={() => {
+          handleSubmit(onHandleSubmit, onError);
+        }}
       >
         <div className={styles.formContentWrapper}>
           <h3 className={styles.formTitle}>
@@ -71,15 +72,9 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
           </h3>
 
           {artistType === "legal_entity" && (
-            <fieldset
-              className={clsx(styles.formContent, styles.legalEntityContent)}
-            >
-              <legend className={styles.visuallyHidden}>
-                Информация о юридическом лице
-              </legend>
-              {legalEntityFields.map((field, index) =>
-                createFormField(field, index, methods),
-              )}
+            <fieldset className={clsx(styles.formContent, styles.legalEntityContent)}>
+              <legend className={styles.visuallyHidden}>Информация о юридическом лице</legend>
+              {legalEntityFields.map((field, index) => createFormField(field, index, methods))}
             </fieldset>
           )}
 
@@ -88,43 +83,23 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
           ) : (
             <>
               {artistType === "legal_entity" && (
-                <h4 className={clsx(styles.formTitle, styles.subtittle)}>
-                  Данные руководителя
-                </h4>
+                <h4 className={clsx(styles.formTitle, styles.subtittle)}>Данные руководителя</h4>
               )}
 
-              <fieldset
-                className={clsx(styles.formContent, styles.personalContent)}
-              >
-                <legend className={styles.visuallyHidden}>
-                  Персональная информация
-                </legend>
-                {personalFields.map((field, index) =>
-                  createFormField(field, index, methods),
-                )}
+              <fieldset className={clsx(styles.formContent, styles.personalContent)}>
+                <legend className={styles.visuallyHidden}>Персональная информация</legend>
+                {personalFields.map((field, index) => createFormField(field, index, methods))}
               </fieldset>
 
-              <fieldset
-                className={clsx(styles.formContent, styles.passportlContent)}
-              >
-                <legend className={styles.visuallyHidden}>
-                  Паспортные данные
-                </legend>
-                {passportFields.map((field, index) =>
-                  createFormField(field, index, methods),
-                )}
+              <fieldset className={clsx(styles.formContent, styles.passportlContent)}>
+                <legend className={styles.visuallyHidden}>Паспортные данные</legend>
+                {passportFields.map((field, index) => createFormField(field, index, methods))}
               </fieldset>
 
               {!isCompany && (
-                <fieldset
-                  className={clsx(styles.formContent, styles.paymentlContent)}
-                >
-                  <legend className={styles.visuallyHidden}>
-                    Платежная информация
-                  </legend>
-                  {paymentFields.map((field, index) =>
-                    createFormField(field, index, methods),
-                  )}
+                <fieldset className={clsx(styles.formContent, styles.paymentlContent)}>
+                  <legend className={styles.visuallyHidden}>Платежная информация</legend>
+                  {paymentFields.map((field, index) => createFormField(field, index, methods))}
                 </fieldset>
               )}
             </>
@@ -133,21 +108,19 @@ export const ArtistFormPersonal: FC<TArtistFormPersonalProps> = ({
         {artistType && (
           <div className={styles.formButtons}>
             <ButtonUI
-              size="standart"
-              variant="primary"
-              disabled={
-                !isChecked || (errors && Object.keys(errors).length > 0)
-              }
-              type="submit"
+              size='standart'
+              variant='primary'
+              disabled={!isChecked || (errors && Object.keys(errors).length > 0)}
+              type='submit'
             >
               Сохранить
             </ButtonUI>
             <ButtonUI
-              size="standart"
-              variant="secondary"
+              size='standart'
+              variant='secondary'
               onClick={onEdit}
               disabled={isOnChange}
-              type="button"
+              type='button'
             >
               Изменить
             </ButtonUI>

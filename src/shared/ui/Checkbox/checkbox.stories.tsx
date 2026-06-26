@@ -1,43 +1,46 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { CheckboxUI } from './CheckboxUI';
-import React, { useState } from 'react';
-import { fn } from 'storybook/test';
+import React, { useState } from "react";
 
-const container = () => 
-  (Story: React.ComponentType) => (
-    <div style={{ 
-      width: 'clamp(194px, calc(100vw - 40px), 394px)', 
-      justifySelf: 'center', 
-      border: '1px dotted #acacac' 
-    }}>
-      <Story />
-    </div>
-  );
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { fn } from "storybook/test";
+
+import { CheckboxUI } from "./CheckboxUI";
+
+const container = () => (Story: React.ComponentType) => (
+  <div
+    style={{
+      width: "clamp(194px, calc(100vw - 40px), 394px)",
+      justifySelf: "center",
+      border: "1px dotted #acacac",
+    }}
+  >
+    <Story />
+  </div>
+);
 
 const meta: Meta<typeof CheckboxUI> = {
-  title: 'shared/ui/Checkbox',
+  title: "shared/ui/Checkbox",
   component: CheckboxUI,
   parameters: {
-    layout: 'centered',
-    controls: { include: ['children', 'isChecked', 'disabled'] },
+    layout: "centered",
+    controls: { include: ["children", "isChecked", "disabled"] },
   },
   argTypes: {
     children: {
-      control: 'text',
+      control: "text",
     },
     isChecked: {
-      control: 'boolean',
+      control: "boolean",
     },
     disabled: {
-      control: 'boolean',
+      control: "boolean",
     },
     onChange: {
-      action: 'onChange triggered',
+      action: "onChange triggered",
     },
   },
-  args: { 
-    onChange: fn() 
-  }
+  args: {
+    onChange: fn(),
+  },
 };
 
 export default meta;
@@ -52,65 +55,59 @@ export const CheckboxButton: StoryType = {
       const newStatus = !checkStatus;
       setIsChecked(newStatus);
       args.onChange?.(newStatus);
-    }
+    };
 
-    return (
-      <CheckboxUI
-      {...args}
-      isChecked={checkStatus}
-      onChange={handleChange}
-      />
-    );
+    return <CheckboxUI {...args} isChecked={checkStatus} onChange={handleChange} />;
   },
   args: {
-    type: 'checkbox',
-    children: 'Согласен с условиями  Правил пользования торговой площадкой и Правилами возврата',
+    type: "checkbox",
+    children: "Согласен с условиями  Правил пользования торговой площадкой и Правилами возврата",
     disabled: false,
     isChecked: false,
   },
-  decorators: [container()]
+  decorators: [container()],
 };
 
 export const RadioButton: StoryType = {
   args: {
-    type: 'radio',
-    children: 'СДЭК - курьером до двери',
+    type: "radio",
+    children: "СДЭК - курьером до двери",
     disabled: false,
-    isChecked: false
+    isChecked: false,
   },
-  decorators: [container()]
+  decorators: [container()],
 };
 
 export const RadioButtonGroup: StoryType = {
   args: {
-    children: '',
+    children: "",
     isChecked: false,
-    disabled: false
+    disabled: false,
   },
 
   render: (args) => {
-    const [selected, setSelected] = useState('sdek');
+    const [selected, setSelected] = useState("sdek");
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         <CheckboxUI
           {...args}
           type='radio'
           name='delivery'
           value='sdek'
-          isChecked={selected === 'sdek'}
-          onChange={() => setSelected('sdek')}
+          isChecked={selected === "sdek"}
+          onChange={() => setSelected("sdek")}
         >
           СДЭК - курьером до двери
         </CheckboxUI>
-        
+
         <CheckboxUI
           {...args}
           type='radio'
           name='delivery'
           value='pickup'
-          isChecked={selected === 'pickup'}
-          onChange={() => setSelected('pickup')}
+          isChecked={selected === "pickup"}
+          onChange={() => setSelected("pickup")}
         >
           СДЭК - пункт выдачи
         </CheckboxUI>
@@ -118,5 +115,5 @@ export const RadioButtonGroup: StoryType = {
     );
   },
 
-  decorators: [container()]
+  decorators: [container()],
 };

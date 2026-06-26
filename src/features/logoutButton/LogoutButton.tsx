@@ -1,9 +1,12 @@
 "use client";
 
-import { ButtonUI, ModalUI } from "@/shared/ui";
-import s from "./LogoutButton.module.scss";
 import { useState } from "react";
+
 import { signOut } from "next-auth/react";
+
+import { ButtonUI, ModalUI } from "@/shared/ui";
+
+import s from "./LogoutButton.module.scss";
 
 const LogoutButton = () => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
@@ -32,26 +35,22 @@ const LogoutButton = () => {
   };
   return (
     <>
-      <ButtonUI
-        variant="secondary"
-        onClick={handleConfirmModalOpen}
-        size="small"
-      >
+      <ButtonUI variant='secondary' onClick={handleConfirmModalOpen} size='small'>
         Выйти
       </ButtonUI>
       <ModalUI
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
-        closeButtonStyle="circledX"
+        closeButtonStyle='circledX'
       >
         <div className={s.confirmModal}>
           <p className={s.confirmModal__text}>
             {error ? "error" : "Вы уверены, что хотите выйти?"}
           </p>
           <ButtonUI
-            variant="primary"
-            size="small"
-            onClick={handleLogOut}
+            variant='primary'
+            size='small'
+            onClick={() => handleLogOut}
             disabled={isLoading}
           >
             {isLoading ? "Выход..." : "Выйти"}

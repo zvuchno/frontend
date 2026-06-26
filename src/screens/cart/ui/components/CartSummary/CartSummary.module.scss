@@ -3,9 +3,15 @@
   flex-direction: column;
   align-items: stretch;
   gap: 72px;
-  padding: 60px 40px;
+  padding: clamp(20px, 4vw, 60px) clamp(15px, 2.7vw, 40px);
   border: 1px solid var(--color-text-primary);
+  width: 33.33vw;
   max-width: 480px;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    max-width: none;
+  }
 
   &Details {
     display: flex;
@@ -40,11 +46,15 @@
   &Total {
     display: flex;
     justify-content: space-between;
-    font-size: 32px;
+    font-size: clamp(20px, 2.2vw, 32px);
     opacity: 1;
     letter-spacing: -0.06em;
     line-height: 1;
     font-family: var(--font-better-vcr), monospace;
+
+    @media (max-width: 800px) {
+      font-size: clamp(20px, 4vw, 32px);
+    }
   }
 
   &Buttons {
@@ -55,6 +65,10 @@
     & .cartSummaryDiscount {
       display: flex;
       gap: 22px;
+
+      @media (max-width: 1199px) {
+        flex-direction: column;
+      }
 
       &Input {
         flex: 1;
@@ -69,6 +83,12 @@
         font-weight: 600;
         font-family: var(--font-feature-mono), monospace;
         color: var(--color-bg-secondary);
+        box-sizing: border-box;
+        height: 60px;
+
+        @media (max-width: 1199px) {
+          padding-block: 14px;
+        }
 
         &::placeholder {
           font-family: var(--font-feature-mono), monospace;
@@ -78,6 +98,10 @@
 
       &Button {
         width: 140px;
+
+        @media (max-width: 1199px) {
+          width: 100%;
+        }
       }
     }
   }

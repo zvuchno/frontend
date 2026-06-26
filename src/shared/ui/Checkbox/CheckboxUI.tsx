@@ -1,11 +1,11 @@
-import { ChangeEvent, FC } from "react";
+import { type ChangeEvent } from "react";
 import styles from "./checkbox.module.scss";
-import { TCheckboxUIProps } from "./types";
+import { type TCheckboxUIProps } from "./types";
 import clsx from "clsx";
 import { CheckBoxIcon } from "../Icons/checkBoxIcon";
 import { RadioButtonIcon } from "../Icons/radioButtonIcon";
 
-export const CheckboxUI: FC<TCheckboxUIProps> = ({
+export const CheckboxUI = ({
   type = "checkbox",
   children,
   isChecked = false,
@@ -13,7 +13,8 @@ export const CheckboxUI: FC<TCheckboxUIProps> = ({
   onChange,
   name,
   value,
-}) => {
+  className,
+}: TCheckboxUIProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.checked);
   };
@@ -24,6 +25,7 @@ export const CheckboxUI: FC<TCheckboxUIProps> = ({
         { [styles.radioButton]: type === "radio" },
         { [styles.noChecked]: type === "radio" && !isChecked },
         { [styles.disabled]: disabled },
+        className,
       )}
     >
       <input
@@ -49,7 +51,7 @@ export const CheckboxUI: FC<TCheckboxUIProps> = ({
         </span>
       </span>
       <span className={styles.checkboxLabel}>
-        <p>{children}</p>
+        <p className={styles.checkboxText}>{children}</p>
       </span>
     </label>
   );

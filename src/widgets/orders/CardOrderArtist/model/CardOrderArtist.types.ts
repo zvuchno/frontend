@@ -1,4 +1,4 @@
-import { ProductCardArtistData } from "@/features";
+import { type ProductCardArtistData } from "@/features/order";
 
 export interface CardOrderArtistProps {
   orderId: string;

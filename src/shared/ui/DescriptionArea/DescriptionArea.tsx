@@ -1,4 +1,4 @@
-import { DescriptionAreaProps } from "./types";
+import { type DescriptionAreaProps } from "./types";
 import styles from './DescriptionArea.module.scss'
 import clsx from "clsx";
 

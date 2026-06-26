@@ -1,35 +1,22 @@
 "use client";
 
-import { Title } from "@/shared/ui";
-import s from "./BlogCard.module.scss";
-import { BlogCardProps } from "./BlogCard.type";
 import Link from "next/link";
 
-const BlogCard = ({
-  image,
-  link,
-  description,
-  hasLink = true,
-  onClick,
-}: BlogCardProps) => {
+import { Title } from "@/shared/ui";
+
+import s from "./BlogCard.module.scss";
+import { type BlogCardProps } from "./BlogCard.type";
+
+export const BlogCard = ({ image, link, description, hasLink = true, onClick }: BlogCardProps) => {
   const CardContent = (
     <>
       {image && (
-        <img
-          className={s.card__image}
-          src={image}
-          alt="Изображение статьи"
-          loading="lazy"
-        />
+        <img className={s.card__image} src={image} alt='Изображение статьи' loading='lazy' />
       )}
 
       {description && (
         <div className={s.card__description}>
-          <Title
-            Tag="h6"
-            variant="title"
-            className={s.card__description__title}
-          >
+          <Title Tag='h6' variant='title' className={s.card__description__title}>
             {description}
           </Title>
         </div>
@@ -49,12 +36,7 @@ const BlogCard = ({
       <div className={s.cardCorner} />
       <div className={s.card}>
         {hasLink && link ? (
-          <Link
-            href={link}
-            className={s.card__link}
-            onClick={handleClick}
-            prefetch={false}
-          >
+          <Link href={link} className={s.card__link} onClick={handleClick} prefetch={false}>
             {CardContent}
           </Link>
         ) : (
@@ -77,5 +59,3 @@ const BlogCard = ({
     </div>
   );
 };
-
-export default BlogCard;

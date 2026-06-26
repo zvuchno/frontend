@@ -4,32 +4,20 @@ import { useEffect, useMemo, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
 import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
+
 import { ButtonUI } from "@/shared/ui";
+
 import { ArtistDataField } from "./ArtistDataField";
-import {
-  artistDataFieldGroups,
-  defaultArtistData,
-} from "./artistDataForm.config";
-import {
-  toArtistDataFormValues,
-  toArtistLegalDataPayload,
-} from "./artistDataForm.mapper";
+import { artistDataFieldGroups, defaultArtistData } from "./artistDataForm.config";
+import { toArtistDataFormValues, toArtistLegalDataPayload } from "./artistDataForm.mapper";
 import type { ArtistDataFormValues } from "./artistDataForm.types";
 import s from "./page.module.scss";
 
 export function ArtistDataForm() {
-  const {
-    artistLegalData,
-    error,
-    fetchArtistLegalData,
-    isLoading,
-    updateArtistLegalData,
-  } = useArtistLegalDataStore();
+  const { artistLegalData, error, fetchArtistLegalData, isLoading, updateArtistLegalData } =
+    useArtistLegalDataStore();
   const [isEditMode, setIsEditMode] = useState(false);
-  const formValues = useMemo(
-    () => toArtistDataFormValues(artistLegalData),
-    [artistLegalData],
-  );
+  const formValues = useMemo(() => toArtistDataFormValues(artistLegalData), [artistLegalData]);
 
   const {
     formState: { errors, isValid },
@@ -51,9 +39,7 @@ export function ArtistDataForm() {
     setIsEditMode(true);
   };
 
-  const handleArtistDataSubmit: SubmitHandler<ArtistDataFormValues> = (
-    values,
-  ) => {
+  const handleArtistDataSubmit: SubmitHandler<ArtistDataFormValues> = (values) => {
     void (async () => {
       try {
         await updateArtistLegalData(toArtistLegalDataPayload(values));
@@ -69,10 +55,8 @@ export function ArtistDataForm() {
   const areFieldsDisabled = !isEditMode || isLoading;
 
   return (
-    <form className={s.form} onSubmit={handleSubmit(handleArtistDataSubmit)}>
-      {isLoading && !artistLegalData ? (
-        <p className={s.status}>Загрузка данных...</p>
-      ) : null}
+    <form className={s.form} onSubmit={() => handleSubmit(handleArtistDataSubmit)}>
+      {isLoading && !artistLegalData ? <p className={s.status}>Загрузка данных...</p> : null}
 
       {error ? <p className={s.errorMessage}>{error}</p> : null}
 
@@ -96,9 +80,9 @@ export function ArtistDataForm() {
         <ButtonUI
           className={s.submitButton}
           disabled={!isEditMode || !isValid || isLoading}
-          size="standart"
-          type="submit"
-          variant="primary"
+          size='standart'
+          type='submit'
+          variant='primary'
         >
           Сохранить
         </ButtonUI>
@@ -106,9 +90,9 @@ export function ArtistDataForm() {
           className={s.editButton}
           disabled={isEditMode || isLoading}
           onClick={handleEdit}
-          size="standart"
-          type="button"
-          variant="secondary"
+          size='standart'
+          type='button'
+          variant='secondary'
         >
           Изменить
         </ButtonUI>

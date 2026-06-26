@@ -1,5 +1,12 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
+import clsx from "clsx";
+
+import { RoleSelectBlock } from "@/features/auth";
+
+import { ShowcaseCard } from "@/entities/Artist";
 import {
   useDeleteProduct,
   useDeletePromo,
@@ -8,12 +15,10 @@ import {
   useToggleVisibilityProduct,
   useToggleVisibilityPromo,
 } from "@/entities/Artist/store/useShowcaseStore";
-import RoleSelectBlock from "@/features/auth/ui/RoleSelectBlock/RoleSelectBlock";
+
+import { ButtonUI, RoleCard, SelectUI, Text, Title } from "@/shared/ui";
+
 import s from "./page.module.scss";
-import { RoleCard, Text, Title, ButtonUI, SelectUI } from "@/shared/ui";
-import { useEffect, useRef, useState } from "react";
-import clsx from "clsx";
-import ShowcaseCard from "@/entities/Artist/ui/ShowcaseCard/ShowcaseCard";
 
 type TProducts = "product" | "promo";
 
@@ -76,20 +81,20 @@ const ShowcasePage = () => {
     <div className={s.container}>
       {shocaseProducts.length === 0 ? (
         <RoleSelectBlock>
-          <RoleCard path="" image={"/images/cassette.png"} title="Загрузить сингл" />
-          <RoleCard path="" image={"/images/record.png"} title="Загрузить альбом" />
-          <RoleCard path="" image={"/images/shirt.png"} title="Загрузить мерч" />
+          <RoleCard path='' image={"/images/cassette.png"} title='Загрузить сингл' />
+          <RoleCard path='' image={"/images/record.png"} title='Загрузить альбом' />
+          <RoleCard path='' image={"/images/shirt.png"} title='Загрузить мерч' />
         </RoleSelectBlock>
       ) : (
         <div className={s.container}>
           <div className={s.actions}>
             <div className={s.actions__buttons}>
-              <ButtonUI variant="primary" size="standart" className={s.button}>
+              <ButtonUI variant='primary' size='standart' className={s.button}>
                 Добавить товар
               </ButtonUI>
               <ButtonUI
-                variant="primary"
-                size="standart"
+                variant='primary'
+                size='standart'
                 className={s.button}
                 onClick={handlePopupOpen}
               >
@@ -97,14 +102,10 @@ const ShowcasePage = () => {
               </ButtonUI>
               {isPopupOpen && (
                 <div className={s.popup} ref={popupRef}>
-                  <button type="button" className={s.popup__item}>
+                  <button type='button' className={s.popup__item}>
                     создать промокод
                   </button>
-                  <button
-                    type="button"
-                    className={s.popup__item}
-                    onClick={handleShowPromo}
-                  >
+                  <button type='button' className={s.popup__item} onClick={handleShowPromo}>
                     все промокоды
                   </button>
                 </div>
@@ -120,7 +121,7 @@ const ShowcasePage = () => {
                   { value: "merch", label: "мерч" },
                   { value: "music", label: "музыка" },
                 ]}
-                placeholder="тип товара"
+                placeholder='тип товара'
                 containerClassName={s.containerOnPersonalAccountPage}
                 selectClassName={s.selectOnPersonalAccountPage}
                 contentClassName={s.itemListOnPersonalAccountPage}
@@ -135,7 +136,7 @@ const ShowcasePage = () => {
                   { value: "inStock", label: "в наличии" },
                   { value: "outOfStock", label: "закончились" },
                 ]}
-                placeholder="наличие"
+                placeholder='наличие'
                 containerClassName={s.containerOnPersonalAccountPage}
                 selectClassName={s.selectOnPersonalAccountPage}
                 contentClassName={s.itemListOnPersonalAccountPage}
@@ -146,15 +147,13 @@ const ShowcasePage = () => {
           </div>
 
           {isPromo && (
-            <Title Tag="h4" className={s.title}>
+            <Title Tag='h4' className={s.title}>
               Промокоды
             </Title>
           )}
 
           <div className={s.heading}>
-            <Text className={s.heading__text}>
-              {isProduct ? "Фото" : "Промокод"}
-            </Text>
+            <Text className={s.heading__text}>{isProduct ? "Фото" : "Промокод"}</Text>
             <Text
               className={clsx(s.heading__text, {
                 [s.heading__text_span]: isProduct,
@@ -162,28 +161,20 @@ const ShowcasePage = () => {
             >
               {isProduct ? "Наименование" : "Скидка"}
             </Text>
-            <Text className={s.heading__text}>
-              {isProduct ? "Артикул" : "Период"}
-            </Text>
-            <Text className={s.heading__text}>
-              {isProduct ? "Цена" : "Количество"}
-            </Text>
+            <Text className={s.heading__text}>{isProduct ? "Артикул" : "Период"}</Text>
+            <Text className={s.heading__text}>{isProduct ? "Цена" : "Количество"}</Text>
             <Text
               className={clsx(
                 s.heading__text,
                 { [s.heading__text_rightAligned]: isPromo },
-                { [s.heading__text_leftAligned]: isPromo },
+                { [s.heading__text_leftAligned]: isPromo }
               )}
             >
               {isProduct ? "Остаток" : "Видимость"}
             </Text>
             {isProduct && (
               <Text
-                className={clsx(
-                  s.heading__text,
-                  s.heading__text_span,
-                  s.heading__text_leftAligned,
-                )}
+                className={clsx(s.heading__text, s.heading__text_span, s.heading__text_leftAligned)}
               >
                 Видимость
               </Text>
@@ -195,7 +186,7 @@ const ShowcasePage = () => {
               ? shocasePromoCodes.map((item) => (
                   <ShowcaseCard
                     key={item.id}
-                    variant="promo"
+                    variant='promo'
                     promoCode={item}
                     onToggleVisibility={useToggleVisibilityPromo}
                     onDelete={useDeletePromo}
@@ -205,7 +196,7 @@ const ShowcasePage = () => {
               : shocaseProducts.map((item) => (
                   <ShowcaseCard
                     key={item.id}
-                    variant="product"
+                    variant='product'
                     product={item}
                     onToggleVisibility={useToggleVisibilityProduct}
                     onDelete={useDeleteProduct}

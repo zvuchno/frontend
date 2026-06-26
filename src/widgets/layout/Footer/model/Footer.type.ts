@@ -1,4 +1,4 @@
-import { MainNavRouteItem } from "@/shared/constants";
+import { type MainNavRouteItem } from "@/shared/constants";
 
 export type FooterLink = MainNavRouteItem;
 

@@ -1,4 +1,4 @@
-import { TDataForModal } from "@/features/addToCartModal";
+import { type TDataForModal } from "@/features/addToCartModal";
 
 export type TMerchImage = {
   id: number;

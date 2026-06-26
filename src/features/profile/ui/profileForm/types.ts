@@ -1,9 +1,9 @@
-import { HTMLInputTypeAttribute } from "react";
+import { type HTMLInputTypeAttribute } from "react";
 import {
-  Control,
-  FieldErrors,
-  SubmitErrorHandler,
-  SubmitHandler,
+  type Control,
+  type FieldErrors,
+  type SubmitErrorHandler,
+  type SubmitHandler,
 } from "react-hook-form";
 
 export interface FieldValues {
@@ -32,9 +32,9 @@ export interface TProfileFormUIProps {
   onEdit: () => void;
 }
 
-export type TProfileFormField = {
+export type TProfileFormField<T extends FieldValues = FieldValues> = {
   title: string;
-  name: keyof FieldValues;
+  name: keyof T;
   placeholder: string;
   type: HTMLInputTypeAttribute;
   required: boolean;

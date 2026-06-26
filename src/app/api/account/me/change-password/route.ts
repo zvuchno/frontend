@@ -1,13 +1,8 @@
 import { NextResponse } from "next/server";
 
-import {
-  buildAccountApiUrl,
-  getAuthorizationHeader,
-  toProxyResponse,
-} from "../../utils";
+import { buildAccountApiUrl, getAuthorizationHeader, toProxyResponse } from "../../utils";
 
-const CURRENT_ACCOUNT_CHANGE_PASSWORD_PATH =
-  "/v1/auth/account/me/change-password/";
+const CURRENT_ACCOUNT_CHANGE_PASSWORD_PATH = "/v1/auth/account/me/change-password/";
 
 export async function POST(request: Request) {
   try {
@@ -18,18 +13,15 @@ export async function POST(request: Request) {
     }
 
     const payload = await request.json();
-    const response = await fetch(
-      buildAccountApiUrl(CURRENT_ACCOUNT_CHANGE_PASSWORD_PATH),
-      {
-        method: "POST",
-        headers: {
-          Authorization: authorizationHeader,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-        cache: "no-store",
+    const response = await fetch(buildAccountApiUrl(CURRENT_ACCOUNT_CHANGE_PASSWORD_PATH), {
+      method: "POST",
+      headers: {
+        Authorization: authorizationHeader,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
 
     return toProxyResponse(response);
   } catch (error) {
@@ -40,7 +32,7 @@ export async function POST(request: Request) {
             ? error.message
             : "Failed to proxy account password update request",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

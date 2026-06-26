@@ -1,90 +1,131 @@
-import { RegisterOptions, Validate } from "react-hook-form";
-import type { FieldValues, TProfileFormField } from "../ui/profileForm/types";
-import { errorsMessages, fieldsConfig } from "./constants";
+import { type FieldPath, type RegisterOptions, type Validate } from "react-hook-form";
 
-export const validatePhone: Validate<string | undefined, FieldValues> = (
-  value,
+import { errorsMessages } from "@/shared/constants/formErrorMessages";
+import { getRuleValue } from "@/shared/utils/getRuleValue";
+
+import type { FieldValues, TProfileFormField } from "../ui/profileForm/types";
+import { fieldsConfig } from "./constants";
+
+type TOptionalValidators = Record<string, Validate<unknown, FieldValues>>;
+
+// Вспомогательная функция для валидации объекта с несколькими правилами
+const executeGroupValidators = (
+  validators: Record<string, Validate<unknown, FieldValues>>,
+  value: unknown,
+  formValues: FieldValues
 ) => {
-  const number = value?.replace(/\D/g, "") || "";
-  if (number?.length === 1) {
-    return errorsMessages.requiredMessage;
-  }
-  if (number?.length !== 11) {
-    return errorsMessages.patternMessage;
+  for (const key in validators) {
+    if (!Object.prototype.hasOwnProperty.call(validators, key)) continue;
+
+    const result = validators[key](value, formValues);
+    if (result !== true) return result; // Возвращаем первую же ошибку
   }
   return true;
 };
 
-export const registerRules = (
-  field: TProfileFormField,
-): RegisterOptions<FieldValues> => {
-  const config = fieldsConfig;
-  const rules: RegisterOptions<FieldValues> = {};
-  const fieldConfig = config[field.name];
-  const isOptionalField = !field.required;
+const createOptionalValidators = (fieldConfig: RegisterOptions): TOptionalValidators => {
+  const validators: TOptionalValidators = {};
 
-  if (field.required) {
-    rules.required = errorsMessages.requiredMessage;
-  }
-  if (fieldConfig.minLength && !isOptionalField) {
-    rules.minLength = {
-      value: fieldConfig.minLength,
-      message: errorsMessages.minLengthMessage + fieldConfig.minLength,
-    };
-  }
-  if (fieldConfig.maxLength && !isOptionalField) {
-    rules.maxLength = {
-      value: fieldConfig.maxLength,
-      message: errorsMessages.maxLengthMessage + fieldConfig.maxLength,
-    };
-  }
-  if (fieldConfig.pattern && !isOptionalField) {
-    rules.pattern = {
-      value: fieldConfig.pattern,
-      message: errorsMessages.patternMessage,
-    };
-  }
-  if (fieldConfig.validate && !isOptionalField) {
-    rules.validate = {
-      validate: fieldConfig.validate,
+  const minLengthVal = getRuleValue(fieldConfig.minLength);
+  if (minLengthVal !== undefined) {
+    validators.minLength = (value) => {
+      const stringValue = typeof value === "string" ? value : "";
+      return !stringValue || stringValue.length >= minLengthVal
+        ? true
+        : errorsMessages.minLengthMessage + minLengthVal;
     };
   }
 
-  if (isOptionalField) {
-    const optionalRules: Record<
-      string,
-      Validate<string | undefined, FieldValues>
-    > = {};
+  const maxLengthVal = getRuleValue(fieldConfig.maxLength);
+  if (maxLengthVal !== undefined) {
+    validators.maxLength = (value) => {
+      const stringValue = typeof value === "string" ? value : "";
+      return !stringValue || stringValue.length <= maxLengthVal
+        ? true
+        : errorsMessages.maxLengthMessage + maxLengthVal;
+    };
+  }
 
-    if (fieldConfig.minLength) {
-      optionalRules.minLength = (value) =>
-        !value || value.length >= fieldConfig.minLength!
-          ? true
-          : errorsMessages.minLengthMessage + fieldConfig.minLength;
-    }
+  if (fieldConfig.pattern) {
+    const patternRegex =
+      fieldConfig.pattern instanceof RegExp
+        ? fieldConfig.pattern
+        : fieldConfig.pattern &&
+            typeof fieldConfig.pattern === "object" &&
+            "value" in fieldConfig.pattern
+          ? fieldConfig.pattern.value
+          : undefined;
 
-    if (fieldConfig.maxLength) {
-      optionalRules.maxLength = (value) =>
-        !value || value.length <= fieldConfig.maxLength!
-          ? true
-          : errorsMessages.maxLengthMessage + fieldConfig.maxLength;
-    }
-
-    if (fieldConfig.pattern) {
-      optionalRules.pattern = (value) =>
-        !value || fieldConfig.pattern!.test(value)
+    if (patternRegex instanceof RegExp) {
+      validators.pattern = (value) => {
+        const stringValue = typeof value === "string" ? value : "";
+        return !stringValue || patternRegex.test(stringValue)
           ? true
           : errorsMessages.patternMessage;
+      };
     }
+  }
 
+  if (fieldConfig.validate) {
+    validators.validate = (value, formValues) => {
+      if (!value) return true;
+
+      const { validate } = fieldConfig;
+
+      if (typeof validate === "function") {
+        return (validate as Validate<unknown, FieldValues>)(value, formValues);
+      }
+
+      if (typeof validate === "object" && validate !== null) {
+        const group = validate as Record<string, Validate<unknown, FieldValues>>;
+        return executeGroupValidators(group, value, formValues);
+      }
+
+      return true;
+    };
+  }
+  return validators;
+};
+
+export const registerRules = (
+  field: TProfileFormField
+): RegisterOptions<FieldValues, FieldPath<FieldValues>> => {
+  const rules: RegisterOptions<FieldValues, FieldPath<FieldValues>> = {};
+  const fieldConfig = fieldsConfig[field.name];
+
+  if (!fieldConfig) return rules;
+  if (field.required) {
+    rules.required = errorsMessages.requiredMessage;
+
+    if (fieldConfig.minLength) {
+      rules.minLength = {
+        value: fieldConfig.minLength,
+        message: errorsMessages.minLengthMessage + fieldConfig.minLength,
+      };
+    }
+    if (fieldConfig.maxLength) {
+      rules.maxLength = {
+        value: fieldConfig.maxLength,
+        message: errorsMessages.maxLengthMessage + fieldConfig.maxLength,
+      };
+    }
+    if (fieldConfig.pattern) {
+      rules.pattern = {
+        value: fieldConfig.pattern,
+        message: errorsMessages.patternMessage,
+      };
+    }
     if (fieldConfig.validate) {
-      optionalRules.validate = (value, formValues) =>
-        !value ? true : fieldConfig.validate!(value, formValues);
+      rules.validate = {
+        validate: fieldConfig.validate,
+      };
     }
+    return rules;
+  }
 
-    if (Object.keys(optionalRules).length > 0) {
-      rules.validate = optionalRules;
-    }
+  const optionalRules = createOptionalValidators(fieldConfig);
+  if (Object.keys(optionalRules).length > 0) {
+    rules.validate = optionalRules;
   }
 
   return rules;

@@ -1,24 +1,21 @@
 import clsx from "clsx";
 import Image from "next/image";
-import type { FC } from "react";
 
 import { Definition } from "@/shared/ui";
+
 import styles from "./ProductCardArtist.module.scss";
 import type { ProductCardArtistProps } from "./types";
 
-const getDefinitionText = ({
-  label,
-  value,
-}: ProductCardArtistProps["definitions"][number]) =>
+const getDefinitionText = ({ label, value }: ProductCardArtistProps["definitions"][number]) =>
   [label, value]
     .filter(
       (part): part is string | number =>
-        part !== undefined && !(typeof part === "string" && part.length === 0),
+        part !== undefined && !(typeof part === "string" && part.length === 0)
     )
     .map(String)
     .join(" ");
 
-export const ProductCardArtist: FC<ProductCardArtistProps> = ({
+export const ProductCardArtist = ({
   className,
   id,
   image,
@@ -27,7 +24,7 @@ export const ProductCardArtist: FC<ProductCardArtistProps> = ({
   definitions,
   variant = "merch",
   ...articleProps
-}) => {
+}: ProductCardArtistProps) => {
   const primaryDefinition = definitions[0];
   const productName = getDefinitionText(primaryDefinition);
 
@@ -37,7 +34,7 @@ export const ProductCardArtist: FC<ProductCardArtistProps> = ({
       className={clsx(
         styles.productCardArtist,
         styles[`productCardArtist_variant_${variant}`],
-        className,
+        className
       )}
       data-product-id={id}
       aria-label={productName}
@@ -49,7 +46,7 @@ export const ProductCardArtist: FC<ProductCardArtistProps> = ({
           alt={productName}
           width={imageWidth}
           height={imageHeight}
-          sizes="96px"
+          sizes='96px'
         />
       </div>
 
