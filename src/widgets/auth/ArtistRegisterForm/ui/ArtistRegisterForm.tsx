@@ -115,7 +115,7 @@ export const ArtistRegisterForm = ({
   return (
     <BaseForm
       title='Регистрация'
-      onSubmit={() => handleSubmit}
+      onSubmit={() => handleSubmit()}
       onClose={onClose}
       isLoading={isLoading}
       className={s.artistRegisterForm}
