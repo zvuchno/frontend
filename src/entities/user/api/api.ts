@@ -11,6 +11,8 @@ import {
   type TNewArtistRequest,
   type TNewListenerRequest,
   type TNewUserResponse,
+  type TSocialAuthRequest,
+  type TSocialAuthResponse,
 } from "../model/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
@@ -162,5 +164,21 @@ export const resetPasswordConfirm = async (data: TResetPasswordConfirmRequest): 
     url: "/auth/account/reset-password-confirm/",
     fetchData: data,
     defaultMessage: "Ошибка восстановления пароля.",
+  });
+};
+
+export const socialAuthVK = async (data: TSocialAuthRequest): Promise<TSocialAuthResponse> => {
+  return await createFetchFunction<TSocialAuthResponse>({
+    url: "/auth/social/vk/",
+    fetchData: data,
+    defaultMessage: "Ошибка авторизации через ВКонтакте",
+  });
+};
+
+export const socialAuthYandex = async (data: TSocialAuthRequest): Promise<TSocialAuthResponse> => {
+  return await createFetchFunction<TSocialAuthResponse>({
+    url: "/auth/social/yandex/",
+    fetchData: data,
+    defaultMessage: "Ошибка авторизации через Яндекс",
   });
 };
