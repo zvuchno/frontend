@@ -6,13 +6,15 @@ import clsx from "clsx";
 import Link from "next/link";
 
 import { useApplyCartPromoCode, useCart, useRemoveCartPromoCode } from "@/entities/cart";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 
 import { ButtonUI } from "@/shared/ui";
 
 import styles from "./CartSummary.module.scss";
 
 export function CartSummary() {
-  const { data } = useCart();
+  const accessToken = useUserStore((state) => state.user?.accessToken);
+  const { data } = useCart(accessToken);
 
   const [promocode, setPromocode] = useState("");
 
@@ -21,8 +23,8 @@ export function CartSummary() {
   const totalSum = data?.total;
   const discountSum = data?.discount_promocode ?? 0;
 
-  const applyPromo = useApplyCartPromoCode();
-  const removePromo = useRemoveCartPromoCode();
+  const applyPromo = useApplyCartPromoCode(accessToken);
+  const removePromo = useRemoveCartPromoCode(accessToken);
 
   const promoValue = promocode?.trim();
   const isPromoLoading = applyPromo.isPending || removePromo.isPending;

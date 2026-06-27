@@ -100,7 +100,7 @@ export const AuthForm = ({
     <BaseForm
       className={s.authForm}
       title={mode === "login" ? "Вход в личный кабинет" : "Регистрация"}
-      onSubmit={() => handleSubmit}
+      onSubmit={handleSubmit}
       onClose={onClose}
       isLoading={isLoading}
       renderFields={() => (

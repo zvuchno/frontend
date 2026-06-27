@@ -14,11 +14,19 @@ import { EmptyCart } from "./components/EmptyCart/EmptyCart";
 import { ProductsCart } from "./components/ProductsCart/ProductsCart";
 
 export const CartPage = () => {
-  const { data, isLoading } = useCart();
-  const items = data?.items;
   const isAuth = useUserStore((state) => state.isUserAuthorized);
+  const accessToken = useUserStore((state) => state.user?.accessToken);
 
-  if (isAuth === undefined || isLoading) return <div>Загрузка корзины...</div>;
+  const {
+    data: cart,
+    isLoading,
+    isFetching,
+    isPending,
+  } = useCart(accessToken, { enabled: isAuth !== undefined && (isAuth ? !!accessToken : true) });
+  const items = cart?.items;
+
+  if (isAuth === undefined || isLoading || isFetching || isPending)
+    return <div>Загрузка корзины...</div>;
 
   return (
     <div className={styles.cart}>
