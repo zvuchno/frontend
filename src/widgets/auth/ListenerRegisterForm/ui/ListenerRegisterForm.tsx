@@ -113,7 +113,7 @@ export const ListenerRegisterForm = ({
   return (
     <BaseForm
       title='Регистрация'
-      onSubmit={() => handleSubmit}
+      onSubmit={() => handleSubmit()}
       onClose={onClose}
       isLoading={isLoading}
       className={s.listenerRegisterForm}
