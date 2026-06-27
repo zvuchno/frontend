@@ -77,13 +77,13 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   };
 
   const handleOpenAddtoCartModal = (data: TDataForModal) => {
-    if (!isAuthorized) {
+    /*if (!isAuthorized) {
       const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`;
       router.push(`/signin?next=${encodeURIComponent(currentUrl)}`);
-    } else {
+    } else {*/
       setDataForModl(data);
       setIsModalOpen(true);
-    }
+    //}
   };
 
   const handleLike = () => {

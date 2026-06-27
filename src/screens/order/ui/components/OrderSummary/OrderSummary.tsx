@@ -3,13 +3,15 @@
 import clsx from "clsx";
 
 import { useCart } from "@/entities/cart";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 
 import { ButtonUI } from "@/shared/ui";
 
 import styles from "./OrderSummary.module.scss";
 
 export const OrderSummary = () => {
-  const { data } = useCart();
+  const accessToken = useUserStore((state) => state.user?.accessToken);
+  const { data } = useCart(accessToken);
 
   const itemsSum = data?.subtotal;
   const totalSum = data?.total;

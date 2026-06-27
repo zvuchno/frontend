@@ -15,7 +15,7 @@ export interface UserDataProps {
 
 export interface UserStoreProps {
   user: UserDataProps | null;
-  isUserAuthorized: boolean;
+  isUserAuthorized: boolean | undefined;
   isLoading: boolean;
   error: string | null;
   // email на этапе регистрации для модального окна о письме подтверждения
@@ -31,7 +31,7 @@ export interface UserStoreProps {
     
 export const useUserStore = create<UserStoreProps>()((set) => ({
   user: null,
-  isUserAuthorized: false,
+  isUserAuthorized: undefined,
   isLoading: false,
   error: null,
   tempEmail: null,

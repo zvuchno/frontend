@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import { type TCartItem } from "@/entities/cart";
 import { useAddCartItem } from "@/entities/cart";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 
 import { ButtonUI, CheckboxUI, ModalUI, Title } from "@/shared/ui";
 
@@ -25,8 +26,9 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
   const [checkStatus, setIsChecked] = useState<boolean>(false);
   const [newPrice, setNewPrice] = useState<string>("");
   const [comment, setComment] = useState<string>("");
+  const accessToken = useUserStore((state) => state.user?.accessToken);
 
-  const { isPending, error, mutate: addToCart } = useAddCartItem();
+  const { isPending, error, mutate: addToCart } = useAddCartItem(accessToken);
 
   useEffect(() => {
     setNewPrice("");

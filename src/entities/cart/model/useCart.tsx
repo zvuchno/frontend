@@ -2,84 +2,119 @@
 
 import toast from "react-hot-toast";
 
+
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { useUserStore } from "../../user";
-import {
-  addCartItem,
-  applyCartPromoCode,
-  getCart,
-  removeCartItem,
-  removeCartPromoCode,
-  updateCart,
-} from "../api/cart.api";
+
+
+import { addCartItem, applyCartPromoCode, getCart, removeCartItem, removeCartPromoCode, updateCart } from "../api/cart.api";
 import type { TCart, TCartItem } from "./types";
 
-export const cartQueryKeys = {
-  all: ["cart"] as const,
-  current: () => [...cartQueryKeys.all, "current"] as const,
-  promocode: ["promo"] as const,
-};
 
-type UseCartOptions = {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export type UseCartOptions = {
   enabled?: boolean;
 };
 
-export function useCart(options?: UseCartOptions) {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
+export const cartQueryKeys = {
+  all: ["cart"] as const,
+  current: (token?: string) => [...cartQueryKeys.all, "current", token] as const,
+  promocode: ["promo"] as const,
+};
 
+export function useCart(token?: string, options?: UseCartOptions) {
   return useQuery<TCart>({
-    queryKey: [...cartQueryKeys.current(), { isAuth: !!accessToken }],
-    queryFn: () => getCart(accessToken),
-    enabled: (options?.enabled ?? true) && !!accessToken,
+    queryKey: cartQueryKeys.current(token),
+    queryFn: () => getCart(token),
+    ...options,
+    retry: false, // временно, убрать когда ошибка  CORS не будет падать
+    refetchOnWindowFocus: false, // временно, убрать когда ошибка  CORS не будет падать
+    refetchOnMount: false, // временно, убрать когда ошибка  CORS не будет падать
   });
 }
 
-export function useAddCartItem() {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
+export function useAddCartItem(token?: string) {
   const queryClient = useQueryClient();
 
   return useMutation<TCart, Error, TCartItem>({
-    mutationFn: (item: TCartItem) => addCartItem(item, accessToken),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+    mutationFn: (item: TCartItem) => addCartItem(item, token),
+    onSuccess: (newCart) => {
+      queryClient.setQueryData(cartQueryKeys.current(token), newCart);
+      toast.success("Товар добавлен в корзину");
+    },
+    onError: (error) => {
+      toast.success(`Ошибка добавления товара в корзину: ${error.message}`);
     },
   });
 }
 
-export function useUpdateCart() {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
+export function useUpdateCart(token?: string) {
   const queryClient = useQueryClient();
 
   return useMutation<TCart, Error, Partial<TCartItem>>({
-    mutationFn: (item) => updateCart({ items: [item] }, accessToken),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+    mutationFn: (item) => updateCart({ items: [item] }, token),
+    onSuccess: (newCart) => {
+      queryClient.setQueryData(cartQueryKeys.current(token), newCart);
+
+      toast.success("Количество товара в корзине изменено");
     },
   });
 }
 
-export function useRemoveCartItem() {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
+export function useRemoveCartItem(token?: string) {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (variantId: number) => removeCartItem(variantId, accessToken),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+  return useMutation<void, Error, number>({
+    mutationFn: (variantId: number) => removeCartItem(variantId, token),
+    onSuccess: (_, variantId) => {
+      const previousCart = queryClient.getQueryData<TCart>(cartQueryKeys.current(token));
+
+     if (previousCart) {
+       const updatedItems = previousCart.items.filter(
+         (item) => item.product_variant !== variantId
+       );
+       queryClient.setQueryData<TCart>(cartQueryKeys.current(token), {
+         ...previousCart,
+         items: updatedItems,
+       });
+     }
       toast.success("Товар удален из корзины");
     },
   });
 }
 
-export function useApplyCartPromoCode() {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
+export function useApplyCartPromoCode(token?: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (code: string) => applyCartPromoCode(code, accessToken),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+    mutationFn: (code: string) => applyCartPromoCode(code, token),
+    onSuccess: (newCart) => {
+      queryClient.setQueryData(cartQueryKeys.current(token), newCart);
       toast.success("Промокод успешно применен");
     },
     onError: (error) => {
@@ -88,14 +123,13 @@ export function useApplyCartPromoCode() {
   });
 }
 
-export function useRemoveCartPromoCode() {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
+export function useRemoveCartPromoCode(token?: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => removeCartPromoCode(accessToken),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+    mutationFn: () => removeCartPromoCode(token),
+    onSuccess: (newCart) => {
+      queryClient.setQueryData(cartQueryKeys.current(token), newCart);
       toast.success("Промокод удален");
     },
   });

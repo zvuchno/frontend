@@ -6,14 +6,16 @@ import {
   useUpdateCart,
   type CartItemRespond,
 } from "@/entities/cart";
+import { useUserStore } from "@/entities/user/store/useUserStore";
 import styles from "./CartItem.module.scss";
 import { ItemsCounter } from "../ItemsCounter";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
 export const CartItem = ({ item }: { item: CartItemRespond }) => {
-  const { mutate: updateCount } = useUpdateCart();
-  const { mutate: removeCartItem } = useRemoveCartItem();
+  const accessToken = useUserStore((state) => state.user?.accessToken);
+  const { mutate: updateCount } = useUpdateCart(accessToken);
+  const { mutate: removeCartItem } = useRemoveCartItem(accessToken);
 
   const handleUpdateItemCount = (type: "increment" | "decrement") => {
     const currentCount = item.quantity;
