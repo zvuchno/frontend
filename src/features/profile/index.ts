@@ -5,3 +5,4 @@ export { NavBar } from "./ui/NavBar/NavBar";
 export { ProfileFormUI } from "./ui/profileForm/ProfileForm";
 export { ProfileFormArtistUI } from "./ui/profileForm/profileFormArtist";
 export type { FieldValues } from "./ui/profileForm/types";
+export { ProfileFormListenerUI } from "./ui/profileForm/profileFormListener";

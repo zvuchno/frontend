@@ -1,24 +1,19 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { useState } from "react";
 
-import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
   ReleaseDescription,
   type TDetailRelease,
 } from "@/widgets/ProductDetailCard/ReleaseDescription";
+import { RecomendationsList } from "@/widgets/RecomendationsList";
 
-import { ButtonLike } from "@/features/ButtonLike";
 import { AddToCartModal, type TDataForModal } from "@/features/addToCartModal";
 
-import { ProductCard } from "@/entities/ProductCard";
-import { useUserStore } from "@/entities/user/store/useUserStore";
-
-import { ListSection, Title } from "@/shared/ui";
+import { Title } from "@/shared/ui";
 import { Track } from "@/shared/ui/Track";
 
 import s from "./ReleasePageContent.module.scss";
@@ -29,13 +24,6 @@ interface ReleasePageContentProps {
 }
 
 const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
-  const user = useUserStore((state) => state.user);
-  const isAuthorized = !!user?.id;
-
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
   const [playingTrack, setPlayingTrack] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataForModal, setDataForModl] = useState<TDataForModal | null>(null);
@@ -49,20 +37,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
     refetchOnWindowFocus: false,
   });
 
-  const recomQuery = useQuery({
-    queryKey: ["recom", "album"],
-    queryFn: () =>
-      getCatalogList({
-        type: "album",
-        ordering: "random",
-        limit: "4",
-      }),
-    refetchOnWindowFocus: false,
-  });
-
   const tracks = tracksQuery.data?.results;
-  const recommendations = recomQuery.data?.results;
-  const hasMoreRecommendations = !!recomQuery.data?.next;
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -77,13 +52,8 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   };
 
   const handleOpenAddtoCartModal = (data: TDataForModal) => {
-    /*if (!isAuthorized) {
-      const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`;
-      router.push(`/signin?next=${encodeURIComponent(currentUrl)}`);
-    } else {*/
-      setDataForModl(data);
-      setIsModalOpen(true);
-    //}
+    setDataForModl(data);
+    setIsModalOpen(true);
   };
 
   const handleLike = () => {
@@ -132,40 +102,8 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
           </div>
         </section>
       )}
-      <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
-        {recommendations && (
-          <ListSection
-            title='Вам также может понравиться'
-            link={`/catalog/album`}
-            hasMore={hasMoreRecommendations}
-          >
-            {recommendations.map((item) => {
-              const url = item.target.url;
-              const match = url.match(/(\d+)\/$/);
-              const id = match ? match[1] : null;
-              const selected =
-                item.target.selected_variant_id !== null
-                  ? item.target.selected_variant_id
-                  : undefined;
-              return (
-                <ProductCard
-                  key={item.product_id}
-                  title={item.artist_name}
-                  description={
-                    item.year === null
-                      ? `${item.kind} ${item.name}`
-                      : `${item.kind} ${item.name} (${item.year.toString()})`
-                  }
-                  image={item.image}
-                  price={item.price}
-                  likeButton={<ButtonLike isLiked={item.is_favorite} />}
-                  link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
-                />
-              );
-            })}
-          </ListSection>
-        )}
-      </Suspense>
+
+      <RecomendationsList />
 
       {dataForModal && (
         <AddToCartModal isOpen={isModalOpen} data={dataForModal} onClose={handleClose} />

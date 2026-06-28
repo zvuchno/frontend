@@ -9,6 +9,7 @@ import { type TDetalArtist } from "@/widgets/ArtistDetailCard";
 import { ButtonLike } from "@/features/ButtonLike";
 
 import { ProductCard } from "@/entities/ProductCard";
+import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection } from "@/shared/ui";
 
@@ -17,6 +18,8 @@ interface IArtistPageContentProps {
 }
 
 const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
+  const { addProduct } = useRecentlyViewed();
+
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
     queryFn: () =>
@@ -76,6 +79,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 price={item.price}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+                onHandleClick={() => addProduct(item)}
               />
             );
           })}
@@ -108,6 +112,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 price={item.price}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+                onHandleClick={() => addProduct(item)}
               />
             );
           })}

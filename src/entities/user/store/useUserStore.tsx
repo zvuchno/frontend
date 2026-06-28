@@ -1,33 +1,7 @@
 import { create } from "zustand"
+import type { UserStoreProps } from "../model/types"
 
-export interface UserDataProps {
-  id: number | null;
-  userName: string | null;
-  email: string | null;
-  phone: string | null;
-  isPhoneVerified: boolean;
-  isEmailVerified: boolean;
-  isListener: boolean;
-  isArtist: boolean;
-  artistName?: string | null;
-  accessToken?: string;
-}
 
-export interface UserStoreProps {
-  user: UserDataProps | null;
-  isUserAuthorized: boolean | undefined;
-  isLoading: boolean;
-  error: string | null;
-  // email на этапе регистрации для модального окна о письме подтверждения
-  tempEmail: string | null;
-  
-  setUser: (user: UserDataProps | null) => void;
-  setIsUserAuthorized: (auth: boolean) => void;
-  setIsLoading: (load: boolean) => void;
-  setError: (error: string | null) => void;
-  clearStore: () => void;
-  setTempEmail: (email: string) => void;
-}
     
 export const useUserStore = create<UserStoreProps>()((set) => ({
   user: null,

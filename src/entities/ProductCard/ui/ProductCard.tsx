@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import Image from "next/image";
+import Link from "next/link";
 
 import styles from "./productCard.module.scss";
 import type { TProductCardProps } from "./types";
-import Link from "next/link";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -11,8 +11,7 @@ const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   maximumFractionDigits: 0,
 });
 
-const formatTotalPrice = (totalPrice: number) =>
-  totalPriceFormatter.format(totalPrice);
+const formatTotalPrice = (totalPrice: number) => totalPriceFormatter.format(totalPrice);
 
 export const ProductCard = ({
   image,
@@ -23,27 +22,26 @@ export const ProductCard = ({
   likeButton,
   className,
   link,
+  onHandleClick,
   ...articleProps
 }: TProductCardProps) => {
   const mediaAction = actionButton ?? likeButton;
 
   return (
-    <Link href={link ?? '#'}>
+    <Link href={link ?? "#"} onClick={onHandleClick}>
       <article className={clsx(styles.productCard, className)} {...articleProps}>
         <div className={styles.media}>
           {image && (
-          <Image
+            <Image
               className={styles.image}
               src={image}
               alt={title}
               width={327}
               height={327}
-              sizes="327px"
+              sizes='327px'
             />
           )}
-        {mediaAction ? (
-            <div className={styles.actionButton}>{mediaAction}</div>
-          ) : null}
+          {mediaAction ? <div className={styles.actionButton}>{mediaAction}</div> : null}
         </div>
 
         <div className={styles.content}>

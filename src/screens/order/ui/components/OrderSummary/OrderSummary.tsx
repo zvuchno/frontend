@@ -1,6 +1,7 @@
 "use client";
 
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 
 import { useCart } from "@/entities/cart";
 import { useUserStore } from "@/entities/user/store/useUserStore";
@@ -15,6 +16,10 @@ export const OrderSummary = () => {
 
   const itemsSum = data?.subtotal;
   const totalSum = data?.total;
+
+  // для тестов - потом убрать роутер
+  const router = useRouter();
+  //
 
   return (
     <div className={styles.summary}>
@@ -33,7 +38,11 @@ export const OrderSummary = () => {
           <span>{totalSum ? totalSum : 0} ₽</span>
         </div>
       </div>
-      <ButtonUI variant={"primary"} className={styles.summaryButton}>
+      <ButtonUI
+        variant={"primary"}
+        className={styles.summaryButton}
+        onClick={() => router.push(`/order/order-succeed`)}
+      >
         Оформить заказ
       </ButtonUI>
     </div>

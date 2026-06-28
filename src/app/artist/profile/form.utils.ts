@@ -2,7 +2,7 @@ import type { CurrentArtistResponse, UpdateCurrentArtistPayload } from "@/api/ar
 
 import type { FieldValues } from "@/features/profile";
 
-import type { UserDataProps } from "@/entities/user/store/useUserStore";
+import type { UserDataProps } from "@/entities/user";
 
 type ArtistProfileFormValueSource = {
   name?: string | null;

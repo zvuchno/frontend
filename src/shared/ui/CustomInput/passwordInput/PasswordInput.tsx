@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, InputHTMLAttributes, useState } from "react";
+import { forwardRef, type InputHTMLAttributes, useState } from "react";
 import s from "./PasswordInput.module.scss";
 import clsx from "clsx";
 
@@ -78,7 +78,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             className={inputClassName}
             style={style}
             type={showPassword ? 'text' : 'password'}
-            ref={ref as React.Ref<HTMLInputElement>}
+            ref={ref}
             {...otherProps}
           />
           <button 

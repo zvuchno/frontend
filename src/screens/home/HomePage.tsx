@@ -1,3 +1,7 @@
+"use client";
+
+import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
+import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 import Link from "next/link";
 
 import { SectionFAQ } from "@/widgets/SectionFAQ";
@@ -9,28 +13,27 @@ import { ButtonLike } from "@/features/ButtonLike";
 import { CardArtist } from "@/entities/Artist";
 import { ProductCard } from "@/entities/ProductCard";
 import { BlogCard } from "@/entities/blog";
+import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { mockBlogs, questions } from "@/shared/constants";
 import { ListSection } from "@/shared/ui";
 
 import styles from "./HomePage.module.scss";
-import { TArtistCard } from "@/api/catalog/artistsListApi/types";
-import { TCatalogCard } from "@/api/catalog/catalogListApi/types";
 
 interface HomePageProps {
   artists: TArtistCard[];
   albums: TCatalogCard[];
   merch: TCatalogCard[];
-};
+}
 
 export function HomePage({ artists, albums, merch }: HomePageProps) {
-
+  const { addProduct } = useRecentlyViewed();
   return (
     <div className={styles.page}>
       <HeroUI />
 
       <div className={styles.mainContent}>
-        <ListSection title="Артисты" link={`/catalog/artists`} gap="70px">
+        <ListSection title='Артисты' link={`/catalog/artists`} gap='70px'>
           {artists.map((artist) => (
             <Link key={artist.slug} href={`/catalog/artists/${artist.slug}/?kind=artists`}>
               <CardArtist image={artist.cover ?? undefined} description={artist.name} />
@@ -60,6 +63,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 price={item.price ?? undefined}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+                onHandleClick={() => addProduct(item)}
               />
             );
           })}
@@ -87,6 +91,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 price={item.price ?? undefined}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+                onHandleClick={() => addProduct(item)}
               />
             );
           })}

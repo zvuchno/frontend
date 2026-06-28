@@ -4,11 +4,14 @@ import { useState } from "react";
 
 import { signOut } from "next-auth/react";
 
+import { useRecentlyViewed } from "@/entities/recentlyViewed";
+
 import { ButtonUI, ModalUI } from "@/shared/ui";
 
 import s from "./LogoutButton.module.scss";
 
 const LogoutButton = () => {
+  const { clearProducts } = useRecentlyViewed();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +29,7 @@ const LogoutButton = () => {
         redirect: true,
         callbackUrl: "/",
       });
+      clearProducts();
     } catch (error) {
       console.error("Ошибка выхода:", error);
       setError("Не удалось выйти из аккаунта. Попробуйте снова");
@@ -47,12 +51,7 @@ const LogoutButton = () => {
           <p className={s.confirmModal__text}>
             {error ? "error" : "Вы уверены, что хотите выйти?"}
           </p>
-          <ButtonUI
-            variant='primary'
-            size='small'
-            onClick={handleLogOut}
-            disabled={isLoading}
-          >
+          <ButtonUI variant='primary' size='small' onClick={handleLogOut} disabled={isLoading}>
             {isLoading ? "Выход..." : "Выйти"}
           </ButtonUI>
         </div>
