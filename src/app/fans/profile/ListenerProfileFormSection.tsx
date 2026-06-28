@@ -1,34 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+
+import { type CurrentAccountResponse, getCurrentAccount, updateAccountPhone } from "@/api/account";
+import { getCurrentListener, updateListener } from "@/api/listener";
 import type { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 
-import {
-  getCurrentAccount,
-  type CurrentAccountResponse,
-  updateAccountPhone,
-} from "@/api/account";
-import { getCurrentListener, updateListener } from "@/api/listener";
-import {
-  type UserDataProps,
-  useUserStore,
-} from "@/entities/user/store/useUserStore";
-import { ProfileFormUI } from "@/features/profile/ui/profileForm/ProfileForm";
-import { type FieldValues } from "@/features/profile/ui/profileForm/types";
-import { ProfileFormListenerUI } from "@/features/profile/ui/profileForm/profileFormListener";
+import { ProfileFormUI } from "@/features/profile";
+import { ProfileFormListenerUI } from "@/features/profile";
+import { type FieldValues } from "@/features/profile";
+
+import { type UserDataProps, useUserStore } from "@/entities/user";
+
 import styles from "./ListenerProfileFormSection.module.scss";
 
 function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
 }
 
-function toUserStoreData(
-  account: CurrentAccountResponse,
-  accessToken?: string,
-): UserDataProps {
+function toUserStoreData(account: CurrentAccountResponse, accessToken?: string): UserDataProps {
   return {
     id: account.id,
     userName: account.username,
@@ -44,7 +37,7 @@ function toUserStoreData(
 
 function shouldSyncSessionAccount(
   sessionUser: Session["user"] | undefined,
-  account: CurrentAccountResponse,
+  account: CurrentAccountResponse
 ) {
   if (!sessionUser) {
     return false;
@@ -148,9 +141,7 @@ export function ListenerProfileFormSection() {
         setUser(toUserStoreData(accountResponse, sessionUser?.accessToken));
 
         if (shouldSyncSessionAccount(sessionUser, accountResponse)) {
-          void updateSession(getSessionAccountPatch(accountResponse)).catch(
-            () => undefined,
-          );
+          void updateSession(getSessionAccountPatch(accountResponse)).catch(() => undefined);
         }
 
         reset({
@@ -163,9 +154,7 @@ export function ListenerProfileFormSection() {
         if (isCurrentRequest) {
           setAccount(null);
           setProfileError(
-            requestError instanceof Error
-              ? requestError.message
-              : "Не удалось загрузить профиль",
+            requestError instanceof Error ? requestError.message : "Не удалось загрузить профиль"
           );
         }
       } finally {
@@ -239,9 +228,7 @@ export function ListenerProfileFormSection() {
       setIsEditMode(false);
     } catch (requestError) {
       setProfileError(
-        requestError instanceof Error
-          ? requestError.message
-          : "Не удалось сохранить профиль",
+        requestError instanceof Error ? requestError.message : "Не удалось сохранить профиль"
       );
     } finally {
       setIsProfileSaving(false);
@@ -252,7 +239,7 @@ export function ListenerProfileFormSection() {
     <FormProvider {...methods}>
       <ProfileFormUI
         className={styles.profileForm}
-        title="Профиль"
+        title='Профиль'
         isChecked={isEditMode && isDirty && isValid && !isProfileBusy}
         isOnChange={isEditMode || isProfileBusy}
         isSubmitting={isProfileSaving}

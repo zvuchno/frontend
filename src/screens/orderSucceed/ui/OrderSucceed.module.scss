@@ -1,0 +1,59 @@
+.success {
+  margin-block-end: clamp(40px, 13.89vw, 200px);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: clamp(20px, 6.94vw, 100px);
+  color: var(--color-text-primary);
+
+  &Main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 17px;
+    padding: 65px 10px;
+    font-family: var(--font-feature-mono), monospace;
+    border-top: none;
+    background-color: var(--color-accent-blue);
+  }
+
+  &Title {
+    font-family: var(--font-better-vcr), monospace;
+    font-weight: 400;
+    letter-spacing: -0.06em;
+    font-size: clamp(26px, 2.5vw, 36px);
+  }
+
+  &Images {
+    width: 94.1vw;
+    max-width: 1355px;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  }
+
+  &Image {
+    height: auto;
+    object-fit: contain;
+    grid-area: 1/1;
+  }
+
+  &Banner {
+    width: 34.69%;
+    margin-block-start: -4px;
+    margin-inline-start: 2px;
+
+    &Cover {
+      width: 100%;
+      margin-block-start: -42px;
+      margin-inline-start: -7px;
+    }
+  }
+
+  &Button {
+    max-width: 320px;
+    margin-block-start: -5px;
+  }
+}

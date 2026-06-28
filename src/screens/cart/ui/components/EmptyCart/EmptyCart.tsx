@@ -29,7 +29,7 @@ export const EmptyCart = () => (
         className={clsx(styles.emptyCartImage, styles.emptyCartBanner)}
       />
       <Image
-        src={"/images/empty-cart-banner-cover.png"}
+        src={"/images/banner-plastic-cover.png"}
         alt={"Прозрачная пленка на баннере пустой корзины"}
         width={917}
         height={326}

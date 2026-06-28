@@ -7,7 +7,8 @@ import { roadmapItems } from "@/widgets/Roadmap";
 import { SectionFAQ } from "@/widgets/SectionFAQ";
 import { HeroUI } from "@/widgets/layout/main/Hero";
 
-import { FAQItemsForArtists, artistInfo } from "@/shared/constants";
+import { FAQItemsForArtists } from "@/shared/constants";
+import { artistInfo } from "@/shared/constants/mocks/mockArtistsInfo";
 import { AccentContainer, ButtonUI, DescriptionArea, Title } from "@/shared/ui";
 
 import styles from "./ForArtists.module.scss";

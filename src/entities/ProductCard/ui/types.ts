@@ -11,4 +11,5 @@ export type TProductCardProps = Omit<
   link?: string;
   actionButton?: ReactNode;
   likeButton?: ReactNode;
+  onHandleClick?: () => void;
 };

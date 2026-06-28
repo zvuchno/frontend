@@ -1,15 +1,11 @@
 import clsx from "clsx";
 import Link from "next/link";
 
+import { RecomendationsList } from "@/widgets/RecomendationsList";
 import { HeroUI } from "@/widgets/layout/main/Hero";
 import s from "@/widgets/layout/main/Hero/ui/Hero.module.scss";
 
-import { ButtonLike } from "@/features/ButtonLike";
-
-import { ProductCard } from "@/entities/ProductCard";
-
-import { mockProducts } from "@/shared/constants";
-import { ButtonUI, ListSection } from "@/shared/ui";
+import { ButtonUI } from "@/shared/ui";
 
 import styles from "./NotFoundPage.module.scss";
 
@@ -40,22 +36,7 @@ export function NotFoundPage() {
           </ButtonUI>
         </div>
       </HeroUI>
-      <ListSection
-        title='вам может понравиться'
-        link={`/`}
-        className={styles.not_found__main_section}
-      >
-        {mockProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            title={product.name}
-            image={product.cover_image}
-            description={product.description}
-            price={product.price ?? undefined}
-            likeButton={<ButtonLike isLiked={product.isLiked} />}
-          />
-        ))}
-      </ListSection>
+      <RecomendationsList />
     </div>
   );
 }

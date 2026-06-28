@@ -14,6 +14,7 @@ export type TCatalogCard = {
   image: string;
   is_favorite: boolean;
   target: Target;
+  className?: string;
 };
 
 export type TCatalogListResponse = {
