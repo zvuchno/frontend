@@ -18,6 +18,7 @@ import {
 } from "../model/ArtistRegisterForm.types";
 import s from "./ArtistRegisterForm.module.scss";
 import { signIn } from "next-auth/react";
+import { PasswordInput } from "@/shared/ui/CustomInput";
 
 interface FormErrors {
   title?: string;
@@ -207,31 +208,27 @@ export const ArtistRegisterForm = ({
             disabled={isLoading}
           />
 
-          <CustomInput
+          <PasswordInput
             id='password'
             label='Пароль*'
-            type='password'
             name='password'
             value={formData.password}
             onChange={handleChange("password")}
             placeholder='Длина пароля не менее 6 символов.......'
             error={!!errors.password}
             message={errors.password}
-            inputSize='small'
             disabled={isLoading}
           />
 
-          <CustomInput
+          <PasswordInput
             id='confirmPassword'
             label='Повторите пароль*'
-            type='password'
             name='confirmPassword'
             value={formData.confirmPassword}
             onChange={handleChange("confirmPassword")}
             placeholder=''
             error={!!errors.confirmPassword}
             message={errors.confirmPassword}
-            inputSize='small'
             disabled={isLoading}
           />
 

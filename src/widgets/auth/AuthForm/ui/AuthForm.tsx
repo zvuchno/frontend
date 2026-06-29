@@ -12,6 +12,7 @@ import { ButtonUI, CustomInput, Typography } from "@/shared/ui";
 import { BaseForm } from "../../BaseForm";
 import { type AuthFormData, type AuthFormProps } from "../model/AuthForm.types";
 import s from "./AuthForm.module.scss";
+import { PasswordInput } from "@/shared/ui/CustomInput";
 
 const initialFormState: AuthFormData = {
   email: "",
@@ -141,15 +142,13 @@ export const AuthForm = ({
             disabled={isLoading}
           />
 
-          <CustomInput
+          <PasswordInput
             id='password'
             label='Пароль'
-            type='password'
             name='password'
             value={formData.password}
             onChange={handleChange("password")}
             placeholder='••••••••'
-            inputSize='small'
             disabled={isLoading}
           />
 
