@@ -3,162 +3,20 @@
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
-
-
 import { useCart } from "@/entities/cart";
 import { useUserStore } from "@/entities/user/store/useUserStore";
-
-
 
 import { ButtonUI } from "@/shared/ui";
 import { formatSum } from "@/shared/utils/formatSum";
 
-
-
 import styles from "./OrderSummary.module.scss";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const OrderSummary = () => {
   const accessToken = useUserStore((state) => state.user?.accessToken);
   const { data } = useCart(accessToken);
 
-  const itemsSum = data?.total ?? '0';
-  const deliverySum = '0';
+  const itemsSum = data?.total ?? "0";
+  const deliverySum = "0";
   const totalSum = Number(itemsSum) + Number(deliverySum);
 
   // для тестов - потом убрать роутер
