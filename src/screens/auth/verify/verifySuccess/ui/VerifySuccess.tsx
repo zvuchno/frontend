@@ -46,7 +46,7 @@ export const VerifySuccessPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [data.uid, data.token]);
+  }, [data]);
 
   const resendEmail = useCallback(async () => {
     try {
@@ -60,14 +60,14 @@ export const VerifySuccessPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!hasSentInitialRequest.current && data.uid && data.token) {
       hasSentInitialRequest.current = true;
       verifyAccount();
     }
-  }, [verifyAccount, data.uid, data.token]);
+  }, [data.uid, data.token]);
 
   useEffect(() => {
     if (isVerified) {
