@@ -12,7 +12,6 @@ import { resendEmailForVerify, verifyEmail } from "@/entities/user";
 export const VerifySuccessPage = () => {
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;
-  const token = user?.accessToken;
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -49,11 +48,11 @@ export const VerifySuccessPage = () => {
     }
   }, [data.uid, data.token]);
 
-  const resendEmail = useCallback(async (token: string) => {
+  const resendEmail = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
-      await resendEmailForVerify(token);
+      await resendEmailForVerify();
       router.replace('/verify/verify-email');
     } catch (error) { 
       setError(error instanceof Error ? error.message : 'Неизвестная ошибка')
@@ -61,7 +60,7 @@ export const VerifySuccessPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     if (!hasSentInitialRequest.current && data.uid && data.token) {
@@ -99,8 +98,7 @@ export const VerifySuccessPage = () => {
   };
 
   const handleResend = () => {
-    if (!token) return;
-    resendEmail(token);
+    resendEmail();
   };
 
   const handleToLogin = () => {
