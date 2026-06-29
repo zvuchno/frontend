@@ -2,8 +2,7 @@ import type { NextConfig } from "next";
 
 function getApiImageRemotePattern() {
   try {
-    const apiBaseUrl =
-      process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
+    const apiBaseUrl = process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
     const apiUrl = new URL(apiBaseUrl ?? "https://dev.zvuchno.space/api");
 
     return {
@@ -25,7 +24,8 @@ const nextConfig: NextConfig = {
   output: "standalone",
   images: {
     unoptimized: process.env.NODE_ENV === "development",
-    remotePatterns: [getApiImageRemotePattern(),
+    remotePatterns: [
+      getApiImageRemotePattern(),
       {
         protocol: "http",
         hostname: "dev.zvuchno.space",
@@ -48,7 +48,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  /* config options here */
 };
 
 export default nextConfig;

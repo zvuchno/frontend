@@ -6,7 +6,7 @@
 
   width: 100%;
   max-width: 666px;
-  height: 263px;
+  min-height: 263px;
 
   @media (max-width: 800px) {
     max-width: none;
@@ -18,7 +18,7 @@
   }
 
   &Title,
-  &Total {
+  &Sum {
     font-family: var(--font-feature-mono), monospace;
     font-size: 28px;
     letter-spacing: -0.08em;
@@ -55,6 +55,9 @@
 
   &Image {
     line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &Content {
       width: 100%;
@@ -67,6 +70,20 @@
         max-width: none;
         max-height: none;
       }
+    }
+  }
+
+  &Sum {
+    display: flex;
+    column-gap: 20px;
+    row-gap: 3px;
+    flex-wrap: wrap;
+    line-height: 1;
+
+    & .oldTotal {
+      opacity: 0.6;
+      text-decoration: line-through;
+      white-space: nowrap;
     }
   }
 }

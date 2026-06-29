@@ -55,3 +55,4 @@ storybook-static
 # Настройки локального редактора (если используешь VS Code)
 .vscode/
 !.vscode/settings.json
+certificates
