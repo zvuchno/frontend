@@ -17,6 +17,7 @@ import {
   type ArtistRegisterFormProps,
 } from "../model/ArtistRegisterForm.types";
 import s from "./ArtistRegisterForm.module.scss";
+import { signIn } from "next-auth/react";
 
 interface FormErrors {
   title?: string;
@@ -111,6 +112,30 @@ export const ArtistRegisterForm = ({
       setIsLoading(false);
     }
   };
+
+  const handleSocialAuth = async (provider: string) => {
+      setIsLoading(true);
+      setRegisterError(undefined);
+  
+      try {
+        const nextRoute = searchParams.get("next");
+  
+        const res = await signIn(provider, {
+          callbackUrl: nextRoute ?? "/"
+        });
+  
+        if (!res?.ok) {
+          throw new Error(
+            res?.error || "Ошибка авторизации."
+          );
+        }
+  
+      } catch (error) {
+        if (error instanceof Error) setRegisterError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
   return (
     <BaseForm
@@ -268,7 +293,7 @@ export const ArtistRegisterForm = ({
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
               type='button'
-              onClick={() => onSocialLogin?.("yandex")}
+              onClick={() => handleSocialAuth("yandex")}
               disabled={isLoading}
               className={s.socialButton}
               aria-label='Яндекс'
@@ -277,7 +302,7 @@ export const ArtistRegisterForm = ({
             </button>
             <button
               type='button'
-              onClick={() => onSocialLogin?.("vk")}
+              onClick={() => handleSocialAuth("vk")}
               disabled={isLoading}
               className={s.socialButton}
               aria-label='VK'

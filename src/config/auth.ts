@@ -66,6 +66,7 @@ export const authConfig: AuthOptions = {
       if (account?.provider && allowedProviders.includes(account.provider))  {
 
         try {
+          console.log('account:', account);
           const res = await socialAuth({
             provider: account.provider,
             access_token: account.id_token ?? '',
