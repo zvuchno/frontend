@@ -1,3 +1,4 @@
+import { getApiAccessToken } from "@/api/authToken";
 import {
   type TResetPasswordConfirmRequest,
   type TResetPasswordRequest,
@@ -11,6 +12,8 @@ import {
   type TNewArtistRequest,
   type TNewListenerRequest,
   type TNewUserResponse,
+  type TSocialAuthRequest,
+  type TSocialAuthResponse,
 } from "../model/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
@@ -126,7 +129,8 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
   });
 };
 
-export const resendEmailForVerify = async (token: string): Promise<void> => {
+export const resendEmailForVerify = async (): Promise<void> => {
+  const token = await getApiAccessToken();
   const res = await fetch(`${BASE_URL}/v1/auth/account/me/resend-email`, {
     method: "POST",
     headers: {
@@ -162,5 +166,13 @@ export const resetPasswordConfirm = async (data: TResetPasswordConfirmRequest): 
     url: "/auth/account/reset-password-confirm/",
     fetchData: data,
     defaultMessage: "Ошибка восстановления пароля.",
+  });
+};
+
+export const socialAuth = async (data: TSocialAuthRequest): Promise<TSocialAuthResponse> => {
+  return await createFetchFunction<TSocialAuthResponse>({
+    url: `/auth/social/${data.provider}/`,
+    fetchData: data,
+    defaultMessage: `Ошибка авторизации через ${data.provider}`,
   });
 };

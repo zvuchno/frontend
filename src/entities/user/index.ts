@@ -18,4 +18,5 @@ export {
   resetPassword,
   resetPasswordVerify,
   resetPasswordConfirm,
+  socialAuth,
 } from "./api/api";

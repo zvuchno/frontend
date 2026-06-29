@@ -97,3 +97,14 @@ export interface UserStoreProps {
   clearStore: () => void;
   setTempEmail: (email: string) => void;
 }
+
+export type TSocialAuthRequest = {
+  provider: string; // "vk" | "yandex";
+  access_token: string;
+  code?: string;
+}
+
+export type TSocialAuthResponse = {
+  access: string;
+  refresh: string;
+}

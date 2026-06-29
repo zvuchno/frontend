@@ -5,7 +5,7 @@ export async function getApiAccessToken(): Promise<string> {
   const accessToken = session?.user?.accessToken;
 
   if (!accessToken) {
-    throw new Error("Authorization token is required");
+    throw new Error("Authorization token is missing");
   }
 
   return accessToken;
