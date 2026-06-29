@@ -1,0 +1,42 @@
+.cartSummaryDiscount {
+  display: flex;
+  gap: 22px;
+
+  @media (max-width: 1199px) {
+    flex-direction: column;
+  }
+
+  &Input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--color-text-primary);
+    border-radius: 36px;
+    padding: 20px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    font-weight: 600;
+    font-family: var(--font-feature-mono), monospace;
+    color: var(--color-bg-secondary);
+    box-sizing: border-box;
+    height: 60px;
+
+    @media (max-width: 1199px) {
+      padding-block: 14px;
+    }
+
+    &::placeholder {
+      font-family: var(--font-feature-mono), monospace;
+      color: var(--color-bg-secondary);
+    }
+  }
+
+  &Button {
+    width: 140px;
+
+    @media (max-width: 1199px) {
+      width: 100%;
+    }
+  }
+}

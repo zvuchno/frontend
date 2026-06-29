@@ -9,9 +9,11 @@ import { useRecentlyViewed } from "@/entities/recentlyViewed";
 import { ButtonUI, ModalUI } from "@/shared/ui";
 
 import s from "./LogoutButton.module.scss";
+import { useCartPromoCode } from "@/entities/promoCode";
 
 const LogoutButton = () => {
   const { clearProducts } = useRecentlyViewed();
+  const { clearPromo } = useCartPromoCode();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +32,7 @@ const LogoutButton = () => {
         callbackUrl: "/",
       });
       clearProducts();
+      clearPromo();
     } catch (error) {
       console.error("Ошибка выхода:", error);
       setError("Не удалось выйти из аккаунта. Попробуйте снова");

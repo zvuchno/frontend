@@ -9,12 +9,11 @@ export async function getCart(token?: string): Promise<TCart> {
   const init: RequestInit = { method: "GET" };
 
   const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
-  const credentials = token ? "omit" : "include";
 
   const response = await fetch(`${baseUrl}${CART_PATH}/me/`, {
     ...init,
     headers: headers,
-    credentials: credentials,
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -25,14 +24,13 @@ export async function getCart(token?: string): Promise<TCart> {
 }
 
 export async function addCartItem(payload: TCartItem, token?: string): Promise<TCart> {
-  const credentials = token ? "omit" : "include";
   const init: RequestInit = {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: credentials,
+    credentials: "include",
   };
 
   const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
@@ -50,14 +48,13 @@ export async function addCartItem(payload: TCartItem, token?: string): Promise<T
 }
 
 export async function updateCart(payload: UpdateCartPayload, token?: string): Promise<TCart> {
-  const credentials = token ? "omit" : "include";
   const init: RequestInit = {
     method: "PATCH",
     body: JSON.stringify(payload),
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: credentials,
+    credentials: "include",
   };
 
   const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
@@ -76,13 +73,13 @@ export async function updateCart(payload: UpdateCartPayload, token?: string): Pr
 
 export async function removeCartItem(variantId: number, token?: string): Promise<void> {
   const init: RequestInit = { method: "DELETE" };
-  const credentials = token ? "omit" : "include";
+
   const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
   const response = await fetch(`${baseUrl}${CART_PATH}/me/remove/${variantId}`, {
     ...init,
     headers: headers,
-    credentials: credentials,
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -93,7 +90,6 @@ export async function removeCartItem(variantId: number, token?: string): Promise
 }
 
 export async function applyCartPromoCode(promo: string, token?: string): Promise<TCart> {
-  const credentials = token ? "omit" : "include";
   const init: RequestInit = {
     method: "POST",
     body: JSON.stringify({ code: promo }),
@@ -108,7 +104,7 @@ export async function applyCartPromoCode(promo: string, token?: string): Promise
   const response = await fetch(`${baseUrl}${CART_PATH}/apply-promocode/`, {
     ...init,
     headers: headers,
-    credentials: credentials,
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -127,13 +123,13 @@ export async function applyCartPromoCode(promo: string, token?: string): Promise
 
 export async function removeCartPromoCode(token?: string): Promise<TCart> {
   const init: RequestInit = { method: "POST" };
-  const credentials = token ? "omit" : "include";
+
   const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
   const response = await fetch(`${baseUrl}${CART_PATH}/remove-promocode/`, {
     ...init,
     headers: headers,
-    credentials: credentials,
+    credentials: "include",
   });
 
   if (!response.ok) {

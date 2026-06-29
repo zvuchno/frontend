@@ -1,21 +1,28 @@
 "use client";
 
-import Image from "next/image";
-import {
-  useRemoveCartItem,
-  useUpdateCart,
-  type CartItemRespond,
-} from "@/entities/cart";
-import { useUserStore } from "@/entities/user/store/useUserStore";
-import styles from "./CartItem.module.scss";
-import { ItemsCounter } from "../ItemsCounter";
-import Link from "next/link";
 import toast from "react-hot-toast";
+
+import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { type CartItemRespond, useRemoveCartItem, useUpdateCart } from "@/entities/cart";
+import { useUserStore } from "@/entities/user/store/useUserStore";
+
+import { formatSum } from "@/shared/utils/formatSum";
+
+import { ItemsCounter } from "../ItemsCounter";
+import styles from "./CartItem.module.scss";
 
 export const CartItem = ({ item }: { item: CartItemRespond }) => {
   const accessToken = useUserStore((state) => state.user?.accessToken);
   const { mutate: updateCount } = useUpdateCart(accessToken);
   const { mutate: removeCartItem } = useRemoveCartItem(accessToken);
+
+  const hasDiscount = Number(item.base_line_total) > Number(item.discount_line_total);
+
+  const router = useRouter();
 
   const handleUpdateItemCount = (type: "increment" | "decrement") => {
     const currentCount = item.quantity;
@@ -40,16 +47,22 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
         });
       }
       return removeCartItem(item.product_variant);
-
     }
   };
+
+  const basePath = "/api/v1/store";
+  const targetPath = item.target.url.replace(basePath, "");
 
   return (
     <article className={styles.cartItem}>
       {item.image && (
-        <Link
-          href={`/catalog/${item.target?.url}`}
+        <div
           className={styles.cartItemImage}
+          onClick={() => {
+            router.push(
+              `${targetPath}?kind=${item.target.type}&selected=${item.target.selected_variant_id}`
+            );
+          }}
         >
           <Image
             src={item.image}
@@ -58,14 +71,11 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
             width={196}
             height={215}
           />
-        </Link>
+        </div>
       )}
       <div className={styles.cartItemContent}>
         <div className={styles.cartItemSpecification}>
-          <Link
-            href={`/catalog/${item.target?.url}`}
-            className={styles.cartItemImage}
-          >
+          <Link href={`/catalog/${item.target?.url}`} className={styles.cartItemImage}>
             <h3 className={styles.cartItemTitle}>{item.name}</h3>
           </Link>
 
@@ -80,7 +90,16 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
               />
             </div>
           </div>
-          <span className={styles.cartItemTotal}>{item.line_total} ₽</span>
+          <div className={styles.cartItemSum}>
+            {hasDiscount && (
+              <span className={styles.cartItemDiscountTotal}>
+                {formatSum(item.discount_line_total)} ₽
+              </span>
+            )}
+            <span className={clsx(styles.cartItemTotal, hasDiscount && [styles.oldTotal])}>
+              {formatSum(item.base_line_total)} ₽
+            </span>
+          </div>
         </div>
       </div>
     </article>

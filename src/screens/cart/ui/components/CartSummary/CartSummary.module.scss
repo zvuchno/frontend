@@ -7,10 +7,12 @@
   border: 1px solid var(--color-text-primary);
   width: 33.33vw;
   max-width: 480px;
+  height: 546px;
 
   @media (max-width: 800px) {
     width: 100%;
     max-width: none;
+    height: auto;
   }
 
   &Details {
@@ -18,16 +20,31 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
+    flex: 1;
 
     & .mainText {
       display: flex;
       justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
       width: 100%;
       font-size: 28px;
       font-weight: 400;
       line-height: 1;
       letter-spacing: -0.08em;
       opacity: 60%;
+
+      @media (max-width: 1185px) {
+        font-size: clamp(18px, 2.4vw, 28px);
+      }
+
+      @media (max-width: 800px) {
+        font-size: 28px;
+      }
+
+      @media (max-width: 400px) {
+        font-size: clamp(18px, 6vw, 28px);
+      }
     }
 
     & .deliveryInfo {
@@ -46,63 +63,23 @@
   &Total {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
     font-size: clamp(20px, 2.2vw, 32px);
     opacity: 1;
     letter-spacing: -0.06em;
     line-height: 1;
     font-family: var(--font-better-vcr), monospace;
 
-    @media (max-width: 800px) {
-      font-size: clamp(20px, 4vw, 32px);
+    @media (max-width: 1185px) {
+      font-size: clamp(18px, 2.1vw, 26px);
     }
-  }
 
-  &Buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+    @media (max-width: 800px) {
+      font-size: 32px;
+    }
 
-    & .cartSummaryDiscount {
-      display: flex;
-      gap: 22px;
-
-      @media (max-width: 1199px) {
-        flex-direction: column;
-      }
-
-      &Input {
-        flex: 1;
-        min-width: 0;
-        border: 1px solid var(--color-text-primary);
-        border-radius: 36px;
-        padding: 20px;
-        text-align: center;
-        font-size: 20px;
-        line-height: 1;
-        letter-spacing: -0.06em;
-        font-weight: 600;
-        font-family: var(--font-feature-mono), monospace;
-        color: var(--color-bg-secondary);
-        box-sizing: border-box;
-        height: 60px;
-
-        @media (max-width: 1199px) {
-          padding-block: 14px;
-        }
-
-        &::placeholder {
-          font-family: var(--font-feature-mono), monospace;
-          color: var(--color-bg-secondary);
-        }
-      }
-
-      &Button {
-        width: 140px;
-
-        @media (max-width: 1199px) {
-          width: 100%;
-        }
-      }
+    @media (max-width: 500px) {
+      font-size: clamp(18px, 6vw, 32px);
     }
   }
 }

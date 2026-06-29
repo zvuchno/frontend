@@ -16,12 +16,10 @@ export const CartPage = () => {
   const {
     data: cart,
     isLoading,
-    isFetching,
-    isPending,
   } = useCart(accessToken, { enabled: isAuth !== undefined && (isAuth ? !!accessToken : true) });
   const items = cart?.items;
 
-  if (isAuth === undefined || isLoading || isFetching || isPending)
+  if (isAuth === undefined || isLoading )
     return <div>Загрузка корзины...</div>;
 
   return (
