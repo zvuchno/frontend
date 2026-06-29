@@ -284,15 +284,6 @@ export const ArtistRegisterForm = ({
             >
               VK
             </button>
-            <button
-              type='button'
-              onClick={() => onSocialLogin?.("google")}
-              disabled={isLoading}
-              className={s.socialButton}
-              aria-label='Google'
-            >
-              G
-            </button>
           </div>
         );
       }}

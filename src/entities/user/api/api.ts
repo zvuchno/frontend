@@ -167,18 +167,10 @@ export const resetPasswordConfirm = async (data: TResetPasswordConfirmRequest): 
   });
 };
 
-export const socialAuthVK = async (data: TSocialAuthRequest): Promise<TSocialAuthResponse> => {
+export const socialAuth = async (data: TSocialAuthRequest): Promise<TSocialAuthResponse> => {
   return await createFetchFunction<TSocialAuthResponse>({
-    url: "/auth/social/vk/",
+    url: `/auth/social/${data.provider}/`,
     fetchData: data,
-    defaultMessage: "Ошибка авторизации через ВКонтакте",
-  });
-};
-
-export const socialAuthYandex = async (data: TSocialAuthRequest): Promise<TSocialAuthResponse> => {
-  return await createFetchFunction<TSocialAuthResponse>({
-    url: "/auth/social/yandex/",
-    fetchData: data,
-    defaultMessage: "Ошибка авторизации через Яндекс",
+    defaultMessage: `Ошибка авторизации через ${data.provider}`,
   });
 };

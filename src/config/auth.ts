@@ -1,17 +1,12 @@
 import type { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
 
-import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken } from "@/entities/user";
+import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken, socialAuth } from "@/entities/user";
 
 export const authConfig: AuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_SECRET as string,
-    }),
     YandexProvider({
       clientId: process.env.YANDEX_CLIENT_ID as string,
       clientSecret: process.env.YANDEX_SECRET as string,
@@ -65,6 +60,29 @@ export const authConfig: AuthOptions = {
   ],
 
   callbacks: {
+    async signIn({ user, account }) {
+      const allowedProviders = ["vk", "yandex"];
+
+      if (account?.provider && allowedProviders.includes(account.provider))  {
+
+        try {
+          const res = await socialAuth({
+            provider: account.provider,
+            access_token: account.id_token ?? '',
+          });
+
+          if (res.access) {
+            user.accessToken = res.access;
+            user.refreshToken = res.refresh;
+          }
+          return true;
+
+        } catch (error) {
+          throw new Error(error instanceof Error ? error.message : 'Ошибка проверки на бэкенде');
+        }
+      }
+      return false;
+    },
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;

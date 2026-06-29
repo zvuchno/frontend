@@ -99,8 +99,9 @@ export interface UserStoreProps {
 }
 
 export type TSocialAuthRequest = {
+  provider: string; // "vk" | "yandex";
   access_token: string;
-  code: string;
+  code?: string;
 }
 
 export type TSocialAuthResponse = {

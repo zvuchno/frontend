@@ -92,6 +92,30 @@ export const AuthForm = ({
     }
   };
 
+  const handleSocialAuth = async (provider: string) => {
+    setIsLoading(true);
+    setAuthError(undefined);
+
+    try {
+      const nextRoute = searchParams.get("next");
+
+      const res = await signIn(provider, {
+        callbackUrl: nextRoute ?? "/"
+      });
+
+      if (!res?.ok) {
+        throw new Error(
+          res?.error || "Ошибка авторизации."
+        );
+      }
+
+    } catch (error) {
+      if (error instanceof Error) setAuthError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleToForgotPassword = () => {
     router.replace("/forgot-password");
   };
@@ -295,7 +319,7 @@ export const AuthForm = ({
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
               type='button'
-              onClick={() => onSocialLogin?.("yandex")}
+              onClick={() => handleSocialAuth("yandex")}
               aria-label='Яндекс'
               disabled={isLoading}
               style={socialButtonStyle}
@@ -316,7 +340,7 @@ export const AuthForm = ({
             </button>
             <button
               type='button'
-              onClick={() => onSocialLogin?.("vk")}
+              onClick={() => handleSocialAuth("vk")}
               aria-label='VK'
               disabled={isLoading}
               style={socialButtonStyle}
@@ -334,27 +358,6 @@ export const AuthForm = ({
               }}
             >
               VK
-            </button>
-            <button
-              type='button'
-              onClick={() => onSocialLogin?.("google")}
-              aria-label='Google'
-              disabled={isLoading}
-              style={socialButtonStyle}
-              onMouseEnter={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.background = "#d4e8ff";
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(16, 15, 13, 0.15)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#E4F1FF";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              G
             </button>
           </div>
         );
