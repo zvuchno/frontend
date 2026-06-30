@@ -98,10 +98,10 @@ export const AuthForm = ({
     setAuthError(undefined);
 
     try {
-      const nextRoute = searchParams.get("next");
+      //const nextRoute = searchParams.get("next");
 
       const res = await signIn(provider, {
-        callbackUrl: nextRoute ?? "/"
+        callbackUrl: "/"
       });
 
       if (!res?.ok) {
