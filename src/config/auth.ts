@@ -67,33 +67,34 @@ export const authConfig: AuthOptions = {
   ],
 
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === "credentials") {
-        return true;
-      }
+    // async signIn({ user, account }) {
+    //   if (account?.provider === "credentials") {
+    //     return true;
+    //   }
 
-      const allowedProviders = ["vk", "yandex"];
+    //   const allowedProviders = ["vk", "yandex"];
 
-      if (account?.provider && allowedProviders.includes(account.provider)) {
-        try {
-          console.log("account:", account);
-          const res = await socialAuth({
-            provider: account.provider,
-            access_token: account.id_token ?? "",
-          });
+    //   if (account?.provider && allowedProviders.includes(account.provider)) {
+    //     try {
+    //       console.log("account:", account);
+    //       const res = await socialAuth({
+    //         provider: account.provider,
+    //         access_token: account.id_token ?? "",
+    //       });
 
-          if (res.access) {
-            user.accessToken = res.access;
-            user.refreshToken = res.refresh;
-          }
-          return true;
-        } catch (error) {
-          throw new Error(error instanceof Error ? error.message : "Ошибка проверки на бэкенде");
-        }
-      }
-      return false;
-    },
-    async jwt({ token, user, trigger, session }) {
+    //       if (res.access) {
+    //         user.accessToken = res.access;
+    //         user.refreshToken = res.refresh;
+    //       }
+    //       return true;
+    //     } catch (error) {
+    //       throw new Error(error instanceof Error ? error.message : "Ошибка проверки на бэкенде");
+    //     }
+    //   }
+    //   return false;
+    // },
+    async jwt({ token, user, trigger, session, account }) {
+
       if (user) {
         token.id = user.id;
         token.userName = user.userName;
@@ -107,6 +108,29 @@ export const authConfig: AuthOptions = {
         token.artistName = user.artistName;
         token.refreshToken = user.refreshToken;
       }
+
+      if (account && (account?.provider === 'vk' || account?.provider === 'yandex' )) {
+        
+        try {
+          const res = await socialAuth({
+            provider: account.provider,
+            access_token: account.access_token ?? "",
+          });
+
+          if (res.access) {
+            token.accessToken = res.access;
+            token.refreshToken = res.refresh;
+          } 
+          
+        } catch (error) {
+          token.accessToken = undefined;
+          token.refreshToken = undefined;
+          console.log('Ошибка проверки на бэкенде')
+          //throw new Error(error instanceof Error ? error.message : "Ошибка проверки на бэкенде");
+        }
+      }
+
+      
 
       if (token.accessToken && !(await isTokenValid(token.accessToken))) {
         console.log("Token expired, refreshing...");
