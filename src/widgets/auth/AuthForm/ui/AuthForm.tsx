@@ -2,17 +2,69 @@
 
 import React, { useEffect, useState } from "react";
 
+
+
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+
+
 import { useUserStore } from "@/entities/user/store/useUserStore";
 
+
+
 import { ButtonUI, CustomInput, Typography } from "@/shared/ui";
+import { PasswordInput } from "@/shared/ui/CustomInput";
+
+
 
 import { BaseForm } from "../../BaseForm";
 import { type AuthFormData, type AuthFormProps } from "../model/AuthForm.types";
 import s from "./AuthForm.module.scss";
-import { PasswordInput } from "@/shared/ui/CustomInput";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const initialFormState: AuthFormData = {
   email: "",
@@ -77,6 +129,7 @@ export const AuthForm = ({
         identifier: formData.email.toLowerCase(),
         password: formData.password,
         redirect: false,
+        //sessionId: "rvw4qp94h5gy7eyi208gnb5c4rcbpdhs",
       });
 
       if (res?.ok) {
@@ -101,15 +154,12 @@ export const AuthForm = ({
       const nextRoute = searchParams.get("next");
 
       const res = await signIn(provider, {
-        callbackUrl: nextRoute ?? "/"
+        callbackUrl: nextRoute ?? "/",
       });
 
       if (!res?.ok) {
-        throw new Error(
-          res?.error || "Ошибка авторизации."
-        );
+        throw new Error(res?.error || "Ошибка авторизации.");
       }
-
     } catch (error) {
       if (error instanceof Error) setAuthError(error.message);
     } finally {

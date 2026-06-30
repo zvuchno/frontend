@@ -1,20 +1,75 @@
 import { getApiAccessToken } from "@/api/authToken";
-import {
-  type TResetPasswordConfirmRequest,
-  type TResetPasswordRequest,
-  type TResetPasswordVerifyRequest,
-  type TVerifyEmailRequest,
-  type TAuthResponse,
-  type TCurrentUserResponse,
-  type TFetchProps,
-  type TLoginData,
-  type TLogoutdata,
-  type TNewArtistRequest,
-  type TNewListenerRequest,
-  type TNewUserResponse,
-  type TSocialAuthRequest,
-  type TSocialAuthResponse,
-} from "../model/types";
+
+
+
+import { type TAuthResponse, type TCurrentUserResponse, type TFetchProps, type TLoginData, type TLogoutdata, type TNewArtistRequest, type TNewListenerRequest, type TNewUserResponse, type TResetPasswordConfirmRequest, type TResetPasswordRequest, type TResetPasswordVerifyRequest, type TSocialAuthRequest, type TSocialAuthResponse, type TVerifyEmailRequest } from "../model/types";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -59,12 +114,31 @@ export const registerNewListener = async (
   });
 };
 
-export const logInUser = async (userData: TLoginData): Promise<TAuthResponse> => {
-  return await createFetchFunction<TAuthResponse>({
-    url: "/auth/token/create/",
-    fetchData: userData,
-    defaultMessage: "Ошибка авторизации. Проверьте корректность введённых данных.",
+export const logInUser = async (
+  userData: TLoginData,
+  sessionId?: string
+): Promise<TAuthResponse> => {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (sessionId) {
+    headers["Cookie"] = `sessionid=${sessionId}`;
+  }
+
+  process.stdout.write(`\n>>> ПОПЫТКА ЛОГИНА. SessionId: ${sessionId || "ОТСУТСТВУЕТ"}\n`);
+
+  const response = await fetch(`${BASE_URL}/v1/auth/token/create/`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(userData),
   });
+
+  if (!response.ok) {
+    throw new Error(`Ошибка логина: статус ${response.status}`);
+  }
+
+  return response.json() as Promise<TAuthResponse>;
 };
 
 export const refreshToken = async (token: string): Promise<TAuthResponse> => {
