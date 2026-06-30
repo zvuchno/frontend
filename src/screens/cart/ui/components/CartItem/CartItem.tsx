@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { type CartItemRespond, useRemoveCartItem, useUpdateCart } from "@/entities/cart";
-import { useUserStore } from "@/entities/user/store/useUserStore";
 
 import { formatSum } from "@/shared/utils/formatSum";
 
@@ -16,9 +15,8 @@ import { ItemsCounter } from "../ItemsCounter";
 import styles from "./CartItem.module.scss";
 
 export const CartItem = ({ item }: { item: CartItemRespond }) => {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
-  const { mutate: updateCount } = useUpdateCart(accessToken);
-  const { mutate: removeCartItem } = useRemoveCartItem(accessToken);
+  const { mutate: updateCount } = useUpdateCart();
+  const { mutate: removeCartItem } = useRemoveCartItem();
 
   const hasDiscount = Number(item.base_line_total) > Number(item.discount_line_total);
 

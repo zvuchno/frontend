@@ -7,7 +7,7 @@ export type TCartItem = {
 };
 
 export interface UpdateCartPayload {
-  items: Partial<TCartItem>[]
+  items: Partial<TCartItem>[];
 }
 
 export interface CartItemRespond extends Omit<TCartItem, "comment" | "price_with_donation"> {
@@ -27,7 +27,7 @@ export interface CartItemRespond extends Omit<TCartItem, "comment" | "price_with
 
 export type TCart = {
   items: CartItemRespond[];
-  promocode?: string;
+  code: string | null;
   subtotal: string;
   discount_promocode?: string;
   total: string;

@@ -4,8 +4,6 @@ import toast from "react-hot-toast";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { useCartPromoCode } from "@/entities/promoCode";
-
 import {
   addCartItem,
   applyCartPromoCode,
@@ -22,13 +20,13 @@ export type UseCartOptions = {
 
 export const cartQueryKeys = {
   all: ["cart"] as const,
-  current: (token?: string) => [...cartQueryKeys.all, "current", token] as const,
+  current: () => [...cartQueryKeys.all, "current"] as const,
   promocode: ["promo"] as const,
 };
 
-export function useCart(token?: string, options?: UseCartOptions) {
+export function useCart(options?: UseCartOptions) {
   return useQuery<TCart>({
-    queryKey: cartQueryKeys.current(token),
+    queryKey: cartQueryKeys.current(),
     queryFn: () => getCart(),
     ...options,
     retry: false, // временно, убрать когда ошибка  CORS не будет падать
@@ -37,13 +35,13 @@ export function useCart(token?: string, options?: UseCartOptions) {
   });
 }
 
-export function useAddCartItem(token?: string) {
+export function useAddCartItem() {
   const queryClient = useQueryClient();
 
   return useMutation<TCart, Error, TCartItem>({
     mutationFn: (item: TCartItem) => addCartItem(item),
     onSuccess: (newCart) => {
-      queryClient.setQueryData(cartQueryKeys.current(token), newCart);
+      queryClient.setQueryData(cartQueryKeys.current(), newCart);
       toast.success("Товар добавлен в корзину");
     },
     onError: (error) => {
@@ -52,34 +50,34 @@ export function useAddCartItem(token?: string) {
   });
 }
 
-export function useUpdateCart(token?: string) {
+export function useUpdateCart() {
   const queryClient = useQueryClient();
 
   return useMutation<TCart, Error, Partial<TCartItem>>({
     mutationFn: (item) => updateCart({ items: [item] }),
     onSuccess: (newCart) => {
-      queryClient.setQueryData(cartQueryKeys.current(token), newCart);
+      queryClient.setQueryData(cartQueryKeys.current(), newCart);
       toast.success("Количество товара в корзине изменено");
     },
   });
 }
 
-export function useRemoveCartItem(token?: string) {
+export function useRemoveCartItem() {
   const queryClient = useQueryClient();
 
   return useMutation<void, Error, number, { previousCart: TCart | undefined }>({
     mutationFn: (variantId: number) => removeCartItem(variantId),
     onMutate: async (variantId) => {
-      await queryClient.cancelQueries({ queryKey: cartQueryKeys.current(token) });
+      await queryClient.cancelQueries({ queryKey: cartQueryKeys.current() });
 
-      const previousCart = queryClient.getQueryData<TCart>(cartQueryKeys.current(token));
+      const previousCart = queryClient.getQueryData<TCart>(cartQueryKeys.current());
 
       if (previousCart) {
         const updatedItems = previousCart.items.filter(
           (item) => item.product_variant !== variantId
         );
 
-        queryClient.setQueryData<TCart>(cartQueryKeys.current(token), {
+        queryClient.setQueryData<TCart>(cartQueryKeys.current(), {
           ...previousCart,
           items: updatedItems,
         });
@@ -87,26 +85,26 @@ export function useRemoveCartItem(token?: string) {
       return { previousCart };
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.current(token) });
+      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.current() });
       toast.success("Товар удален из корзины");
     },
     onError: (err, variantId, context) => {
       if (context?.previousCart) {
-        queryClient.setQueryData(cartQueryKeys.current(token), context.previousCart);
+        queryClient.setQueryData(cartQueryKeys.current(), context.previousCart);
       }
       toast.error("Не удалось удалить товар");
     },
   });
 }
 
-export function useApplyCartPromoCode({ promo, token }: { promo?: string; token?: string }) {
+export function useApplyCartPromoCode() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (code: string) => applyCartPromoCode(code),
     onSuccess: (newCart) => {
-      queryClient.setQueryData(cartQueryKeys.current(token), newCart);
-      useCartPromoCode.setState({ promo: promo });
+      queryClient.setQueryData(cartQueryKeys.current(), newCart);
+
       toast.success("Промокод успешно применен");
     },
     onError: (error) => {
@@ -115,15 +113,14 @@ export function useApplyCartPromoCode({ promo, token }: { promo?: string; token?
   });
 }
 
-export function useRemoveCartPromoCode(token?: string) {
+export function useRemoveCartPromoCode() {
   const queryClient = useQueryClient();
-  const { clearPromo } = useCartPromoCode();
 
   return useMutation({
     mutationFn: () => removeCartPromoCode(),
     onSuccess: (newCart) => {
-      queryClient.setQueryData(cartQueryKeys.current(token), newCart);
-      clearPromo();
+      queryClient.setQueryData(cartQueryKeys.current(), newCart);
+
       toast.success("Промокод удален");
     },
   });
