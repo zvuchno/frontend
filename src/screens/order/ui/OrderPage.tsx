@@ -1,12 +1,17 @@
 "use client";
 
+<<<<<<< Updated upstream
 import { FormProvider, useForm } from "react-hook-form";
 
+=======
+>>>>>>> Stashed changes
 import { AccentContainer } from "@/shared/ui";
 
 import styles from "./OrderPage.module.scss";
 import { OrderDetails } from "./components/OrderDetails";
 import { OrderSummary } from "./components/OrderSummary";
+import { OrderDetails } from "./components/OrderDetails";
+import { FormProvider, useForm } from "react-hook-form";
 
 export const OrderPage = () => {
   const methods = useForm({
@@ -31,4 +36,4 @@ export const OrderPage = () => {
       </AccentContainer>
     </FormProvider>
   );
-};
+}

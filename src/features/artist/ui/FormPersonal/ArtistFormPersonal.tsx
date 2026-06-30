@@ -1,8 +1,22 @@
+<<<<<<< Updated upstream
+=======
+import type { TArtistFormPersonalProps, FieldValues } from "./utils/types";
+import styles from "./artistFormPersonal.module.scss";
+import { ButtonUI } from "@/shared/ui";
+import { useFormContext } from "react-hook-form";
+import {
+  artistPersonalFields,
+  artistPasportFields,
+  artistIndividualPaymentFields,
+  artistEntityPaymentFields,
+} from "./utils/constants";
+>>>>>>> Stashed changes
 import "react-datepicker/dist/react-datepicker.module.css";
 import { useFormContext } from "react-hook-form";
 
 import clsx from "clsx";
 
+<<<<<<< Updated upstream
 import { ButtonUI } from "@/shared/ui";
 import { formatDateToApi } from "@/shared/utils/formatDate";
 
@@ -17,6 +31,8 @@ import {
 } from "./utils/constants";
 import type { FieldValues, TArtistFormPersonalProps } from "./utils/types";
 
+=======
+>>>>>>> Stashed changes
 export const ArtistFormPersonal = ({
   isChecked = false,
   isOnChange = true,

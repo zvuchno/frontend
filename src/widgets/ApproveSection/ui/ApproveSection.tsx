@@ -9,7 +9,14 @@ import { Title } from "@/shared/ui";
 import type { ApproveSectionProps } from "../model/ApproveSection.types";
 import styles from "./ApproveSection.module.scss";
 
+<<<<<<< Updated upstream
 export const ApproveSection = ({ className, artistInfo }: ApproveSectionProps) => {
+=======
+export const ApproveSection = ({
+  className,
+  artistInfo,
+}: ApproveSectionProps) => {
+>>>>>>> Stashed changes
   return (
     <div className={clsx(styles.container, className)}>
       <Title Tag='h2' className={styles.title}>
