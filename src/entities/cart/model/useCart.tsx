@@ -29,7 +29,7 @@ export const cartQueryKeys = {
 export function useCart(token?: string, options?: UseCartOptions) {
   return useQuery<TCart>({
     queryKey: cartQueryKeys.current(token),
-    queryFn: () => getCart(token),
+    queryFn: () => getCart(),
     ...options,
     retry: false, // временно, убрать когда ошибка  CORS не будет падать
     refetchOnWindowFocus: false, // временно, убрать когда ошибка  CORS не будет падать
@@ -41,7 +41,7 @@ export function useAddCartItem(token?: string) {
   const queryClient = useQueryClient();
 
   return useMutation<TCart, Error, TCartItem>({
-    mutationFn: (item: TCartItem) => addCartItem(item, token),
+    mutationFn: (item: TCartItem) => addCartItem(item),
     onSuccess: (newCart) => {
       queryClient.setQueryData(cartQueryKeys.current(token), newCart);
       toast.success("Товар добавлен в корзину");
@@ -56,7 +56,7 @@ export function useUpdateCart(token?: string) {
   const queryClient = useQueryClient();
 
   return useMutation<TCart, Error, Partial<TCartItem>>({
-    mutationFn: (item) => updateCart({ items: [item] }, token),
+    mutationFn: (item) => updateCart({ items: [item] }),
     onSuccess: (newCart) => {
       queryClient.setQueryData(cartQueryKeys.current(token), newCart);
       toast.success("Количество товара в корзине изменено");
@@ -68,7 +68,7 @@ export function useRemoveCartItem(token?: string) {
   const queryClient = useQueryClient();
 
   return useMutation<void, Error, number, { previousCart: TCart | undefined }>({
-    mutationFn: (variantId: number) => removeCartItem(variantId, token),
+    mutationFn: (variantId: number) => removeCartItem(variantId),
     onMutate: async (variantId) => {
       await queryClient.cancelQueries({ queryKey: cartQueryKeys.current(token) });
 
@@ -103,7 +103,7 @@ export function useApplyCartPromoCode({ promo, token }: { promo?: string; token?
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (code: string) => applyCartPromoCode(code, token),
+    mutationFn: (code: string) => applyCartPromoCode(code),
     onSuccess: (newCart) => {
       queryClient.setQueryData(cartQueryKeys.current(token), newCart);
       useCartPromoCode.setState({ promo: promo });
@@ -120,7 +120,7 @@ export function useRemoveCartPromoCode(token?: string) {
   const { clearPromo } = useCartPromoCode();
 
   return useMutation({
-    mutationFn: () => removeCartPromoCode(token),
+    mutationFn: () => removeCartPromoCode(),
     onSuccess: (newCart) => {
       queryClient.setQueryData(cartQueryKeys.current(token), newCart);
       clearPromo();
