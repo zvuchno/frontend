@@ -5,7 +5,6 @@ import clsx from "clsx";
 import { PromoCodeContext } from "@/screens/cart/model/context";
 
 import { useCart } from "@/entities/cart";
-import { useUserStore } from "@/entities/user/store/useUserStore";
 
 import { formatSum } from "@/shared/utils/formatSum";
 
@@ -13,8 +12,7 @@ import { CartSummaryButtons } from "../CartSummaryButtons/CartSummaryButtons";
 import styles from "./CartSummary.module.scss";
 
 export function CartSummary() {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
-  const { data, isLoading } = useCart(accessToken);
+  const { data, isLoading } = useCart();
 
   const hasPromoCode = Number(data?.discount_promocode) > 0;
   const itemsSum = data?.subtotal ?? 0;

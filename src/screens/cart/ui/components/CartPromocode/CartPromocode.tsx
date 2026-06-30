@@ -1,31 +1,27 @@
-import { type ChangeEvent, useContext, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 
-import { PromoCodeContext } from "@/screens/cart/model/context";
-
-import { useApplyCartPromoCode, useRemoveCartPromoCode } from "@/entities/cart";
-import { useCartPromoCode } from "@/entities/promoCode";
-import { useUserStore } from "@/entities/user";
+import { useApplyCartPromoCode, useCart, useRemoveCartPromoCode } from "@/entities/cart";
 
 import { ButtonUI } from "@/shared/ui";
 
 import styles from "./CartPromocode.module.scss";
 
 export const CartPromocode = () => {
-  const accessToken = useUserStore((state) => state.user?.accessToken);
-  const hasPromoCode = useContext(PromoCodeContext);
-  const { promo } = useCartPromoCode();
-  const currentPromo = !hasPromoCode ? "" : promo !== null ? promo : "";
-  const [promocode, setPromocode] = useState(currentPromo);
+  const { data } = useCart();
+  const promo = data?.code;
+  console.log(promo);
 
-  const removePromo = useRemoveCartPromoCode(accessToken);
+  const hasPromoCode = promo !== null;
+
+  const [promocode, setPromocode] = useState(promo);
 
   const promoValue = promocode?.trim();
-  const applyPromo = useApplyCartPromoCode({ promo: promoValue, token: accessToken });
+  const applyPromo = useApplyCartPromoCode();
+  const removePromo = useRemoveCartPromoCode();
   const isPromoLoading = applyPromo.isPending || removePromo.isPending;
 
   const handleTogglePromo = () => {
     if (hasPromoCode) {
-      console.log(promocode);
       removePromo.mutate(undefined, {
         onSuccess: () => setPromocode(""),
       });
@@ -34,7 +30,6 @@ export const CartPromocode = () => {
 
     if (promoValue) {
       applyPromo.mutate(promoValue);
-      console.log(promoValue);
     }
   };
   return (
@@ -42,7 +37,7 @@ export const CartPromocode = () => {
       <input
         className={styles.cartSummaryDiscountInput}
         placeholder='Ввести промокод'
-        value={promocode}
+        value={typeof promocode === "string" ? promocode : ""}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setPromocode(e.target.value)}
         disabled={isPromoLoading || hasPromoCode}
       />

@@ -1,5 +1,7 @@
 "use client";
 
+import { useSession } from "next-auth/react";
+
 import { RecomendationsList } from "@/widgets/RecomendationsList";
 
 import { useCart } from "@/entities/cart";
@@ -11,16 +13,15 @@ import { ProductsCart } from "./components/ProductsCart/ProductsCart";
 
 export const CartPage = () => {
   const isAuth = useUserStore((state) => state.isUserAuthorized);
-  const accessToken = useUserStore((state) => state.user?.accessToken);
+  const session = useSession();
+  const accessToken = session.data?.user.accessToken;
 
-  const {
-    data: cart,
-    isLoading,
-  } = useCart(accessToken, { enabled: isAuth !== undefined && (isAuth ? !!accessToken : true) });
+  const { data: cart, isLoading } = useCart({
+    enabled: isAuth !== undefined && (isAuth ? !!accessToken : true),
+  });
   const items = cart?.items;
 
-  if (isAuth === undefined || isLoading )
-    return <div>Загрузка корзины...</div>;
+  if (isAuth === undefined || isLoading) return <div>Загрузка корзины...</div>;
 
   return (
     <div className={styles.cart}>
