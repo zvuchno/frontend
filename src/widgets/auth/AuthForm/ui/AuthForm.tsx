@@ -2,69 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 
-
-
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-
-
 import { useUserStore } from "@/entities/user/store/useUserStore";
-
-
 
 import { ButtonUI, CustomInput, Typography } from "@/shared/ui";
 import { PasswordInput } from "@/shared/ui/CustomInput";
 
-
-
 import { BaseForm } from "../../BaseForm";
 import { type AuthFormData, type AuthFormProps } from "../model/AuthForm.types";
 import s from "./AuthForm.module.scss";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const initialFormState: AuthFormData = {
   email: "",
@@ -151,10 +99,10 @@ export const AuthForm = ({
     setAuthError(undefined);
 
     try {
-      const nextRoute = searchParams.get("next");
+      //const nextRoute = searchParams.get("next");
 
       const res = await signIn(provider, {
-        callbackUrl: nextRoute ?? "/",
+        callbackUrl: "/",
       });
 
       if (!res?.ok) {

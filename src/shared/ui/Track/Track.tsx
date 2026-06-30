@@ -9,7 +9,7 @@ import s from "./Track.module.scss";
 interface TrackProps {
   isLiked: boolean;
   isPlaying: boolean;
-  image: string;
+  image: string | null;
   title: string;
   artistName: string;
   hasCart: boolean;
@@ -42,7 +42,12 @@ export const Track = ({
           }}
           onClick={onPlayClick}
         />
-        <div className={s.image} style={{ backgroundImage: `url(${image})` }} />
+        {image && (
+          <div 
+            className={s.image} 
+            style={{ backgroundImage: `url(${image})` }} 
+          />
+        )}
       </div>
 
       <div className={s.info}>

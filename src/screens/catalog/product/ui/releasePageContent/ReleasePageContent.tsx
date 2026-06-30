@@ -37,7 +37,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
     refetchOnWindowFocus: false,
   });
 
-  const tracks = tracksQuery.data?.results;
+  const tracks = tracksQuery.data?.tracks;
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -89,7 +89,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
                     handleOpenAddtoCartModal({
                       product_variant: track.id,
                       type: "Трек",
-                      name: `"${track.name}"`,
+                      name: `${track.name}`,
                       image: track.image,
                       price: track.price,
                       allow_overpay: track.allow_overpay,
