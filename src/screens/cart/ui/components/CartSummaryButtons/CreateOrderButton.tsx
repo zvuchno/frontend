@@ -16,19 +16,15 @@ export const CreateOrderButton = () => {
   const router = useRouter();
 
   const onCreateOrder = () => {
-    if (isAuthorized || !isAuthorized) router.push(`/order`);
-    /*if (!isAuthorized) {
+    if (isAuthorized) router.push(`/order`);
+    if (!isAuthorized) {
       const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`;
       router.push(`/signin?next=${encodeURIComponent(currentUrl)}`);
-    }*/
+    }
   };
 
   return (
-    <ButtonUI
-      variant={"primary"}
-      className={styles.cartSummaryButton}
-      onClick={onCreateOrder}
-    >
+    <ButtonUI variant={"primary"} className={styles.cartSummaryButton} onClick={onCreateOrder}>
       Перейти к оформлению
     </ButtonUI>
   );
