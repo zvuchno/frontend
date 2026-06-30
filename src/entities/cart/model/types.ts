@@ -27,6 +27,7 @@ export interface CartItemRespond extends Omit<TCartItem, "comment" | "price_with
 
 export type TCart = {
   items: CartItemRespond[];
+  promocode?: string;
   subtotal: string;
   discount_promocode?: string;
   total: string;

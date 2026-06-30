@@ -2,15 +2,51 @@ import type { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
+import { cookies } from "next/headers";
 
-import {
-  getCurrentUser,
-  isTokenValid,
-  logInUser,
-  logOutUser,
-  refreshToken,
-  socialAuth,
-} from "@/entities/user";
+
+
+import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken, socialAuth } from "@/entities/user";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -27,8 +63,16 @@ export const authConfig: AuthOptions = {
       credentials: {
         identifier: { label: "Email or Username", type: "text" },
         password: { label: "Password", type: "password" },
+        sessionId: { type: "text" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
+        const reqWithHeaders = req as { headers?: { cookie?: string } };
+        const cookieHeader = reqWithHeaders?.headers?.cookie || "";
+        const match = cookieHeader.match(/sessionid=([^;]+)/);
+        const sessionId = match ? match[1] : null;
+
+        console.log("=== ID ГОСТЯ НА СЕРВЕРЕ ===", sessionId);
+
         if (!credentials?.password || !credentials.identifier) {
           return null;
         }
@@ -37,6 +81,7 @@ export const authConfig: AuthOptions = {
           const loginData = {
             email: credentials.identifier.trim(),
             password: credentials.password,
+            sessionId: sessionId,
           };
           const tokens = await logInUser(loginData);
 
