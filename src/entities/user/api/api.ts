@@ -1,4 +1,4 @@
-import { getApiAccessToken } from "@/api/authToken";
+import { checkAccessToken } from "@/api/authToken";
 import {
   type TResetPasswordConfirmRequest,
   type TResetPasswordRequest,
@@ -130,7 +130,7 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
 };
 
 export const resendEmailForVerify = async (): Promise<void> => {
-  const token = await getApiAccessToken();
+  const token = await checkAccessToken();
   const res = await fetch(`${BASE_URL}/v1/auth/account/me/resend-email`, {
     method: "POST",
     headers: {

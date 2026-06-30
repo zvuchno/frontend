@@ -30,7 +30,7 @@ export const VerifySuccessPage = () => {
     token: tokenFromLink || '',
   };
 
-  const verifyAccount = useCallback(async () => {
+  const verifyAccount = async (data: { uid: string, token: string}) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -46,7 +46,7 @@ export const VerifySuccessPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [data]);
+  };
 
   const resendEmail = useCallback(async () => {
     try {
@@ -63,11 +63,11 @@ export const VerifySuccessPage = () => {
   }, [router]);
 
   useEffect(() => {
-    if (!hasSentInitialRequest.current && data.uid && data.token) {
+    if (!hasSentInitialRequest.current && data) {
       hasSentInitialRequest.current = true;
-      verifyAccount();
+      void verifyAccount(data);
     }
-  }, [data.uid, data.token]);
+  }, [data]);
 
   useEffect(() => {
     if (isVerified) {
@@ -94,11 +94,11 @@ export const VerifySuccessPage = () => {
   }
 
   const handleRetry = () => {
-    verifyAccount();
+    void verifyAccount(data);
   };
 
   const handleResend = () => {
-    resendEmail();
+    void resendEmail();
   };
 
   const handleToLogin = () => {
