@@ -75,13 +75,18 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
             : `${data.type} "${data.name}"`}
         </Title>
         <div className={s.content}>
-          <Image
-            src={data.image}
-            style={{ flexShrink: "0" }}
-            width={400}
-            height={386}
-            alt={data.name}
-          />
+          {data.image ? (
+              <Image
+                src={data.image}
+                style={{ flexShrink: "0" }}
+                width={400}
+                height={386}
+                alt={data.name}
+              />
+            ) : (
+              <div className={s.noPhoto}>Нет изображения</div>
+            )
+          }
 
           <div className={s.content__data}>
             {data.allow_overpay && (

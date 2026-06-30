@@ -59,7 +59,7 @@ export const ReleaseDescription = ({
       product_variant: product.variant_id,
       type: product.property_value,
       name: product.name,
-      image: product.images[0].image,
+      image: product.images.length > 0 ? product.images[0].image : null,
       price: product.price.toString(),
       allow_overpay: product.allow_overpay,
       is_single: release.is_single,
