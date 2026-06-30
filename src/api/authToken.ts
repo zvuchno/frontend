@@ -10,3 +10,15 @@ export async function getApiAccessToken(): Promise<string> {
 
   return accessToken;
 }
+
+// проверяет наличие дествующего токена, но не блокирует выполнение операций, если токена нет
+export const checkAccessToken = async () => {
+  let token: string | undefined;
+
+  try {
+    token = await getApiAccessToken().catch(() => undefined);
+  } catch {
+    token = undefined;
+  }
+  return token;
+};
