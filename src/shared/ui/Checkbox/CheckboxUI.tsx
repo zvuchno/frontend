@@ -1,13 +1,11 @@
-<<<<<<< Updated upstream
 import { type ChangeEvent } from "react";
-=======
-import { ChangeEvent } from "react";
->>>>>>> Stashed changes
-import styles from "./checkbox.module.scss";
-import { type TCheckboxUIProps } from "./types";
+
 import clsx from "clsx";
+
 import { CheckBoxIcon } from "../Icons/checkBoxIcon";
 import { RadioButtonIcon } from "../Icons/radioButtonIcon";
+import styles from "./checkbox.module.scss";
+import { type TCheckboxUIProps } from "./types";
 
 export const CheckboxUI = ({
   type = "checkbox",
@@ -17,10 +15,7 @@ export const CheckboxUI = ({
   onChange,
   name,
   value,
-<<<<<<< Updated upstream
   className,
-=======
->>>>>>> Stashed changes
 }: TCheckboxUIProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.checked);
@@ -32,7 +27,7 @@ export const CheckboxUI = ({
         { [styles.radioButton]: type === "radio" },
         { [styles.noChecked]: type === "radio" && !isChecked },
         { [styles.disabled]: disabled },
-        className,
+        className
       )}
     >
       <input
@@ -43,9 +38,9 @@ export const CheckboxUI = ({
         onChange={handleChange}
         name={name}
         value={value}
-        aria-hidden="true"
+        aria-hidden='true'
       />
-      <span className={styles.checkboxWrapper} aria-hidden="true">
+      <span className={styles.checkboxWrapper} aria-hidden='true'>
         <span
           className={styles.checkboxArea}
           role={type === "checkbox" ? "checkbox" : "radio"}

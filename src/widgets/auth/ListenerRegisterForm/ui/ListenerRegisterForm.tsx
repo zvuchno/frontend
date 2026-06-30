@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { type TNewListenerRequest } from "@/entities/user";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 
 import { CustomInput, PhoneInput, Typography } from "@/shared/ui";
+import { PasswordInput } from "@/shared/ui/CustomInput";
 
 import { BaseForm } from "../../BaseForm";
 import { validateField } from "../../config/validateField";
@@ -17,8 +19,6 @@ import {
   type ListenerRegisterFormProps,
 } from "../model/ListenerRegisterForm.types";
 import s from "./ListenerRegisterForm.module.scss";
-import { signIn } from "next-auth/react";
-import { PasswordInput } from "@/shared/ui/CustomInput";
 
 interface FormErrors {
   login?: string;
@@ -41,12 +41,7 @@ export const ListenerRegisterForm = ({
   onSubmit,
   onSocialLogin,
 }: ListenerRegisterFormProps) => {
-<<<<<<< Updated upstream
   const [formData, setFormData] = useState<ListenerRegisterFormData>(initialFormState);
-=======
-  const [formData, setFormData] =
-    useState<ListenerRegisterFormData>(initialFormState);
->>>>>>> Stashed changes
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [registerError, setRegisterError] = useState<string | undefined>(undefined);
@@ -125,15 +120,12 @@ export const ListenerRegisterForm = ({
       const nextRoute = searchParams.get("next");
 
       const res = await signIn(provider, {
-        callbackUrl: nextRoute ?? "/"
+        callbackUrl: nextRoute ?? "/",
       });
 
       if (!res?.ok) {
-        throw new Error(
-          res?.error || "Ошибка авторизации."
-        );
+        throw new Error(res?.error || "Ошибка авторизации.");
       }
-
     } catch (error) {
       if (error instanceof Error) setRegisterError(error.message);
     } finally {

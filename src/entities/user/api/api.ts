@@ -26,7 +26,7 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
     body: JSON.stringify(props.fetchData),
   });
 
-  const data = await res.json() as T;
+  const data = await res.json();
   if (!res.ok) {
     throw new Error(
       data.message ||
