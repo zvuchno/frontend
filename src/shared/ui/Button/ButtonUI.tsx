@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-import { type TButtonUIProps } from "./types";
-=======
-import { TButtonUIProps } from "./types";
->>>>>>> Stashed changes
+import type { TButtonUIProps } from "./types";
 import styles from "./button.module.scss";
 import clsx from "clsx";
 

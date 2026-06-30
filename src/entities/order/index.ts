@@ -1,2 +1,2 @@
 export { useGetDeliveryOptions } from "./model/useGetDeliveryOptions";
-export type { TDeliveryOption } from "./api/order.api";
+export type { TDeliveryOption } from "./model/types";

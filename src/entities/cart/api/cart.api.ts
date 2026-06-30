@@ -1,18 +1,7 @@
 import { checkAccessToken } from "@/api/authToken";
 import { createAuthHeaders } from "@/api/store/request";
 
-
-
 import type { TCart, TCartItem, UpdateCartPayload } from "../model/types";
-
-
-
-
-
-
-
-
-
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 const CART_PATH = "/v1/store/cart";
@@ -31,7 +20,6 @@ export async function getCart(): Promise<TCart> {
     });
 
     if (!response.ok) {
-      getStoreApiErrorMessage
       throw new Error(`Статус сервера: ${response.status}`);
     }
     return response.json() as Promise<TCart>;
