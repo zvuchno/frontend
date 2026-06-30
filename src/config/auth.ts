@@ -3,7 +3,14 @@ import Credentials from "next-auth/providers/credentials";
 import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
 
-import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken, socialAuth } from "@/entities/user";
+import {
+  getCurrentUser,
+  isTokenValid,
+  logInUser,
+  logOutUser,
+  refreshToken,
+  socialAuth,
+} from "@/entities/user";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -61,15 +68,18 @@ export const authConfig: AuthOptions = {
 
   callbacks: {
     async signIn({ user, account }) {
+      if (account?.provider === "credentials") {
+        return true;
+      }
+
       const allowedProviders = ["vk", "yandex"];
 
-      if (account?.provider && allowedProviders.includes(account.provider))  {
-
+      if (account?.provider && allowedProviders.includes(account.provider)) {
         try {
-          console.log('account:', account);
+          console.log("account:", account);
           const res = await socialAuth({
             provider: account.provider,
-            access_token: account.id_token ?? '',
+            access_token: account.id_token ?? "",
           });
 
           if (res.access) {
@@ -77,9 +87,8 @@ export const authConfig: AuthOptions = {
             user.refreshToken = res.refresh;
           }
           return true;
-
         } catch (error) {
-          throw new Error(error instanceof Error ? error.message : 'Ошибка проверки на бэкенде');
+          throw new Error(error instanceof Error ? error.message : "Ошибка проверки на бэкенде");
         }
       }
       return false;

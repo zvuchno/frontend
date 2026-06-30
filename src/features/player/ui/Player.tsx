@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { useEffect, useRef, useState } from "react";
 
 import clsx from "clsx";
@@ -14,6 +15,21 @@ export const PlayerUI = ({
   artistName,
   audioTrack,
   isLiked = false,
+=======
+import { useRef, useState, useEffect } from 'react';
+import clsx from 'clsx';
+import styles from './Player.module.scss'
+import type { PlayerUIProps } from "./Player.types";
+import { ButtonLike } from "@/features/ButtonLike";
+
+export const PlayerUI = ({
+    className, 
+    image, 
+    title, 
+    artistName,
+    audioTrack,
+    isLiked = false,
+>>>>>>> Stashed changes
 }: PlayerUIProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);

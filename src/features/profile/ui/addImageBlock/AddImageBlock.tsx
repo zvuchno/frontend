@@ -7,7 +7,13 @@ import { ButtonUI } from "@/shared/ui";
 import styles from "./AddImageBlock.module.scss";
 import { type AddImageBlockProps } from "./AddImageBlock.types";
 
+<<<<<<< Updated upstream
 export const AddImageBlock = ({ severalImages = false }: AddImageBlockProps) => {
+=======
+export const AddImageBlock = ({
+  severalImages = false,
+}: AddImageBlockProps) => {
+>>>>>>> Stashed changes
   const fileInputRef = useRef<HTMLInputElement>(null);
   const additionalInputsRef = useRef<Record<string, HTMLInputElement | null>>({});
   const [mainPreview, setMainPreview] = useState<string | null>(null);

@@ -1,7 +1,15 @@
 "use client";
 
+<<<<<<< Updated upstream
 import { useState } from "react";
 
+=======
+import { THeaderUIProps } from "../model/types";
+import styles from "./header.module.scss";
+import { useState } from "react";
+import Link from "next/link";
+import { NavPanel } from "@/features";
+>>>>>>> Stashed changes
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,11 +21,14 @@ import { NavPanel } from "@/features/nav-panel";
 
 import { useUserStore } from "@/entities/user/store/useUserStore";
 
+<<<<<<< Updated upstream
 import { CloseButtonIconCircledX } from "@/shared/ui/Icons";
 
 import { type THeaderUIProps } from "../model/types";
 import styles from "./header.module.scss";
 
+=======
+>>>>>>> Stashed changes
 export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;

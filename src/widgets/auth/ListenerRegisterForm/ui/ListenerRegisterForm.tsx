@@ -41,7 +41,12 @@ export const ListenerRegisterForm = ({
   onSubmit,
   onSocialLogin,
 }: ListenerRegisterFormProps) => {
+<<<<<<< Updated upstream
   const [formData, setFormData] = useState<ListenerRegisterFormData>(initialFormState);
+=======
+  const [formData, setFormData] =
+    useState<ListenerRegisterFormData>(initialFormState);
+>>>>>>> Stashed changes
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [registerError, setRegisterError] = useState<string | undefined>(undefined);

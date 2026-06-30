@@ -23,7 +23,10 @@ function getApiImageRemotePattern() {
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
+<<<<<<< Updated upstream
     unoptimized: process.env.NODE_ENV === "development",
+=======
+>>>>>>> Stashed changes
     remotePatterns: [
       getApiImageRemotePattern(),
       {
@@ -39,12 +42,21 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "storage.yandexcloud.net",
+<<<<<<< Updated upstream
         pathname: "/zvuchno-platform-public/**",
       },
       {
         protocol: "https",
         hostname: "storage.yandexcloud.net",
         pathname: "/zvuchno-platform-private/**",
+=======
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "storage.yandexcloud.net",
+        pathname: "/**",
+>>>>>>> Stashed changes
       },
     ],
   },

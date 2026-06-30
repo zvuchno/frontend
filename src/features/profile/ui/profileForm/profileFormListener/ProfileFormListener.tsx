@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { type FieldError, useFormContext } from "react-hook-form";
 
 import { CustomInput } from "@/shared/ui";
@@ -8,6 +9,16 @@ import { InputPhone } from "../inputPhone";
 import { type FieldValues, type TProfileFormFieldsProps } from "../types";
 import styles from "./profileFormListener.module.scss";
 
+=======
+import { FieldValues, TProfileFormFieldsProps } from "../types";
+import styles from "./profileFormListener.module.scss";
+import { CustomInput } from "@/shared/ui";
+import { FieldError, useFormContext } from "react-hook-form";
+import { listenerFormFields } from "@/features/profile/utils/constants";
+import { InputPhone } from "../inputPhone";
+import { registerRules } from "@/features/profile/utils/validation";
+
+>>>>>>> Stashed changes
 export const ProfileFormListenerUI = ({
   fieldsDisabled = false,
   disabledFields,

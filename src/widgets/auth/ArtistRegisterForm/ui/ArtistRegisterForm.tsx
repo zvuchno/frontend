@@ -43,7 +43,12 @@ export const ArtistRegisterForm = ({
   onSubmit,
   onSocialLogin,
 }: ArtistRegisterFormProps) => {
+<<<<<<< Updated upstream
   const [formData, setFormData] = useState<ArtistRegisterFormData>(initialFormState);
+=======
+  const [formData, setFormData] =
+    useState<ArtistRegisterFormData>(initialFormState);
+>>>>>>> Stashed changes
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [registerError, setRegisterError] = useState<string | undefined>(undefined);

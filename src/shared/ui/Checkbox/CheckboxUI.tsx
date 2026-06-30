@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import { type ChangeEvent } from "react";
+=======
+import { ChangeEvent } from "react";
+>>>>>>> Stashed changes
 import styles from "./checkbox.module.scss";
 import { type TCheckboxUIProps } from "./types";
 import clsx from "clsx";
@@ -13,7 +17,10 @@ export const CheckboxUI = ({
   onChange,
   name,
   value,
+<<<<<<< Updated upstream
   className,
+=======
+>>>>>>> Stashed changes
 }: TCheckboxUIProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.checked);
