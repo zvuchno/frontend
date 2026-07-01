@@ -107,11 +107,16 @@ const verifyToken = async (token: string): Promise<void> => {
 };
 
 export const logOutUser = async (userData: TLogoutdata): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/token/logout/",
-    fetchData: userData,
-    defaultMessage: "Ошибка при выходе из системы",
+  const endPoint = BASE_URL + "/v1" + "/auth/token/logout/";
+  const res = await fetch(endPoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData),
   });
+
+  if (res.status === 400) {
+    throw new Error (res.statusText || "Ошибка при выходе из системы")
+  }
 };
 
 export const getCurrentUser = async (token: string): Promise<TCurrentUserResponse> => {
