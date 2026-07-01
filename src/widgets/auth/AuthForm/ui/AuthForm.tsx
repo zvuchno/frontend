@@ -303,7 +303,7 @@ export const AuthForm = ({
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e,"yandex")}
+              onClick={(e) => handleSocialAuth(e, "yandex")}
               aria-label='Яндекс'
               disabled={isLoading}
               style={socialButtonStyle}
@@ -324,7 +324,7 @@ export const AuthForm = ({
             </button>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e,"vk")}
+              onClick={(e) => handleSocialAuth(e, "vk")}
               aria-label='VK'
               disabled={isLoading}
               style={socialButtonStyle}

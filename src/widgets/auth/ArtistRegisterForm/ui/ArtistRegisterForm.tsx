@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { type TNewArtistRequest } from "@/entities/user";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 
 import { CustomInput, PhoneInput, Typography } from "@/shared/ui";
+import { PasswordInput } from "@/shared/ui/CustomInput";
 
 import { BaseForm } from "../../BaseForm";
 import { validateField } from "../../config/validateField";
@@ -17,8 +19,6 @@ import {
   type ArtistRegisterFormProps,
 } from "../model/ArtistRegisterForm.types";
 import s from "./ArtistRegisterForm.module.scss";
-import { signIn } from "next-auth/react";
-import { PasswordInput } from "@/shared/ui/CustomInput";
 
 interface FormErrors {
   title?: string;

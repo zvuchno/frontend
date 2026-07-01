@@ -9,7 +9,6 @@ import styles from "./CartPromocode.module.scss";
 export const CartPromocode = () => {
   const { data } = useCart();
   const promo = data?.code;
-  console.log(promo);
 
   const hasPromoCode = promo !== null;
 

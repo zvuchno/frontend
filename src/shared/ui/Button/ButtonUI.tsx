@@ -1,6 +1,7 @@
-import type { TButtonUIProps } from "./types";
-import styles from "./button.module.scss";
 import clsx from "clsx";
+
+import styles from "./button.module.scss";
+import type { TButtonUIProps } from "./types";
 
 export const ButtonUI = ({
   variant,
@@ -18,7 +19,7 @@ export const ButtonUI = ({
       styles.button,
       styles[`${variant}Button`],
       { [styles[`${size}Button`]]: size !== "standart" },
-      className,
+      className
     )}
     type={type}
     disabled={disabled}
@@ -26,8 +27,6 @@ export const ButtonUI = ({
     aria-disabled={disabled}
     onClick={onClick}
   >
-    <span className={clsx(styles.buttonContent, contentClassName)}>
-      {children}
-    </span>
+    <span className={clsx(styles.buttonContent, contentClassName)}>{children}</span>
   </button>
 );

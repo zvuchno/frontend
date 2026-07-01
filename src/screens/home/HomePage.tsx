@@ -19,7 +19,6 @@ import { mockBlogs, questions } from "@/shared/constants";
 import { ListSection } from "@/shared/ui";
 
 import styles from "./HomePage.module.scss";
-import { useSession } from "next-auth/react";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -28,8 +27,6 @@ interface HomePageProps {
 }
 
 export function HomePage({ artists, albums, merch }: HomePageProps) {
-  const { data: session } = useSession();
-  console.log('session:', session?.user);
   const { addProduct } = useRecentlyViewed();
   return (
     <div className={styles.page}>

@@ -3,6 +3,7 @@
 import toast from "react-hot-toast";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 import {
   addCartItem,
@@ -25,13 +26,12 @@ export const cartQueryKeys = {
 };
 
 export function useCart(options?: UseCartOptions) {
+  const { status } = useSession();
+
   return useQuery<TCart>({
-    queryKey: cartQueryKeys.current(),
+    queryKey: [...cartQueryKeys.current(), status],
     queryFn: () => getCart(),
     ...options,
-    retry: false, // временно, убрать когда ошибка  CORS не будет падать
-    refetchOnWindowFocus: false, // временно, убрать когда ошибка  CORS не будет падать
-    refetchOnMount: false, // временно, убрать когда ошибка  CORS не будет падать
   });
 }
 

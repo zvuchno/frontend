@@ -4,9 +4,14 @@ import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
 import { cookies } from "next/headers";
 
-
-
-import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken, socialAuth } from "@/entities/user";
+import {
+  getCurrentUser,
+  isTokenValid,
+  logInUser,
+  logOutUser,
+  refreshToken,
+  socialAuth,
+} from "@/entities/user";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -14,16 +19,15 @@ export const authConfig: AuthOptions = {
       clientId: process.env.YANDEX_CLIENT_ID as string,
       clientSecret: process.env.YANDEX_SECRET as string,
       authorization: {
-        url: 'https://oauth.yandex.ru/authorize',
+        url: "https://oauth.yandex.ru/authorize",
         params: {
-          scope: 'login:email',
-          response_type: 'code',
-          access_type: 'offline',
-          prompt: 'select_account',
+          scope: "login:email",
+          response_type: "code",
+          access_type: "offline",
+          prompt: "select_account",
         },
-      }
-    },
-  ),
+      },
+    }),
     VkProvider({
       clientId: process.env.VK_CLIENT_ID as string,
       clientSecret: process.env.VK_SECRET as string,
@@ -46,11 +50,6 @@ export const authConfig: AuthOptions = {
       async authorize(credentials) {
         const cookiesStore = await cookies();
         const sessionId = cookiesStore.get("sessionid")?.value || undefined;
-        /*const reqWithHeaders = req as { headers?: { cookie?: string } };
-        const cookieHeader = reqWithHeaders?.headers?.cookie || "";
-        const match = cookieHeader.match(/sessionid=([^;]+)/);
-        const sessionId = match ? match[1] : null;*/
-        process.stdout.write(`\n>>> ПЕРЕДАЧА 1. SessionId: ${sessionId || "ПУСТО"}\n`);
 
         if (!credentials?.password || !credentials.identifier) {
           return null;
@@ -60,9 +59,7 @@ export const authConfig: AuthOptions = {
           const loginData = {
             email: credentials.identifier.trim(),
             password: credentials.password,
-            //sessionId: sessionId,
           };
-          process.stdout.write(`\n>>> ПЕРЕДАЧА 2. SessionId: ${sessionId || "ПУСТО"}\n`);
 
           const tokens = await logInUser(loginData, sessionId);
 
@@ -131,13 +128,12 @@ export const authConfig: AuthOptions = {
               token.isEmailVerified = userFromServer.is_email_verified;
               token.isArtist = userFromServer.is_artist;
               token.isListener = userFromServer.is_listener;
-            }     
-          } 
-          
+            }
+          }
         } catch (error) {
           token.accessToken = undefined;
           token.refreshToken = undefined;
-          console.log('Ошибка проверки на бэкенде:', error)
+          console.log("Ошибка проверки на бэкенде:", error);
         }
       }
 
@@ -212,7 +208,7 @@ export const authConfig: AuthOptions = {
         try {
           await logOutUser({ refresh: token.refreshToken });
         } catch (error) {
-          console.error('Failed to revoke refresh token on backend:', error);
+          console.error("Failed to revoke refresh token on backend:", error);
         }
       }
     },

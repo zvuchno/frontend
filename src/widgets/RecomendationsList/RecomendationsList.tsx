@@ -37,7 +37,7 @@ export const RecomendationsList = () => {
 
   const recommendations = showRecentViewed ? recentViewedToShow : recomQuery.data?.results;
   const hasMoreRecommendations = showRecentViewed ? false : !!recomQuery.data?.next;
-  console.log(viewedProducts);
+
   if (!recommendations) return;
 
   return (
