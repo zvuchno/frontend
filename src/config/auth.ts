@@ -28,7 +28,7 @@ export const authConfig: AuthOptions = {
       clientId: process.env.VK_CLIENT_ID as string,
       clientSecret: process.env.VK_SECRET as string,
       authorization: {
-        url: 'https://id.vk.ru/authorize',
+        url: 'https://id.vk.com/authorize',
         params: {
           scope: 'email offline',
           response_type: 'code',
