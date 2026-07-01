@@ -1,9 +1,6 @@
 import { checkAccessToken } from "@/api/authToken";
+
 import {
-  type TResetPasswordConfirmRequest,
-  type TResetPasswordRequest,
-  type TResetPasswordVerifyRequest,
-  type TVerifyEmailRequest,
   type TAuthResponse,
   type TCurrentUserResponse,
   type TFetchProps,
@@ -12,8 +9,12 @@ import {
   type TNewArtistRequest,
   type TNewListenerRequest,
   type TNewUserResponse,
+  type TResetPasswordConfirmRequest,
+  type TResetPasswordRequest,
+  type TResetPasswordVerifyRequest,
   type TSocialAuthRequest,
   type TSocialAuthResponse,
+  type TVerifyEmailRequest,
 } from "../model/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
@@ -28,8 +29,8 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
 
   const data = await res.json();
   if (!res.ok) {
-    console.error('Server error:', res.statusText);
-    console.error('Server message:', data.message || data.detail);
+    console.error("Server error:", res.statusText);
+    console.error("Server message:", data.message || data.detail);
     throw new Error(
       data.message ||
         data.detail ||
@@ -67,10 +68,8 @@ export const logInUser = async (
 ): Promise<TAuthResponse> => {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...(sessionId ? {Cookie: `sessionid=${sessionId}`} : {})
+    ...(sessionId ? { Cookie: `sessionid=${sessionId}` } : {}),
   };
-
-  process.stdout.write(`\n>>> ПОПЫТКА ЛОГИНА. SessionId: ${sessionId || "ОТСУТСТВУЕТ"}\n`);
 
   const response = await fetch(`${BASE_URL}/v1/auth/token/create/`, {
     method: "POST",
@@ -114,7 +113,7 @@ export const logOutUser = async (userData: TLogoutdata): Promise<void> => {
   });
 
   if (res.status === 400) {
-    throw new Error (res.statusText || "Ошибка при выходе из системы")
+    throw new Error(res.statusText || "Ошибка при выходе из системы");
   }
 };
 
