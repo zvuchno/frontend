@@ -27,14 +27,14 @@ export const authConfig: AuthOptions = {
     VkProvider({
       clientId: process.env.VK_CLIENT_ID as string,
       clientSecret: process.env.VK_SECRET as string,
-      authorization: {
-        url: 'https://id.vk.com/authorize',
-        params: {
-          scope: 'email offline',
-          response_type: 'code',
-          v: '5.131',
-        },
-      },
+      // authorization: {
+      //   url: 'https://id.vk.com/authorize',
+      //   params: {
+      //     scope: 'email offline',
+      //     response_type: 'code',
+      //     v: '5.131',
+      //   },
+      // },
     }),
     Credentials({
       name: "Credentials",
