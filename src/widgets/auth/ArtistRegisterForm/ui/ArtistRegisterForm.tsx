@@ -114,29 +114,13 @@ export const ArtistRegisterForm = ({
     }
   };
 
-  const handleSocialAuth = async (provider: string) => {
-      setIsLoading(true);
-      setRegisterError(undefined);
-  
-      try {
-        const nextRoute = searchParams.get("next");
-  
-        const res = await signIn(provider, {
-          callbackUrl: nextRoute ?? "/"
-        });
-  
-        if (!res?.ok) {
-          throw new Error(
-            res?.error || "Ошибка авторизации."
-          );
-        }
-  
-      } catch (error) {
-        if (error instanceof Error) setRegisterError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const handleSocialAuth = (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
+    e.preventDefault();
+    const nextRoute = searchParams.get("next");
+    signIn(provider, {
+      callbackUrl: nextRoute ? nextRoute : "/",
+    });
+  };
 
   return (
     <BaseForm
@@ -290,7 +274,7 @@ export const ArtistRegisterForm = ({
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
               type='button'
-              onClick={() => handleSocialAuth("yandex")}
+              onClick={(e) => handleSocialAuth(e, "yandex")}
               disabled={isLoading}
               className={s.socialButton}
               aria-label='Яндекс'
@@ -299,7 +283,7 @@ export const ArtistRegisterForm = ({
             </button>
             <button
               type='button'
-              onClick={() => handleSocialAuth("vk")}
+              onClick={(e) => handleSocialAuth(e, "vk")}
               disabled={isLoading}
               className={s.socialButton}
               aria-label='VK'

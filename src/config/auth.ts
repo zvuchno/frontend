@@ -8,55 +8,30 @@ import { cookies } from "next/headers";
 
 import { getCurrentUser, isTokenValid, logInUser, logOutUser, refreshToken, socialAuth } from "@/entities/user";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const authConfig: AuthOptions = {
   providers: [
     YandexProvider({
       clientId: process.env.YANDEX_CLIENT_ID as string,
       clientSecret: process.env.YANDEX_SECRET as string,
-    }),
+      authorization: {
+        url: 'https://oauth.yandex.ru/authorize',
+        params: {
+          scope: 'login:info login:email',
+          access_type: 'offline',
+        },
+      }
+    },
+  ),
     VkProvider({
       clientId: process.env.VK_CLIENT_ID as string,
       clientSecret: process.env.VK_SECRET as string,
+      authorization: {
+        url: 'https://oauth.vk.com/authorize',
+        params: {
+          scope: 'email offline',
+          v: '5.131',
+        },
+      },
     }),
     Credentials({
       name: "Credentials",
@@ -112,32 +87,6 @@ export const authConfig: AuthOptions = {
   ],
 
   callbacks: {
-    // async signIn({ user, account }) {
-    //   if (account?.provider === "credentials") {
-    //     return true;
-    //   }
-
-    //   const allowedProviders = ["vk", "yandex"];
-
-    //   if (account?.provider && allowedProviders.includes(account.provider)) {
-    //     try {
-    //       console.log("account:", account);
-    //       const res = await socialAuth({
-    //         provider: account.provider,
-    //         access_token: account.id_token ?? "",
-    //       });
-
-    //       if (res.access) {
-    //         user.accessToken = res.access;
-    //         user.refreshToken = res.refresh;
-    //       }
-    //       return true;
-    //     } catch (error) {
-    //       throw new Error(error instanceof Error ? error.message : "Ошибка проверки на бэкенде");
-    //     }
-    //   }
-    //   return false;
-    // },
     async jwt({ token, user, trigger, session, account }) {
 
       if (user) {
@@ -165,17 +114,28 @@ export const authConfig: AuthOptions = {
           if (res.access) {
             token.accessToken = res.access;
             token.refreshToken = res.refresh;
+
+            const userFromServer = await getCurrentUser(token.accessToken);
+
+            if (userFromServer) {
+              //перезаписать данные о пользователе в token
+              token.id = String(userFromServer.id);
+              token.userName = userFromServer.username;
+              token.email = userFromServer.email;
+              token.phone = userFromServer.phone;
+              token.isPhoneVerified = userFromServer.is_phone_verified;
+              token.isEmailVerified = userFromServer.is_email_verified;
+              token.isArtist = userFromServer.is_artist;
+              token.isListener = userFromServer.is_listener;
+            }     
           } 
           
         } catch (error) {
           token.accessToken = undefined;
           token.refreshToken = undefined;
-          console.log('Ошибка проверки на бэкенде')
-          //throw new Error(error instanceof Error ? error.message : "Ошибка проверки на бэкенде");
+          console.log('Ошибка проверки на бэкенде:', error)
         }
       }
-
-      
 
       if (token.accessToken && !(await isTokenValid(token.accessToken))) {
         console.log("Token expired, refreshing...");
@@ -248,7 +208,7 @@ export const authConfig: AuthOptions = {
         try {
           await logOutUser({ refresh: token.refreshToken });
         } catch (error) {
-          throw new Error(error instanceof Error ? error.message : "Ошибка выхода из аккаунта");
+          console.error('Failed to revoke refresh token on backend:', error);
         }
       }
     },
