@@ -16,12 +16,16 @@ export const CartPage = () => {
   const session = useSession();
   const accessToken = session.data?.user.accessToken;
 
-  const { data: cart, isLoading } = useCart({
+  const {
+    data: cart,
+    isLoading,
+    isFetching,
+  } = useCart({
     enabled: isAuth !== undefined && (isAuth ? !!accessToken : true),
   });
   const items = cart?.items;
 
-  if (isAuth === undefined || isLoading) return <div>Загрузка корзины...</div>;
+  if (isAuth === undefined || isLoading || isFetching) return <div>Загрузка корзины...</div>;
 
   return (
     <div className={styles.cart}>

@@ -1,20 +1,75 @@
 import { type ChangeEvent, useState } from "react";
 
+
+
 import { useApplyCartPromoCode, useCart, useRemoveCartPromoCode } from "@/entities/cart";
+
+
 
 import { ButtonUI } from "@/shared/ui";
 
+
+
 import styles from "./CartPromocode.module.scss";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const CartPromocode = () => {
   const { data } = useCart();
-  const promo = data?.code;
+  const promo = data?.code || "";
 
   const hasPromoCode = promo !== null;
 
-  const [promocode, setPromocode] = useState(promo);
+  const [promocode, setPromocode] = useState("");
+  const currentInputValue = hasPromoCode ? promo : promocode;
 
-  const promoValue = promocode?.trim();
+  const promoValue = currentInputValue.trim();
   const applyPromo = useApplyCartPromoCode();
   const removePromo = useRemoveCartPromoCode();
   const isPromoLoading = applyPromo.isPending || removePromo.isPending;
@@ -36,7 +91,7 @@ export const CartPromocode = () => {
       <input
         className={styles.cartSummaryDiscountInput}
         placeholder='Ввести промокод'
-        value={typeof promocode === "string" ? promocode : ""}
+        value={currentInputValue}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setPromocode(e.target.value)}
         disabled={isPromoLoading || hasPromoCode}
       />
