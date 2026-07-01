@@ -2,17 +2,45 @@
 
 import React, { useEffect, useState } from "react";
 
+
+
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+
+
 import { useUserStore } from "@/entities/user/store/useUserStore";
+
+
 
 import { ButtonUI, CustomInput, Typography } from "@/shared/ui";
 import { PasswordInput } from "@/shared/ui/CustomInput";
 
+
+
 import { BaseForm } from "../../BaseForm";
 import { type AuthFormData, type AuthFormProps } from "../model/AuthForm.types";
 import s from "./AuthForm.module.scss";
+import { useQueryClient } from "@tanstack/react-query";
+import { cartQueryKeys } from "@/entities/cart";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const initialFormState: AuthFormData = {
   email: "",
@@ -37,6 +65,7 @@ export const AuthForm = ({
 
   const searchParams = useSearchParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (isAuthorized) {
@@ -77,10 +106,11 @@ export const AuthForm = ({
         identifier: formData.email.toLowerCase(),
         password: formData.password,
         redirect: false,
-        //sessionId: "rvw4qp94h5gy7eyi208gnb5c4rcbpdhs",
       });
 
       if (res?.ok) {
+        await queryClient.invalidateQueries({ queryKey: cartQueryKeys.current() });
+        
         setFormData(initialFormState);
       } else {
         throw new Error(
