@@ -28,7 +28,8 @@ export const authConfig: AuthOptions = {
       authorization: {
         url: 'https://oauth.vk.com/authorize',
         params: {
-          scope: 'email',
+          scope: 'email offline',
+          response_type: 'code',
           v: '5.131',
         },
       },
