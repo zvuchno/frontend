@@ -43,13 +43,14 @@ export const authConfig: AuthOptions = {
         password: { label: "Password", type: "password" },
         sessionId: { type: "text" },
       },
-      async authorize(credentials, req) {
-        const reqWithHeaders = req as { headers?: { cookie?: string } };
+      async authorize(credentials) {
+        const cookiesStore = await cookies();
+        const sessionId = cookiesStore.get("sessionid")?.value || undefined;
+        /*const reqWithHeaders = req as { headers?: { cookie?: string } };
         const cookieHeader = reqWithHeaders?.headers?.cookie || "";
         const match = cookieHeader.match(/sessionid=([^;]+)/);
-        const sessionId = match ? match[1] : null;
-
-        console.log("=== ID ГОСТЯ НА СЕРВЕРЕ ===", sessionId);
+        const sessionId = match ? match[1] : null;*/
+        process.stdout.write(`\n>>> ПЕРЕДАЧА 1. SessionId: ${sessionId || "ПУСТО"}\n`);
 
         if (!credentials?.password || !credentials.identifier) {
           return null;
@@ -59,9 +60,11 @@ export const authConfig: AuthOptions = {
           const loginData = {
             email: credentials.identifier.trim(),
             password: credentials.password,
-            sessionId: sessionId,
+            //sessionId: sessionId,
           };
-          const tokens = await logInUser(loginData);
+          process.stdout.write(`\n>>> ПЕРЕДАЧА 2. SessionId: ${sessionId || "ПУСТО"}\n`);
+
+          const tokens = await logInUser(loginData, sessionId);
 
           if (!tokens.access) {
             return null;
@@ -91,7 +94,6 @@ export const authConfig: AuthOptions = {
 
   callbacks: {
     async jwt({ token, user, trigger, session, account }) {
-
       if (user) {
         token.id = user.id;
         token.userName = user.userName;
@@ -106,8 +108,7 @@ export const authConfig: AuthOptions = {
         token.refreshToken = user.refreshToken;
       }
 
-      if (account && (account?.provider === 'vk' || account?.provider === 'yandex' )) {
-        
+      if (account && (account?.provider === "vk" || account?.provider === "yandex")) {
         try {
           const res = await socialAuth({
             provider: account.provider,

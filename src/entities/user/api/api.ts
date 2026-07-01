@@ -67,11 +67,8 @@ export const logInUser = async (
 ): Promise<TAuthResponse> => {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    ...(sessionId ? {Cookie: `sessionid=${sessionId}`} : {})
   };
-
-  if (sessionId) {
-    headers["Cookie"] = `sessionid=${sessionId}`;
-  }
 
   process.stdout.write(`\n>>> ПОПЫТКА ЛОГИНА. SessionId: ${sessionId || "ОТСУТСТВУЕТ"}\n`);
 
