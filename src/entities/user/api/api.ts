@@ -28,6 +28,8 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
 
   const data = await res.json();
   if (!res.ok) {
+    console.error('Server error:', res.statusText);
+    console.error('Server message:', data.message || data.detail);
     throw new Error(
       data.message ||
         data.detail ||
