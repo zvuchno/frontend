@@ -16,7 +16,7 @@ export const authConfig: AuthOptions = {
       authorization: {
         url: 'https://oauth.yandex.ru/authorize',
         params: {
-          scope: 'login:info login:email',
+          scope: 'login:email',
           access_type: 'offline',
         },
       }
@@ -28,7 +28,7 @@ export const authConfig: AuthOptions = {
       authorization: {
         url: 'https://oauth.vk.com/authorize',
         params: {
-          scope: 'email offline',
+          scope: 'email',
           v: '5.131',
         },
       },
