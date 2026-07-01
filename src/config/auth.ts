@@ -17,7 +17,9 @@ export const authConfig: AuthOptions = {
         url: 'https://oauth.yandex.ru/authorize',
         params: {
           scope: 'login:email',
+          response_type: 'code',
           access_type: 'offline',
+          prompt: 'select_account',
         },
       }
     },
@@ -26,7 +28,7 @@ export const authConfig: AuthOptions = {
       clientId: process.env.VK_CLIENT_ID as string,
       clientSecret: process.env.VK_SECRET as string,
       authorization: {
-        url: 'https://oauth.vk.com/authorize',
+        url: 'https://id.vk.ru/authorize',
         params: {
           scope: 'email offline',
           response_type: 'code',
