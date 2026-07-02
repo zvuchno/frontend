@@ -63,9 +63,8 @@ export default function RootLayout({
   return (
     <html lang='ru'>
       <head>
-        <meta name='test' content="" />
         <meta name='vk:app_id' content={DEBUG_VK_ID} />
-        <meta name='vk:scope' content='email,phone' />
+        <meta name='vk:scope' content='email' />
       </head>
       <body className={`${featureMono.variable} ${betterVcr.variable}`}>
         <QueryProvider>
