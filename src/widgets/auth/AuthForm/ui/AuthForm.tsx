@@ -42,6 +42,9 @@ import { cartQueryKeys } from "@/entities/cart";
 
 
 
+import * as VKID from '@vkid/sdk';
+import toast from "react-hot-toast";
+
 const initialFormState: AuthFormData = {
   email: "",
   password: "",
@@ -124,12 +127,33 @@ export const AuthForm = ({
     }
   };
 
-  const handleSocialAuth = (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
+  const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
-    const nextRoute = searchParams.get("next");
-    signIn(provider, {
-      callbackUrl: nextRoute ? nextRoute : "/",
-    });
+
+    try {
+
+      const result = await VKID.Auth.login();
+
+      const { code, device_id } = result as { code: string; device_id: string };
+
+      // Отправляем code и device_id на стандартный signin-эндпоинт NextAuth v4
+      const res = await fetch('/api/auth/signin/customVk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, device_id }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Sign-in failed: ${res.statusText}`);
+      }
+    } catch(error) {
+      console.error(error);
+      toast.error('Ошибка входа через VK')
+    }
+    // const nextRoute = searchParams.get("next");
+    // signIn(provider, {
+    //   callbackUrl: nextRoute ? nextRoute : "/",
+    // });
   };
 
   const handleToForgotPassword = () => {
