@@ -1,9 +1,8 @@
 import type { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-//import VkProvider from "next-auth/providers/vk";
+import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
 import { cookies } from "next/headers";
-import { jwtDecode } from 'jwt-decode';
 
 import {
   getCurrentUser,
@@ -29,63 +28,63 @@ export const authConfig: AuthOptions = {
         },
       }
     }),
-    {
-      id: 'customVk',
-      name: 'customVk',
-      type: 'oauth',
-      checks: ['pkce'],
+    // {
+    //   id: 'customVk',
+    //   name: 'customVk',
+    //   type: 'oauth',
+    //   checks: ['pkce'],
+    //   authorization: {
+    //     url: 'https://id.vk.сom/authorize',
+    //     params: {
+    //       scope: 'email',
+    //       response_type: 'code',
+    //       redirect_uri: 'https://dev.zvuchno.space/api/auth/callback/customVk',
+    //     },
+    //   },
+    //   token: {
+    //     url: 'https://id.vk.com/oauth2/token',
+    //     params: {
+    //       code: 'code',
+    //       client_id: process.env.VK_CLIENT_ID as string,
+    //       //device_id: 'device_id', 
+    //       client_secret: process.env.VK_SECRET as string,
+    //       grant_type: 'authorization_code',
+    //     },
+    //   },
+    //   profile(token) {
+    //     const payload = jwtDecode<{
+    //       sub: string;
+    //       name?: string;
+    //       preferred_username?: string;
+    //       email?: string;
+    //       picture?: string;
+    //     }>(token.id_token);
+
+    //     return {
+    //       id: payload.sub,
+    //       email: payload.email || '',
+    //       //image: payload.picture,
+    //       userName: payload.name || payload.preferred_username || '', 
+    //       phone: null,
+    //       isPhoneVerified: false,
+    //       isEmailVerified: !!payload.email,
+    //       isArtist: false,
+    //       isListener: false,
+    //     };
+    //   },
+    // },
+    VkProvider({
+      clientId: process.env.VK_CLIENT_ID as string,
+      clientSecret: process.env.VK_SECRET as string,
       authorization: {
-        url: 'https://id.vk.сom/authorize',
+        //url: 'https://id.vk.ru/oauth2/auth',
         params: {
           scope: 'email',
-          response_type: 'code',
-          redirect_uri: 'https://dev.zvuchno.space/api/auth/callback/customVk',
+          //response_type: 'code',
+          //v: '5.131',
         },
       },
-      token: {
-        url: 'https://id.vk.com/oauth2/token',
-        params: {
-          code: 'code',
-          client_id: process.env.VK_CLIENT_ID as string,
-          //device_id: 'device_id', 
-          client_secret: process.env.VK_SECRET as string,
-          grant_type: 'authorization_code',
-        },
-      },
-      profile(token) {
-        const payload = jwtDecode<{
-          sub: string;
-          name?: string;
-          preferred_username?: string;
-          email?: string;
-          picture?: string;
-        }>(token.id_token);
-
-        return {
-          id: payload.sub,
-          email: payload.email || '',
-          //image: payload.picture,
-          userName: payload.name || payload.preferred_username || '', 
-          phone: null,
-          isPhoneVerified: false,
-          isEmailVerified: !!payload.email,
-          isArtist: false,
-          isListener: false,
-        };
-      },
-    },
-    // VkProvider({
-    //   clientId: process.env.VK_CLIENT_ID as string,
-    //   clientSecret: process.env.VK_SECRET as string,
-    //   // authorization: {
-    //   //   url: 'https://id.vk.ru/oauth2/auth',
-    //   //   params: {
-    //   //     scope: 'email offline',
-    //   //     response_type: 'code',
-    //   //     v: '5.131',
-    //   //   },
-    //   // },
-    // }),
+    }),
     Credentials({
       name: "Credentials",
       credentials: {
@@ -151,7 +150,7 @@ export const authConfig: AuthOptions = {
         token.refreshToken = user.refreshToken;
       }
 
-      if (account && (account?.provider === 'customVk' || account?.provider === 'yandex' || account?.provider === 'vk' )) {
+      if (account && (account?.provider === 'vk' || account?.provider === 'yandex')) {
         
         try {
           const res = await socialAuth({

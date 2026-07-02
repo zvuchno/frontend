@@ -42,8 +42,8 @@ import { cartQueryKeys } from "@/entities/cart";
 
 
 
-import * as VKID from '@vkid/sdk';
-import toast from "react-hot-toast";
+// import * as VKID from '@vkid/sdk';
+// import toast from "react-hot-toast";
 
 const initialFormState: AuthFormData = {
   email: "",
@@ -130,10 +130,9 @@ export const AuthForm = ({
   const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
 
-    if (provider === 'customVk') {
-
-      await signIn('customVk', {
-        callbackUrl: "/", // или откуда пришёл пользователь
+    const nextRoute = searchParams.get("next");
+      signIn(provider, {
+        callbackUrl: nextRoute ? nextRoute : "/",
       });
 
       // try {
@@ -162,13 +161,6 @@ export const AuthForm = ({
       //   console.error('Ошибка входа через VK:',error);
       //   toast.error('Ошибка входа через VK')
       // }
-
-    } else if (provider === 'yandex') {
-      const nextRoute = searchParams.get("next");
-      signIn(provider, {
-        callbackUrl: nextRoute ? nextRoute : "/",
-      });
-    }
     
   };
 
@@ -394,7 +386,7 @@ export const AuthForm = ({
             </button>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e, "customVk")}
+              onClick={(e) => handleSocialAuth(e, "vk")}
               aria-label='VK'
               disabled={isLoading}
               style={socialButtonStyle}
