@@ -42,7 +42,7 @@ import { cartQueryKeys } from "@/entities/cart";
 
 
 
-import VKID from '@vkid/sdk';
+import * as VKID from '@vkid/sdk';
 import toast from "react-hot-toast";
 
 const initialFormState: AuthFormData = {
