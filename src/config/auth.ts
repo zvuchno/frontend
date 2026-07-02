@@ -35,7 +35,7 @@ export const authConfig: AuthOptions = {
       type: 'oauth',
       checks: ['pkce'],
       authorization: {
-        url: 'https://id.vk.com/oauth2/auth',
+        url: 'https://id.vk.сom/authorize',
         params: {
           scope: 'email',
           response_type: 'code',
