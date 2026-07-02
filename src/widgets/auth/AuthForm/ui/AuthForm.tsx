@@ -135,7 +135,7 @@ export const AuthForm = ({
       try {
 
         VKID.Config.init({
-          app: Number(process.env.NEXT_PUBLIC_VK_CLIENT_ID),
+          app: 54522267,
           redirectUrl: `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/callback/customVk`,
         });
 
