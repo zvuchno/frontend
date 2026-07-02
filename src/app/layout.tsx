@@ -51,6 +51,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:3000"),
   title: "Звучно",
   description: "Маркетплейс цифровой музыки для СНГ артисов",
+  // Кастомные мета-теги для VK ID SDK
+  other: {
+    'vk:app_id': [process.env.VK_CLIENT_ID ?? ''],
+    'vk:scope': ['email'],
+  }
 };
 
 export default function RootLayout({

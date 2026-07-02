@@ -133,6 +133,7 @@ export const AuthForm = ({
     try {
 
       const result = await VKID.Auth.login();
+      console.log('result:', result);
 
       const { code, device_id } = result as { code: string; device_id: string };
 
@@ -147,7 +148,7 @@ export const AuthForm = ({
         throw new Error(`Sign-in failed: ${res.statusText}`);
       }
     } catch(error) {
-      console.error(error);
+      console.error('Ошибка входа через VK:',error);
       toast.error('Ошибка входа через VK')
     }
     // const nextRoute = searchParams.get("next");
