@@ -58,11 +58,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const appId = process.env.VK_CLIENT_ID ?? '';
+  //const appId = process.env.VK_CLIENT_ID ?? '';
+  const DEBUG_VK_ID = '54522267';
   return (
     <html lang='ru'>
       <head>
-        <meta name='vk:app_id' content={appId} />
+        <meta name='test' content="" />
+        <meta name='vk:app_id' content={DEBUG_VK_ID} />
         <meta name='vk:scope' content='email,phone' />
       </head>
       <body className={`${featureMono.variable} ${betterVcr.variable}`}>
