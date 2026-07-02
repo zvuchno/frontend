@@ -35,18 +35,19 @@ export const authConfig: AuthOptions = {
       type: 'oauth',
       checks: ['pkce'],
       authorization: {
-        url: 'https://id.vk.ru/oauth2/auth',
+        url: 'https://id.vk.com/oauth2/auth',
         params: {
           scope: 'email',
           response_type: 'code',
+          redirect_uri: 'https://dev.zvuchno.space/api/auth/callback/customVk',
         },
       },
       token: {
         url: 'https://id.vk.com/oauth2/token',
         params: {
-          code: 'code', // берётся из тела POST-запроса
+          code: 'code',
           client_id: process.env.VK_CLIENT_ID as string,
-          device_id: 'device_id', // берётся из тела POST-запроса
+          //device_id: 'device_id', 
           client_secret: process.env.VK_SECRET as string,
           grant_type: 'authorization_code',
         },
@@ -77,7 +78,7 @@ export const authConfig: AuthOptions = {
     //   clientId: process.env.VK_CLIENT_ID as string,
     //   clientSecret: process.env.VK_SECRET as string,
     //   // authorization: {
-    //   //   url: 'https://id.vk.com/authorize',
+    //   //   url: 'https://id.vk.ru/oauth2/auth',
     //   //   params: {
     //   //     scope: 'email offline',
     //   //     response_type: 'code',

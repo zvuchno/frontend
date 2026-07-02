@@ -132,32 +132,36 @@ export const AuthForm = ({
 
     if (provider === 'customVk') {
 
-      try {
+      await signIn('customVk', {
+        callbackUrl: "/", // или откуда пришёл пользователь
+      });
 
-        VKID.Config.init({
-          app: 54522267,
-          redirectUrl: `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/callback/customVk`,
-        });
+      // try {
 
-        const result = await VKID.Auth.login();
-        console.log('result:', result);
+      //   VKID.Config.init({
+      //     app: 54522267,
+      //     redirectUrl: 'https://dev.zvuchno.space/api/auth/callback/customVk',
+      //   });
 
-        const { code, device_id } = result as { code: string; device_id: string };
+      //   const result = await VKID.Auth.login();
+      //   console.log('result:', result);
 
-        // Отправляем code и device_id на стандартный signin-эндпоинт NextAuth v4
-        const res = await fetch('/api/auth/signin/customVk', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code, device_id }),
-        });
+      //   const { code, device_id } = result as { code: string; device_id: string };
 
-        if (!res.ok) {
-          throw new Error(`Sign-in failed: ${res.statusText}`);
-        }
-      } catch(error) {
-        console.error('Ошибка входа через VK:',error);
-        toast.error('Ошибка входа через VK')
-      }
+      //   // Отправляем code и device_id на стандартный signin-эндпоинт NextAuth v4
+      //   const res = await fetch('/api/auth/signin/customVk', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify({ code, device_id }),
+      //   });
+
+      //   if (!res.ok) {
+      //     throw new Error(`Sign-in failed: ${res.statusText}`);
+      //   }
+      // } catch(error) {
+      //   console.error('Ошибка входа через VK:',error);
+      //   toast.error('Ошибка входа через VK')
+      // }
 
     } else if (provider === 'yandex') {
       const nextRoute = searchParams.get("next");
@@ -165,8 +169,6 @@ export const AuthForm = ({
         callbackUrl: nextRoute ? nextRoute : "/",
       });
     }
-
-    
     
   };
 
