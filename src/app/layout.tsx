@@ -51,6 +51,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:3000"),
   title: "Звучно",
   description: "Маркетплейс цифровой музыки для СНГ артисов",
+  other: {
+    'vk:app_id': ['54522267'],
+    'vk:scope': ['email'],
+  }
 };
 
 export default function RootLayout({
@@ -58,14 +62,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  //const appId = process.env.VK_CLIENT_ID ?? '';
-  const DEBUG_VK_ID = '54522267';
   return (
     <html lang='ru'>
-      <head>
-        <meta name='vk:app_id' content={DEBUG_VK_ID} />
-        <meta name='vk:scope' content='email' />
-      </head>
       <body className={`${featureMono.variable} ${betterVcr.variable}`}>
         <QueryProvider>
           <SessionProviders>
