@@ -150,7 +150,7 @@ export const authConfig: AuthOptions = {
         token.refreshToken = user.refreshToken;
       }
 
-      if (account && (account?.provider === 'customVk' || account?.provider === 'yandex' )) {
+      if (account && (account?.provider === 'customVk' || account?.provider === 'yandex' || account?.provider === 'vk' )) {
         
         try {
           const res = await socialAuth({

@@ -130,31 +130,44 @@ export const AuthForm = ({
   const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
 
-    try {
+    if (provider === 'customVk') {
 
-      const result = await VKID.Auth.login();
-      console.log('result:', result);
+      try {
 
-      const { code, device_id } = result as { code: string; device_id: string };
+        VKID.Config.init({
+          app: Number(process.env.NEXT_PUBLIC_VK_CLIENT_ID),
+          redirectUrl: `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/callback/customVk`,
+        });
 
-      // Отправляем code и device_id на стандартный signin-эндпоинт NextAuth v4
-      const res = await fetch('/api/auth/signin/customVk', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, device_id }),
-      });
+        const result = await VKID.Auth.login();
+        console.log('result:', result);
 
-      if (!res.ok) {
-        throw new Error(`Sign-in failed: ${res.statusText}`);
+        const { code, device_id } = result as { code: string; device_id: string };
+
+        // Отправляем code и device_id на стандартный signin-эндпоинт NextAuth v4
+        const res = await fetch('/api/auth/signin/customVk', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, device_id }),
+        });
+
+        if (!res.ok) {
+          throw new Error(`Sign-in failed: ${res.statusText}`);
+        }
+      } catch(error) {
+        console.error('Ошибка входа через VK:',error);
+        toast.error('Ошибка входа через VK')
       }
-    } catch(error) {
-      console.error('Ошибка входа через VK:',error);
-      toast.error('Ошибка входа через VK')
+
+    } else if (provider === 'yandex') {
+      const nextRoute = searchParams.get("next");
+      signIn(provider, {
+        callbackUrl: nextRoute ? nextRoute : "/",
+      });
     }
-    // const nextRoute = searchParams.get("next");
-    // signIn(provider, {
-    //   callbackUrl: nextRoute ? nextRoute : "/",
-    // });
+
+    
+    
   };
 
   const handleToForgotPassword = () => {
@@ -379,7 +392,7 @@ export const AuthForm = ({
             </button>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e, "vk")}
+              onClick={(e) => handleSocialAuth(e, "customVk")}
               aria-label='VK'
               disabled={isLoading}
               style={socialButtonStyle}
