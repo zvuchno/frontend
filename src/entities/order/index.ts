@@ -1,2 +1,10 @@
 export { useGetDeliveryOptions } from "./model/useGetDeliveryOptions";
-export type { TDeliveryOption } from "./model/types";
+export { useCreateOrder } from "./model/useCreateOrder";
+export type {
+  TDeliveryOption,
+  OrderStatus,
+  TCheckoutData,
+  TDeliveryType,
+  TOrder,
+  TOrderResponse,
+} from "./model/types";

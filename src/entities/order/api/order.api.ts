@@ -1,4 +1,4 @@
-import type { TCheckoutData, TDeliveryOption, TOrderResponse } from "../model/types";
+import type { TCheckoutData, TDeliveryOption, TOrder, TOrderResponse } from "../model/types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -28,14 +28,22 @@ export async function getCheckoutData(): Promise<TCheckoutData> {
   return response.json() as Promise<TCheckoutData>;
 }
 
-export async function placeOrder(): Promise<TOrderResponse> {
-  const init: RequestInit = { method: "POST" };
+export async function placeOrder(orderData: TOrder): Promise<TOrderResponse> {
+  const init: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(orderData),
+    credentials: "include",
+  };
+
   const response = await fetch(`${baseUrl}/v1/store/orders/checkout/`, {
     ...init,
   });
 
   if (!response.ok) {
-    throw new Error("Ошибка оформления заказа");
+    throw new Error("Ошибка создания заказа");
   }
-  return response.json() as Promise<TOrderResponse>;
+  return (await response.json()) as TOrderResponse;
 }

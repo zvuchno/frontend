@@ -1,10 +1,11 @@
 export type TCheckboxUIProps = {
-  type: 'checkbox' | 'radio';
+  type: "checkbox" | "radio";
   children?: React.ReactNode;
   isChecked?: boolean;
+  checked?: boolean;
   disabled?: boolean;
-  onChange?: (checked: boolean) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
   value?: string;
-  className?: string 
-}
+  className?: string;
+};

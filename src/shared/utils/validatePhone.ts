@@ -1,4 +1,4 @@
-import type { Validate, FieldValues } from "react-hook-form";
+import type { FieldValues, Validate } from "react-hook-form";
 
 import { errorsMessages } from "../constants/formErrorMessages";
 
@@ -14,3 +14,5 @@ export const validatePhone: Validate<string | undefined, FieldValues> = (value) 
   }
   return true;
 };
+
+
