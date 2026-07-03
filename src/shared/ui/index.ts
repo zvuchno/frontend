@@ -2,6 +2,8 @@ export { AccentContainer, type AccentContainerProps } from "./AccentContainer";
 export { Accordion } from "./Accordion";
 export { ButtonUI } from "./Button";
 export { CardFAQUI } from "./CardFAQ";
+export { CartCounter } from "./CartCounter";
+export { HeaderCartWithCounter } from "./CartCounter/HeaderCartWithCounter";
 export { CheckboxUI } from "./Checkbox";
 export { CustomInput, PhoneInput } from "./CustomInput";
 export { Definition, type DefinitionProps } from "./Definition";
