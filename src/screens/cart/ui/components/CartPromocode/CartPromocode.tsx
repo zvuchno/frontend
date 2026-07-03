@@ -1,70 +1,16 @@
 import { type ChangeEvent, useState } from "react";
 
-
-
 import { useApplyCartPromoCode, useCart, useRemoveCartPromoCode } from "@/entities/cart";
-
-
 
 import { ButtonUI } from "@/shared/ui";
 
-
-
 import styles from "./CartPromocode.module.scss";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const CartPromocode = () => {
   const { data } = useCart();
   const promo = data?.code || "";
 
-  const hasPromoCode = promo !== null;
+  const hasPromoCode = promo !== "";
 
   const [promocode, setPromocode] = useState("");
   const currentInputValue = hasPromoCode ? promo : promocode;

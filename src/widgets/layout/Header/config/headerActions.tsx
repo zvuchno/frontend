@@ -1,6 +1,5 @@
 import { type Url } from "next/dist/shared/lib/router/router";
 
-import { CartIcon } from "@/shared/ui/Icons/cartIcon";
 import { ProfileIcon } from "@/shared/ui/Icons/profileIcon";
 import { SearchIcon } from "@/shared/ui/Icons/searchIcon";
 
@@ -23,7 +22,6 @@ export const DefaultHeaderActions: THeaderAction[] = [
     title: "Корзина",
     type: "link",
     href: "/cart",
-    children: <CartIcon />,
   },
   {
     title: "Профиль",

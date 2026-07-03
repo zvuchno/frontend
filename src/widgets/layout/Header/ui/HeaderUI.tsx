@@ -11,8 +11,10 @@ import SearchInput from "@/features/SearchInput/SearchInput";
 import LogoutButton from "@/features/logoutButton/LogoutButton";
 import { NavPanel } from "@/features/nav-panel";
 
+import { useCart } from "@/entities/cart";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 
+import { HeaderCartWithCounter } from "@/shared/ui/CartCounter/HeaderCartWithCounter";
 import { CloseButtonIconCircledX } from "@/shared/ui/Icons";
 
 import { type THeaderUIProps } from "../model/types";
@@ -21,6 +23,9 @@ import styles from "./header.module.scss";
 export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
   const user = useUserStore((state) => state.user);
   const isAuthorized = !!user?.id;
+
+  const { data } = useCart();
+  const itemsCount = data?.items?.length ?? 0;
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -94,7 +99,11 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
                     )}
                     {action.type === "link" && action.href && (
                       <Link title={action.title} href={href ?? action.href} prefetch={false}>
-                        {action.children}
+                        {action.title === "Корзина" ? (
+                          <HeaderCartWithCounter items={itemsCount} />
+                        ) : (
+                          action.children
+                        )}
                       </Link>
                     )}
                   </li>
