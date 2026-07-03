@@ -1,15 +1,17 @@
-import { type Validate } from "react-hook-form";
+import { type RegisterOptions } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
 
 import { type TProfileFormField } from "@/features/profile";
 
+import { validateDeliveryOption } from "@/shared/utils/validateDeliveryOption";
+import { validatePersonalConsent } from "@/shared/utils/validatePersonalConsent";
 import { validatePhone } from "@/shared/utils/validatePhone";
 
 export const orderPersonalFormFields: TProfileFormField<FieldValues>[] = [
   {
     title: "Имя и фамилия",
-    name: "fullName",
+    name: "full_name",
     placeholder: "Например, Иван Иванов",
     type: "text",
     required: true,
@@ -57,7 +59,7 @@ export const orderAddressFormFields: TProfileFormField<FieldValues>[] = [
   },
   {
     title: "Дом",
-    name: "building",
+    name: "house",
     placeholder: "1",
     type: "text",
     required: true,
@@ -82,17 +84,10 @@ export const errorsMessages = {
   patternMessage: "Введите корректные данные",
 };
 
-export const fieldsConfig: Record<
-  keyof FieldValues,
-  {
-    required?: boolean;
-    minLength?: number;
-    maxLength?: number;
-    pattern?: RegExp;
-    validate?: Validate<string | undefined, FieldValues>;
-  }
-> = {
-  fullName: {
+export const fieldsConfig: {
+  [K in keyof FieldValues]?: RegisterOptions<FieldValues, K>;
+} = {
+  full_name: {
     required: true,
     minLength: 2,
     maxLength: 50,
@@ -115,14 +110,22 @@ export const fieldsConfig: Record<
     minLength: 2,
     maxLength: 50,
   },
-  building: {
+  house: {
     required: true,
-    minLength: 2,
+    minLength: 1,
     maxLength: 50,
   },
   apartment: {
     required: true,
-    minLength: 2,
+    minLength: 1,
     maxLength: 50,
+  },
+  delivery: {
+    required: true,
+    validate: (value, fields) => validateDeliveryOption(String(value), fields),
+  },
+  personal_data_consent: {
+    required: true,
+    validate: (value, fields) => validatePersonalConsent(value, fields),
   },
 };

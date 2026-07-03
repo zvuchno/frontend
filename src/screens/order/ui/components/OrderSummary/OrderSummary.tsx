@@ -1,9 +1,13 @@
 "use client";
 
+import { useFormContext } from "react-hook-form";
+
+import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
-import { useCart } from "@/entities/cart";
+import { cartQueryKeys, useCart } from "@/entities/cart";
+import { type TOrder, useCreateOrder } from "@/entities/order";
 
 import { ButtonUI } from "@/shared/ui";
 import { formatSum } from "@/shared/utils/formatSum";
@@ -17,9 +21,31 @@ export const OrderSummary = () => {
   const deliverySum = "0";
   const totalSum = Number(itemsSum) + Number(deliverySum);
 
-  // для тестов - потом убрать роутер
+  const { mutate, isPending } = useCreateOrder();
+
   const router = useRouter();
-  //
+
+  const {
+    handleSubmit,
+    formState: { isValid },
+  } = useFormContext<TOrder>();
+
+  const isFormValid = isValid && totalSum > 0;
+
+  const queryClient = useQueryClient();
+
+  const onSubmit = (orderData: TOrder) => {
+    mutate(orderData, {
+      onSuccess: () => {
+        router.push(`/order/order-succeed`);
+        void queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+      },
+    });
+  };
+
+  const handleButtonClick = () => {
+    void handleSubmit(onSubmit)();
+  };
 
   return (
     <div className={styles.summary}>
@@ -39,9 +65,11 @@ export const OrderSummary = () => {
         </div>
       </div>
       <ButtonUI
+        type='button'
         variant={"primary"}
+        onClick={handleButtonClick}
         className={styles.summaryButton}
-        onClick={() => router.push(`/order/order-succeed`)}
+        disabled={!isFormValid || isPending}
       >
         Оформить заказ
       </ButtonUI>

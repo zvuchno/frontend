@@ -1,10 +1,16 @@
+export type TDeliveryType = "courier" | "pickpoint" | "pickup";
+
 export type TDeliveryOption = {
   id: number;
   name: string;
-  delivery_type: string;
+  delivery_type: TDeliveryType;
 };
 
-type TDeliveryOptions = "courier" | "pickpoint" | "pickup";
+type TPickupPoint = {
+  id: number;
+  address: string;
+  date: string;
+};
 
 export type TCheckoutData = {
   user_defaults: {
@@ -14,35 +20,23 @@ export type TCheckoutData = {
     city: string;
   };
   subtotal: string;
-  deliveries: [
-    {
-      id: number;
-      name: string;
-      delivery_type: TDeliveryOptions;
-    },
-  ];
-  pickup_points: [
-    {
-      id: 0;
-      address: string;
-      date: string;
-    },
-  ];
+  deliveries: TDeliveryOption[];
+  pickup_points: TPickupPoint[];
 };
 
 export type TOrder = {
   full_name: string;
   email: string;
   phone: string;
-  personal_data_consent: true;
-  city: string;
-  street: string;
-  house: string;
-  apartment: string;
-  delivery: number;
+  personal_data_consent: boolean | undefined;
+  city?: string;
+  street?: string;
+  house?: string;
+  apartment?: string;
+  delivery: number | undefined;
 };
 
-type OrderStatus = "created" | "confirmed" | "paid" | "shipped" | "completed" | "canceled";
+export type OrderStatus = "created" | "confirmed" | "paid" | "shipped" | "completed" | "canceled";
 
 export type TOrderResponse = {
   id: number;

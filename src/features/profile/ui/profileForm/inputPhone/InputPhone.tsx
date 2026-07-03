@@ -48,7 +48,7 @@ export const InputPhone = ({ field, disabled, className }: TIputPhoneProps) => {
             value={value || ""}
             type='text'
             inputMode='tel'
-            unmask={true}
+            unmask={false}
             onAccept={(val) => onChange(val)}
             onBlur={onBlur}
             inputRef={ref}
@@ -57,10 +57,11 @@ export const InputPhone = ({ field, disabled, className }: TIputPhoneProps) => {
             })}
             style={{
               height: "40px",
-              border: "1px solid currentColor",
+              border: "1px solid ",
               padding: "12px 32px",
               fontFamily: "var(--font-feature-mono)",
               fontSize: "16px",
+              borderColor: fieldError ? "var(--color-primary-blue)" : "currentColor",
             }}
             id={`${field.row}.${field.column}`}
             disabled={disabled}
@@ -68,7 +69,16 @@ export const InputPhone = ({ field, disabled, className }: TIputPhoneProps) => {
             required={field.required}
             aria-required={field.required}
           />
-          {fieldError ? <span className='message error'>{fieldError.message}</span> : null}
+          {fieldError ? (
+            <span
+              className='message error'
+              style={{
+                color: "var(--color-primary-blue)",
+              }}
+            >
+              {fieldError.message}
+            </span>
+          ) : null}
         </div>
       )}
     />

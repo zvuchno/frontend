@@ -14,6 +14,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,scss,css}\""
   },
   "dependencies": {
+    "@hookform/devtools": "^4.4.0",
     "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-select": "^2.2.6",
     "@tanstack/react-query": "^5.101.0",

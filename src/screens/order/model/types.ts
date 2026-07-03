@@ -1,13 +1,15 @@
 import { type HTMLInputTypeAttribute } from "react";
 
 export interface FieldValues {
-  fullName?: string;
+  full_name?: string;
   email?: string;
   phone?: string;
   city?: string;
   street?: string;
-  building?: string;
+  house?: string;
   apartment?: string;
+  personal_data_consent?: boolean;
+  delivery?: number;
 }
 
 export type TOrderPersonalFormField = {

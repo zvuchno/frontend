@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useFormContext } from "react-hook-form";
 
-import { useGetDeliveryOptions } from "@/entities/order";
+import { type FieldValues } from "@/screens/order/model/types";
+
+import { type TDeliveryOption, useGetDeliveryOptions } from "@/entities/order";
 
 import styles from "./OrderDetails.module.scss";
-import { OrderAddressDetails } from "./componenents/OrderAddressDetails";
 import { OrderDeliveryOptions } from "./componenents/OrderDeliveryOptions";
 import { OrderDetailsPersonal } from "./componenents/OrderDetailsPersonal";
 
@@ -12,8 +14,11 @@ export const OrderDetails = ({ fieldsDisabled = false }) => {
 
   const [selected, setIsSelected] = useState("");
 
-  const handleOptionChoose = (option: string) => {
-    setIsSelected(option);
+  const { setValue } = useFormContext<FieldValues>();
+
+  const handleOptionChoose = (option: TDeliveryOption) => {
+    setIsSelected(option.delivery_type);
+    setValue("delivery", option.id);
   };
 
   return (
@@ -26,7 +31,6 @@ export const OrderDetails = ({ fieldsDisabled = false }) => {
           optionChecked={selected}
         />
       )}
-      {selected === "courier" && <OrderAddressDetails fieldsDisabled={fieldsDisabled} />}
     </div>
   );
 };

@@ -1,25 +1,71 @@
-import { useState } from "react";
 import { type FieldError, useFormContext } from "react-hook-form";
+
+
 
 import { type FieldValues } from "@/screens/order/model/types";
 
+
+
 import { InputPhone } from "@/features/profile";
+
+
 
 import { CheckboxUI, CustomInput } from "@/shared/ui";
 
+
+
 import styles from "../OrderDetails.module.scss";
-import { orderPersonalFormFields } from "../utils";
+import { fieldsConfig, orderPersonalFormFields } from "../utils";
 import { orderPersonalFormRules } from "../validation";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boolean }) => {
   const {
     register,
     formState: { errors },
+    watch,
   } = useFormContext<FieldValues>();
-  const [isChecked, setIsChecked] = useState(false);
-  const toggleConfirm = () => {
-    setIsChecked((prev) => !prev);
-  };
+
+  const isConsentChecked = watch("personal_data_consent");
 
   return (
     <section className={styles.orderDetailsPersonal}>
@@ -58,8 +104,8 @@ export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boole
       <div>
         <CheckboxUI
           type='checkbox'
-          onChange={toggleConfirm}
-          isChecked={isChecked}
+          isChecked={!!isConsentChecked}
+          {...register("personal_data_consent", fieldsConfig.personal_data_consent)}
           className={styles.confirmationMessagge}
         >
           Дать согласие на обработку персональных данных в соответствии с политикой обработки{" "}
