@@ -1,5 +1,3 @@
-import { checkAccessToken } from "@/api/authToken";
-
 import {
   type TAuthResponse,
   type TCurrentUserResponse,
@@ -16,6 +14,7 @@ import {
   type TSocialAuthResponse,
   type TVerifyEmailRequest,
 } from "../model/types";
+import { authApiFetch } from "@/api/authApiClient";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -84,6 +83,7 @@ export const logInUser = async (
   return response.json() as Promise<TAuthResponse>;
 };
 
+// Удалить после перехода на AuthApiFetch
 export const refreshToken = async (token: string): Promise<TAuthResponse> => {
   return await createFetchFunction<TAuthResponse>({
     url: "/auth/token/refresh/",
@@ -132,6 +132,7 @@ export const getCurrentUser = async (token: string): Promise<TCurrentUserRespons
   return (await res.json()) as TCurrentUserResponse;
 };
 
+// Удалить после перехода на AuthApiFetch
 export const isTokenValid = async (token: string): Promise<boolean> => {
   try {
     await verifyToken(token);
@@ -152,18 +153,12 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
 };
 
 export const resendEmailForVerify = async (): Promise<void> => {
-  const token = await checkAccessToken();
-  const res = await fetch(`${BASE_URL}/v1/auth/account/me/resend-email`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.message || data.detail || "Не удалось отправить письмо");
+  try {
+    await authApiFetch<void>('/v1/auth/account/me/resend-email', {
+      method: 'POST',
+    });
+  } catch (error) {
+    throw error;
   }
 };
 

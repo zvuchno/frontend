@@ -55,7 +55,7 @@ export const VerifySuccessPage = () => {
       await resendEmailForVerify();
       router.replace('/verify/verify-email');
     } catch (error) { 
-      setError(error instanceof Error ? error.message : 'Неизвестная ошибка')
+      setError(error instanceof Error ? error.message : 'Не удалось отправить письмо')
 
     } finally {
       setIsLoading(false);
