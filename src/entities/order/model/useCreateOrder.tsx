@@ -9,7 +9,7 @@ export function useCreateOrder() {
   return useMutation<TOrderResponse, Error, TOrder>({
     mutationFn: (orderData: TOrder) => placeOrder(orderData),
     onSuccess: () => {
-      toast.error("Заказ успешно создан!");
+      toast.success("Заказ успешно создан!");
     },
     onError: () => {
       toast.error("Неудалось отправить заказ. Попробуйте еще раз");
