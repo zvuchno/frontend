@@ -1,6 +1,7 @@
-'use client'
+"use client";
 
 import React from "react";
+
 import styles from "./ItemsCounter.module.scss";
 
 export const ItemsCounter = ({
@@ -15,6 +16,7 @@ export const ItemsCounter = ({
   return (
     <div className={styles.counterWrapper}>
       <button
+        type='button'
         className={styles.counterButton}
         onClick={(e) => {
           e.stopPropagation();
@@ -26,6 +28,7 @@ export const ItemsCounter = ({
       </button>
       <span>{quantity}</span>
       <button
+        type='button'
         className={styles.counterButton}
         onClick={(e) => {
           e.stopPropagation();
