@@ -1,3 +1,5 @@
+import { getApiAccessToken } from "@/api/authToken";
+
 import type { TCheckoutData, TDeliveryOption, TOrder, TOrderResponse } from "../model/types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
@@ -29,10 +31,12 @@ export async function getCheckoutData(): Promise<TCheckoutData> {
 }
 
 export async function placeOrder(orderData: TOrder): Promise<TOrderResponse> {
+  const token = await getApiAccessToken();
   const init: RequestInit = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(orderData),
     credentials: "include",
