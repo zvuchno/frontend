@@ -184,6 +184,7 @@ export const authConfig: AuthOptions = {
         }
       }
 
+      // удалить блок с проверкой токена после перехода на authApiFetch
       if (token.accessToken && !(await isTokenValid(token.accessToken))) {
         console.log("Token expired, refreshing...");
 
