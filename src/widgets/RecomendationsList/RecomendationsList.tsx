@@ -65,7 +65,7 @@ export const RecomendationsList = () => {
               image={item.image}
               price={item.price}
               likeButton={<ButtonLike isLiked={item.is_favorite} />}
-              link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+              link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
               onHandleClick={() => addProduct(item)}
             />
           );

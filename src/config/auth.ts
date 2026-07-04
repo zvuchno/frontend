@@ -245,6 +245,7 @@ export const authConfig: AuthOptions = {
         session.user.isArtist = token.isArtist;
         session.user.accessToken = token.accessToken;
         session.user.artistName = token.artistName;
+        session.user.refreshToken = token.refreshToken;
       }
       return session;
     },

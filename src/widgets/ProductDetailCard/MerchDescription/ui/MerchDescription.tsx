@@ -36,13 +36,18 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
     setSelectedVariant(id);
   };
 
+  const imagesForGallery = [...product.images].sort((a, b) => {
+    if (a.is_main === b.is_main) return 0;
+    return a.is_main ? -1 : 1;
+  });
+
   const handleAddToCart = () => {
       
     const data: TDataForModal = {
       product_variant: selectedVariant,
       type: product.kind,
       name: product.name,
-      image: product.images.length > 0 ? product.images[0].image : null,
+      image: imagesForGallery.length > 0 ? imagesForGallery[0].image : null,
       price: product.price.toString(),
       allow_overpay: product.allow_overpay
 
@@ -50,11 +55,6 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
 
     onClick(data);
   };
-
-  const imagesForGallery = [...product.images].sort((a, b) => {
-    if (a.is_main === b.is_main) return 0;
-    return a.is_main ? -1 : 1;
-  });
 
   return (
     <AccentContainer className={s.containerWrapper}>
@@ -84,7 +84,7 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
             <VariantRange type={product.property_name} variants={product.variants} onClick={selectVariant}/>
           )}
 
-          { product.stock !== null ? (
+          { product.stock > 0 ? (
             <ButtonUI 
               variant="primary" 
               size="standart" 

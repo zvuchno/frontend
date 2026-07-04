@@ -63,7 +63,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 }
                 price={item.price ?? undefined}
                 likeButton={<ButtonLike isLiked={item.is_favorite} />}
-                link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+                link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
               />
             );
