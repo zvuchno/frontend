@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Script from "next/script";
 
-import { useGetCheckoutData } from "@/entities/order";
+import { useGetCheckoutData, useGetDeliveryOptions } from "@/entities/order";
 
 import { CustomInput } from "@/shared/ui";
 
@@ -15,7 +15,7 @@ export const CdekDelivery = () => {
   const [currentCity, setCurrentCity] = useState(city);
 
   const yandexKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
-  const cdekServicePath = `https://dev.zvuchno.space/api/v1/store/cdek/widget?city=${currentCity}`;
+  const cdekServicePath = process.env.NEXT_PUBLIC_DADATA_API_KEY;
 
   console.log(city);
   const handleScriptLoad = () => {
