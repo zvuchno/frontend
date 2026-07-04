@@ -84,7 +84,7 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
             <VariantRange type={product.property_name} variants={product.variants} onClick={selectVariant}/>
           )}
 
-          { product.stock !== null ? (
+          { product.stock > 0 ? (
             <ButtonUI 
               variant="primary" 
               size="standart" 

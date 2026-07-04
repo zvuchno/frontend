@@ -109,7 +109,7 @@ export const ReleaseDescription = ({
             onClick={selectVariant}
           />
 
-          {product?.stock !== null || product?.property_value === "Диджитал" ? (
+          {(product?.stock !== null && product?.stock > 0) || product?.property_value === "Диджитал" ? (
             <ButtonUI
               variant='primary'
               size='standart'
