@@ -15,7 +15,9 @@ export const CdekDelivery = () => {
   const [currentCity, setCurrentCity] = useState(city);
 
   const yandexKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
-  const cdekServicePath = process.env.NEXT_PUBLIC_DADATA_API_KEY;
+  const cdekServicePath =
+    process.env.NEXT_PUBLIC_CDEK_SERVICE_PATH ||
+    "https://dev.zvuchno.space/api/v1/store/cdek/widget";
 
   console.log(city);
   const handleScriptLoad = () => {
