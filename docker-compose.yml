@@ -5,7 +5,7 @@ services:
       args:
         NEXT_PUBLIC_BASE_API_URL: "https://dev.zvuchno.space/api"
         NEXTAUTH_URL: "http://localhost:3000"
-        NEXT_PUBLIC_YANDEX_MAPS_API_KEY: NEXT_PUBLIC_YANDEX_MAPS_API_KEY
+        NEXT_PUBLIC_YANDEX_MAPS_API_KEY: ${NEXT_PUBLIC_YANDEX_MAPS_API_KEY}
         
 
     ports:
