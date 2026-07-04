@@ -3,14 +3,15 @@ import { useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
 
-import { type TDeliveryOption, useGetDeliveryOptions } from "@/entities/order";
+import { type TDeliveryOption, useGetCheckoutData } from "@/entities/order";
 
 import styles from "./OrderDetails.module.scss";
 import { OrderDeliveryOptions } from "./componenents/OrderDeliveryOptions";
 import { OrderDetailsPersonal } from "./componenents/OrderDetailsPersonal";
 
 export const OrderDetails = ({ fieldsDisabled = false }) => {
-  const { data } = useGetDeliveryOptions();
+  const { data } = useGetCheckoutData();
+  const deliveryOptionsAvaliable = data?.deliveries;
 
   const [selected, setIsSelected] = useState("");
 
@@ -24,9 +25,9 @@ export const OrderDetails = ({ fieldsDisabled = false }) => {
   return (
     <div className={styles.orderDetails}>
       <OrderDetailsPersonal fieldsDisabled={fieldsDisabled} />
-      {data && (
+      {deliveryOptionsAvaliable && deliveryOptionsAvaliable?.length > 0 && (
         <OrderDeliveryOptions
-          options={data}
+          options={deliveryOptionsAvaliable}
           onChooseOption={handleOptionChoose}
           optionChecked={selected}
         />

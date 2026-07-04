@@ -6,8 +6,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
-import { cartQueryKeys, useCart } from "@/entities/cart";
-import { type TOrder, useCreateOrder } from "@/entities/order";
+import { cartQueryKeys } from "@/entities/cart";
+import { type TOrder, useCreateOrder, useGetCheckoutData } from "@/entities/order";
 
 import { ButtonUI } from "@/shared/ui";
 import { formatSum } from "@/shared/utils/formatSum";
@@ -15,9 +15,9 @@ import { formatSum } from "@/shared/utils/formatSum";
 import styles from "./OrderSummary.module.scss";
 
 export const OrderSummary = () => {
-  const { data } = useCart();
+  const { data } = useGetCheckoutData();
 
-  const itemsSum = data?.total ?? "0";
+  const itemsSum = data?.subtotal ?? "0";
   const deliverySum = "0";
   const totalSum = Number(itemsSum) + Number(deliverySum);
 

@@ -2,6 +2,8 @@ import { useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
 
+import { CdekDelivery } from "@/widgets/CdekDelivery";
+
 import type { TDeliveryOption } from "@/entities/order";
 
 import { CheckboxUI } from "@/shared/ui";
@@ -40,6 +42,7 @@ export const OrderDeliveryOptions = ({
         })}
       </div>
       {String(currentDeliveryValue) === "1" && <OrderAddressDetails fieldsDisabled={false} />}
+      {String(currentDeliveryValue) === "2" && <CdekDelivery />}
     </section>
   );
 };
