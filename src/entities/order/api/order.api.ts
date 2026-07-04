@@ -19,7 +19,14 @@ export async function getDeliveryOptions(): Promise<TDeliveryOption[]> {
 }
 
 export async function getCheckoutData(): Promise<TCheckoutData> {
-  const init: RequestInit = { method: "GET" };
+  const token = await getApiAccessToken();
+  const init: RequestInit = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: "include",
+  };
   const response = await fetch(`${baseUrl}/v1/store/orders/checkout/`, {
     ...init,
   });
