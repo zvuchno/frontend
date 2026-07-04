@@ -54,23 +54,23 @@ export const ReleaseDescription = ({
     if (index !== -1) setProduct(release.variants[index]);
   };
 
+  const imagesForGallery = [...product.images].sort((a, b) => {
+    if (a.is_main === b.is_main) return 0;
+    return a.is_main ? -1 : 1;
+  });
+
   const handleAddToCart = () => {
     const data: TDataForModal = {
       product_variant: product.variant_id,
       type: product.property_value,
       name: product.name,
-      image: product.images.length > 0 ? product.images[0].image : null,
+      image: imagesForGallery.length > 0 ? imagesForGallery[0].image : null,
       price: product.price.toString(),
       allow_overpay: product.allow_overpay,
       is_single: release.is_single,
     };
     onClick(data);
   };
-
-  const imagesForGallery = [...product.images].sort((a, b) => {
-    if (a.is_main === b.is_main) return 0;
-    return a.is_main ? -1 : 1;
-  });
 
   return (
     <AccentContainer className={s.containerWrapper}>
