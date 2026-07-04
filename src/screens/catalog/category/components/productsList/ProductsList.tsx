@@ -96,7 +96,7 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                     }
                     price={product.price}
                     likeButton={<ButtonLike isLiked={product.is_favorite} />}
-                    link={`/catalog/album/${id}/?kind=${product.target.type}&selected=${selected}`}
+                    link={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}
                   />
                 </li>
               );

@@ -73,7 +73,10 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
       )}
       <div className={styles.cartItemContent}>
         <div className={styles.cartItemSpecification}>
-          <Link href={`/catalog/${item.target?.url}`} className={styles.cartItemImage}>
+          <Link 
+            href={`${targetPath}?kind=${item.target.type}&selected=${item.target.selected_variant_id}`} 
+            className={styles.cartItemImage}
+          >
             <h3 className={styles.cartItemTitle}>{item.name}</h3>
           </Link>
 
