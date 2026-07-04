@@ -3,9 +3,9 @@
 import { FormProvider, useForm } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
-import { useSession } from "next-auth/react";
 
 import { type TOrder } from "@/entities/order";
+import { useGetCheckoutData } from "@/entities/order";
 
 import { AccentContainer } from "@/shared/ui";
 
@@ -14,16 +14,17 @@ import { OrderDetails } from "./components/OrderDetails";
 import { OrderSummary } from "./components/OrderSummary";
 
 export const OrderPage = () => {
-  const session = useSession();
-  const userData = session.data?.user;
+  const { data } = useGetCheckoutData();
+
+  const userDefault = data?.user_defaults;
 
   const methods = useForm<TOrder>({
     values: {
-      full_name: userData?.userName || "",
-      email: userData?.email || "",
-      phone: userData?.phone || "",
+      full_name: userDefault?.full_name || "",
+      email: userDefault?.email || "",
+      phone: userDefault?.phone || "",
       personal_data_consent: undefined,
-      city: "",
+      city: userDefault?.city,
       street: "",
       house: "",
       apartment: "",
