@@ -90,6 +90,7 @@ export const authConfig: AuthOptions = {
       credentials: {
         identifier: { label: "Email or Username", type: "text" },
         password: { label: "Password", type: "password" },
+        rememberme: { label: "Remember Me", type: "boolean" },
         sessionId: { type: "text" },
       },
       async authorize(credentials) {
@@ -113,6 +114,9 @@ export const authConfig: AuthOptions = {
           }
 
           const user = await getCurrentUser(tokens.access);
+          // Если пользователь не нажал "Запомнить меня"
+          // устанавливаем время, через которое разлогиним пользователя (12 ч)
+          const sessionExpires = credentials.rememberme ? null : Date.now() + 12 * 60 * 60 * 1000;
 
           return {
             id: String(user.id),
@@ -125,6 +129,7 @@ export const authConfig: AuthOptions = {
             isListener: user.is_listener,
             accessToken: tokens.access,
             refreshToken: tokens.refresh,
+            sessionExpires,
           };
         } catch (error: unknown) {
           console.log("Ошибка аутентификации", error);
@@ -145,6 +150,7 @@ export const authConfig: AuthOptions = {
         if (res.access) {
           user.accessToken = res.access;
           user.refreshToken = res.refresh;
+          user.sessionExpires = null;
 
           return true;
         }
@@ -167,6 +173,7 @@ export const authConfig: AuthOptions = {
         token.accessToken = user.accessToken;
         token.artistName = user.artistName;
         token.refreshToken = user.refreshToken;
+        token.sessionExpires = user.sessionExpires;
       }
 
       if (account && (account.provider === 'vk' || account.provider === 'yandex')) {
@@ -182,6 +189,14 @@ export const authConfig: AuthOptions = {
           token.isArtist = userFromServer.is_artist;
           token.isListener = userFromServer.is_listener;
          }
+      }
+
+      if (token.sessionExpires) {
+        if (Date.now() > token.sessionExpires) {
+          token.sessionError = 'SessionExpire';
+        } else {
+          token.sessionError = '';
+        }
       }
 
       // удалить блок с проверкой токена после перехода на authApiFetch
@@ -246,6 +261,7 @@ export const authConfig: AuthOptions = {
         session.user.accessToken = token.accessToken;
         session.user.artistName = token.artistName;
         session.user.refreshToken = token.refreshToken;
+        session.user.sessionError = token.sessionError;
       }
       return session;
     },

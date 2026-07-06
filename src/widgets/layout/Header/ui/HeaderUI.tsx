@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import clsx from "clsx";
 import Image from "next/image";
@@ -19,6 +19,7 @@ import { CloseButtonIconCircledX } from "@/shared/ui/Icons";
 
 import { type THeaderUIProps } from "../model/types";
 import styles from "./header.module.scss";
+import { signOut, useSession } from "next-auth/react";
 
 export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
   const user = useUserStore((state) => state.user);
@@ -30,6 +31,23 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`;
+
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (!session?.user?.sessionError) {
+      return;
+    }
+
+    if (session.user.sessionError === "SessionExpire") {
+      signOut({
+        redirect: true,
+        callbackUrl: `/signin?next=${encodeURIComponent(currentUrl)}`,
+      }).catch((err) => {
+        console.error("Ошибка при выходе:", err);
+      });
+    }
+  }, [session])
 
   const [isSearchOpen, setSearchOpen] = useState(false);
 

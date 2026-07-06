@@ -13,6 +13,8 @@ declare module "next-auth" {
     artistName?: string;
     accessToken?: string;
     refreshToken?: string;
+    sessionExpires: number | null;
+    sessionError?: string;
   }
 
   interface Session {
@@ -33,5 +35,7 @@ declare module "next-auth/jwt" {
     artistName?: string;
     accessToken?: string;
     refreshToken?: string;
+    sessionExpires: number | null;
+    sessionError?: string;
   }
 }

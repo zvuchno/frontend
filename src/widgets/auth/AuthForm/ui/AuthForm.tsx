@@ -108,6 +108,7 @@ export const AuthForm = ({
       const res = await signIn("credentials", {
         identifier: formData.email.toLowerCase(),
         password: formData.password,
+        rememberme: formData.rememberMe,
         redirect: false,
       });
 
