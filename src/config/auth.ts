@@ -135,6 +135,25 @@ export const authConfig: AuthOptions = {
   ],
 
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === 'vk' || account?.provider === 'yandex') {
+        const res = await socialAuth({
+          provider: account.provider,
+          access_token: account.access_token ?? "",
+        });
+
+        if (res.access) {
+          user.accessToken = res.access;
+          user.refreshToken = res.refresh;
+
+          return true;
+        }
+
+        return false;
+      }
+      return true;
+    },
+
     async jwt({ token, user, trigger, session, account }) {
       if (user) {
         token.id = user.id;
@@ -150,38 +169,19 @@ export const authConfig: AuthOptions = {
         token.refreshToken = user.refreshToken;
       }
 
-      if (account && (account?.provider === 'vk' || account?.provider === 'yandex')) {
-        
-        try {
-          const res = await socialAuth({
-            provider: account.provider,
-            access_token: account.access_token ?? "",
-          });
+      if (account && (account.provider === 'vk' || account.provider === 'yandex')) {
+         const userFromServer = await getCurrentUser(token.accessToken ?? '');
 
-          if (res.access) {
-            token.accessToken = res.access;
-            token.refreshToken = res.refresh;
-            token.userName = 'ABC'
-
-            const userFromServer = await getCurrentUser(token.accessToken);
-
-            if (userFromServer) {
-              //перезаписать данные о пользователе в token
-              token.id = String(userFromServer.id);
-              token.userName = userFromServer.username;
-              token.email = userFromServer.email;
-              token.phone = userFromServer.phone;
-              token.isPhoneVerified = userFromServer.is_phone_verified;
-              token.isEmailVerified = userFromServer.is_email_verified;
-              token.isArtist = userFromServer.is_artist;
-              token.isListener = userFromServer.is_listener;
-            }
-          }
-        } catch (error) {
-          token.accessToken = undefined;
-          token.refreshToken = undefined;
-          console.log("Ошибка проверки на бэкенде:", error);
-        }
+         if (userFromServer) {
+          token.id = String(userFromServer.id);
+          token.userName = userFromServer.username;
+          token.email = userFromServer.email;
+          token.phone = userFromServer.phone;
+          token.isPhoneVerified = userFromServer.is_phone_verified;
+          token.isEmailVerified = userFromServer.is_email_verified;
+          token.isArtist = userFromServer.is_artist;
+          token.isListener = userFromServer.is_listener;
+         }
       }
 
       // удалить блок с проверкой токена после перехода на authApiFetch
