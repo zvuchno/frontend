@@ -53,7 +53,7 @@ export const Default: Story = {
     description: "Винил ОДИН МАНУЛ (LP, 2025)",
     price: "1000",
   },
-  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isLiked={false} />} />,
+  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isAuth isLiked={false} />} />,
 };
 
 export const Liked: Story = {
@@ -63,7 +63,7 @@ export const Liked: Story = {
     description: "Винил ОДИН МАНУЛ (LP, 2025)",
     price: "1000",
   },
-  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isLiked />} />,
+  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isAuth isLiked />} />,
 };
 
 export const LongText: Story = {
@@ -73,5 +73,5 @@ export const LongText: Story = {
     description: "Винил ОДИН МАНУЛ Deluxe Gatefold Edition (LP, 2025)",
     price: "12500",
   },
-  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isLiked={false} />} />,
+  render: (args) => <ProductCard {...args} likeButton={<ButtonLike isAuth isLiked={false} />} />,
 };

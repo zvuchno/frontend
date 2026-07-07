@@ -12,8 +12,13 @@ import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection } from "@/shared/ui";
+import { useUserStore } from "@/entities/user";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 export const RecomendationsList = () => {
+  const user = useUserStore((state) => state.user);
+  const isAuth = !!user?.id;
+
   const { viewedProducts, addProduct } = useRecentlyViewed();
 
   const recentViewedToShow = viewedProducts && viewedProducts.slice(0, 4);
@@ -64,7 +69,13 @@ export const RecomendationsList = () => {
               }
               image={item.image}
               price={item.price}
-              likeButton={<ButtonLike isLiked={item.is_favorite} />}
+              likeButton={
+                <ButtonLike 
+                  isLiked={item.is_favorite} 
+                  isAuth={isAuth}
+                  onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                />
+              }
               link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
               onHandleClick={() => addProduct(item)}
             />

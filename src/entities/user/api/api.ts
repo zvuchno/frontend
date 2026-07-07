@@ -83,25 +83,36 @@ export const logInUser = async (
   return response.json() as Promise<TAuthResponse>;
 };
 
-// Удалить после перехода на AuthApiFetch
-export const refreshToken = async (token: string): Promise<TAuthResponse> => {
-  return await createFetchFunction<TAuthResponse>({
-    url: "/auth/token/refresh/",
-    fetchData: {
-      refresh: token,
-    },
-    defaultMessage: "Ошибка при обновлении сессии",
-  });
+// Получение информации о токене
+export const getTokenExp = (token: string | null): { exp: number } | null => {
+  if (!token) return null;
+
+  try {
+    const parts = token.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    const exp = payload.exp * 1000;
+
+    return {
+      exp,
+    }
+  } catch {
+    return null;
+  }
 };
 
-const verifyToken = async (token: string): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/token/verify/",
-    fetchData: {
-      token: token,
-    },
-    defaultMessage: "Ошибка верификации токена",
+// обновление токена 
+export const refreshToken = async (refreshToken: string): Promise<{ access: string, refresh: string;}> => {
+  const res = await fetch(`${BASE_URL}/v1/auth/token/refresh/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ refresh: refreshToken }),
   });
+
+  const data = await  res.json();
+
+  if (!res.ok) throw new Error('Refresh failed:', data.detail);
+
+  return data; // { accessToken, refreshToken }
 };
 
 export const logOutUser = async (userData: TLogoutdata): Promise<void> => {
@@ -130,18 +141,6 @@ export const getCurrentUser = async (token: string): Promise<TCurrentUserRespons
     throw new Error(errorData.message);
   }
   return (await res.json()) as TCurrentUserResponse;
-};
-
-// Удалить после перехода на AuthApiFetch
-export const isTokenValid = async (token: string): Promise<boolean> => {
-  try {
-    await verifyToken(token);
-    console.log("Token still valid");
-    return true;
-  } catch (error) {
-    console.log("Token expired or invalid:", error);
-    return false;
-  }
 };
 
 export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {

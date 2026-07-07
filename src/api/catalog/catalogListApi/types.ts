@@ -1,4 +1,5 @@
 type Target = {
+  id: number;
   type: string;
   url: string;
   selected_variant_id: number;

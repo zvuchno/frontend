@@ -12,6 +12,8 @@ import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection } from "@/shared/ui";
+import { useUserStore } from "@/entities/user";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 interface IArtistPageContentProps {
   artist: TDetalArtist;
@@ -19,6 +21,8 @@ interface IArtistPageContentProps {
 
 const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const { addProduct } = useRecentlyViewed();
+  const user = useUserStore((state) => state.user);
+  const isAuth = !!user?.id;
 
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
@@ -77,7 +81,13 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 }
                 image={item.image}
                 price={item.price}
-                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                likeButton={
+                  <ButtonLike 
+                    isLiked={item.is_favorite} 
+                    isAuth={isAuth}
+                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                  />
+                }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
               />
@@ -110,7 +120,13 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 }
                 image={item.image}
                 price={item.price}
-                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                likeButton={
+                  <ButtonLike 
+                    isLiked={item.is_favorite} 
+                    isAuth={isAuth}
+                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                  />
+                }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
               />

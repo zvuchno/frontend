@@ -6,12 +6,14 @@ import { useState } from "react";
 import styles from "./buttonLike.module.scss";
 import { ButtonLikeIcon } from "./ButtonLikeIcon";
 import { type TButtonLikeProps } from "./types";
+import toast from "react-hot-toast";
 
 export const ButtonLike = ({
   isLiked: initialIsLiked,
   className,
   iconClassName,
   disabled = false,
+  isAuth,
   onToggle,
 }: TButtonLikeProps) => {
   const [isLiked, setIsLiked] = useState(() => initialIsLiked);
@@ -21,6 +23,11 @@ export const ButtonLike = ({
     e.preventDefault();
     e.stopPropagation();
     const nextIsLiked = !isLiked;
+
+    if (!isAuth) {
+      toast.error('Войдите, чтобы добавить в избранное');
+      return;
+    }
 
     setIsLiked(nextIsLiked);
     setAnimationKey((prevAnimationKey) => prevAnimationKey + 1);

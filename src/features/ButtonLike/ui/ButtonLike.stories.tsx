@@ -109,6 +109,7 @@ type Story = StoryObj<typeof meta>;
 export const InitiallyUnliked: Story = {
   args: {
     isLiked: false,
+    isAuth: true
   },
   render: (args) => (
     <ButtonLike key={`button-like-${String(args.isLiked)}`} {...args} />
@@ -118,6 +119,7 @@ export const InitiallyUnliked: Story = {
 export const InitiallyLiked: Story = {
   args: {
     isLiked: true,
+    isAuth: true
   },
   render: (args) => (
     <ButtonLike key={`button-like-${String(args.isLiked)}`} {...args} />

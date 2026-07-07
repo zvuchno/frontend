@@ -9,7 +9,7 @@ export {
   registerNewListener,
   registerNewArtist,
   getCurrentUser,
-  isTokenValid,
+  getTokenExp,
   logInUser,
   logOutUser,
   refreshToken,

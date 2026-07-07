@@ -21,12 +21,17 @@ import {
   isArtistCard,
   isProductCard,
 } from "./ProductsList.types";
+import { useUserStore } from "@/entities/user";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 const ProductsList = ({ products, link }: ProductsListProps) => {
   const [allProducts, setAllProducts] = useState<TCatalogCard[] | TArtistCard[] | []>(products);
   const [nextLink, setNextLink] = useState<string | null>(link);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const user = useUserStore((state) => state.user);
+  const isAuth = !!user?.id;
 
   useEffect(() => {
     setAllProducts(products);
@@ -67,7 +72,11 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
             {artistsCards.map((artist) => (
               <li key={artist.slug}>
                 <Link href={`/catalog/artists/${artist.slug}/?kind=artists`}>
-                  <CardArtist image={artist.cover ?? undefined} description={artist.name} />
+                  <CardArtist 
+                    image={artist.cover ?? undefined} 
+                    description={artist.name} 
+                    hasButton={false}
+                  />
                 </Link>
               </li>
             ))}
@@ -95,7 +104,13 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                         : `${product.kind} ${product.name} (${product.year.toString()})`
                     }
                     price={product.price}
-                    likeButton={<ButtonLike isLiked={product.is_favorite} />}
+                    likeButton={
+                      <ButtonLike 
+                        isLiked={product.is_favorite} 
+                        isAuth={isAuth}
+                        onToggle={(isLiked) => handleToggleFavorites(isLiked, product.target.id)}
+                      />
+                    }
                     link={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}
                   />
                 </li>

@@ -5,6 +5,12 @@ type TPlayBack = {
   url: string | null;
 }
 
+type TPurchase = {
+  variant_id: number;
+  price: string;
+  allow_overpay: boolean;
+}
+
 export type TTrack = {
   id: number;
   artist_name: string | null;
@@ -12,11 +18,10 @@ export type TTrack = {
   album: number;
   duration: number | null;
   position: number | null;
-  price: string;
   image: string | null;
   is_favorite: boolean;
-  allow_overpay: boolean;
   playback: TPlayBack;
+  purchase?: TPurchase;
 }
 
 export type TracksListResponse = {

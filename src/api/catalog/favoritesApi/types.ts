@@ -1,12 +1,12 @@
 export type TAddToFavoriteRequest = {
-  id: number;
-  product_variant: number;
-};
-
-export type TAddToFavoriteResponse = {
   product_variant: number;
 };
 
 export type TDeleteFavoriteRequest = {
+  product_variant: number;
+};
+
+export type TAddToFavoriteResponse = {
   id: number;
+  product_variant: number;
 };

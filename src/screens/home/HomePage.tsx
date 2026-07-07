@@ -19,6 +19,8 @@ import { mockBlogs, questions } from "@/shared/constants";
 import { ListSection } from "@/shared/ui";
 
 import styles from "./HomePage.module.scss";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
+import { useUserStore } from "@/entities/user";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -29,6 +31,9 @@ interface HomePageProps {
 export function HomePage({ artists, albums, merch }: HomePageProps) {
   const { addProduct } = useRecentlyViewed();
 
+  const user = useUserStore((state) => state.user);
+  const isAuth = !!user?.id;
+
   return (
     <div className={styles.page}>
       <HeroUI />
@@ -37,7 +42,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
         <ListSection title='Артисты' link={`/catalog/artists`} gap='70px'>
           {artists.map((artist) => (
             <Link key={artist.slug} href={`/catalog/artists/${artist.slug}/?kind=artists`}>
-              <CardArtist image={artist.cover ?? undefined} description={artist.name} />
+              <CardArtist image={artist.cover ?? undefined} description={artist.name} hasButton={false}/>
             </Link>
           ))}
         </ListSection>
@@ -62,7 +67,13 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                     : `${item.kind} ${item.name} (${item.year.toString()})`
                 }
                 price={item.price ?? undefined}
-                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                likeButton={
+                  <ButtonLike 
+                    isLiked={item.is_favorite} 
+                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                    isAuth={isAuth}
+                  />
+                }
                 link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
               />
@@ -90,7 +101,13 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                     : `${item.kind} ${item.name} (${item.year.toString()})`
                 }
                 price={item.price ?? undefined}
-                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                likeButton={
+                  <ButtonLike 
+                    isLiked={item.is_favorite} 
+                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                    isAuth={isAuth}
+                  />
+                }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
               />

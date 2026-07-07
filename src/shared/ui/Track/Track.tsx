@@ -13,6 +13,7 @@ interface TrackProps {
   title: string;
   artistName: string;
   hasCart: boolean;
+  isAuth: boolean;
   onPlayClick: () => void;
   onCartClick?: () => void;
   onLikeClick: (value: boolean) => void;
@@ -25,6 +26,7 @@ export const Track = ({
   title,
   artistName,
   hasCart,
+  isAuth,
   onPlayClick,
   onCartClick,
   onLikeClick,
@@ -63,6 +65,7 @@ export const Track = ({
           isLiked={isLiked}
           className={s.likeButton}
           iconClassName={s.likeButton__icon}
+          isAuth={isAuth}
           onToggle={onLikeClick}
         />
       </div>
