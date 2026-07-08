@@ -3,15 +3,25 @@ export type TCdekTariffDetails = {
   tariff_name: string;
   tariff_description: string;
   delivery_mode: number;
+  delivery_sum: number;
   period_min: number;
   period_max: number;
-  delivery_sum: number;
+  calendar_min: number;
+  calendar_max: number;
+  delivery_date_range: {
+    min: string;
+    max: string;
+  };
 };
 
 export type TCdekTariffs = {
   office: TCdekTariffDetails[];
   door: TCdekTariffDetails[];
   pickup: TCdekTariffDetails[];
+};
+
+export type TCdekTariffPlans = {
+  tariff_codes: TCdekTariffDetails[];
 };
 
 export type TCdekDeliveryAddress = {
@@ -48,3 +58,24 @@ export type TCdekDoorAddress = {
   country_code: string;
   city: string;
 };
+
+export type TAddressSuggestion = {
+  value: string;
+  unrestricted_value: string;
+  data: {
+    city: string | null;
+    city_fias_id: string | null;
+    fias_id: string | null;
+    kladr_id: string | null;
+    settlement: string | null;
+  };
+};
+
+export type TDaDataResponse = {
+  suggestions: TAddressSuggestion[];
+};
+
+export interface WidgetCdekProps {
+  cityName: string;
+  isDeliveryChosen: (isChosen: boolean) => void;
+}

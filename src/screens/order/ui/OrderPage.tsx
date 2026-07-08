@@ -4,6 +4,8 @@ import { FormProvider, useForm } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
 
+import { useCdekCalculate } from "@/features/CdekDelivery";
+
 import { type TOrder } from "@/entities/order";
 import { useGetCheckoutData } from "@/entities/order";
 
@@ -30,6 +32,8 @@ export const OrderPage = () => {
       apartment: "",
       delivery: undefined,
     },
+    mode: "onChange"
+    
   });
 
   return (

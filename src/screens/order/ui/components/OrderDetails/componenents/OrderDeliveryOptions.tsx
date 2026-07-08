@@ -2,7 +2,7 @@ import { useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
 
-import { CdekDelivery } from "@/widgets/CdekDelivery";
+import { CdekDelivery } from "@/features/CdekDelivery";
 
 import type { TDeliveryOption } from "@/entities/order";
 
@@ -22,6 +22,13 @@ export const OrderDeliveryOptions = ({
   const { register, watch } = useFormContext<FieldValues>();
   const currentDeliveryValue = watch("delivery");
 
+  const deliveryDays = {
+    courier: "Доставка займёт 7–21 дней",
+    pickpoint: "Доставка займёт 5–7 дней",
+    digital: "Доставка займёт 1–2 дня",
+    pickup: "",
+  };
+
   return (
     <section className={styles.orderDetailsDeliveryOptions}>
       <h3 className={styles.title}>Способ доставки</h3>
@@ -29,15 +36,17 @@ export const OrderDeliveryOptions = ({
         {options.map((option) => {
           const isCurrentSelected = String(currentDeliveryValue) === String(option.id);
           return (
-            <CheckboxUI
-              type={"radio"}
-              key={option.id}
-              isChecked={isCurrentSelected}
-              {...register("delivery", fieldsConfig.delivery)}
-              value={String(option.id)}
-            >
-              {option.name}
-            </CheckboxUI>
+            <div key={option.id} className={styles.optionDescriptionContainer}>
+              <CheckboxUI
+                type={"radio"}
+                isChecked={isCurrentSelected}
+                {...register("delivery", fieldsConfig.delivery)}
+                value={String(option.id)}
+              >
+                {option.name}
+              </CheckboxUI>
+              <span className={styles.optionDescription}>{deliveryDays[option.delivery_type]}</span>
+            </div>
           );
         })}
       </div>

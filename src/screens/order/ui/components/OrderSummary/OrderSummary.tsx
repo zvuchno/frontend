@@ -6,6 +6,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
+import { useCdekCalculate } from "@/features/CdekDelivery";
+
 import { cartQueryKeys } from "@/entities/cart";
 import { type TOrder, useCreateOrder, useGetCheckoutData } from "@/entities/order";
 
@@ -16,11 +18,12 @@ import styles from "./OrderSummary.module.scss";
 
 export const OrderSummary = () => {
   const { data } = useGetCheckoutData();
+  const { data: delivery } = useCdekCalculate();
 
   const itemsSum = data?.subtotal ?? "0";
-  const deliverySum = "0";
-  const totalSum = Number(itemsSum) + Number(deliverySum);
 
+  const deliverySum = delivery?.delivery_sum ?? 0;
+  const totalSum = Number(itemsSum) + Number(deliverySum);
   const { mutate, isPending } = useCreateOrder();
 
   const router = useRouter();
