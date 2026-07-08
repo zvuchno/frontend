@@ -3,6 +3,7 @@ import { type TCatalogListRequest, type TCatalogListResponse } from "./types";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export async function getCatalogList({
+  token,
   type,
   genre,
   kind,
@@ -51,7 +52,15 @@ export async function getCatalogList({
 
   const url = `${baseUrl}/v1/store/catalog/?${params.toString()}`;
 
-  const response = await fetch(url);
+  const headers: HeadersInit = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers,
+  });
 
   if (!response.ok) {
     throw new Error(`Ошибка получения продуктов категории: ${type}`);

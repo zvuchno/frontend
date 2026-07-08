@@ -18,6 +18,7 @@ import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 export const RecomendationsList = () => {
   const user = useUserStore((state) => state.user);
   const isAuth = !!user?.id;
+  const accessToken = user?.accessToken;
 
   const { viewedProducts, addProduct } = useRecentlyViewed();
 
@@ -31,6 +32,7 @@ export const RecomendationsList = () => {
     queryKey: ["recom", "album", limitToShow],
     queryFn: () =>
       getCatalogList({
+        token: accessToken,
         type: "album",
         ordering: "random",
         limit: limitToShow,

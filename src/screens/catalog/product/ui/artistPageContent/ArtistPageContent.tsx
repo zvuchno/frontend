@@ -23,11 +23,13 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const { addProduct } = useRecentlyViewed();
   const user = useUserStore((state) => state.user);
   const isAuth = !!user?.id;
+  const accessToken = user?.accessToken;
 
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
     queryFn: () =>
       getCatalogList({
+        token: accessToken,
         type: "album",
         artist: artist.slug,
         ordering: "random",
@@ -40,6 +42,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
     queryKey: ["recom", "merch", artist.slug],
     queryFn: () =>
       getCatalogList({
+        token: accessToken,
         type: "merch",
         artist: artist.slug,
         ordering: "random",

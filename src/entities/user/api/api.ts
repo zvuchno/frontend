@@ -110,7 +110,7 @@ export const refreshToken = async (refreshToken: string): Promise<{ access: stri
 
   const data = await  res.json();
 
-  if (!res.ok) throw new Error('Refresh failed:', data.detail);
+  if (!res.ok) throw new Error(data.detail);
 
   return data; // { accessToken, refreshToken }
 };

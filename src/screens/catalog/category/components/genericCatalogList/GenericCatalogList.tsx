@@ -4,6 +4,8 @@ import s from "./GenericCatalogList.module.scss";
 import { type CatalogListProps } from "./GenericCatalogList.types";
 import { TRANSLATIONS } from "@/shared/constants";
 import { getArtistsList } from "@/api/catalog/artistsListApi/getArtistsList";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/config/auth";
 
 const GenericCatalogList = async ({
   category,
@@ -13,6 +15,8 @@ const GenericCatalogList = async ({
   orderingFilter,
   offset,
 }: CatalogListProps) => {
+  const session = await getServerSession(authConfig);
+  const accessToken = session?.user.accessToken;
   try {
 
     let products;
@@ -31,6 +35,7 @@ const GenericCatalogList = async ({
 
     } else {
       const data = await getCatalogList({
+        token: accessToken,
         type: category,
         genre: filterByGenre, 
         kind: filterBySubcategory, 
