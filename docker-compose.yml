@@ -6,6 +6,7 @@ services:
         NEXT_PUBLIC_BASE_API_URL: "https://dev.zvuchno.space/api"
         NEXTAUTH_URL: "http://localhost:3000"
         NEXT_PUBLIC_YANDEX_MAPS_API_KEY: ${NEXT_PUBLIC_YANDEX_MAPS_API_KEY}
+        NEXT_PUBLIC_DADATA_API_KEY: ${NEXT_PUBLIC_DADATA_API_KEY}
         
 
     ports:
@@ -20,6 +21,7 @@ services:
       - VK_CLIENT_ID=${VK_CLIENT_ID}
       - VK_SECRET=${VK_SECRET}
       - NEXT_PUBLIC_YANDEX_MAPS_API_KEY=${NEXT_PUBLIC_YANDEX_MAPS_API_KEY}
+      - NEXT_PUBLIC_DADATA_API_KEY=${NEXT_PUBLIC_DADATA_API_KEY}
 
     volumes:
       - next_image_cache:/app/.next/cache/images

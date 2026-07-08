@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
 
-import { type TDeliveryOption, useGetCheckoutData, useGetDeliveryOptions } from "@/entities/order";
+import { type TDeliveryOption, useGetCheckoutData } from "@/entities/order";
 
 import styles from "./OrderDetails.module.scss";
 import { OrderDeliveryOptions } from "./componenents/OrderDeliveryOptions";
@@ -13,7 +13,7 @@ export const OrderDetails = ({ fieldsDisabled = false }) => {
   //const { data } = useGetDeliveryOptions(); // для локальных тестов
   //const deliveryOptionsAvaliable = data; // для локальных тестов
 
-  const { data } = useGetCheckoutData();
+  const { data, status } = useGetCheckoutData();
   const deliveryOptionsAvaliable = data?.deliveries;
 
   const [selected, setIsSelected] = useState("");
@@ -25,14 +25,21 @@ export const OrderDetails = ({ fieldsDisabled = false }) => {
     setValue("delivery", option.id);
   };
 
+  const isDigital = !(deliveryOptionsAvaliable && deliveryOptionsAvaliable?.length > 0);
+
   return (
     <div className={styles.orderDetails}>
       <OrderDetailsPersonal fieldsDisabled={fieldsDisabled} />
-      {deliveryOptionsAvaliable && deliveryOptionsAvaliable?.length > 0 && (
+
+      {status === "success" && (
         <OrderDeliveryOptions
-          options={deliveryOptionsAvaliable}
-          onChooseOption={handleOptionChoose}
-          optionChecked={selected}
+          options={
+            !isDigital
+              ? deliveryOptionsAvaliable
+              : [{ id: 4, name: "Электронный товар", delivery_type: "digital" }]
+          }
+          onChooseOption={!isDigital ? handleOptionChoose : () => {}}
+          optionChecked={!isDigital ? selected : "Электронный товар"}
         />
       )}
     </div>

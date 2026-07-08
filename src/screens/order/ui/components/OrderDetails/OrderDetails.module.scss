@@ -30,7 +30,7 @@
     &List {
       display: flex;
       flex-direction: column;
-      gap: 25px;
+      gap: 22px;
     }
   }
 
@@ -74,4 +74,16 @@ label.confirmationMessagge * {
 
 .confirmationMessagge span span {
   width: 22px;
+}
+
+.optionDescription {
+  opacity: 0.4;
+  font-size: 16px;
+  letter-spacing: -0.06em;
+}
+
+.optionDescriptionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }

@@ -1,4 +1,4 @@
-export type TDeliveryType = "courier" | "pickpoint" | "pickup";
+export type TDeliveryType = "courier" | "pickpoint" | "pickup" | "digital";
 
 export type TDeliveryOption = {
   id: number;
@@ -33,7 +33,7 @@ export type TOrder = {
   street?: string;
   house?: string;
   apartment?: string;
-  delivery: number | undefined;
+  delivery?: number | undefined;
 };
 
 export type OrderStatus = "created" | "confirmed" | "paid" | "shipped" | "completed" | "canceled";
