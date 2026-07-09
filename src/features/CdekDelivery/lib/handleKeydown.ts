@@ -1,12 +1,12 @@
-import type { TAddressSuggestion } from "../model/types";
+import type { TCdekCity } from "../api/cdek.api";
 
 export const handleKeyDown = (
-  suggestions: TAddressSuggestion[],
+  suggestions: TCdekCity[],
   e: React.KeyboardEvent<HTMLInputElement>,
-  setSuggestions: (suggestions: TAddressSuggestion[]) => void,
+  setSuggestions: (suggestions: TCdekCity[]) => void,
   setActiveSuggestionIndex: React.Dispatch<React.SetStateAction<number>>,
   activeSuggestionIndex: number,
-  handleSelectSuggestion: (suggestion: TAddressSuggestion) => void
+  handleSelectSuggestion: (suggestion: TCdekCity) => void
 ) => {
   if (suggestions.length === 0) return;
 

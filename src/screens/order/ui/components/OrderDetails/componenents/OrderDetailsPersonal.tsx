@@ -1,62 +1,14 @@
 import { type FieldError, useFormContext } from "react-hook-form";
 
-
-
 import { type FieldValues } from "@/screens/order/model/types";
-
-
 
 import { InputPhone } from "@/features/profile";
 
-
-
 import { CheckboxUI, CustomInput } from "@/shared/ui";
-
-
 
 import styles from "../OrderDetails.module.scss";
 import { fieldsConfig, orderPersonalFormFields } from "../utils";
 import { orderPersonalFormRules } from "../validation";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boolean }) => {
   const {

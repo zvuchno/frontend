@@ -1,13 +1,13 @@
-import type { TAddressSuggestion } from "../model/types";
-import styles from "./CdekDelivery.module.scss";
+import type { TCdekCity } from "../api/cdek.api";
+import styles from "../ui/CdekDelivery.module.scss";
 
 export const LocationSuggestionsList = ({
   suggestions,
   handleSelectSuggestion,
   activeSuggestionIndex,
 }: {
-  suggestions: TAddressSuggestion[];
-  handleSelectSuggestion: (suggestion: TAddressSuggestion) => void;
+  suggestions: TCdekCity[];
+  handleSelectSuggestion: (suggestion: TCdekCity) => void;
   activeSuggestionIndex: number;
 }) => (
   <ul className={styles.suggestionsList}>
@@ -22,7 +22,7 @@ export const LocationSuggestionsList = ({
             background: isActive ? "var(--color-bg-secondary)" : "#fff",
           }}
         >
-          {suggestion.value}
+          {suggestion.full_name}
         </li>
       );
     })}
