@@ -10,10 +10,8 @@ import { OrderDeliveryOptions } from "./componenents/OrderDeliveryOptions";
 import { OrderDetailsPersonal } from "./componenents/OrderDetailsPersonal";
 
 export const OrderDetails = ({ fieldsDisabled = false }) => {
-  //const { data } = useGetDeliveryOptions(); // для локальных тестов
-  //const deliveryOptionsAvaliable = data; // для локальных тестов
 
-  const { data, status } = useGetCheckoutData();
+  const { data } = useGetCheckoutData();
   const deliveryOptionsAvaliable = data?.deliveries;
 
   const [selected, setIsSelected] = useState("");
@@ -25,21 +23,14 @@ export const OrderDetails = ({ fieldsDisabled = false }) => {
     setValue("delivery", option.id);
   };
 
-  const isDigital = !(deliveryOptionsAvaliable && deliveryOptionsAvaliable?.length > 0);
-
   return (
     <div className={styles.orderDetails}>
       <OrderDetailsPersonal fieldsDisabled={fieldsDisabled} />
-
-      {status === "success" && (
+      {deliveryOptionsAvaliable && deliveryOptionsAvaliable?.length > 0 && (
         <OrderDeliveryOptions
-          options={
-            !isDigital
-              ? deliveryOptionsAvaliable
-              : [{ id: 4, name: "Электронный товар", delivery_type: "digital" }]
-          }
-          onChooseOption={!isDigital ? handleOptionChoose : () => {}}
-          optionChecked={!isDigital ? selected : "Электронный товар"}
+          options={deliveryOptionsAvaliable}
+          onChooseOption={handleOptionChoose}
+          optionChecked={selected}
         />
       )}
     </div>

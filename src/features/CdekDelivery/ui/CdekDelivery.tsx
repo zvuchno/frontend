@@ -1,17 +1,14 @@
 import { useState } from "react";
 
-import Script from "next/script";
-
 import { useGetCheckoutData } from "@/entities/order";
 
 import { CustomInput } from "@/shared/ui";
 
-import { choseLocation } from "../api/cdek.api";
+import { type TCdekCity, getCdekCities } from "../api/cdek.api";
+import { LocationSuggestionsList } from "../components/LocationSuggestionsList";
+import { WidgetCdek } from "../components/WidgetCdek";
 import { handleKeyDown } from "../lib/handleKeydown";
-import type { TAddressSuggestion } from "../model/types";
 import styles from "./CdekDelivery.module.scss";
-import { LocationSuggestionsList } from "./LocationSuggestionsList";
-import { WidgetCdek } from "./WidgetCdek";
 
 export const CdekDelivery = ({
   isDeliveryChosen,
@@ -23,22 +20,28 @@ export const CdekDelivery = ({
 
   const [currentCity, setCurrentCity] = useState(defaultCity);
   const [currentInputValue, setCurrentInputValue] = useState(defaultCity);
-  const [suggestions, setSuggestions] = useState<TAddressSuggestion[]>([]);
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const [suggestions, setSuggestions] = useState<TCdekCity[]>([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+
+  const [prevDefaultCity, setPrevDefaultCity] = useState(defaultCity);
+  if (defaultCity !== prevDefaultCity) {
+    setPrevDefaultCity(defaultCity);
+    setCurrentCity(defaultCity);
+    setCurrentInputValue(defaultCity);
+  }
 
   const handleShowSuggestions = (value: string) => {
     setCurrentInputValue(value);
     setActiveSuggestionIndex(-1);
 
-    if (value.length < 3) {
+    if (value.length < 2) {
       setSuggestions([]);
       return;
     }
 
     const fetchSuggestions = async () => {
       try {
-        const res = await choseLocation(value);
+        const res = await getCdekCities(value);
         if (res) {
           setSuggestions(res);
         }
@@ -49,11 +52,10 @@ export const CdekDelivery = ({
     void fetchSuggestions();
   };
 
-  const handleSelectSuggestion = (suggestion: TAddressSuggestion) => {
-    const cityName = suggestion.value;
+  const handleSelectSuggestion = (suggestion: TCdekCity) => {
+    const cityName = suggestion.full_name;
     setCurrentInputValue(cityName);
     setCurrentCity(cityName);
-
     setSuggestions([]);
   };
 
@@ -74,7 +76,7 @@ export const CdekDelivery = ({
         <CustomInput
           label={"Город"}
           required
-          id={""}
+          id={"cdek-city-input"}
           className={styles.cdekCity}
           placeholder='Выберите город'
           value={currentInputValue}
@@ -89,14 +91,10 @@ export const CdekDelivery = ({
           />
         )}
       </div>
-      {isScriptLoaded && currentCity && currentCity.trim() !== "" && (
-        <WidgetCdek cityName={currentCity} isDeliveryChosen={isDeliveryChosen} />
+
+      {currentCity && currentCity.trim() !== "" && (
+        <WidgetCdek key={currentCity} cityName={currentCity} isDeliveryChosen={isDeliveryChosen} />
       )}
-      <Script
-        src='https://cdn.jsdelivr.net/npm/@cdek-it/widget@3'
-        strategy='afterInteractive'
-        onLoad={() => setIsScriptLoaded(true)}
-      />
     </section>
   );
 };

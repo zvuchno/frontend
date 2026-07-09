@@ -17,6 +17,37 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 const daDataApiKey = process.env.NEXT_PUBLIC_DADATA_API_KEY;
 
+export type TCdekCity = {
+  city_uuid: string; //"770f3275-921b-4552-a856-a16697d45691"
+  code: number; // 288
+  full_name: string; // "Владивосток, Владивостокский городской округ, Приморский край, Россия"
+  country_code: string; // "RU"
+};
+
+// справочник населенных пунктов из справочника ПВЗ СДЕК (если есть ПВЗ)
+export async function getCdekCities(location: string): Promise<TCdekCity[]> {
+  const token = await getApiAccessToken();
+
+  const init: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: "include",
+  };
+
+  const response = await fetch(`${baseUrl}/v1/store/cdek-cities?query=${location}`, {
+    ...init,
+  });
+
+  if (!response.ok) {
+    throw new Error("Населенный пункт СДЕК не найден");
+  }
+  return (await response.json()) as TCdekCity[];
+}
+
+// запрос расечта стоимости доставки в выбранный пвз
 export async function calculateCdekDelivery(
   cdekData: TCdekData
 ): Promise<TCdekPickupDetailsResponse> {
@@ -42,6 +73,7 @@ export async function calculateCdekDelivery(
   return (await response.json()) as TCdekPickupDetailsResponse;
 }
 
+// справочник населенных пунктов DaData
 export async function choseLocation(location: string): Promise<TAddressSuggestion[] | undefined> {
   try {
     const response = await fetch(
