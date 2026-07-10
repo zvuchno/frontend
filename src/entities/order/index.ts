@@ -9,3 +9,7 @@ export type {
   TOrder,
   TOrderResponse,
 } from "./model/types";
+
+export { SelectedDeliveryContext } from "./model/selectDeliveryContext";
+export { useSelectPickpoint } from "./model/useSelectPickpoint";
+export { DeliverySelectionProvider } from "./model/DeliverySelectionProvider";

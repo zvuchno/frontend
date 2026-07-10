@@ -4,9 +4,7 @@ import { FormProvider, useForm } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
 
-import { useCdekCalculate } from "@/features/CdekDelivery";
-
-import { type TOrder } from "@/entities/order";
+import { DeliverySelectionProvider, type TOrder } from "@/entities/order";
 import { useGetCheckoutData } from "@/entities/order";
 
 import { AccentContainer } from "@/shared/ui";
@@ -30,26 +28,29 @@ export const OrderPage = () => {
       street: "",
       house: "",
       apartment: "",
+      cdek_delivery_mode: "",
+      delivery_point: "",
       delivery: undefined,
     },
-    mode: "onChange"
-    
+    mode: "onChange",
   });
 
   return (
-    <FormProvider {...methods}>
-      <AccentContainer className={styles.order}>
-        <h1 className={styles.orderTitle}>Оформление заказа</h1>
-        <form className={styles.orderWrapper}>
-          <section className={styles.orderDetails}>
-            <OrderDetails />
-          </section>
-          <section className={styles.orderSummary}>
-            <OrderSummary />
-          </section>
-        </form>
-      </AccentContainer>
-      <DevTool control={methods.control} />
-    </FormProvider>
+    <DeliverySelectionProvider>
+      <FormProvider {...methods}>
+        <AccentContainer className={styles.order}>
+          <h1 className={styles.orderTitle}>Оформление заказа</h1>
+          <form className={styles.orderWrapper}>
+            <section className={styles.orderDetails}>
+              <OrderDetails />
+            </section>
+            <section className={styles.orderSummary}>
+              <OrderSummary />
+            </section>
+          </form>
+        </AccentContainer>
+        <DevTool control={methods.control} />
+      </FormProvider>
+    </DeliverySelectionProvider>
   );
 };

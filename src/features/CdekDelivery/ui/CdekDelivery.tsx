@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
-import { useGetCheckoutData } from "@/entities/order";
+import { type TOrder, useGetCheckoutData, useSelectPickpoint } from "@/entities/order";
 
 import { CustomInput } from "@/shared/ui";
 
@@ -10,17 +11,16 @@ import { WidgetCdek } from "../components/WidgetCdek";
 import { handleKeyDown } from "../lib/handleKeydown";
 import styles from "./CdekDelivery.module.scss";
 
-export const CdekDelivery = ({
-  isDeliveryChosen,
-}: {
-  isDeliveryChosen: (isChosen: boolean) => void;
-}) => {
+export const CdekDelivery = () => {
   const { data } = useGetCheckoutData();
   const defaultCity = data?.user_defaults.city || "";
 
   const [currentCity, setCurrentCity] = useState(defaultCity);
+
   const [currentInputValue, setCurrentInputValue] = useState(defaultCity);
+
   const [suggestions, setSuggestions] = useState<TCdekCity[]>([]);
+
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
 
   const [prevDefaultCity, setPrevDefaultCity] = useState(defaultCity);
@@ -29,6 +29,9 @@ export const CdekDelivery = ({
     setCurrentCity(defaultCity);
     setCurrentInputValue(defaultCity);
   }
+
+  const { register, setValue } = useFormContext<TOrder>();
+  const { deliverySelected } = useSelectPickpoint();
 
   const handleShowSuggestions = (value: string) => {
     setCurrentInputValue(value);
@@ -69,6 +72,17 @@ export const CdekDelivery = ({
       handleSelectSuggestion
     );
 
+  useEffect(() => {
+    register("delivery_point");
+    register("city");
+  }, [register]);
+
+  useEffect(() => {
+    if (!deliverySelected) return;
+    setValue("delivery_point", deliverySelected.code);
+    setValue("city", deliverySelected.city);
+  }, [deliverySelected, setValue]);
+
   return (
     <section className={styles.cdek}>
       <h3 className={styles.title}>Выбор ПВЗ</h3>
@@ -93,7 +107,7 @@ export const CdekDelivery = ({
       </div>
 
       {currentCity && currentCity.trim() !== "" && (
-        <WidgetCdek key={currentCity} cityName={currentCity} isDeliveryChosen={isDeliveryChosen} />
+        <WidgetCdek key={currentCity} cityName={currentCity} />
       )}
     </section>
   );

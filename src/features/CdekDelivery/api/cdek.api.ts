@@ -1,17 +1,11 @@
 import { getApiAccessToken } from "@/api/authToken";
 
-import type { TAddressSuggestion, TDaDataResponse } from "../model/types";
-
-export type TCdekData = {
-  delivery_type: "offices" | "door";
-  city_code: number;
-};
-
-export type TCdekPickupDetailsResponse = {
-  delivery_sum: number;
-  period_min: number;
-  period_max: number;
-};
+import type {
+  TAddressSuggestion,
+  TCdekData,
+  TCdekPickupDetailsResponse,
+  TDaDataResponse,
+} from "../model/types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -63,7 +57,7 @@ export async function calculateCdekDelivery(
     credentials: "include",
   };
 
-  const response = await fetch(`${baseUrl}/v1/store/cdek-calculate`, {
+  const response = await fetch(`${baseUrl}/v1/store/cdek-calculate/`, {
     ...init,
   });
 

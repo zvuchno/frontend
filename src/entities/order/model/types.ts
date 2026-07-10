@@ -1,4 +1,4 @@
-export type TDeliveryType = "courier" | "pickpoint" | "pickup" | "digital";
+export type TDeliveryType = "courier" | "pickpoint" | "artist_pickup" | "digital";
 
 export type TDeliveryOption = {
   id: number;
@@ -33,7 +33,9 @@ export type TOrder = {
   street?: string;
   house?: string;
   apartment?: string;
-  delivery?: number | undefined;
+  cdek_delivery_mode?: string;
+  delivery_point?: string;
+  delivery?: number;
 };
 
 export type OrderStatus = "created" | "confirmed" | "paid" | "shipped" | "completed" | "canceled";
@@ -46,3 +48,18 @@ export type TOrderResponse = {
   items_count: number;
   total: string;
 };
+
+export type TDeliveryPickpointSelection = {
+  isChosen: boolean;
+  code: string;
+  price: number;
+  daysMin: number;
+  daysMax: number;
+  address: string;
+  city: string;
+} | null;
+
+export interface SelectDeliveryContextType {
+  deliverySelected: TDeliveryPickpointSelection | null;
+  setDeliverySelected: React.Dispatch<React.SetStateAction<TDeliveryPickpointSelection | null>>;
+}
