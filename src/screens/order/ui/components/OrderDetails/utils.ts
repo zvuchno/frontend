@@ -77,6 +77,19 @@ export const orderAddressFormFields: TProfileFormField<FieldValues>[] = [
   },
 ];
 
+export const orderCdekDeliveryFormFields: Partial<TProfileFormField<FieldValues>>[] = [
+  {
+    name: "delivery_point",
+    type: "text",
+    required: true,
+  },
+  {
+    name: "cdek_delivery_mode",
+    type: "text",
+    required: true,
+  },
+];
+
 export const errorsMessages = {
   requiredMessage: "Обязательное поле",
   minLengthMessage: "Min длина поля ",
@@ -127,5 +140,11 @@ export const fieldsConfig: {
   personal_data_consent: {
     required: true,
     validate: (value, fields) => validatePersonalConsent(value, fields),
+  },
+  cdek_delivery_mode: {
+    required: true,
+  },
+  delivery_point: {
+    required: true,
   },
 };

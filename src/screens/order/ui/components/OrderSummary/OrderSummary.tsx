@@ -6,10 +6,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
-import { useCdekCalculate } from "@/features/CdekDelivery";
-
 import { cartQueryKeys } from "@/entities/cart";
-import { type TOrder, useCreateOrder, useGetCheckoutData } from "@/entities/order";
+import {
+  type TOrder,
+  useCreateOrder,
+  useGetCheckoutData,
+  useSelectPickpoint,
+} from "@/entities/order";
 
 import { ButtonUI } from "@/shared/ui";
 import { formatSum } from "@/shared/utils/formatSum";
@@ -18,12 +21,13 @@ import styles from "./OrderSummary.module.scss";
 
 export const OrderSummary = () => {
   const { data } = useGetCheckoutData();
-  const { data: delivery } = useCdekCalculate();
 
   const itemsSum = data?.subtotal ?? "0";
 
-  const deliverySum = delivery?.delivery_sum ?? 0;
-  const totalSum = Number(itemsSum) + Number(deliverySum);
+  const { deliverySelected } = useSelectPickpoint();
+  const deliverySum = deliverySelected?.price;
+  const totalSum = !deliverySum ? Number(itemsSum) : Number(itemsSum) + Number(deliverySum);
+
   const { mutate, isPending } = useCreateOrder();
 
   const router = useRouter();
@@ -60,7 +64,7 @@ export const OrderSummary = () => {
         </div>
         <div className={clsx(styles.summaryDeliverySum, styles.mainText)}>
           <span>Доставка</span>
-          <span>{formatSum(deliverySum) + " ₽"}</span>
+          <span>{formatSum(String(deliverySum)) + " ₽"}</span>
         </div>
         <div className={styles.summaryTotal}>
           <span>Итого:</span>

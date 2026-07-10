@@ -2,11 +2,8 @@ import toast from "react-hot-toast";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import {
-  type TCdekData,
-  type TCdekPickupDetailsResponse,
-  calculateCdekDelivery,
-} from "../api/cdek.api";
+import { calculateCdekDelivery } from "../api/cdek.api";
+import type { TCdekData, TCdekPickupDetailsResponse } from "./types";
 
 export function useCdekCalculate() {
   const queryClient = useQueryClient();

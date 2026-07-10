@@ -1,71 +1,21 @@
 import DatePicker from "react-datepicker";
-import { Controller, type FieldError, type FieldPath, type RegisterOptions, get, type useFormContext } from "react-hook-form";
+import {
+  Controller,
+  type FieldError,
+  type FieldPath,
+  get,
+  type useFormContext,
+} from "react-hook-form";
 import { IMaskInput } from "react-imask";
-
-
 
 import clsx from "clsx";
 import { ru } from "date-fns/locale";
 
-
-
-import { type TArtistLegalData } from "@/entities/Artist/store/types";
-
-
-
 import { CustomInput } from "@/shared/ui";
-
-
 
 import styles from "../artistFormPersonal.module.scss";
 import { type FieldValues, type TArtistFormPersonalField } from "../utils/types";
 import { artistFormPersonalRules } from "../utils/validation";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const createFormField = (
   field: TArtistFormPersonalField,
@@ -211,7 +161,7 @@ export const createFormField = (
             required={field.required}
             aria-required={field.required}
             onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-              onChange(e);
+              void onChange(e);
               issuerCodeFormatter(field, e as React.ChangeEvent<HTMLInputElement>);
             }}
             defaultValue=''
@@ -243,7 +193,7 @@ export const createFormField = (
           required={field.required}
           aria-required={field.required}
           onChange={(e) => {
-            register(field.name).onChange(e);
+            void register(field.name).onChange(e);
             issuerCodeFormatter(field, e);
           }}
           maxLength={field.maxLength}

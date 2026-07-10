@@ -29,7 +29,7 @@ export type TCdekDeliveryAddress = {
   address?: string; // заполняется при выборе доставки до адреса
 };
 
-export type TCdekDeliveryOption = "door" | "office";
+export type TCdekDeliveryOption = "door" | "office" | "pickup";
 
 export type TCdekOfficeAddress = {
   city_code: number;
@@ -75,7 +75,23 @@ export type TDaDataResponse = {
   suggestions: TAddressSuggestion[];
 };
 
-export interface WidgetCdekProps {
-  cityName: string;
-  isDeliveryChosen: (isChosen: boolean) => void;
-}
+export type TDeliveryPickpointSelection = {
+  isChosen: boolean;
+  code: string;
+  price: number;
+  daysMin: number;
+  daysMax: number;
+  address: string;
+  city: string;
+} | null;
+
+export type TCdekData = {
+  cdek_delivery_mode: TCdekDeliveryOption;
+  city_code: number;
+};
+
+export type TCdekPickupDetailsResponse = {
+  delivery_sum: number;
+  period_min: number;
+  period_max: number;
+};

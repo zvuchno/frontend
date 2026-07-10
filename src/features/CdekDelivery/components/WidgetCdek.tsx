@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { useSelectPickpoint } from "@/entities/order";
 
 import { createDeliveryPriceViewer } from "../lib/createDeliveryPriceViewer";
-import type {
-  TCdekDeliveryOption,
-  TCdekOfficeAddress,
-  TCdekTariffDetails,
-  WidgetCdekProps,
-} from "../model/types";
+import type { TCdekDeliveryOption, TCdekOfficeAddress, TCdekTariffDetails } from "../model/types";
 import { useCdekCalculate } from "../model/useCdekDeliveryCalculate";
 import styles from "../ui/CdekDelivery.module.scss";
 
@@ -58,7 +56,7 @@ declare global {
   }
 }
 
-export const WidgetCdek = ({ cityName, isDeliveryChosen }: WidgetCdekProps) => {
+export const WidgetCdek = ({ cityName }: { cityName: string }) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
   const yandexKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
 
@@ -66,12 +64,19 @@ export const WidgetCdek = ({ cityName, isDeliveryChosen }: WidgetCdekProps) => {
   const widgetRef = useRef<ICDEKWidgetInstance | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
 
-  const isDeliveryChosenRef = useRef(isDeliveryChosen);
-  useEffect(() => {
-    isDeliveryChosenRef.current = isDeliveryChosen;
-  }, [isDeliveryChosen]);
+  const { setDeliverySelected } = useSelectPickpoint();
 
-  const uniqueContainerId = `cdek-map-${encodeURIComponent(cityName).replace(/%/g, "")}`;
+  const setDeliveryDetailsRef = useRef(setDeliverySelected);
+
+  const { setValue } = useForm();
+
+  
+
+  useEffect(() => {
+    setDeliveryDetailsRef.current = setDeliverySelected;
+  }, [setDeliverySelected]);
+
+  const uniqueContainerId = "cdek-map";
   const scriptId = `cdek-script-node`;
 
   useEffect(() => {
@@ -83,11 +88,7 @@ export const WidgetCdek = ({ cityName, isDeliveryChosen }: WidgetCdekProps) => {
     script.src = "https://cdn.jsdelivr.net/npm/@cdek-it/widget@3";
     script.id = scriptId;
     script.async = true;
-
-    script.onload = () => {
-      setScriptReady(true);
-    };
-
+    script.onload = () => setScriptReady(true);
     document.body.appendChild(script);
 
     return () => {
@@ -95,12 +96,6 @@ export const WidgetCdek = ({ cityName, isDeliveryChosen }: WidgetCdekProps) => {
 
       if (window.CDEKWidget) {
         window.CDEKWidget = undefined;
-      }
-
-      let id = window.setTimeout(() => {}, 0);
-      while (id--) {
-        window.clearTimeout(id);
-        window.clearInterval(id);
       }
     };
   }, [cityName, scriptId]);
@@ -133,10 +128,12 @@ export const WidgetCdek = ({ cityName, isDeliveryChosen }: WidgetCdekProps) => {
         onChoose(deliveryType, tariff, address) {
           if (address && address.city_code) {
             mutate(
-              { city_code: address.city_code, delivery_type: "offices" },
+              { city_code: address.city_code, cdek_delivery_mode: "office" },
               {
                 onSuccess: (data) => {
-                  createDeliveryPriceViewer(data, address, isDeliveryChosenRef.current);
+                  createDeliveryPriceViewer(data, address, (selection) => {
+                    setDeliverySelected(selection);        
+                  });
                 },
               }
             );
@@ -150,8 +147,18 @@ export const WidgetCdek = ({ cityName, isDeliveryChosen }: WidgetCdekProps) => {
     return () => {
       widgetRef.current = null;
       if (container) container.innerHTML = "";
+      setDeliveryDetailsRef.current(null);
     };
-  }, [scriptReady, cityName, baseUrl, yandexKey, uniqueContainerId, mutate]);
+  }, [
+    scriptReady,
+    cityName,
+    setDeliverySelected,
+    baseUrl,
+    yandexKey,
+    uniqueContainerId,
+    mutate,
+    setValue,
+  ]);
 
   return <div className={styles.cdekPickPointsWidget} id={uniqueContainerId} />;
 };

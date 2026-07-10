@@ -13,10 +13,6 @@
     @media (max-width: 859px) {
       flex-direction: column;
     }
-    &City {
-    }
-    &PickPoint {
-    }
   }
 
   &PickPointsWidget {
@@ -39,29 +35,59 @@
 // стили для элементов внутри виджета СДЕК
 .payment {
   position: absolute;
-  background-color: rgba(51, 85, 104, 0.05);
-  border: 1px solid transparent;
-  top: 200px;
-  color: #44403c;
-  border-radius: 6px;
-  margin-block-start: 20px;
-  padding: 12px;
-  min-height: 100px;
-  width: 95%;
-  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  top: 160px;
+  left: 0;
+  width: 100%;
 
-  &:hover {
-    background-color: rgba(26, 178, 72, 0.1);
-    border: 1px solid rgb(26, 178, 72);
-    cursor: pointer;
+  &Title {
+    color: #44403c;
+    font-weight: 700;
   }
 
-  &.active {
-    background-color: rgba(26, 178, 72, 0.1);
-    border: 1px solid rgb(26, 178, 72);
+  &Data {
+    position: relative;
+    background-color: rgba(51, 85, 104, 0.05);
+    border: 1px solid transparent;
+    color: #44403c;
+    border-radius: 6px;
+    padding: 12px;
+    min-height: 100px;
+    width: 100%;
+    font-weight: 700;
+
+    &:hover {
+      background-color: rgba(26, 178, 72, 0.1);
+      cursor: pointer;
+    }
+
+    &.active {
+      background-color: rgba(26, 178, 72, 0.1);
+      border: 1px solid rgb(26, 178, 72);
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 7px;
+        right: 10px;
+        width: 25px;
+        height: 25px;
+        z-index: 10;
+        background-color: rgb(26, 178, 72);
+        -webkit-mask-image: url("/icons/cdek-checked.svg");
+        mask-image: url("/icons/cdek-checked.svg");
+
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+      }
+    }
   }
 
-  &Details {
+  &DataDetails {
     margin-block-start: 10px;
     font-weight: 400;
   }
@@ -96,5 +122,11 @@
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
+  }
+}
+
+.cdekPickPointsWidget {
+  :global(.cdek-qmwuzg) {
+    position: relative !important;
   }
 }

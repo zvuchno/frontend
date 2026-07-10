@@ -9,8 +9,7 @@ import styles from "./OrderDetails.module.scss";
 import { OrderDeliveryOptions } from "./componenents/OrderDeliveryOptions";
 import { OrderDetailsPersonal } from "./componenents/OrderDetailsPersonal";
 
-export const OrderDetails = ({ fieldsDisabled = false }) => {
-
+export const OrderDetails = () => {
   const { data } = useGetCheckoutData();
   const deliveryOptionsAvaliable = data?.deliveries;
 
@@ -25,7 +24,7 @@ export const OrderDetails = ({ fieldsDisabled = false }) => {
 
   return (
     <div className={styles.orderDetails}>
-      <OrderDetailsPersonal fieldsDisabled={fieldsDisabled} />
+      <OrderDetailsPersonal fieldsDisabled={false} />
       {deliveryOptionsAvaliable && deliveryOptionsAvaliable?.length > 0 && (
         <OrderDeliveryOptions
           options={deliveryOptionsAvaliable}

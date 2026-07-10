@@ -1,11 +1,14 @@
-import type { TCdekPickupDetailsResponse } from "../api/cdek.api";
-import { type TCdekOfficeAddress } from "../model/types";
+import type {
+  TCdekOfficeAddress,
+  TCdekPickupDetailsResponse,
+  TDeliveryPickpointSelection,
+} from "../model/types";
 import styles from "../ui/CdekDelivery.module.scss";
 
 export const createDeliveryPriceViewer = (
   data: TCdekPickupDetailsResponse,
   address: TCdekOfficeAddress,
-  isDeliveryChosen: (isChosen: boolean) => void
+  onDeliverySelect: (selection: TDeliveryPickpointSelection) => void
 ) => {
   const cdekDelivetryWidget = document.getElementById("cdek-map");
 
@@ -16,34 +19,58 @@ export const createDeliveryPriceViewer = (
   );
 
   if (deliveryOption.length > 0) {
-    const targetElement = deliveryOption[0];
+    const targetElement = deliveryOption[0].querySelector(".cdek-qmwuzg");
 
-    //deliveryOption.find((el) => el.className.includes("payment"))?.remove();
-    const existingPayment = targetElement.querySelector('[class*="payment"]');
+    const existingPayment = targetElement && targetElement.querySelector('[class*="payment"]');
     if (existingPayment) {
       existingPayment.remove();
     }
+    const paymentDetails = document.createElement("div");
+    paymentDetails.className = `${styles.payment}`;
+    targetElement?.appendChild(paymentDetails);
+
+    const paymentTitle = document.createElement("p");
+    paymentTitle.textContent = "Выберите тариф";
+    paymentTitle.className = `${styles.paymentTitle}`;
+    paymentDetails.appendChild(paymentTitle);
 
     const paymentData = document.createElement("div");
+    paymentData.className = `${styles.paymentData}`;
+    paymentData.dataset.chosen = "false";
     paymentData.textContent = `Доставка в ПВЗ - ${address.code}`;
-    paymentData.className = `${styles.payment}`;
     paymentData.onclick = () => {
-      paymentData.classList.toggle(styles.active);
-      if (isDeliveryChosen) isDeliveryChosen(!!styles.active);
+      const isCurrentlyChosen = paymentData.dataset.chosen === "true";
+      const nextChosenState = !isCurrentlyChosen;
+      paymentData.dataset.chosen = String(nextChosenState);
+      paymentData.classList.toggle(styles.active, nextChosenState);
+
+      onDeliverySelect({
+        isChosen: nextChosenState,
+        code: address.code,
+        price: Number(data.delivery_sum),
+        daysMin: data.period_min,
+        daysMax: data.period_max,
+        address: address.address,
+        city: address.city,
+      });
     };
 
+    paymentDetails.appendChild(paymentData);
+
     const paymentDataDetails = document.createElement("div");
-    paymentDataDetails.textContent = `Срок доставки (рабочие дни): ${data.period_min}-${data.period_max}`;
-    paymentDataDetails.className = `${styles.paymentDetails}`;
+    paymentDataDetails.textContent = `Срок доставки (дн.): ${
+      data.period_min === data.period_max || data.period_min === 0
+        ? data.period_max
+        : `${data.period_min}-${data.period_max}`
+    }`;
+    paymentDataDetails.className = `${styles.paymentDataDetails}`;
     paymentData.appendChild(paymentDataDetails);
 
     const paymentDataSum = document.createElement("div");
     paymentDataSum.textContent = `Стоимость доставки: ${data.delivery_sum} RUB`;
-    paymentDataSum.className = `${styles.paymentDetails}`;
+    paymentDataSum.className = `${styles.paymentDataDetails}`;
     paymentData.appendChild(paymentDataSum);
 
-    targetElement.appendChild(paymentData);
-
-    const chooseButton = targetElement.querySelector("button");
+    //const chooseButton = targetElement.querySelector("button");
   }
 };

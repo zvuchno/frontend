@@ -9,6 +9,8 @@ export interface FieldValues {
   house?: string;
   apartment?: string;
   personal_data_consent?: boolean;
+  cdek_delivery_mode?: string;
+  delivery_point?: string;
   delivery?: number;
 }
 
