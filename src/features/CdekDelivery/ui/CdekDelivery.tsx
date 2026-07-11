@@ -81,9 +81,13 @@ export const CdekDelivery = () => {
   }, [register]);
 
   useEffect(() => {
-    if (!deliverySelected) return;
-    setValue("delivery_point", deliverySelected.code, { shouldValidate: true });
-    setValue("city", deliverySelected.city, { shouldValidate: true });
+    if (!deliverySelected) {
+      setValue("delivery_point", "", { shouldValidate: true });
+      setValue("city", "", { shouldValidate: true });
+    }
+
+    setValue("delivery_point", deliverySelected?.code, { shouldValidate: true });
+    setValue("city", deliverySelected?.city, { shouldValidate: true });
   }, [deliverySelected, setValue]);
 
   return (
