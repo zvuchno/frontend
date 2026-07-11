@@ -70,8 +70,6 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
 
   const { setValue } = useForm();
 
-  
-
   useEffect(() => {
     setDeliveryDetailsRef.current = setDeliverySelected;
   }, [setDeliverySelected]);
@@ -132,7 +130,7 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
               {
                 onSuccess: (data) => {
                   createDeliveryPriceViewer(data, address, (selection) => {
-                    setDeliverySelected(selection);        
+                    setDeliverySelected(selection);
                   });
                 },
               }

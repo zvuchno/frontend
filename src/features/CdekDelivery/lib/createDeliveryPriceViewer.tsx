@@ -21,10 +21,10 @@ export const createDeliveryPriceViewer = (
   if (deliveryOption.length > 0) {
     const targetElement = deliveryOption[0].querySelector(".cdek-qmwuzg");
 
-    const existingPayment = targetElement && targetElement.querySelector('[class*="payment"]');
-    if (existingPayment) {
-      existingPayment.remove();
-    }
+    const selectButton = deliveryOption[0].querySelector("button");
+
+    selectButton?.classList.add(`${styles.hiddenButton}`);
+
     const paymentDetails = document.createElement("div");
     paymentDetails.className = `${styles.payment}`;
     targetElement?.appendChild(paymentDetails);
@@ -44,15 +44,19 @@ export const createDeliveryPriceViewer = (
       paymentData.dataset.chosen = String(nextChosenState);
       paymentData.classList.toggle(styles.active, nextChosenState);
 
-      onDeliverySelect({
-        isChosen: nextChosenState,
-        code: address.code,
-        price: Number(data.delivery_sum),
-        daysMin: data.period_min,
-        daysMax: data.period_max,
-        address: address.address,
-        city: address.city,
-      });
+      onDeliverySelect(
+        nextChosenState
+          ? {
+              isChosen: nextChosenState,
+              code: address.code,
+              price: Number(data.delivery_sum),
+              daysMin: data.period_min,
+              daysMax: data.period_max,
+              address: address.address,
+              city: address.city,
+            }
+          : null
+      );
     };
 
     paymentDetails.appendChild(paymentData);
@@ -71,6 +75,13 @@ export const createDeliveryPriceViewer = (
     paymentDataSum.className = `${styles.paymentDataDetails}`;
     paymentData.appendChild(paymentDataSum);
 
-    //const chooseButton = targetElement.querySelector("button");
+    const closeButtonContainer = deliveryOption[0].firstElementChild;
+
+    const closeButton = closeButtonContainer?.querySelector("a");
+    if (closeButton)
+      closeButton.onclick = () => {
+        onDeliverySelect(null);
+        paymentDetails.remove();
+      };
   }
 };

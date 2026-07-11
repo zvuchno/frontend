@@ -43,7 +43,6 @@ export const OrderDeliveryOptions = ({
                 type={"radio"}
                 isChecked={isCurrentSelected}
                 {...register("delivery", fieldsConfig.delivery)}
-                //{...register("cdek_delivery_mode", fieldsConfig.cdek_delivery_mode)}
                 value={String(option.id)}
               >
                 {option.name}

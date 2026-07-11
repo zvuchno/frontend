@@ -38,7 +38,7 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  top: 160px;
+  top: 125px;
   left: 0;
   width: 100%;
 
@@ -91,6 +91,12 @@
     margin-block-start: 10px;
     font-weight: 400;
   }
+}
+
+// временно скрываем и блокируем кнопку выбора тарифа в виджете когда тариф выбран
+.hiddenButton {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 // стили для выпадающего списка населеннных пунктов
