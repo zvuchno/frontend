@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { type TOrder, useGetCheckoutData, useSelectPickpoint } from "@/entities/order";
+import { type FieldValues } from "@/screens/order/model/types";
+import { fieldsConfig } from "@/screens/order/ui/components/OrderDetails/utils";
+
+import { useGetCheckoutData, useSelectPickpoint } from "@/entities/order";
 
 import { CustomInput } from "@/shared/ui";
 
@@ -30,7 +33,7 @@ export const CdekDelivery = () => {
     setCurrentInputValue(defaultCity);
   }
 
-  const { register, setValue } = useFormContext<TOrder>();
+  const { register, setValue } = useFormContext<FieldValues>();
   const { deliverySelected } = useSelectPickpoint();
 
   const handleShowSuggestions = (value: string) => {
@@ -73,14 +76,14 @@ export const CdekDelivery = () => {
     );
 
   useEffect(() => {
-    register("delivery_point");
-    register("city");
+    register("delivery_point", fieldsConfig.delivery_point);
+    register("city", fieldsConfig.city);
   }, [register]);
 
   useEffect(() => {
     if (!deliverySelected) return;
-    setValue("delivery_point", deliverySelected.code);
-    setValue("city", deliverySelected.city);
+    setValue("delivery_point", deliverySelected.code, { shouldValidate: true });
+    setValue("city", deliverySelected.city, { shouldValidate: true });
   }, [deliverySelected, setValue]);
 
   return (
