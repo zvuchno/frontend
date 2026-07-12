@@ -63,11 +63,11 @@ export const VerifySuccessPage = () => {
   }, [router]);
 
   useEffect(() => {
-    if (!hasSentInitialRequest.current && data) {
+    if (!hasSentInitialRequest.current) {
       hasSentInitialRequest.current = true;
       void verifyAccount(data);
     }
-  }, [data]);
+  },);
 
   useEffect(() => {
     if (isVerified) {

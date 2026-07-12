@@ -132,7 +132,7 @@ export const AuthForm = ({
     e.preventDefault();
 
     const nextRoute = searchParams.get("next");
-      signIn(provider, {
+      await signIn(provider, {
         callbackUrl: nextRoute ? nextRoute : "/",
       });
 
@@ -173,7 +173,9 @@ export const AuthForm = ({
     <BaseForm
       className={s.authForm}
       title={mode === "login" ? "Вход в личный кабинет" : "Регистрация"}
-      onSubmit={handleSubmit}
+      onSubmit={() => {
+        handleSubmit().catch(console.error)
+      }}
       onClose={onClose}
       isLoading={isLoading}
       renderFields={() => (
@@ -366,7 +368,9 @@ export const AuthForm = ({
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e, "yandex")}
+              onClick={(e) => {
+                handleSocialAuth(e, "yandex").catch(console.error)
+              }}
               aria-label='Яндекс'
               disabled={isLoading}
               style={socialButtonStyle}
@@ -387,7 +391,9 @@ export const AuthForm = ({
             </button>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e, "vk")}
+              onClick={(e) => {
+                handleSocialAuth(e, "vk").catch(console.error)
+              }}
               aria-label='VK'
               disabled={isLoading}
               style={socialButtonStyle}

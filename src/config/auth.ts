@@ -6,10 +6,10 @@ import { cookies } from "next/headers";
 
 import {
   getCurrentUser,
-  isTokenValid,
+  getTokenExp,
   logInUser,
   logOutUser,
-  refreshToken,
+  refreshAccessToken,
   socialAuth,
 } from "@/entities/user";
 
@@ -117,6 +117,8 @@ export const authConfig: AuthOptions = {
           // Если пользователь не нажал "Запомнить меня"
           // устанавливаем время, через которое разлогиним пользователя (12 ч)
           const sessionExpires = credentials.rememberme ? null : Date.now() + 12 * 60 * 60 * 1000;
+          //получаем срок жизни access токена
+          const decodedTokenExp = getTokenExp(tokens.access);
 
           return {
             id: String(user.id),
@@ -130,6 +132,7 @@ export const authConfig: AuthOptions = {
             accessToken: tokens.access,
             refreshToken: tokens.refresh,
             sessionExpires,
+            accessTokenExpires: decodedTokenExp ? decodedTokenExp.exp : null,
           };
         } catch (error: unknown) {
           console.log("Ошибка аутентификации", error);
@@ -148,9 +151,11 @@ export const authConfig: AuthOptions = {
         });
 
         if (res.access) {
+          const decodedTokenExp = getTokenExp(res.access);
           user.accessToken = res.access;
           user.refreshToken = res.refresh;
           user.sessionExpires = null;
+          user.accessTokenExpires = decodedTokenExp ? decodedTokenExp.exp : null;
 
           return true;
         }
@@ -174,8 +179,10 @@ export const authConfig: AuthOptions = {
         token.artistName = user.artistName;
         token.refreshToken = user.refreshToken;
         token.sessionExpires = user.sessionExpires;
+        token.accessTokenExpires = user.accessTokenExpires;
       }
 
+      // получение пользоваетля, авторизованного через vk или yandex, от бэкенда  
       if (account && (account.provider === 'vk' || account.provider === 'yandex')) {
          const userFromServer = await getCurrentUser(token.accessToken ?? '');
 
@@ -191,32 +198,14 @@ export const authConfig: AuthOptions = {
          }
       }
 
+      // Проверка жизни сессии, если rememberme: true
       if (token.sessionExpires) {
         if (Date.now() > token.sessionExpires) {
           token.sessionError = 'SessionExpire';
         } else {
           token.sessionError = '';
         }
-      }
-
-      // удалить блок с проверкой токена после перехода на authApiFetch
-      if (token.accessToken && !(await isTokenValid(token.accessToken))) {
-        console.log("Token expired, refreshing...");
-
-        try {
-          const refreshed = await refreshToken(token.refreshToken as string);
-
-          token.accessToken = refreshed.access;
-          token.refreshToken = refreshed.refresh;
-
-          console.log("Token successfully updated");
-        } catch (refreshError) {
-          console.error("Token refresh failed:", refreshError);
-
-          token.accessToken = undefined;
-          token.refreshToken = undefined;
-        }
-      }
+      } 
 
       if (trigger === "update" && session) {
         if ("userName" in session) {
@@ -245,6 +234,33 @@ export const authConfig: AuthOptions = {
         }
       }
 
+      const isExpired = !token.accessTokenExpires ||  Date.now() >= token.accessTokenExpires;
+      
+      if (isExpired) {
+        console.log('***Update Access Token***')
+        try {
+          if (token.refreshToken) {
+            const refreshed = await refreshAccessToken(token.refreshToken);
+            const decodedTokenExp = getTokenExp(refreshed.access)?.exp;
+            token.accessToken = refreshed.access;
+            token.accessTokenExpires = decodedTokenExp ? decodedTokenExp: null;
+            token.sessionError = '';
+            console.log("***Token successfully updated***");
+          } else {
+            console.log('No refresh token')
+            token.accessToken = undefined;
+            token.accessTokenExpires = null;
+            token.sessionError = 'RefreshTokenError';
+          }
+          
+        } catch(error) {
+          console.error("Token refresh failed:", error);
+          token.accessToken = undefined;
+          token.accessTokenExpires = null;
+          token.sessionError = 'RefreshTokenError';
+        }
+
+      }
       return token;
     },
 
@@ -260,7 +276,6 @@ export const authConfig: AuthOptions = {
         session.user.isArtist = token.isArtist;
         session.user.accessToken = token.accessToken;
         session.user.artistName = token.artistName;
-        session.user.refreshToken = token.refreshToken;
         session.user.sessionError = token.sessionError;
       }
       return session;

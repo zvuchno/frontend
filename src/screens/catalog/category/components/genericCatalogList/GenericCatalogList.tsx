@@ -1,9 +1,11 @@
-import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import ProductsList from "../productsList/ProductsList";
 import s from "./GenericCatalogList.module.scss";
 import { type CatalogListProps } from "./GenericCatalogList.types";
 import { TRANSLATIONS } from "@/shared/constants";
-import { getArtistsList } from "@/api/catalog/artistsListApi/getArtistsList";
+import { getArtistsListServer } from "@/api/catalog/artistsListApi/getArtistsListServer";
+import { getCatalogListServer } from "@/api/catalog/catalogListApi/getCatalogListServer";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/config/auth";
 
 const GenericCatalogList = async ({
   category,
@@ -13,35 +15,40 @@ const GenericCatalogList = async ({
   orderingFilter,
   offset,
 }: CatalogListProps) => {
+  const session = await getServerSession(authConfig);
+  const token = session?.user.accessToken;
+  
   try {
 
     let products;
     let nextLink;
 
     if (category === 'artists') {
-      const data = await getArtistsList({
+      const data = await getArtistsListServer({
         genre: filterByGenre,
         limit: "15",
         offset: offset,
         ordering: orderingFilter,
+        token,
       });
 
-      products = data.results;
-      nextLink = data.next;
+      products = data?.results ?? [];
+      nextLink = data?.next ?? '';
 
     } else {
-      const data = await getCatalogList({
+      const data = await getCatalogListServer({
         type: category,
         genre: filterByGenre, 
         kind: filterBySubcategory, 
         artist: filterByArtist,
         limit: "16", 
         offset: offset, 
-        ordering: orderingFilter
+        ordering: orderingFilter,
+        token,
       });
 
-      products = data.results;
-      nextLink = data.next;
+      products = data?.results ?? [];
+      nextLink = data?.next ?? '';
     }
 
     return (
@@ -49,7 +56,6 @@ const GenericCatalogList = async ({
     )
     
   } catch (error) {
-    console.log("Ошибка получения карточек категории:", error);
     return (
       <div
         className={s.message}

@@ -1,13 +1,15 @@
+import { authFetchServer } from "@/api/authFetchFromServer/authFetchServer";
 import { type TArtistsListRequest, type TArtistsListResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
-export async function getArtistsList({
+export async function getArtistsListServer({
+  token,
   genre,
   limit,
   offset,
   ordering,
-}: TArtistsListRequest): Promise<TArtistsListResponse> {
+}: TArtistsListRequest) {
   const params = new URLSearchParams();
 
   if (limit !== undefined) {
@@ -32,11 +34,16 @@ export async function getArtistsList({
 
   const url = `${baseUrl}/v1/artists/?${params.toString()}`;
 
-  const response = await fetch(url);
+  try {
+    const response = await authFetchServer<TArtistsListResponse>(url, {
+      method: "GET",
+    },
+      token
+    );
 
-  if (!response.ok) {
-    throw new Error(`Ошибка получения списка артистов}`);
+    return response;
+
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : 'Ошибка получения списка артистов')
   }
-
-  return (await response.json()) as TArtistsListResponse;
 }

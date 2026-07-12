@@ -1,11 +1,13 @@
 type Target = {
+  id: number;
   type: string;
   url: string;
   selected_variant_id: number;
 };
 
 export type TCatalogCard = {
-  product_id: number
+  product_id: number;
+  favorite_variant_id: number;
   name: string;
   artist_name: string;
   kind: string;
@@ -25,6 +27,7 @@ export type TCatalogListResponse = {
 };
 
 export type TCatalogListRequest = {
+  token?: string;
   type?: 'album' | 'all' | 'merch',
   genre?: string | string[],
   kind?: string | string[],

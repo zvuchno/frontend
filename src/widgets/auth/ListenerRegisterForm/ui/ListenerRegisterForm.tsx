@@ -112,10 +112,10 @@ export const ListenerRegisterForm = ({
     }
   };
 
-  const handleSocialAuth = (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
+  const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
     const nextRoute = searchParams.get("next");
-    signIn(provider, {
+    await signIn(provider, {
       callbackUrl: nextRoute ? nextRoute : "/",
     });
   };
@@ -123,7 +123,9 @@ export const ListenerRegisterForm = ({
   return (
     <BaseForm
       title='Регистрация'
-      onSubmit={() => handleSubmit()}
+      onSubmit={() => {
+        handleSubmit().catch(console.error)
+      }}
       onClose={onClose}
       isLoading={isLoading}
       className={s.listenerRegisterForm}

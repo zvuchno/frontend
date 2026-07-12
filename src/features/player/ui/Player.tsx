@@ -13,6 +13,7 @@ export const PlayerUI = ({
   title,
   artistName,
   audioTrack,
+  isAuth,
   isLiked = false,
 }: PlayerUIProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -123,6 +124,7 @@ export const PlayerUI = ({
         </div>
         <div className={styles.likeContainer}>
           <ButtonLike
+            isAuth={isAuth}
             isLiked={isLiked}
             className={styles.buttonLike}
             iconClassName={styles.iconLike}

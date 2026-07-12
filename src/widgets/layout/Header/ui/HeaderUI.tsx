@@ -39,7 +39,7 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
       return;
     }
 
-    if (session.user.sessionError === "SessionExpire") {
+    if (session.user.sessionError === "SessionExpire" || session.user.sessionError === 'RefreshTokenError') {
       signOut({
         redirect: true,
         callbackUrl: `/signin?next=${encodeURIComponent(currentUrl)}`,
@@ -47,7 +47,7 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
         console.error("Ошибка при выходе:", err);
       });
     }
-  }, [session])
+  }, [session, currentUrl])
 
   const [isSearchOpen, setSearchOpen] = useState(false);
 

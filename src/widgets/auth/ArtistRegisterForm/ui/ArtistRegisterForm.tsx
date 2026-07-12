@@ -114,10 +114,10 @@ export const ArtistRegisterForm = ({
     }
   };
 
-  const handleSocialAuth = (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
+  const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
     const nextRoute = searchParams.get("next");
-    signIn(provider, {
+    await signIn(provider, {
       callbackUrl: nextRoute ? nextRoute : "/",
     });
   };

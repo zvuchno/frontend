@@ -24,7 +24,7 @@ export const ApproveSection = ({ className, artistInfo }: ApproveSectionProps) =
                 <CardArtist
                   image={artist.image}
                   description={artist.description}
-                  hasButton={true}
+                  hasButton={false}
                   isLiked={true}
                 />
               }

@@ -17,6 +17,8 @@ import { Title } from "@/shared/ui";
 import { Track } from "@/shared/ui/Track";
 
 import s from "./ReleasePageContent.module.scss";
+import { useUserStore } from "@/entities/user";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 interface ReleasePageContentProps {
   release: TDetailRelease;
@@ -27,6 +29,9 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const [playingTrack, setPlayingTrack] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataForModal, setDataForModl] = useState<TDataForModal | null>(null);
+
+  const user = useUserStore((state) => state.user);
+  const isAuth = !!user?.id;
 
   const tracksQuery = useQuery({
     queryKey: ["tracks", release.id],
@@ -56,10 +61,6 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
     setIsModalOpen(true);
   };
 
-  const handleLike = () => {
-    console.log("Лайк");
-  };
-
   return (
     <>
       <ReleaseDescription
@@ -75,6 +76,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
           <Title className={s.title}>Плеер</Title>
           <div className={s.tracksContainer}>
             {tracks.map((track) => {
+              const variant_id = track.purchase?.variant_id;
               return (
                 <Track
                   key={track.id}
@@ -83,19 +85,26 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
                   image={track.image}
                   isLiked={track.is_favorite}
                   isPlaying={playingTrack === track.id}
-                  hasCart={!!track.price}
+                  hasCart={track.purchase ? true : false}
+                  isAuth={isAuth}
                   onPlayClick={() => handlePlay(track.id)}
-                  onCartClick={() =>
-                    handleOpenAddtoCartModal({
-                      product_variant: track.id,
-                      type: "Трек",
-                      name: `${track.name}`,
-                      image: track.image,
-                      price: track.price,
-                      allow_overpay: track.allow_overpay,
-                    })
+                  onCartClick={() => {
+                    if (track.purchase) {
+                      handleOpenAddtoCartModal({
+                        product_variant: track.purchase.variant_id,
+                        type: "Трек",
+                        name: `${track.name}`,
+                        image: track.image,
+                        price: track.purchase ? track.purchase.price : '',
+                        allow_overpay: track.purchase.allow_overpay,
+                      })
+                    }
                   }
-                  onLikeClick={handleLike}
+                    
+                  }
+                  onLikeClick={(value) => {
+                    handleToggleFavorites(value, variant_id!).catch(console.error)
+                  }}
                 />
               );
             })}

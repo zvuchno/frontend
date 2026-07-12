@@ -98,6 +98,7 @@ export function FavoritesPageClient() {
           price={card.price ?? undefined}
           likeButton={
             <ButtonLike
+              isAuth={status === 'authenticated'}
               isLiked={true}
               disabled={deletingFavoriteId === card.favoriteId}
               onToggle={(isLiked) => void handleFavoriteToggle(card.favoriteId, isLiked)}

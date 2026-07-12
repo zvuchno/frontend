@@ -1,6 +1,5 @@
 "use client";
 
-import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import { useQuery } from "@tanstack/react-query";
 
 import { ArtistDetailCard } from "@/widgets/ArtistDetailCard";
@@ -12,6 +11,9 @@ import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection } from "@/shared/ui";
+import { useUserStore } from "@/entities/user";
+import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 interface IArtistPageContentProps {
   artist: TDetalArtist;
@@ -19,11 +21,13 @@ interface IArtistPageContentProps {
 
 const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const { addProduct } = useRecentlyViewed();
+  const user = useUserStore((state) => state.user);
+  const isAuth = !!user?.id;
 
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
     queryFn: () =>
-      getCatalogList({
+      getCatalogListClient({
         type: "album",
         artist: artist.slug,
         ordering: "random",
@@ -35,7 +39,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const queryMerch = useQuery({
     queryKey: ["recom", "merch", artist.slug],
     queryFn: () =>
-      getCatalogList({
+      getCatalogListClient({
         type: "merch",
         artist: artist.slug,
         ordering: "random",
@@ -77,7 +81,15 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 }
                 image={item.image}
                 price={item.price}
-                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                likeButton={
+                  <ButtonLike 
+                    isLiked={item.is_favorite} 
+                    isAuth={isAuth}
+                    onToggle={(isLiked) => {
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                    }}
+                  />
+                }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
               />
@@ -110,7 +122,15 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 }
                 image={item.image}
                 price={item.price}
-                likeButton={<ButtonLike isLiked={item.is_favorite} />}
+                likeButton={
+                  <ButtonLike 
+                    isLiked={item.is_favorite} 
+                    isAuth={isAuth}
+                    onToggle={(isLiked) => {
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                    }}
+                  />
+                }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
               />
