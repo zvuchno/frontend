@@ -1,18 +1,21 @@
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import { type TrackListRequest, type TracksListResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export async function getTracksList({
   albumId,
-}: TrackListRequest): Promise<TracksListResponse> {
+}: TrackListRequest) {
 
   const url = `${baseUrl}/v1/store/player/albums/${albumId}`;
 
-  const response = await fetch(url);
+  try {
+    const data = await authFetchClient<TracksListResponse>(url, {
+      method: "GET",
+    })
 
-  if (!response.ok) {
-    throw new Error("Faild to fetch tracks data");
+    return data;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : "Faild to fetch tracks data");
   }
-
-  return (await response.json()) as TracksListResponse;
 }

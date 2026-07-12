@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 
-import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 
@@ -13,12 +12,12 @@ import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection } from "@/shared/ui";
 import { useUserStore } from "@/entities/user";
+import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 export const RecomendationsList = () => {
   const user = useUserStore((state) => state.user);
   const isAuth = !!user?.id;
-  const accessToken = user?.accessToken;
 
   const { viewedProducts, addProduct } = useRecentlyViewed();
 
@@ -31,8 +30,7 @@ export const RecomendationsList = () => {
   const recomQuery = useQuery({
     queryKey: ["recom", "album", limitToShow],
     queryFn: () =>
-      getCatalogList({
-        token: accessToken,
+      getCatalogListClient({
         type: "album",
         ordering: "random",
         limit: limitToShow,
@@ -75,7 +73,7 @@ export const RecomendationsList = () => {
                 <ButtonLike 
                   isLiked={item.is_favorite} 
                   isAuth={isAuth}
-                  onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                  onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
                 />
               }
               link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}

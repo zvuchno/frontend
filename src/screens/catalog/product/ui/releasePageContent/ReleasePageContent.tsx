@@ -17,8 +17,8 @@ import { Title } from "@/shared/ui";
 import { Track } from "@/shared/ui/Track";
 
 import s from "./ReleasePageContent.module.scss";
-import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 import { useUserStore } from "@/entities/user";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 interface ReleasePageContentProps {
   release: TDetailRelease;

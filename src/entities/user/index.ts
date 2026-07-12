@@ -12,7 +12,7 @@ export {
   getTokenExp,
   logInUser,
   logOutUser,
-  refreshToken,
+  refreshAccessToken,
   verifyEmail,
   resendEmailForVerify,
   resetPassword,

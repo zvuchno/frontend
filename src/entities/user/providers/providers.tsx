@@ -14,7 +14,6 @@ const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
-      console.log('записываю новый токен:', session.user.accessToken)
       const userData = session.user;
       setUser({
         id: Number(userData.id),

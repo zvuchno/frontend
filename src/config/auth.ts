@@ -9,7 +9,7 @@ import {
   getTokenExp,
   logInUser,
   logOutUser,
-  refreshToken,
+  refreshAccessToken,
   socialAuth,
 } from "@/entities/user";
 
@@ -205,27 +205,7 @@ export const authConfig: AuthOptions = {
         } else {
           token.sessionError = '';
         }
-      }
-
-      // удалить блок с проверкой токена после перехода на authApiFetch
-      // if (token.accessToken && !(await isTokenValid(token.accessToken))) {
-      //   console.log("Token expired, refreshing...");
-
-      //   try {
-      //     const refreshed = await refreshToken(token.refreshToken as string);
-
-      //     token.accessToken = refreshed.access;
-      //     token.refreshToken = refreshed.refresh;
-
-      //     console.log("Token successfully updated");
-      //   } catch (refreshError) {
-      //     console.error("Token refresh failed:", refreshError);
-
-      //     token.accessToken = undefined;
-      //     token.refreshToken = undefined;
-      //   }
-      // }
-      
+      } 
 
       if (trigger === "update" && session) {
         if ("userName" in session) {
@@ -254,43 +234,33 @@ export const authConfig: AuthOptions = {
         }
       }
 
-      // console.log(
-      //   '*****AccessToken expires on*****',
-      //   token.accessTokenExpires,
-      //   new Date(token.accessTokenExpires!)
-      // );
-
-      let hasRefreshing = false;
-
-      if (token.accessTokenExpires && (Date.now() > token.accessTokenExpires) && !hasRefreshing) {
-        hasRefreshing = true;
+      const isExpired = !token.accessTokenExpires ||  Date.now() >= token.accessTokenExpires;
+      
+      if (isExpired) {
         console.log('***Update Access Token***')
         try {
           if (token.refreshToken) {
-            const refreshed = await refreshToken(token.refreshToken);
-            const decodedTokenExp = getTokenExp(refreshed.access);
-            //записываем обновленные данные
+            const refreshed = await refreshAccessToken(token.refreshToken);
+            const decodedTokenExp = getTokenExp(refreshed.access)?.exp;
             token.accessToken = refreshed.access;
-            token.refreshToken = refreshed.refresh;
-            token.accessTokenExpires = decodedTokenExp ? decodedTokenExp.exp : null;
+            token.accessTokenExpires = decodedTokenExp ? decodedTokenExp: null;
+            token.sessionError = '';
             console.log("***Token successfully updated***");
           } else {
             console.log('No refresh token')
             token.accessToken = undefined;
-            token.refreshToken = undefined;
             token.accessTokenExpires = null;
+            token.sessionError = 'RefreshTokenError';
           }
           
         } catch(error) {
           console.error("Token refresh failed:", error);
           token.accessToken = undefined;
-          token.refreshToken = undefined;
           token.accessTokenExpires = null;
-        } finally {
-          hasRefreshing = false;
+          token.sessionError = 'RefreshTokenError';
         }
-      }
 
+      }
       return token;
     },
 

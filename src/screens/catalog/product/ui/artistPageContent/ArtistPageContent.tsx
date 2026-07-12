@@ -1,6 +1,5 @@
 "use client";
 
-import { getCatalogList } from "@/api/catalog/catalogListApi/getCatalogList";
 import { useQuery } from "@tanstack/react-query";
 
 import { ArtistDetailCard } from "@/widgets/ArtistDetailCard";
@@ -13,6 +12,7 @@ import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection } from "@/shared/ui";
 import { useUserStore } from "@/entities/user";
+import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 interface IArtistPageContentProps {
@@ -23,13 +23,11 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const { addProduct } = useRecentlyViewed();
   const user = useUserStore((state) => state.user);
   const isAuth = !!user?.id;
-  const accessToken = user?.accessToken;
 
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
     queryFn: () =>
-      getCatalogList({
-        token: accessToken,
+      getCatalogListClient({
         type: "album",
         artist: artist.slug,
         ordering: "random",
@@ -41,8 +39,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const queryMerch = useQuery({
     queryKey: ["recom", "merch", artist.slug],
     queryFn: () =>
-      getCatalogList({
-        token: accessToken,
+      getCatalogListClient({
         type: "merch",
         artist: artist.slug,
         ordering: "random",
@@ -88,7 +85,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                   <ButtonLike 
                     isLiked={item.is_favorite} 
                     isAuth={isAuth}
-                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
                   />
                 }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
@@ -127,7 +124,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                   <ButtonLike 
                     isLiked={item.is_favorite} 
                     isAuth={isAuth}
-                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
                   />
                 }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}

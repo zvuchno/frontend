@@ -22,6 +22,7 @@ import {
   isProductCard,
 } from "./ProductsList.types";
 import { useUserStore } from "@/entities/user";
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 const ProductsList = ({ products, link }: ProductsListProps) => {
@@ -44,11 +45,11 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
     setError(null);
 
     try {
-      const res = await fetch(url);
+      const data = await authFetchClient<ProductsListResponse>(url, {
+        method: 'GET'
+      });
 
-      if (!res.ok) throw new Error("Ошибка получения карточек каталога");
-
-      const data: ProductsListResponse = (await res.json()) as ProductsListResponse;
+      if (!data) throw new Error("Ошибка получения карточек каталога");
 
       setAllProducts((prev) => [...prev, ...data.results]);
       setNextLink(data.next);
@@ -108,7 +109,7 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                       <ButtonLike 
                         isLiked={product.is_favorite} 
                         isAuth={isAuth}
-                        onToggle={(isLiked) => handleToggleFavorites(isLiked, product.target.id)}
+                        onToggle={(isLiked) => handleToggleFavorites(isLiked, product.favorite_variant_id)}
                       />
                     }
                     link={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}

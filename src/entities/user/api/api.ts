@@ -1,3 +1,4 @@
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import {
   type TAuthResponse,
   type TCurrentUserResponse,
@@ -14,7 +15,6 @@ import {
   type TSocialAuthResponse,
   type TVerifyEmailRequest,
 } from "../model/types";
-import { authApiFetch } from "@/api/authApiClient";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -28,8 +28,8 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
 
   const data = await res.json();
   if (!res.ok) {
-    console.error("Server error:", res.statusText);
-    console.error("Server message:", data.message || data.detail);
+    // console.error("Server error:", res.statusText);
+    // console.error("Server message:", data.message || data.detail);
     throw new Error(
       data.message ||
         data.detail ||
@@ -84,16 +84,18 @@ export const logInUser = async (
 };
 
 // Получение информации о токене
-export const getTokenExp = (token: string | null): { exp: number } | null => {
+export const getTokenExp = (token: string | null): { exp: number; isValid: boolean } | null => {
   if (!token) return null;
 
   try {
     const parts = token.split('.');
     const payload = JSON.parse(atob(parts[1]));
     const exp = payload.exp * 1000;
+    const isValid = Date.now() > exp;
 
     return {
       exp,
+      isValid,
     }
   } catch {
     return null;
@@ -101,7 +103,7 @@ export const getTokenExp = (token: string | null): { exp: number } | null => {
 };
 
 // обновление токена 
-export const refreshToken = async (refreshToken: string): Promise<{ access: string, refresh: string;}> => {
+export const refreshAccessToken = async (refreshToken: string): Promise<{ access: string }> => {
   const res = await fetch(`${BASE_URL}/v1/auth/token/refresh/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -112,7 +114,7 @@ export const refreshToken = async (refreshToken: string): Promise<{ access: stri
 
   if (!res.ok) throw new Error(data.detail);
 
-  return data; // { accessToken, refreshToken }
+  return data; // { accessToken }
 };
 
 export const logOutUser = async (userData: TLogoutdata): Promise<void> => {
@@ -153,7 +155,7 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
 
 export const resendEmailForVerify = async (): Promise<void> => {
   try {
-    await authApiFetch<void>('/v1/auth/account/me/resend-email', {
+    await authFetchClient<void>('/v1/auth/account/me/resend-email', {
       method: 'POST',
     });
   } catch (error) {

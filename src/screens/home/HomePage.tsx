@@ -1,7 +1,5 @@
 "use client";
 
-import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
-import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 import Link from "next/link";
 
 import { SectionFAQ } from "@/widgets/SectionFAQ";
@@ -19,8 +17,10 @@ import { mockBlogs, questions } from "@/shared/constants";
 import { ListSection } from "@/shared/ui";
 
 import styles from "./HomePage.module.scss";
-import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 import { useUserStore } from "@/entities/user";
+import { TArtistCard } from "@/api/catalog/artistsListApi/types";
+import { TCatalogCard } from "@/api/catalog/catalogListApi/types";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -70,7 +70,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 likeButton={
                   <ButtonLike 
                     isLiked={item.is_favorite} 
-                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
                     isAuth={isAuth}
                   />
                 }
@@ -80,7 +80,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
             );
           })}
         </ListSection>
-
+        
         <ListSection title='Мерч' link={`/catalog/merch`}>
           {merch.map((item) => {
             const url = item.target.url;
@@ -104,7 +104,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 likeButton={
                   <ButtonLike 
                     isLiked={item.is_favorite} 
-                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.target.id)}
+                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
                     isAuth={isAuth}
                   />
                 }

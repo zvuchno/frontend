@@ -15,6 +15,7 @@ export type TArtistsListResponse = {
 };
 
 export type TArtistsListRequest = {
+  token?: string,
   genre?: string | string[],
   limit?: string, 
   offset?: string,
