@@ -109,7 +109,9 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                       <ButtonLike 
                         isLiked={product.is_favorite} 
                         isAuth={isAuth}
-                        onToggle={(isLiked) => handleToggleFavorites(isLiked, product.favorite_variant_id)}
+                        onToggle={(isLiked) => {
+                          handleToggleFavorites(isLiked, product.favorite_variant_id).catch(console.error)
+                        }}
                       />
                     }
                     link={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}

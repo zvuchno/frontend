@@ -154,13 +154,9 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
 };
 
 export const resendEmailForVerify = async (): Promise<void> => {
-  try {
-    await authFetchClient<void>('/v1/auth/account/me/resend-email', {
-      method: 'POST',
-    });
-  } catch (error) {
-    throw error;
-  }
+  await authFetchClient<void>('/v1/auth/account/me/resend-email', {
+    method: 'POST',
+  });
 };
 
 export const resetPassword = async (data: TResetPasswordRequest): Promise<void> => {

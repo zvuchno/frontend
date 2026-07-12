@@ -85,7 +85,9 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                   <ButtonLike 
                     isLiked={item.is_favorite} 
                     isAuth={isAuth}
-                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
+                    onToggle={(isLiked) => {
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                    }}
                   />
                 }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
@@ -124,7 +126,9 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                   <ButtonLike 
                     isLiked={item.is_favorite} 
                     isAuth={isAuth}
-                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
+                    onToggle={(isLiked) => {
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                    }}
                   />
                 }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}

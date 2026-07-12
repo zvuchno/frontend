@@ -72,7 +72,7 @@ export const ResetPasswordPage = () => {
   useEffect(() => {
     if (!hasSentInitialRequest.current && dataFromLink.uid && dataFromLink.token) {
       hasSentInitialRequest.current = true;
-      verifyLink();
+      void verifyLink();
     }
   }, [verifyLink, dataFromLink.uid, dataFromLink.token]);
 

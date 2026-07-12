@@ -70,7 +70,9 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 likeButton={
                   <ButtonLike 
                     isLiked={item.is_favorite} 
-                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
+                    onToggle={(isLiked) => {
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                    }}
                     isAuth={isAuth}
                   />
                 }
@@ -104,7 +106,9 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 likeButton={
                   <ButtonLike 
                     isLiked={item.is_favorite} 
-                    onToggle={(isLiked) => handleToggleFavorites(isLiked, item.favorite_variant_id)}
+                    onToggle={(isLiked) => {
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                    }}
                     isAuth={isAuth}
                   />
                 }

@@ -1,5 +1,5 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
-import { TAddToFavoriteRequest, TAddToFavoriteResponse } from "./types";
+import type { TAddToFavoriteRequest, TAddToFavoriteResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 

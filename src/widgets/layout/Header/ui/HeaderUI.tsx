@@ -47,7 +47,7 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
         console.error("Ошибка при выходе:", err);
       });
     }
-  }, [session])
+  }, [session, currentUrl])
 
   const [isSearchOpen, setSearchOpen] = useState(false);
 
