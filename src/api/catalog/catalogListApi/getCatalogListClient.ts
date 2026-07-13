@@ -11,7 +11,7 @@ export async function getCatalogListClient({
   limit,
   offset,
   ordering,
-}: TCatalogListRequest) {
+}: TCatalogListRequest): Promise<TCatalogListResponse | null> {
   const params = new URLSearchParams();
 
   if (type !== undefined) {

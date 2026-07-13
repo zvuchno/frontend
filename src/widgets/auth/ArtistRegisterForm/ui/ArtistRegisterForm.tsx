@@ -125,7 +125,9 @@ export const ArtistRegisterForm = ({
   return (
     <BaseForm
       title='Регистрация'
-      onSubmit={() => handleSubmit()}
+      onSubmit={() => {
+        handleSubmit().catch(console.error)
+      }}
       onClose={onClose}
       isLoading={isLoading}
       className={s.artistRegisterForm}
@@ -274,7 +276,9 @@ export const ArtistRegisterForm = ({
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e, "yandex")}
+              onClick={(e) => {
+                handleSocialAuth(e, "yandex").catch(console.error)
+              }}
               disabled={isLoading}
               className={s.socialButton}
               aria-label='Яндекс'
@@ -283,7 +287,9 @@ export const ArtistRegisterForm = ({
             </button>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e, "vk")}
+              onClick={(e) => {
+                handleSocialAuth(e, "vk").catch(console.error)
+              }}
               disabled={isLoading}
               className={s.socialButton}
               aria-label='VK'

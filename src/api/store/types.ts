@@ -5,10 +5,21 @@ export type PaginatedStoreResponse<T> = {
   results: T[];
 };
 
+type TTarget = {
+  type: string;
+  id: number | null;
+  url: string;
+  selected_variant_id: number | null;
+}
+
 export type StoreFavorite = {
-  id: number;
+  artist_name: string;
+  name: string;
+  kind: string | null;
+  price: string;
   product_variant: number;
-  target_url: string;
+  image: string;
+  target: TTarget;
 };
 
 export type StoreCatalogItem = {

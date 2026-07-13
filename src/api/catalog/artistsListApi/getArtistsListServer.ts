@@ -9,7 +9,7 @@ export async function getArtistsListServer({
   limit,
   offset,
   ordering,
-}: TArtistsListRequest) {
+}: TArtistsListRequest): Promise<TArtistsListResponse | null> {
   const params = new URLSearchParams();
 
   if (limit !== undefined) {

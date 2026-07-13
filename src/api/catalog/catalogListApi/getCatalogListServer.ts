@@ -1,5 +1,5 @@
 import { authFetchServer } from "@/api/authFetchFromServer/authFetchServer";
-import { TCatalogListRequest, TCatalogListResponse } from "./types";
+import { type TCatalogListRequest, type TCatalogListResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -12,7 +12,7 @@ export async function getCatalogListServer({
   limit,
   offset,
   ordering,
-}: TCatalogListRequest) {
+}: TCatalogListRequest): Promise<TCatalogListResponse | null> {
   const params = new URLSearchParams();
 
   if (type !== undefined) {

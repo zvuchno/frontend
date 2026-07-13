@@ -8,9 +8,12 @@ import type {
   StoreOrderDetail,
   StoreOrderItem,
 } from "@/api/store/types";
+import { authFetchClient } from "../authFetchFromClient/authFetchClient";
 
 const DEFAULT_LIMIT = 100;
 const FALLBACK_PRODUCT_IMAGE = "/images/favorite-cassette.png";
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 function formatPrice(value?: string | number | null): string | number | null {
   if (value === undefined || value === null || value === "") {
@@ -48,26 +51,6 @@ function getStoreItemType(targetUrl?: string): "album" | "track" | "merch" {
   return "merch";
 }
 
-function toProductCardData(
-  item: StoreCatalogItem,
-  options: {
-    id: string | number;
-    favoriteId?: number;
-    targetUrl?: string;
-  }
-): FanProductCardData {
-  return {
-    id: options.id,
-    image: getCatalogItemImage(item),
-    title: item.name,
-    description: item.description || getStoreItemType(options.targetUrl),
-    price: formatPrice(item.price),
-    favoriteId: options.favoriteId,
-    targetUrl: options.targetUrl,
-    downloadUrl: item.audio_file ?? null,
-  };
-}
-
 function toReleaseCardData(item: StoreOrderItem, detail?: StoreCatalogItem): FanProductCardData {
   const detailImage = detail ? detail.cover_image || detail.main_image || null : null;
 
@@ -99,31 +82,21 @@ async function getStoreItemByTargetUrl(targetUrl: string): Promise<StoreCatalogI
   );
 }
 
-export async function getFavoriteProducts(): Promise<FanProductCardData[]> {
-  const favorites = await requestStore<PaginatedStoreResponse<StoreFavorite>>(
-    `/api/store/me/favorites?limit=${DEFAULT_LIMIT}`,
-    {
+export async function getFavoriteProducts(url?: string): Promise<PaginatedStoreResponse<StoreFavorite>> {
+  const mainUrl = `${baseUrl}/v1/store/me/favorites/?limit=6`;
+  const currentUrl = url ? url : mainUrl;
+
+  try {
+    const data = await authFetchClient<PaginatedStoreResponse<StoreFavorite>>(currentUrl, {
       method: "GET",
-    }
-  );
+    });
 
-  const cards = await Promise.all(
-    favorites.results.map(async (favorite) => {
-      const item = await getStoreItemByTargetUrl(favorite.target_url);
+    if (!data) throw new Error('Ошибка получения избранного')
 
-      if (!item) {
-        return null;
-      }
-
-      return toProductCardData(item, {
-        id: favorite.product_variant,
-        favoriteId: favorite.id,
-        targetUrl: favorite.target_url,
-      });
-    })
-  );
-
-  return cards.filter((card): card is FanProductCardData => card !== null);
+    return data;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : `Ошибка получения избранного`);
+  }
 }
 
 export async function deleteFavorite(favoriteId: number): Promise<void> {

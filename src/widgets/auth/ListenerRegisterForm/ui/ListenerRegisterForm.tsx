@@ -260,7 +260,9 @@ export const ListenerRegisterForm = ({
           <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e, "yandex")}
+              onClick={(e) => {
+                handleSocialAuth(e, "yandex").catch(console.error)
+              }}
               disabled={isLoading}
               className={s.socialButton}
               aria-label='Яндекс'
@@ -269,7 +271,9 @@ export const ListenerRegisterForm = ({
             </button>
             <button
               type='button'
-              onClick={(e) => handleSocialAuth(e, "vk")}
+              onClick={(e) => {
+                handleSocialAuth(e, "vk").catch(console.error)
+              }}
               disabled={isLoading}
               className={s.socialButton}
               aria-label='VK'

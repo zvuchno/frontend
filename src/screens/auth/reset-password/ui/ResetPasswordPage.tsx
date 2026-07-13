@@ -144,7 +144,9 @@ export const ResetPasswordPage = () => {
           </Title>
           <form 
             className={s.form} 
-            onSubmit={handleSubmit} 
+            onSubmit={(e) => {
+              handleSubmit(e).catch(console.error)
+            }} 
             autoComplete="off"
           >
             <PasswordInput 
