@@ -87,3 +87,54 @@ label.confirmationMessagge * {
   flex-direction: column;
   gap: 4px;
 }
+
+.artistPickup {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+
+  &List {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+}
+
+.pickupOption {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  min-height: 100px;
+  width: 100%;
+  font-family: var(--font-feature-mono);
+  letter-spacing: -0.06em;
+  color: var(--color-text-primary);
+  background-color: #e4f1ff;
+  border: 1px solid #0000;
+  border-radius: 10px;
+  padding: 0.5em;
+  font-size: 20px;
+  line-height: 100%;
+
+  &:hover {
+    border-color: var(--color-primary-blue);
+    cursor: pointer;
+  }
+
+  &.active {
+    background-color: var(--color-accent-blue);
+    border-color: var(--color-primary-blue);
+  }
+
+  &Details {
+    display: flex;
+    gap: 5px;
+  }
+
+  &Title {
+    font-weight: 700;
+  }
+}

@@ -210,7 +210,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
     disabled: false,
     row: 1,
     column: 1,
-    maxLength: 100,
+    maxLength: 250,
     minLength: 2,
   },
   {
@@ -246,7 +246,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
     disabled: false,
     row: 3,
     column: 1,
-    maxLength: 150,
+    maxLength: 250,
     minLength: 2,
   },
   {

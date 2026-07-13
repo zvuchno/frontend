@@ -17,27 +17,27 @@ export const fieldsConfig: Record<
   "company_data.company_name": {
     required: true,
     minLength: 2,
-    maxLength: 100,
+    maxLength: 250,
   },
   "company_data.company_address": {
     required: true,
     minLength: 2,
-    maxLength: 150,
+    maxLength: 250,
   },
   "identity_data.first_name": {
     required: true,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 100,
   },
   "identity_data.last_name": {
     required: true,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 100,
   },
   "identity_data.middle_name": {
     required: false,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 100,
   },
   "identity_data.birth_date": {
     required: true,
@@ -46,7 +46,7 @@ export const fieldsConfig: Record<
   "identity_data.registration_address": {
     required: true,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 250,
   },
   "legal_profile.email": {
     required: true,
@@ -81,7 +81,7 @@ export const fieldsConfig: Record<
   "bank_data.bank_name": {
     required: true,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 100,
   },
   "bank_data.bik": {
     required: true,

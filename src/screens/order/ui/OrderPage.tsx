@@ -28,11 +28,13 @@ export const OrderPage = () => {
       street: "",
       house: "",
       apartment: "",
-      cdek_delivery_mode: "",
+      cdek_city_code: "",
+      tariffs: "",
       delivery_point: "",
       delivery: undefined,
     },
     mode: "onChange",
+    shouldUnregister: true,
   });
 
   return (

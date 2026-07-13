@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
 
-import { useSelectPickpoint } from "@/entities/order";
+import { type TCdekDeliveryTariff, useSelectPickpoint } from "@/entities/order";
 
 import { createDeliveryPriceViewer } from "../lib/createDeliveryPriceViewer";
-import type { TCdekDeliveryOption, TCdekOfficeAddress, TCdekTariffDetails } from "../model/types";
+import type { TCdekOfficeAddress, TCdekTariffDetails } from "../model/types";
 import { useCdekCalculate } from "../model/useCdekDeliveryCalculate";
 import styles from "../ui/CdekDelivery.module.scss";
 
@@ -35,7 +34,7 @@ interface CDEKWidgetOptions {
   currency?: string;
   fixBounds?: "country" | "province" | "locality";
   onChoose?: (
-    deliveryType?: TCdekDeliveryOption,
+    deliveryType?: TCdekDeliveryTariff,
     tariff?: TCdekTariffDetails,
     address?: TCdekOfficeAddress
   ) => void;
@@ -67,8 +66,6 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
   const { setDeliverySelected } = useSelectPickpoint();
 
   const setDeliveryDetailsRef = useRef(setDeliverySelected);
-
-  const { setValue } = useForm();
 
   useEffect(() => {
     setDeliveryDetailsRef.current = setDeliverySelected;
@@ -117,7 +114,7 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
         canChoose: true,
         servicePath: currentServicePath,
         hideDeliveryOptions: { office: false, door: true },
-        hideFilters: { is_dressing_room: true, have_cash: true, have_cashless: true, type: true },
+        hideFilters: { is_dressing_room: true, have_cash: true, have_cashless: true, type: false },
         debug: false,
         defaultLocation: cityName,
         lang: "rus",
@@ -125,8 +122,11 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
         fixBounds: "locality",
         onChoose(deliveryType, tariff, address) {
           if (address && address.city_code) {
+            const checkCdekTariff = (type: string) => {
+              return type === "PVZ" ? "office" : "pickup";
+            };
             mutate(
-              { city_code: address.city_code, cdek_delivery_mode: "office" },
+              { city_code: address.city_code, tariffs: checkCdekTariff(address.type) },
               {
                 onSuccess: (data) => {
                   createDeliveryPriceViewer(data, address, (selection) => {
@@ -147,16 +147,7 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
       if (container) container.innerHTML = "";
       setDeliveryDetailsRef.current(null);
     };
-  }, [
-    scriptReady,
-    cityName,
-    setDeliverySelected,
-    baseUrl,
-    yandexKey,
-    uniqueContainerId,
-    mutate,
-    setValue,
-  ]);
+  }, [scriptReady, cityName, setDeliverySelected, baseUrl, yandexKey, uniqueContainerId, mutate]);
 
   return <div className={styles.cdekPickPointsWidget} id={uniqueContainerId} />;
 };

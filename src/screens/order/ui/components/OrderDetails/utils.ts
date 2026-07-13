@@ -84,7 +84,7 @@ export const orderCdekDeliveryFormFields: Partial<TProfileFormField<FieldValues>
     required: true,
   },
   {
-    name: "cdek_delivery_mode",
+    name: "tariffs",
     type: "text",
     required: true,
   },
@@ -116,12 +116,12 @@ export const fieldsConfig: {
   city: {
     required: true,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 250,
   },
   street: {
     required: true,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 100,
   },
   house: {
     required: true,
@@ -141,10 +141,13 @@ export const fieldsConfig: {
     required: true,
     validate: (value, fields) => validatePersonalConsent(value, fields),
   },
-  cdek_delivery_mode: {
+  tariffs: {
     required: true,
   },
   delivery_point: {
+    required: true,
+  },
+  cdek_city_code: {
     required: true,
   },
 };
