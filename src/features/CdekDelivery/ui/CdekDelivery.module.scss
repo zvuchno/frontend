@@ -121,9 +121,7 @@
 
 // скрываем инпут для поиска города на виджете
 .cdekPickPointsWidget {
-  :global(.ymaps3--controls_left),
-  :global([class*="ymaps3--controls_left"]),
-  :global(.ymaps3--search-control) {
+  :global(.ymaps3--controls_left) > :first-child {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
@@ -136,3 +134,16 @@
     position: relative !important;
   }
 }
+
+.cdekCity {
+  gap: 0;
+  & input {
+    height: 40px;
+  }
+
+  & label {
+    letter-spacing: -.06em;
+    line-height: 1.3;
+  }
+}
+

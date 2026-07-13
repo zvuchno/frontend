@@ -8,6 +8,7 @@ export type {
   TDeliveryType,
   TOrder,
   TOrderResponse,
+  TCdekDeliveryTariff,
 } from "./model/types";
 
 export { SelectedDeliveryContext } from "./model/selectDeliveryContext";

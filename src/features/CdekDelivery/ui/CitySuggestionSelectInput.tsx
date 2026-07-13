@@ -1,0 +1,94 @@
+import { useState } from "react";
+
+import { useGetCheckoutData } from "@/entities/order";
+
+import { CustomInput } from "@/shared/ui";
+import type { InputProps } from "@/shared/ui/CustomInput/CustomInput.types";
+
+import { type TCdekCity, getCdekCities } from "../api/cdek.api";
+import { LocationSuggestionsList } from "../components/LocationSuggestionsList";
+import { handleKeyDown } from "../lib/handleKeydown";
+import styles from "./CdekDelivery.module.scss";
+
+export interface TCitySuggestionsInput extends InputProps {
+  onValueConfirm: (value: TCdekCity | string) => void;
+}
+
+export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
+  const { data } = useGetCheckoutData();
+  const defaultCity = data?.user_defaults.city || "";
+  const [suggestions, setSuggestions] = useState<TCdekCity[]>([]);
+
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+
+  const [currentInputValue, setCurrentInputValue] = useState(defaultCity);
+
+  const [prevDefaultCity, setPrevDefaultCity] = useState<TCdekCity | string>(defaultCity);
+
+  if (defaultCity !== prevDefaultCity) {
+    setPrevDefaultCity(defaultCity);
+    props.onValueConfirm(defaultCity);
+    setCurrentInputValue(defaultCity);
+  }
+
+  const handleShowSuggestions = (value: string) => {
+    setCurrentInputValue(value);
+    setActiveSuggestionIndex(-1);
+
+    if (value.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      try {
+        const res = await getCdekCities(value);
+        if (res) {
+          setSuggestions(res);
+        }
+      } catch (error) {
+        console.error("Ошибка при получении подсказок:", error);
+      }
+    };
+    void fetchSuggestions();
+  };
+
+  const handleSelectSuggestion = (suggestion: TCdekCity) => {
+    const cityName = suggestion.full_name;
+    setCurrentInputValue(cityName);
+    props.onValueConfirm(suggestion);
+    setSuggestions([]);
+  };
+
+  const onKeydown = (e: React.KeyboardEvent<HTMLInputElement>) =>
+    handleKeyDown(
+      suggestions,
+      e,
+      setSuggestions,
+      setActiveSuggestionIndex,
+      activeSuggestionIndex,
+      handleSelectSuggestion
+    );
+
+  return (
+    <div className={styles.cdekPickPointPicker}>
+      <CustomInput
+        label={"Город"}
+        required
+        id={props.id}
+        className={styles.cdekCity}
+        placeholder={props.placeholder}
+        value={currentInputValue}
+        onChange={(e) => handleShowSuggestions(e.target.value)}
+        onKeyDown={onKeydown}
+      />
+      {suggestions.length > 0 && (
+        <LocationSuggestionsList
+          suggestions={suggestions}
+          handleSelectSuggestion={handleSelectSuggestion}
+          activeSuggestionIndex={activeSuggestionIndex}
+        />
+      )}
+    </div>
+  );
+};

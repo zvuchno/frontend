@@ -54,6 +54,7 @@ export const createDeliveryPriceViewer = (
               daysMax: data.period_max,
               address: address.address,
               city: address.city,
+              cdek_city_code: String(address.city_code),
             }
           : null
       );

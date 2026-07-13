@@ -1,17 +1,21 @@
-export type TDeliveryType = "courier" | "pickpoint" | "artist_pickup" | "digital";
+// основыне варианты доставки "сдек-курьер" | "сдек-пвз" | "забрать у артиста"
+export type TDeliveryType = "courier" | "pickpoint" | "pickup";
 
+// ddeliveries в запросе данных checkout
 export type TDeliveryOption = {
   id: number;
   name: string;
   delivery_type: TDeliveryType;
 };
 
+// адрес вывоза у артиста
 type TPickupPoint = {
   id: number;
   address: string;
   date: string;
 };
 
+// данные response checkout
 export type TCheckoutData = {
   user_defaults: {
     full_name: string;
@@ -24,6 +28,10 @@ export type TCheckoutData = {
   pickup_points: TPickupPoint[];
 };
 
+//варианты доставки СДЕК - "курьер" | "ПВЗ" | "постамат"
+export type TCdekDeliveryTariff = "door" | "office" | "pickup" | "";
+
+// payload оформление заказа
 export type TOrder = {
   full_name: string;
   email: string;
@@ -33,7 +41,8 @@ export type TOrder = {
   street?: string;
   house?: string;
   apartment?: string;
-  cdek_delivery_mode?: string;
+  cdek_city_code?: string;
+  tariffs?: TCdekDeliveryTariff;
   delivery_point?: string;
   delivery?: number;
 };
@@ -57,6 +66,7 @@ export type TDeliveryPickpointSelection = {
   daysMax: number;
   address: string;
   city: string;
+  cdek_city_code: string;
 } | null;
 
 export interface SelectDeliveryContextType {

@@ -15,11 +15,11 @@ export const OrderDetails = () => {
 
   const [selected, setIsSelected] = useState("");
 
-  const { setValue } = useFormContext<FieldValues>();
+  const { watch } = useFormContext<FieldValues>();
 
   const handleOptionChoose = (option: TDeliveryOption) => {
     setIsSelected(option.delivery_type);
-    setValue("delivery", option.id);
+    watch("delivery");
   };
 
   return (

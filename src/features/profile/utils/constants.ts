@@ -113,7 +113,7 @@ export const fieldsConfig: Record<
   name: {
     required: true,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 100,
   },
   email: {
     required: true,
@@ -131,7 +131,7 @@ export const fieldsConfig: Record<
   city: {
     required: true,
     minLength: 2,
-    maxLength: 50,
+    maxLength: 250,
   },
   url: {
     required: true,

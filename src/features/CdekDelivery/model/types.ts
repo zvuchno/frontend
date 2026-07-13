@@ -1,3 +1,5 @@
+import type { TCdekDeliveryTariff } from "@/entities/order";
+
 export type TCdekTariffDetails = {
   tariff_code: number;
   tariff_name: string;
@@ -28,8 +30,6 @@ export type TCdekDeliveryAddress = {
   code?: number; // код города выбранного пвз (если выбрана доставка до ПВЗ)
   address?: string; // заполняется при выборе доставки до адреса
 };
-
-export type TCdekDeliveryOption = "door" | "office" | "pickup";
 
 export type TCdekOfficeAddress = {
   city_code: number;
@@ -83,10 +83,11 @@ export type TDeliveryPickpointSelection = {
   daysMax: number;
   address: string;
   city: string;
+  cdek_city_code: string;
 } | null;
 
 export type TCdekData = {
-  cdek_delivery_mode: TCdekDeliveryOption;
+  tariffs: TCdekDeliveryTariff;
   city_code: number;
 };
 
