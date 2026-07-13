@@ -1,0 +1,1 @@
+export { FavoritesPageClient } from "./ui/FavoritesPageClient";

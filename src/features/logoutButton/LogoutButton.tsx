@@ -51,7 +51,14 @@ const LogoutButton = () => {
           <p className={s.confirmModal__text}>
             {error ? "error" : "Вы уверены, что хотите выйти?"}
           </p>
-          <ButtonUI variant='primary' size='small' onClick={handleLogOut} disabled={isLoading}>
+          <ButtonUI 
+            variant='primary' 
+            size='small' 
+            onClick={() => {
+              handleLogOut().catch(console.error)
+            }} 
+            disabled={isLoading}
+          >
             {isLoading ? "Выход..." : "Выйти"}
           </ButtonUI>
         </div>

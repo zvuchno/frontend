@@ -18,8 +18,8 @@ import { ListSection } from "@/shared/ui";
 
 import styles from "./HomePage.module.scss";
 import { useUserStore } from "@/entities/user";
-import { TArtistCard } from "@/api/catalog/artistsListApi/types";
-import { TCatalogCard } from "@/api/catalog/catalogListApi/types";
+import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
+import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 interface HomePageProps {

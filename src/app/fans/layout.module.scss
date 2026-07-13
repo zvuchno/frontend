@@ -4,7 +4,6 @@
 }
 
 .container {
-  min-height: 866px;
   overflow: hidden;
   background-color: var(--color-bg-secondary);
 }
@@ -27,7 +26,8 @@
 
 .section {
   display: flex;
-  gap: 5.5625rem;
+  gap: 4rem;
+  //gap: 5.5625rem;
   align-items: flex-start;
 
   &__content {
