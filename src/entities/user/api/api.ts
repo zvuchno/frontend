@@ -76,11 +76,19 @@ export const logInUser = async (
     body: JSON.stringify(userData),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error(`Ошибка логина: статус ${response.status}`);
+    throw new Error(
+      data.message ||
+        data.detail ||
+        data.password ||
+        data.email ||
+        'Неверная почта или пароль'
+    );
   }
 
-  return response.json() as Promise<TAuthResponse>;
+  return data as Promise<TAuthResponse>;
 };
 
 // Получение информации о токене
