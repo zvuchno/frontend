@@ -1,5 +1,23 @@
 import type { TCdekDeliveryTariff } from "@/entities/order";
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export type TCdekTariffDetails = {
   tariff_code: number;
   tariff_name: string;
@@ -59,23 +77,7 @@ export type TCdekDoorAddress = {
   city: string;
 };
 
-export type TAddressSuggestion = {
-  value: string;
-  unrestricted_value: string;
-  data: {
-    city: string | null;
-    city_fias_id: string | null;
-    fias_id: string | null;
-    kladr_id: string | null;
-    settlement: string | null;
-  };
-};
-
-export type TDaDataResponse = {
-  suggestions: TAddressSuggestion[];
-};
-
-export type TDeliveryPickpointSelection = {
+export type TDeliveryTariffSelection = {
   isChosen: boolean;
   code: string;
   price: number;

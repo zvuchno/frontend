@@ -12,5 +12,5 @@ export type {
 } from "./model/types";
 
 export { SelectedDeliveryContext } from "./model/selectDeliveryContext";
-export { useSelectPickpoint } from "./model/useSelectPickpoint";
+export { useSelectDeliveryTariff } from "./model/useSelectDeliveryTariff";
 export { DeliverySelectionProvider } from "./model/DeliverySelectionProvider";

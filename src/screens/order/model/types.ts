@@ -12,6 +12,7 @@ export interface FieldValues {
   cdek_city_code?: string;
   tariffs?: string;
   delivery_point?: string;
+  pickup_point?: number;
   delivery?: number;
 }
 

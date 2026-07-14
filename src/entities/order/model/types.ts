@@ -22,6 +22,7 @@ export type TCheckoutData = {
     email: string;
     phone: string;
     city: string;
+    city_code: number;
   };
   subtotal: string;
   deliveries: TDeliveryOption[];
@@ -44,6 +45,7 @@ export type TOrder = {
   cdek_city_code?: string;
   tariffs?: TCdekDeliveryTariff;
   delivery_point?: string;
+  pickup_point?: number;
   delivery?: number;
 };
 
@@ -58,18 +60,21 @@ export type TOrderResponse = {
   total: string;
 };
 
-export type TDeliveryPickpointSelection = {
-  isChosen: boolean;
-  code: string;
+export type TDeliveryTariffSelection = {
+  isChosen?: boolean;
+  code?: string;
   price: number;
-  daysMin: number;
-  daysMax: number;
-  address: string;
-  city: string;
-  cdek_city_code: string;
+  daysMin?: number;
+  daysMax?: number;
+  address?: string;
+  city?: string;
+  cdek_city_code?: string;
+  type?: TCdekDeliveryTariff;
 } | null;
 
 export interface SelectDeliveryContextType {
-  deliverySelected: TDeliveryPickpointSelection | null;
-  setDeliverySelected: React.Dispatch<React.SetStateAction<TDeliveryPickpointSelection | null>>;
+  deliverySelected: Partial<TDeliveryTariffSelection> | null;
+  setDeliverySelected: React.Dispatch<
+    React.SetStateAction<Partial<TDeliveryTariffSelection> | null>
+  >;
 }

@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
-import { type TCdekDeliveryTariff, useSelectPickpoint } from "@/entities/order";
+import {
+  type TCdekDeliveryTariff,
+  useGetCheckoutData,
+  useSelectDeliveryTariff,
+} from "@/entities/order";
 
 import { createDeliveryPriceViewer } from "../lib/createDeliveryPriceViewer";
 import type { TCdekOfficeAddress, TCdekTariffDetails } from "../model/types";
@@ -55,15 +59,18 @@ declare global {
   }
 }
 
-export const WidgetCdek = ({ cityName }: { cityName: string }) => {
+export const WidgetCdek = ({ cityCode }: { cityCode: number }) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
   const yandexKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
+
+  const { data } = useGetCheckoutData();
+  const defaultCityName = data?.user_defaults.city;
 
   const { mutate } = useCdekCalculate();
   const widgetRef = useRef<ICDEKWidgetInstance | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
 
-  const { setDeliverySelected } = useSelectPickpoint();
+  const { setDeliverySelected } = useSelectDeliveryTariff();
 
   const setDeliveryDetailsRef = useRef(setDeliverySelected);
 
@@ -93,7 +100,7 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
         window.CDEKWidget = undefined;
       }
     };
-  }, [cityName, scriptId]);
+  }, [cityCode, scriptId]);
 
   useEffect(() => {
     if (!scriptReady) return;
@@ -104,7 +111,7 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
     const container = document.getElementById(uniqueContainerId);
     if (container) container.innerHTML = "";
 
-    const currentServicePath = `${baseUrl}/v1/store/cdek/widget?city=${cityName}`;
+    const currentServicePath = `${baseUrl}/v1/store/cdek/widget?city=${cityCode}`;
 
     try {
       widgetRef.current = new WidgetConstructor({
@@ -116,7 +123,7 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
         hideDeliveryOptions: { office: false, door: true },
         hideFilters: { is_dressing_room: true, have_cash: true, have_cashless: true, type: false },
         debug: false,
-        defaultLocation: cityName,
+        defaultLocation: defaultCityName,
         lang: "rus",
         currency: "RUB",
         fixBounds: "locality",
@@ -130,7 +137,11 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
               {
                 onSuccess: (data) => {
                   createDeliveryPriceViewer(data, address, (selection) => {
-                    setDeliverySelected(selection);
+                    const updatedSelection = {
+                      ...selection,
+                      type: checkCdekTariff(address.type) as TCdekDeliveryTariff,
+                    };
+                    setDeliverySelected(updatedSelection);
                   });
                 },
               }
@@ -147,7 +158,16 @@ export const WidgetCdek = ({ cityName }: { cityName: string }) => {
       if (container) container.innerHTML = "";
       setDeliveryDetailsRef.current(null);
     };
-  }, [scriptReady, cityName, setDeliverySelected, baseUrl, yandexKey, uniqueContainerId, mutate]);
+  }, [
+    scriptReady,
+    cityCode,
+    setDeliverySelected,
+    baseUrl,
+    yandexKey,
+    uniqueContainerId,
+    mutate,
+    defaultCityName,
+  ]);
 
   return <div className={styles.cdekPickPointsWidget} id={uniqueContainerId} />;
 };
