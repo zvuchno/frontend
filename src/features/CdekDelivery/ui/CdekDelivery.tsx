@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { type FieldValues } from "@/screens/order/model/types";
 import { fieldsConfig } from "@/screens/order/ui/components/OrderDetails/utils";
 
-import { useGetCheckoutData, useSelectPickpoint } from "@/entities/order";
+import { useGetCheckoutData, useSelectDeliveryTariff } from "@/entities/order";
 
 import { type TCdekCity } from "../api/cdek.api";
 import { WidgetCdek } from "../components/WidgetCdek";
@@ -14,20 +14,22 @@ import { CitySuggestionSelectInput } from "./CitySuggestionSelectInput";
 export const CdekDelivery = () => {
   const { data } = useGetCheckoutData();
   const defaultCity = data?.user_defaults.city || "";
+  const defaultCityCode = data?.user_defaults.city_code || "";
 
   const [currentCity, setCurrentCity] = useState<TCdekCity | string>(defaultCity);
-
-  const currentCityName = currentCity instanceof Object ? currentCity.full_name : currentCity;
+  const currentCityCode = currentCity instanceof Object ? currentCity.code : defaultCityCode;
 
   const { register, setValue, unregister } = useFormContext<FieldValues>();
-  const { deliverySelected } = useSelectPickpoint();
+  const { deliverySelected } = useSelectDeliveryTariff();
 
   useEffect(() => {
-    register("delivery_point", fieldsConfig.delivery_point);
+    register("city", fieldsConfig.city);
     register("cdek_city_code", fieldsConfig.cdek_city_code);
+    register("delivery_point", fieldsConfig.delivery_point);
+    register("tariffs", fieldsConfig.tariffs);
 
     return () => {
-      unregister(["delivery_point", "cdek_city_code"]);
+      unregister(["city", "cdek_city_code", "tariffs", "delivery_point"]);
     };
   }, [register, unregister]);
 
@@ -36,11 +38,14 @@ export const CdekDelivery = () => {
       setValue("delivery_point", "", { shouldValidate: true });
       setValue("city", "", { shouldValidate: true });
       setValue("cdek_city_code", "", { shouldValidate: true });
+      setValue("tariffs", "", { shouldValidate: true });
+      return;
     }
 
-    setValue("delivery_point", deliverySelected?.code, { shouldValidate: true });
-    setValue("city", deliverySelected?.city, { shouldValidate: true });
-    setValue("cdek_city_code", deliverySelected?.cdek_city_code, { shouldValidate: true });
+    setValue("delivery_point", deliverySelected.code ?? "", { shouldValidate: true });
+    setValue("city", deliverySelected.city ?? "", { shouldValidate: true });
+    setValue("cdek_city_code", deliverySelected.cdek_city_code ?? "", { shouldValidate: true });
+    setValue("tariffs", deliverySelected.type ?? "", { shouldValidate: true });
   }, [deliverySelected, setValue]);
 
   return (
@@ -53,9 +58,7 @@ export const CdekDelivery = () => {
         placeholder='Выберите город'
       />
 
-      {currentCityName && currentCityName.trim() !== "" && (
-        <WidgetCdek key={currentCityName} cityName={currentCityName} />
-      )}
+      {currentCityCode && <WidgetCdek key={currentCityCode} cityCode={currentCityCode} />}
     </section>
   );
 };

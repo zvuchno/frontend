@@ -3,29 +3,34 @@
 import { useFormContext } from "react-hook-form";
 
 import { useQueryClient } from "@tanstack/react-query";
-import clsx from "clsx";
 import { useRouter } from "next/navigation";
+
+import { type FieldValues } from "@/screens/order/model/types";
 
 import { cartQueryKeys } from "@/entities/cart";
 import {
   type TOrder,
   useCreateOrder,
   useGetCheckoutData,
-  useSelectPickpoint,
+  useSelectDeliveryTariff,
 } from "@/entities/order";
 
 import { ButtonUI } from "@/shared/ui";
-import { formatSum } from "@/shared/utils/formatSum";
 
 import styles from "./OrderSummary.module.scss";
+import { SummaryDetails } from "./SummaryDetails/SummaryDetails";
 
 export const OrderSummary = () => {
   const { data } = useGetCheckoutData();
 
   const itemsSum = data?.subtotal ?? "0";
 
-  const { deliverySelected } = useSelectPickpoint();
-  const deliverySum = deliverySelected?.price;
+  const { watch } = useFormContext<FieldValues>();
+  const deliveryTafiff = watch("tariffs");
+  const hasDeliveryPrice = !!deliveryTafiff;
+
+  const { deliverySelected } = useSelectDeliveryTariff();
+  const deliverySum = deliverySelected ? deliverySelected.price : 0;
   const totalSum = !deliverySum ? Number(itemsSum) : Number(itemsSum) + Number(deliverySum);
 
   const { mutate, isPending } = useCreateOrder();
@@ -37,7 +42,9 @@ export const OrderSummary = () => {
     formState: { isValid },
   } = useFormContext<TOrder>();
 
-  const isFormValid = isValid && totalSum > 0;
+  const isFormValid = hasDeliveryPrice
+    ? isValid && totalSum > 0 && deliverySum
+    : isValid && totalSum > 0;
 
   const queryClient = useQueryClient();
 
@@ -57,20 +64,7 @@ export const OrderSummary = () => {
   return (
     <div className={styles.summary}>
       <h2 className={styles.summaryTitle}>Ваш заказ:</h2>
-      <div className={styles.summaryDetails}>
-        <div className={clsx(styles.summarySubtotalSum, styles.mainText)}>
-          <span>Товары</span>
-          <span>{formatSum(itemsSum) ?? 0} ₽</span>
-        </div>
-        <div className={clsx(styles.summaryDeliverySum, styles.mainText)}>
-          <span>Доставка</span>
-          <span>{formatSum(String(deliverySum)) + " ₽"}</span>
-        </div>
-        <div className={styles.summaryTotal}>
-          <span>Итого:</span>
-          <span>{formatSum(totalSum ? totalSum : 0)} ₽</span>
-        </div>
-      </div>
+      <SummaryDetails subtotal={itemsSum} delivery={String(deliverySum)} total={String(totalSum)} />
       <ButtonUI
         type='button'
         variant={"primary"}

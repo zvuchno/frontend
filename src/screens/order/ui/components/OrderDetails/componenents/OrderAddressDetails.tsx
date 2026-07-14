@@ -3,10 +3,10 @@ import { type FieldError, useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
 
-import { CitySuggestionSelectInput } from "@/features/CdekDelivery";
+import { CitySuggestionSelectInput, useCdekCalculate } from "@/features/CdekDelivery";
 import { type TCdekCity } from "@/features/CdekDelivery";
 
-import { useGetCheckoutData } from "@/entities/order";
+import { useGetCheckoutData, useSelectDeliveryTariff } from "@/entities/order";
 
 import { CustomInput } from "@/shared/ui";
 
@@ -25,21 +25,21 @@ export const OrderAddressDetails = ({ fieldsDisabled }: { fieldsDisabled: boolea
 
   const { data } = useGetCheckoutData();
   const defaultCity = data?.user_defaults.city || "";
+  const defaultCityCode = data?.user_defaults.city_code || 0;
+
+  const { mutate } = useCdekCalculate();
 
   const [currentCity, setCurrentCity] = useState<TCdekCity | string>(defaultCity);
+
+  const { setDeliverySelected } = useSelectDeliveryTariff();
 
   useEffect(() => {
     register("city", fieldsConfig.city);
     register("cdek_city_code", fieldsConfig.cdek_city_code);
-
-    return () => {
-      unregister(["city", "cdek_city_code"]);
-    };
-  }, [register, unregister]);
-
-  useEffect(() => {
+    register("tariffs");
     const cityValue = currentCity instanceof Object ? currentCity.full_name : currentCity;
-    const cityCodeValue = currentCity instanceof Object ? String(currentCity.code) : undefined;
+    const cityCodeValue =
+      currentCity instanceof Object ? String(currentCity.code) : String(defaultCityCode);
 
     setValue("city", cityValue, { shouldValidate: true });
     setValue("cdek_city_code", cityCodeValue, { shouldValidate: true });
@@ -47,9 +47,44 @@ export const OrderAddressDetails = ({ fieldsDisabled }: { fieldsDisabled: boolea
     if (cityValue) {
       void trigger(["city", "cdek_city_code"]);
     }
-  }, [setValue, currentCity, trigger]);
 
-  const onSetCityValue = (value: TCdekCity | string) => setCurrentCity(value);
+    if (cityCodeValue) {
+      mutate(
+        { city_code: Number(cityCodeValue), tariffs: "door" },
+        {
+          onSuccess: (data) => {
+            setDeliverySelected({ price: data.delivery_sum });
+          },
+        }
+      );
+    }
+
+    return () => {
+      unregister(["city", "cdek_city_code", "tariffs"]);
+      setDeliverySelected({ price: 0 });
+    };
+  }, [
+    setValue,
+    currentCity,
+    trigger,
+    defaultCityCode,
+    mutate,
+    setDeliverySelected,
+    register,
+    unregister,
+  ]);
+
+  const onSetCityValue = (value: TCdekCity) => {
+    setCurrentCity(value);
+    mutate(
+      { city_code: value.code, tariffs: "door" },
+      {
+        onSuccess: (data) => {
+          setDeliverySelected({ price: data.delivery_sum });
+        },
+      }
+    );
+  };
 
   return (
     <section className={styles.orderDetailsDeliveryAddress}>

@@ -1,12 +1,10 @@
 import { type ReactNode, useState } from "react";
 
 import { SelectedDeliveryContext } from "./selectDeliveryContext";
-import type { TDeliveryPickpointSelection } from "./types";
+import { type TDeliveryTariffSelection } from "./types";
 
 export const DeliverySelectionProvider = ({ children }: { children: ReactNode }) => {
-  const [deliverySelected, setDeliverySelected] = useState<TDeliveryPickpointSelection | null>(
-    null
-  );
+  const [deliverySelected, setDeliverySelected] = useState<Partial<TDeliveryTariffSelection> | null>(null);
 
   return (
     <SelectedDeliveryContext.Provider value={{ deliverySelected, setDeliverySelected }}>

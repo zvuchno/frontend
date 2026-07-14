@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
@@ -30,10 +29,6 @@ export const OrderDeliveryOptions = ({
     pickup: "",
   };
 
-  useEffect(() => {
-    register("city", fieldsConfig.city);
-  }, [register]);
-
   return (
     <section className={styles.orderDetailsDeliveryOptions}>
       <h3 className={styles.title}>Способ доставки</h3>
@@ -41,7 +36,6 @@ export const OrderDeliveryOptions = ({
         {options.map((option) => {
           const isCurrentSelected = String(currentDeliveryValue) === String(option.id);
           if (String(currentDeliveryValue) === "1") setValue("tariffs", "door");
-          if (String(currentDeliveryValue) === "2") setValue("tariffs", "office");
 
           return (
             <div key={option.id} className={styles.optionDescriptionContainer}>

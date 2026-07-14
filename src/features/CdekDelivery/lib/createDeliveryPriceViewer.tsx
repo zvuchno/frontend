@@ -1,14 +1,14 @@
 import type {
   TCdekOfficeAddress,
   TCdekPickupDetailsResponse,
-  TDeliveryPickpointSelection,
+  TDeliveryTariffSelection,
 } from "../model/types";
 import styles from "../ui/CdekDelivery.module.scss";
 
 export const createDeliveryPriceViewer = (
   data: TCdekPickupDetailsResponse,
   address: TCdekOfficeAddress,
-  onDeliverySelect: (selection: TDeliveryPickpointSelection) => void
+  onDeliverySelect: (selection: TDeliveryTariffSelection) => void
 ) => {
   const cdekDelivetryWidget = document.getElementById("cdek-map");
 

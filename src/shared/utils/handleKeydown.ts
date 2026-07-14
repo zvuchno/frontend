@@ -1,13 +1,20 @@
-import type { TCdekCity } from "../api/cdek.api";
+interface SuggestionsListProps<T> {
+  suggestions: T[];
+  e: React.KeyboardEvent<HTMLInputElement>;
+  setSuggestions: (suggestions: T[]) => void;
+  setActiveSuggestionIndex: React.Dispatch<React.SetStateAction<number>>;
+  activeSuggestionIndex: number;
+  handleSelectSuggestion: (suggestion: T) => void;
+}
 
-export const handleKeyDown = (
-  suggestions: TCdekCity[],
-  e: React.KeyboardEvent<HTMLInputElement>,
-  setSuggestions: (suggestions: TCdekCity[]) => void,
-  setActiveSuggestionIndex: React.Dispatch<React.SetStateAction<number>>,
-  activeSuggestionIndex: number,
-  handleSelectSuggestion: (suggestion: TCdekCity) => void
-) => {
+export const handleKeyDown = <T>({
+  suggestions,
+  e,
+  setSuggestions,
+  setActiveSuggestionIndex,
+  activeSuggestionIndex,
+  handleSelectSuggestion,
+}: SuggestionsListProps<T>): void => {
   if (suggestions.length === 0) return;
 
   if (e.key === "ArrowDown") {

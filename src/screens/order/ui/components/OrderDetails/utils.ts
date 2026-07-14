@@ -150,4 +150,7 @@ export const fieldsConfig: {
   cdek_city_code: {
     required: true,
   },
+  pickup_point: {
+    required: true,
+  },
 };

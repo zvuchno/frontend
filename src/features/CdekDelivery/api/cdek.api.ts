@@ -1,15 +1,8 @@
 import { getApiAccessToken } from "@/api/authToken";
 
-import type {
-  TAddressSuggestion,
-  TCdekData,
-  TCdekPickupDetailsResponse,
-  TDaDataResponse,
-} from "../model/types";
+import type { TCdekData, TCdekPickupDetailsResponse } from "../model/types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
-
-const daDataApiKey = process.env.NEXT_PUBLIC_DADATA_API_KEY;
 
 export type TCdekCity = {
   city_uuid: string; //"770f3275-921b-4552-a856-a16697d45691"
@@ -65,39 +58,4 @@ export async function calculateCdekDelivery(
     throw new Error("Ошибка расчета стоимости доставки");
   }
   return (await response.json()) as TCdekPickupDetailsResponse;
-}
-
-// справочник населенных пунктов DaData
-export async function choseLocation(location: string): Promise<TAddressSuggestion[] | undefined> {
-  try {
-    const response = await fetch(
-      "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Token ${daDataApiKey ?? ""}`,
-        },
-        body: JSON.stringify({
-          query: location,
-          from_bound: { value: "city" },
-          to_bound: { value: "settlement" },
-          restrict_value: true,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = (await response.json()) as TDaDataResponse;
-
-    return result.suggestions;
-  } catch (error) {
-    console.error("error", error);
-    return undefined;
-  }
 }

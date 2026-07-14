@@ -2,28 +2,29 @@ import { useState } from "react";
 
 import { useGetCheckoutData } from "@/entities/order";
 
+import { choseLocation } from "@/shared/api/getDadataLocation";
+import { type TAddressSuggestion } from "@/shared/types/TAddressSuggestion.types";
 import { CustomInput } from "@/shared/ui";
 import type { InputProps } from "@/shared/ui/CustomInput/CustomInput.types";
+import { LocationSuggestionsList } from "@/shared/ui/LocationSuggestionsList";
 import { handleKeyDown } from "@/shared/utils/handleKeydown";
 
-import { type TCdekCity, getCdekCities } from "../api/cdek.api";
-import { LocationSuggestionsList } from "../components/LocationSuggestionsList";
 import styles from "./CdekDelivery.module.scss";
 
-export interface TCitySuggestionsInput extends InputProps {
-  onValueConfirm: (value: TCdekCity) => void;
+export interface TSuggestionsInputProps<T> extends InputProps {
+  onValueConfirm: (value: T) => void;
 }
 
-export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
+export const SuggestionsSelectInput = (props: TSuggestionsInputProps<TAddressSuggestion>) => {
   const { data } = useGetCheckoutData();
   const defaultCity = data?.user_defaults.city || "";
-  const [suggestions, setSuggestions] = useState<TCdekCity[]>([]);
+  const [suggestions, setSuggestions] = useState<TAddressSuggestion[]>([]);
 
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
 
   const [currentInputValue, setCurrentInputValue] = useState(defaultCity);
 
-  const [prevDefaultCity, setPrevDefaultCity] = useState<TCdekCity | string>(defaultCity);
+  const [prevDefaultCity, setPrevDefaultCity] = useState<TAddressSuggestion | string>(defaultCity);
 
   if (defaultCity !== prevDefaultCity) {
     setPrevDefaultCity(defaultCity);
@@ -41,7 +42,7 @@ export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
 
     const fetchSuggestions = async () => {
       try {
-        const res = await getCdekCities(value);
+        const res = await choseLocation(value);
         if (res) {
           setSuggestions(res);
         }
@@ -52,9 +53,7 @@ export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
     void fetchSuggestions();
   };
 
-  const handleSelectSuggestion = (suggestion: TCdekCity) => {
-    const cityName = suggestion.full_name;
-    setCurrentInputValue(cityName);
+  const handleSelectSuggestion = (suggestion: TAddressSuggestion) => {
     props.onValueConfirm(suggestion);
     setSuggestions([]);
   };
