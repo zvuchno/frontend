@@ -129,7 +129,7 @@ export const fieldsConfig: {
     maxLength: 50,
   },
   apartment: {
-    required: true,
+    required: false,
     minLength: 1,
     maxLength: 50,
   },

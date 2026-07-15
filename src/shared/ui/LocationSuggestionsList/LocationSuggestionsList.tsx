@@ -1,33 +1,33 @@
 import type { ReactNode } from "react";
 
-import styles from "../ui/CdekDelivery.module.scss";
+import { type TDadataResponse } from "../../types/daData.types";
+import styles from "./LocationSuggestionsList.module.scss";
 
-interface SuggestionsListProps<T> {
-  suggestions: T[];
-  handleSelectSuggestion: (suggestion: T) => void;
+interface SuggestionsListProps {
+  suggestions: TDadataResponse[];
+  handleSelectSuggestion: (suggestion: TDadataResponse) => void;
   activeSuggestionIndex: number;
   children?: ReactNode;
 }
 
-export const LocationSuggestionsList = <T,>({
+export const LocationSuggestionsList = ({
   suggestions,
   handleSelectSuggestion,
   activeSuggestionIndex,
-  children,
-}: SuggestionsListProps<T>) => (
-  <ul className={styles.suggestionsList}>
+}: SuggestionsListProps) => (
+  <ul className={styles.locationSuggestionsList}>
     {suggestions.map((suggestion, index) => {
       const isActive = index === activeSuggestionIndex;
       return (
         <li
           key={index}
           onClick={() => handleSelectSuggestion(suggestion)}
-          className={styles.suggestionsListItem}
+          className={styles.locationSuggestionsListItem}
           style={{
             background: isActive ? "var(--color-bg-secondary)" : "#fff",
           }}
         >
-          {children}
+          {suggestion.value}
         </li>
       );
     })}

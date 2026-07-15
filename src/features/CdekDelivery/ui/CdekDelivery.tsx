@@ -58,7 +58,13 @@ export const CdekDelivery = () => {
         placeholder='Выберите город'
       />
 
-      {currentCityCode && <WidgetCdek key={currentCityCode} cityCode={currentCityCode} />}
+      {currentCityCode && (
+        <WidgetCdek
+          key={currentCityCode}
+          cityCode={currentCityCode}
+          cityName={typeof currentCity === "string" ? currentCity : currentCity.full_name}
+        />
+      )}
     </section>
   );
 };

@@ -59,7 +59,7 @@ declare global {
   }
 }
 
-export const WidgetCdek = ({ cityCode }: { cityCode: number }) => {
+export const WidgetCdek = ({ cityCode, cityName }: { cityCode: number; cityName: string }) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
   const yandexKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
 
@@ -111,7 +111,7 @@ export const WidgetCdek = ({ cityCode }: { cityCode: number }) => {
     const container = document.getElementById(uniqueContainerId);
     if (container) container.innerHTML = "";
 
-    const currentServicePath = `${baseUrl}/v1/store/cdek/widget?city=${cityCode}`;
+    const currentServicePath = `${baseUrl}/v1/store/cdek/widget?city_code=${cityCode}`;
 
     try {
       widgetRef.current = new WidgetConstructor({
@@ -123,7 +123,7 @@ export const WidgetCdek = ({ cityCode }: { cityCode: number }) => {
         hideDeliveryOptions: { office: false, door: true },
         hideFilters: { is_dressing_room: true, have_cash: true, have_cashless: true, type: false },
         debug: false,
-        defaultLocation: defaultCityName,
+        defaultLocation: cityName,
         lang: "rus",
         currency: "RUB",
         fixBounds: "locality",
@@ -167,6 +167,7 @@ export const WidgetCdek = ({ cityCode }: { cityCode: number }) => {
     uniqueContainerId,
     mutate,
     defaultCityName,
+    cityName,
   ]);
 
   return <div className={styles.cdekPickPointsWidget} id={uniqueContainerId} />;
