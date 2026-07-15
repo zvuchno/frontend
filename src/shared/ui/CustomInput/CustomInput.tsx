@@ -48,6 +48,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
             style={style}
             type="text"
             ref={ref}
+            autoComplete="off"
             {...otherProps}
           />
         )}
