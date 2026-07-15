@@ -94,7 +94,7 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
                 const href =
                   action.title === "Профиль"
                     ? user?.isArtist
-                      ? "/artisis/profile"
+                      ? "/artist/profile"
                       : "/fans/profile"
                     : action.href;
 

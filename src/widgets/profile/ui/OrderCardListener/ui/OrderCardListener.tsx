@@ -1,113 +1,183 @@
 import clsx from "clsx";
 import Image from "next/image";
 
-import { ButtonUI } from "@/shared/ui";
+import { ArrowIcon, Definition, Loader } from "@/shared/ui";
 
 import styles from "./OrderCardListener.module.scss";
 import type { TOrderCardListenerProps } from "../model/types";
+import { type KeyboardEvent, useState } from "react";
+import { getOrderDetail, type StoreOrderDetail } from "@/api/store";
+import Link from "next/link";
 
-const priceFormatter = new Intl.NumberFormat("ru-RU");
+const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
+  style: "currency",
+  currency: "RUB",
+  maximumFractionDigits: 0,
+});
 
-const getItemsLabel = (itemsCount: number) => {
-  const remainder100 = itemsCount % 100;
-  const remainder10 = itemsCount % 10;
+const orderDateFormatter = new Intl.DateTimeFormat("ru-RU", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+});
 
-  if (remainder100 >= 11 && remainder100 <= 19) {
-    return "товаров";
-  }
+const formatTotalPrice = (totalPrice: number) => totalPriceFormatter.format(totalPrice);
 
-  if (remainder10 === 1) {
-    return "товар";
-  }
-
-  if (remainder10 >= 2 && remainder10 <= 4) {
-    return "товара";
-  }
-
-  return "товаров";
-};
-
-const formatOrderSummary = ({
-  orderNumber,
-  itemsCount,
-  totalPrice,
-}: Pick<
-  TOrderCardListenerProps,
-  "orderNumber" | "itemsCount" | "totalPrice"
->) => {
-  const itemsCountLabel = `${itemsCount} ${getItemsLabel(itemsCount)}`;
-  const totalPriceLabel = `${priceFormatter.format(totalPrice)} ₽`;
-
-  return `Заказ № ${orderNumber}: ${itemsCountLabel} на сумму ${totalPriceLabel}`;
-};
+const formatOrderDate = (orderDate: Date) => orderDateFormatter.format(orderDate);
 
 export const OrderCardListener = ({
   orderId,
   orderNumber,
-  itemsCount,
+  statusLabel,
   totalPrice,
-  previewItems,
-  onDetailsClick,
-  className,
-  ...articleProps
+  orderDate,
+  images,
 }: TOrderCardListenerProps) => {
-  const normalizedPreviewItems = previewItems.filter(
-    (previewItem) => previewItem.src.trim().length > 0,
-  );
-  const orderSummary = formatOrderSummary({
-    orderNumber,
-    itemsCount,
-    totalPrice,
-  });
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [details, setDetails] = useState<StoreOrderDetail | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const contentId = `content-${orderId}`;
+
+  const toggleExpanded = async () => {
+    if (isExpanded) {
+      setIsExpanded(false);
+      return;
+    }
+    setIsExpanded(true);
+    setLoading(true);
+    setError(null);
+
+    if (!details) {
+      try {
+        const data = await getOrderDetail(orderId);
+        setDetails(data);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Ошибка загрузки');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const allComments = details?.items
+    .map((item) => item.comment)
+    .filter((comment) => comment && comment.trim() !== '')
+    .join('. ');
+
+  const handleHeaderKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      void toggleExpanded();
+      return;
+    }
+
+    if (event.key === " " || event.code === "Space") {
+      event.preventDefault();
+      void toggleExpanded();
+    }
+  };
 
   return (
-    <article
-      className={clsx(styles.orderCardListener, className)}
-      data-order-id={orderId}
-      {...articleProps}
-    >
-      <div className={styles.content}>
-        <div className={styles.textBlock}>
-          <p className={styles.orderSummary}>{orderSummary}</p>
+    <article className={clsx(styles.card, { [styles.card_expanded]: isExpanded })}>
+      <div
+        role='button'
+        tabIndex={0}
+        aria-expanded={isExpanded}
+        aria-controls={contentId}
+        className={styles.header}
+        onClick={() => void toggleExpanded()}
+        onKeyDown={handleHeaderKeyDown}
+      >
+        <div className={styles.info}>
+          <h3 className={styles.orderId}>Заказ №{orderNumber}</h3>
+          <dl>
+            <Definition label='Статус' value={statusLabel} />
+          </dl>
         </div>
-
-        <ul
-          className={styles.previewList}
-          aria-label={
-            normalizedPreviewItems.length > 0
-              ? "Превью товаров в заказе"
-              : "Превью товаров недоступно"
-          }
-        >
-          {normalizedPreviewItems.length > 0 ? (
-            normalizedPreviewItems.map((previewItem) => (
-              <li key={previewItem.id} className={styles.previewItem}>
-                <Image
-                  className={styles.previewImage}
-                  src={previewItem.src}
-                  alt={previewItem.title.trim() || "Товар из заказа"}
+        <div className={styles.summary}>
+          <p className={styles.summaryPrice}>{formatTotalPrice(totalPrice)}</p>
+          <p className={styles.date}>{formatOrderDate(orderDate)}</p>
+          <span className={styles.arrow}>
+            <ArrowIcon />
+          </span>
+        </div>
+      </div>
+      {!isExpanded && (
+        <div className={styles.preview}>
+          {images.map((image, index) => (
+            <div className={styles.media} key={index}>
+              {image && (
+                <Image 
+                  className={styles.image}
+                  src={image}
+                  alt={image}
                   width={136}
                   height={136}
-                  sizes="8.5rem"
+                  sizes='136px'
                 />
-              </li>
-            ))
-          ) : (
-            <li className={clsx(styles.previewItem, styles.previewFallback)}>
-              Нет превью
-            </li>
-          )}
-        </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      <div id={contentId} className={styles.content} aria-hidden={!isExpanded}>
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <p>Ошибка: {error}</p>
+        ) : details ? (
+          <div className={styles.contentInner}>
+            <dl>
+              <Definition className={styles.definition} label='Адрес' value={details?.full_address} />
+              <Definition className={styles.definition} label='Способ доставки' value={details.delivery} />
+              <Definition className={styles.definition} label='ФИО получателя' value={details.full_name} />
+            </dl>
+            {allComments && (
+              <dl>
+                <Definition label='Сообщение' value={allComments} />
+              </dl>
+            )}
+            <div className={styles.products}>
+              {details.items.map((product) => {
+                const url = product.target.url;
+                const match = url.match(/(\d+)\/$/);
+                const id = match ? match[1] : null;
+                const selected =
+                  product.target.selected_variant_id !== null
+                    ? product.target.selected_variant_id
+                    : undefined;
+                return (
+                <div key={product.sku}>
+                  <Link 
+                    href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`} 
+                    className={styles.productCard}
+                  >
+                    <div className={styles.media}>
+                      {product.image && (
+                        <Image 
+                          className={styles.image}
+                          src={product.image}
+                          alt={product.name}
+                          width={136}
+                          height={136}
+                          sizes='136px'
+                        />
+                      )}
+                    </div>
+                    <div className={styles.content}>
+                      <h4 className={styles.title}>{product.name}</h4>
+                      {product.price_at_purchase !== undefined && product.price_at_purchase !== null ? (
+                        <p className={styles.price}>{formatTotalPrice(Number(product.price_at_purchase))}</p>
+                      ) : null}
+                    </div>
+                  </Link>
+                  <p className={styles.quantity}>{`количество ${product.quantity}шт`}</p>
+                </div>)
+              })}
+            </div>
+          </div>
+        ) : null}
       </div>
-
-      <ButtonUI
-        variant="secondary"
-        size="medium"
-        className={styles.detailsButton}
-        onClick={onDetailsClick}
-      >
-        Подробнее о заказе
-      </ButtonUI>
     </article>
   );
 };

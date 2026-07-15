@@ -70,9 +70,6 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    if (session?.user.isListener === true) {
-      router.replace("/fans/profile");
-    }
   }, [pathname, router, session?.user.isListener, status]);
 
   useEffect(() => {

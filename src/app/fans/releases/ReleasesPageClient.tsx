@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { type FanProductCardData, getPurchasedReleases } from "@/api/store";
+import { getPurchasedReleases, type PurchasedReleases } from "@/api/store";
 import { useSession } from "next-auth/react";
 
 import { ProductCard } from "@/entities/ProductCard";
@@ -40,7 +40,7 @@ function DownloadButton({ href }: { href?: string | null }) {
 
 export function ReleasesPageClient() {
   const { status } = useSession();
-  const [cards, setCards] = useState<FanProductCardData[]>([]);
+  const [cards, setCards] = useState<PurchasedReleases[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -59,7 +59,7 @@ export function ReleasesPageClient() {
         const releaseCards = await getPurchasedReleases();
 
         if (isCurrentRequest) {
-          setCards(releaseCards);
+          setCards(releaseCards.results);
         }
       } catch (requestError) {
         if (isCurrentRequest) {
@@ -99,9 +99,9 @@ export function ReleasesPageClient() {
         <ProductCard
           key={card.id}
           image={card.image}
-          title={card.title}
-          description={card.description}
-          actionButton={<DownloadButton href={card.downloadUrl} />}
+          title={card.name}
+          description={card.name}
+          actionButton={<DownloadButton href={''} />}
         />
       ))}
     </div>
