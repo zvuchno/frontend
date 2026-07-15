@@ -41,17 +41,16 @@ export const FormFieldSet = ({ onCityConfirm }: { onCityConfirm: (city: TCdekCit
   ) => {
     setCurrentAddress(fieldName, suggestion.value);
     if (fieldName === "street") {
-      setCurrentAddress("streetId", suggestion.data.fias_id || "");
+      setCurrentAddress("streetId", suggestion.data?.fias_id || "");
     } else if (fieldName === "house") {
-      setCurrentAddress("houseId", suggestion.data.fias_id || "");
+      setCurrentAddress("houseId", suggestion.data?.fias_id || "");
     }
   };
 
   useEffect(() => {
     setValue("street", address.street, { shouldValidate: true });
     setValue("house", address.house, { shouldValidate: true });
-    setValue("apartment", address.apartment || "", { shouldValidate: true });
-  }, [address.street, address.house, address.apartment, setValue]);
+  }, [address.street, address.house, setValue]);
 
   return (
     <div className={styles.orderDeliveryAddress}>
@@ -74,12 +73,12 @@ export const FormFieldSet = ({ onCityConfirm }: { onCityConfirm: (city: TCdekCit
                 className={styles.orderFormField}
                 value={address.city}
               />
-            ) : field.name === "street" || field.name === "house" || field.name === "apartment" ? (
+            ) : field.name === "street" || field.name === "house" ? (
               <SuggestionsSelectInput
                 {...register(field.name as keyof FieldValues, orderPersonalFormRules(field))}
                 defaultSuggestionValue={address[field.name]}
                 fiasId={fiasId[field.name] ?? ""}
-                boundType={field.name === "apartment" ? "flat" : field.name}
+                boundType={field.name}
                 onValueConfirm={(suggestion) =>
                   handleSelectSuggestion(field.name as keyof TDeliveryAddress, suggestion)
                 }
