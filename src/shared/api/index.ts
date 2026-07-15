@@ -1,0 +1,1 @@
+export { getDadataSuggestions } from "./getDadataLocation";

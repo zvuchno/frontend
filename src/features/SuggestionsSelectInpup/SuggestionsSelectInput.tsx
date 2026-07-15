@@ -1,48 +1,62 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { useGetCheckoutData } from "@/entities/order";
-
-import { choseLocation } from "@/shared/api/getDadataLocation";
-import { type TAddressSuggestion } from "@/shared/types/TAddressSuggestion.types";
+import { getDadataSuggestions } from "@/shared/api";
+import { type TDadataBound, type TDadataResponse } from "@/shared/types/daData.types";
 import { CustomInput } from "@/shared/ui";
 import type { InputProps } from "@/shared/ui/CustomInput/CustomInput.types";
 import { LocationSuggestionsList } from "@/shared/ui/LocationSuggestionsList";
 import { handleKeyDown } from "@/shared/utils/handleKeydown";
 
-import styles from "./CdekDelivery.module.scss";
+import styles from "./SuggestionsSelectInput.module.scss";
 
 export interface TSuggestionsInputProps<T> extends InputProps {
+  defaultSuggestionValue?: string;
+  fiasId: string;
+  boundType: string;
   onValueConfirm: (value: T) => void;
 }
 
-export const SuggestionsSelectInput = (props: TSuggestionsInputProps<TAddressSuggestion>) => {
-  const { data } = useGetCheckoutData();
-  const defaultCity = data?.user_defaults.city || "";
-  const [suggestions, setSuggestions] = useState<TAddressSuggestion[]>([]);
+export const SuggestionsSelectInput = (props: TSuggestionsInputProps<TDadataResponse>) => {
+  const [suggestions, setSuggestions] = useState<TDadataResponse[]>([]);
 
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+  const [localInputValue, setLocalInputValue] = useState<string | null>(null);
 
-  const [currentInputValue, setCurrentInputValue] = useState(defaultCity);
+  const displayValue =
+    localInputValue !== null ? localInputValue : (props.defaultSuggestionValue ?? "");
 
-  const [prevDefaultCity, setPrevDefaultCity] = useState<TAddressSuggestion | string>(defaultCity);
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setSuggestions([]);
+        setLocalInputValue(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
 
-  if (defaultCity !== prevDefaultCity) {
-    setPrevDefaultCity(defaultCity);
-    setCurrentInputValue(defaultCity);
-  }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleShowSuggestions = (value: string) => {
-    setCurrentInputValue(value);
     setActiveSuggestionIndex(-1);
 
-    if (value.length < 2) {
+    if (value.length < 1) {
       setSuggestions([]);
       return;
     }
 
     const fetchSuggestions = async () => {
       try {
-        const res = await choseLocation(value);
+        const res = await getDadataSuggestions(
+          {
+            fiasId: props.fiasId,
+            location: value,
+          },
+          props.boundType as TDadataBound
+        );
         if (res) {
           setSuggestions(res);
         }
@@ -53,7 +67,14 @@ export const SuggestionsSelectInput = (props: TSuggestionsInputProps<TAddressSug
     void fetchSuggestions();
   };
 
-  const handleSelectSuggestion = (suggestion: TAddressSuggestion) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setLocalInputValue(value);
+    handleShowSuggestions(value);
+  };
+
+  const handleSelectSuggestion = (suggestion: TDadataResponse) => {
+    setLocalInputValue(null);
     props.onValueConfirm(suggestion);
     setSuggestions([]);
   };
@@ -69,15 +90,15 @@ export const SuggestionsSelectInput = (props: TSuggestionsInputProps<TAddressSug
     });
 
   return (
-    <div className={styles.cdekPickPointPicker}>
+    <div ref={containerRef} className={styles.suggestionsSelectInput}>
       <CustomInput
-        label={"Город"}
-        required
+        label={props.label}
+        required={props.required}
         id={props.id}
-        className={styles.cdekCity}
+        className={styles.locationSuggestion}
         placeholder={props.placeholder}
-        value={currentInputValue}
-        onChange={(e) => handleShowSuggestions(e.target.value)}
+        value={displayValue}
+        onChange={handleInputChange}
         onKeyDown={onKeydown}
       />
       {suggestions.length > 0 && (

@@ -52,7 +52,7 @@ export const OrderDeliveryOptions = ({
           );
         })}
       </div>
-      {String(currentDeliveryValue) === "1" && <OrderAddressDetails fieldsDisabled={false} />}
+      {String(currentDeliveryValue) === "1" && <OrderAddressDetails />}
       {String(currentDeliveryValue) === "2" && <CdekDelivery />}
       {String(currentDeliveryValue) === "3" && <OrderArtistPickupList />}
     </section>

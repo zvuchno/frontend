@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useGetCheckoutData } from "@/entities/order";
 
@@ -52,6 +52,20 @@ export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
     void fetchSuggestions();
   };
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setSuggestions([]);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleSelectSuggestion = (suggestion: TCdekCity) => {
     const cityName = suggestion.full_name;
     setCurrentInputValue(cityName);
@@ -70,7 +84,7 @@ export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
     });
 
   return (
-    <div className={styles.cdekPickPointPicker}>
+    <div ref={containerRef} className={styles.cdekPickPointPicker}>
       <CustomInput
         label={"Город"}
         required

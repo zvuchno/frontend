@@ -1,140 +1,128 @@
-import { useEffect, useState } from "react";
-import { type FieldError, useFormContext } from "react-hook-form";
+import { useCallback, useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
 
-import { CitySuggestionSelectInput, useCdekCalculate } from "@/features/CdekDelivery";
+import { useCdekCalculate } from "@/features/CdekDelivery";
 import { type TCdekCity } from "@/features/CdekDelivery";
 
 import { useGetCheckoutData, useSelectDeliveryTariff } from "@/entities/order";
+import { useCourierDeliveryAddressStore } from "@/entities/order/store/useCourierDeliveryAddress";
 
-import { CustomInput } from "@/shared/ui";
+import { getFiasIdByCityName } from "@/shared/api/getDadataLocation";
 
 import styles from "../OrderDetails.module.scss";
-import { fieldsConfig, orderAddressFormFields } from "../utils";
-import { orderPersonalFormRules } from "../validation";
+import { fieldsConfig } from "../utils";
+import { FormFieldSet } from "./FormFieldSet";
 
-export const OrderAddressDetails = ({ fieldsDisabled }: { fieldsDisabled: boolean }) => {
-  const {
-    register,
-    formState: { errors },
-    setValue,
-    unregister,
-    trigger,
-  } = useFormContext<FieldValues>();
-
-  const { data } = useGetCheckoutData();
-  const defaultCity = data?.user_defaults.city || "";
-  const defaultCityCode = data?.user_defaults.city_code || 0;
+export const OrderAddressDetails = () => {
+  const { register, setValue, unregister } = useFormContext<FieldValues>();
 
   const { mutate } = useCdekCalculate();
 
-  const [currentCity, setCurrentCity] = useState<TCdekCity | string>(defaultCity);
+  const { data } = useGetCheckoutData();
+
+  const setCourierAddress = useCourierDeliveryAddressStore((state) => state.setAddress);
+
+  const userDefault = data?.user_defaults;
+
+  useEffect(() => {
+    if (userDefault) {
+      setCourierAddress("city", userDefault.city);
+      setCourierAddress("cityCode", userDefault.city_code.toString());
+    }
+  }, [userDefault, setCourierAddress]);
+
+  const address = useCourierDeliveryAddressStore((state) => state.address);
+  const setCurrentAddress = useCourierDeliveryAddressStore((state) => state.setAddress);
+  const clearCurrentAddress = useCourierDeliveryAddressStore((state) => state.clearAddress);
 
   const { setDeliverySelected } = useSelectDeliveryTariff();
 
-  useEffect(() => {
-    register("city", fieldsConfig.city);
-    register("cdek_city_code", fieldsConfig.cdek_city_code);
-    register("tariffs");
-    const cityValue = currentCity instanceof Object ? currentCity.full_name : currentCity;
-    const cityCodeValue =
-      currentCity instanceof Object ? String(currentCity.code) : String(defaultCityCode);
-
-    setValue("city", cityValue, { shouldValidate: true });
-    setValue("cdek_city_code", cityCodeValue, { shouldValidate: true });
-
-    if (cityValue) {
-      void trigger(["city", "cdek_city_code"]);
-    }
-
-    if (cityCodeValue) {
+  const showDeliveryPrice = useCallback(
+    (value: number | string) => {
+      const valueToNumber = typeof value === "number" ? value : Number(value);
       mutate(
-        { city_code: Number(cityCodeValue), tariffs: "door" },
+        { city_code: valueToNumber, tariffs: "door" },
         {
           onSuccess: (data) => {
             setDeliverySelected({ price: data.delivery_sum });
           },
         }
       );
-    }
+    },
+    [mutate, setDeliverySelected]
+  );
+
+  const cityValue = address.city;
+  const cityCodeValue = address.cityCode;
+
+  useEffect(() => {
+    register("city", fieldsConfig.city);
+    register("street", fieldsConfig.street);
+    register("house", fieldsConfig.house);
+    register("apartment", fieldsConfig.apartment);
+    register("cdek_city_code", fieldsConfig.cdek_city_code);
+    register("tariffs");
 
     return () => {
-      unregister(["city", "cdek_city_code", "tariffs"]);
+      unregister(["city", "cdek_city_code", "tariffs", "street", "house", "apartment"]);
       setDeliverySelected({ price: 0 });
+      clearCurrentAddress();
     };
-  }, [
-    setValue,
-    currentCity,
-    trigger,
-    defaultCityCode,
-    mutate,
-    setDeliverySelected,
-    register,
-    unregister,
-  ]);
+  }, [clearCurrentAddress, register, setDeliverySelected, unregister]);
+
+  useEffect(() => {
+    setValue("city", cityValue, { shouldValidate: true });
+    setValue("cdek_city_code", cityCodeValue, { shouldValidate: true });
+
+    if (cityCodeValue) {
+      showDeliveryPrice(cityCodeValue);
+    }
+
+    if (cityValue) {
+      const fetchCityFias = async () => {
+        try {
+          const res = await getFiasIdByCityName(cityValue);
+          const suggestions = res?.suggestions;
+
+          if (suggestions && suggestions.length > 0) {
+            const data = suggestions[0].data;
+            const realFiasId = data.city_fias_id || data.fias_id || data.region_fias_id;
+            setCurrentAddress("cityId", realFiasId || "");
+          } else {
+            setCurrentAddress("cityId", cityValue);
+          }
+        } catch (error) {
+          console.error("Ошибка при резолве FIAS в useEffect:", error);
+        }
+      };
+
+      void fetchCityFias();
+    }
+  }, [setValue, showDeliveryPrice, cityValue, cityCodeValue, setCurrentAddress]);
 
   const onSetCityValue = (value: TCdekCity) => {
-    setCurrentCity(value);
-    mutate(
-      { city_code: value.code, tariffs: "door" },
-      {
-        onSuccess: (data) => {
-          setDeliverySelected({ price: data.delivery_sum });
-        },
-      }
-    );
+    setCurrentAddress("city", value.full_name);
+    setCurrentAddress("cityCode", value.code.toString());
+
+    setCurrentAddress("street", "");
+    setCurrentAddress("streetId", "");
+    setCurrentAddress("house", "");
+    setCurrentAddress("houseId", "");
+    setCurrentAddress("apartment", "");
+
+    showDeliveryPrice(value.code);
+  };
+
+  const handleCityConfirm = (value: TCdekCity) => {
+    void onSetCityValue(value);
   };
 
   return (
     <section className={styles.orderDetailsDeliveryAddress}>
       <h3 className={styles.title}>Адрес доставки</h3>
-      <div className={styles.orderDeliveryAddress}>
-        {orderAddressFormFields.map((field) => {
-          const fieldError = errors[field.name] as FieldError;
-          const isFieldDisabled = fieldsDisabled || false;
-
-          return (
-            <div className={`cell-${field.row}-${field.column}`} key={field.name}>
-              {field.name === "city" ? (
-                <CitySuggestionSelectInput
-                  onValueConfirm={onSetCityValue}
-                  id={`${field.row}.${field.column}`}
-                  type={field.type}
-                  label={field.title}
-                  placeholder={field.placeholder}
-                  error={!!fieldError}
-                  message={fieldError?.message}
-                  disabled={isFieldDisabled}
-                  aria-disabled={isFieldDisabled}
-                  required={field.required}
-                  aria-required={field.required}
-                  className={styles.orderFormField}
-                  value={currentCity instanceof Object ? currentCity.full_name : currentCity}
-                />
-              ) : (
-                <CustomInput
-                  {...register(field.name, orderPersonalFormRules(field))}
-                  id={`${field.row}.${field.column}`}
-                  type={field.type}
-                  label={field.title}
-                  placeholder={field.placeholder}
-                  style={{
-                    height: "40px",
-                  }}
-                  error={!!fieldError}
-                  message={fieldError?.message}
-                  disabled={isFieldDisabled}
-                  aria-disabled={isFieldDisabled}
-                  required={field.required}
-                  aria-required={field.required}
-                  className={styles.orderFormField}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <FormFieldSet onCityConfirm={handleCityConfirm} />
     </section>
   );
 };
