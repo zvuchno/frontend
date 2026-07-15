@@ -36,9 +36,10 @@ export type StoreOrder = {
   id: number;
   order_number: string;
   created_at: string;
-  status?: string;
+  status: string;
   items_count: number;
   total: string;
+  images: string[]
 };
 
 export type StoreOrderItem = {
@@ -53,27 +54,31 @@ export type StoreOrderItem = {
   line_total: string;
   comment?: string;
   image: string;
-  target_url: string;
+  target: TTarget;
 };
 
-export type StoreOrderDetail = StoreOrder & {
+export type StoreOrderDetail = {
+  id: number;
+  order_number: string;
+  created_at: string;
+  status: string;
   full_name: string;
   email: string;
   phone: string;
-  delivery?: string;
+  delivery: string;
   full_address: string;
   items: StoreOrderItem[];
   subtotal: string;
   delivery_price: string;
+  total: string;
 };
 
-export type FanProductCardData = {
+export type PurchasedReleases = {
   id: string | number;
+  name: string;
+  artist_name: string;
+  kind: string;
+  year: number;
   image: string;
-  title: string;
-  description: string;
-  price?: string | number | null;
-  favoriteId?: number;
-  targetUrl?: string;
-  downloadUrl?: string | null;
+  is_fully_available: boolean;
 };

@@ -29,3 +29,4 @@ export { SelectUI } from "./Select";
 export { TagUI } from "./Tag";
 export { Text, Title, Typography } from "./Typography";
 export { VerifyLoader } from "./VerifyLoader";
+export { Loader } from "./Loader";

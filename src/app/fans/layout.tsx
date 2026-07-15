@@ -26,10 +26,6 @@ const FansLayout = ({ children }: { children: React.ReactNode }) => {
       router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
       return;
     }
-
-    if (session?.user.isListener === false) {
-      router.replace("/artist/profile");
-    }
   }, [pathname, router, session?.user.isListener, status]);
 
   return (
