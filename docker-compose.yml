@@ -3,8 +3,8 @@ services:
     build:
       context: .
       args:
-        NEXT_PUBLIC_BASE_API_URL: "https://dev.zvuchno.space/api"
-        NEXTAUTH_URL: "http://localhost:3000"
+        NEXT_PUBLIC_BASE_API_URL: ${NEXT_PUBLIC_BASE_API_URL}
+        NEXTAUTH_URL: ${NEXTAUTH_URL}
         NEXT_PUBLIC_YANDEX_MAPS_API_KEY: ${NEXT_PUBLIC_YANDEX_MAPS_API_KEY}
         NEXT_PUBLIC_DADATA_API_KEY: ${NEXT_PUBLIC_DADATA_API_KEY}
         
@@ -22,6 +22,8 @@ services:
       - VK_SECRET=${VK_SECRET}
       - NEXT_PUBLIC_YANDEX_MAPS_API_KEY=${NEXT_PUBLIC_YANDEX_MAPS_API_KEY}
       - NEXT_PUBLIC_DADATA_API_KEY=${NEXT_PUBLIC_DADATA_API_KEY}
+      - NEXT_PUBLIC_BASE_API_URL=${NEXT_PUBLIC_BASE_API_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
 
     volumes:
       - next_image_cache:/app/.next/cache/images

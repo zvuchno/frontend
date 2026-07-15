@@ -1,41 +1,35 @@
 import type { NextConfig } from "next";
 
 function getApiImageRemotePattern() {
+  const apiBaseUrl = process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
+
+  if (!apiBaseUrl) return null;
+
   try {
-    const apiBaseUrl = process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
-    const apiUrl = new URL(apiBaseUrl ?? "https://dev.zvuchno.space/api");
+    const apiUrl = new URL(apiBaseUrl);
 
     return {
       protocol: apiUrl.protocol.replace(":", "") as "http" | "https",
       hostname: apiUrl.hostname,
-      port: apiUrl.port,
+      port: apiUrl.port || undefined,
       pathname: "/media/**",
     };
-  } catch {
-    return {
-      protocol: "https" as const,
-      hostname: "dev.zvuchno.space",
-      pathname: "/media/**",
-    };
+  } catch (error) {
+    console.log("ошибка парсинга BASE_API_URL:", error);
+    return null;
   }
 }
+
+const dynamicRemotePatterns = getApiImageRemotePattern();
 
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
     unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [
-      getApiImageRemotePattern(),
-      {
-        protocol: "http",
-        hostname: "dev.zvuchno.space",
-        pathname: "/media/**",
-      },
-      {
-        protocol: "https",
-        hostname: "dev.zvuchno.space",
-        pathname: "/media/**",
-      },
+      
+      ...(dynamicRemotePatterns ? [dynamicRemotePatterns] : []),
+
       {
         protocol: "https",
         hostname: "storage.yandexcloud.net",
