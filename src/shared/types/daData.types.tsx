@@ -39,7 +39,7 @@ export type TDadataRequest = {
 
 // response DaData (улица / дом / квартира)
 export type TDadataResponse = {
-  data: {
+  data?: {
     fias_id?: string;
   };
   value: string;

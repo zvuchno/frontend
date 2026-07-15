@@ -61,7 +61,6 @@ export const OrderAddressDetails = () => {
     register("city", fieldsConfig.city);
     register("street", fieldsConfig.street);
     register("house", fieldsConfig.house);
-    register("apartment", fieldsConfig.apartment);
     register("cdek_city_code", fieldsConfig.cdek_city_code);
     register("tariffs");
 
@@ -81,7 +80,7 @@ export const OrderAddressDetails = () => {
     }
 
     if (cityValue) {
-      const fetchCityFias = async () => {
+      const fetchCityFiasId = async () => {
         try {
           const res = await getFiasIdByCityName(cityValue);
           const suggestions = res?.suggestions;
@@ -98,7 +97,7 @@ export const OrderAddressDetails = () => {
         }
       };
 
-      void fetchCityFias();
+      void fetchCityFiasId();
     }
   }, [setValue, showDeliveryPrice, cityValue, cityCodeValue, setCurrentAddress]);
 
