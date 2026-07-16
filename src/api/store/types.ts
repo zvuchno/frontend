@@ -44,6 +44,7 @@ export type StoreOrder = {
 
 export type StoreOrderItem = {
   sku: string;
+  kind: string;
   name: string;
   property_name: string;
   property_value: string;

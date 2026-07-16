@@ -1,8 +1,6 @@
-import { requestStore } from "@/api/store/request";
 import type {
   PaginatedStoreResponse,
   PurchasedReleases,
-  StoreCatalogItem,
   StoreFavorite,
   StoreOrder,
   StoreOrderDetail,
