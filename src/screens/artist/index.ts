@@ -1,0 +1,1 @@
+export { OrdersPageArtist } from "./orders/OrdersPageArtist";

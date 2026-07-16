@@ -4,7 +4,7 @@
 }
 
 .container {
-  min-height: 866px;
+  //min-height: 866px;
   overflow: hidden;
   background-color: var(--color-bg-secondary);
 }
@@ -28,12 +28,16 @@
 .section {
   display: flex;
   align-items: flex-start;
-  gap: 196px;
+  gap: 4rem;
+  //gap: 196px;
 
   &__content {
-    flex: 0 1 810px;
-    width: min(100%, 810px);
-    min-width: 0;
+    flex: 1 1 auto;
+    inline-size: min(100%, 63.8125rem);
+    min-inline-size: 0;
+    max-height: none;
+    overflow: visible;
+    margin-inline: 0;
   }
 }
 

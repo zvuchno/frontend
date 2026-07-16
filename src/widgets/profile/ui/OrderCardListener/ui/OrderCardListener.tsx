@@ -165,7 +165,7 @@ export const OrderCardListener = ({
                       )}
                     </div>
                     <div className={styles.content}>
-                      <h4 className={styles.title}>{product.name}</h4>
+                      <h4 className={styles.title}>`${product.kind} ${product.name}`</h4>
                       {product.price_at_purchase !== undefined && product.price_at_purchase !== null ? (
                         <p className={styles.price}>{formatTotalPrice(Number(product.price_at_purchase))}</p>
                       ) : null}

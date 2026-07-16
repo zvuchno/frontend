@@ -1,15 +1,9 @@
-import { type ProductCardArtistData } from "@/features/order";
-
 export interface CardOrderArtistProps {
-  orderId: string;
+  orderId: number;
+  orderNumber: string;
   statusLabel: string;
-  address: string;
-  deliveryType: string;
-  recipientFIO: string;
-  message?: string;
   totalPrice: number;
   orderDate: Date;
-  products: ProductCardArtistData[];
-  onAccepted: () => void;
-  onRejected: () => void;
+  // onAccepted: () => void;
+  // onRejected: () => void;
 }

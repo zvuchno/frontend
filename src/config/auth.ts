@@ -115,8 +115,8 @@ export const authConfig: AuthOptions = {
 
           const user = await getCurrentUser(tokens.access);
           // Если пользователь не нажал "Запомнить меня"
-          // устанавливаем время, через которое разлогиним пользователя (12 ч)
-          const sessionExpires = credentials.rememberme ? null : Date.now() + 12 * 60 * 60 * 1000;
+          // устанавливаем время, через которое разлогиним пользователя (6 ч)
+          const sessionExpires = credentials.rememberme ? null : Date.now() + 6 * 60 * 60 * 1000;
           //получаем срок жизни access токена
           const decodedTokenExp = getTokenExp(tokens.access);
 
