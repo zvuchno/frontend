@@ -1,9 +1,12 @@
 "use client";
 
+import { useContext } from "react";
 import toast from "react-hot-toast";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+
+import { SelectedDeliveryContext } from "@/entities/order";
 
 import {
   addCartItem,
@@ -93,9 +96,19 @@ export function useRemoveCartItem() {
           (item) => item.product_variant !== variantId
         );
 
+        const updatedSubtotal = updatedItems.reduce((acc, item) => {
+          return acc + Number(item.base_line_total);
+        }, 0);
+
+        const updatedTotal = updatedItems.reduce((acc, item) => {
+          return acc + Number(item.discount_line_total);
+        }, 0);
+
         queryClient.setQueryData<TCart>([...cartQueryKeys.current(), isAuthorized], {
           ...previousCart,
           items: updatedItems,
+          total: updatedTotal.toString(),
+          subtotal: updatedSubtotal.toString(),
         });
       }
       return { previousCart };
