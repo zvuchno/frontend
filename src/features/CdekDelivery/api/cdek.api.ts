@@ -1,4 +1,6 @@
-import { getApiAccessToken } from "@/api/authToken";
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
+
+//import { getApiAccessToken } from "@/api/authToken";
 
 import type { TCdekData, TCdekPickupDetailsResponse } from "../model/types";
 
@@ -12,35 +14,41 @@ export type TCdekCity = {
 };
 
 // справочник населенных пунктов из справочника ПВЗ СДЕК (если есть ПВЗ)
-export async function getCdekCities(location: string): Promise<TCdekCity[]> {
-  const token = await getApiAccessToken();
+export async function getCdekCities(location: string, token?: string): Promise<TCdekCity[]> {
+  //const token = await getApiAccessToken();
 
-  const init: RequestInit = {
+  /*const init: RequestInit = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
     credentials: "include",
-  };
+  };*/
 
-  const response = await fetch(`${baseUrl}/v1/store/cdek-cities?query=${location}`, {
-    ...init,
-  });
+  const response = await authFetchClient<TCdekCity[]>(
+    `${baseUrl}/v1/store/cdek-cities?query=${location}`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+    token
+  );
 
-  if (!response.ok) {
+  if (!response) {
     throw new Error("Населенный пункт СДЕК не найден");
   }
-  return (await response.json()) as TCdekCity[];
+  return response;
 }
 
-// запрос расечта стоимости доставки в выбранный пвз
+// запрос рассчета стоимости доставки в выбранный пвз
 export async function calculateCdekDelivery(
-  cdekData: TCdekData
+  cdekData: TCdekData,
+  token?: string
 ): Promise<TCdekPickupDetailsResponse> {
-  const token = await getApiAccessToken();
+  //const token = await getApiAccessToken();
 
-  const init: RequestInit = {
+  /*const init: RequestInit = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48,14 +56,23 @@ export async function calculateCdekDelivery(
     },
     body: JSON.stringify(cdekData),
     credentials: "include",
-  };
+  };*/
 
-  const response = await fetch(`${baseUrl}/v1/store/cdek-calculate/`, {
-    ...init,
-  });
+  const response = await authFetchClient<TCdekPickupDetailsResponse>(
+    `${baseUrl}/v1/store/cdek-calculate/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cdekData),
+      credentials: "include",
+    },
+    token
+  );
 
-  if (!response.ok) {
+  if (!response) {
     throw new Error("Ошибка расчета стоимости доставки");
   }
-  return (await response.json()) as TCdekPickupDetailsResponse;
+  return response;
 }

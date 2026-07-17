@@ -61,8 +61,8 @@ export default function RootLayout({
   return (
     <html lang='ru'>
       <body className={`${featureMono.variable} ${betterVcr.variable}`}>
-        <QueryProvider>
-          <SessionProviders>
+        <SessionProviders>
+          <QueryProvider>
             <div className='global-noise' />
             <div className='app-shell'>
               <div className='app-container app-header-container'>
@@ -73,8 +73,8 @@ export default function RootLayout({
               </main>
               <Footer />
             </div>
-          </SessionProviders>
-        </QueryProvider>
+          </QueryProvider>
+        </SessionProviders>
 
         {/* вывод сообшений об ошибках от сервера либо кастомных в попап уведомлении для пользователя */}
         <Toaster

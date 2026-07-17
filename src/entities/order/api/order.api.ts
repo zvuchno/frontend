@@ -1,4 +1,6 @@
-import { getApiAccessToken } from "@/api/authToken";
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
+
+//import { getApiAccessToken } from "@/api/authToken";
 
 import type { TCheckoutData, TDeliveryOption, TOrder, TOrderResponse } from "../model/types";
 
@@ -18,28 +20,33 @@ export async function getDeliveryOptions(): Promise<TDeliveryOption[]> {
   return response.json() as Promise<TDeliveryOption[]>;
 }
 
-export async function getCheckoutData(): Promise<TCheckoutData> {
-  const token = await getApiAccessToken();
-  const init: RequestInit = {
+export async function getCheckoutData(token?: string): Promise<TCheckoutData> {
+  //const token = await getApiAccessToken();
+  /*const init: RequestInit = {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
     credentials: "include",
-  };
-  const response = await fetch(`${baseUrl}/v1/store/orders/checkout/`, {
-    ...init,
-  });
+  };*/
+  const response = await authFetchClient<TCheckoutData>(
+    `${baseUrl}/v1/store/orders/checkout/`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+    token
+  );
 
-  if (!response.ok) {
+  if (!response) {
     throw new Error("Ошибка получения данных заказа");
   }
-  return response.json() as Promise<TCheckoutData>;
+  return response;
 }
 
-export async function placeOrder(orderData: TOrder): Promise<TOrderResponse> {
-  const token = await getApiAccessToken();
-  const init: RequestInit = {
+export async function placeOrder(orderData: TOrder, token?: string): Promise<TOrderResponse> {
+  //const token = await getApiAccessToken();
+  /*const init: RequestInit = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -47,14 +54,23 @@ export async function placeOrder(orderData: TOrder): Promise<TOrderResponse> {
     },
     body: JSON.stringify(orderData),
     credentials: "include",
-  };
+  };*/
 
-  const response = await fetch(`${baseUrl}/v1/store/orders/checkout/`, {
-    ...init,
-  });
+  const response = await authFetchClient<TOrderResponse>(
+    `${baseUrl}/v1/store/orders/checkout/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderData),
+      credentials: "include",
+    },
+    token
+  );
 
-  if (!response.ok) {
+  if (!response) {
     throw new Error("Ошибка создания заказа");
   }
-  return (await response.json()) as TOrderResponse;
+  return response;
 }

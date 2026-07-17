@@ -1,37 +1,37 @@
-import { checkAccessToken } from "@/api/authToken";
-import { createAuthHeaders } from "@/api/store/request";
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
+
+//import { createAuthHeaders } from "@/api/store/request";
 
 import type { TCart, TCartItem, UpdateCartPayload } from "../model/types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 const CART_PATH = "/v1/store/cart";
 
-export async function getCart(): Promise<TCart> {
-  const token = await checkAccessToken();
-  try {
-    const init: RequestInit = { method: "GET" };
+export async function getCart(token?: string): Promise<TCart> {
+  //try {
+  //const init: RequestInit = { method: "GET" };
 
-    const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
+  //const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
-    const response = await fetch(`${baseUrl}${CART_PATH}/me/`, {
-      ...init,
-      headers: headers,
-      credentials: "include",
-    });
+  const response = await authFetchClient<TCart>(
+    `${baseUrl}${CART_PATH}/me/`,
+    { method: "GET", credentials: "include" },
 
-    if (!response.ok) {
-      throw new Error(`Статус сервера: ${response.status}`);
-    }
-    return response.json() as Promise<TCart>;
-  } catch (error) {
+    token
+  );
+
+  if (!response) {
+    throw new Error("Корзина пуста или не найдена");
+  }
+  return response;
+  /*} catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     throw new Error(`Ошибка получения корзины: ${errorMessage}`);
-  }
+  }*/
 }
 
-export async function addCartItem(payload: TCartItem): Promise<TCart> {
-  const token = await checkAccessToken();
-  const init: RequestInit = {
+export async function addCartItem(payload: TCartItem, token?: string): Promise<TCart> {
+  /*const init: RequestInit = {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
@@ -41,22 +41,30 @@ export async function addCartItem(payload: TCartItem): Promise<TCart> {
   };
 
   const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
+*/
+  const response = await authFetchClient<TCart>(
+    `${baseUrl}${CART_PATH}/me/add/`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    },
+    token
+  );
 
-  const response = await fetch(`${baseUrl}${CART_PATH}/me/add/`, {
-    ...init,
-    headers: headers,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Ошибка добавления товара в корзину: ${response.status}`);
+  if (!response) {
+    throw new Error(`Ошибка добавления товара в корзину`);
   }
 
-  return response.json() as Promise<TCart>;
+  return response;
 }
 
-export async function updateCart(payload: UpdateCartPayload): Promise<TCart> {
-  const token = await checkAccessToken();
-  const init: RequestInit = {
+export async function updateCart(payload: UpdateCartPayload, token?: string): Promise<TCart> {
+  //const token = await checkAccessToken();
+  /*const init: RequestInit = {
     method: "PATCH",
     body: JSON.stringify(payload),
     headers: {
@@ -66,41 +74,52 @@ export async function updateCart(payload: UpdateCartPayload): Promise<TCart> {
   };
 
   const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
+*/
+  const response = await authFetchClient<TCart>(
+    `${baseUrl}${CART_PATH}/me/`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    },
+    token
+  );
 
-  const response = await fetch(`${baseUrl}${CART_PATH}/me/`, {
-    ...init,
-    headers: headers,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Ошибка обновления корзины: ${response.status}`);
+  if (!response) {
+    throw new Error(`Ошибка обновления корзины`);
   }
 
-  return response.json() as Promise<TCart>;
+  return response;
 }
 
-export async function removeCartItem(variantId: number): Promise<void> {
-  const token = await checkAccessToken();
-  const init: RequestInit = { method: "DELETE" };
+export async function removeCartItem(variantId: number, token?: string): Promise<void> {
+  //const token = await checkAccessToken();
+  //const init: RequestInit = { method: "DELETE" };
 
-  const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
+  //const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
-  const response = await fetch(`${baseUrl}${CART_PATH}/me/remove/${variantId}`, {
-    ...init,
-    headers: headers,
-    credentials: "include",
-  });
+  const response = await authFetchClient(
+    `${baseUrl}${CART_PATH}/me/remove/${variantId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    },
+    token
+  );
 
-  if (!response.ok) {
-    throw new Error(`Ошибка удаления товара из корзины: ${response.status}`);
+  if (!response) {
+    throw new Error(`Ошибка удаления товара из корзины`);
   }
 
   return;
 }
 
-export async function applyCartPromoCode(promo: string): Promise<TCart> {
-  const token = await checkAccessToken();
-  const init: RequestInit = {
+export async function applyCartPromoCode(promo: string, token?: string): Promise<TCart> {
+  //const token = await checkAccessToken();
+  /*const init: RequestInit = {
     method: "POST",
     body: JSON.stringify({ code: promo }),
     headers: {
@@ -110,42 +129,45 @@ export async function applyCartPromoCode(promo: string): Promise<TCart> {
   };
 
   const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
+*/
+  const response = await authFetchClient<TCart>(
+    `${baseUrl}${CART_PATH}/apply-promocode/`,
+    {
+      method: "POST",
+      body: JSON.stringify({ code: promo }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    },
+    token
+  );
 
-  const response = await fetch(`${baseUrl}${CART_PATH}/apply-promocode/`, {
-    ...init,
-    headers: headers,
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    const errorData = (await response.json()) as Error;
-
-    if (errorData && typeof errorData === "object") {
-      throw new Error(
-        errorData.message || `Ошибка ${response.status}: Не удалось применить промокод`
-      );
-    }
-    throw new Error(`Ошибка ${response.status}: Не удалось применить промокод`);
+  if (!response) {
+    throw new Error("Ошибка: Не удалось применить промокод");
   }
 
-  return (await response.json()) as Promise<TCart>;
+  return response;
 }
 
-export async function removeCartPromoCode(): Promise<TCart> {
-  const token = await checkAccessToken();
-  const init: RequestInit = { method: "POST" };
+export async function removeCartPromoCode(token?: string): Promise<TCart> {
+  //const token = await checkAccessToken();
+  //const init: RequestInit = { method: "POST" };
 
-  const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
+  //const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
-  const response = await fetch(`${baseUrl}${CART_PATH}/remove-promocode/`, {
-    ...init,
-    headers: headers,
-    credentials: "include",
-  });
+  const response = await authFetchClient<TCart>(
+    `${baseUrl}${CART_PATH}/remove-promocode/`,
+    {
+      method: "POST",
+      credentials: "include",
+    },
+    token
+  );
 
-  if (!response.ok) {
-    throw new Error(`Ошибка удаления промокода: ${response.status}`);
+  if (!response) {
+    throw new Error(`Ошибка удаления промокода`);
   }
 
-  return response.json() as Promise<TCart>;
+  return response;
 }

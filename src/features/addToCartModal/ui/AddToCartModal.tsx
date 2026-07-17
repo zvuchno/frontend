@@ -75,12 +75,7 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
         <div className={s.content}>
           {data.image ? (
             <div className={s.imgWrapper}>
-              <Image
-                className={s.img}
-                src={data.image}
-                fill
-                alt={data.name}
-              />
+              <Image className={s.img} src={data.image} fill alt={data.name} />
             </div>
           ) : (
             <div className={s.noPhoto}>Нет изображения</div>

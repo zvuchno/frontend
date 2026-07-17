@@ -13,11 +13,11 @@ import { ProductsCart } from "./components/ProductsCart/ProductsCart";
 
 export const CartPage = () => {
   const isAuth = useUserStore((state) => state.isUserAuthorized);
-  const session = useSession();
-  const accessToken = session.data?.user.accessToken;
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
 
   const { data: cart, isLoading } = useCart({
-    enabled: isAuth !== undefined && (isAuth ? !!accessToken : true),
+    enabled: isAuth !== undefined && (isAuth ? !!token : true),
   });
   const items = cart?.items;
 
