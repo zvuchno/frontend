@@ -101,18 +101,14 @@ export async function removeCartItem(variantId: number, token?: string): Promise
 
   //const headers = token ? createAuthHeaders(token, init.headers) : init.headers || {};
 
-  const response = await authFetchClient(
-    `${baseUrl}${CART_PATH}/me/remove/${variantId}`,
+  await authFetchClient(
+    `${baseUrl}${CART_PATH}/me/remove/${variantId}/`,
     {
       method: "DELETE",
       credentials: "include",
     },
     token
   );
-
-  if (!response) {
-    throw new Error(`Ошибка удаления товара из корзины`);
-  }
 
   return;
 }
