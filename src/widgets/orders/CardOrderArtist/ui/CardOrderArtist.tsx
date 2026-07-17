@@ -1,3 +1,5 @@
+"use client";
+
 import { type KeyboardEvent, useState } from "react";
 
 import clsx from "clsx";
@@ -11,6 +13,7 @@ import { type TArtistOrderDetails } from "@/api/artist/ordersApi/types";
 import { getArtistOrderDetails } from "@/api/artist/ordersApi/getArtistOrders";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -37,6 +40,9 @@ export const CardOrderArtist = ({
   // onAccepted,
   // onRejected,
 }: CardOrderArtistProps) => {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [details, setDetails] = useState<TArtistOrderDetails | null>(null);
   const [loading, setLoading] = useState(false);
@@ -54,7 +60,7 @@ export const CardOrderArtist = ({
 
     if (!details) {
       try {
-        const data = await getArtistOrderDetails(orderId);
+        const data = await getArtistOrderDetails(orderId, token);
         setDetails(data);
       } catch (error) {
         setError(error instanceof Error ? error.message : 'Ошибка загрузки');

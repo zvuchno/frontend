@@ -24,7 +24,7 @@ export const DownloadReleaseModal = ({
   data,
   onClose,
 }: DownloadReleaseModalProps) => {
-  const { status, data: session } = useSession();
+  const { data: session } = useSession();
   const token = session?.user.accessToken;
   const [downloading, setDownloading] = useState<Record<string, boolean>>({});
 

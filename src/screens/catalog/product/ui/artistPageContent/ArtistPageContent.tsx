@@ -11,9 +11,9 @@ import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection } from "@/shared/ui";
-import { useUserStore } from "@/entities/user";
 import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
+import { useSession } from "next-auth/react";
 
 interface IArtistPageContentProps {
   artist: TDetalArtist;
@@ -21,13 +21,15 @@ interface IArtistPageContentProps {
 
 const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const { addProduct } = useRecentlyViewed();
-  const user = useUserStore((state) => state.user);
-  const isAuth = !!user?.id;
+  const { status, data: session } = useSession();
+  const isAuth = status === 'authenticated';
+  const token = session?.user.accessToken;
 
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
     queryFn: () =>
       getCatalogListClient({
+        token,
         type: "album",
         artist: artist.slug,
         ordering: "random",
@@ -40,6 +42,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
     queryKey: ["recom", "merch", artist.slug],
     queryFn: () =>
       getCatalogListClient({
+        token,
         type: "merch",
         artist: artist.slug,
         ordering: "random",
@@ -86,7 +89,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                     isLiked={item.is_favorite} 
                     isAuth={isAuth}
                     onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                      handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
                     }}
                   />
                 }
@@ -127,7 +130,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                     isLiked={item.is_favorite} 
                     isAuth={isAuth}
                     onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                      handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
                     }}
                   />
                 }

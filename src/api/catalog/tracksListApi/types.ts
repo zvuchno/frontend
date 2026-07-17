@@ -34,4 +34,5 @@ export type TracksListResponse = {
 
 export type TrackListRequest = {
   albumId: number;
+  token?: string;
 }

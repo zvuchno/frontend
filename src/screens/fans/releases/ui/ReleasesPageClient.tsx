@@ -37,10 +37,10 @@ export function ReleasesPageClient() {
     Error,
     InfiniteData<PaginatedStoreResponse<PurchasedReleases>>
   >({
-    queryKey: ["listener", "favorites"],
+    queryKey: ["listener", "releases"],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
-      if (url) return getPurchasedReleases(url, token);
+      if (url) return getPurchasedReleases(token, url);
       return getPurchasedReleases(token);
     },
     initialPageParam: '',

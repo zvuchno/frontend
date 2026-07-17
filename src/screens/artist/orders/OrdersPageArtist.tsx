@@ -13,7 +13,8 @@ import { ORDER_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
 import { getRelativeDateLabel } from "@/shared/utils/getRelativeDateLabel";
 
 export function OrdersPageArtist() {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
+  const token = session?.user.accessToken;
 
   const {
     data,
@@ -30,8 +31,8 @@ export function OrdersPageArtist() {
     queryKey: ["orders", "artist"],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
-      if (url) return getArtistOrders(url);
-      return getArtistOrders();
+      if (url) return getArtistOrders(token, url);
+      return getArtistOrders(token);
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,

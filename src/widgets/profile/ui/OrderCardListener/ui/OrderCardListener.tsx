@@ -8,6 +8,7 @@ import type { TOrderCardListenerProps } from "../model/types";
 import { type KeyboardEvent, useState } from "react";
 import { getOrderDetail, type StoreOrderDetail } from "@/api/store";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -33,6 +34,9 @@ export const OrderCardListener = ({
   orderDate,
   images,
 }: TOrderCardListenerProps) => {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [details, setDetails] = useState<StoreOrderDetail | null>(null);
   const [loading, setLoading] = useState(false);
@@ -50,7 +54,7 @@ export const OrderCardListener = ({
 
     if (!details) {
       try {
-        const data = await getOrderDetail(orderId);
+        const data = await getOrderDetail(orderId, token);
         setDetails(data);
       } catch (error) {
         setError(error instanceof Error ? error.message : 'Ошибка загрузки');
