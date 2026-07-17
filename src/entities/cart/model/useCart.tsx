@@ -3,6 +3,7 @@
 import toast from "react-hot-toast";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 import {
   addCartItem,
@@ -25,21 +26,29 @@ export const cartQueryKeys = {
 };
 
 export function useCart(options?: UseCartOptions) {
+  const { data: session, status } = useSession();
+  const token = session?.user.accessToken;
+  const isSessionLoading = status === "loading";
+  const isAuthorized = !!token;
 
   return useQuery<TCart>({
-    queryKey: [...cartQueryKeys.current()],
-    queryFn: () => getCart(),
+    queryKey: [...cartQueryKeys.current(), isAuthorized],
+    queryFn: getCart.bind(null, token),
     ...options,
+    enabled: options?.enabled !== false && !isSessionLoading,
   });
 }
 
 export function useAddCartItem() {
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const isAuthorized = !!token;
 
   return useMutation<TCart, Error, TCartItem>({
-    mutationFn: (item: TCartItem) => addCartItem(item),
+    mutationFn: (item: TCartItem) => addCartItem(item, token),
     onSuccess: (newCart) => {
-      queryClient.setQueryData(cartQueryKeys.current(), newCart);
+      queryClient.setQueryData([...cartQueryKeys.current(), isAuthorized], newCart);
       toast.success("Товар добавлен в корзину");
     },
     onError: (error) => {
@@ -50,11 +59,14 @@ export function useAddCartItem() {
 
 export function useUpdateCart() {
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const isAuthorized = !!token;
 
   return useMutation<TCart, Error, Partial<TCartItem>>({
-    mutationFn: (item) => updateCart({ items: [item] }),
+    mutationFn: (item) => updateCart({ items: [item] }, token),
     onSuccess: (newCart) => {
-      queryClient.setQueryData(cartQueryKeys.current(), newCart);
+      queryClient.setQueryData([...cartQueryKeys.current(), isAuthorized], newCart);
       toast.success("Количество товара в корзине изменено");
     },
   });
@@ -62,20 +74,26 @@ export function useUpdateCart() {
 
 export function useRemoveCartItem() {
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const isAuthorized = !!token;
 
   return useMutation<void, Error, number, { previousCart: TCart | undefined }>({
-    mutationFn: (variantId: number) => removeCartItem(variantId),
+    mutationFn: (variantId: number) => removeCartItem(variantId, token),
     onMutate: async (variantId) => {
-      await queryClient.cancelQueries({ queryKey: cartQueryKeys.current() });
+      await queryClient.cancelQueries({ queryKey: [...cartQueryKeys.current(), isAuthorized] });
 
-      const previousCart = queryClient.getQueryData<TCart>(cartQueryKeys.current());
+      const previousCart = queryClient.getQueryData<TCart>([
+        ...cartQueryKeys.current(),
+        isAuthorized,
+      ]);
 
       if (previousCart) {
         const updatedItems = previousCart.items.filter(
           (item) => item.product_variant !== variantId
         );
 
-        queryClient.setQueryData<TCart>(cartQueryKeys.current(), {
+        queryClient.setQueryData<TCart>([...cartQueryKeys.current(), isAuthorized], {
           ...previousCart,
           items: updatedItems,
         });
@@ -83,12 +101,12 @@ export function useRemoveCartItem() {
       return { previousCart };
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: cartQueryKeys.current() });
+      void queryClient.invalidateQueries({ queryKey: [...cartQueryKeys.current(), isAuthorized] });
       toast.success("Товар удален из корзины");
     },
     onError: (err, variantId, context) => {
       if (context?.previousCart) {
-        queryClient.setQueryData(cartQueryKeys.current(), context.previousCart);
+        queryClient.setQueryData([...cartQueryKeys.current(), isAuthorized], context.previousCart);
       }
       toast.error("Не удалось удалить товар");
     },
@@ -97,11 +115,14 @@ export function useRemoveCartItem() {
 
 export function useApplyCartPromoCode() {
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const isAuthorized = !!token;
 
   return useMutation({
-    mutationFn: (code: string) => applyCartPromoCode(code),
+    mutationFn: (code: string) => applyCartPromoCode(code, token),
     onSuccess: (newCart) => {
-      queryClient.setQueryData(cartQueryKeys.current(), newCart);
+      queryClient.setQueryData([...cartQueryKeys.current(), isAuthorized], newCart);
 
       toast.success("Промокод успешно применен");
     },
@@ -113,11 +134,14 @@ export function useApplyCartPromoCode() {
 
 export function useRemoveCartPromoCode() {
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const isAuthorized = !!token;
 
   return useMutation({
-    mutationFn: () => removeCartPromoCode(),
+    mutationFn: () => removeCartPromoCode(token),
     onSuccess: (newCart) => {
-      queryClient.setQueryData(cartQueryKeys.current(), newCart);
+      queryClient.setQueryData([...cartQueryKeys.current(), isAuthorized], newCart);
 
       toast.success("Промокод удален");
     },

@@ -4,11 +4,11 @@ import { getSession, signOut } from "next-auth/react";
 export class RateLimitError extends Error {
   retryAfterMs: number;
   constructor(retryAfterMs: number) {
-    super('Rate limit exceeded');
+    super("Rate limit exceeded");
     this.retryAfterMs = retryAfterMs;
-    this.name = 'RateLimitError';
+    this.name = "RateLimitError";
   }
-};
+}
 
 // Парсинг Retry-After: число (секунды) или HTTP-дата
 const parseRetryAfter = (header: string | null): number => {
@@ -28,18 +28,18 @@ const parseRetryAfter = (header: string | null): number => {
 export const authFetchClient = async <T>(
   input: RequestInfo,
   init?: RequestInit,
+  token?: string
 ): Promise<T | null> => {
-
-  const session = await getSession();
-  const accessToken = session?.user.accessToken;
+  //const session = await getSession();
+  //const accessToken = session?.user.accessToken;
 
   const headers: HeadersInit = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(init?.headers as Record<string, string>),
   };
 
-  if (accessToken) {
-    headers['Authorization'] = `Bearer ${accessToken}`;
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const res = await fetch(input, { ...init, headers });
@@ -49,9 +49,9 @@ export const authFetchClient = async <T>(
     await signOut();
   }
 
-  // Обработка 429 — с учётом Retry-After 
+  // Обработка 429 — с учётом Retry-After
   if (res.status === 429) {
-    const retryAfterMs = parseRetryAfter(res.headers.get('retry-after'));
+    const retryAfterMs = parseRetryAfter(res.headers.get("retry-after"));
 
     // использовать для перезапроса
     // или информирования пользователя о том, что слишком много запросов
@@ -62,7 +62,7 @@ export const authFetchClient = async <T>(
     return null;
   }
 
-  const data = await res.json()
+  const data = await res.json();
 
   if (!res.ok) {
     throw new Error(
@@ -78,4 +78,3 @@ export const authFetchClient = async <T>(
 
   return data as T;
 };
-
