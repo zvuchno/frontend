@@ -4,6 +4,7 @@ import { type TCatalogListRequest, type TCatalogListResponse } from "./types";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export async function getCatalogListClient({
+  token,
   type,
   genre,
   kind,
@@ -55,7 +56,9 @@ export async function getCatalogListClient({
   try {
     const data = await authFetchClient<TCatalogListResponse>(url, {
       method: "GET",
-    });
+    },
+      token
+    );
 
     return data;
   } catch(error) {

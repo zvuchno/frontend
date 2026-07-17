@@ -19,7 +19,8 @@ import { RateLimitError } from "@/api/authFetchFromClient/authFetchClient";
 import { Loader } from "@/shared/ui";
 
 export function FavoritesPageClient() {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
+  const token = session?.user.accessToken;
   const [deletingFavoriteId, setDeletingFavoriteId] = useState<number | null>(null);
   const queryClient = useQueryClient();
 
@@ -38,8 +39,8 @@ export function FavoritesPageClient() {
     queryKey: ["listener", "favorites"],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
-      if (url) return getFavoriteProducts(url);
-      return getFavoriteProducts();
+      if (url) return getFavoriteProducts(token, url);
+      return getFavoriteProducts(token);
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,

@@ -24,6 +24,7 @@ import {
 import { useUserStore } from "@/entities/user";
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
+import { useSession } from "next-auth/react";
 
 const ProductsList = ({ products, link }: ProductsListProps) => {
   const [allProducts, setAllProducts] = useState<TCatalogCard[] | TArtistCard[] | []>(products);
@@ -31,8 +32,9 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const user = useUserStore((state) => state.user);
-  const isAuth = !!user?.id;
+  const {status, data: session} = useSession();
+  const isAuth = status === 'authenticated';
+  const token = session?.user.accessToken;
 
   useEffect(() => {
     setAllProducts(products);
@@ -47,7 +49,7 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
     try {
       const data = await authFetchClient<ProductsListResponse>(url, {
         method: 'GET'
-      });
+      }, token);
 
       if (!data) throw new Error("Ошибка получения карточек каталога");
 
@@ -110,7 +112,7 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                         isLiked={product.is_favorite} 
                         isAuth={isAuth}
                         onToggle={(isLiked) => {
-                          handleToggleFavorites(isLiked, product.favorite_variant_id).catch(console.error)
+                          handleToggleFavorites(isLiked, product.favorite_variant_id, token).catch(console.error)
                         }}
                       />
                     }

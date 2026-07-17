@@ -3,9 +3,11 @@ import type { TAddToFavoriteRequest, TAddToFavoriteResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
-export const addToFavorites = async (payload: TAddToFavoriteRequest) => {
+export const addToFavorites = async (payload: TAddToFavoriteRequest, token?: string) => {
   return await authFetchClient<TAddToFavoriteResponse>(`${baseUrl}/v1/store/me/favorites/`, {
     method: 'POST',
     body: JSON.stringify(payload),
-  })
+  },
+    token
+  )
 };

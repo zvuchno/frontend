@@ -65,10 +65,10 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    if (status === "unauthenticated") {
-      router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
-      return;
-    }
+    // if (status === "unauthenticated") {
+    //   router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
+    //   return;
+    // }
 
   }, [pathname, router, session?.user.isListener, status]);
 

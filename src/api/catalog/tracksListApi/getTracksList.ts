@@ -5,6 +5,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export async function getTracksList({
   albumId,
+  token
 }: TrackListRequest) {
 
   const url = `${baseUrl}/v1/store/player/albums/${albumId}`;
@@ -12,7 +13,9 @@ export async function getTracksList({
   try {
     const data = await authFetchClient<TracksListResponse>(url, {
       method: "GET",
-    })
+    },
+      token
+    )
 
     return data;
   } catch (error) {

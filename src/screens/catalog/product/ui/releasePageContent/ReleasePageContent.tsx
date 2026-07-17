@@ -17,8 +17,8 @@ import { Title } from "@/shared/ui";
 import { Track } from "@/shared/ui/Track";
 
 import s from "./ReleasePageContent.module.scss";
-import { useUserStore } from "@/entities/user";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
+import { useSession } from "next-auth/react";
 
 interface ReleasePageContentProps {
   release: TDetailRelease;
@@ -30,14 +30,16 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataForModal, setDataForModl] = useState<TDataForModal | null>(null);
 
-  const user = useUserStore((state) => state.user);
-  const isAuth = !!user?.id;
+  const { status, data: session } = useSession();
+  const isAuth = status === 'authenticated';
+  const token = session?.user.accessToken;
 
   const tracksQuery = useQuery({
     queryKey: ["tracks", release.id],
     queryFn: () =>
       getTracksList({
         albumId: release.id,
+        token,
       }),
     refetchOnWindowFocus: false,
   });
@@ -103,7 +105,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
                     
                   }
                   onLikeClick={(value) => {
-                    handleToggleFavorites(value, variant_id!).catch(console.error)
+                    handleToggleFavorites(value, variant_id!, token).catch(console.error)
                   }}
                 />
               );

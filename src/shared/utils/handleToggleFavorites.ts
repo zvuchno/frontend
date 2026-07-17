@@ -3,12 +3,12 @@ import { addToFavorites } from "@/api/catalog/favoritesApi/addToFavorites";
 import { deleteFromFavorites } from "@/api/catalog/favoritesApi/deleteFromFavorites";
 import toast from "react-hot-toast";
 
-export const handleToggleFavorites = async (isLiked: boolean, id: number) => {
+export const handleToggleFavorites = async (isLiked: boolean, id: number, token?: string) => {
   if (isLiked) {
       try {
         await addToFavorites({
           product_variant: id,
-        })
+        }, token)
         toast.success('Добавлено в избранное')
       } catch(error) {
         if (error instanceof RateLimitError) {
@@ -23,7 +23,7 @@ export const handleToggleFavorites = async (isLiked: boolean, id: number) => {
       try {
         await deleteFromFavorites({
           product_variant: id,
-        })
+        }, token)
         toast.success('Удалено из избранного')
       } catch(error) {
         if (error instanceof RateLimitError) {

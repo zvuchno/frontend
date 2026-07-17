@@ -12,7 +12,8 @@ import { Loader } from "@/shared/ui";
 import { ORDER_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
 
 export function OrdersPageClient() {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
+  const token = session?.user.accessToken;
 
   const {
     data,
@@ -29,8 +30,8 @@ export function OrdersPageClient() {
     queryKey: ["orders", "listener"],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
-      if (url) return getOrders(url);
-      return getOrders();
+      if (url) return getOrders(token, url);
+      return getOrders(token);
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,

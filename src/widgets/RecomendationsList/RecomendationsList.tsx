@@ -14,10 +14,12 @@ import { ListSection } from "@/shared/ui";
 import { useUserStore } from "@/entities/user";
 import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
+import { useSession } from "next-auth/react";
 
 export const RecomendationsList = () => {
-  const user = useUserStore((state) => state.user);
-  const isAuth = !!user?.id;
+  const { status, data: session } = useSession();
+  const isAuth = status === 'authenticated';
+  const token = session?.user.accessToken;
 
   const { viewedProducts, addProduct } = useRecentlyViewed();
 
@@ -31,6 +33,7 @@ export const RecomendationsList = () => {
     queryKey: ["recom", "album", limitToShow],
     queryFn: () =>
       getCatalogListClient({
+        token,
         type: "album",
         ordering: "random",
         limit: limitToShow,
@@ -74,7 +77,7 @@ export const RecomendationsList = () => {
                   isLiked={item.is_favorite} 
                   isAuth={isAuth}
                   onToggle={(isLiked) => {
-                    handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                    handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
                   }}
                 />
               }

@@ -161,10 +161,10 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
   });
 };
 
-export const resendEmailForVerify = async (): Promise<void> => {
+export const resendEmailForVerify = async (token?: string): Promise<void> => {
   await authFetchClient<void>('/v1/auth/account/me/resend-email', {
     method: 'POST',
-  });
+  }, token);
 };
 
 export const resetPassword = async (data: TResetPasswordRequest): Promise<void> => {

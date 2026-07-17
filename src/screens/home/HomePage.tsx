@@ -17,10 +17,10 @@ import { mockBlogs, questions } from "@/shared/constants";
 import { ListSection } from "@/shared/ui";
 
 import styles from "./HomePage.module.scss";
-import { useUserStore } from "@/entities/user";
 import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
 import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
+import { useSession } from "next-auth/react";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -31,8 +31,9 @@ interface HomePageProps {
 export function HomePage({ artists, albums, merch }: HomePageProps) {
   const { addProduct } = useRecentlyViewed();
 
-  const user = useUserStore((state) => state.user);
-  const isAuth = !!user?.id;
+  const { status, data: session } = useSession();
+  const isAuth = status === 'authenticated';
+  const token = session?.user.accessToken;
 
   return (
     <div className={styles.page}>
@@ -71,7 +72,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                   <ButtonLike 
                     isLiked={item.is_favorite} 
                     onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                      handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
                     }}
                     isAuth={isAuth}
                   />
@@ -107,7 +108,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                   <ButtonLike 
                     isLiked={item.is_favorite} 
                     onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error)
+                      handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
                     }}
                     isAuth={isAuth}
                   />
