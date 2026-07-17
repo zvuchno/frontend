@@ -46,7 +46,10 @@ export const authFetchClient = async <T>(
 
   //Обработка 401
   if (res.status === 401) {
-    await signOut();
+    await signOut({
+      redirect: true,
+        callbackUrl: "/",
+    });
   }
 
   // Обработка 429 — с учётом Retry-After
