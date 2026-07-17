@@ -13,3 +13,10 @@ export const ORDER_STATUS_TRANSLATIONS: Record<string, string> = {
   completed: 'Завершен',
   canceled: 'Отменен',
 };
+
+export const RELEASE_STATUS_TRANSLATIONS: Record<string, string> = {
+  pending: 'Ожидает сборки',
+  building: 'Собирается',
+  ready: 'Готов',
+  failed: 'Ошибка',
+}
