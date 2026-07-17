@@ -115,7 +115,7 @@ export async function getOrderDetail(orderId: string | number): Promise<StoreOrd
   return data;
 }
 
-export async function getPurchasedReleases(url?: string): Promise<PaginatedStoreResponse<PurchasedReleases>> {
+export async function getPurchasedReleases(token: string | undefined, url?: string): Promise<PaginatedStoreResponse<PurchasedReleases>> {
   const mainUrl = `${baseUrl}/v1/store/me/purchased-music?limit=6`;
   const currentUrl = url ? url : mainUrl;
   const data = await authFetchClient<PaginatedStoreResponse<PurchasedReleases>>(currentUrl, {
@@ -129,7 +129,7 @@ export async function getPurchasedReleases(url?: string): Promise<PaginatedStore
   return data;
 };
 
-export async function getDownloadOptions(albumId: number): Promise<PurchasedReleaseDownloadOptions> {
+export async function getDownloadOptions(albumId: number, token: string | undefined): Promise<PurchasedReleaseDownloadOptions> {
   const url = `${baseUrl}/v1/store/me/purchased-music/${albumId}`
   const data = await authFetchClient<PurchasedReleaseDownloadOptions>(url, {
     method: "GET",
@@ -142,7 +142,7 @@ export async function getDownloadOptions(albumId: number): Promise<PurchasedRele
   return data;
 };
 
-export async function getDownloadData(url: string): Promise<PurchasedReleaseDownloadData> {
+export async function getDownloadData(url: string, token: string | undefined): Promise<PurchasedReleaseDownloadData> {
   const data = await authFetchClient<PurchasedReleaseDownloadData>(url, {
     method: "POST",
   });

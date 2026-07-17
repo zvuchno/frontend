@@ -16,7 +16,8 @@ import { DownloadReleaseModal } from "../components/DownloadReleaseModal/Downloa
 import { useState } from "react";
 
 export function ReleasesPageClient() {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
+  const token = session?.user.accessToken;
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // Состояние для данных скачивания
@@ -39,8 +40,8 @@ export function ReleasesPageClient() {
     queryKey: ["listener", "favorites"],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
-      if (url) return getPurchasedReleases(url);
-      return getPurchasedReleases();
+      if (url) return getPurchasedReleases(url, token);
+      return getPurchasedReleases(token);
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,
@@ -57,7 +58,7 @@ export function ReleasesPageClient() {
     setDownloadData(null); 
 
     try {
-      const data = await getDownloadOptions(albumId);
+      const data = await getDownloadOptions(albumId, token);
       setDownloadData(data);
     } catch (err) {
       setErrorDownload(err instanceof Error ? err.message : 'Не удалось получить варианты скачивания');

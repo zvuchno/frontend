@@ -7,6 +7,7 @@ import s from "./DownloadReleaseModal.module.scss";
 import { RELEASE_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
 import { getDownloadData } from "@/api/store";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 interface DownloadReleaseModalProps {
   isOpen: boolean;
@@ -23,8 +24,10 @@ export const DownloadReleaseModal = ({
   data,
   onClose,
 }: DownloadReleaseModalProps) => {
+  const { status, data: session } = useSession();
+  const token = session?.user.accessToken;
   const [downloading, setDownloading] = useState<Record<string, boolean>>({});
-  
+
   if (!isOpen) return null;
   
   const items = data?.items ?? [];
@@ -34,7 +37,7 @@ export const DownloadReleaseModal = ({
     setDownloading((prev) => ({ ...prev, [item.type]: true }));
 
     try {
-      const result = await getDownloadData(item.download_action_url!);
+      const result = await getDownloadData(item.download_action_url!, token);
       window.open(result.url, '_blank');
     } catch (err) {
       console.error(err);
