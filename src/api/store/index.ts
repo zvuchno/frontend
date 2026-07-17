@@ -1,5 +1,7 @@
 import type {
   PaginatedStoreResponse,
+  PurchasedReleaseDownloadData,
+  PurchasedReleaseDownloadOptions,
   PurchasedReleases,
   StoreFavorite,
   StoreOrder,
@@ -113,9 +115,10 @@ export async function getOrderDetail(orderId: string | number): Promise<StoreOrd
   return data;
 }
 
-export async function getPurchasedReleases(): Promise<PaginatedStoreResponse<PurchasedReleases>> {
-  const url = `${baseUrl}/v1/store/me/purchased-music`;
-  const data = await authFetchClient<PaginatedStoreResponse<PurchasedReleases>>(url, {
+export async function getPurchasedReleases(url?: string): Promise<PaginatedStoreResponse<PurchasedReleases>> {
+  const mainUrl = `${baseUrl}/v1/store/me/purchased-music?limit=6`;
+  const currentUrl = url ? url : mainUrl;
+  const data = await authFetchClient<PaginatedStoreResponse<PurchasedReleases>>(currentUrl, {
     method: "GET",
   });
 
@@ -124,6 +127,31 @@ export async function getPurchasedReleases(): Promise<PaginatedStoreResponse<Pur
   }
 
   return data;
-}
+};
+
+export async function getDownloadOptions(albumId: number): Promise<PurchasedReleaseDownloadOptions> {
+  const url = `${baseUrl}/v1/store/me/purchased-music/${albumId}`
+  const data = await authFetchClient<PurchasedReleaseDownloadOptions>(url, {
+    method: "GET",
+  });
+
+  if (!data) {
+    throw new Error('Пустой ответ от сервера');
+  }
+
+  return data;
+};
+
+export async function getDownloadData(url: string): Promise<PurchasedReleaseDownloadData> {
+  const data = await authFetchClient<PurchasedReleaseDownloadData>(url, {
+    method: "POST",
+  });
+
+  if (!data) {
+    throw new Error('Пустой ответ от сервера');
+  }
+
+  return data;
+};
 
 export type { PurchasedReleases, StoreOrder, StoreOrderDetail, StoreOrderItem };

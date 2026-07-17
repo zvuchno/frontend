@@ -75,11 +75,31 @@ export type StoreOrderDetail = {
 };
 
 export type PurchasedReleases = {
-  id: string | number;
+  id: number;
   name: string;
   artist_name: string;
   kind: string;
-  year: number;
+  year: number | null;
   image: string;
   is_fully_available: boolean;
+};
+
+export type PurchasedReleasesDownloadItem = {
+  type: 'archive' | 'track';
+  title: string;
+  status: string;
+  download_action_url: string | null;
+};
+
+export type PurchasedReleaseDownloadOptions = {
+  album_id: number;
+  access: string;
+  items: PurchasedReleasesDownloadItem[];
+};
+
+export type PurchasedReleaseDownloadData = {
+  url: string;
+  filename: string;
+  expires_in: number | null;
+  expires_at: string | null;
 };

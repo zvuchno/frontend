@@ -16,6 +16,7 @@ import { type PaginatedStoreResponse, type StoreFavorite } from "@/api/store/typ
 import { deleteFromFavorites } from "@/api/catalog/favoritesApi/deleteFromFavorites";
 import toast from "react-hot-toast";
 import { RateLimitError } from "@/api/authFetchFromClient/authFetchClient";
+import { Loader } from "@/shared/ui";
 
 export function FavoritesPageClient() {
   const { status } = useSession();
@@ -74,7 +75,7 @@ export function FavoritesPageClient() {
   };
 
   if (status !== "authenticated" || isLoading) {
-    return <p className={styles.stateMessage}>Загрузка избранного...</p>;
+    return <Loader />
   }
 
   if (error) {
