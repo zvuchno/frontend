@@ -8,13 +8,13 @@ export async function getTracksList({
   token
 }: TrackListRequest) {
 
-  const url = `${baseUrl}/v1/store/player/albums/${albumId}`;
+  const url = `${baseUrl}/v1/store/player/albums/${albumId}/`;
 
   try {
     const data = await authFetchClient<TracksListResponse>(url, {
       method: "GET",
     },
-      token
+      token as string
     )
 
     return data;

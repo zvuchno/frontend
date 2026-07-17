@@ -16,7 +16,7 @@ import styles from "./CartItem.module.scss";
 
 export const CartItem = ({ item }: { item: CartItemRespond }) => {
   const { mutate: updateCount } = useUpdateCart();
-  const { mutate: removeCartItem } = useRemoveCartItem();
+  const { mutate: removeItem } = useRemoveCartItem();
 
   const hasDiscount = Number(item.base_line_total) > Number(item.discount_line_total);
 
@@ -44,7 +44,7 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
           quantity: currentCount - 1,
         });
       }
-      return removeCartItem(item.product_variant);
+      return removeItem(item.product_variant);
     }
   };
 
