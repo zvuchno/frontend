@@ -145,6 +145,32 @@
   gap: 1rem;
 }
 
+.productCard {
+  display: grid;
+  gap: 0.75rem;
+  inline-size: 8.5rem;
+  max-inline-size: 100%;
+  color: var(--color-text-primary);
+}
+
+.media {
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background-color: var(--color-accent-blue);
+}
+
+.image {
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
+
+.cardContent {
+  display: grid;
+  gap: 0.5rem;
+  min-inline-size: 0;
+}
+
 .products>* {
   flex: 1 1 8.1875rem;
   min-inline-size: min(100%, 8.1875rem);

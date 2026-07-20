@@ -151,32 +151,33 @@ export const OrderCardListener = ({
                     ? product.target.selected_variant_id
                     : undefined;
                 return (
-                <div key={product.sku}>
-                  <Link 
-                    href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`} 
-                    className={styles.productCard}
-                  >
-                    <div className={styles.media}>
-                      {product.image && (
-                        <Image 
-                          className={styles.image}
-                          src={product.image}
-                          alt={product.name}
-                          width={136}
-                          height={136}
-                          sizes='136px'
-                        />
-                      )}
-                    </div>
-                    <div className={styles.content}>
-                      <h4 className={styles.title}>`${product.kind} ${product.name}`</h4>
-                      {product.price_at_purchase !== undefined && product.price_at_purchase !== null ? (
-                        <p className={styles.price}>{formatTotalPrice(Number(product.price_at_purchase))}</p>
-                      ) : null}
-                    </div>
-                  </Link>
-                  <p className={styles.quantity}>{`количество ${product.quantity}шт`}</p>
-                </div>)
+                  <div key={product.sku}>
+                    <Link 
+                      href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`} 
+                      className={styles.productCard}
+                    >
+                      <div className={styles.media}>
+                        {product.image && (
+                          <Image 
+                            className={styles.image}
+                            src={product.image}
+                            alt={product.name}
+                            width={136}
+                            height={136}
+                            sizes='136px'
+                          />
+                        )}
+                      </div>
+                      <div className={styles.cardContent}>
+                        <h4 className={styles.title}>{product.kind} {product.name}</h4>
+                        {product.price_at_purchase !== undefined && product.price_at_purchase !== null ? (
+                          <p className={styles.price}>{formatTotalPrice(Number(product.price_at_purchase))}</p>
+                        ) : null}
+                      </div>
+                    </Link>
+                    <p className={styles.quantity}>{`количество ${product.quantity}шт`}</p>
+                  </div>
+                )
               })}
             </div>
           </div>
