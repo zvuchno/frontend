@@ -6,7 +6,7 @@ import { ArrowIcon, Definition, Loader } from "@/shared/ui";
 import styles from "./OrderCardListener.module.scss";
 import type { TOrderCardListenerProps } from "../model/types";
 import { type KeyboardEvent, useState } from "react";
-import { getOrderDetail, type StoreOrderDetail } from "@/api/store";
+import { getOrderDetail } from "@/api/store";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
