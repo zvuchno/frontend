@@ -42,6 +42,7 @@ export type TArtistOrderDetails = {
   delivery: string;
   full_address: string;
   items: TOrderItem[];
+  cdek_number: string;
   total: string;
 };
 
