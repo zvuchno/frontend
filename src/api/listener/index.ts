@@ -1,9 +1,3 @@
-import { getApiAccessToken } from "@/api/authToken";
-
-import { type ListenerMe, type UpdateListenerPayload } from "./types";
-
-const LISTENER_ME_PATH = "/api/listener/me";
-
 function getListenerApiErrorMessage(data: unknown): string | null {
   if (!data || typeof data !== "object") {
     return null;
@@ -33,52 +27,18 @@ function getListenerApiErrorMessage(data: unknown): string | null {
   return null;
 }
 
-async function throwListenerApiError(response: Response): Promise<never> {
-  let message = `Listener API request failed with status ${response.status}`;
-  const responseBody = await response.text();
+// async function throwListenerApiError(response: Response): Promise<never> {
+//   let message = `Listener API request failed with status ${response.status}`;
+//   const responseBody = await response.text();
 
-  if (responseBody) {
-    try {
-      message = getListenerApiErrorMessage(JSON.parse(responseBody)) ?? responseBody;
-    } catch {
-      message = responseBody;
-    }
-  }
+//   if (responseBody) {
+//     try {
+//       message = getListenerApiErrorMessage(JSON.parse(responseBody)) ?? responseBody;
+//     } catch {
+//       message = responseBody;
+//     }
+//   }
 
-  throw new Error(message);
-}
+//   throw new Error(message);
+// }
 
-export async function getCurrentListener(): Promise<ListenerMe> {
-  const accessToken = await getApiAccessToken();
-  const response = await fetch(LISTENER_ME_PATH, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (!response.ok) {
-    return throwListenerApiError(response);
-  }
-
-  return (await response.json()) as ListenerMe;
-}
-
-export async function updateListener(data: UpdateListenerPayload): Promise<ListenerMe> {
-  const accessToken = await getApiAccessToken();
-  const response = await fetch(LISTENER_ME_PATH, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    return throwListenerApiError(response);
-  }
-
-  return (await response.json()) as ListenerMe;
-}
-
-export const getListener = getCurrentListener;
