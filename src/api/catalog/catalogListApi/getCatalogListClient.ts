@@ -49,6 +49,8 @@ export async function getCatalogListClient({
 
   if (ordering !== undefined) {
     params.append("ordering", ordering.toString());
+  } else {
+    params.append("ordering", "-created_at");
   }
 
   const url = `${baseUrl}/v1/store/catalog/?${params.toString()}`;
