@@ -14,7 +14,7 @@ export async function getTracksList({
     const data = await authFetchClient<TracksListResponse>(url, {
       method: "GET",
     },
-      token as string
+      token
     )
 
     return data;

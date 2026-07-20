@@ -1,3 +1,5 @@
+"use client"
+
 import { Controller, type FieldError, get, useFormContext } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 

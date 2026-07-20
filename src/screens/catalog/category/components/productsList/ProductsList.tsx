@@ -21,7 +21,6 @@ import {
   isArtistCard,
   isProductCard,
 } from "./ProductsList.types";
-import { useUserStore } from "@/entities/user";
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 import { useSession } from "next-auth/react";

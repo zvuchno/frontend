@@ -1,3 +1,5 @@
+"use client"
+
 import { useFormContext } from "react-hook-form";
 
 import clsx from "clsx";
@@ -27,9 +29,7 @@ export const ProfileFormUI = ({
   return (
     <form
       className={clsx(styles.form, className)}
-      onSubmit={() => {
-        handleSubmit(onSubmit, onError);
-      }}
+      onSubmit={handleSubmit(onSubmit, onError)}
     >
       <div className={styles.formContentWrapper}>
         <h3 className={styles.formTitle}>{title}</h3>
