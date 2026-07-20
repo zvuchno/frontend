@@ -8,8 +8,12 @@ export const ItemsCounter = ({
   quantity,
   onIncrement,
   onDecrement,
+  incrementDisabled,
+  decrementDisabled,
 }: {
   quantity: number;
+  incrementDisabled?: boolean;
+  decrementDisabled?: boolean;
   onIncrement: (e: React.MouseEvent | React.KeyboardEvent) => void;
   onDecrement: (e: React.MouseEvent | React.KeyboardEvent) => void;
 }) => {
@@ -23,6 +27,7 @@ export const ItemsCounter = ({
           e.preventDefault();
           onDecrement(e);
         }}
+        disabled={decrementDisabled}
       >
         -
       </button>
@@ -35,6 +40,7 @@ export const ItemsCounter = ({
           e.preventDefault();
           onIncrement(e);
         }}
+        disabled={incrementDisabled}
       >
         +
       </button>

@@ -12,6 +12,7 @@ import { type CartItemRespond, useRemoveCartItem, useUpdateCart } from "@/entiti
 import { formatSum } from "@/shared/utils/formatSum";
 
 import { ItemsCounter } from "../ItemsCounter";
+import { RemoveFromCart } from "../RemoveFromCart/RemoveFromCart";
 import styles from "./CartItem.module.scss";
 
 export const CartItem = ({ item }: { item: CartItemRespond }) => {
@@ -19,6 +20,7 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
   const { mutate: removeItem } = useRemoveCartItem();
 
   const hasDiscount = Number(item.base_line_total) > Number(item.discount_line_total);
+  const isAvailable = item.stock > 1;
 
   const router = useRouter();
 
@@ -48,11 +50,13 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
     }
   };
 
+  const onRemoveItem = () => removeItem(item.product_variant);
+
   const basePath = "/api/v1/store";
   const targetPath = item.target.url.replace(basePath, "");
 
   return (
-    <article className={styles.cartItem}>
+    <article className={clsx(styles.cartItem, !isAvailable && styles.outOfStock)}>
       {item.image && (
         <div
           className={styles.cartItemImage}
@@ -73,9 +77,9 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
       )}
       <div className={styles.cartItemContent}>
         <div className={styles.cartItemSpecification}>
-          <Link 
-            href={`${targetPath}?kind=${item.target.type}&selected=${item.target.selected_variant_id}`} 
-            className={styles.cartItemImage}
+          <Link
+            href={`${targetPath}?kind=${item.target.type}&selected=${item.target.selected_variant_id}`}
+            className={styles.cartItemTitle}
           >
             <h3 className={styles.cartItemTitle}>{item.name}</h3>
           </Link>
@@ -85,24 +89,31 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
             <div className={styles.cartItemCounter}>
               <span>Количество:</span>
               <ItemsCounter
-                quantity={item.quantity ?? 0}
+                quantity={isAvailable ? item.quantity : 0}
                 onIncrement={() => handleUpdateItemCount("increment")}
                 onDecrement={() => handleUpdateItemCount("decrement")}
+                incrementDisabled={!isAvailable}
+                decrementDisabled={!isAvailable}
               />
             </div>
           </div>
-          <div className={styles.cartItemSum}>
-            {hasDiscount && (
-              <span className={styles.cartItemDiscountTotal}>
-                {formatSum(item.discount_line_total)} ₽
+          {isAvailable ? (
+            <div className={styles.cartItemSum}>
+              {hasDiscount && (
+                <span className={styles.cartItemDiscountTotal}>
+                  {formatSum(item.discount_line_total)} ₽
+                </span>
+              )}
+              <span className={clsx(styles.cartItemTotal, hasDiscount && [styles.oldTotal])}>
+                {formatSum(item.base_line_total)} ₽
               </span>
-            )}
-            <span className={clsx(styles.cartItemTotal, hasDiscount && [styles.oldTotal])}>
-              {formatSum(item.base_line_total)} ₽
-            </span>
-          </div>
+            </div>
+          ) : (
+            <span className={styles.cartItemTotal}>Нет в наличии</span>
+          )}
         </div>
       </div>
+      {!isAvailable && <RemoveFromCart removeType={"single"} onDelete={onRemoveItem} />}
     </article>
   );
 };
