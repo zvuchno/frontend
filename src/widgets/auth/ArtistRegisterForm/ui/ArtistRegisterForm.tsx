@@ -204,6 +204,7 @@ export const ArtistRegisterForm = ({
             error={!!errors.password}
             message={errors.password}
             disabled={isLoading}
+            autoComplete="new-password"
           />
 
           <PasswordInput
@@ -216,6 +217,7 @@ export const ArtistRegisterForm = ({
             error={!!errors.confirmPassword}
             message={errors.confirmPassword}
             disabled={isLoading}
+            autoComplete="new-password"
           />
 
           {registerError && (

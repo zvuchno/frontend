@@ -183,7 +183,7 @@ export const AuthForm = ({
           <CustomInput
             id='email'
             label='Почта'
-            type='text'
+            type='email'
             name='email'
             value={formData.email}
             onChange={handleChange("email")}
