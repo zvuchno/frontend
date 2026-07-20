@@ -9,7 +9,6 @@ import { ArrowIcon } from "@/shared/ui/Icons";
 
 import type { CardOrderArtistProps } from "../model/CardOrderArtist.types";
 import styles from "./CardOrderArtist.module.scss";
-import { type TArtistOrderDetails } from "@/api/artist/ordersApi/types";
 import { getArtistOrderDetails } from "@/api/artist/ordersApi/getArtistOrders";
 import Link from "next/link";
 import Image from "next/image";
