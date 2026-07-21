@@ -13,7 +13,7 @@ import { RecomendationsList } from "@/widgets/RecomendationsList";
 
 import { AddToCartModal, type TDataForModal } from "@/features/addToCartModal";
 
-import { Title } from "@/shared/ui";
+import { Loader, Title } from "@/shared/ui";
 import { Track } from "@/shared/ui/Track";
 
 import s from "./ReleasePageContent.module.scss";
@@ -33,6 +33,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const { status, data: session } = useSession();
   const isAuth = status === 'authenticated';
   const token = session?.user.accessToken;
+  const hasFetching = isAuth || status === 'unauthenticated';
 
   const tracksQuery = useQuery({
     queryKey: ["tracks", release.id],
@@ -41,7 +42,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
         albumId: release.id,
         token,
       }),
-    refetchOnWindowFocus: false,
+      enabled: hasFetching,
   });
 
   const tracks = tracksQuery.data?.tracks;
@@ -62,6 +63,10 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
     setDataForModl(data);
     setIsModalOpen(true);
   };
+
+  if (status === 'loading') {
+    return <Loader />;
+  }
 
   return (
     <>

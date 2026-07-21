@@ -4,6 +4,7 @@
   gap: 40px;
   padding: 30px;
   max-width: 620px;
+  max-height: calc(100vh - 60px);
 }
 
 .title {
@@ -15,14 +16,6 @@
   text-transform: none;
   text-align: center;
 }
-
-// .errorMessage {
-//   inline-size: min(100%, 50.625rem);
-//   font-family: var(--font-feature-mono), "Feature Mono", monospace;
-//   font-size: 1.25rem;
-//   line-height: 1.2;
-//   color: var(--color-text-primary);
-// }
 
 .list {
   display: flex;

@@ -1,3 +1,5 @@
+"use client"
+
 import { type FieldError, get, useFormContext } from "react-hook-form";
 
 import { CustomInput } from "@/shared/ui";
