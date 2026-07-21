@@ -1,9 +1,21 @@
 import { type UserDataProps, useUserStore } from "@/entities/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { getCurrentListener, updateAccountPhone, updateListener } from "../api/currentListenerApi";
-import { getCurrentAccount } from "../api/currentAccountApi";
-import type { TListenerProfile, CurrentAccountResponse } from "./types";
+import { getCurrentListener, updateListener } from "../api/currentListenerApi";
+import { 
+  getCurrentAccount, 
+  setAccountPassword, 
+  updateAccountPassword, 
+  updateAccountPhone, 
+  updateAccountUsername 
+} from "../api/currentAccountApi";
+import type { 
+  TListenerProfile, 
+  CurrentAccountResponse, 
+  UpdateAccountPasswordPayload, 
+  UpdateAccountUsernamePayload, 
+  SetAccountPasswordPayload 
+} from "./types";
 import type { Session } from "next-auth";
 
 function toUserStoreData(account: CurrentAccountResponse, accessToken?: string): UserDataProps {
@@ -130,14 +142,63 @@ export function useUpdateAccountPhone() {
         };
       });
       
-      try {
-        updateSession({
-          phone: phoneResponse.phone,
-          isPhoneVerified: false,
-        });
-      } catch (e) {
-        console.error('Failed to update session phone', e);
-      }
+      void updateSession({
+        phone: phoneResponse.phone,
+        isPhoneVerified: false,
+      });
+    },
+  });
+};
+
+// 4. Хук для обновления пароля
+export function useUpdateAccountPassword() {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation({
+    mutationFn: async (payload: UpdateAccountPasswordPayload) => {
+      return await updateAccountPassword(payload, token);
+    },
+  });
+};
+
+// 5. Хук для обновления имени пользователя
+export function useUpdateAccountUsername() {
+  const queryClient = useQueryClient();
+  const { update: updateSession, data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation({
+    mutationFn: async (payload: UpdateAccountUsernamePayload) => {
+      return await updateAccountUsername(payload, token);
+    },
+    onSuccess: (userNameResponse) => {
+      queryClient.setQueryData<TListenerProfile>(['listenerProfile'], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          account: {
+            ...oldData.account,
+            username: userNameResponse.username,
+          },
+        };
+      });
+      
+      void updateSession({
+        userName: userNameResponse.username,
+      });
+    },
+  });
+};
+
+// 6. Хук для установления пароля
+export function useSetAccountPassword() {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation({
+    mutationFn: async (payload: SetAccountPasswordPayload) => {
+      return await setAccountPassword(payload, token);
     },
   });
 };

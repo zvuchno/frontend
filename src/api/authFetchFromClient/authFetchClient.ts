@@ -75,6 +75,8 @@ export const authFetchClient = async <T>(
         data.email ||
         data.token ||
         data.uid ||
+        data.old_password ||
+        data.password ||
         `HTTP ${res.statusText}`
     );
   }

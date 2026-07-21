@@ -15,6 +15,7 @@ export type CurrentAccountResponse = {
   is_email_verified: boolean;
   is_listener: boolean;
   is_artist: boolean;
+  has_usable_password: boolean;
 };
 
 export type TListenerProfile = {
@@ -35,6 +36,13 @@ export type UpdateAccountPasswordPayload = {
   new_password: string;
   retype_new_password: string;
 };
+
+export type SetAccountPasswordPayload = {
+  new_password: string;
+  retype_new_password: string;
+}
+
+export type SetAccountPasswordResponse = void;
 
 export type UpdateAccountPasswordResponse = void;
 

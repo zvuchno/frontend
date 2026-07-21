@@ -90,12 +90,30 @@ export const listenerFormFields: TProfileFormField[] = [
     column: 1,
   },
   {
+    title: "Имя пользователя",
+    name: "userName",
+    placeholder: "Текст",
+    type: "text",
+    required: true,
+    row: 2,
+    column: 2,
+  },
+  {
     title: "Пароль",
     name: "password",
     placeholder: "",
     type: "password",
     required: false,
-    row: 2,
+    row: 3,
+    column: 1,
+  },
+  {
+    title: "Старый пароль",
+    name: "oldPassword",
+    placeholder: "",
+    type: "password",
+    required: false,
+    row: 3,
     column: 2,
   },
 ];
@@ -115,6 +133,10 @@ export const fieldsConfig: Record<
     minLength: 2,
     maxLength: 100,
   },
+  userName: {
+    required: true,
+    pattern: /^[а-яА-Яa-zA-Z0-9@./\-_+]+$/,
+  },
   email: {
     required: true,
     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -127,6 +149,13 @@ export const fieldsConfig: Record<
     required: true,
     minLength: 8,
     maxLength: 50,
+    pattern: /^(?=\S{8,}$)[a-zA-Z0-9\W]*$/
+  },
+  oldPassword: {
+    required: true,
+    minLength: 8,
+    maxLength: 50,
+    pattern: /^(?=\S{8,}$)[a-zA-Z0-9\W]*$/
   },
   city: {
     required: true,

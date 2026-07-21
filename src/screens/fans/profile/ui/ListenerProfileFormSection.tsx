@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -19,6 +19,8 @@ import {
   useUpdateAccountPhone, 
   useUpdateListenerName 
 } from "@/entities/profile";
+import { useSetAccountPassword, useUpdateAccountPassword, useUpdateAccountUsername } from "@/entities/profile/model/useListenerProfile";
+import toast from "react-hot-toast";
 
 function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
@@ -54,6 +56,9 @@ export function ListenerProfileFormSection() {
 
   const updateNameMutation = useUpdateListenerName();
   const updatePhoneMutation = useUpdateAccountPhone();
+  const updateUserNameMutation = useUpdateAccountUsername();
+  const updatePasswordMutation = useUpdateAccountPassword();
+  const setPasswordMutation = useSetAccountPassword();
 
   const account = profileData?.account ?? null;
   const listener = profileData?.listener;
@@ -66,9 +71,11 @@ export function ListenerProfileFormSection() {
     mode: "onChange",
     defaultValues: {
       name: "",
+      userName: "",
       email: "",
       phone: "",
       password: "",
+      oldPassword: "",
     },
   });
 
@@ -79,9 +86,11 @@ export function ListenerProfileFormSection() {
     if (profileData && listener) {
       reset({
         name: listener.full_name,
+        userName: account?.username,
         email: account?.email || "",
         phone: normalizePhone(account?.phone || ""),
         password: "",
+        oldPassword: "",
       });
     }
   }, [profileData, listener, account, reset]);
@@ -89,7 +98,7 @@ export function ListenerProfileFormSection() {
   // Обработка статуса авторизации
   useEffect(() => {
     if (status === "unauthenticated") {
-      reset({ name: "", email: "", phone: "", password: "" });
+      reset({ name: "", userName: "", email: "", phone: "", password: "", oldPassword: "" });
       // router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
       return;
     }
@@ -106,7 +115,6 @@ export function ListenerProfileFormSection() {
   };
 
   const handleSubmitForm = async (data: FieldValues) => {
-    console.log('account:', account)
     if (!account) {
       setFormError('Не удалось подготовить данные профиля к сохранению');
       return;
@@ -118,6 +126,10 @@ export function ListenerProfileFormSection() {
     try {
       const nextPhone = normalizePhone(data.phone);
       const shouldUpdatePhone = nextPhone !== normalizePhone(account.phone);
+
+      const nextUserName = data.userName?.trim() ?? "";
+      const shouldUpdateUserName = nextUserName !== account.username;
+
       let nextAccount = account;
       let savedName = data.name?.trim() ?? "";
 
@@ -128,7 +140,7 @@ export function ListenerProfileFormSection() {
       }
 
       // 2. Обновление телефона
-      if (shouldUpdatePhone) {
+      if (dirtyFields.phone && shouldUpdatePhone) {
         const phoneResponse = await updatePhoneMutation.mutateAsync(nextPhone);
         nextAccount = {
           ...nextAccount,
@@ -142,6 +154,46 @@ export function ListenerProfileFormSection() {
         }).catch(() => undefined);
       }
 
+      // 3. Обновление имени пользователя
+      if (dirtyFields.userName && shouldUpdateUserName) {
+        console.log('я тут')
+        const userNameResponse = await updateUserNameMutation.mutateAsync({ username: nextUserName });
+        nextAccount = {
+          ...nextAccount,
+          username: userNameResponse.username,
+        };
+
+        void updateSession({
+          userName: nextAccount.username,
+        }).catch(() => undefined);
+      }
+
+      // 4. Обновление или установление пароля
+      if (dirtyFields.password && data.password) {
+        
+        if (account.has_usable_password) {
+          // меняем существующий пароль
+          if(!data.oldPassword) {
+            setFormError('Для смены пароля требуется ввести текущий пароль');
+            return;
+          }
+
+          await updatePasswordMutation.mutateAsync({
+            old_password: data.oldPassword,
+            new_password: data.password,
+            retype_new_password: data.password,
+          })
+        } else {
+          // устанавливаем пароль впервые
+          await setPasswordMutation.mutateAsync({
+            new_password: data.password,
+            retype_new_password: data.password,
+          })
+        }
+      }
+
+      toast.success('Профиль успешно обновлён');
+
       // Обновляем локальный стейт и сбрасываем форму
       setUser({ ...useUserStore.getState(), ...toUserStoreData(nextAccount, sessionUser?.accessToken) });
 
@@ -150,6 +202,7 @@ export function ListenerProfileFormSection() {
         email: nextAccount.email,
         phone: normalizePhone(nextAccount.phone),
         password: "",
+        oldPassword: "",
       });
 
       setIsEditMode(false);
@@ -158,7 +211,7 @@ export function ListenerProfileFormSection() {
       setFormError(
         requestError instanceof Error ? requestError.message : "Не удалось сохранить профиль"
       );
-      throw requestError;
+      toast.error('Не удалось сохранить профиль. Проверьте данные.');
     } finally {
       setIsProfileSaving(false);
     }
@@ -178,7 +231,8 @@ export function ListenerProfileFormSection() {
       >
         <ProfileFormListenerUI
           fieldsDisabled={!isEditMode || isProfileBusy || !account}
-          disabledFields={["email", "password"]}
+          disabledFields={["email"]}
+          has_usable_password={account?.has_usable_password || false}
         />
       </ProfileFormUI>
     </FormProvider>

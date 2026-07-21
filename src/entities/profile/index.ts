@@ -9,6 +9,8 @@ export type {
   UpdateListenerPayload, 
   CurrentAccountResponse,
   TListenerProfile,
+  SetAccountPasswordPayload,
+  SetAccountPasswordResponse,
   UpdateAccountPhonePayload,
   UpdateAccountPhoneResponse,
   UpdateAccountPasswordPayload,
