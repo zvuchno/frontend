@@ -10,7 +10,7 @@ import { ButtonLike } from "@/features/ButtonLike";
 import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
-import { ListSection } from "@/shared/ui";
+import { ListSection, Loader } from "@/shared/ui";
 import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 import { useSession } from "next-auth/react";
@@ -22,8 +22,10 @@ interface IArtistPageContentProps {
 const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const { addProduct } = useRecentlyViewed();
   const { status, data: session } = useSession();
+
   const isAuth = status === 'authenticated';
   const token = session?.user.accessToken;
+  const hasFetching = isAuth || status === 'unauthenticated';
 
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
@@ -35,7 +37,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
         ordering: "random",
         limit: "4",
       }),
-    refetchOnWindowFocus: false,
+      enabled: hasFetching,
   });
 
   const queryMerch = useQuery({
@@ -48,13 +50,17 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
         ordering: "random",
         limit: "4",
       }),
-    refetchOnWindowFocus: false,
+      enabled: hasFetching,
   });
 
   const albumsRecommend = queryAlbums.data?.results;
   const hasMoreAlbums = !!queryAlbums.data?.next;
   const merchRecommend = queryMerch.data?.results;
   const hasMoreMerch = !!queryMerch.data?.next;
+
+  if (status === 'loading') {
+    return <Loader />;
+  }
 
   return (
     <>
