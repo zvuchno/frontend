@@ -155,6 +155,7 @@ export default function ArtistProfileFormSection({
           fieldsDisabled={!isEditMode}
           disabledFields={["email", "password"]}
           personalDataHref='/artist/data'
+          has_usable_password={false}
         />
       </ProfileFormUI>
     </FormProvider>
