@@ -10,7 +10,7 @@ import { ButtonLike } from "@/features/ButtonLike";
 import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
-import { ListSection } from "@/shared/ui";
+import { ListSection, Loader } from "@/shared/ui";
 import { useUserStore } from "@/entities/user";
 import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
@@ -20,6 +20,7 @@ export const RecomendationsList = () => {
   const { status, data: session } = useSession();
   const isAuth = status === 'authenticated';
   const token = session?.user.accessToken;
+  const hasFetching = isAuth || status === 'unauthenticated';
 
   const { viewedProducts, addProduct } = useRecentlyViewed();
 
@@ -38,7 +39,8 @@ export const RecomendationsList = () => {
         ordering: "random",
         limit: limitToShow,
       }),
-    refetchOnWindowFocus: false,
+      enabled: hasFetching,
+      refetchOnWindowFocus: false,
   });
 
   const showRecentViewed = isCartPage && viewedProducts.length > 0;
@@ -47,6 +49,10 @@ export const RecomendationsList = () => {
   const hasMoreRecommendations = showRecentViewed ? false : !!recomQuery.data?.next;
 
   if (!recommendations) return;
+
+  if (status === 'loading') {
+    return <Loader />;
+  }
 
   return (
     <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
