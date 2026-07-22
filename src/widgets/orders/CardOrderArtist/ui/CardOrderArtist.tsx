@@ -9,11 +9,11 @@ import { ArrowIcon } from "@/shared/ui/Icons";
 
 import type { CardOrderArtistProps } from "../model/CardOrderArtist.types";
 import styles from "./CardOrderArtist.module.scss";
-import { getArtistOrderDetails } from "@/api/artist/ordersApi/getArtistOrders";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
+import { getArtistOrderDetails } from "@/api/artist";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",

@@ -4,6 +4,12 @@ export {
   useUpdateAccountPhone
 } from "./model/useListenerProfile";
 
+export { 
+  useCurrentArtist,
+  useUpdateArtist,
+  useUpdateArtistCover,
+} from "./model/useArtistProfile";
+
 export type { 
   ListenerMe, 
   UpdateListenerPayload, 
@@ -16,5 +22,11 @@ export type {
   UpdateAccountPasswordPayload,
   UpdateAccountPasswordResponse,
   UpdateAccountUsernamePayload,
-  UpdateAccountUsernameResponse
+  UpdateAccountUsernameResponse,
+  ArtistApiDataItem,
+  CurrentArtistResponse,
+  UpdateCurrentArtistPayload,
+  UpdateCurrentArtistResponse,
+  UpdateCurrentArtistCoverPayload,
+  UpdateCurrentArtistCoverResponse,
 } from "./model/types";

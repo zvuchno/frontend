@@ -1,23 +1,32 @@
-import { requestArtist } from "@/api/artist/request";
 import { type TArtistLegalData, type TArtistLegalDataForApi } from "./types";
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
 const ARTIST_LEGAL_PATH = "/api/artist/me/legal";
 
 export const updateArtistLegalData = async (
   legalData: TArtistLegalDataForApi,
 ): Promise<Partial<TArtistLegalData>> => {
-  return requestArtist<Partial<TArtistLegalData>>(ARTIST_LEGAL_PATH, {
+  const response =  await authFetchClient<Partial<TArtistLegalData>>(ARTIST_LEGAL_PATH, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(legalData),
   });
+
+  if (!response) {
+      throw new Error('Не удалось получить данные')
+    }
+
+    return response
 };
 
 export const getArtistLegalData =
   async (): Promise<Partial<TArtistLegalData>> => {
-    return requestArtist<Partial<TArtistLegalData>>(ARTIST_LEGAL_PATH, {
+    const response =  await authFetchClient<Partial<TArtistLegalData>>(ARTIST_LEGAL_PATH, {
       method: "GET",
     });
+
+    if (!response) {
+      throw new Error('Не удалось получить данные')
+    }
+
+    return response
   };

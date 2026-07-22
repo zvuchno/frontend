@@ -1,25 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import {
-  type ArtistApiDataItem,
-  type CurrentArtistResponse,
-  type UpdateCurrentArtistPayload,
-  getCurrentArtist,
-  updateCurrentArtist,
-  updateCurrentArtistCover,
-} from "@/api/artist";
-import { useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { NavBar } from "@/features/profile";
 
 import { artistsProfileRoutes } from "@/shared/constants";
-import { AccentContainer, Title } from "@/shared/ui";
+import { AccentContainer, Loader, Title } from "@/shared/ui";
 
 import { ArtistDataSection, type TArtistDataItem } from "./components/ArtistDataSection";
 import s from "./layout.module.scss";
+import { 
+  type ArtistApiDataItem, 
+  type CurrentArtistResponse, 
+  UpdateCurrentArtistPayload, 
+  useCurrentArtist, 
+  useUpdateArtist, 
+  useUpdateArtistCover 
+} from "@/entities/profile";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 const artistProfilePathnames = ["/artist/profile"];
 
@@ -44,181 +45,105 @@ const buildArtistUpdatePayload = (
   socials: overrides.socials ?? artist.socials,
 });
 
-const getRequestErrorMessage = (error: unknown, fallback: string) =>
-  error instanceof Error ? error.message : fallback;
-
 const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
+
+  const { data: artist, isLoading, error } = useCurrentArtist();
+  const updateArtist = useUpdateArtist();
+  const updateCover = useUpdateArtistCover();
+
   const shouldShowArtistInfo = artistProfilePathnames.includes(pathname);
-  const [artist, setArtist] = useState<CurrentArtistResponse | null>(null);
-  const [artistDataError, setArtistDataError] = useState<string | null>(null);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [isAddingSocial, setIsAddingSocial] = useState(false);
   const [deletingContactKey, setDeletingContactKey] = useState<string | null>(null);
   const [deletingSocialKey, setDeletingSocialKey] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (status === "loading") {
-      return;
-    }
-
-    // if (status === "unauthenticated") {
-    //   router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
-    //   return;
-    // }
-
-  }, [pathname, router, session?.user.isListener, status]);
-
-  useEffect(() => {
-    if (!shouldShowArtistInfo || status === "loading") {
-      return;
-    }
-
-    let isMounted = true;
-
-    const loadCurrentArtist = async () => {
-      if (status === "unauthenticated") {
-        setArtist(null);
-        return;
-      }
-
-      try {
-        const response = await getCurrentArtist();
-
-        if (isMounted) {
-          setArtist(response);
-          setArtistDataError(null);
-        }
-      } catch {
-        if (isMounted) {
-          setArtist(null);
-        }
-      }
-    };
-
-    void loadCurrentArtist();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [shouldShowArtistInfo, status]);
-
-  const requireLoadedArtist = () => {
-    if (artist) {
-      return artist;
-    }
-
-    const error = new Error("Данные артиста еще не загружены");
-    setArtistDataError(error.message);
-    throw error;
-  };
-
-  const saveArtistData = async (
-    overrides: Partial<Pick<CurrentArtistResponse, "contacts" | "socials">>
-  ) => {
-    const currentArtist = requireLoadedArtist();
-    const nextArtist = await updateCurrentArtist(
-      buildArtistUpdatePayload(currentArtist, overrides)
-    );
-
-    setArtist(nextArtist);
-    setArtistDataError(null);
-
-    return nextArtist;
-  };
+  const isLoadingDataArtist = status === 'loading' || isLoading;
 
   const handleCoverChange = async (file: File) => {
+    setIsUploadingCover(true);
     try {
-      requireLoadedArtist();
-      setIsUploadingCover(true);
-      setArtistDataError(null);
-
-      const response = await updateCurrentArtistCover({ cover: file });
-      setArtist((currentArtist) =>
-        currentArtist
-          ? {
-              ...currentArtist,
-              cover: response.cover,
-            }
-          : currentArtist
-      );
-    } catch (error) {
-      setArtistDataError(getRequestErrorMessage(error, "Не удалось загрузить обложку"));
+      await updateCover.mutateAsync({ cover: file });
+      toast.success('Обложка успешно обновлена');
+    } catch (err) {
+      console.error(err);
+      toast.error('Не удалось обновить обложку');
     } finally {
       setIsUploadingCover(false);
     }
   };
 
   const handleAddContact = async (item: TArtistDataItem) => {
+    if (!artist) return;
     try {
-      const currentArtist = requireLoadedArtist();
       setIsAddingContact(true);
-      setArtistDataError(null);
-
-      await saveArtistData({
-        contacts: [...currentArtist.contacts, toApiDataItem(item)],
+      const payload = buildArtistUpdatePayload(artist, {
+        contacts: [...artist.contacts, toApiDataItem(item)],
       });
-    } catch (error) {
-      setArtistDataError(getRequestErrorMessage(error, "Не удалось добавить контакт"));
-      throw error;
+      await updateArtist.mutateAsync(payload);
+      toast.success('Контакт успешно добавлен');
+    } catch (err) {
+      console.error(err);
+      toast.error('Не удалось добавить контакт');
     } finally {
       setIsAddingContact(false);
     }
   };
 
   const handleAddSocial = async (item: TArtistDataItem) => {
+    if (!artist) return;
     try {
-      const currentArtist = requireLoadedArtist();
       setIsAddingSocial(true);
-      setArtistDataError(null);
-
-      await saveArtistData({
-        socials: [...currentArtist.socials, toApiDataItem(item)],
+      const payload = buildArtistUpdatePayload(artist, {
+        socials: [...artist.socials, toApiDataItem(item)],
       });
-    } catch (error) {
-      setArtistDataError(getRequestErrorMessage(error, "Не удалось добавить соцсеть"));
-      throw error;
+      await updateArtist.mutateAsync(payload);
+      toast.success('Соцсеть успешно добавлена');
+    } catch (err) {
+      console.error(err);
+      toast.error('Не удалось добавить соцсеть');
     } finally {
       setIsAddingSocial(false);
     }
   };
 
   const handleDeleteContact = async (item: TArtistDataItem) => {
-    const itemKey = getArtistDataItemKey(item);
-
+    if (!artist) return;
+    const key = getArtistDataItemKey(item);
+    setDeletingContactKey(key);
     try {
-      const currentArtist = requireLoadedArtist();
-      setDeletingContactKey(itemKey);
-      setArtistDataError(null);
-
-      await saveArtistData({
-        contacts: currentArtist.contacts.filter(
-          (contact) => getArtistDataItemKey(contact) !== itemKey
+      const payload = buildArtistUpdatePayload(artist, {
+        contacts: artist.contacts.filter(
+          (c) => getArtistDataItemKey(c) !== key
         ),
       });
-    } catch (error) {
-      setArtistDataError(getRequestErrorMessage(error, "Не удалось удалить контакт"));
+      await updateArtist.mutateAsync(payload);
+      toast.success('Контат удалён');
+    } catch (err) {
+      console.error(err);
+      toast.error('Не удалось удалить контакт');
     } finally {
       setDeletingContactKey(null);
     }
   };
 
   const handleDeleteSocial = async (item: TArtistDataItem) => {
-    const itemKey = getArtistDataItemKey(item);
-
+    if (!artist) return;
+    const key = getArtistDataItemKey(item);
+    setDeletingSocialKey(key);
     try {
-      const currentArtist = requireLoadedArtist();
-      setDeletingSocialKey(itemKey);
-      setArtistDataError(null);
-
-      await saveArtistData({
-        socials: currentArtist.socials.filter((social) => getArtistDataItemKey(social) !== itemKey),
+      const payload = buildArtistUpdatePayload(artist, {
+        socials: artist.socials.filter(
+          (s) => getArtistDataItemKey(s) !== key
+        ),
       });
-    } catch (error) {
-      setArtistDataError(getRequestErrorMessage(error, "Не удалось удалить соцсеть"));
+      await updateArtist.mutateAsync(payload);
+      toast.success('Соцсеть удалена');
+    } catch (err) {
+      console.error(err);
+      toast.error('Не удалось удалить соцсеть');
     } finally {
       setDeletingSocialKey(null);
     }
@@ -238,7 +163,9 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </AccentContainer>
 
-      {shouldShowArtistInfo ? (
+      {shouldShowArtistInfo ? isLoadingDataArtist ? (
+        <Loader />
+      ) : (
         <div className={s.profileInfo}>
           <ArtistDataSection
             coverSrc={artist?.cover ?? ""}
@@ -250,12 +177,12 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
             isUploadingCover={isUploadingCover}
             deletingContactKey={deletingContactKey}
             deletingSocialKey={deletingSocialKey}
-            errorMessage={artistDataError}
+            errorMessage={error?.message}
             onCoverChange={handleCoverChange}
             onAddContactClick={handleAddContact}
             onAddSocialClick={handleAddSocial}
-            onDeleteContactClick={() => handleDeleteContact}
-            onDeleteSocialClick={() => handleDeleteSocial}
+            onDeleteContactClick={(item) => void handleDeleteContact(item)}
+            onDeleteSocialClick={(item) => void handleDeleteSocial(item)}
           />
         </div>
       ) : null}

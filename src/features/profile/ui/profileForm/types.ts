@@ -15,6 +15,7 @@ export interface FieldValues {
   url?: string;
   userName?: string;
   oldPassword?: string;
+  description?: string;
 }
 
 export interface TProfileFormUIProps {

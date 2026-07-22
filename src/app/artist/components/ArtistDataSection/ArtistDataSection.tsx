@@ -66,7 +66,7 @@ const ArtistDataSection = ({
     onEditCoverClick?.();
   };
 
-  const handleCoverInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleCoverInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
 
@@ -74,7 +74,7 @@ const ArtistDataSection = ({
       return;
     }
 
-    await onCoverChange?.(file);
+    void onCoverChange?.(file);
   };
 
   return (
@@ -100,7 +100,7 @@ const ArtistDataSection = ({
             className={s.fileInput}
             type='file'
             accept='image/*'
-            onChange={() => handleCoverInputChange}
+            onChange={handleCoverInputChange}
           />
         ) : null}
       </div>
