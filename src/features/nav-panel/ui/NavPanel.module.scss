@@ -6,6 +6,12 @@
   gap: 1.5rem;
 }
 
+.navLink {
+  @media (max-width: 800px) {
+    padding-inline: 10px;
+  }
+}
+
 .linkActive {
   background-color: var(--color-accent-blue);
   border: transparent;

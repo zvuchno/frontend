@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import clsx from "clsx";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -19,7 +20,6 @@ import { CloseButtonIconCircledX } from "@/shared/ui/Icons";
 
 import { type THeaderUIProps } from "../model/types";
 import styles from "./header.module.scss";
-import { signOut, useSession } from "next-auth/react";
 
 export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
   const user = useUserStore((state) => state.user);
@@ -39,7 +39,10 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
       return;
     }
 
-    if (session.user.sessionError === "SessionExpire" || session.user.sessionError === 'RefreshTokenError') {
+    if (
+      session.user.sessionError === "SessionExpire" ||
+      session.user.sessionError === "RefreshTokenError"
+    ) {
       signOut({
         redirect: true,
         callbackUrl: `/signin?next=${encodeURIComponent(currentUrl)}`,
@@ -47,7 +50,7 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
         console.error("Ошибка при выходе:", err);
       });
     }
-  }, [session, currentUrl])
+  }, [session, currentUrl]);
 
   const [isSearchOpen, setSearchOpen] = useState(false);
 

@@ -10,8 +10,8 @@ import { useGetCheckoutData } from "@/entities/order";
 import { AccentContainer } from "@/shared/ui";
 
 import styles from "./OrderPage.module.scss";
-import { OrderDetails } from "./components/OrderDetails";
-import { OrderSummary } from "./components/OrderSummary";
+import { OrderDetails } from "./components/OrderDetails/OrderDetails";
+import { OrderSummary } from "./components/OrderSummary/OrderSummary";
 
 export const OrderPage = () => {
   const { data } = useGetCheckoutData();

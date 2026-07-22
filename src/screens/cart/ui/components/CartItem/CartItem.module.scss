@@ -1,10 +1,11 @@
 .cartItem {
+  position: relative;
   display: flex;
   gap: 40px;
   padding: 22px 20px;
   border: 1px solid var(--color-text-primary);
-
   width: 100%;
+  height: 100%;
   max-width: 666px;
   min-height: 263px;
 
@@ -17,32 +18,38 @@
     height: auto;
   }
 
+  &.outOfStock {
+    border: 1px solid rgba(16, 15, 13, 0.4);
+
+    & .cartItemImage,
+    .cartItemContent {
+      opacity: 0.6;
+    }
+
+    @media (max-width: 499px) {
+      padding-block-end: 50px;
+    }
+  }
+
   &Title,
   &Sum {
     font-family: var(--font-feature-mono), monospace;
     font-size: 28px;
     letter-spacing: -0.08em;
     font-weight: 400;
-  }
-
-  &Content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 100%;
+    line-height: 1;
   }
 
   &Specification {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 20px;
     height: 100%;
     width: 100%;
   }
 
   &Details {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -51,6 +58,13 @@
   &Counter {
     display: flex;
     gap: 10px;
+  }
+
+  &StockMessage {
+    color: red;
+    font-size: 14px;
+    font-weight: 500;
+    padding-block-start: 15px;
   }
 
   &Image {
@@ -79,6 +93,8 @@
     row-gap: 3px;
     flex-wrap: wrap;
     line-height: 1;
+    flex: 1;
+    align-items: flex-end;
 
     & .oldTotal {
       opacity: 0.6;

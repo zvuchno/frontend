@@ -1,0 +1,43 @@
+.deleteButton {
+  border: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  font-family: var(--font-feature-mono), monospace;
+
+  &.single {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding-inline: 2px;
+    background-color: transparent;
+    color: inherit;
+    transition: border-bottom 300ms ease;
+    border-bottom: 1px solid transparent;
+
+    &:hover {
+      border-bottom: 1px solid currentColor;
+    }
+  }
+
+  &.bulk {
+    border-radius: 36px;
+    font-size: 14px;
+    padding: 2px 25px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--color-bg-secondary);
+    transition: background-color 300ms ease;
+
+    @media (max-width: 499px) {
+      min-height: 40px;
+    }
+
+    &:hover {
+      background-color: var(--color-bg-main);
+    }
+  }
+}

@@ -1,12 +1,9 @@
 "use client";
 
-import { useContext } from "react";
 import toast from "react-hot-toast";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-
-import { SelectedDeliveryContext } from "@/entities/order";
 
 import {
   addCartItem,
@@ -70,7 +67,6 @@ export function useUpdateCart() {
     mutationFn: (item) => updateCart({ items: [item] }, token),
     onSuccess: (newCart) => {
       queryClient.setQueryData([...cartQueryKeys.current(), isAuthorized], newCart);
-      toast.success("Количество товара в корзине изменено");
     },
   });
 }
