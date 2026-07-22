@@ -50,10 +50,9 @@ export const OrderSummary = () => {
 
   const onSubmit = (orderData: TOrder) => {
     mutate(orderData, {
-      onSuccess: (data) => {
-        
-        //router.push(`/order/order-succeed`);
-        //void queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
+      onSuccess: () => {
+        router.push(`/order/order-succeed`);
+        void queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
       },
     });
   };

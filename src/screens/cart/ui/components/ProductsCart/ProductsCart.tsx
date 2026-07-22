@@ -13,8 +13,8 @@ import { RemoveFromCart } from "../RemoveFromCart/RemoveFromCart";
 export const ProductsCart = ({ cartItems }: { cartItems: CartItemRespond[] }) => {
   const { mutate: removeItem } = useRemoveCartItem();
 
-  const availableItems = cartItems.filter((item) => item.stock > 1);
-  const unAvailableItems = cartItems.filter((item) => item.stock === 1);
+  const availableItems = cartItems.filter((item) => item.stock > 0);
+  const unAvailableItems = cartItems.filter((item) => item.stock === 0);
 
   const handleDeleteAll = () => {
     unAvailableItems.forEach((item) => removeItem(item.product_variant));

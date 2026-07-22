@@ -20,6 +20,16 @@ export const CartPromocode = () => {
   const removePromo = useRemoveCartPromoCode();
   const isPromoLoading = applyPromo.isPending || removePromo.isPending;
 
+  const handleChangePromo = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.toUpperCase();
+
+    value = value.replace(/[^A-Z0-9_-]/g, "");
+
+    if (value.length <= 20) {
+      setPromocode(value);
+    }
+  };
+
   const handleTogglePromo = () => {
     if (hasPromoCode) {
       removePromo.mutate(undefined, {
@@ -38,14 +48,14 @@ export const CartPromocode = () => {
         className={styles.cartSummaryDiscountInput}
         placeholder='Ввести промокод'
         value={currentInputValue}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setPromocode(e.target.value)}
+        onChange={handleChangePromo}
         disabled={isPromoLoading || hasPromoCode}
       />
       <ButtonUI
         variant={!hasPromoCode ? "primary" : "secondary"}
         className={styles.cartSummaryDiscountButton}
         onClick={() => handleTogglePromo()}
-        disabled={isPromoLoading || !promoValue}
+        disabled={isPromoLoading || !promoValue || promoValue.length < 8}
       >
         {hasPromoCode ? "Удалить" : "Применить"}
       </ButtonUI>

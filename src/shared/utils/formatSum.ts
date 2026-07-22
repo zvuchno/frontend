@@ -3,7 +3,8 @@ export const formatSum = (value: string | number): string => {
 
   if (isNaN(num)) return "0";
   return new Intl.NumberFormat("ru-RU", {
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
   })
     .format(num)
     .replace(",", ".");

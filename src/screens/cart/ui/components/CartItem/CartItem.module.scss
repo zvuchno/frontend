@@ -60,6 +60,13 @@
     gap: 10px;
   }
 
+  &StockMessage {
+    color: red;
+    font-size: 14px;
+    font-weight: 500;
+    padding-block-start: 15px;
+  }
+
   &Image {
     line-height: 1;
     display: flex;

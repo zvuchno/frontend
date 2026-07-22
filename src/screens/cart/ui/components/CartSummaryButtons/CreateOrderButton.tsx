@@ -7,7 +7,7 @@ import { ButtonUI } from "@/shared/ui";
 
 import styles from "./CartSummaryButtons.module.scss";
 
-export const CreateOrderButton = () => {
+export const CreateOrderButton = ({ disabled }: { disabled: boolean }) => {
   const { user } = useUserStore();
   const isAuthorized = !!user?.id;
 
@@ -24,7 +24,12 @@ export const CreateOrderButton = () => {
   };
 
   return (
-    <ButtonUI variant={"primary"} className={styles.cartSummaryButton} onClick={onCreateOrder}>
+    <ButtonUI
+      variant={"primary"}
+      className={styles.cartSummaryButton}
+      onClick={onCreateOrder}
+      disabled={disabled}
+    >
       Перейти к оформлению
     </ButtonUI>
   );

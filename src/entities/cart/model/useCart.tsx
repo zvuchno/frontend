@@ -67,7 +67,6 @@ export function useUpdateCart() {
     mutationFn: (item) => updateCart({ items: [item] }, token),
     onSuccess: (newCart) => {
       queryClient.setQueryData([...cartQueryKeys.current(), isAuthorized], newCart);
-      toast.success("Количество товара в корзине изменено");
     },
   });
 }

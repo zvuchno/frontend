@@ -28,7 +28,10 @@ export function NavPanel({ className, items = mainNavRoutes }: NavPanelProps) {
           href={item.href}
           variant='outlined'
           items={item.items}
-          className={isActive(item.href.toString()) ? `${styles.linkActive}` : ""}
+          className={clsx(
+            styles.navLink,
+            isActive(item.href.toString()) ? `${styles.linkActive}` : ""
+          )}
         >
           {item.label}
         </Link>
