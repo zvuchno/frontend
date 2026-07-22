@@ -9,8 +9,8 @@ export const addContactFormFields: TAddContactFormField[] = [
     required: false,
     validation: {
       minLength: {
-        value: 2,
-        message: "Минимум 2 символа",
+        value: 3,
+        message: "Минимум 3 символа",
       },
       maxLength: {
         value: 50,
@@ -21,7 +21,7 @@ export const addContactFormFields: TAddContactFormField[] = [
   {
     title: "Адрес",
     name: "email",
-    placeholder: "booking@gmaol.com",
+    placeholder: "booking@gmail.com",
     type: "email",
     required: false,
     validation: {
@@ -37,13 +37,13 @@ export const addLinkFormFields: TAddContactFormField[] = [
   {
     title: "Название",
     name: "name",
-    placeholder: "Букинг",
+    placeholder: "ВКонтакте",
     type: "text",
     required: false,
     validation: {
       minLength: {
-        value: 2,
-        message: "Минимум 2 символа",
+        value: 3,
+        message: "Минимум 3 символа",
       },
       maxLength: {
         value: 50,
@@ -54,7 +54,7 @@ export const addLinkFormFields: TAddContactFormField[] = [
   {
     title: "URL",
     name: "url",
-    placeholder: "booking@gmaol.com",
+    placeholder: "https://example.com",
     type: "url",
     required: false,
     validation: {

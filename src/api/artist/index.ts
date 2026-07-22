@@ -1,12 +1,3 @@
-export { getCurrentArtist } from "./getCurrentArtist";
-export { updateCurrentArtist } from "./updateCurrentArtist";
-export { updateCurrentArtistCover } from "./updateCurrentArtistCover";
+export { getArtistOrders, getArtistOrderDetails } from "./ordersApi/getArtistOrders";
 
-export type {
-  ArtistApiDataItem,
-  CurrentArtistResponse,
-  UpdateCurrentArtistCoverPayload,
-  UpdateCurrentArtistCoverResponse,
-  UpdateCurrentArtistPayload,
-  UpdateCurrentArtistResponse,
-} from "./types";
+export type { TArtistOrder, TArtistOrderDetails } from "./ordersApi/types";

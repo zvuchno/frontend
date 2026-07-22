@@ -79,7 +79,7 @@ export function useListenerProfile() {
       ]);
 
       // Обновляем стейт пользователя
-      setUser(toUserStoreData(accountResponse, sessionUser?.accessToken));
+      setUser(toUserStoreData(accountResponse, token));
 
       // Пытаемся обновить сессию (если нужно)
       if (shouldSyncSessionAccount(sessionUser, accountResponse)) {

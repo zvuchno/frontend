@@ -1,7 +1,6 @@
 "use client";
 
-import { getArtistOrders } from "@/api/artist/ordersApi/getArtistOrders";
-import { type TArtistOrder } from "@/api/artist/ordersApi/types";
+
 import { type PaginatedStoreResponse } from "@/api/store/types";
 import { Loader, Title } from "@/shared/ui";
 import type { InfiniteData } from "@tanstack/react-query";
@@ -11,6 +10,7 @@ import s from "./OrdersPageArtist.module.scss";
 import { CardOrderArtist } from "@/widgets/orders";
 import { ORDER_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
 import { getRelativeDateLabel } from "@/shared/utils/getRelativeDateLabel";
+import { getArtistOrders, type TArtistOrder } from "@/api/artist";
 
 export function OrdersPageArtist() {
   const { status, data: session } = useSession();

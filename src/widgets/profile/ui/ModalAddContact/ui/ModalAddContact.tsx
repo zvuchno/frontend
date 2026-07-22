@@ -48,9 +48,7 @@ export const ModalAddContact = ({
       <div className={s.container}>
         <form
           className={s.form}
-          onSubmit={() => {
-            handleSubmit(onSave);
-          }}
+          onSubmit={handleSubmit(onSave)}
         >
           <Title className={s.form__title} Tag='h5' variant='title'>
             {variant === "contact" ? "Добавление контакта" : "Добавление ссылки"}
