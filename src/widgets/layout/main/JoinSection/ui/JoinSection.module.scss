@@ -7,7 +7,7 @@
   height: 681px;
   padding: 120px;
   background-color: transparent;
-  background-image: url('/images/Image_join_section.png');
+  background-image: url("/images/Image_join_section.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: auto;
@@ -29,7 +29,7 @@
   gap: 17px;
   align-items: center;
   padding: 16px 20px;
-  min-width: 440px;
+  min-width: 100%;
   border-radius: 36px;
   font-family: var(--font-feature-mono);
   font-size: 28px;

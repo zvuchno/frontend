@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 import { type FieldValues } from "@/screens/order/model/types";
+
+import { YooKassaPayment } from "@/widgets/PaymentService";
+import { usePayment } from "@/widgets/PaymentService";
 
 import { cartQueryKeys } from "@/entities/cart";
 import {
@@ -34,13 +37,16 @@ export const OrderSummary = () => {
   const totalSum = !deliverySum ? Number(itemsSum) : Number(itemsSum) + Number(deliverySum);
 
   const { mutate, isPending } = useCreateOrder();
+  const { mutate: createPaymentKey } = usePayment();
 
-  const router = useRouter();
+  //const router = useRouter();
 
   const {
     handleSubmit,
     formState: { isValid },
   } = useFormContext<TOrder>();
+
+  const [confirmationToken, setConfirmationToken] = useState<string | null>(null);
 
   const isFormValid = hasDeliveryPrice
     ? isValid && totalSum > 0 && deliverySum
@@ -50,8 +56,17 @@ export const OrderSummary = () => {
 
   const onSubmit = (orderData: TOrder) => {
     mutate(orderData, {
-      onSuccess: () => {
-        router.push(`/order/order-succeed`);
+      onSuccess: (data) => {
+        //router.push(`/order/order-succeed`);
+        createPaymentKey(data.id, {
+          onSuccess: (data) => {
+            if (!data) {
+              console.error("Не получен токен для оплаты через Ю-Касса");
+              return;
+            }
+            setConfirmationToken(data.confirmation_token);
+          },
+        });
         void queryClient.invalidateQueries({ queryKey: cartQueryKeys.all });
       },
     });
@@ -74,6 +89,8 @@ export const OrderSummary = () => {
       >
         Оформить заказ
       </ButtonUI>
+
+      {confirmationToken && <YooKassaPayment confirmationToken={confirmationToken} />}
     </div>
   );
 };

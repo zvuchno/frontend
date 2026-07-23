@@ -1,20 +1,20 @@
-/*import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
-import { type TPaymentError, type TPaymentRequest, type TPaymentResponse } from "../model/types";
+import { type TPaymentRequest, type TPaymentResponse } from "../model/types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
-/*export async function initiatePayment(
-  orderId: TPaymentRequest,
+export async function initiatePayment(
+  payload: TPaymentRequest,
   token?: string
-): Promise<TPaymentResponse | null> {
+): Promise<TPaymentResponse> {
   //let confirmationToken;
   try {
     const res = await authFetchClient<TPaymentResponse | null>(
       `${baseUrl}/v1/store/payments/create/`,
       {
         method: "POST",
-        body: JSON.stringify(orderId),
+        body: JSON.stringify(payload),
         headers: {
           "Content-Type": "application/json",
         },
@@ -23,10 +23,9 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
       token
     );
 
-    if (!res) return null;
-
     return res;
   } catch (error) {
     console.log(error);
+    return null;
   }
-}*/
+}

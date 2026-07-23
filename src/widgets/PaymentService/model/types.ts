@@ -10,8 +10,8 @@ export type TPaymentRequest = {
 
 export type TPaymentResponse = {
   confirmation_token: string;
-};
+} | null;
 
 export interface TPaymentError {
   error: string;
-};
+}

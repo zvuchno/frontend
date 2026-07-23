@@ -1,10 +1,14 @@
-/*import { useMutation, useQuery } from "@tanstack/react-query"
-import { TPaymentError, TPaymentRequest, TPaymentResponse } from "./types"
-import { initiatePayment } from "../api/payment.api"
+import { useMutation } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
-export function usePayment(orderId: number) {
-  return useMutation<TPaymentRequest, TPaymentError, TPaymentResponse>({
-    mutationKey: ['confirmation-token', orderId],
-    mutationFn: initiatePayment
-  })
-}*/
+import { initiatePayment } from "../api/payment.api";
+import { type TPaymentError, type TPaymentResponse } from "./types";
+
+export function usePayment() {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation<TPaymentResponse, TPaymentError, number>({
+    mutationFn: (orderId: number) => initiatePayment({ order_id: orderId }, token),
+  });
+}
