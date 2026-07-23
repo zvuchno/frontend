@@ -18,7 +18,7 @@
     line-height: 0;
     background-color: transparent;
   }
-  
+
   & ul {
     list-style: none;
   }
@@ -57,7 +57,7 @@
   }
 
   &Title {
-    font-family: 'BetterVCR', monospace;
+    font-family: "BetterVCR", monospace;
     font-weight: 400;
     font-size: 32px;
     line-height: 1;
@@ -68,6 +68,9 @@
 
   &Menu {
     display: flex;
+    @media (max-width: 820px) {
+      gap: 15px !important;
+    }
   }
 
   &Actions {
@@ -76,11 +79,19 @@
     gap: 30px;
     align-items: center;
 
+    @media (max-width: 870px) {
+      gap: 15px;
+    }
+
     &Menu {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 29px;
+
+      @media (max-width: 870px) {
+        gap: 15px;
+      }
     }
   }
 
@@ -102,10 +113,6 @@
     &Menu {
       display: none !important;
     }
-
-    &ActionsMenu {
-      gap: 20px;
-    }
   }
 }
 
@@ -116,5 +123,20 @@
     &ActionsMenu {
       gap: 16px;
     }
+  }
+}
+
+@media (max-width: 400px) {
+  .header {
+    padding-inline: 10px;
+  }
+}
+
+@media (max-width: 374px) {
+  .headerActionsMenu {
+    gap: 10px;
+  }
+  .headerActionsMenu > *:first-child {
+    display: none;
   }
 }

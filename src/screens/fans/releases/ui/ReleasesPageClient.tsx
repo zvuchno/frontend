@@ -103,7 +103,7 @@ export function ReleasesPageClient() {
               <DownloadIcon />
             </button>
           }
-          link={`/catalog/release/${card.id}/?kind=${card.kind}`}
+          link={`/catalog/release/${card.id}?kind=release`}
         />
       )})}
       {hasNextPage && (

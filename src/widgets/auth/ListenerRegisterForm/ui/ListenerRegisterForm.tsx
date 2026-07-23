@@ -188,6 +188,7 @@ export const ListenerRegisterForm = ({
             error={!!errors.password}
             message={errors.password}
             disabled={isLoading}
+            autoComplete="new-password"
           />
 
           <PasswordInput
@@ -200,6 +201,7 @@ export const ListenerRegisterForm = ({
             error={!!errors.confirmPassword}
             message={errors.confirmPassword}
             disabled={isLoading}
+            autoComplete="new-password"
           />
 
           {registerError && (

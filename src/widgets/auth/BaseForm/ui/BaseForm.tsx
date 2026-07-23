@@ -43,7 +43,7 @@ export const BaseForm = ({
         </Typography>
       </header>
 
-      <form className={s.baseForm__body} onSubmit={handleSubmit}>
+      <form className={s.baseForm__body} onSubmit={handleSubmit} autoComplete="off">
         {renderFields && (
           <div className={s.baseForm__fields}>{renderFields()}</div>
         )}

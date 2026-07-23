@@ -11,9 +11,10 @@ export const YooKassaPayment = ({ confirmationToken, onError }: YooKassaPaymentP
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const widgetRef = useRef<YooMoneyCheckoutWidgetInstance>(null);
 
+  //const handleSetIsLoaded = () => setIsScriptLoaded(true);
+
   useEffect(() => {
-    if (window.YooMoneyCheckoutWidget) {
-      setIsScriptLoaded(true);
+    if (!window.YooMoneyCheckoutWidget) {
       return;
     }
 

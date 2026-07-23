@@ -61,7 +61,7 @@ export const VerifySuccessPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [router]);
+  }, [router, token]);
 
   useEffect(() => {
     if (!hasSentInitialRequest.current) {

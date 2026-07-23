@@ -33,13 +33,16 @@ export const authFetchClient = async <T>(
   //const session = await getSession();
   //const accessToken = session?.user.accessToken;
 
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    ...(init?.headers as Record<string, string>),
-  };
+  const headers = new Headers(init?.headers);
 
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  const hasFormData = init?.body instanceof FormData;
+
+  if (!hasFormData && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
   }
 
   const res = await fetch(input, { ...init, headers });
@@ -75,6 +78,8 @@ export const authFetchClient = async <T>(
         data.email ||
         data.token ||
         data.uid ||
+        data.old_password ||
+        data.password ||
         `HTTP ${res.statusText}`
     );
   }

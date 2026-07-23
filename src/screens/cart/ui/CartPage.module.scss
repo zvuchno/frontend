@@ -31,6 +31,10 @@
       font-size: clamp(26px, 2.5vw, 36px);
       margin-block-end: 5px;
     }
+
+    &.cartSubtitle {
+      font-size: 26px;
+    }
   }
 
   &Content {
@@ -41,6 +45,38 @@
 
     @media (max-width: 800px) {
       flex-direction: column;
+    }
+
+    &List {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: clamp(40px, 8.75vw, 126px);
+    }
+  }
+
+  &Unavailable {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &Title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 666px;
+      gap: 10px;
+
+      @media (max-width: 800px) {
+        max-width: none;
+      }
+
+      @media (max-width: 499px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
     }
   }
 }
@@ -73,4 +109,42 @@
   width: 100%;
   margin-block-start: -20px;
   margin-inline-start: 40px;
+}
+
+.modal {
+  &Content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 80%;
+    margin-block: 40px;
+    font-family: var(--font-vcr);
+    align-content: center;
+  }
+  &Title {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+  &List {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    list-style: decimal inside;
+    width: 80%;
+    line-height: 1.5;
+    text-align: start;
+    align-self: center;
+  }
+  &Buttons {
+    margin-block-start: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-self: center;
+  }
+
+  &Button {
+    width: 200px;
+  }
 }

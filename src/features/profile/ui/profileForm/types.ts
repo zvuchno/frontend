@@ -13,6 +13,9 @@ export interface FieldValues {
   password?: string;
   city?: string;
   url?: string;
+  userName?: string;
+  oldPassword?: string;
+  description?: string;
 }
 
 export interface TProfileFormUIProps {
@@ -44,6 +47,7 @@ export type TProfileFormField<T extends FieldValues = FieldValues> = {
 
 export type TProfileFormFieldsProps = {
   fieldsDisabled: boolean;
+  has_usable_password: boolean;
   disabledFields?: ReadonlyArray<keyof FieldValues>;
   showPublishHint?: boolean;
   personalDataHref?: string;

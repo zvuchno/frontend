@@ -6,9 +6,10 @@ import { ArrowIcon, Definition, Loader } from "@/shared/ui";
 import styles from "./OrderCardListener.module.scss";
 import type { TOrderCardListenerProps } from "../model/types";
 import { type KeyboardEvent, useState } from "react";
-import { getOrderDetail, type StoreOrderDetail } from "@/api/store";
+import { getOrderDetail } from "@/api/store";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -38,30 +39,17 @@ export const OrderCardListener = ({
   const token = session?.user.accessToken;
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const [details, setDetails] = useState<StoreOrderDetail | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const contentId = `content-${orderId}`;
 
-  const toggleExpanded = async () => {
-    if (isExpanded) {
-      setIsExpanded(false);
-      return;
-    }
-    setIsExpanded(true);
-    setLoading(true);
-    setError(null);
+  const { data: details, isLoading, error } = useQuery({
+    queryKey: ['order-details', 'listener', orderId],
+    queryFn: () => getOrderDetail(orderId, token),
+    enabled: isExpanded,
+    staleTime: 3 * 60 * 1000,
+  });
 
-    if (!details) {
-      try {
-        const data = await getOrderDetail(orderId, token);
-        setDetails(data);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : 'Ошибка загрузки');
-      } finally {
-        setLoading(false);
-      }
-    }
+  const toggleExpanded = () => {
+    setIsExpanded((prev) => !prev);
   };
 
   const allComments = details?.items
@@ -71,13 +59,13 @@ export const OrderCardListener = ({
 
   const handleHeaderKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
-      void toggleExpanded();
+      toggleExpanded();
       return;
     }
 
     if (event.key === " " || event.code === "Space") {
       event.preventDefault();
-      void toggleExpanded();
+      toggleExpanded();
     }
   };
 
@@ -89,7 +77,7 @@ export const OrderCardListener = ({
         aria-expanded={isExpanded}
         aria-controls={contentId}
         className={styles.header}
-        onClick={() => void toggleExpanded()}
+        onClick={toggleExpanded}
         onKeyDown={handleHeaderKeyDown}
       >
         <div className={styles.info}>
@@ -125,10 +113,10 @@ export const OrderCardListener = ({
         </div>
       )}
       <div id={contentId} className={styles.content} aria-hidden={!isExpanded}>
-        {loading ? (
+        {isLoading ? (
           <Loader />
         ) : error ? (
-          <p>Ошибка: {error}</p>
+          <p>Ошибка: {error.message}</p>
         ) : details ? (
           <div className={styles.contentInner}>
             <dl>
@@ -151,32 +139,33 @@ export const OrderCardListener = ({
                     ? product.target.selected_variant_id
                     : undefined;
                 return (
-                <div key={product.sku}>
-                  <Link 
-                    href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`} 
-                    className={styles.productCard}
-                  >
-                    <div className={styles.media}>
-                      {product.image && (
-                        <Image 
-                          className={styles.image}
-                          src={product.image}
-                          alt={product.name}
-                          width={136}
-                          height={136}
-                          sizes='136px'
-                        />
-                      )}
-                    </div>
-                    <div className={styles.content}>
-                      <h4 className={styles.title}>`${product.kind} ${product.name}`</h4>
-                      {product.price_at_purchase !== undefined && product.price_at_purchase !== null ? (
-                        <p className={styles.price}>{formatTotalPrice(Number(product.price_at_purchase))}</p>
-                      ) : null}
-                    </div>
-                  </Link>
-                  <p className={styles.quantity}>{`количество ${product.quantity}шт`}</p>
-                </div>)
+                  <div key={product.sku}>
+                    <Link 
+                      href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`} 
+                      className={styles.productCard}
+                    >
+                      <div className={styles.media}>
+                        {product.image && (
+                          <Image 
+                            className={styles.image}
+                            src={product.image}
+                            alt={product.name}
+                            width={136}
+                            height={136}
+                            sizes='136px'
+                          />
+                        )}
+                      </div>
+                      <div className={styles.cardContent}>
+                        <h4 className={styles.title}>{product.kind} {product.name}</h4>
+                        {product.price_at_purchase !== undefined && product.price_at_purchase !== null ? (
+                          <p className={styles.price}>{formatTotalPrice(Number(product.price_at_purchase))}</p>
+                        ) : null}
+                      </div>
+                    </Link>
+                    <p className={styles.quantity}>{`количество ${product.quantity}шт`}</p>
+                  </div>
+                )
               })}
             </div>
           </div>

@@ -27,9 +27,10 @@ const meta: Meta<typeof ProfileFormUI> = {
             fieldsDisabled={false}
             disabledFields={ARTIST_DISABLED_FIELDS}
             personalDataHref='/'
+            has_usable_password={false}
           />
         ),
-        listener: <ProfileFormListenerUI fieldsDisabled={false} showPublishHint={false} />,
+        listener: <ProfileFormListenerUI fieldsDisabled={false} showPublishHint={false} has_usable_password={false} />,
       },
     },
   },
@@ -88,6 +89,7 @@ export const ProfileFormNew: Story = {
         fieldsDisabled={false}
         disabledFields={ARTIST_DISABLED_FIELDS}
         personalDataHref='/'
+        has_usable_password={false}
       />
     ),
     values: {
@@ -117,6 +119,7 @@ export const ProfileFormCurrent: Story = {
           fieldsDisabled={!isEditMode}
           disabledFields={ARTIST_DISABLED_FIELDS}
           personalDataHref='/'
+          has_usable_password={false}
         />
       </ProfileFormUI>
     );
@@ -130,6 +133,7 @@ export const ProfileFormWithErrors: Story = {
         fieldsDisabled={false}
         disabledFields={ARTIST_DISABLED_FIELDS}
         personalDataHref='/'
+        has_usable_password={false}
       />
     ),
     isOnChange: true,
@@ -151,6 +155,7 @@ export const ProfileFormWithoutErrors: Story = {
         fieldsDisabled={false}
         disabledFields={ARTIST_DISABLED_FIELDS}
         personalDataHref='/'
+        has_usable_password={false}
       />
     ),
     isChecked: true,
@@ -168,6 +173,7 @@ export const ProfileFormWithoutHint: Story = {
         fieldsDisabled={false}
         disabledFields={ARTIST_DISABLED_FIELDS}
         showPublishHint={false}
+        has_usable_password={false}
       />
     ),
     values: {

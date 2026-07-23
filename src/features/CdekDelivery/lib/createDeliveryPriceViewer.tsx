@@ -12,6 +12,8 @@ export const createDeliveryPriceViewer = (
 ) => {
   const cdekDelivetryWidget = document.getElementById("cdek-map");
 
+  if (!cdekDelivetryWidget) return;
+
   const deliveryOptionsContainer = cdekDelivetryWidget?.querySelectorAll(".cdek-dorbss") || [];
 
   const deliveryOption = [...deliveryOptionsContainer].filter(
@@ -84,5 +86,28 @@ export const createDeliveryPriceViewer = (
         onDeliverySelect(null);
         paymentDetails.remove();
       };
+
+    //поиск маркеров на карте и отслеживание клика по ним, чтобы убрать информацию о предыдущем расчете при выборе другого пвз
+    const observer = new MutationObserver((mutations, obs) => {
+      const markers = cdekDelivetryWidget.querySelectorAll('[class*="6pvvrh"]');
+
+      if (markers.length > 0) {
+        console.log("Элементы появились в DOM после клика!", markers);
+
+        if (paymentDetails) {
+          markers.forEach((el) => {
+            el.addEventListener("click", () => {
+              onDeliverySelect(null);
+              paymentDetails.remove();
+            });
+          });
+        }
+      }
+    });
+
+    observer.observe(cdekDelivetryWidget, {
+      childList: true,
+      subtree: true,
+    });
   }
 };

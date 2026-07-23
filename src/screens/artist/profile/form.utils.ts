@@ -1,22 +1,21 @@
-import type { CurrentArtistResponse, UpdateCurrentArtistPayload } from "@/api/artist";
-
 import type { FieldValues } from "@/features/profile";
 
 import type { UserDataProps } from "@/entities/user";
+import type { 
+  CurrentArtistResponse, 
+  UpdateCurrentArtistPayload 
+} from "@/entities/profile";
 
 type ArtistProfileFormValueSource = {
   name?: string | null;
-  email?: string | null;
-  phone?: string | null;
+  description?: string | null;
   city?: string | null;
   url?: string | null;
 };
 
 export const EMPTY_PROFILE_FORM_VALUES: FieldValues = {
   name: "",
-  email: "",
-  phone: "",
-  password: "",
+  description: "",
   city: "",
   url: "",
 };
@@ -27,15 +26,13 @@ export function normalizePhone(value?: string | null): string {
 
 export function getArtistProfileFormValues({
   name,
-  email,
-  phone,
+  description,
   city,
   url,
 }: ArtistProfileFormValueSource): FieldValues {
   return {
     name: name ?? "",
-    email: email ?? "",
-    phone: normalizePhone(phone),
+    description: description ?? "",
     password: "",
     city: city ?? "",
     url: url ?? "",
@@ -48,6 +45,7 @@ export function hasArtistProfileChanges(
 ): boolean {
   return (
     (formData.name ?? "") !== (artist.name ?? "") ||
+    (formData.description ?? "") !== (artist.description ?? "") ||
     (formData.city ?? "") !== (artist.city ?? "") ||
     (formData.url ?? "") !== (artist.url ?? "")
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./buttonLike.module.scss";
 import { ButtonLikeIcon } from "./ButtonLikeIcon";
@@ -16,8 +16,12 @@ export const ButtonLike = ({
   isAuth,
   onToggle,
 }: TButtonLikeProps) => {
-  const [isLiked, setIsLiked] = useState(() => initialIsLiked);
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [animationKey, setAnimationKey] = useState(0);
+
+  useEffect(() => {
+    setIsLiked(initialIsLiked);
+  }, [initialIsLiked]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

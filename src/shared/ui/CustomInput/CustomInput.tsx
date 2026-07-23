@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, type TextareaHTMLAttributes } from "react";
 import { type InputProps } from "./CustomInput.types";
 import clsx from "clsx";
 import s from "./CustomInput.module.scss";
@@ -34,11 +34,12 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
         {multiline ? (
           <textarea
             id={id}
-            className={s.input_multiline}
+            className={clsx(s.input, s.input_multiline)}
             style={style}
             placeholder={otherProps.placeholder}
             rows={rows}
             ref={ref as React.Ref<HTMLTextAreaElement>}
+            {...otherProps as TextareaHTMLAttributes<HTMLTextAreaElement>}
             
           />
         ) : (

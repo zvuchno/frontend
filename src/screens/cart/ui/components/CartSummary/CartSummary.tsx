@@ -19,6 +19,14 @@ export function CartSummary() {
   const totalSum = data?.total ?? 0;
   const discountSum = data?.discount_promocode ?? 0;
 
+  const hasInappropriateItems = data?.items
+    .filter((item) => item.stock > 0)
+    .some((item) => item.stock < item.quantity);
+
+  const hasItemsToOrder = data && Number(data.subtotal) > 0;
+
+  const isOrderValid = (hasItemsToOrder && !hasInappropriateItems) ?? false;
+
   if (isLoading && !data) {
     return <div className={styles.cartSummary}>Загрузка...</div>;
   }
@@ -44,7 +52,7 @@ export function CartSummary() {
             <span>Итого:</span>
             <span style={{ whiteSpace: "nowrap" }}>{formatSum(totalSum ? totalSum : 0)} ₽</span>
           </div>
-          <CartSummaryButtons />
+          <CartSummaryButtons isValid={isOrderValid} />
         </div>
       </div>
     </PromoCodeContext.Provider>
