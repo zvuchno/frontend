@@ -149,39 +149,6 @@
     margin: 0;
   }
 
-  .socialButton {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 9px 16px;
-    gap: 10px;
-    width: 136px;
-    height: 60px;
-    background: #e4f1ff;
-    border: 1px solid #100f0d;
-    border-radius: 36px;
-    font-family: "Better VCR", sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 28px;
-    letter-spacing: -0.04em;
-    color: #100f0d;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover:not(:disabled) {
-      background: #d4e8ff;
-      transform: translateY(-2px);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  }
-
   .rememberMe {
     display: flex;
     align-items: center;
@@ -268,47 +235,6 @@
   text-align: center;
 }
 
-.socialButtons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-  align-items: center;
-}
-
-.socialButton {
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 9px 16px;
-  width: 136px;
-  height: 60px;
-  background: #e4f1ff;
-  border: 1px solid #100f0d;
-  border-radius: 36px;
-  font-family: var(--font-vcr);
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 28px;
-  letter-spacing: -0.04em;
-  color: #100f0d;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-
-  &:hover:not(:disabled) {
-    background: #d4e8ff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(16, 15, 13, 0.15);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
-}
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -321,15 +247,9 @@
     padding: 24px 20px;
     margin: 0 16px;
 
-    :global(.baseForm__title) {
+    .baseForm__title {
       font-size: 18px;
       line-height: 24px;
-    }
-
-    .socialButton {
-      width: 120px;
-      height: 52px;
-      font-size: 18px;
     }
   }
 }

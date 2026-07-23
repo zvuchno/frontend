@@ -30,3 +30,5 @@ export { TagUI } from "./Tag";
 export { Text, Title, Typography } from "./Typography";
 export { VerifyLoader } from "./VerifyLoader";
 export { Loader } from "./Loader";
+export { FormSocialButtons } from "./FormSocialButtons/FormSocialButtons";
+export { LoadingButton } from "./LoadingButton/LoadingButton";

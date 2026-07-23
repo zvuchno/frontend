@@ -1,7 +1,6 @@
-import { ButtonUI } from "@/shared/ui";
+import { ButtonUI, LoadingButton } from "@/shared/ui";
 
 import { type AuthFormData } from "../model/AuthForm.types";
-import { LoadingButton } from "./LoadingButton";
 
 export const PrimaryButton = ({
   isLoading,
