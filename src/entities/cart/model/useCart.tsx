@@ -92,11 +92,13 @@ export function useRemoveCartItem() {
           (item) => item.product_variant !== variantId
         );
 
-        const updatedSubtotal = updatedItems.reduce((acc, item) => {
+        const activeItemsForCalc = updatedItems.filter((item) => item.stock !== 0);
+
+        const updatedSubtotal = activeItemsForCalc.reduce((acc, item) => {
           return acc + Number(item.base_line_total);
         }, 0);
 
-        const updatedTotal = updatedItems.reduce((acc, item) => {
+        const updatedTotal = activeItemsForCalc.reduce((acc, item) => {
           return acc + Number(item.discount_line_total);
         }, 0);
 

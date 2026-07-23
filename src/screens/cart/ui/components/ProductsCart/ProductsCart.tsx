@@ -13,7 +13,8 @@ import { RemoveFromCart } from "../RemoveFromCart/RemoveFromCart";
 export const ProductsCart = ({ cartItems }: { cartItems: CartItemRespond[] }) => {
   const { mutate: removeItem } = useRemoveCartItem();
 
-  const availableItems = cartItems.filter((item) => item.stock > 0);
+  // item.stock === null - цифровые товары в наличии (сток всегда = null), заказ возможен только в 1 экз. по умолчанию
+  const availableItems = cartItems.filter((item) => item.stock > 0 || item.stock === null);
   const unAvailableItems = cartItems.filter((item) => item.stock === 0);
 
   const handleDeleteAll = () => {

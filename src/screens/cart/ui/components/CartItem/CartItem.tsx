@@ -1,59 +1,25 @@
 "use client";
 
-import toast from "react-hot-toast";
-
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { type CartItemRespond, useRemoveCartItem, useUpdateCart } from "@/entities/cart";
+import { type CartItemRespond, useRemoveCartItem } from "@/entities/cart";
 
 import { formatSum } from "@/shared/utils/formatSum";
 
-import { ItemsCounter } from "../ItemsCounter";
 import { RemoveFromCart } from "../RemoveFromCart/RemoveFromCart";
 import styles from "./CartItem.module.scss";
+import { CartItemDetails } from "./CartItemDetails";
 
 export const CartItem = ({ item }: { item: CartItemRespond }) => {
-  const { mutate: updateCount } = useUpdateCart();
   const { mutate: removeItem } = useRemoveCartItem();
 
   const hasDiscount = Number(item.base_line_total) > Number(item.discount_line_total);
-  const isAvailable = item.stock > 0;
-
-  const isInappropriate = item.stock > 0 && item.quantity > item.stock;
+  const isAvailable = item.stock > 0 || item.stock === null;
 
   const router = useRouter();
-
-  const handleUpdateItemCount = (type: "increment" | "decrement") => {
-    const currentCount = item.quantity;
-    const availableCount = item.stock;
-
-    if (type === "increment") {
-      if (currentCount >= availableCount) {
-        toast.error("недостаточно товара");
-        return;
-      }
-      const newCount = currentCount + 1;
-      return updateCount(
-        {
-          product_variant: item.product_variant,
-          quantity: newCount,
-        },
-        { onSuccess: () => toast.success("Количество товара в корзине изменено") }
-      );
-    }
-    if (type === "decrement") {
-      if (currentCount > 1) {
-        return updateCount({
-          product_variant: item.product_variant,
-          quantity: currentCount - 1,
-        });
-      }
-      return removeItem(item.product_variant);
-    }
-  };
 
   const onRemoveItem = () => removeItem(item.product_variant);
 
@@ -89,26 +55,7 @@ export const CartItem = ({ item }: { item: CartItemRespond }) => {
             <h3 className={styles.cartItemTitle}>{item.name}</h3>
           </Link>
 
-          <div className={styles.cartItemDetails}>
-            <span className={styles.cartItemDescription}>{item.kind}</span>
-            {isAvailable && (
-              <div className={styles.cartItemCounter}>
-                <span>Количество:</span>
-                <ItemsCounter
-                  quantity={isAvailable ? item.quantity : 0}
-                  onIncrement={() => handleUpdateItemCount("increment")}
-                  onDecrement={() => handleUpdateItemCount("decrement")}
-                  incrementDisabled={!isAvailable}
-                  decrementDisabled={!isAvailable}
-                />
-              </div>
-            )}
-            {isInappropriate && (
-              <span
-                className={styles.cartItemStockMessage}
-              >{`Недостаточно товара на складе. Доступно ${item.stock} шт.`}</span>
-            )}
-          </div>
+          <CartItemDetails item={item} onRemove={removeItem} isAvailable={isAvailable} />
           {isAvailable ? (
             <div className={styles.cartItemSum}>
               {hasDiscount && (
