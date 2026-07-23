@@ -6,7 +6,7 @@ export interface BaseFormProps {
   onClose?: () => void;
   renderFields?: () => ReactNode;
   renderPrimaryButton?: (isLoading: boolean) => ReactNode;
-  renderSecondaryButton?: () => ReactNode;
+  renderSecondaryButton?: (isLoading?: boolean) => ReactNode;
   renderSocialLogin?: () => ReactNode;
   className?: string;
   isLoading?: boolean;
