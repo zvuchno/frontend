@@ -14,7 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
   currency: "RUB",
-  maximumFractionDigits: 0,
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
 });
 
 const orderDateFormatter = new Intl.DateTimeFormat("ru-RU", {
@@ -120,9 +121,33 @@ export const OrderCardListener = ({
         ) : details ? (
           <div className={styles.contentInner}>
             <dl>
-              <Definition className={styles.definition} label='Адрес' value={details?.full_address} />
-              <Definition className={styles.definition} label='Способ доставки' value={details.delivery} />
-              <Definition className={styles.definition} label='ФИО получателя' value={details.full_name} />
+              {details.full_address && (
+                <Definition 
+                  className={styles.definition} 
+                  label='Адрес' 
+                  value={details.full_address} 
+                />
+              )}
+              <Definition 
+                className={styles.definition} 
+                label='ФИО получателя' 
+                value={details.full_name} 
+              />
+              {details.delivery && (
+                <Definition 
+                  className={styles.definition} 
+                  label='Способ доставки' 
+                  value={details.delivery} 
+                />
+              )}
+              {details.delivery_price && (
+                <Definition 
+                  className={styles.definition} 
+                  label='Стоимость доставки' 
+                  value={formatTotalPrice(Number(details.delivery_price))} 
+                />
+              )}
+              
             </dl>
             {allComments && (
               <dl>
@@ -159,11 +184,17 @@ export const OrderCardListener = ({
                       <div className={styles.cardContent}>
                         <h4 className={styles.title}>{product.kind} {product.name}</h4>
                         {product.price_at_purchase !== undefined && product.price_at_purchase !== null ? (
-                          <p className={styles.price}>{formatTotalPrice(Number(product.price_at_purchase))}</p>
+                          <p className={styles.price}>
+                            {formatTotalPrice(Number(product.line_total))}
+                          </p>
                         ) : null}
                       </div>
                     </Link>
-                    <p className={styles.quantity}>{`количество ${product.quantity}шт`}</p>
+                    {product.quantity === null ? (
+                      <p className={styles.quantity}>{`цифровой товар`}</p>
+                    ) : (
+                      <p className={styles.quantity}>{`количество ${product.quantity}шт`}</p>
+                    )}
                   </div>
                 )
               })}

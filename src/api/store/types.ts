@@ -49,7 +49,7 @@ export type StoreOrderItem = {
   property_name: string;
   property_value: string;
   price_at_purchase: string;
-  quantity: number;
+  quantity: number | null;
   donation: string;
   promocode_discount: string;
   line_total: string;
