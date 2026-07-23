@@ -1,10 +1,13 @@
+"use client";
+
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-import s from "../ui/AuthForm.module.scss";
+import s from "./FormSocialButtons.module.scss";
 
-export const SocialButtons = ({ disabled }: { disabled: boolean }) => {
+export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
   const searchParams = useSearchParams();
+
   const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
 

@@ -15,3 +15,12 @@ export interface ArtistRegisterFormProps {
   onLoginClick?: () => void;
   onSocialLogin?: (provider: "yandex" | "vk" | "google") => void;
 }
+
+export interface FormErrors {
+  title?: string;
+  login?: string;
+  email?: string;
+  phone?: string;
+  password?: string;
+  confirmPassword?: string;
+}

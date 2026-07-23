@@ -9,11 +9,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { cartQueryKeys } from "@/entities/cart";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 
+import { FormSocialButtons } from "@/shared/ui";
+
 import { BaseForm } from "../../BaseForm";
 import { AuthFormFields } from "../components/AuthFormFields";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { SecondaryButton } from "../components/SecondaryButton";
-import { SocialButtons } from "../components/SocialButtons";
 import { type AuthFormData, type AuthFormProps } from "../model/AuthForm.types";
 import s from "./AuthForm.module.scss";
 
@@ -121,7 +122,7 @@ export const AuthForm = ({
         />
       )}
       renderSocialLogin={() => {
-        return <SocialButtons disabled={isLoading} />;
+        return <FormSocialButtons disabled={isLoading} />;
       }}
     />
   );

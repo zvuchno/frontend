@@ -16,3 +16,11 @@ export interface ListenerRegisterFormProps {
   // isLoading?: boolean;
   // error?: string | null;
 }
+
+export interface FormErrors {
+  login?: string;
+  email?: string;
+  phone?: string;
+  password?: string;
+  confirmPassword?: string;
+}

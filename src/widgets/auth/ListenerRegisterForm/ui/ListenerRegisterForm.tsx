@@ -2,31 +2,23 @@
 
 import React, { useState } from "react";
 
-import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { type TNewListenerRequest } from "@/entities/user";
 import { useUserStore } from "@/entities/user/store/useUserStore";
 
-import { CustomInput, PhoneInput, Typography } from "@/shared/ui";
-import { PasswordInput } from "@/shared/ui/CustomInput";
+import { FormSocialButtons, LoadingButton } from "@/shared/ui";
 
 import { BaseForm } from "../../BaseForm";
 import { validateField } from "../../config/validateField";
 import { validateForm } from "../../config/validateForm";
+import { ListenerRegisterFormContent } from "../components/ListenerRegisterFormContent/ListenerRegisterFormContent";
 import {
+  type FormErrors,
   type ListenerRegisterFormData,
   type ListenerRegisterFormProps,
 } from "../model/ListenerRegisterForm.types";
 import s from "./ListenerRegisterForm.module.scss";
-
-interface FormErrors {
-  login?: string;
-  email?: string;
-  phone?: string;
-  password?: string;
-  confirmPassword?: string;
-}
 
 const initialFormState: ListenerRegisterFormData = {
   login: "",
@@ -36,11 +28,7 @@ const initialFormState: ListenerRegisterFormData = {
   confirmPassword: "",
 };
 
-export const ListenerRegisterForm = ({
-  onClose,
-  onSubmit,
-  onSocialLogin,
-}: ListenerRegisterFormProps) => {
+export const ListenerRegisterForm = ({ onClose, onSubmit }: ListenerRegisterFormProps) => {
   const [formData, setFormData] = useState<ListenerRegisterFormData>(initialFormState);
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -112,104 +100,23 @@ export const ListenerRegisterForm = ({
     }
   };
 
-  const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
-    e.preventDefault();
-    const nextRoute = searchParams.get("next");
-    await signIn(provider, {
-      callbackUrl: nextRoute ? nextRoute : "/",
-    });
-  };
-
   return (
     <BaseForm
       title='Регистрация'
       onSubmit={() => {
-        handleSubmit().catch(console.error)
+        handleSubmit().catch(console.error);
       }}
       onClose={onClose}
       isLoading={isLoading}
       className={s.listenerRegisterForm}
       renderFields={() => (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "40px",
-            marginBottom: "20px",
-          }}
-        >
-          <CustomInput
-            id='login'
-            label='Имя пользователя*'
-            type='text'
-            name='login'
-            value={formData.login}
-            onChange={handleChange("login")}
-            placeholder='Текст'
-            error={!!errors.login}
-            message={errors.login}
-            inputSize='small'
-            disabled={isLoading}
-            maxLength={150}
-          />
-
-          <CustomInput
-            id='email'
-            label='Почта*'
-            type='email'
-            name='email'
-            value={formData.email}
-            onChange={handleChange("email")}
-            placeholder='user@example.com'
-            error={!!errors.email}
-            message={errors.email}
-            inputSize='small'
-            disabled={isLoading}
-          />
-
-          <PhoneInput
-            id='phone'
-            label='Телефон*'
-            value={formData.phone}
-            onChange={handleChange("phone")}
-            hasError={!!errors.phone}
-            errorMessage={errors.phone}
-            inputSize='small'
-            disabled={isLoading}
-          />
-
-          <PasswordInput
-            id='password'
-            label='Пароль*'
-            name='password'
-            value={formData.password}
-            onChange={handleChange("password")}
-            placeholder='Длина пароля не менее 8 символов.......'
-            error={!!errors.password}
-            message={errors.password}
-            disabled={isLoading}
-            autoComplete="new-password"
-          />
-
-          <PasswordInput
-            id='confirmPassword'
-            label='Повторите пароль*'
-            name='confirmPassword'
-            value={formData.confirmPassword}
-            onChange={handleChange("confirmPassword")}
-            placeholder=''
-            error={!!errors.confirmPassword}
-            message={errors.confirmPassword}
-            disabled={isLoading}
-            autoComplete="new-password"
-          />
-
-          {registerError && (
-            <Typography variant='normal' className={s.error}>
-              {registerError}
-            </Typography>
-          )}
-        </div>
+        <ListenerRegisterFormContent
+          data={formData}
+          disabled={isLoading}
+          errors={errors}
+          registerError={registerError}
+          handleFieldChange={handleChange}
+        />
       )}
       renderPrimaryButton={(loading) => (
         <button
@@ -221,69 +128,11 @@ export const ListenerRegisterForm = ({
             opacity: loading ? 0.6 : 1,
           }}
         >
-          {loading ? (
-            <>
-              <svg
-                className={s.spinner}
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                style={{
-                  display: "inline-block",
-                  width: "18px",
-                  height: "18px",
-                  marginRight: "8px",
-                  verticalAlign: "middle",
-                }}
-              >
-                <circle
-                  className='opacity-25'
-                  cx='12'
-                  cy='12'
-                  r='10'
-                  stroke='currentColor'
-                  strokeWidth='4'
-                />
-                <path
-                  className='opacity-75'
-                  fill='currentColor'
-                  d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                />
-              </svg>
-              Обработка...
-            </>
-          ) : (
-            "Зарегистрироваться"
-          )}
+          {loading ? <LoadingButton /> : "Зарегистрироваться"}
         </button>
       )}
       renderSocialLogin={() => {
-        return (
-          <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-            <button
-              type='button'
-              onClick={(e) => {
-                handleSocialAuth(e, "yandex").catch(console.error)
-              }}
-              disabled={isLoading}
-              className={s.socialButton}
-              aria-label='Яндекс'
-            >
-              Я
-            </button>
-            <button
-              type='button'
-              onClick={(e) => {
-                handleSocialAuth(e, "vk").catch(console.error)
-              }}
-              disabled={isLoading}
-              className={s.socialButton}
-              aria-label='VK'
-            >
-              VK
-            </button>
-          </div>
-        );
+        return <FormSocialButtons disabled={isLoading} />;
       }}
     />
   );
