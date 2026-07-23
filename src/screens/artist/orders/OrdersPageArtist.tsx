@@ -1,6 +1,5 @@
 "use client";
 
-
 import { type PaginatedStoreResponse } from "@/api/store/types";
 import { Loader, Title } from "@/shared/ui";
 import type { InfiniteData } from "@tanstack/react-query";

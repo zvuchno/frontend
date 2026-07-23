@@ -18,7 +18,8 @@ import { getArtistOrderDetails } from "@/api/artist";
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
   currency: "RUB",
-  maximumFractionDigits: 0,
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
 });
 
 const orderDateFormatter = new Intl.DateTimeFormat("ru-RU", {
@@ -107,10 +108,32 @@ export const CardOrderArtist = ({
         ) : details ? (
           <div className={styles.contentInner}>
             <dl>
-              <Definition className={styles.definition} label='Адрес' value={details.full_address} />
-              <Definition className={styles.definition} label='Способ доставки' value={details.delivery} />
-              <Definition className={styles.definition} label='ФИО получателя' value={details.full_name} />
-              <Definition className={styles.definition} label='Номер отправления' value={details.cdek_number} />
+              {details.full_address && (
+                <Definition 
+                  className={styles.definition} 
+                  label='Адрес' 
+                  value={details.full_address} 
+                />
+              )}
+              <Definition 
+                className={styles.definition} 
+                label='ФИО получателя' 
+                value={details.full_name} 
+              />
+              {details.delivery && (
+                <Definition 
+                  className={styles.definition} 
+                  label='Способ доставки' 
+                  value={details.delivery} 
+                />
+              )}
+              {details.cdek_number && (
+                <Definition 
+                  className={styles.definition} 
+                  label='Номер отправления' 
+                  value={details.cdek_number} 
+                />
+              )}
             </dl>
             {allComments && (
               <dl>
@@ -146,13 +169,37 @@ export const CardOrderArtist = ({
                     </div>
                     <div className={styles.cardContent}>
                       <dl>
-                        <Definition className={styles.definition} label={product.kind} value={product.name} />
+                        <Definition 
+                          className={styles.definition} 
+                          label={product.kind} 
+                          value={product.name} 
+                        />
                         {product.property_name && product.property_value && (
-                          <Definition className={styles.definition} label={product.property_name} value={product.property_value} />
+                          <Definition 
+                            className={styles.definition} 
+                            label={product.property_name} 
+                            value={product.property_value} 
+                          />
                         )}
                         {/* <Definition className={styles.definition} label='Тип' value={product.kind} /> */}
-                        <Definition className={styles.definition} label='Артикул' value={product.sku} />
-                        <Definition className={styles.definition} label='Кол-во' value={product.quantity} />
+                        <Definition 
+                          className={styles.definition} 
+                          label='Артикул' 
+                          value={product.sku} 
+                        />
+                        {product.quantity === null ? (
+                          <Definition 
+                            className={styles.definition} 
+                            label='Кол-во' 
+                            value='цифровой товар' 
+                          />
+                        ) : (
+                          <Definition 
+                            className={styles.definition} 
+                            label='Кол-во' 
+                            value={product.quantity} 
+                          />
+                        )}
                       </dl>
                     </div>
                   </Link>
