@@ -78,7 +78,7 @@ export default function RootLayout({
 
         {/* вывод сообшений об ошибках от сервера либо кастомных в попап уведомлении для пользователя */}
         <Toaster
-          position='bottom-left'
+          position='bottom-right'
           toastOptions={{ style: { fontFamily: "FeatureMono", border: "1px solid currentColor" } }}
         />
       </body>

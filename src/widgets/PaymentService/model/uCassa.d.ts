@@ -2,7 +2,7 @@ export {};
 
 interface YooMoneyCheckoutWidgetConfig {
   confirmation_token: string;
-  return_url: string;
+  return_url?: string;
   customization?: {
     modal?: boolean;
     colors?: {
@@ -20,6 +20,7 @@ interface YooMoneyCheckoutWidgetConfig {
 export interface YooMoneyCheckoutWidgetInstance {
   render: () => void;
   destroy: () => void;
+  on: (code: string, callback: () => void) => void;
 }
 
 declare global {

@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
+import toast from "react-hot-toast";
 
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 import { type FieldValues } from "@/screens/order/model/types";
 
@@ -13,6 +15,7 @@ import { usePayment } from "@/widgets/PaymentService";
 import { cartQueryKeys } from "@/entities/cart";
 import {
   type TOrder,
+  type TOrderResponse,
   useCreateOrder,
   useGetCheckoutData,
   useSelectDeliveryTariff,
@@ -39,7 +42,7 @@ export const OrderSummary = () => {
   const { mutate, isPending } = useCreateOrder();
   const { mutate: createPaymentKey } = usePayment();
 
-  //const router = useRouter();
+  const router = useRouter();
 
   const {
     handleSubmit,
@@ -54,10 +57,14 @@ export const OrderSummary = () => {
 
   const queryClient = useQueryClient();
 
+  const { data: order } = useQuery<TOrderResponse>({
+    queryKey: ["new-order"],
+    enabled: false,
+  });
+
   const onSubmit = (orderData: TOrder) => {
     mutate(orderData, {
       onSuccess: (data) => {
-        //router.push(`/order/order-succeed`);
         createPaymentKey(data.id, {
           onSuccess: (data) => {
             if (!data) {
@@ -76,6 +83,16 @@ export const OrderSummary = () => {
     void handleSubmit(onSubmit)();
   };
 
+  const handleNotSucceedPayment = (path: string) => {
+    router.push(path);
+    toast.error(`Заказ № ${order?.order_number} создан со статусом "Резерв", но не был оплачен`);
+  };
+
+  const handleSucceedPayment = (path: string) => {
+    router.push(path);
+    toast.success(`Заказ № ${order?.order_number} создан и успешно оплачен`);
+  };
+
   return (
     <div className={styles.summary}>
       <h2 className={styles.summaryTitle}>Ваш заказ:</h2>
@@ -90,7 +107,13 @@ export const OrderSummary = () => {
         Оформить заказ
       </ButtonUI>
 
-      {confirmationToken && <YooKassaPayment confirmationToken={confirmationToken} />}
+      {confirmationToken && (
+        <YooKassaPayment
+          confirmationToken={confirmationToken}
+          onReturn={handleNotSucceedPayment}
+          onSuccess={handleSucceedPayment}
+        />
+      )}
     </div>
   );
 };

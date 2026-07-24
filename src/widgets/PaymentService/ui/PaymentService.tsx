@@ -5,9 +5,16 @@ import { useEffect, useRef } from "react";
 import { type YooKassaPaymentProps } from "../model/types";
 import { type YooMoneyCheckoutWidgetInstance } from "../model/uCassa";
 
-const RETURN_URL = "https://dev.zvuchno.space/order/order-succeed";
+//const URL_SUCCESS = "https://dev.zvuchno.space/order/order-succeed";
+const returnPath = "/fans/orders";
+const successPath = "/order/order-succeed";
 
-export const YooKassaPayment = ({ confirmationToken, onError }: YooKassaPaymentProps) => {
+export const YooKassaPayment = ({
+  confirmationToken,
+  onError,
+  onReturn,
+  onSuccess,
+}: YooKassaPaymentProps) => {
   //const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const widgetRef = useRef<YooMoneyCheckoutWidgetInstance>(null);
 
@@ -44,7 +51,7 @@ export const YooKassaPayment = ({ confirmationToken, onError }: YooKassaPaymentP
 
       widgetRef.current = new window.YooMoneyCheckoutWidget({
         confirmation_token: confirmationToken,
-        return_url: RETURN_URL,
+        //return_url: URL_SUCCESS,
         customization: {
           modal: true,
           colors: {
@@ -52,13 +59,25 @@ export const YooKassaPayment = ({ confirmationToken, onError }: YooKassaPaymentP
             background: "#ffffff",
           },
         },
-        error_callback: function (error: any) {
+        error_callback: function (error) {
           console.error("Ошибка виджета ЮKassa:", error);
           if (onError) onError(error);
         },
       });
 
       widgetRef.current.render();
+
+      if (onSuccess) {
+        widgetRef.current.on("success", () => {
+          onSuccess(successPath);
+          if (widgetRef.current) widgetRef.current.destroy();
+        });
+      }
+
+      if (onReturn) {
+        widgetRef.current.on("modal_close", () => onReturn(returnPath));
+        widgetRef.current.on("fail", () => onReturn(returnPath));
+      }
     };
 
     if (window.YooMoneyCheckoutWidget) {
@@ -73,7 +92,7 @@ export const YooKassaPayment = ({ confirmationToken, onError }: YooKassaPaymentP
 
       return () => clearInterval(timer);
     }
-  }, [confirmationToken, onError]);
+  }, [confirmationToken, onError, onReturn, onSuccess]);
 
   return null;
 };
