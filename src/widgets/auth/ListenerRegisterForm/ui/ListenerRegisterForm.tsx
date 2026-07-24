@@ -119,15 +119,7 @@ export const ListenerRegisterForm = ({ onClose, onSubmit }: ListenerRegisterForm
         />
       )}
       renderPrimaryButton={(loading) => (
-        <button
-          className={s.submitButton}
-          type='submit'
-          disabled={loading}
-          style={{
-            cursor: loading ? "not-allowed" : "pointer",
-            opacity: loading ? 0.6 : 1,
-          }}
-        >
+        <button className={s.submitButton} type='submit' disabled={loading}>
           {loading ? <LoadingButton /> : "Зарегистрироваться"}
         </button>
       )}
