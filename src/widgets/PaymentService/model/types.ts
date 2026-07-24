@@ -1,7 +1,12 @@
 export interface YooKassaPaymentProps {
   confirmationToken: string;
-  onSuccess?: () => void;
-  onError?: (error: any) => void;
+  onReturn?: (path: string) => void;
+  onSuccess?: (path: string) => void;
+  onError?: (error: {
+    type: string;
+    description: string;
+    params?: Record<string, string> | undefined;
+  }) => void;
 }
 
 export type TPaymentRequest = {
