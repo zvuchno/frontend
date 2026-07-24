@@ -25,10 +25,11 @@
 }
 
 .button.button {
-  min-height: 40px;
-  min-width: 200px;
+  min-width: 212px;
+  padding: 12px;
 
   & span {
+    font-family: var(--font-feature-mono);
     font-size: 16px;
   }
 }

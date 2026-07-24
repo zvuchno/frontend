@@ -2,10 +2,11 @@
 
 import clsx from "clsx";
 
-import { Text } from "@/shared/ui";
+import { DeleteIcon, Text } from "@/shared/ui";
 
 import s from "./ShowcaseCard.module.scss";
 import { type ShowcaseCardProps } from "./ShowcaseCard.type";
+import { EditIcon } from "@/shared/ui/Icons";
 
 export const ShowcaseCard = ({
   variant,
@@ -29,25 +30,32 @@ export const ShowcaseCard = ({
     if (id && onEdit) onEdit(id);
   };
 
+  const name = product?.name || promoCode?.name;
+  const articleOrDiscount = product?.article || (promoCode?.discount && `${promoCode.discount}%`);
+  const priceOrPeriod = (product?.price && `${product.price} ₽`) || promoCode?.period;
+  const amount = (product?.amount && `${product.amount} шт`) || promoCode?.amount;
+
   return (
     <div className={s.card}>
       {variant === "product" && (
         <div className={s.imgContainer}>
-          {product?.image && <img src={product.image} alt={product.name} loading='lazy' />}
+          {product?.image && (
+            <img src={product.image} alt={product.name} loading='lazy' />
+          )}
         </div>
       )}
 
       <Text className={clsx(s.text, { [s.name]: variant === "product" })}>
-        {product?.name || promoCode?.name}
+        {name}
       </Text>
       <Text className={s.text}>
-        {product?.article || (promoCode?.discount && `${promoCode.discount}%`)}
+        {articleOrDiscount}
       </Text>
       <Text className={s.text}>
-        {(product?.price && `${product.price} ₽`) || promoCode?.period}
+        {priceOrPeriod}
       </Text>
       <Text className={s.text}>
-        {(product?.amount && `${product.amount} шт`) || promoCode?.amount}
+        {amount}
       </Text>
 
       <div className={clsx(s.actions, { [s.actions_span]: variant === "promo" })}>
@@ -61,13 +69,11 @@ export const ShowcaseCard = ({
           <span className={s.checkboxMark}></span>
         </label>
         <div className={s.buttons}>
-          {variant === "promo" && (
-            <button type='button' className={clsx(s.text, s.actions__button)} onClick={handleEdit}>
-              изменить
-            </button>
-          )}
-          <button type='button' className={clsx(s.text, s.actions__button)} onClick={handleDelete}>
-            удалить
+          <button className={s.editButton} onClick={handleEdit}>
+            {EditIcon()}
+          </button>
+          <button className={s.deleteButton} onClick={handleDelete}>
+            {DeleteIcon()}
           </button>
         </div>
       </div>

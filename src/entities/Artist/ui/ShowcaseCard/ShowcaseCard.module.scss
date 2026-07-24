@@ -52,7 +52,7 @@
   grid-column: span 2;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: space-evenly;
   gap: 53px;
 
   &_span {
@@ -110,4 +110,31 @@
 .buttons {
   display: flex;
   gap: 16px;
+
+  & button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 1px solid var(--outline-color);
+    cursor: pointer;
+  }
+}
+
+.editButton {
+  background-color: #E4F1FF;
+
+  &:hover {
+    background-color: var(--color-accent-blue);
+  }
+}
+
+.deleteButton {
+  background-color: var(--color-btn-secondary);
+
+  &:hover {
+    background-color: var(--color-bg-secondary);
+  }
 }

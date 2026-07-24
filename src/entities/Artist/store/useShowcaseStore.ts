@@ -20,6 +20,7 @@ export type TPromoCode = {
 }
 
 interface IActions {
+  setArtist: (atrist: string | null) => void;
   toggleVisibilityProduct: (value: boolean, id: number) => void;
   deleteProduct: (id: number) => void;
   toggleVisibilityPromo: (value: boolean, id: number) => void;
@@ -27,61 +28,24 @@ interface IActions {
 }
 
 interface IInitialState {
+  artist: string | null;
   products: TProduct[];
   promoCodes: TPromoCode[];
 };
 
 interface IShowcaseState extends IInitialState, IActions {};
 
-// const initialState: IInitialState = {
-//   products: [],
-//   promoCodes: [],
-// };
-
-//Временное начальное состояние, чтобы посмотреть страницу с товарами
 const initialState: IInitialState = {
-  products: [
-    {
-      id: 1,
-      image: 'https://avatars.yandex.net/get-music-content/17649213/93307982.a.41277295-1/m1000x1000',
-      name: 'Футболка',
-      article: 'артикул 1',
-      price: '1000',
-      amount: '100',
-      visibility: true,
-    },
-    {
-      id: 2,
-      image: 'https://avatars.yandex.net/get-music-content/17649213/93307982.a.41277295-1/m1000x1000',
-      name: 'Футболка',
-      article: 'артикул 1',
-      price: '1000',
-      amount: '100',
-      visibility: true,
-    },
-  ],
-  promoCodes: [
-    {
-      id: 5,
-      name: 'SALE20',
-      discount: '20',
-      period: '01.04 - 25.04',
-      amount: 'неограничено',
-      visibility: false,
-    },
-    {
-      id: 6,
-      name: 'SALE20',
-      discount: '20',
-      period: '01.04 - 25.04',
-      amount: 'неограничено',
-      visibility: false,
-    },
-  ],
+  artist: null,
+  products: [],
+  promoCodes: [],
 };
 
 const showcaseStore: StateCreator<IShowcaseState> = (set) => ({
   ...initialState,
+  setArtist: (artist: string | null) => {
+    set({ artist });
+  },
   toggleVisibilityProduct: (value: boolean, id: number) => {
     set((state) => ({
       products: state.products.map(product => product.id === id ? { ...product, visibility: value} : product)
@@ -106,12 +70,20 @@ const showcaseStore: StateCreator<IShowcaseState> = (set) => ({
 
 const useShowcaseStore = create<IShowcaseState>()(showcaseStore);
 
+// Селектор для получения артиста
+export const useShowcaseArtist = () =>
+  useShowcaseStore((state) => state.artist);
+
+// Селектор для установки артиста 
+export const useSetArtist = () =>
+  useShowcaseStore((state) => state.setArtist);
+
 // Селекторы для продуктов
 export const useShowcaseProducts = () => useShowcaseStore((state) => state.products);
-export const useToggleVisibilityProduct = (value: boolean, id: number) => useShowcaseStore.getState().toggleVisibilityProduct(value, id);
-export const useDeleteProduct = (id: number) => useShowcaseStore.getState().deleteProduct(id);
+export const useToggleVisibilityProduct = () => useShowcaseStore((s) => s.toggleVisibilityProduct);
+export const useDeleteProduct = () => useShowcaseStore((s) => s.deleteProduct);
 
 //Селекторы для промокодов
 export const useShowcasePromoCodes = () => useShowcaseStore((state) => state.promoCodes);
-export const useToggleVisibilityPromo = (value: boolean, id: number) => useShowcaseStore.getState().toggleVisibilityPromo(value, id);
-export const useDeletePromo = (id: number) => useShowcaseStore.getState().deletePromo(id);
+export const useToggleVisibilityPromo = () => useShowcaseStore((s) => s.toggleVisibilityPromo);
+export const useDeletePromo = () => useShowcaseStore((s) => s.deletePromo);
