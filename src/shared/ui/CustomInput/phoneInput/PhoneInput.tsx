@@ -1,15 +1,18 @@
-'use client'
+"use client";
+
+import { forwardRef } from "react";
+import { IMaskInput } from "react-imask";
 
 import clsx from "clsx";
-import { forwardRef } from "react";
+
+import { FieldErrorMessage } from "../FieldErrorMessage/FieldErrorMessage";
 import s from "./PhoneInput.module.scss";
-import { IMaskInput } from "react-imask";
 
 interface PhoneInputProps {
   id: string;
   value: string;
   label: string;
-  inputSize?: 'small' | 'large';
+  inputSize?: "small" | "large";
   hasError?: boolean;
   errorMessage?: string;
   autoFocus?: boolean;
@@ -22,52 +25,56 @@ interface PhoneInputProps {
 }
 
 export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({
-    id,
-    label,
-    hasError = false,
-    errorMessage,
-    inputSize = 'small',
-    className,
-    autoFocus,
-    required,
-    disabled,
-    onChange,
-    onFocus,
-    onBlur,
-  }, 
+  (
+    {
+      id,
+      label,
+      hasError = false,
+      errorMessage,
+      inputSize = "small",
+      className,
+      autoFocus,
+      required,
+      disabled,
+      onChange,
+      onFocus,
+      onBlur,
+    },
     ref
   ) => {
     const inputClassName = clsx(
-      s.input, 
-      { [s.error]: hasError }, 
-      inputSize === 'small' ? s.input_size_small : s.input_size_large,
+      s.input,
+      { [s.error]: hasError },
+      inputSize === "small" ? s.input_size_small : s.input_size_large,
       className
     );
 
     const labelClassName = clsx(
-      s.labelContainer__label, 
-      inputSize === 'small' ? s.labelContainer__label_size_small : s.labelContainer__label_size_large
+      s.labelContainer__label,
+      inputSize === "small"
+        ? s.labelContainer__label_size_small
+        : s.labelContainer__label_size_large
     );
-      
+
     return (
       <div className={s.field}>
-
         {label && (
           <div className={s.labelContainer}>
-            <label className={labelClassName} htmlFor={id}>{label}</label>
+            <label className={labelClassName} htmlFor={id}>
+              {label}
+            </label>
             {required && <span className={s.labelContainer__markRequired}>*</span>}
-        </div>
+          </div>
         )}
 
         <IMaskInput
-          mask="+{7} (000) 000-00-00"
-          placeholder="+7 (___) ___-__-__"
+          mask='+{7} (000) 000-00-00'
+          placeholder='+7 (___) ___-__-__'
           id={id}
           className={inputClassName}
           inputRef={ref}
-          type="text"
-          inputMode="tel"
+          type='text'
+          inputMode='tel'
           unmask={true}
           onAccept={(value) => onChange?.(value)}
           onFocus={onFocus}
@@ -78,12 +85,10 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
           disabled={disabled}
           aria-disabled={disabled}
         />
-        
-        {errorMessage && (
-          <span className={clsx(s.message, { [s.error]: hasError })}>{errorMessage}</span>
-        )}
+
+        {errorMessage && <FieldErrorMessage message={errorMessage} hasError={hasError} />}
       </div>
-    )
+    );
   }
 );
 

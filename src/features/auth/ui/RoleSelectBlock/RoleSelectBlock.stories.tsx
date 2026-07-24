@@ -26,7 +26,6 @@ export const RoleSelectBlockInModal: Story = {
           <Title
             Tag='h5'
             variant='title'
-            style={{ fontSize: 24, textTransform: "none", lineHeight: "36px" }}
           >
             Войдите или зарегестрируйте новый аккаунт
           </Title>
