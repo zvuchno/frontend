@@ -1,9 +1,12 @@
 export { CardArtist } from "./ui/CardArtist/CardArtist";
 export { ShowcaseCard } from "./ui/ShowcaseCard/ShowcaseCard";
 export type { 
-  TShowcaseAlbums, 
+  TShowcaseAlbum, 
   TShowcaseMerch, 
-  TShowcasePromocodes 
+  TShowcasePromocode,
+  StockFilter,
+  TShowcaseItem,
+  PromoTypeFilter
 } from "./model/types";
 export { 
   getShowcaseAlbumsList, 
@@ -14,5 +17,11 @@ export {
 export { 
   useAlbumsInfiniteQuery,
   useMerchInfiniteQuery,
-  usePromocodesInfiniteQuery
+  usePromocodesInfiniteQuery,
+  useToggleAlbumVisibility,
+  useToggPromocodeVisibility,
+  useToggleMerchVisibility,
+  useDeleteAlbum,
+  useDeleteMerch,
+  useDeletePromocode
 } from "./model/useShowcase";

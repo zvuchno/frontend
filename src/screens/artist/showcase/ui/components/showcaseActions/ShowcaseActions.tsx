@@ -4,32 +4,41 @@ import { useEffect, useRef, useState } from "react";
 import s from "./ShowcaseActions.module.scss";
 import { ButtonUI, SelectUI } from "@/shared/ui";
 import clsx from "clsx";
+import { PromoTypeFilter, TShowcaseItem } from "@/entities/Artist";
 
 type PopupType = 'promo' | 'product' | null;
-type TItem = 'promo' | 'products' ;
 
 interface ShowcaseActionsProps {
-  selectItemType: (item: TItem) => void;
-  addProduct: () => void;
-  addPromo: () => void;
-  sortBytype: (value: string) => void;
-  sortByAvailability: (value: string) => void;
-}
+  itemType: TShowcaseItem;
+  selectItemType: (item: TShowcaseItem) => void;
+  addProduct: () => void; // ссылка на форму
+  addPromo: () => void; // ссылка на форму
+  filterByStock: (value: 'true' | 'false' | '') => void;
+  filterByAvailability: (value: 'true' | 'false' | '') => void;
+  filterByPromoType: (value: PromoTypeFilter) => void;
+};
 
 export const ShowcaseActions = ({ 
+  itemType,
   selectItemType, 
   addProduct,
   addPromo, 
-  sortBytype, 
-  sortByAvailability 
+  filterByStock,
+  filterByAvailability,
+  filterByPromoType
 }: ShowcaseActionsProps) => {
   const [activePopup, setActivePopup] = useState<PopupType>(null);
   const promoPopupRef = useRef<HTMLDivElement | null>(null);
   const productPopupRef = useRef<HTMLDivElement | null>(null);
-  //const merchPopupRef = useRef<HTMLDivElement | null>(null);
 
-  const [sortType, setSortType] = useState<string>("");
-  const [availability, setAvailability] = useState<string>("");
+  // состояние для селекта выбора отображаемого товара: все, мерч, альбомы
+  const [productType, setProductType] = useState<string>("");
+  // состояние для селекта выбора фильтра для мерча по наличию
+  const [stockFilter, setStockFilter] = useState<'true' | 'false' | ''>('');
+  // состояние для селекта выбора типа скидки промокода
+  const [promoType, setPromoType] = useState<string>("");
+  // состояние для селекта выбора фильтра для промокода по доступности
+  const [availability, setAvailability] = useState<'true' | 'false' | ''>('');
 
   const closeAll = () => setActivePopup(null);
 
@@ -95,14 +104,24 @@ export const ShowcaseActions = ({
     addPromo();
   };
 
-  const handleChangeType = (value: string) => {
-    setSortType(value);
-    sortBytype(value);
+  const handleChangeTypeProduct = (value: string) => {
+    setProductType(value);
+    selectItemType(value as TShowcaseItem);
+  };
+
+  const handleChangeTypePromo = (value: string) => {
+    setPromoType(value);
+    filterByPromoType(value as PromoTypeFilter)
+  };
+
+  const hamdleChangeStock = (value: string) => {
+    setStockFilter(value as 'true' | 'false' | '');
+    filterByStock(value as 'true' | 'false' | '');
   };
 
   const handleChangeAvailability = (value: string) => {
-    setAvailability(value);
-    sortByAvailability(value);
+    setAvailability(value as 'true' | 'false' | '');
+    filterByAvailability(value as 'true' | 'false' | '');
   };
 
   return (
@@ -170,37 +189,75 @@ export const ShowcaseActions = ({
       </div>
 
       <div className={s.actions__select}>
-        <SelectUI
-          value={sortType}
-          onChange={handleChangeType}
-          options={[
-            { value: "products", label: "все" },
-            { value: "merch", label: "мерч" },
-            { value: "album", label: "музыка" },
-          ]}
-          placeholder='по типу товара'
-          containerClassName={s.containerOnPersonalAccountPage}
-          selectClassName={s.selectOnPersonalAccountPage}
-          contentClassName={s.itemListOnPersonalAccountPage}
-          optionClassName={s.itemOnPersonalAccountPage}
-          iconClassName={s.selectIcon}
-        />
-        <SelectUI
-          value={availability}
-          onChange={handleChangeAvailability}
-          options={[
-            { value: "all", label: "все" },
-            { value: "inStock", label: "в наличии" },
-            { value: "outOfStock", label: "закончились" },
-          ]}
-          placeholder='наличие'
-          containerClassName={s.containerOnPersonalAccountPage}
-          selectClassName={s.selectOnPersonalAccountPage}
-          contentClassName={s.itemListOnPersonalAccountPage}
-          optionClassName={s.itemOnPersonalAccountPage}
-          iconClassName={s.selectIcon}
-        />
+        {itemType === 'promo' ? (
+          <SelectUI
+            value={promoType}
+            onChange={handleChangeTypePromo}
+            options={[
+              { value: "ALL", label: "все" },
+              { value: "PERСENT", label: "процент" },
+              { value: "FIXED", label: "фиксированная" },
+            ]}
+            placeholder='по типу скидки'
+            containerClassName={s.containerOnPersonalAccountPage}
+            selectClassName={s.selectOnPersonalAccountPage}
+            contentClassName={s.itemListOnPersonalAccountPage}
+            optionClassName={s.itemOnPersonalAccountPage}
+            iconClassName={s.selectIcon}
+            disabled={itemType === 'promo'}
+          />
+        ) : (
+          <SelectUI
+            value={productType}
+            onChange={handleChangeTypeProduct}
+            options={[
+              { value: "products", label: "все товары" },
+              { value: "merch", label: "мерч" },
+              { value: "album", label: "музыка" },
+            ]}
+            placeholder='по типу товара'
+            containerClassName={s.containerOnPersonalAccountPage}
+            selectClassName={s.selectOnPersonalAccountPage}
+            contentClassName={s.itemListOnPersonalAccountPage}
+            optionClassName={s.itemOnPersonalAccountPage}
+            iconClassName={s.selectIcon}
+          />
+        )}
+
+        {itemType === 'promo' ? (
+          <SelectUI
+            value={availability}
+            onChange={handleChangeAvailability}
+            options={[
+              { value: "", label: "все" },
+              { value: "true", label: "доступен" },
+              { value: "false", label: "не доступен" },
+            ]}
+            placeholder='наличие'
+            containerClassName={s.containerOnPersonalAccountPage}
+            selectClassName={s.selectOnPersonalAccountPage}
+            contentClassName={s.itemListOnPersonalAccountPage}
+            optionClassName={s.itemOnPersonalAccountPage}
+            iconClassName={s.selectIcon}
+          />
+        ) : (
+          <SelectUI
+            value={stockFilter}
+            onChange={hamdleChangeStock}
+            options={[
+              { value: "", label: "все" },
+              { value: "true", label: "в наличии" },
+              { value: "false", label: "закончились" },
+            ]}
+            placeholder='наличие'
+            containerClassName={s.containerOnPersonalAccountPage}
+            selectClassName={s.selectOnPersonalAccountPage}
+            contentClassName={s.itemListOnPersonalAccountPage}
+            optionClassName={s.itemOnPersonalAccountPage}
+            iconClassName={s.selectIcon}
+          />
+        )}
       </div>
     </div>
   )
-}
+};

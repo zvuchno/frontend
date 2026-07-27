@@ -4,20 +4,30 @@ import { RoleSelectBlock } from "@/features/auth";
 import s from "./ShowcasePage.module.scss";
 import { Loader, RoleCard } from "@/shared/ui";
 import { useSession } from "next-auth/react";
-import { useAlbumsInfiniteQuery, useMerchInfiniteQuery, usePromocodesInfiniteQuery } from "@/entities/Artist";
+import { 
+  type PromoTypeFilter,
+  type StockFilter, 
+  type TShowcaseItem, 
+  useAlbumsInfiniteQuery, 
+  useMerchInfiniteQuery, 
+  usePromocodesInfiniteQuery, 
+} from "@/entities/Artist";
 import { useShowcaseArtist } from "@/entities/Artist/store/useShowcaseStore";
 import { useMemo, useState } from "react";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
-
-//type TItem = "products" | "album" | "merch" | "promo";
+import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
 
 export const ShowcasePage = () => {
-  // получаем товары , если есть товары, то рендерим ShowcaseContent, если нет, то выбор загрузки
-  // здесь же получаем промокоды (хуки)
-  // сохраняю в стор для ShowcaseItemsList
-
   const { status } = useSession();
-  const [itemType, setItemType] = useState<string>("products")
+
+  // состояние для типа карточек отображемых на странице (промокоды или товары (все товары, альбомы, мерч))
+  const [itemType, setItemType] = useState<TShowcaseItem>("products");
+  // состояние для фильтрации мерча по наличию
+  const [inStockFilter, setInStockFilter] = useState<StockFilter>(null);
+  // состояние для фильтрации промокодов по доступности к использованию
+  const [availableFilter, setAvailableFilter] = useState<StockFilter>(null);
+  // состояние для фильтрации промокодов по типу скидки
+  const [typePromoFilter, setTypePromoFilter] = useState<PromoTypeFilter>('ALL');
 
   const currentArtistSlug = useShowcaseArtist();
 
@@ -32,15 +42,22 @@ export const ShowcasePage = () => {
   });
 
   const merchQuery = useMerchInfiniteQuery({
-    artistSlug: currentArtistSlug
+    artistSlug: currentArtistSlug,
+    in_stock: inStockFilter,
   });
 
-  const promoQuery = usePromocodesInfiniteQuery();
+  const promoQuery = usePromocodesInfiniteQuery({
+    discount_type: typePromoFilter,
+    is_available: availableFilter,
+  });
 
   const promocodes = promoQuery.data?.pages.flatMap((page) => page.results) ?? [];
   const albums = albumsQuery.data?.pages.flatMap((page) => page.results) ?? [];
   const merch = merchQuery.data?.pages.flatMap((page) => page.results) ?? [];
   const allProducts = [...albums, ...merch];
+
+  const isLoadingData = albumsQuery.isLoading || merchQuery.isLoading || promoQuery.isLoading;
+  const error = albumsQuery.error || merchQuery.error || promoQuery.error;
 
   const currentItems = useMemo(() => {
     switch (itemType) {
@@ -51,6 +68,18 @@ export const ShowcasePage = () => {
       default: return allProducts;
     }
   }, [itemType, allProducts, albums, merch, promocodes]);
+
+  if (isLoadingData) {
+    return (
+      <Loader />
+    )
+  }
+
+  if (error) {
+    return (
+      <div>`Ошибка загрузки данных: ${error.message}`</div>
+    )
+  }
 
   if (allProducts.length === 0) {
     return (
@@ -64,19 +93,29 @@ export const ShowcasePage = () => {
   
   return (
     <div className={s.container}>
-      {currentItems.length > 0 ? (
-        <ShowcaseActions 
-          selectItemType={setItemType}
-          sortBytype={setItemType}
-          sortByAvailability={() => undefined}
-          addProduct={() => undefined}
-          addPromo={() => undefined}
-        />
-      ) : (
-        <div className={s.message}>
-          Ничего не найдено 
-        </div>
-      )}
+      <ShowcaseActions 
+        itemType={itemType}
+        selectItemType={setItemType}
+        filterByStock={(value: 'true' | 'false' | '') => {
+          if (value === 'true') setInStockFilter(true);
+          else if (value === 'false') setInStockFilter(false);
+          else setInStockFilter(null);
+        }}
+        filterByAvailability={(value: 'true' | 'false' | '') => {
+          if (value === 'true') setAvailableFilter(true);
+          else if (value === 'false') setInStockFilter(false);
+          else setInStockFilter(null);
+        }}
+        filterByPromoType={(value: PromoTypeFilter) => {
+          setTypePromoFilter(value)
+        }}
+        addProduct={() => undefined}
+        addPromo={() => undefined}
+      />
+      <ShowcaseItemsList 
+        itemType={itemType}
+        items={currentItems}
+      />
     </div>
   )
 }

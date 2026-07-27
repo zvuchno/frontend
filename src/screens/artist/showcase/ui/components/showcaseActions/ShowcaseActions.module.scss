@@ -1,9 +1,3 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .actions {
   display: flex;
   justify-content: space-between;
@@ -72,4 +66,57 @@
 
 .popup_promo {
   right: 9px;
+}
+
+//продублированы названия селекторов, т.к стили перезатирались стилями из самого компонента SelectUI
+.containerOnPersonalAccountPage.containerOnPersonalAccountPage {
+  min-width: 132px;
+  width: auto;
+  gap: 3px;
+}
+
+.selectOnPersonalAccountPage.selectOnPersonalAccountPage {
+  border-width: 1px;
+  border-radius: 0;
+  padding-block: 9px;
+  margin-bottom: 0;
+  // margin-bottom: 7px;
+  gap: 32px;
+
+  & span {
+    color: var(--color-text-primary); 
+  }
+}
+
+.itemListOnPersonalAccountPage.itemListOnPersonalAccountPage {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  padding: 7px;
+  gap: 12px;
+  border-width: 1px;
+  border-radius: 0;
+  background-color: var(--color-bg-main);
+  margin-top: 7px;
+  z-index: 2;
+}
+
+.itemOnPersonalAccountPage.itemOnPersonalAccountPage {
+  padding-block: 7px;
+  border-radius: 0;
+  margin-bottom: 2px;
+  font-family: 'Feature Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+
+  &[aria-selected="true"], &:hover {
+    background-color: var(--color-accent-blue);
+  }
+}
+
+.selectIcon.selectIcon {
+  width: 20px;
+  height: 20px;
 }
