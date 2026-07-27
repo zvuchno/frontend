@@ -1,12 +1,14 @@
-import { type TProduct, type TPromoCode } from "../../store/useShowcaseStore";
+import type { TShowcaseAlbum, TShowcaseMerch, TShowcasePromocode } from "../../model/types";
 
-type TShowcaseItem = "product" | "promo";
+type TShowcaseItem = TShowcaseAlbum | TShowcaseMerch | TShowcasePromocode;
 
 export interface ShowcaseCardProps {
-  variant: TShowcaseItem;
-  product?: TProduct;
-  promoCode?: TPromoCode;
-  onToggleVisibility: (value: boolean, id: number) => void;
-  onDelete: (id: number) => void;
+  item: TShowcaseItem;
+  onToggleAlbumVisibility: (isChecked: boolean, id: number) => Promise<void> | void;
+  onToggleMerchVisibility: (isChecked: boolean, id: number) => Promise<void> | void;
+  onTogglePromoVisibility: (isChecked: boolean, id: number) => Promise<void> | void;
+  onDeleteAlbum: (id: number) => Promise<void> | void;
+  onDeleteMerch: (id: number) => Promise<void> | void;
+  onDeletePromocode: (id: number) => Promise<void> | void;
   onEdit?: (id: number) => void;
 }

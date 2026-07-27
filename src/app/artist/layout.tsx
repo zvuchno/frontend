@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { usePathname } from "next/navigation";
 
@@ -21,6 +21,7 @@ import {
 } from "@/entities/profile";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import { useSetArtist, useShowcaseArtist } from "@/entities/Artist/store/useShowcaseStore";
 
 const artistProfilePathnames = ["/artist/profile"];
 
@@ -52,6 +53,8 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: artist, isLoading, error } = useCurrentArtist();
   const updateArtist = useUpdateArtist();
   const updateCover = useUpdateArtistCover();
+  const setArtist = useSetArtist();
+  const currentSlug = useShowcaseArtist();
 
   const shouldShowArtistInfo = artistProfilePathnames.includes(pathname);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
@@ -61,6 +64,16 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const [deletingSocialKey, setDeletingSocialKey] = useState<string | null>(null);
 
   const isLoadingDataArtist = status === 'loading' || isLoading;
+
+  useEffect(() => {
+    if (!artist) return;
+
+    const newSlug = artist.slug;
+
+    if (currentSlug !== newSlug) {
+      setArtist(newSlug);
+    }
+  }, [artist?.slug, currentSlug, setArtist]);
 
   const handleCoverChange = async (file: File) => {
     setIsUploadingCover(true);

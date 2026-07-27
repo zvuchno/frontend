@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-family: var(--font-better-vcr);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -0.06em;
+}
+
+.heading {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  align-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 0px 48px 0px 28px;
+  margin-bottom: 8px;
+
+  &__text {
+    font-family: var(--font-feature-mono);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -0.04em;
+    color: var(--color-bg-secondary);
+    text-align: center;
+
+    &_span {
+      grid-column: span 2;
+    }
+
+    &_rightAligned {
+      grid-column: 6 / -1;
+    }
+
+    &_leftAligned {
+      justify-self: start;
+    }
+  }
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  list-style: none; 
+}

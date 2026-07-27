@@ -9,3 +9,4 @@ export { PlusIcon } from "./plusIcon";
 export { ProfileIcon } from "./profileIcon";
 export { RadioButtonIcon } from "./radioButtonIcon";
 export { SearchIcon } from "./searchIcon";
+export { EditIcon } from "./editIcon";
