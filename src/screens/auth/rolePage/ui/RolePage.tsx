@@ -38,7 +38,7 @@ export const RolePage = () => {
         />
         <RoleCard
           path=''
-          image='/images/recordPlayer.png'
+          image='/images/vinyl_player.png'
           title='Как лейбл'
           description='Продвигай своих артистов, следи за их популярностью, анонсируй релизы'
         />

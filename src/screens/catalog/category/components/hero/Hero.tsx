@@ -7,13 +7,13 @@ const Hero = () => {
     <div className={s.container}>
       <div className={s.back} />
       <img
-        src={"/images/recordPlayer.png"}
+        src={"/images/vinyl_player.png"}
         alt="Виниловый проигрыватель"
         className={clsx(s.img, s.img_left)}
         loading="lazy"
       />
       <img
-        src={"/images/recordPlayer.png"}
+        src={"/images/vinyl_player.png"}
         alt="Виниловый проигрыватель"
         className={clsx(s.img, s.img_right)}
         loading="lazy"
