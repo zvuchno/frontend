@@ -14,7 +14,7 @@ export const OrderSucceed = () => (
       <h1 className={styles.successTitle}>Заказ оплачен!</h1>
       <div className={styles.successImages}>
         <Image
-          src={"/images/order-succeed-banner.png"}
+          src={"/images/vinyl_player.png"}
           alt={"Баннер фото проигрователя"}
           width={470}
           height={456}

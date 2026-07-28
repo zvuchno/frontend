@@ -69,7 +69,7 @@ export const HeroUI = ({
       )}
       {mainTitle === "ЗВУЧНО" && (
         <div className={styles.hero__image}>
-          <img src='/images/image_main_hero.png' />
+          <img src='/images/vinyl_player.png' />
         </div>
       )}
     </div>
