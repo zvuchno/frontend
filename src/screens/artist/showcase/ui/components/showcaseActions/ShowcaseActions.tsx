@@ -204,7 +204,6 @@ export const ShowcaseActions = ({
             contentClassName={s.itemListOnPersonalAccountPage}
             optionClassName={s.itemOnPersonalAccountPage}
             iconClassName={s.selectIcon}
-            disabled={itemType === 'promo'}
           />
         ) : (
           <SelectUI

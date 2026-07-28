@@ -3,6 +3,8 @@ import type { PaginatedStoreResponse } from "@/api/store/types";
 import type { 
   TShowcaseAlbum, 
   TShowcaseAlbumDetail, 
+  TShowcaseCreateAlbumRequest, 
+  TShowcaseCreateMerchRequest, 
   TShowcaseListRequest, 
   TShowcaseMerch, 
   TShowcaseMerchDetail, 
@@ -195,6 +197,35 @@ export async function deletePromocode({
   }, token);
 
   if (!response) throw new Error('Не удалось удалить промокод')
+
+  return response;
+};
+
+export async function createAlbum(token: string | undefined, formData: FormData): Promise<TShowcaseAlbumDetail> {
+
+  const url = `${baseUrl}/v1/store/albums/`;
+
+  const response = await authFetchClient<TShowcaseAlbumDetail>(url, {
+    method: "POST",
+    body: formData
+  }, token);
+
+  if (!response) throw new Error('Не удалось создать альбом')
+
+  return response;
+};
+
+export async function createMerch(payload: TShowcaseCreateMerchRequest): Promise<TShowcaseMerchDetail> {
+  const {  token, ...otherProperties} = payload;
+
+  const url = `${baseUrl}/v1/store/merch/`;
+
+  const response = await authFetchClient<TShowcaseMerchDetail>(url, {
+    method: "POST",
+    body: JSON.stringify(otherProperties)
+  }, token);
+
+  if (!response) throw new Error('Не удалось создать мерч')
 
   return response;
 };

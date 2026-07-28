@@ -1,23 +1,44 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ButtonUI } from "@/shared/ui";
 
 import styles from "./AddImageBlock.module.scss";
 import { type AddImageBlockProps } from "./AddImageBlock.types";
 
-export const AddImageBlock = ({ severalImages = false }: AddImageBlockProps) => {
+export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlockProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const additionalInputsRef = useRef<Record<string, HTMLInputElement | null>>({});
+
+  // Стейт только для превью (URL)
   const [mainPreview, setMainPreview] = useState<string | null>(null);
   const [additionalPreviews, setAdditionalPreviews] = useState<Record<string, string>>({});
+
+  // Стейт для файлов 
+  const [files, setFiles] = useState<{
+    mainImage?: File;
+    additionalImages?: Record<string, File>;
+  }>({
+    mainImage: undefined,
+    additionalImages: undefined,
+  });
+
+  useEffect(() => {
+    // Синхронизируем форму с локальным стейтом
+    setValue('mainImage', files.mainImage);
+    setValue('additionalImages', files.additionalImages);
+  }, [files, setValue]);
 
   const handleMainFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const objectUrl = URL.createObjectURL(file);
       setMainPreview(objectUrl);
+      setFiles((prev) => ({ ...prev, mainImage: file }));
+    } else {
+      setMainPreview(null);
+      setFiles((prev) => ({ ...prev, mainImage: undefined }));
     }
   };
 
@@ -30,6 +51,10 @@ export const AddImageBlock = ({ severalImages = false }: AddImageBlockProps) => 
     if (file) {
       const url = URL.createObjectURL(file);
       setAdditionalPreviews((prev) => ({ ...prev, [id]: url }));
+      setFiles((prev) => {
+        const nextAdditional = { ...(prev.additionalImages || {}), [id]: file };
+        return { ...prev, additionalImages: nextAdditional };
+      });
     }
   };
 

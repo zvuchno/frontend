@@ -11,6 +11,7 @@ import type {
   TShowcasePromocodeDetail
 } from "./types";
 import { 
+  createAlbum,
   deleteAlbum,
   deleteMerch,
   deletePromocode,
@@ -238,3 +239,21 @@ export function useDeletePromocode() {
     }
   })
 };
+
+export function useCreateAlbum() {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation({
+    mutationFn: (formData: FormData) =>
+      createAlbum(token, formData),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
+      toast.success("Альбом успешно создан")
+    },
+    onError: () => {
+      toast.error('Не удалось создать альбом')
+    }
+  });
+}

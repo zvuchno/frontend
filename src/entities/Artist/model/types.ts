@@ -151,3 +151,34 @@ export type TShowcaseUpdateMerchRequest = {
   stock?: number;
   variamts?: TMerchVariant[];
 };
+
+export type TShowcaseCreateAlbumRequest = {
+  token: string  | undefined;
+  name: string;
+  artist: number;
+  is_single: boolean;
+  release_date: string | null;
+  genre: number | null;
+  price: string;
+  description: string;
+  cover_image: File | Blob | null;
+  allow_overpay: boolean;
+  is_published: boolean;
+  visibility: "public" | "link_only" | "hidden";
+};
+
+export type TShowcaseCreateMerchRequest = {
+  token: string | undefined;
+  name: string;
+  kind: string | null;
+  price: string;
+  album: number | null;
+  artist: number;
+  description: string;
+  allow_overpay: boolean;
+  visibility: "public" | "link_only" | "hidden";
+  is_published: boolean;
+  property_name: string;
+  stock: number;
+  variants: TMerchVariantDetail[];
+};

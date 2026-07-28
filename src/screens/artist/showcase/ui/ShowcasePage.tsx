@@ -59,6 +59,10 @@ export const ShowcasePage = () => {
   const isLoadingData = albumsQuery.isLoading || merchQuery.isLoading || promoQuery.isLoading;
   const error = albumsQuery.error || merchQuery.error || promoQuery.error;
 
+  const emptyText = itemType === 'album' || itemType === 'merch' 
+    ? 'нет товаров' 
+    : 'нет промокодов';
+
   const currentItems = useMemo(() => {
     switch (itemType) {
       case 'products': return allProducts;
@@ -112,10 +116,14 @@ export const ShowcasePage = () => {
         addProduct={() => undefined}
         addPromo={() => undefined}
       />
-      <ShowcaseItemsList 
-        itemType={itemType}
-        items={currentItems}
-      />
+      {currentItems.length > 0 ? (
+        <ShowcaseItemsList 
+          itemType={itemType}
+          items={currentItems}
+        />
+      ) : (
+        <div>{emptyText}</div>
+      )}
     </div>
   )
 }

@@ -55,7 +55,6 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
             id={id}
             className={inputClassName}
             style={style}
-            type='text'
             ref={ref}
             autoComplete='off'
             {...otherProps}
