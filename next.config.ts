@@ -24,10 +24,19 @@ const dynamicRemotePatterns = getApiImageRemotePattern();
 
 const nextConfig: NextConfig = {
   output: "standalone",
+
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
+  },
+
   images: {
     unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [
-      
       ...(dynamicRemotePatterns ? [dynamicRemotePatterns] : []),
 
       {
