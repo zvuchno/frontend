@@ -59,7 +59,7 @@ export const artistFormFields: TProfileFormField[] = [
   //   row: 2,
   //   column: 2,
   // },
-  
+
   {
     title: "URL артиста",
     name: "url",
@@ -159,13 +159,19 @@ export const fieldsConfig: Record<
     required: true,
     minLength: 8,
     maxLength: 50,
-    pattern: /^(?=\S{8,}$)[a-zA-Z0-9\W]*$/
+    pattern: /^(?=\S{8,}$)[a-zA-Z0-9\W]*$/,
   },
   oldPassword: {
     required: true,
     minLength: 8,
     maxLength: 50,
-    pattern: /^(?=\S{8,}$)[a-zA-Z0-9\W]*$/
+    pattern: /^(?=\S{8,}$)[a-zA-Z0-9\W]*$/,
+  },
+  repeatPassword: {
+    required: true,
+    minLength: 8,
+    maxLength: 50,
+    pattern: /^(?=\S{8,}$)[a-zA-Z0-9\W]*$/,
   },
   city: {
     required: true,
@@ -180,6 +186,6 @@ export const fieldsConfig: Record<
   description: {
     required: false,
     minLength: 3,
-    maxLength: 3000
-  }
+    maxLength: 3000,
+  },
 };
