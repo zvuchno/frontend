@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { type TFinanceStatement } from "../model/finance.types";
-import styles from "../ui/ArtistFinance.module.scss";
-import { FinanceStatement } from "./FinanceStatement";
-import { StatementHeading } from "./StatementHeading";
+import { type TFinanceStatement } from "../../model/finance.types";
+import { FinanceStatement } from "../FinanceStatement/FinanceStatement";
+import { StatementHeading } from "../StatementHeading/StatementHeading";
+import styles from "./FinanceStatementList.module.scss";
 
 export const FinanceStatementList = ({ statements }: { statements: TFinanceStatement[] }) => {
   const [tableMode, setTableMode] = useState<"row" | "column">("row");

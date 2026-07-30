@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { ButtonUI, CheckboxUI } from "@/shared/ui";
 
-import styles from "../ui/ArtistSettingsPage.module.scss";
-import { ArtistSettingsPickupPoint } from "./ArtistSettingsPickupPoint/ArtistSettingsPickupPoint";
+import { ArtistSettingsPickupPoint } from "../ArtistSettingsPickupPoint/ArtistSettingsPickupPoint";
+import styles from "./ArtistSettingsDelivery.module.scss";
 
 export type TArtistSettingsDelivery = {
   onChooseButtonClick: (isOpen?: boolean) => void;
