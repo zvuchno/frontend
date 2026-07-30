@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.propertyContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.variantContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 42px;
+  align-items: center;
+  margin-block-end: 30px;
+
+  &__button {
+    max-width: 273px;
+  }
+
+  &__hint {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 100%;
+    letter-spacing: -0.04em;
+    color: var(--color-bg-secondary);
+  }
+}

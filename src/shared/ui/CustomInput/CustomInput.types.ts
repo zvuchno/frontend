@@ -23,4 +23,6 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   multiline?: boolean;
   rows?: number;
   className?: string;
+  labelClassName?: string
+  inputClassName?: string
 };

@@ -21,7 +21,7 @@ import {
 } from "@/entities/profile";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { useSetArtist, useShowcaseArtist } from "@/entities/Artist/store/useShowcaseStore";
+import { useSetArtistId, useSetArtistSlug, useShowcaseArtistId, useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
 
 const artistProfilePathnames = ["/artist/profile"];
 
@@ -53,8 +53,11 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: artist, isLoading, error } = useCurrentArtist();
   const updateArtist = useUpdateArtist();
   const updateCover = useUpdateArtistCover();
-  const setArtist = useSetArtist();
-  const currentSlug = useShowcaseArtist();
+
+  const setArtistSlug = useSetArtistSlug();
+  const setArtistId = useSetArtistId();
+  const currentSlug = useShowcaseArtistSlug();
+  const currentArtistId = useShowcaseArtistId();
 
   const shouldShowArtistInfo = artistProfilePathnames.includes(pathname);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
@@ -69,11 +72,16 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
     if (!artist) return;
 
     const newSlug = artist.slug;
+    const newArtistId = artist.id;
 
     if (currentSlug !== newSlug) {
-      setArtist(newSlug);
+      setArtistSlug(newSlug);
     }
-  }, [artist?.slug, currentSlug, setArtist]);
+
+    if (currentArtistId !== newArtistId) {
+      setArtistId(newArtistId);
+    }
+  }, [artist?.slug, currentSlug, setArtistSlug]);
 
   const handleCoverChange = async (file: File) => {
     setIsUploadingCover(true);

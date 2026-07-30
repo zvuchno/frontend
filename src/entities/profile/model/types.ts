@@ -63,6 +63,8 @@ export type ArtistApiDataItem = {
 };
 
 export type CurrentArtistResponse = {
+  id: number;
+  profile_type: "artist" | "label";
   name: string;
   description: string | null;
   cover: string | null;

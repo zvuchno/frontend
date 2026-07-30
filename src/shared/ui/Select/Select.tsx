@@ -4,6 +4,7 @@ import React, { useState, useId } from 'react';
 import clsx from 'clsx';
 import type { SelectUIProps } from './Select.types';
 import styles from './Select.module.scss';
+import { useClickOutside } from '@/shared/hooks/useClickOutside';
 
 
 
@@ -35,6 +36,9 @@ export const SelectUI = ({
 
   const selectedLabel = options.find((opt) => opt.value === value)?.label;
 
+  const closeOnOutsideClick = () => setIsOpen(false);
+  const selectRef = useClickOutside(closeOnOutsideClick);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') setIsOpen(false);
   };
@@ -48,6 +52,7 @@ export const SelectUI = ({
   return (
     <div 
       className={clsx(styles.select__container, containerClassName)} 
+      ref={selectRef}
     >
       {!!label && (
         <label className={clsx(styles.select__label, labelClassName)} htmlFor={id}>

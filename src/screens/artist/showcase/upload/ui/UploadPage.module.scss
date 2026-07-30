@@ -1,0 +1,88 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 945px;
+  margin-inline: auto;
+}
+
+.fildsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &__group {
+    display: flex;
+    gap: 49px;
+  }
+}
+
+.label {
+  font-family: var(--font-feature-mono);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: -0.04em;
+  text-transform: none;
+}
+
+.typeSelect {
+  max-width: 134px;
+  gap: 8px;
+
+  &__select {
+    border-radius: 36px;
+  }
+}
+
+.select {
+  border-radius: 0;
+  border-width: 1px;
+}
+
+.input {
+  padding: 10px 32px;
+
+  &::placeholder {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 130%;
+    letter-spacing: -0.06em;
+  }
+}
+
+.textarea {
+  padding: 26px 32px;
+
+  &::placeholder {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 130%;
+    letter-spacing: -0.06em;
+  }
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.uploadContainer {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-block-end: 30px;
+
+  &__button {
+    max-width: 463px;
+  }
+
+  &__hint {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: -0.04em;
+    color: var(--color-bg-secondary);
+  }
+}

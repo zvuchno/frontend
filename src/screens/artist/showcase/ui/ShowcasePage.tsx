@@ -12,7 +12,7 @@ import {
   useMerchInfiniteQuery, 
   usePromocodesInfiniteQuery, 
 } from "@/entities/Artist";
-import { useShowcaseArtist } from "@/entities/Artist/store/useShowcaseStore";
+import { useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
 import { useMemo, useState } from "react";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
@@ -29,7 +29,7 @@ export const ShowcasePage = () => {
   // состояние для фильтрации промокодов по типу скидки
   const [typePromoFilter, setTypePromoFilter] = useState<PromoTypeFilter>('ALL');
 
-  const currentArtistSlug = useShowcaseArtist();
+  const currentArtistSlug = useShowcaseArtistSlug();
 
   if (!currentArtistSlug || status === 'loading') {
     return (
@@ -81,16 +81,16 @@ export const ShowcasePage = () => {
 
   if (error) {
     return (
-      <div>`Ошибка загрузки данных: ${error.message}`</div>
+      <div>{`Ошибка загрузки данных: ${error.message}`}</div>
     )
   }
 
   if (allProducts.length === 0) {
     return (
       <RoleSelectBlock>
-        <RoleCard path='/upload/single' image={"/images/cassette.png"} title='Загрузить сингл' />
-        <RoleCard path='/upload/album' image={"/images/record.png"} title='Загрузить альбом' />
-        <RoleCard path='/upload/merch' image={"/images/shirt.png"} title='Загрузить мерч' />
+        <RoleCard path='/artist/showcase/upload/single' image={"/images/cassette.png"} title='Загрузить сингл' />
+        <RoleCard path='/artist/showcase/upload/album' image={"/images/record.png"} title='Загрузить альбом' />
+        <RoleCard path='/artist/showcase/upload/merch' image={"/images/shirt.png"} title='Загрузить мерч' />
       </RoleSelectBlock>
     )
   }

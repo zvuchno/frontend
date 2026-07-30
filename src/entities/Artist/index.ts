@@ -24,6 +24,7 @@ export {
   useDeleteAlbum,
   useDeleteMerch,
   useDeletePromocode,
+  useDetailInfo
 } from "./model/useShowcase";
 
 export { useGetArtistLegalData } from "./model/useGetArtistLegalData";

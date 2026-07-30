@@ -1,4 +1,5 @@
 .select__container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -74,10 +75,14 @@
 }
 
 .select__content {
-  border: 2px solid var(--color-text-primary);
-  border-radius: 12px; 
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  border: 1px solid var(--color-text-primary);
+  //border-radius: 12px; 
   padding: 6px;
   width: 100%;
+  background-color: var(--color-bg-main);
 }
 
 .select__list {
@@ -96,14 +101,15 @@
   height: 26px;
   font-size: 16px;
   font-family: 'Ubuntu', monospace;
-  font-weight: 300;
-  line-height: 120%;
-  letter-spacing: 0%;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: -0.04em;
   vertical-align: middle;
   margin-bottom: 5px;
   
   &[aria-selected="true"], &:hover {
-    background-color: var(--search-color-btn-primary);
+    //background-color: var(--search-color-btn-primary);
+    color: var(--color-text-accent-blue);
     outline: none;
   }
 }

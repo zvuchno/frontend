@@ -18,12 +18,14 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
       multiline = false,
       rows = 5,
       className,
+      labelClassName,
+      inputClassName,
       ...otherProps
     },
     ref
   ) => {
-    const inputClassName = clsx(s.input, { [s.error]: error }, s[`input_size_${inputSize}`]);
-    const labelClassName = clsx(
+    const inputsClassName = clsx(s.input, { [s.error]: error }, s[`input_size_${inputSize}`]);
+    const labelsClassName = clsx(
       s.labelContainer__label,
       s[`labelContainer__label_size_${inputSize}`],
       { [s.labelContainer__label_size_large]: multiline }
@@ -33,7 +35,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
       <div className={clsx(s.field, { [s.field_multiline]: multiline }, className)}>
         {label && (
           <div className={s.labelContainer}>
-            <label className={labelClassName} htmlFor={id}>
+            <label className={clsx(labelsClassName, labelClassName)} htmlFor={id}>
               {label}
             </label>
             {otherProps.required && <span className={s.labelContainer__markRequired}>*</span>}
@@ -43,7 +45,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
         {multiline ? (
           <textarea
             id={id}
-            className={clsx(s.input, s.input_multiline)}
+            className={clsx(s.input, s.input_multiline, inputClassName)}
             style={style}
             placeholder={otherProps.placeholder}
             rows={rows}
@@ -53,7 +55,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
         ) : (
           <input
             id={id}
-            className={inputClassName}
+            className={clsx(inputsClassName, inputClassName)}
             style={style}
             ref={ref}
             autoComplete='off'

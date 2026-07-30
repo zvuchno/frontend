@@ -1,6 +1,6 @@
 import type { PaginatedStoreResponse } from "@/api/store/types";
 import type { InfiniteData } from "@tanstack/react-query";
-import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { 
   PromoTypeFilter, 
   TShowcaseAlbum, 
@@ -15,6 +15,8 @@ import {
   deleteAlbum,
   deleteMerch,
   deletePromocode,
+  getDetailAlbum,
+  getDetailMerch,
   getShowcaseAlbumsList, 
   getShowcaseMerchList, 
   getShowcasePromocodes, 
@@ -256,4 +258,19 @@ export function useCreateAlbum() {
       toast.error('Не удалось создать альбом')
     }
   });
-}
+};
+
+export function useDetailInfo(type: string, id?: number) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useQuery({
+    queryKey: ['showcase', 'detai', type,  id],
+    queryFn: async () => {
+      return type === 'merch'
+      ? getDetailMerch({ token, id })
+      : getDetailAlbum({ token, id });
+    },
+    enabled: !!token && !!id
+  });
+};

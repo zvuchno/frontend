@@ -2,8 +2,7 @@ import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import type { PaginatedStoreResponse } from "@/api/store/types";
 import type { 
   TShowcaseAlbum, 
-  TShowcaseAlbumDetail, 
-  TShowcaseCreateAlbumRequest, 
+  TShowcaseAlbumDetail,
   TShowcaseCreateMerchRequest, 
   TShowcaseListRequest, 
   TShowcaseMerch, 
@@ -226,6 +225,42 @@ export async function createMerch(payload: TShowcaseCreateMerchRequest): Promise
   }, token);
 
   if (!response) throw new Error('Не удалось создать мерч')
+
+  return response;
+};
+
+export async function getDetailAlbum({
+  token,
+  id
+}: {
+  token: string | undefined;
+  id?: number;
+}): Promise<TShowcaseAlbumDetail> {
+  const url = `${baseUrl}/v1/store/albums/${id}`;
+
+  const response = await authFetchClient<TShowcaseAlbumDetail>(url, {
+    method: "GET",
+  }, token);
+
+  if (!response) throw new Error('Не удалось получить альбом')
+
+  return response;
+};
+
+export async function getDetailMerch({
+  token,
+  id
+}: {
+  token: string | undefined;
+  id?: number;
+}): Promise<TShowcaseMerchDetail> {
+  const url = `${baseUrl}/v1/store/merch/${id}`;
+
+  const response = await authFetchClient<TShowcaseMerchDetail>(url, {
+    method: "GET",
+  }, token);
+
+  if (!response) throw new Error('Не удалось получить мерч')
 
   return response;
 };
