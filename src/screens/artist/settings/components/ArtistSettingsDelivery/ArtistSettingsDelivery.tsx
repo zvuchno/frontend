@@ -1,20 +1,25 @@
 import { useState } from "react";
 
+import { useSelectDeliveryTariff } from "@/entities/order";
+
 import { ButtonUI, CheckboxUI } from "@/shared/ui";
 
 import { ArtistSettingsPickupPoint } from "../ArtistSettingsPickupPoint/ArtistSettingsPickupPoint";
 import styles from "./ArtistSettingsDelivery.module.scss";
 
 export type TArtistSettingsDelivery = {
-  onChooseButtonClick: (isOpen?: boolean) => void;
+  onChooseButtonClick: () => void;
 };
 
 export const ArtistSettingsDelivery = ({ onChooseButtonClick }: TArtistSettingsDelivery) => {
+  const { deliverySelected } = useSelectDeliveryTariff();
   const [pickupPointsCount, setPickupPointsCount] = useState<number>(1);
 
   const addNewPickupPoint = () => {
     setPickupPointsCount((prev) => prev + 1);
   };
+
+  console.log(deliverySelected);
 
   return (
     <section className={styles.artistSettingsDelivery}>
@@ -29,15 +34,34 @@ export const ArtistSettingsDelivery = ({ onChooseButtonClick }: TArtistSettingsD
           >
             СДЭК
           </CheckboxUI>
+          {!deliverySelected?.code || deliverySelected?.code.length === 0 ? (
+            <ButtonUI
+              variant={"primary"}
+              type='button'
+              className={styles.artistSettingsDeliveryOptionsButton}
+              onClick={() => onChooseButtonClick()}
+            >
+              Выбрать пункт выдачи
+            </ButtonUI>
+          ) : (
+            <div className={styles.artistSettingsDeliveryOffice}>
+              <div className={styles.artistSettingsDeliveryOfficeDetails}>
+                <span
+                  className={styles.artistSettingsDeliveryOfficeAddress}
+                >{`${deliverySelected.city}, ${deliverySelected.address}`}</span>
+                <span
+                  className={styles.artistSettingsDeliveryOfficeCode}
+                >{`ПВЗ - ${deliverySelected.code}`}</span>
+              </div>
 
-          <ButtonUI
-            variant={"primary"}
-            type='button'
-            className={styles.artistSettingsDeliveryOptionsButton}
-            onClick={() => onChooseButtonClick(true)}
-          >
-            Выбрать пункт выдачи
-          </ButtonUI>
+              <span
+                onClick={() => onChooseButtonClick()}
+                className={styles.artistSettingsDeliveryOfficeChange}
+              >
+                Изменить пункт
+              </span>
+            </div>
+          )}
         </div>
 
         <div key='pickup' className={styles.artistSettingsDeliveryOptionsContainer}>

@@ -25,6 +25,42 @@
     flex-direction: column;
     gap: 20px;
   }
+
+  &Office {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding-inline-start: 24px;
+    font-family: var(--font-feat);
+    color: var(--color-text-primary);
+    letter-spacing: -0.08em;
+
+    &::before {
+      content: url(/icons/location.svg);
+      position: absolute;
+      top: 2px;
+      left: 0;
+    }
+
+    &Details {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1, 6875;
+    }
+
+    &Change {
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1;
+    }
+  }
 }
 
 .artistSettingsTitle {

@@ -4,4 +4,11 @@
   gap: 80px;
   color: var(--color-text-primary);
   width: 100%;
+
+  &Widget {
+    width: 90vw;
+    max-width: 1000px;
+    height: 90vh;
+    max-height: 800px;
+  }
 }
