@@ -33,6 +33,7 @@ interface CDEKWidgetOptions {
   };
   hideDeliveryOptions?: { office?: boolean; door?: boolean };
   debug?: boolean;
+  sender?: boolean;
   defaultLocation?: [number, number] | string;
   lang?: string;
   currency?: string;
@@ -59,7 +60,17 @@ declare global {
   }
 }
 
-export const WidgetCdek = ({ cityCode, cityName }: { cityCode: number; cityName: string }) => {
+export const WidgetCdek = ({
+  cityCode,
+  cityName,
+  senderMode,
+  onModalClose,
+}: {
+  cityCode: number;
+  cityName: string;
+  senderMode: boolean;
+  onModalClose?: () => void;
+}) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
   const yandexKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
 
@@ -123,29 +134,43 @@ export const WidgetCdek = ({ cityCode, cityName }: { cityCode: number; cityName:
         hideDeliveryOptions: { office: false, door: true },
         hideFilters: { is_dressing_room: true, have_cash: true, have_cashless: true, type: false },
         debug: false,
+        sender: senderMode,
         defaultLocation: cityName,
         lang: "rus",
         currency: "RUB",
         fixBounds: "locality",
         onChoose(deliveryType, tariff, address) {
-          if (address && address.city_code) {
-            const checkCdekTariff = (type: string) => {
-              return type === "PVZ" ? "office" : "pickup";
-            };
-            mutate(
-              { city_code: address.city_code, tariffs: checkCdekTariff(address.type) },
-              {
-                onSuccess: (data) => {
-                  createDeliveryPriceViewer(data, address, (selection) => {
-                    const updatedSelection = {
-                      ...selection,
-                      type: checkCdekTariff(address.type) as TCdekDeliveryTariff,
-                    };
-                    setDeliverySelected(updatedSelection);
-                  });
-                },
-              }
-            );
+          if (!senderMode) {
+            if (address && address.city_code) {
+              const checkCdekTariff = (type: string) => {
+                return type === "PVZ" ? "office" : "pickup";
+              };
+              mutate(
+                { city_code: address.city_code, tariffs: checkCdekTariff(address.type) },
+                {
+                  onSuccess: (data) => {
+                    createDeliveryPriceViewer(data, address, (selection) => {
+                      const updatedSelection = {
+                        ...selection,
+                        type: checkCdekTariff(address.type) as TCdekDeliveryTariff,
+                      };
+                      setDeliverySelected(updatedSelection);
+                    });
+                  },
+                }
+              );
+            }
+          } else {
+            console.log("Выбран склад отправки:", address);
+            setDeliverySelected({
+              isSender: true,
+              city: address?.city,
+              cdek_city_code: address?.city_code.toString(),
+              address: address?.address,
+              code: address?.code,
+              isChosen: true,
+            });
+            if (onModalClose) onModalClose();
           }
         },
       });
@@ -156,7 +181,7 @@ export const WidgetCdek = ({ cityCode, cityName }: { cityCode: number; cityName:
     return () => {
       widgetRef.current = null;
       if (container) container.innerHTML = "";
-      setDeliveryDetailsRef.current(null);
+      if (!senderMode) setDeliveryDetailsRef.current(null);
     };
   }, [
     scriptReady,
@@ -168,6 +193,8 @@ export const WidgetCdek = ({ cityCode, cityName }: { cityCode: number; cityName:
     mutate,
     defaultCityName,
     cityName,
+    senderMode,
+    onModalClose,
   ]);
 
   return <div className={styles.cdekPickPointsWidget} id={uniqueContainerId} />;

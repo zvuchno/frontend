@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-
-import styles from "../ui/ArtistFinance.module.scss";
+import styles from "./StatementHeading.module.scss";
 
 const headingColumnNames = [
   "Номер отчета",

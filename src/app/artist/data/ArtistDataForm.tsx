@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
+import { useGetArtistLegalData } from "@/entities/Artist";
 import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
 
 import { ButtonUI } from "@/shared/ui";
@@ -14,10 +15,10 @@ import type { ArtistDataFormValues } from "./artistDataForm.types";
 import s from "./page.module.scss";
 
 export function ArtistDataForm() {
-  const { artistLegalData, error, fetchArtistLegalData, isLoading, updateArtistLegalData } =
-    useArtistLegalDataStore();
+  const { data, isLoading } = useGetArtistLegalData();
+  const { error, updateArtistLegalData } = useArtistLegalDataStore();
   const [isEditMode, setIsEditMode] = useState(false);
-  const formValues = useMemo(() => toArtistDataFormValues(artistLegalData), [artistLegalData]);
+  const formValues = useMemo(() => toArtistDataFormValues(data), [data]);
 
   const {
     formState: { errors, isValid },
@@ -30,9 +31,9 @@ export function ArtistDataForm() {
     values: formValues,
   });
 
-  useEffect(() => {
+  /* useEffect(() => {
     void fetchArtistLegalData();
-  }, [fetchArtistLegalData]);
+  }, [fetchArtistLegalData]);*/
 
   const handleEdit = () => {
     reset(formValues);
@@ -56,7 +57,7 @@ export function ArtistDataForm() {
 
   return (
     <form className={s.form} onSubmit={() => handleSubmit(handleArtistDataSubmit)}>
-      {isLoading && !artistLegalData ? <p className={s.status}>Загрузка данных...</p> : null}
+      {isLoading && !data ? <p className={s.status}>Загрузка данных...</p> : null}
 
       {error ? <p className={s.errorMessage}>{error}</p> : null}
 

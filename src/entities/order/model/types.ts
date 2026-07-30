@@ -70,6 +70,7 @@ export type TDeliveryTariffSelection = {
   city?: string;
   cdek_city_code?: string;
   type?: TCdekDeliveryTariff;
+  isSender?: boolean;
 } | null;
 
 export interface SelectDeliveryContextType {

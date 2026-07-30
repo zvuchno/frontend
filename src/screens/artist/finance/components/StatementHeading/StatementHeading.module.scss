@@ -1,0 +1,77 @@
+.financeStatementHeading {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 73.18%;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 5 / 3;
+  padding-inline-start: 20px;
+  color: var(--color-bg-secondary);
+
+  @media (max-width: 1024px) {
+    padding-inline-start: 5px;
+    gap: 15px;
+  }
+
+  @media (max-width: 950px) {
+    padding-inline-start: 0;
+    gap: 10px;
+  }
+
+  @media (max-width: 768px) {
+    padding-inline-start: 10px;
+    gap: 20px;
+  }
+
+  &Column {
+    min-width: 96px;
+    width: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    &:nth-child(4) {
+      margin-inline-start: -10px;
+      width: 123px;
+
+      @media (max-width: 1024px) {
+        width: 65px;
+        margin-inline-start: 3px;
+      }
+    }
+
+    &:nth-child(5) {
+      margin-inline-start: -15px;
+
+      @media (max-width: 1024px) {
+        margin-inline-start: 3px;
+      }
+    }
+
+    @media (max-width: 1300px) {
+      width: 90px;
+      min-width: 0;
+    }
+
+    @media (max-width: 1024px) {
+      width: 60px;
+
+      &:nth-child(4),
+      &:nth-child(5),
+      &:nth-child(6) {
+        margin-inline-start: 15px;
+      }
+    }
+
+    @media (max-width: 550px) {
+      gap: 5px;
+
+      &:nth-child(4),
+      &:nth-child(5) {
+        margin-inline-start: 0;
+      }
+    }
+  }
+}

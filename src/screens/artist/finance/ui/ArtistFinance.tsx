@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { CalendarPicker } from "../components/CalendarPicker";
-import { FinanceStatementList } from "../components/FinanceStatementList";
+import { CalendarPicker } from "../components/CalendarPicker/CalendarPicker";
+import { FinanceStatementList } from "../components/FinanceStatementList/FinanceStatementList";
 import { type TFinanceStatement } from "../model/finance.types";
 import styles from "./ArtistFinance.module.scss";
 

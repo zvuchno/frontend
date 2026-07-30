@@ -3,9 +3,9 @@ import { useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 
-import AarrowInCircle from "../../../../../public/icons/arrow-right.svg";
-import { type TFinanceStatement } from "../model/finance.types";
-import styles from "../ui/ArtistFinance.module.scss";
+import AarrowInCircle from "../../../../../../public/icons/arrow-right.svg";
+import { type TFinanceStatement } from "../../model/finance.types";
+import styles from "./FinanceStatement.module.scss";
 
 export const FinanceStatement = ({
   statement,

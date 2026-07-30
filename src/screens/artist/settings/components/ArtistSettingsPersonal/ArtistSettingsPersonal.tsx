@@ -1,94 +1,16 @@
 import { type FieldError, FormProvider, useForm } from "react-hook-form";
 
-
-
 import { useSession } from "next-auth/react";
 
-
-
 import { InputPhone } from "@/features/profile";
-
-
 
 import { ButtonUI } from "@/shared/ui";
 import { CustomInput, PasswordInput } from "@/shared/ui/CustomInput";
 
-
-
-import { artistSettingsPersonalFields } from "../config/config";
-import { registerRules } from "../config/validation";
-import { type TArtistSettingsFieldValues } from "../model/artistSettings.types";
-import styles from "../ui/ArtistSettingsPage.module.scss";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { artistSettingsPersonalFields } from "../../config/config";
+import { registerRules } from "../../config/validation";
+import { type TArtistSettingsFieldValues } from "../../model/artistSettings.types";
+import styles from "./ArtistSettingsPersonal.module.scss";
 
 export const ArtistSettingsPersonal = () => {
   const fields = artistSettingsPersonalFields;

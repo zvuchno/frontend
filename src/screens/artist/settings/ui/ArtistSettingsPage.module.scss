@@ -5,97 +5,10 @@
   color: var(--color-text-primary);
   width: 100%;
 
-  &Title {
-    font-family: var(--font-better-vcr);
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.06em;
-    width: 100%;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--color-bg-secondary);
-    margin-bottom: 28px;
-  }
-
-  &Personal {
-    &Form {
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-      width: 100%;
-
-      &Content {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-areas:
-          "cell-1-1 cell-1-2"
-          "cell-2-1 cell-2-2";
-        column-gap: 20px;
-        row-gap: 40px;
-        width: 100%;
-
-        @media (max-width: 1000px) {
-          grid-template-columns: minmax(0, 1fr);
-          grid-template-areas:
-            "cell-1-1"
-            "cell-1-2"
-            "cell-2-1"
-            "cell-2-2";
-        }
-      }
-
-      &Buttons {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-    }
-  }
-
-  &Delivery {
-    width: 100%;
-
-    &Options {
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-      width: 100%;
-
-      &Container {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        width: 100%;
-      }
-
-      &Button {
-        min-height: 36px;
-        width: 273px;
-      }
-    }
-
-    & .pickupPoints {
-      &Form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-    }
-
-    &Option {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      width: 100%;
-
-      &.pickupPoint {
-        border: none;
-      }
-
-      @media (max-width: 1124px) {
-        flex-wrap: wrap;
-      }
-    }
+  &Widget {
+    width: 90vw;
+    max-width: 1000px;
+    height: 90vh;
+    max-height: 800px;
   }
 }
