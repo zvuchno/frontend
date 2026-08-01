@@ -46,7 +46,11 @@ export const ArtistSettingsPersonal = () => {
               return (
                 <div className={`cell-${field.row}-${field.column}`} key={field.name}>
                   {field.type === "tel" ? (
-                    <InputPhone field={field} disabled={false} />
+                    <InputPhone
+                      field={field}
+                      disabled={false}
+                      className={styles.artistSettingsPersonalFormPhone}
+                    />
                   ) : field.type === "password" ? (
                     <PasswordInput
                       {...register(field.name, registerRules(field))}

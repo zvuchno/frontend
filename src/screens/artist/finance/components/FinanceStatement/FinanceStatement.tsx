@@ -3,54 +3,59 @@ import { useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 
+import { type TFinanceReportPreview } from "@/entities/financeReports";
+
 import AarrowInCircle from "../../../../../../public/icons/arrow-right.svg";
-import { type TFinanceStatement } from "../../model/finance.types";
 import styles from "./FinanceStatement.module.scss";
+import { FinanceStatementDetails } from "./FinanceStatementDetails";
 
 export const FinanceStatement = ({
   statement,
   mode,
 }: {
-  statement: TFinanceStatement;
+  statement: TFinanceReportPreview;
   mode: "row" | "column";
 }) => {
-  const isOpen = false;
-  const [isStatementOpen, setIsStatementOpen] = useState(isOpen);
+  const [isStatementOpen, setIsStatementOpen] = useState(false);
 
   return (
     <div className={clsx(styles.financeStatement, isStatementOpen && styles.detailStatement)}>
-      <span className={styles.financeStatementItem}>{statement.number}</span>
-      {mode === "row" && (
-        <>
-          <span className={styles.financeStatementItem}>{statement.firstDate}</span>
-          <span className={styles.financeStatementItem}>{statement.lastDate}</span>
-        </>
-      )}
-      {mode === "column" && (
-        <>
-          <span className={styles.financeStatementItem}>
-            {`${statement.firstDate} ${statement.lastDate}`}
-          </span>
-        </>
-      )}
-      <span className={styles.financeStatementItem}>{statement.createdAt}</span>
-      <span className={styles.financeStatementItem}>{statement.itemsSold}</span>
-      <span className={styles.financeStatementItem}>{statement.totalSum}</span>
-      <span className={styles.financeStatementItem}>
-        <Link href={statement.url} className={styles.financeStatementLink}>
-          скачать
-        </Link>
-      </span>
-      <span className={styles.financeStatementItem}>
-        <button
-          className={styles.financeStatementButton}
-          onClick={() => setIsStatementOpen((prev) => !prev)}
-        >
-          <AarrowInCircle
-            className={clsx(styles.financeStatementButtonImage, isStatementOpen && styles.open)}
-          />
-        </button>
-      </span>
+      <div className={styles.financeStatementHeading}>
+        <span className={styles.financeStatementItem}>{statement.id}</span>
+        {mode === "row" && (
+          <>
+            <span className={styles.financeStatementItem}>{statement.period_start}</span>
+            <span className={styles.financeStatementItem}>{statement.period_end}</span>
+          </>
+        )}
+        {mode === "column" && (
+          <>
+            <span className={styles.financeStatementItem}>
+              {`${statement.period_start} ${statement.period_end}`}
+            </span>
+          </>
+        )}
+        <span className={styles.financeStatementItem}>{statement.created_at}</span>
+        <span className={styles.financeStatementItem}>{`${statement.items_count} шт.`}</span>
+        <span className={styles.financeStatementItem}>{`${statement.sales_amount} руб.`}</span>
+        <span className={styles.financeStatementItem}>
+          <Link href={statement.file_url} className={styles.financeStatementLink}>
+            скачать
+          </Link>
+        </span>
+        <span className={styles.financeStatementItem}>
+          <button
+            className={styles.financeStatementButton}
+            onClick={() => setIsStatementOpen((prev) => !prev)}
+          >
+            <AarrowInCircle
+              className={clsx(styles.financeStatementButtonImage, isStatementOpen && styles.open)}
+            />
+          </button>
+        </span>
+      </div>
+
+      {isStatementOpen && <FinanceStatementDetails id={statement.id} />}
     </div>
   );
 };

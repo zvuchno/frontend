@@ -2,51 +2,38 @@
 
 import { useState } from "react";
 
+import { useGetFinanceReports } from "@/entities/financeReports";
+
 import { CalendarPicker } from "../components/CalendarPicker/CalendarPicker";
 import { FinanceStatementList } from "../components/FinanceStatementList/FinanceStatementList";
-import { type TFinanceStatement } from "../model/finance.types";
 import styles from "./ArtistFinance.module.scss";
 
 export const ArtistFinance = () => {
-  const state: TFinanceStatement[] = [
-    {
-      number: 1,
-      firstDate: "01.06.2026",
-      lastDate: "30.06.2026",
-      createdAt: "05.07.2026",
-      itemsSold: "15 шт.",
-      totalSum: "150 000 руб.",
-      url: "url",
-    },
-    {
-      number: 2,
-      firstDate: "01.05.2026",
-      lastDate: "30.05.2026",
-      createdAt: "10.07.2026",
-      itemsSold: "20 шт.",
-      totalSum: "250 000 руб.",
-      url: "url",
-    },
-    {
-      number: 3,
-      firstDate: "01.03.2026",
-      lastDate: "30.03.2026",
-      createdAt: "18.07.2026",
-      itemsSold: "35 шт.",
-      totalSum: "430 000 руб.",
-      url: "url",
-    },
-  ];
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
-  const [statements, setStatements] = useState<TFinanceStatement[]>(state);
+  const { data } = useGetFinanceReports(dateFrom, dateTo, "month");
+  const reports = data?.results;
+
+  const formatDate = (date: string) => {
+    if (!date) return "";
+    const [year, month, day] = date.split("-");
+    return `${day}.${month}.${year}`;
+  };
 
   return (
     <section className={styles.artistFinance}>
-      <CalendarPicker />
-      {statements.length > 0 ? (
-        <FinanceStatementList statements={statements} />
+      <CalendarPicker onSelectFirstDay={setDateFrom} onSelectLastDay={setDateTo} />
+
+      {reports && reports.length > 0 ? (
+        <FinanceStatementList statements={reports} />
       ) : (
-        <div className={styles.artistFinanceEmpty}>За выбранный период отчеты отсутствуют</div>
+        dateFrom.length !== 0 &&
+        dateTo.length !== 0 && (
+          <div
+            className={styles.artistFinanceEmpty}
+          >{`За период с ${formatDate(dateFrom)} по ${formatDate(dateTo)} отчеты отсутствуют`}</div>
+        )
       )}
     </section>
   );
