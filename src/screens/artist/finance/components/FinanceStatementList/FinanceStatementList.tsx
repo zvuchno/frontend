@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { type TFinanceStatement } from "../../model/finance.types";
+import { type TFinanceReportPreview } from "@/entities/financeReports";
+
 import { FinanceStatement } from "../FinanceStatement/FinanceStatement";
 import { StatementHeading } from "../StatementHeading/StatementHeading";
 import styles from "./FinanceStatementList.module.scss";
 
-export const FinanceStatementList = ({ statements }: { statements: TFinanceStatement[] }) => {
+export const FinanceStatementList = ({ statements }: { statements: TFinanceReportPreview[] }) => {
   const [tableMode, setTableMode] = useState<"row" | "column">("row");
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export const FinanceStatementList = ({ statements }: { statements: TFinanceState
       <StatementHeading mode={tableMode} />
       <div className={styles.financeStatementList}>
         {statements.map((statement) => (
-          <FinanceStatement key={statement.number} statement={statement} mode={tableMode} />
+          <FinanceStatement key={statement.id} statement={statement} mode={tableMode} />
         ))}
       </div>
     </div>

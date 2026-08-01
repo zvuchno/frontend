@@ -1,13 +1,11 @@
-import s from './Loader.module.scss';
+import { type CSSProperties } from "react";
 
-export const Loader = () => {
+import s from "./Loader.module.scss";
+
+export const Loader = (style?: CSSProperties) => {
   return (
-    <div 
-      className={s.container} 
-      role="status" 
-      aria-live="polite"
-    >
+    <div className={s.container} role='status' aria-live='polite' style={style}>
       <div className={s.loader} />
     </div>
-  )
+  );
 };
