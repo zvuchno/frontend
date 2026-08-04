@@ -8,6 +8,7 @@ import s from "./ShowcaseCard.module.scss";
 import { type ShowcaseCardProps } from "./ShowcaseCard.type";
 import { EditIcon } from "@/shared/ui/Icons";
 import { isAlbum, isMerch, isPromo } from "../../utils/typeGuarde";
+import Link from "next/link";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -35,7 +36,6 @@ export const ShowcaseCard = ({
   onDeleteAlbum,
   onDeleteMerch,
   onDeletePromocode,
-  onEdit,
 }: ShowcaseCardProps) => {
   const id = item.id
 
@@ -56,20 +56,12 @@ export const ShowcaseCard = ({
     }
   };
 
-  const renderActions = (type: string, isChecked?: boolean) => (
+  const renderActions = (type: string, editType: string, isChecked?: boolean) => {
+    const params = new URLSearchParams();
+    params.append('id', encodeURIComponent(id));
+
+    return (
     <div className={clsx(s.actions, {[s.actions_span]: type === 'promo'})}>
-      <div className={s.buttons}>
-        <button type="button" className={s.editButton} onClick={() => onEdit}>
-          {EditIcon()}
-        </button>
-        <button 
-          type="button" 
-          className={s.deleteButton} 
-          onClick={() => handleDeleteItem(type)}
-        >
-          {DeleteIcon()}
-        </button>
-      </div>
       <label className={s.checkboxContainer}>
         <input
           type="checkbox"
@@ -80,9 +72,25 @@ export const ShowcaseCard = ({
         />
         <span className={s.checkboxMark}></span>
       </label>
+      <div className={s.buttons}>
+        <Link  
+          className={s.editButton} 
+          href={editType === 'promo' ? '' : `/artist/showcase/upload/${editType}/?${params.toString()}`}
+        >
+          {EditIcon()}
+        </Link>
+        <button 
+          type="button" 
+          className={s.deleteButton} 
+          onClick={() => handleDeleteItem(type)}
+        >
+          {DeleteIcon()}
+        </button>
+      </div>
+    
     </div>
     
-  );
+  )};
 
   if (isAlbum(item)) {
     return (
@@ -98,7 +106,7 @@ export const ShowcaseCard = ({
         <Text className={s.text}>{item.sku}</Text>
         <Text className={s.text}>{item.price}</Text>
         <Text className={s.text}>-</Text>
-        {renderActions('album', item.is_published)}
+        {renderActions('album', item.is_single ? 'single' : 'album', item.is_published)}
       </div>
     )
   }
@@ -114,10 +122,10 @@ export const ShowcaseCard = ({
         <Text className={clsx(s.text, s.name)}>
           {item.name}
         </Text>
-        <Text className={s.text}>{item.sku}</Text>
+        <Text className={s.text}>{item.sku ? item.sku : '-'}</Text>
         <Text className={s.text}>{item.price}</Text>
         <Text className={s.text}>{item.stock} шт</Text>
-        {renderActions('merch')}
+        {renderActions('merch', 'merch', item.is_published)}
       </div>
     )
   }
@@ -144,7 +152,7 @@ export const ShowcaseCard = ({
         <Text className={s.text}>{discount}</Text>
         <Text className={s.text}>{period}</Text>
         <Text className={s.text}>{usageText}</Text>
-        {renderActions('promo', item.is_enabled)}
+        {renderActions('promo', 'promo', item.is_enabled)}
       </div>
     )
   }

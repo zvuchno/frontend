@@ -5,18 +5,26 @@ import { useEffect, useRef, useState } from "react";
 import { ButtonUI } from "@/shared/ui";
 
 import styles from "./AddImageBlock.module.scss";
-import { type AddImageBlockProps } from "./AddImageBlock.types";
+import { TImage, type AddImageBlockProps } from "./AddImageBlock.types";
 import toast from "react-hot-toast";
 import { checkMediaFiles } from "../../lib/checkMediaFiles";
 
-export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlockProps) => {
+export const AddImageBlock = ({ 
+  severalImages = false, 
+  initialMainPreview,
+  initialAdditionalPreviews,
+  setValue,
+  onDelete,
+}: AddImageBlockProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Для дополнительных инпутов храним массив refs по индексам
   const additionalInputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
   // Стейт только для превью (URL)
-  const [mainPreview, setMainPreview] = useState<string | null>(null);
-  const [additionalPreviews, setAdditionalPreviews] = useState<(string | null)[]>([]);
+  const [mainPreview, setMainPreview] = useState<TImage | null>(initialMainPreview ?? null);
+  const [additionalPreviews, setAdditionalPreviews] = useState<(TImage | null)[]>(initialAdditionalPreviews ?? []);
+
+  const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
 
   // Стейт для файлов 
   const [files, setFiles] = useState<{
@@ -27,12 +35,38 @@ export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlock
     additionalImages: [],
   });
 
-  useEffect(() => {
-    // Синхронизируем форму с локальным стейтом
-    if (files.mainImage) setValue('mainImage', files.mainImage);
-    if (files.additionalImages) setValue('additionalImages', files.additionalImages);
+   useEffect(() => {
+    onDelete(deletedImageIds);
+  }, [deletedImageIds, onDelete]);
+
+  // useEffect(() => {
+  //   // Синхронизируем форму с локальным стейтом
+  //   if (files.mainImage) {
+  //     setValue('mainImage', files.mainImage);
+  //   } else {
+  //     setValue('mainImage', []);
+  //   }
     
-  }, [files, setValue]);
+  //   if (files.additionalImages && files.additionalImages.length > 0) {
+  //     setValue('additionalImages', files.additionalImages);
+  //   } else {
+  //     setValue('additionalImages', []);
+  //   }
+    
+  // }, [files, setValue]);
+
+  useEffect(() => {
+    return () => {
+      if (mainPreview && !mainPreview.image.startsWith('http')) {
+        URL.revokeObjectURL(mainPreview.image);
+      }
+      additionalPreviews.forEach((i) => {
+        if (i && !i.image.startsWith('http')) {
+          URL.revokeObjectURL(i.image);
+        }
+      });
+    };
+  }, [mainPreview, additionalPreviews]);
 
   const handleMainFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -40,6 +74,7 @@ export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlock
     if (!file) {
       setMainPreview(null);
       setFiles((prev) => ({ ...prev, mainImage: null }));
+      setValue('mainImage', null);
       event.target.value = '';
       return;
     }
@@ -50,9 +85,34 @@ export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlock
       event.target.value = '';
       return;
     }
+
+    // Если был старый временный URL — отзываем его
+    if (mainPreview && !mainPreview.image.startsWith('http')) {
+      URL.revokeObjectURL(mainPreview.image);
+    }
+
     const objectUrl = URL.createObjectURL(file);
-    setMainPreview(objectUrl);
-    setFiles((prev) => ({ ...prev, mainImage: file }));
+    setMainPreview({image: objectUrl, is_main: true});
+
+    setFiles((prev) => {
+      const newFiles = { ...prev, mainImage: file };
+      setValue('mainImage', file); // обновляем форму
+      return newFiles;
+    });
+  };
+
+  const clearMainImage = async (id?: number) => {
+    // Отзываем старый временный URL
+    if (mainPreview && !mainPreview.image.startsWith('http')) {
+      URL.revokeObjectURL(mainPreview.image);
+    }
+    setMainPreview(null);
+    setFiles((prev) => ({ ...prev, mainImage: null }));
+    setValue('mainImage', null); 
+
+    if (id && severalImages) {
+      setDeletedImageIds((prev) => [...prev, id]);
+    };
   };
 
   const handleButtonClick = () => {
@@ -61,25 +121,27 @@ export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlock
 
   const handleAdditionalFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>, 
-    id: number
+    index: number
   ) => {
     const file = event.target.files?.[0];
     if (!file) {
       // Очищаем превью и файл по индексу
       setAdditionalPreviews((prev) => {
         const next = [...prev];
-        next[id] = null;
+        next[index] = null;
         return next;
       });
 
       setFiles((prev) => {
         const current = prev.additionalImages ?? [];
         const nextAdditional = [...current];
-        nextAdditional[id] = undefined as unknown as File;
-        // Удаляем undefined из массива, чтобы не слать мусор
+        if (index < nextAdditional.length) {
+          nextAdditional.splice(index, 1);
+        }
+        setValue('additionalImages', nextAdditional);
         return {
           ...prev,
-          additionalImages: nextAdditional.filter((f): f is File => f !== undefined),
+          additionalImages: nextAdditional,
         };
       });
       event.target.value = '';
@@ -93,44 +155,96 @@ export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlock
       return;
     }
 
+    // Отзываем старый URL, если был
+    if (additionalPreviews[index] && !additionalPreviews[index]?.image.startsWith('http')) {
+      URL.revokeObjectURL(additionalPreviews[index].image!);
+    }
+
     const url = URL.createObjectURL(file);
     setAdditionalPreviews((prev) => {
       const next = [...prev];
-      next[id] = url;
+      next[index] = {
+        image: url,
+        is_main: false
+      };
       return next;
     });
 
     setFiles((prev) => {
       const current = prev.additionalImages ?? [];
       const nextAdditional = [...current];
-      nextAdditional[id] = file;
+      nextAdditional[index] = file;
+      setValue('additionalImages', nextAdditional);
       return { ...prev, additionalImages: nextAdditional };
     });
 
   };
 
-  const renderAdditionalInputs = (id: number) => {
-    const hasImage = !!additionalPreviews[id];
-    const preview = additionalPreviews[id] ?? null;
+  const clearAdditionalImageAt = async (index: number, id?: number) => {
+    // Отзываем временный URL, если он был
+    if (additionalPreviews[index] && !additionalPreviews[index]?.image.startsWith('http')) {
+      URL.revokeObjectURL(additionalPreviews[index].image!);
+    }
+
+    setAdditionalPreviews((prev) => {
+      const next = [...prev];
+      next[index] = null;
+      return next;
+    });
+
+    setFiles((prev) => {
+      const current = prev.additionalImages ?? [];
+      const nextAdditional = [...current];
+      // Удаляем файл по индексу
+      if (index < nextAdditional.length) {
+        nextAdditional.splice(index, 1);
+      }
+      setValue('additionalImages', nextAdditional)
+      return { ...prev, additionalImages: nextAdditional };
+    });
+
+    if (id) {
+      setDeletedImageIds((prev) => [...prev, id]);
+    };
+  };
+
+  const renderAdditionalInputs = (index: number) => {
+    const hasImage = !!additionalPreviews[index];
+    //const preview = additionalPreviews[index] ?? null;
 
     return (
       <div
-        key={id}
+        key={index}
         className={styles.addImage__additionalInput}
         style={{
           backgroundImage: hasImage
-            ? `url(${additionalPreviews[id]})`
+            ? `url(${additionalPreviews[index]?.image})`
             : "url('/icons/plus-sign.svg')",
           backgroundSize: hasImage ? "contain" : "auto",
+          position: 'relative',
         }}
-        onClick={() => additionalInputsRef.current[id]?.click()}
+        onClick={() => additionalInputsRef.current[index]?.click()}
       >
+        {hasImage && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              void clearAdditionalImageAt(index, additionalPreviews[index]?.id);
+            }}
+            className={styles.addImage__removeButton}
+            aria-label="Удалить изображение"
+          >
+            ✕
+          </button>
+        )}
+
         <input
           type='file'
           ref={(el) => {
-            additionalInputsRef.current[id] = el;
+            additionalInputsRef.current[index] = el;
           }}
-          onChange={(e) => handleAdditionalFileChange(e, id)}
+          onChange={(e) => handleAdditionalFileChange(e, index)}
           accept='image/*'
           hidden
         />
@@ -144,26 +258,42 @@ export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlock
         className={styles.addImage__previewContainer}
         style={{
           backgroundImage: mainPreview 
-            ? `url(${mainPreview})` 
+            ? `url(${mainPreview.image})` 
             : `repeating-conic-gradient(#e9e8e8 0% 25%, #fff 0% 50%)`,
-          backgroundSize: mainPreview ? 'cover' : '45px 45px',
+          backgroundSize: mainPreview?.image ? 'cover' : '45px 45px',
           backgroundPosition: 'center',
-          backgroundRepeat: mainPreview ? 'no-repeat' : 'repeat',
+          backgroundRepeat: mainPreview?.image ? 'no-repeat' : 'repeat',
+          position: 'relative'
         }}
       >
-        <label htmlFor='image-upload' className={styles.addImage__label}>
-          Загрузите фото
-        </label>
+        {mainPreview && (
+          <button
+            type="button"
+            onClick={() => void clearMainImage(mainPreview.id)}
+            className={styles.addImage__removeButton}
+            aria-label="Удалить главное фото"
+          >
+            ✕
+          </button>
+        )}
 
-        <ButtonUI
-          variant='secondary'
-          size='small'
-          className={styles.addImage__button}
-          contentClassName={styles.addImage__buttonText}
-          onClick={handleButtonClick}
-        >
-          Выбрать фото
-        </ButtonUI>
+        {!mainPreview && (
+          <label htmlFor='image-upload' className={styles.addImage__label}>
+            Загрузите фото
+          </label>
+        )}
+
+        {!mainPreview && (
+          <ButtonUI
+            variant='secondary'
+            size='small'
+            className={styles.addImage__button}
+            contentClassName={styles.addImage__buttonText}
+            onClick={handleButtonClick}
+          >
+            Выбрать фото
+          </ButtonUI>
+        )}
 
         <input
           id="image-upload"
@@ -177,7 +307,7 @@ export const AddImageBlock = ({ severalImages = false, setValue }: AddImageBlock
 
       {severalImages && (
         <div className={styles.addImage__additionalInputsWrapper}>
-          {[0, 1, 2].map((id) => renderAdditionalInputs(id))}
+          {[0, 1, 2].map((index) => renderAdditionalInputs(index))}
         </div>
       )}
 

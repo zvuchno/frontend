@@ -46,6 +46,30 @@
   display: none;
 }
 
+.addImage__removeButton {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}
+
 .addImage__requirements {
   width: 100%;
   display: flex;
@@ -99,4 +123,5 @@
   border: 1px solid var(--color-text-primary);
   background-repeat: no-repeat;
   background-position: center;
+  cursor: pointer;
 }

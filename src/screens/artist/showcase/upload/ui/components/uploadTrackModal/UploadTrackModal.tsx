@@ -19,11 +19,13 @@ type TrackFormValues = {
 interface UploadTrackModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onUploadTrack: (file: File, values: Omit<TrackFormValues, 'track'>) => Promise<void>;
+  onUploadTrack: (file: File, values: Omit<TrackFormValues, 'track'>) => void;
 }
 
 export const UploadTrackModal = ({ isOpen, onClose, onUploadTrack }: UploadTrackModalProps) => {
   const trackInputRef = useRef<HTMLInputElement | null>(null);
+
+  // если это редактируемый товар, то возможно сюда передавать id этого товара
 
   const { 
     register, 
@@ -94,20 +96,22 @@ export const UploadTrackModal = ({ isOpen, onClose, onUploadTrack }: UploadTrack
             size='standart'
             onClick={handleTrackButtonClick}
             disabled={isSubmitting}
-            className={s.mediaButton}
+            className={s.uploadContainer__mediaButton}
           >
             Выбрать трек
           </ButtonUI>
 
           <input
             ref={trackInputRef}
-            className={s.fileInput}
+            className={s.uploadContainer__fileInput}
             type='file'
             accept="audio/mpeg,audio/wav,audio/flac"
             onChange={handleFileChange}
           />
 
-          <Text>Загрузите трек с вашего устройства (максимальный размер 500 MB; MP3, WAV, FLAC)</Text>
+          <Text className={s.uploadContainer__hint}>
+            Загрузите трек с вашего устройства (максимальный размер 500 MB; MP3, WAV, FLAC)
+          </Text>
         </div>
 
         <CustomInput
@@ -116,8 +120,10 @@ export const UploadTrackModal = ({ isOpen, onClose, onUploadTrack }: UploadTrack
           error={!!errors.name}
           message={errors.name?.message}
           {...register('name', { required: "Название обязательно" })}
+          labelClassName={s.label}
+          inputClassName={s.input}
         />
-        <div>
+        <div className={s.container}>
           <div className={s.field}>
             <div className={s.field__labelContainer}>
               <label className={clsx(s.text, s.field__labelContainer__label)} htmlFor='price'>
@@ -149,6 +155,8 @@ export const UploadTrackModal = ({ isOpen, onClose, onUploadTrack }: UploadTrack
                   return true;
                 },
               })}
+              labelClassName={s.label}
+              inputClassName={s.input}
             />
           </div>
 
@@ -171,6 +179,9 @@ export const UploadTrackModal = ({ isOpen, onClose, onUploadTrack }: UploadTrack
           {...register('description', {
             required: false,
           })}
+          labelClassName={s.label}
+          inputClassName={s.textarea}
+          placeholder="Этот текст будут видеть ваши слушатели"
         />
 
         <ButtonUI variant="primary" type="submit" disabled={isSubmitting}>

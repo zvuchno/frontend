@@ -6,10 +6,10 @@ import {
   TShowcaseItem, 
   useDeleteAlbum, 
   useDeleteMerch, 
-  useDeletePromocode, 
-  useToggleAlbumVisibility, 
-  useToggleMerchVisibility, 
-  useToggPromocodeVisibility, 
+  useDeletePromocode,
+  useUpdateAlbum,
+  useUpdateMerch,
+  useUpdatePromocode,
   type TShowcaseAlbum, 
   type TShowcaseMerch, 
   type TShowcasePromocode 
@@ -26,9 +26,9 @@ export const ShowcaseItemsList = ({
   itemType, 
   items,
 }: ShowcaseItemsListProps) => {
-  const toggleAlbumMutation = useToggleAlbumVisibility();
-  const toggleMerchMutation = useToggleMerchVisibility();
-  const togglePromoMutation = useToggPromocodeVisibility();
+  const toggleAlbumMutation = useUpdateAlbum();
+  const toggleMerchMutation = useUpdateMerch();
+  const togglePromoMutation = useUpdatePromocode();
 
   const deleteAlbumMutation = useDeleteAlbum();
   const deleteMerchMutation = useDeleteMerch();
@@ -37,28 +37,37 @@ export const ShowcaseItemsList = ({
   const isProduct = itemType === "products" || itemType === "album" || itemType === "merch";
   const isPromo = itemType === "promo";
 
-  const handleToggleAlbumVisibility = (isChecked: boolean, id: number) => {
-    toggleAlbumMutation.mutate({ id, is_published: isChecked });
+  const handleToggleAlbumVisibility = async (isChecked: boolean, id: number) => {
+    await toggleAlbumMutation.mutateAsync({ 
+      id, 
+      payload: {is_published: isChecked}
+    });
   };
 
-  const handleToggleMerchVisibility = (isChecked: boolean, id: number) => {
-    toggleMerchMutation.mutate({ id, is_published: isChecked });
+  const handleToggleMerchVisibility = async (isChecked: boolean, id: number) => {
+    await toggleMerchMutation.mutateAsync({ 
+      id, 
+      payload: {is_published: isChecked}
+    });
   };
 
-  const handleTogglePromoVisibility = (isChecked: boolean, id: number) => {
-    togglePromoMutation.mutate({ id, is_enabled: isChecked });
+  const handleTogglePromoVisibility = async (isChecked: boolean, id: number) => {
+    await togglePromoMutation.mutateAsync({ 
+      id, 
+      payload: {is_enabled: isChecked} 
+    });
   };
 
-  const handleDeleteAlbum = (id: number) => {
-    deleteAlbumMutation.mutate({ id });
+  const handleDeleteAlbum = async (id: number) => {
+    await deleteAlbumMutation.mutateAsync({ id });
   };
 
-  const handleDeleteMerch = (id: number) => {
-    deleteMerchMutation.mutate({ id });
+  const handleDeleteMerch = async (id: number) => {
+    await deleteMerchMutation.mutateAsync({ id });
   };
 
-  const handleDeletePromocode = (id: number) => {
-    deletePromocodeMutation.mutate({ id });
+  const handleDeletePromocode = async(id: number) => {
+    await deletePromocodeMutation.mutateAsync({ id });
   };
 
   return (
@@ -107,7 +116,6 @@ export const ShowcaseItemsList = ({
             onDeleteAlbum={handleDeleteAlbum}
             onDeleteMerch={handleDeleteMerch}
             onDeletePromocode={handleDeletePromocode}
-            onEdit={() => undefined}
           />
         ))}
       </ul>

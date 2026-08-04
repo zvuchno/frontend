@@ -10,7 +10,7 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
     return {
       name: album.name,
       releaseDate: album.release_date ?? '',
-      genre: album.genre ?? undefined,
+      genre: String(album.genre_id),
       price: Number(album.price) || 0,
       allowHigherPrice: album.allow_overpay ?? false,
       description: album.description ?? '',
@@ -20,6 +20,7 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
       kind: undefined,
       album: undefined,
       quantity: undefined,
+      
     };
   }
 
@@ -27,8 +28,8 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
   const merch = item as TShowcaseMerchDetail;
   return {
     name: merch.name,
-    kind: merch.kind ?? undefined,
-    album: merch.album ?? undefined,
+    kind: String(merch.kind_id),
+    album: String(merch.album_id),
     price: Number(merch.price) || 0,
     allowHigherPrice: merch.allow_overpay ?? false,
     description: merch.description ?? '',
@@ -37,6 +38,9 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
     additionalImages: [],
     quantity: merch.stock ?? undefined,
     releaseDate: '',
-    genre: undefined,
+    genre: '',
+    variants: merch.variants,
+    propertyName: merch.property_name,
+    hasProperty: merch.property_name ? true : false
   };
 }

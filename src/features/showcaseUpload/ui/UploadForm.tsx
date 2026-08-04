@@ -1,24 +1,99 @@
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { UploadFormValues } from "../model/types";
 import { AddImageBlock } from "../components/addImageBlock/AddImageBlock";
 import s from "./UploadForm.module.scss";
-import { CheckboxUI, CustomInput, SelectUI } from "@/shared/ui";
+import { CheckboxUI, CustomInput, Loader, SelectUI } from "@/shared/ui";
+import clsx from "clsx";
+import { useAlbumsInfiniteQuery, useGenresList, useMerchKindsList } from "@/entities/Artist";
+import { useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
+import { useMemo } from "react";
 
-export const UploadForm = ({ productType }: { productType: 'album' | 'single' | 'merch' }) => {
+type TImage = {
+  image: string;
+  is_main: boolean;
+  id?: number;
+}
+
+export const UploadForm = ({ 
+  productType,
+  mainPreview,
+  additionalPreviews,
+  onDeleteImage
+}: { 
+  productType: 'album' | 'single' | 'merch';
+  onDeleteImage: (data: number[]) => void;
+  mainPreview?: TImage | null;
+  additionalPreviews?: TImage[];
+}) => {
   const {
-      register,
-      formState: { errors },
-      setValue,
-      watch
-    } = useFormContext<UploadFormValues>();
+    register,
+    formState: { errors },
+    setValue,
+    watch,
+    control
+  } = useFormContext<UploadFormValues>();
+
+  const currentArtistSlug = useShowcaseArtistSlug();
+
+  if (!currentArtistSlug) {
+    return (
+      <Loader />
+    );
+  }
+
+  // Список альбомов (для селекта)
+  const albumsQuery = useAlbumsInfiniteQuery({ artistSlug: currentArtistSlug });
+
+  const albumOptions = useMemo(() => {
+    if (!albumsQuery.data) return [];
+    return albumsQuery.data.pages
+      .flatMap((page) => page.results || [])
+      .map((album) => ({
+        value: String(album.id),
+        label: album.name,
+      }));
+  }, [albumsQuery.data]);
+
+  const isLoadingAlbums = albumsQuery.isFetching || albumsQuery.isPending;
+
+  // Список жанров (для селекта)
+  const genresQuery =  useGenresList();
+
+  const genresOptions = useMemo(() => {
+    if (!genresQuery.data) return [];
+    return genresQuery.data
+      .map((genre) => ({
+        value: String(genre.id),
+        label: genre.name,
+      }));
+  }, [genresQuery.data]);
+
+  const isLoadingGenres = genresQuery.isFetching || genresQuery.isPending;
+  
+  // Список типов мерча (для селекта)
+  const merchKindsQuery = useMerchKindsList();
+
+  const merchKindsOptions = useMemo(() => {
+    if (!merchKindsQuery.data) return [];
+    return merchKindsQuery.data
+      .map((genre) => ({
+        value: String(genre.id),
+        label: genre.name,
+      }));
+  }, [merchKindsQuery.data]);
+
+  const isLoadingMerchKinds = merchKindsQuery.isFetching || merchKindsQuery.isPending;
+  
   return (
-    <div>
+    <div className={s.container}>
       <AddImageBlock 
         severalImages={productType === 'merch'} 
         setValue={setValue}
+        initialMainPreview={mainPreview}
+        initialAdditionalPreviews={additionalPreviews}
+        onDelete={onDeleteImage}
       />
       <div className={s.fildsContainer}>
-        <div className={s.fildsContainer__group}>
           <CustomInput 
             id='name'
             type='text'
@@ -31,17 +106,8 @@ export const UploadForm = ({ productType }: { productType: 'album' | 'single' | 
             labelClassName={s.label}
             inputClassName={s.input}
           />
-          {productType === 'merch' ? (
-            <CustomInput 
-              id='kind'
-              type='text'
-              label='Тип мерча'
-              inputSize="large"
-              {...register('kind')}
-              labelClassName={s.label}
-              inputClassName={s.input}
-            />
-          ) : (
+
+          {productType !== 'merch' ? (
             <CustomInput 
               id='date'
               type='date'
@@ -51,34 +117,61 @@ export const UploadForm = ({ productType }: { productType: 'album' | 'single' | 
               labelClassName={s.label}
               inputClassName={s.input}
             />
+            
+          ) : (
+            <Controller 
+              name="kind"
+              control={control}
+              render={({ field }) => (
+                <SelectUI 
+                  name="kind"
+                  label="Тип мерча"
+                  options={merchKindsOptions}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  selectClassName={s.select}
+                  labelClassName={s.label}
+                  disabled={isLoadingMerchKinds}
+                />
+              )}
+            />
           )}
+
           {productType === 'merch' ? (
-            <SelectUI 
-              label="Альбом"
-              value={watch('album') ?? ''}
-              onChange={(val) => setValue('album', val)}
-              options={[
-                { value: "1", label: "альбом 1" },
-                { value: "2", label: "альбом 2" },
-              ]}
-              selectClassName={s.select}
-              labelClassName={s.label}
+            <Controller 
+              name="album"
+              control={control}
+              render={({ field }) => (
+                <SelectUI 
+                  name="album"
+                  label="Альбом"
+                  options={albumOptions}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  selectClassName={s.select}
+                  labelClassName={s.label}
+                  disabled={isLoadingAlbums}
+                />
+              )}
             />
           ) : (
-            <SelectUI 
-              label="Жанр"
-              value={watch('genre') ?? ''}
-              onChange={(val) => setValue('genre', val)}
-              options={[
-                { value: "rock", label: "Рок" },
-                { value: "pop", label: "Поп" },
-              ]}
-              selectClassName={s.select}
-              labelClassName={s.label}
+            <Controller 
+              name="genre"
+              control={control}
+              render={({ field }) => (
+                <SelectUI 
+                  name="genre"
+                  label="Жанр"
+                  options={genresOptions}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  selectClassName={s.select}
+                  labelClassName={s.label}
+                  disabled={isLoadingGenres}
+                />
+              )}
             />
           )}
-        </div>
-        <div className={s.fildsContainer__group}>
           <CustomInput 
             id='price'
             type='number'
@@ -112,24 +205,26 @@ export const UploadForm = ({ productType }: { productType: 'album' | 'single' | 
               inputSize="large"
               {...register('quantity')}
               labelClassName={s.label}
-              inputClassName={s.input}
+              inputClassName={clsx(s.input, s.quantityInput)}
             />
           ) : (
             <CheckboxUI 
               type="checkbox"
-              onChange={(e) => setValue('allowHigherPrice', e.target.checked)}
+              className={s.spanWide}
               checked={!!watch('allowHigherPrice')}
+              {...register('allowHigherPrice')}
             >
               Разрешить фанатам платить больше если они хотят
             </CheckboxUI>
           )}
-        </div>
 
         {productType === 'merch' && (
           <CheckboxUI 
             type="checkbox"
-            onChange={(e) => setValue('allowHigherPrice', e.target.checked)}
+            //onChange={(e) => setValue('allowHigherPrice', e.target.checked)}
             checked={!!watch('allowHigherPrice')}
+            className={s.spanWide}
+            {...register('allowHigherPrice')}
           >
             Разрешить фанатам платить больше если они хотят
           </CheckboxUI>
@@ -146,20 +241,29 @@ export const UploadForm = ({ productType }: { productType: 'album' | 'single' | 
           }}
           {...register('description')}
           labelClassName={s.label}
-            inputClassName={s.textarea}
+          inputClassName={s.textarea}
+          className={s.spanFull}
         />
 
-        <SelectUI 
-          label="Приватность"
-          value={watch('privacy')}
-          onChange={(val) => setValue('privacy', val as 'public' | 'link_only' | 'hidden')}
-          options={[
-            { value: "public", label: "Для всех" },
-            { value: "link_only", label: "Доступно по ссылке" },
-            { value: "hidden", label: "Скрыто" },
-          ]}
-          selectClassName={s.select}
-          labelClassName={s.label}
+        <Controller 
+          name="privacy"
+          control={control}
+          render={({ field }) => (
+            <SelectUI 
+              name="privacy"
+              label="Приватность"
+              options={[
+                { value: "public", label: "Для всех" },
+                { value: "link_only", label: "Доступно по ссылке" },
+                { value: "hidden", label: "Скрыто" },
+              ]}
+              value={field.value ?? ''}
+              onChange={field.onChange}
+              selectClassName={s.select}
+              labelClassName={s.label}
+              containerClassName={s.spanWide}
+            />
+          )}
         />
       </div>
     </div>

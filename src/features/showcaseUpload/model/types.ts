@@ -1,8 +1,7 @@
 export type VariantForm = {
-  id: string;
   value: string;
   sku: string;
-  stock: string; 
+  stock: number | null; 
 };
 
 export type UploadFormValues = {
@@ -15,10 +14,10 @@ export type UploadFormValues = {
   allowHigherPrice: boolean;
   description?: string;
   privacy: 'public' | 'link_only' | 'hidden';
-  mainImage?: File;
+  mainImage?: File | null;
   additionalImages?: File[]; // для мерча
   quantity?: number; // для мерча
-  propertyName?: string;
-  variants?: VariantForm[];
+  propertyName?: string; // для мерча
+  variants?: VariantForm[]; // для мерча
   hasProperty?: boolean; 
 };

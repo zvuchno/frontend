@@ -11,25 +11,66 @@
 }
 
 .variantContainer {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 368px repeat(3, 1fr);
+  align-items: center;
+  //justify-content: space-between;
+  column-gap: 52px;
+  row-gap: 24px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 300px repeat(2, 1fr);
+    column-gap: 32px;
+    row-gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    column-gap: 24px;
+    row-gap: 16px;
+  }
+
 }
 
-.buttonContainer {
-  display: flex;
-  gap: 42px;
-  align-items: center;
-  margin-block-end: 30px;
+.label {
+  font-family: var(--font-feature-mono);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: -0.04em;
+  text-transform: none;
+}
 
-  &__button {
-    max-width: 273px;
-  }
+.input {
+  padding: 7px 32px;
+  max-width: 368px;
 
-  &__hint {
+  &::placeholder {
     font-size: 16px;
-    font-weight: 500;
-    line-height: 100%;
-    letter-spacing: -0.04em;
-    color: var(--color-bg-secondary);
+    font-weight: 400;
+    line-height: 130%;
+    letter-spacing: -0.06em;
   }
+}
+
+.removeButton {
+  max-width: 95px;
+  background-color: transparent;
+  border: none;
+  font-family: var(--font-feature-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-text-accent-blue);
+  }
+}
+
+.addButton {
+  max-width: 273px;
+  min-height: 36px;
+  margin-block-end: 20px;
 }

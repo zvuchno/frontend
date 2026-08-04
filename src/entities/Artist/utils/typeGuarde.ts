@@ -1,7 +1,7 @@
 import type { TShowcaseAlbum, TShowcaseMerch, TShowcasePromocode } from "../model/types";
 
 export function isAlbum(item: TShowcaseAlbum | TShowcaseMerch | TShowcasePromocode): item is TShowcaseAlbum {
-  return 'is_published' in item;
+  return 'is_single' in item;
 }
 
 export function isMerch(item: TShowcaseAlbum | TShowcaseMerch | TShowcasePromocode): item is TShowcaseMerch {

@@ -5,6 +5,7 @@ import s from "./ShowcaseActions.module.scss";
 import { ButtonUI, SelectUI } from "@/shared/ui";
 import clsx from "clsx";
 import { PromoTypeFilter, TShowcaseItem } from "@/entities/Artist";
+import Link from "next/link";
 
 type PopupType = 'promo' | 'product' | null;
 
@@ -149,13 +150,12 @@ export const ShowcaseActions = ({
             className={clsx(s.popup, s.popup_album)} 
             ref={productPopupRef}
           >
-            <button 
-              type='button' 
+            <Link 
               className={s.popup__item} 
-              onClick={handleAddAlbum}
+              href='/artist/showcase/upload/album'
             >
               добавить товар
-            </button>
+            </Link>
             <button 
               type='button' 
               className={s.popup__item}
@@ -192,7 +192,7 @@ export const ShowcaseActions = ({
         {itemType === 'promo' ? (
           <SelectUI
             value={promoType}
-            onChange={handleChangeTypePromo}
+            onChange={(e) => handleChangeTypePromo(e.target.value)}
             options={[
               { value: "ALL", label: "все" },
               { value: "PERСENT", label: "процент" },
@@ -208,7 +208,7 @@ export const ShowcaseActions = ({
         ) : (
           <SelectUI
             value={productType}
-            onChange={handleChangeTypeProduct}
+            onChange={(e) => handleChangeTypeProduct(e.target.value)}
             options={[
               { value: "products", label: "все товары" },
               { value: "merch", label: "мерч" },
@@ -226,7 +226,7 @@ export const ShowcaseActions = ({
         {itemType === 'promo' ? (
           <SelectUI
             value={availability}
-            onChange={handleChangeAvailability}
+            onChange={(e) => handleChangeAvailability(e.target.value)}
             options={[
               { value: "", label: "все" },
               { value: "true", label: "доступен" },
@@ -242,7 +242,7 @@ export const ShowcaseActions = ({
         ) : (
           <SelectUI
             value={stockFilter}
-            onChange={hamdleChangeStock}
+            onChange={(e) => hamdleChangeStock(e.target.value)}
             options={[
               { value: "", label: "все" },
               { value: "true", label: "в наличии" },

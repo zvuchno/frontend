@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useId } from 'react';
+import React, { useState, useId, ChangeEvent, forwardRef } from 'react';
 import clsx from 'clsx';
 import type { SelectUIProps } from './Select.types';
 import styles from './Select.module.scss';
@@ -14,106 +14,114 @@ const defaultSelectIcon: React.ReactNode =  (
   </svg>
 );
 
-export const SelectUI = ({
-  options,
-  value,
-  onChange,
-  label,
-  icon = defaultSelectIcon, 
-  name,
-  placeholder = 'Выберите...',
-  disabled,
-  required,
-  containerClassName,
-  selectClassName,
-  iconClassName,
-  labelClassName,
-  contentClassName,
-  optionClassName,
-}: SelectUIProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const id = useId();
+export const SelectUI = forwardRef<HTMLSelectElement, SelectUIProps> (
+  ({
+    options,
+    label,
+    icon = defaultSelectIcon,
+    placeholder = 'Выберите...',
+    disabled,
+    required,
+    containerClassName,
+    selectClassName,
+    iconClassName,
+    labelClassName,
+    contentClassName,
+    optionClassName,
+    name,
+    value,
+    onChange,
+  }, ref) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const id = useId();
 
-  const selectedLabel = options.find((opt) => opt.value === value)?.label;
+    const selectedLabel = options.find((opt) => opt.value === value)?.label;
 
-  const closeOnOutsideClick = () => setIsOpen(false);
-  const selectRef = useClickOutside(closeOnOutsideClick);
+    const closeOnOutsideClick = () => setIsOpen(false);
+    const selectRef = useClickOutside(closeOnOutsideClick);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') setIsOpen(false);
-  };
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
 
-  const handleOptionClick = (val: string) => {
-    if (disabled) return;
-    onChange(val); 
-    setIsOpen(false);
-  };
+    const handleOptionClick = (val: string) => {
+      if (disabled) return;
+      if (onChange) {
+        onChange(val)
+      }
+      setIsOpen(false);
+    };
 
-  return (
-    <div 
-      className={clsx(styles.select__container, containerClassName)} 
-      ref={selectRef}
-    >
-      {!!label && (
-        <label className={clsx(styles.select__label, labelClassName)} htmlFor={id}>
-          {label}
-        </label>
-      )}
-
-      <div className={styles.select__wrapper}>
-        {/* Нативный селект визуально скрыт от пользователя, но работает для форм */}
-        <select
-          id={id}
-          value={value}
-          name={name}
-          required={required}
-          disabled={disabled}
-          onChange={(e) => onChange(e.target.value)}
-          className={styles.select__select_visuallyHidden}
-        ></select>
-
-        {/* Tо, что видит пользователь вместо нативного селекта */}
-        <div
-          role="button"
-          aria-haspopup="listbox"
-          aria-expanded={isOpen}
-          className={clsx(
-            styles.select__select, 
-            selectClassName, 
-            { [styles.select__select_disabled]: disabled }
-          )}
-          onClick={() => !disabled && setIsOpen((prev) => !prev)}
-          onKeyDown={handleKeyDown}
-        >
-          <span className={clsx({[styles.select__select_placeholder]: !selectedLabel})}>
-            {selectedLabel ?? placeholder}
-          </span>
-          <div className={clsx(styles.select__icon, iconClassName, { [styles.select__icon_rotated]: isOpen })}>
-            {icon}
-          </div>
-        </div>
-
-        {isOpen && !disabled && (
-          <div className={clsx(styles.select__content, contentClassName)}>
-            <ul role="listbox" className={styles.select__list}>
-              {options.map((opt) => (
-                <li
-                  key={opt.value}
-                  role="option"
-                  aria-selected={value === opt.value}
-                  className={clsx(
-                    styles.select__option, optionClassName,
-                    { [styles.select__option_selected]: value === opt.value }
-                  )}
-                  onClick={() => handleOptionClick(opt.value)}
-                >
-                  {opt.label}
-                </li>
-              ))}
-            </ul>
-          </div>
+    return (
+      <div 
+        className={clsx(styles.select__container, containerClassName)} 
+        ref={selectRef}
+      >
+        {!!label && (
+          <label className={clsx(styles.select__label, labelClassName)} htmlFor={id}>
+            {label}
+          </label>
         )}
+
+        <div className={styles.select__wrapper}>
+          {/* Нативный селект визуально скрыт от пользователя, но работает для форм */}
+          <select
+            id={id}
+            ref={ref}
+            name={name}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            required={required}
+            disabled={disabled}
+            className={styles.select__select_visuallyHidden}
+          ></select>
+
+          {/* Tо, что видит пользователь вместо нативного селекта */}
+          <div
+            role="button"
+            aria-haspopup="listbox"
+            aria-expanded={isOpen}
+            className={clsx(
+              styles.select__select, 
+              selectClassName, 
+              { [styles.select__select_disabled]: disabled }
+            )}
+            onClick={() => !disabled && setIsOpen((prev) => !prev)}
+            tabIndex={disabled ? undefined : 0}
+            onKeyDown={handleKeyDown}
+          >
+            <span className={clsx({[styles.select__select_placeholder]: !selectedLabel})}>
+              {selectedLabel ?? placeholder}
+            </span>
+            <div className={clsx(styles.select__icon, iconClassName, { [styles.select__icon_rotated]: isOpen })}>
+              {icon}
+            </div>
+          </div>
+
+          {isOpen && !disabled && (
+            <div className={clsx(styles.select__content, contentClassName)}>
+              <ul role="listbox" className={styles.select__list}>
+                {options.map((opt) => (
+                  <li
+                    key={opt.value}
+                    role="option"
+                    aria-selected={value === opt.value}
+                    className={clsx(
+                      styles.select__option, optionClassName,
+                      { [styles.select__option_selected]: value === opt.value }
+                    )}
+                    onClick={() => handleOptionClick(opt.value)}
+                  >
+                    {opt.label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
+
+SelectUI.displayName = 'Select';

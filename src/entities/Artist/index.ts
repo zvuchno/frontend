@@ -18,13 +18,20 @@ export {
   useAlbumsInfiniteQuery,
   useMerchInfiniteQuery,
   usePromocodesInfiniteQuery,
-  useToggleAlbumVisibility,
-  useToggPromocodeVisibility,
-  useToggleMerchVisibility,
+  useUpdateAlbum,
+  useUpdateMerch,
+  useUpdatePromocode,
   useDeleteAlbum,
   useDeleteMerch,
   useDeletePromocode,
-  useDetailInfo
+  useDetailInfo,
+  useCreateAlbum,
+  useCreateMerch,
+  useGenresList,
+  useMerchKindsList,
+  useAddImage,
+  useUpdateImage,
+  useDeleteImage,
 } from "./model/useShowcase";
 
 export { useGetArtistLegalData } from "./model/useGetArtistLegalData";

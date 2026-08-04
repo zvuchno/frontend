@@ -3,21 +3,28 @@ import type { PaginatedStoreResponse } from "@/api/store/types";
 import type { 
   TShowcaseAlbum, 
   TShowcaseAlbumDetail,
-  TShowcaseCreateMerchRequest, 
+  TCreateMerchRequest, 
   TShowcaseListRequest, 
   TShowcaseMerch, 
   TShowcaseMerchDetail, 
   TShowcaseMerchRequest, 
   TShowcasePromocode, 
   TShowcasePromocodeDetail, 
-  TShowcasePromocodesRequest, 
-  TShowcaseUpdateAlbumRequest,
-  TShowcaseUpdateMerchRequest,
-  TShowcaseUpdatePromocodeRequest
+  TShowcasePromocodesRequest,
+  TUpdateAlbumRequest,
+  TUpdateMerchRequest,
+  TUpdatePromocodeRequest,
+  TCreateAlbumRequest,
+  TAddImageRequest,
+  TAddImageResponse,
+  TUpdateImageRequest,
+  TDeleteImageRequest,
 } from "../model/types";
+import { fillFormData } from "@/features/showcaseUpload";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
+//-------получение списка для витрины-------//
 export async function getShowcaseAlbumsList({
   token,
   artist,
@@ -92,76 +99,20 @@ export async function getShowcasePromocodes({
   return response;
 };
 
-export async function togglePublishedAlbum({
-  token,
-  id,
-  is_published
-}: TShowcaseUpdateAlbumRequest): Promise<TShowcaseAlbumDetail> {
 
-  const url = `${baseUrl}/v1/store/albums/${id}`;
-
-  const response = await authFetchClient<TShowcaseAlbumDetail>(url, {
-    method: "PATCH",
-    body: JSON.stringify({ is_published })
-  }, token);
-
-  if (!response) throw new Error('Не удалось обновить альбом')
-
-  return response;
-};
-
-export async function togglePublishedMerch({
-  token,
-  id,
-  is_published
-}: TShowcaseUpdateMerchRequest): Promise<TShowcaseMerchDetail> {
-
-  const url = `${baseUrl}/v1/store/merch/${id}`;
-
-  const response = await authFetchClient<TShowcaseMerchDetail>(url, {
-    method: "PATCH",
-    body: JSON.stringify({ is_published })
-  }, token);
-
-  if (!response) throw new Error('Не удалось обновить мерч')
-
-  return response;
-};
-
-export async function toggleEnabledPromocode({
-  token,
-  id,
-  is_enabled
-}: TShowcaseUpdatePromocodeRequest): Promise<TShowcasePromocodeDetail> {
-
-  const url = `${baseUrl}/v1/store/promocodes/${id}`;
-
-  const response = await authFetchClient<TShowcasePromocodeDetail>(url, {
-    method: "PATCH",
-    body: JSON.stringify({ is_enabled })
-  }, token);
-
-  if (!response) throw new Error('Не удалось обновить промокод');
-
-  return response;
-};
-
+//-------удаление товара/промокода-------//
 export async function deleteAlbum({
   token,
   id,
 }: {
   token: string | undefined;
   id: number;
-}): Promise<void> {
+}) {
   const url = `${baseUrl}/v1/store/albums/${id}`;
 
-  const response = await authFetchClient<void>(url, {
+  await authFetchClient<void>(url, {
     method: "DELETE",
   }, token);
-
-  if (!response) throw new Error('Не удалось удалить альбом')
-
-  return response;
 };
 
 export async function deleteMerch({
@@ -171,15 +122,11 @@ export async function deleteMerch({
   token: string | undefined;
   id: number;
 }): Promise<void> {
-  const url = `${baseUrl}/v1/store/merch/${id}`;
+  const url = `${baseUrl}/v1/store/merch/${id}/`;
 
-  const response = await authFetchClient<void>(url, {
+  await authFetchClient<void>(url, {
     method: "DELETE",
   }, token);
-
-  if (!response) throw new Error('Не удалось удалить мерч')
-
-  return response;
 };
 
 export async function deletePromocode({
@@ -200,7 +147,10 @@ export async function deletePromocode({
   return response;
 };
 
-export async function createAlbum(token: string | undefined, formData: FormData): Promise<TShowcaseAlbumDetail> {
+//-------создание товара/промокода-------//
+export async function createAlbum(token: string | undefined, payload: TCreateAlbumRequest): Promise<TShowcaseAlbumDetail> {
+  const formData = new FormData();
+  fillFormData(formData, payload);
 
   const url = `${baseUrl}/v1/store/albums/`;
 
@@ -214,14 +164,12 @@ export async function createAlbum(token: string | undefined, formData: FormData)
   return response;
 };
 
-export async function createMerch(payload: TShowcaseCreateMerchRequest): Promise<TShowcaseMerchDetail> {
-  const {  token, ...otherProperties} = payload;
-
+export async function createMerch(token: string | undefined, payload: TCreateMerchRequest): Promise<TShowcaseMerchDetail> {
   const url = `${baseUrl}/v1/store/merch/`;
 
   const response = await authFetchClient<TShowcaseMerchDetail>(url, {
     method: "POST",
-    body: JSON.stringify(otherProperties)
+    body: JSON.stringify(payload)
   }, token);
 
   if (!response) throw new Error('Не удалось создать мерч')
@@ -229,6 +177,7 @@ export async function createMerch(payload: TShowcaseCreateMerchRequest): Promise
   return response;
 };
 
+//-------получение детальной информации о товаре/промокоде (для формы редактирования)-------//
 export async function getDetailAlbum({
   token,
   id
@@ -263,4 +212,100 @@ export async function getDetailMerch({
   if (!response) throw new Error('Не удалось получить мерч')
 
   return response;
+};
+
+//-------обновление товара/промокода-------//
+export async function updateAlbum(data: TUpdateAlbumRequest): Promise<TShowcaseAlbumDetail> {
+  const { token, id, payload } = data;
+  const url = `${baseUrl}/v1/store/albums/${id}`;
+  const formData = new FormData();
+  fillFormData(formData, payload);
+
+  const response = await authFetchClient<TShowcaseAlbumDetail>(url, {
+    method: "PATCH",
+    body: formData
+  }, token);
+
+  if (!response) throw new Error('Не удалось обновить альбом')
+
+  return response;
+};
+
+export async function updateMerch(data: TUpdateMerchRequest): Promise<TShowcaseMerchDetail> {
+  const { token, id, payload } = data;
+
+  const url = `${baseUrl}/v1/store/merch/${id}`;
+
+  const response = await authFetchClient<TShowcaseMerchDetail>(url, {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  }, token);
+
+  if (!response) throw new Error('Не удалось обновить мерч')
+
+  return response;
+};
+
+export async function updatePromocode(data: TUpdatePromocodeRequest): Promise<TShowcasePromocodeDetail> {
+  const { token, id, payload } = data;
+
+  const url = `${baseUrl}/v1/store/promocodes/${id}`;
+
+  const response = await authFetchClient<TShowcasePromocodeDetail>(url, {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  }, token);
+
+  if (!response) throw new Error('Не удалось обновить промокод');
+
+  return response;
+};
+
+//-------загрузка изображения для мерча-------//
+export async function addImage(data: TAddImageRequest): Promise<TAddImageResponse> {
+  const { token, id, payload } = data;
+  const formData = new FormData();
+  formData.append('image', payload.image);
+  formData.append('is_main', String(payload.is_main));
+
+  const url = `${baseUrl}/v1/store/merch/${id}/images/`;
+
+  const response = await authFetchClient<TAddImageResponse>(url, {
+    method: "POST",
+    body: formData
+  }, token);
+
+  if (!response) throw new Error('Не добавить изображение')
+
+  return response;
+};
+
+//-------обновлние изображений для мерча-------//
+export async function updateImage(data: TUpdateImageRequest): Promise<TAddImageResponse> {
+  const { token, id, payload } = data;
+  const formData = new FormData();
+  formData.append('image', payload.image);
+  formData.append('is_main', String(payload.is_main));
+
+  const url = `${baseUrl}/v1/store/merch/${id}/images/${payload.image_id}/`;
+
+  const response = await authFetchClient<TAddImageResponse>(url, {
+    method: "PATCH",
+    body: formData
+  }, token);
+
+  if (!response) throw new Error('Не удалось обновить изображение')
+
+  return response;
+};
+
+//-------удаление изображений для мерча-------//
+export async function deleteImage(token: string | undefined, data: TDeleteImageRequest): Promise<void> {
+  const { id, image_id } = data;
+
+  const url = `${baseUrl}/v1/store/merch/${id}/images/${image_id}/`;
+
+  await authFetchClient<void>(url, {
+    method: "DELETE",
+  }, token);
 };
