@@ -1,10 +1,11 @@
+/*import type { FieldError, UseFormRegister } from "react-hook-form";
+
 import clsx from "clsx";
-import type { FieldError, UseFormRegister } from "react-hook-form";
 
 import type {
   ArtistDataField as ArtistDataFieldConfig,
   ArtistDataFormValues,
-} from "./artistDataForm.types";
+} from "../../../../app/artist/data/artistDataForm.types";
 import s from "./page.module.scss";
 
 type ArtistDataFieldProps = {
@@ -17,12 +18,7 @@ type ArtistDataFieldProps = {
 const getErrorMessage = (error?: FieldError) =>
   typeof error?.message === "string" ? error.message : null;
 
-export function ArtistDataField({
-  error,
-  field,
-  isDisabled,
-  register,
-}: ArtistDataFieldProps) {
+export function ArtistDataField({ error, field, isDisabled, register }: ArtistDataFieldProps) {
   const errorMessage = getErrorMessage(error);
 
   return (
@@ -34,7 +30,7 @@ export function ArtistDataField({
         })}
         disabled={isDisabled}
         placeholder={field.placeholder}
-        type="text"
+        type='text'
         autoComplete={field.autoComplete}
         aria-invalid={Boolean(errorMessage)}
         aria-describedby={errorMessage ? `${field.name}-error` : undefined}
@@ -48,3 +44,4 @@ export function ArtistDataField({
     </label>
   );
 }
+*/

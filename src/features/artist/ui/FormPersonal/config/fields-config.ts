@@ -41,7 +41,7 @@ export const fieldsConfig: Record<
   },
   "identity_data.birth_date": {
     required: true,
-    validate: (value: any) => value instanceof Date && !isNaN(value.getTime()),
+    validate: (value: unknown) => value instanceof Date && !isNaN(value.getTime()),
   },
   "identity_data.registration_address": {
     required: true,
@@ -70,7 +70,7 @@ export const fieldsConfig: Record<
   },
   "identity_data.passport_issue_date": {
     required: true,
-    validate: (value: any) => value instanceof Date && !isNaN(value.getTime()),
+    validate: (value: unknown) => value instanceof Date && !isNaN(value.getTime()),
   },
   "identity_data.inn": {
     required: true,
@@ -107,5 +107,11 @@ export const fieldsConfig: Record<
     minLength: 10,
     maxLength: 10,
     pattern: /^(\d{10})$/,
+  },
+  "legal_profile.is_veryfied": {
+    required: false,
+  },
+  "legal_profile.comment": {
+    required: false,
   },
 };

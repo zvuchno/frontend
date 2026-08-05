@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+/*import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
@@ -75,3 +75,4 @@ type Story = StoryObj<typeof ArtistFormPersonal>;
 export const ArtistLegalDataInteractiveForm: Story = {
   render: (args) => <FormWithLogic {...args} />,
 };
+*/

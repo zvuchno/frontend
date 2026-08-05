@@ -16,14 +16,11 @@ import {
 } from "@/entities/Artist/store/types";
 
 export type TArtistFormPersonalProps = {
-  isChecked: boolean;
-  isOnChange: boolean;
   control?: Control<FieldValues>;
   values?: Partial<FieldValues>;
   errors?: Partial<FieldErrors<FieldValues>>;
   onSubmit: SubmitHandler<TArtistLegalDataForApi>;
   onError?: SubmitErrorHandler<FieldValues>;
-  onEdit: () => void;
 };
 
 export type FieldValues = TArtistLegalData;

@@ -1,9 +1,9 @@
-"use client";
+/*"use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
-import { useGetArtistLegalData } from "@/entities/Artist";
+import { type TArtistLegalData } from "@/entities/Artist/store/types";
 import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
 
 import { ButtonUI } from "@/shared/ui";
@@ -14,8 +14,7 @@ import { toArtistDataFormValues, toArtistLegalDataPayload } from "./artistDataFo
 import type { ArtistDataFormValues } from "./artistDataForm.types";
 import s from "./page.module.scss";
 
-export function ArtistDataForm() {
-  const { data, isLoading } = useGetArtistLegalData();
+export function ArtistDataForm({ data }: { data: Partial<TArtistLegalData> }) {
   const { error, updateArtistLegalData } = useArtistLegalDataStore();
   const [isEditMode, setIsEditMode] = useState(false);
   const formValues = useMemo(() => toArtistDataFormValues(data), [data]);
@@ -34,7 +33,7 @@ export function ArtistDataForm() {
   /* useEffect(() => {
     void fetchArtistLegalData();
   }, [fetchArtistLegalData]);*/
-
+/*
   const handleEdit = () => {
     reset(formValues);
     setIsEditMode(true);
@@ -53,11 +52,11 @@ export function ArtistDataForm() {
     })();
   };
 
-  const areFieldsDisabled = !isEditMode || isLoading;
+  const areFieldsDisabled = !isEditMode;
 
   return (
     <form className={s.form} onSubmit={() => handleSubmit(handleArtistDataSubmit)}>
-      {isLoading && !data ? <p className={s.status}>Загрузка данных...</p> : null}
+      {!data ? <p className={s.status}>Загрузка данных...</p> : null}
 
       {error ? <p className={s.errorMessage}>{error}</p> : null}
 
@@ -80,7 +79,7 @@ export function ArtistDataForm() {
       <div className={s.actions}>
         <ButtonUI
           className={s.submitButton}
-          disabled={!isEditMode || !isValid || isLoading}
+          disabled={!isEditMode || !isValid}
           size='standart'
           type='submit'
           variant='primary'
@@ -89,7 +88,7 @@ export function ArtistDataForm() {
         </ButtonUI>
         <ButtonUI
           className={s.editButton}
-          disabled={isEditMode || isLoading}
+          disabled={isEditMode}
           onClick={handleEdit}
           size='standart'
           type='button'
@@ -101,3 +100,4 @@ export function ArtistDataForm() {
     </form>
   );
 }
+*/

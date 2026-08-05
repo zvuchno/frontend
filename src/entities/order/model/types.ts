@@ -1,5 +1,5 @@
 // основыне варианты доставки "сдек-курьер" | "сдек-пвз" | "забрать у артиста"
-export type TDeliveryType = "courier" | "pickpoint" | "pickup";
+export type TDeliveryType = "courier" | "pickpoint" | "artist_pickup";
 
 // ddeliveries в запросе данных checkout
 export type TDeliveryOption = {

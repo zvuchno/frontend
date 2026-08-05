@@ -5,11 +5,11 @@ import { errorsMessages } from "@/shared/constants/formErrorMessages";
 import { fieldsConfig } from "../config/fields-config";
 import type { FieldValues, TArtistFormPersonalField } from "./types";
 
-export const artistFormPersonalRules = (
+export const artistFormPersonalRules = <TFieldValues extends FieldValues>(
   field: TArtistFormPersonalField
-): RegisterOptions<FieldValues, FieldPath<FieldValues>> => {
+): RegisterOptions<TFieldValues, FieldPath<TFieldValues>> => {
   const config = fieldsConfig;
-  const rules: RegisterOptions<FieldValues, FieldPath<FieldValues>> = {};
+  const rules: RegisterOptions<TFieldValues, FieldPath<TFieldValues>> = {};
 
   rules.required = errorsMessages.requiredMessage;
 

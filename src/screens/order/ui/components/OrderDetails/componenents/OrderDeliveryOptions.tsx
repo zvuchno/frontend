@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
@@ -21,12 +22,20 @@ export const OrderDeliveryOptions = ({
   onChooseOption: (option: TDeliveryOption) => void;
 }) => {
   const { register, watch, setValue } = useFormContext<FieldValues>();
-  const currentDeliveryValue = watch("delivery");
+  const currentDeliveryValueId = watch("delivery");
+  const currentDeliveryOption = options.find(
+    (option) => String(option.id) === String(currentDeliveryValueId)
+  );
+
+  useEffect(() => {
+    if (currentDeliveryOption?.delivery_type === "courier") setValue("tariffs", "door");
+    console.log(currentDeliveryOption);
+  }, [currentDeliveryValueId, options, setValue, currentDeliveryOption]);
 
   const deliveryDays = {
     courier: "Доставка займёт 7–21 дней",
     pickpoint: "Доставка займёт 5–7 дней",
-    pickup: "",
+    artist_pickup: "",
   };
 
   return (
@@ -34,8 +43,7 @@ export const OrderDeliveryOptions = ({
       <h3 className={styles.title}>Способ доставки</h3>
       <div className={styles.orderDetailsDeliveryOptionsList}>
         {options.map((option) => {
-          const isCurrentSelected = String(currentDeliveryValue) === String(option.id);
-          if (String(currentDeliveryValue) === "1") setValue("tariffs", "door");
+          const isCurrentSelected = String(currentDeliveryValueId) === String(option.id);
 
           return (
             <div key={option.id} className={styles.optionDescriptionContainer}>
@@ -52,9 +60,9 @@ export const OrderDeliveryOptions = ({
           );
         })}
       </div>
-      {String(currentDeliveryValue) === "1" && <OrderAddressDetails />}
-      {String(currentDeliveryValue) === "2" && <CdekDelivery isSender={false} />}
-      {String(currentDeliveryValue) === "3" && <OrderArtistPickupList />}
+      {currentDeliveryOption?.delivery_type === "courier" && <OrderAddressDetails />}
+      {currentDeliveryOption?.delivery_type === "pickpoint" && <CdekDelivery isSender={false} />}
+      {currentDeliveryOption?.delivery_type === "artist_pickup" && <OrderArtistPickupList />}
     </section>
   );
 };
