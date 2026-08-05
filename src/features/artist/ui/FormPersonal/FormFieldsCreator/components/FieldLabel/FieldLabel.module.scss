@@ -1,0 +1,30 @@
+.labelContainer {
+  align-items: center;
+  gap: 11px;
+  display: flex;
+  
+
+  &__label {
+    letter-spacing: -0.06em;
+    font-size: 20px;
+    font-weight: 700;
+
+    font-family: var(--font-feature-mono);
+    color: var(--color-text-primary);
+    text-align: left;
+    cursor: pointer;
+    line-height: 130%;
+  }
+
+  &__markRequired {
+    letter-spacing: -0.06em;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 130%;
+    font-family: var(--font-feature-mono);
+    color: var(--color-primary-blue);
+    display: inline-block;
+  }
+}
+
+

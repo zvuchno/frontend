@@ -8,11 +8,10 @@ export function useGetArtistLegalData() {
   const { data: session, status } = useSession();
   const token = session?.user.accessToken;
   const isSessionLoading = status === "loading";
-  const isAuthorized = !!token;
 
   return useQuery<Partial<TArtistLegalData>>({
-    queryKey: ["artist-legal-data", token],
+    queryKey: ["artist-legal-data", { isAuthorized: !!token }],
     queryFn: () => getArtistLegalData(token),
-    enabled: !isSessionLoading && !isAuthorized,
+    enabled: !isSessionLoading && !!token,
   });
 }

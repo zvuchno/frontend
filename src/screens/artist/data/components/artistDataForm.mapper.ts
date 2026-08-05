@@ -1,4 +1,4 @@
-import type {
+/*import type {
   TArtistLegalData,
   TArtistLegalDataForApi,
   TLegalProfile,
@@ -9,7 +9,7 @@ import type { ArtistDataFormValues } from "./artistDataForm.types";
 
 type RecipientType = TLegalProfile["recipient_type"];
 
-const recipientTypeLabels: Record<RecipientType, string> = {
+const recipientTypeLabels: Record<Exclude<RecipientType, "individual_temporary">, string> = {
   individual_entrepreneur: "ИП",
   self_employed: "СМЗ",
   legal_entity: "Юридическое лицо",
@@ -139,3 +139,4 @@ export const toArtistLegalDataPayload = (values: ArtistDataFormValues): TArtistL
     },
   };
 };
+*/

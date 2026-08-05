@@ -1,21 +1,15 @@
-import DatePicker from "react-datepicker";
-import {
-  Controller,
-  type FieldError,
-  type FieldPath,
-  get,
-  type useFormContext,
-} from "react-hook-form";
-import { IMaskInput } from "react-imask";
+import { Controller, type FieldError, get, type useFormContext } from "react-hook-form";
 
 import clsx from "clsx";
-import { ru } from "date-fns/locale";
-
-import { CustomInput } from "@/shared/ui";
 
 import styles from "../artistFormPersonal.module.scss";
 import { type FieldValues, type TArtistFormPersonalField } from "../utils/types";
 import { artistFormPersonalRules } from "../utils/validation";
+import { CalendarField } from "./components/CalendarField";
+import { FieldLabel } from "./components/FieldLabel/FieldLabel";
+import { FieldWithOptions } from "./components/FieldWithOptions";
+import { PhoneField } from "./components/PhoneField";
+import { RegularField } from "./components/RegularField";
 
 export const createFormField = (
   field: TArtistFormPersonalField,
@@ -23,33 +17,11 @@ export const createFormField = (
   methods: ReturnType<typeof useFormContext<FieldValues>>
 ) => {
   const {
-    register,
     control,
     formState: { errors },
   } = methods;
 
   const fieldError = get(errors, field.name) as FieldError;
-
-  const { onChange, ...registerRest } = register(
-    field.name as FieldPath<FieldValues>,
-    artistFormPersonalRules(field)
-  );
-
-  const currentValue = methods.watch(field.name as FieldPath<FieldValues>);
-
-  const issuerCodeFormatter = (
-    field: TArtistFormPersonalField,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (field.name === "identity_data.passport_issued_by") {
-      const value = e.target.value.replace(/\D/g, "");
-      if (value.length > 3) {
-        e.target.value = `${value.slice(0, 3)}-${value.slice(3, 6)}`;
-      } else {
-        e.target.value = value;
-      }
-    }
-  };
 
   return (
     <div className={styles[`cell-${field.row}-${field.column}`]} key={`${field.name}-${fieldSet}`}>
@@ -57,147 +29,60 @@ export const createFormField = (
         <Controller
           control={control}
           name={field.name}
-          rules={artistFormPersonalRules(field) as Record<string, any>}
+          rules={artistFormPersonalRules(field) as Record<string, undefined>}
           render={({ field: { onChange, value, name, ref, onBlur } }) => {
             const fieldError = get(errors, name) as FieldError | undefined;
             return (
               <div
+                style={{ position: "relative" }}
                 className={clsx(
                   "field",
                   { ["error"]: !!fieldError },
                   { ["calendar"]: field.type === "date" }
                 )}
               >
-                <div className='labelContainer'>
-                  <label
-                    className='labelContainer__label labelContainer__label_size_small'
-                    htmlFor={name}
-                  >
-                    {field.title}
-                  </label>
-                  {field.required && (
-                    <span className={clsx("labelContainer__markRequired", styles.markRequired)}>
-                      *
-                    </span>
-                  )}
-                </div>
+                <FieldLabel field={field} forField={`${field.row}.${field.column}`} />
                 {field.type === "date" && (
-                  <DatePicker
-                    id={name}
-                    className={clsx("input input_size_small", {
-                      ["error"]: !!fieldError,
-                    })}
-                    wrapperClassName={styles.datePickerWrapper}
-                    dateFormat='dd.MM.yyyy'
-                    locale={ru}
-                    selected={value instanceof Date ? value : null}
-                    onChange={(date: Date | null) => onChange(date)}
-                    placeholderText='дд.мм.гггг'
-                    peekNextMonth
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode='select'
-                    showIcon
+                  <CalendarField
+                    field={field}
+                    fieldError={fieldError}
+                    value={value instanceof Date ? value : null}
+                    onChange={onChange}
                   />
                 )}
                 {field.type === "tel" && (
-                  <IMaskInput
-                    mask='+{7}(000)000-00-00'
-                    lazy={false}
-                    placeholderChar='_'
+                  <PhoneField
+                    field={field}
                     value={(value as string) || ""}
-                    type='text'
-                    inputMode='tel'
-                    unmask={true}
-                    onAccept={(val) => onChange(val)}
+                    onChange={onChange}
+                    ref={ref}
                     onBlur={onBlur}
-                    inputRef={ref}
-                    className={clsx("input input_size_small", {
-                      ["error"]: !!fieldError,
-                    })}
-                    style={{ height: "40px" }}
-                    id={`${field.row}.${field.column}`}
-                    disabled={field.disabled}
-                    aria-disabled={field.disabled}
-                    required={field.required}
-                    aria-required={field.required}
                   />
                 )}
-                {fieldError && <span className='message error'>{fieldError.message}</span>}
+                {fieldError && (
+                  <span
+                    className='message error'
+                    style={{
+                      position: "absolute",
+                      letterSpacing: "-0.06em",
+                      color: "var(--color-primary-blue)",
+                    }}
+                  >
+                    {fieldError.message}
+                  </span>
+                )}
               </div>
             );
           }}
         />
       ) : field.options ? (
-        <div className={clsx("field", { ["error"]: !!fieldError })}>
-          <div className={"labelContainer"}>
-            <label
-              htmlFor={field.name}
-              className='labelContainer__label labelContainer__label_size_small'
-            >
-              {field.title}
-            </label>
-            {field.required && (
-              <span className={clsx("labelContainer__markRequired", styles.markRequired)}>*</span>
-            )}
-          </div>
-          <select
-            {...registerRest}
-            id={`${field.row}.${field.column}`}
-            name={field.name}
-            style={{
-              height: "40px",
-              paddingBlock: "10px",
-              color:
-                !currentValue || currentValue === "individual_temporary"
-                  ? "rgba(16, 15, 13, 0.4)"
-                  : "inherit",
-            }}
-            className={clsx("input input_size_small", {
-              ["error"]: !!fieldError,
-            })}
-            disabled={field.disabled}
-            aria-disabled={field.disabled}
-            required={field.required}
-            aria-required={field.required}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-              void onChange(e);
-              issuerCodeFormatter(field, e as React.ChangeEvent<HTMLInputElement>);
-            }}
-            defaultValue=''
-          >
-            <option value='individual_temporary' disabled>
-              {field.placeholder}
-            </option>
-            {field.options?.map((el) => (
-              <option key={el.value} value={el.value}>
-                {el.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <FieldWithOptions field={field} hasError={!!fieldError} methods={methods} />
       ) : (
-        <CustomInput
-          {...register(field.name as FieldPath<FieldValues>, artistFormPersonalRules(field))}
-          id={`${field.row}.${field.column}`}
-          type={field.type}
-          label={field.title}
-          placeholder={field.placeholder}
-          style={{
-            height: "40px",
-          }}
-          error={!!fieldError}
-          message={fieldError?.message}
-          disabled={field.disabled}
-          aria-disabled={field.disabled}
-          required={field.required}
-          aria-required={field.required}
-          onChange={(e) => {
-            void register(field.name).onChange(e);
-            issuerCodeFormatter(field, e);
-          }}
-          maxLength={field.maxLength}
-          minLength={field.minLength}
+        <RegularField
+          field={field}
+          fieldError={fieldError}
+          methods={methods}
+          className={styles.height_100}
         />
       )}
     </div>
