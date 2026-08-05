@@ -8,6 +8,7 @@ import s from "./ShowcaseCard.module.scss";
 import { type ShowcaseCardProps } from "./ShowcaseCard.type";
 import { EditIcon } from "@/shared/ui/Icons";
 import { isAlbum, isMerch, isPromo } from "../../utils/typeGuarde";
+import Link from "next/link";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -20,7 +21,7 @@ const formatTotalPrice = (totalPrice: number) => totalPriceFormatter.format(tota
 
 const formatter = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit' });
 
-export const formatDateRangeIntl = (startAt?: string | null, endAt?: string  | null) => {
+const formatDateRangeIntl = (startAt?: string | null, endAt?: string  | null) => {
   if (!startAt || !endAt) return null;
   const start = formatter.format(new Date(startAt));
   const end = formatter.format(new Date(endAt));
@@ -35,54 +36,61 @@ export const ShowcaseCard = ({
   onDeleteAlbum,
   onDeleteMerch,
   onDeletePromocode,
-  onEdit,
 }: ShowcaseCardProps) => {
   const id = item.id
 
-  const handleToggleVisibility = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
+  const handleToggleVisibility = async (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
     const isCheked = e.target.checked;
     if (id) {
-      if (type === 'album') onToggleAlbumVisibility(isCheked, id);
-      if (type === 'merch') onToggleMerchVisibility(isCheked, id);
-      if (type === 'promo') onTogglePromoVisibility(isCheked, id);
+      if (type === 'album') await onToggleAlbumVisibility(isCheked, id);
+      if (type === 'merch') await onToggleMerchVisibility(isCheked, id);
+      if (type === 'promo') await onTogglePromoVisibility(isCheked, id);
     } 
   };
 
-  const handleDeleteItem = (type: string) => {
+  const handleDeleteItem = async (type: string) => {
     if (id) {
-      if (type === 'album') onDeleteAlbum(id);
-      if (type === 'merch') onDeleteMerch(id);
-      if (type === 'promo') onDeletePromocode(id);
+      if (type === 'album') await onDeleteAlbum(id);
+      if (type === 'merch') await onDeleteMerch(id);
+      if (type === 'promo') await onDeletePromocode(id);
     }
   };
 
-  const renderActions = (type: string, isChecked?: boolean) => (
+  const renderActions = (type: string, editType: string, isChecked?: boolean) => {
+    const params = new URLSearchParams();
+    params.append('id', encodeURIComponent(id));
+
+    return (
     <div className={clsx(s.actions, {[s.actions_span]: type === 'promo'})}>
-      <div className={s.buttons}>
-        <button type="button" className={s.editButton} onClick={() => onEdit}>
-          {EditIcon()}
-        </button>
-        <button 
-          type="button" 
-          className={s.deleteButton} 
-          onClick={() => handleDeleteItem(type)}
-        >
-          {DeleteIcon()}
-        </button>
-      </div>
       <label className={s.checkboxContainer}>
         <input
           type="checkbox"
           className={s.visuallyHidden}
           checked={isChecked}
-          onChange={(e) => handleToggleVisibility(e, type)}
+          onChange={(e) => void handleToggleVisibility(e, type)}
           aria-label="переключение видимости"
         />
         <span className={s.checkboxMark}></span>
       </label>
+      <div className={s.buttons}>
+        <Link  
+          className={s.editButton} 
+          href={editType === 'promo' ? '' : `/artist/showcase/upload/${editType}/?${params.toString()}`}
+        >
+          {EditIcon()}
+        </Link>
+        <button 
+          type="button" 
+          className={s.deleteButton} 
+          onClick={() => void handleDeleteItem(type)}
+        >
+          {DeleteIcon()}
+        </button>
+      </div>
+    
     </div>
     
-  );
+  )};
 
   if (isAlbum(item)) {
     return (
@@ -98,7 +106,7 @@ export const ShowcaseCard = ({
         <Text className={s.text}>{item.sku}</Text>
         <Text className={s.text}>{item.price}</Text>
         <Text className={s.text}>-</Text>
-        {renderActions('album', item.is_published)}
+        {renderActions('album', item.is_single ? 'single' : 'album', item.is_published)}
       </div>
     )
   }
@@ -114,10 +122,10 @@ export const ShowcaseCard = ({
         <Text className={clsx(s.text, s.name)}>
           {item.name}
         </Text>
-        <Text className={s.text}>{item.sku}</Text>
+        <Text className={s.text}>{item.sku ? item.sku : '-'}</Text>
         <Text className={s.text}>{item.price}</Text>
         <Text className={s.text}>{item.stock} шт</Text>
-        {renderActions('merch')}
+        {renderActions('merch', 'merch', item.is_published)}
       </div>
     )
   }
@@ -144,7 +152,7 @@ export const ShowcaseCard = ({
         <Text className={s.text}>{discount}</Text>
         <Text className={s.text}>{period}</Text>
         <Text className={s.text}>{usageText}</Text>
-        {renderActions('promo', item.is_enabled)}
+        {renderActions('promo', 'promo', item.is_enabled)}
       </div>
     )
   }

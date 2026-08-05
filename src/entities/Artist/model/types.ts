@@ -1,6 +1,7 @@
 // showcase types
 export type TShowcaseItem = 'products' | 'album' | 'merch' | 'promo';
 
+// для списка товаров/промокодов в витрине
 export type TShowcaseAlbum = {
   id: number;
   sku: string | null;
@@ -8,20 +9,7 @@ export type TShowcaseAlbum = {
   price: string;
   cover_image: string | null;
   is_published: boolean;
-};
-
-export type TShowcaseAlbumDetail = {
-  id: number;
-  sku: string | null;
-  name: string;
-  price: string;
-  cover_image: string | null;
   is_single: boolean;
-  genre: string;
-  description: string;
-  release_date: string | null;
-  allow_overpay: boolean;
-  is_published: boolean;
 };
 
 export type TShowcaseMerch = {
@@ -35,6 +23,34 @@ export type TShowcaseMerch = {
   is_published: boolean;
 };
 
+export type TShowcasePromocode = {
+  id: number;
+  code: string;
+  discount_value: string;
+  discount_type: "PERCENT" | "FIXED";
+  start_at: string | null;
+  end_at: string | null;
+  usage_limit: number | null; // Макс. количество использований. Пусто = неограничено
+  used_count: number, // Использовано раз
+  is_enabled: boolean
+};
+
+// Для предзаполнения формы редактирования/создания товара/промокода
+export type TShowcaseAlbumDetail = {
+  id: number;
+  sku: string | null;
+  name: string;
+  price: string;
+  cover_image: string | null;
+  is_single: boolean;
+  genre: string;
+  genre_id: number;
+  description: string;
+  release_date: string | null;
+  allow_overpay: boolean;
+  is_published: boolean;
+};
+
 type TMerchImage = {
   id: number;
   image: string;
@@ -42,7 +58,7 @@ type TMerchImage = {
 }
 
 type TMerchVariantDetail = {
-  id: number;
+  id?: number;
   sku: string;
   stock: number | null;
   value: string;
@@ -59,22 +75,12 @@ export type TShowcaseMerchDetail = {
   allow_overpay: boolean;
   images_merch: TMerchImage[];
   kind: string;
+  kind_id: number;
   album: string;
+  album_id: number;
   property_name: string;
   is_published: boolean;
   variants: TMerchVariantDetail[];
-};
-
-export type TShowcasePromocode = {
-  id: number;
-  code: string;
-  discount_value: string;
-  discount_type: "PERCENT" | "FIXED";
-  start_at: string | null;
-  end_at: string | null;
-  usage_limit: number | null; // Макс. количество использований. Пусто = неограничено
-  used_count: number, // Использовано раз
-  is_enabled: boolean
 };
 
 export type TShowcasePromocodeDetail = TShowcasePromocode & {
@@ -83,7 +89,7 @@ export type TShowcasePromocodeDetail = TShowcasePromocode & {
 
 export type TShowcaseListRequest = {
   token: string | undefined;
-  artist: string;
+  artist: string | null;
   url?: string;
 };
 
@@ -100,26 +106,47 @@ export type TShowcaseMerchRequest = TShowcaseListRequest & {
 
 export type StockFilter = true | false | null;
 
-export type TShowcaseUpdateAlbumRequest = {
-  token: string | undefined;
-  id: number;
-  name?: string;
-  artist?: number;
-  is_single?: boolean;
-  release_date?: string | null;
-  genre?: number | null;
-  price?: string;
-  description?: string;
-  cover_image?: string | null;
-  allow_overpay?: boolean;
-  visibility?: "public" | "link_only" | "hidden";
-  is_published?: boolean;
+
+
+
+
+export type TCreateAlbumRequest = {
+  name: string;
+  artist: number;
+  is_single: boolean;
+  release_date: string | null;
+  genre: number | null;
+  price: string;
+  description: string;
+  cover_image: File | Blob | null;
+  allow_overpay: boolean;
+  is_published: boolean;
+  visibility: "public" | "link_only" | "hidden";
 };
 
-export type TShowcaseUpdatePromocodeRequest = {
+export type TCreateMerchRequest = {
+  name: string;
+  kind: number | null;
+  price: string;
+  album: number | null;
+  artist: number;
+  description: string;
+  allow_overpay: boolean;
+  visibility: "public" | "link_only" | "hidden";
+  is_published: boolean;
+  property_name: string;
+  stock: number;
+  variants: TMerchVariantDetail[];
+};
+
+type TUpdateRequest = {
   token: string | undefined;
   id: number;
-  code?: string;
+};
+
+export type TUpdateAlbumPayload = Partial<TCreateAlbumRequest>
+
+export type TUpdatePromocodePayload = {
   description?: string;
   usage_limit?: number | null;
   discount_type?: "PERCENT" | "FIXED";
@@ -129,25 +156,55 @@ export type TShowcaseUpdatePromocodeRequest = {
   is_enabled?: boolean;
 };
 
-type TMerchVariant = {
-  value: string;
-  stock: number;
-  id?: number;
+export type TUpdateMerchPayload = Partial<TCreateMerchRequest>
 
+export type TUpdateAlbumRequest = TUpdateRequest & {
+  payload: TUpdateAlbumPayload;
+};
+
+export type TUpdateMerchRequest = TUpdateRequest & {
+  payload: TUpdateMerchPayload;
+};
+
+export type TUpdatePromocodeRequest = TUpdateRequest & {
+  payload: TUpdatePromocodePayload;
+};
+
+
+
+
+export type TAddImagePayload = {
+  image: File | Blob;
+  is_main: boolean;
+};
+
+export type TAddImageRequest = TUpdateRequest & {
+  payload: TAddImagePayload
+};
+
+export type TAddImageResponse = {
+  id: number;
+  image: string;
+  is_main: boolean;
+};
+
+
+export type TUpdateImagePayload = {
+  image_id: string;
+  image: File | Blob;
+  is_main: boolean;
+};
+
+export type TUpdateImageRequest = TUpdateRequest & {
+  payload: TUpdateImagePayload
+};
+
+export type TDeleteImageRequest = {
+  id: number;
+  image_id: number;
 }
 
-export type TShowcaseUpdateMerchRequest = {
-  token: string | undefined;
-  id: number;
-  name?: string;
-  kind?: number | null;
-  price?: string;
-  artist?: number;
-  description?: string;
-  allow_overpay?: boolean;
-  visibility?: "public" | "link_only" | "hidden";
-  is_published?: boolean;
-  property_name?: string;
-  stock?: number;
-  variamts?: TMerchVariant[];
-};
+
+
+
+

@@ -20,7 +20,8 @@ export type TPromoCode = {
 }
 
 interface IActions {
-  setArtist: (atrist: string | null) => void;
+  setArtistSlug: (atristSlug: string | null) => void;
+  setArtistId: (atristId: number | null) => void;
   toggleVisibilityProduct: (value: boolean, id: number) => void;
   deleteProduct: (id: number) => void;
   toggleVisibilityPromo: (value: boolean, id: number) => void;
@@ -28,7 +29,8 @@ interface IActions {
 }
 
 interface IInitialState {
-  artist: string | null;
+  artistSlug: string | null;
+  artistId: number | null;
   products: TProduct[];
   promoCodes: TPromoCode[];
 };
@@ -36,15 +38,19 @@ interface IInitialState {
 interface IShowcaseState extends IInitialState, IActions {};
 
 const initialState: IInitialState = {
-  artist: null,
+  artistSlug: null,
+  artistId: null,
   products: [],
   promoCodes: [],
 };
 
 const showcaseStore: StateCreator<IShowcaseState> = (set) => ({
   ...initialState,
-  setArtist: (artist: string | null) => {
-    set({ artist });
+  setArtistSlug: (artistSlug: string | null) => {
+    set({ artistSlug });
+  },
+  setArtistId: (artistId: number | null) => {
+    set({ artistId });
   },
   toggleVisibilityProduct: (value: boolean, id: number) => {
     set((state) => ({
@@ -70,15 +76,23 @@ const showcaseStore: StateCreator<IShowcaseState> = (set) => ({
 
 const useShowcaseStore = create<IShowcaseState>()(showcaseStore);
 
-// Селектор для получения артиста
-export const useShowcaseArtist = () =>
-  useShowcaseStore((state) => state.artist);
+// Селектор для получения slug артиста
+export const useShowcaseArtistSlug = () =>
+  useShowcaseStore((state) => state.artistSlug);
 
-// Селектор для установки артиста 
-export const useSetArtist = () =>
-  useShowcaseStore((state) => state.setArtist);
+// Селектор для установки slug артиста 
+export const useSetArtistSlug = () =>
+  useShowcaseStore((state) => state.setArtistSlug);
 
-// Селекторы для продуктов
+// Селектор для получения id артиста
+export const useShowcaseArtistId = () =>
+  useShowcaseStore((state) => state.artistId);
+
+// Селектор для установки id артиста 
+export const useSetArtistId = () =>
+  useShowcaseStore((state) => state.setArtistId);
+
+// Селекторы для товаров
 export const useShowcaseProducts = () => useShowcaseStore((state) => state.products);
 export const useToggleVisibilityProduct = () => useShowcaseStore((s) => s.toggleVisibilityProduct);
 export const useDeleteProduct = () => useShowcaseStore((s) => s.deleteProduct);

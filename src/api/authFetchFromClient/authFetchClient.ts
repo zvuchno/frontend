@@ -80,6 +80,7 @@ export const authFetchClient = async <T>(
         data.uid ||
         data.old_password ||
         data.password ||
+        data.stock ||
         `HTTP ${res.statusText}`
     );
   }

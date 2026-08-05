@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import s from "./ShowcaseActions.module.scss";
 import { ButtonUI, SelectUI } from "@/shared/ui";
 import clsx from "clsx";
-import { PromoTypeFilter, TShowcaseItem } from "@/entities/Artist";
+import type { PromoTypeFilter, TShowcaseItem } from "@/entities/Artist";
+import Link from "next/link";
 
 type PopupType = 'promo' | 'product' | null;
 
@@ -146,16 +147,15 @@ export const ShowcaseActions = ({
 
         {activePopup === 'product' && (
           <div 
-            className={clsx(s.popup, s.popup_album)} 
+            className={clsx(s.popup, s.popup_product)} 
             ref={productPopupRef}
           >
-            <button 
-              type='button' 
+            <Link 
               className={s.popup__item} 
-              onClick={handleAddAlbum}
+              href='/artist/showcase/upload/album'
             >
               добавить товар
-            </button>
+            </Link>
             <button 
               type='button' 
               className={s.popup__item}
@@ -204,7 +204,6 @@ export const ShowcaseActions = ({
             contentClassName={s.itemListOnPersonalAccountPage}
             optionClassName={s.itemOnPersonalAccountPage}
             iconClassName={s.selectIcon}
-            disabled={itemType === 'promo'}
           />
         ) : (
           <SelectUI

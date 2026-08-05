@@ -12,7 +12,7 @@ import {
   useMerchInfiniteQuery, 
   usePromocodesInfiniteQuery, 
 } from "@/entities/Artist";
-import { useShowcaseArtist } from "@/entities/Artist/store/useShowcaseStore";
+import { useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
 import { useMemo, useState } from "react";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
@@ -29,13 +29,7 @@ export const ShowcasePage = () => {
   // состояние для фильтрации промокодов по типу скидки
   const [typePromoFilter, setTypePromoFilter] = useState<PromoTypeFilter>('ALL');
 
-  const currentArtistSlug = useShowcaseArtist();
-
-  if (!currentArtistSlug || status === 'loading') {
-    return (
-      <Loader />
-    );
-  }
+  const currentArtistSlug = useShowcaseArtistSlug();
 
   const albumsQuery = useAlbumsInfiniteQuery({
     artistSlug: currentArtistSlug
@@ -59,15 +53,24 @@ export const ShowcasePage = () => {
   const isLoadingData = albumsQuery.isLoading || merchQuery.isLoading || promoQuery.isLoading;
   const error = albumsQuery.error || merchQuery.error || promoQuery.error;
 
-  const currentItems = useMemo(() => {
-    switch (itemType) {
-      case 'products': return allProducts;
-      case 'album': return albums;
-      case 'merch': return merch;
-      case 'promo': return promocodes;
-      default: return allProducts;
-    }
-  }, [itemType, allProducts, albums, merch, promocodes]);
+  const emptyText = itemType === 'album' || itemType === 'merch' 
+    ? 'нет товаров' 
+    : 'нет промокодов';
+
+  console.log('merch:', merch)
+
+  const currentItems =
+    itemType === 'products' ? allProducts :
+    itemType === 'album'    ? albums :
+    itemType === 'merch'    ? merch :
+    itemType === 'promo'    ? promocodes :
+    allProducts;
+
+  if (!currentArtistSlug || status === 'loading') {
+    return (
+      <Loader />
+    );
+  }
 
   if (isLoadingData) {
     return (
@@ -77,16 +80,16 @@ export const ShowcasePage = () => {
 
   if (error) {
     return (
-      <div>`Ошибка загрузки данных: ${error.message}`</div>
+      <div>{`Ошибка загрузки данных: ${error.message}`}</div>
     )
   }
 
   if (allProducts.length === 0) {
     return (
       <RoleSelectBlock>
-        <RoleCard path='/upload/single' image={"/images/cassette.png"} title='Загрузить сингл' />
-        <RoleCard path='/upload/album' image={"/images/record.png"} title='Загрузить альбом' />
-        <RoleCard path='/upload/merch' image={"/images/shirt.png"} title='Загрузить мерч' />
+        <RoleCard path='/artist/showcase/upload/single' image={"/images/cassette.png"} title='Загрузить сингл' />
+        <RoleCard path='/artist/showcase/upload/album' image={"/images/record.png"} title='Загрузить альбом' />
+        <RoleCard path='/artist/showcase/upload/merch' image={"/images/shirt.png"} title='Загрузить мерч' />
       </RoleSelectBlock>
     )
   }
@@ -112,10 +115,14 @@ export const ShowcasePage = () => {
         addProduct={() => undefined}
         addPromo={() => undefined}
       />
-      <ShowcaseItemsList 
-        itemType={itemType}
-        items={currentItems}
-      />
+      {currentItems.length > 0 ? (
+        <ShowcaseItemsList 
+          itemType={itemType}
+          items={currentItems}
+        />
+      ) : (
+        <div>{emptyText}</div>
+      )}
     </div>
   )
 }

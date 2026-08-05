@@ -21,6 +21,7 @@
 .button.button {
   min-width: 212px;
   padding: 12px;
+  min-height: 40px;
 
   & span {
     font-family: var(--font-feature-mono);
@@ -37,7 +38,6 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 183px;
   padding: 14px 22px;
   background-color: var(--background);
   box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -61,7 +61,7 @@
 }
 
 .popup_product {
-  left: 9px;
+  left: 16px;
 }
 
 .popup_promo {

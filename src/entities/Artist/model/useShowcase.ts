@@ -1,33 +1,52 @@
 import type { PaginatedStoreResponse } from "@/api/store/types";
 import type { InfiniteData } from "@tanstack/react-query";
-import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { 
   PromoTypeFilter, 
+  TAddImagePayload, 
+  TAddImageResponse, 
+  TCreateAlbumRequest, 
+  TCreateMerchRequest, 
+  TDeleteImageRequest, 
   TShowcaseAlbum, 
   TShowcaseAlbumDetail, 
   TShowcaseMerch, 
   TShowcaseMerchDetail, 
   TShowcasePromocode, 
-  TShowcasePromocodeDetail
+  TShowcasePromocodeDetail,
+  TUpdateAlbumPayload,
+  TUpdateImagePayload,
+  TUpdateMerchPayload,
+  TUpdatePromocodePayload,
 } from "./types";
 import { 
+  addImage,
+  createAlbum,
+  createMerch,
   deleteAlbum,
+  deleteImage,
   deleteMerch,
   deletePromocode,
+  getDetailAlbum,
+  getDetailMerch,
   getShowcaseAlbumsList, 
   getShowcaseMerchList, 
-  getShowcasePromocodes, 
-  toggleEnabledPromocode, 
-  togglePublishedAlbum, 
-  togglePublishedMerch
+  getShowcasePromocodes,
+  updateAlbum,
+  updateImage,
+  updateMerch,
+  updatePromocode,
 } from "../api/showcaseApi";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { getGenresKinds } from "@/api/catalog/genresKindApi/getGenresKinds";
+import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
 
+//-------получение списка для витрины-------//
 export function useAlbumsInfiniteQuery({
   artistSlug,
 }: {
-  artistSlug: string;
+  artistSlug: string | null;
 }) {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
@@ -37,7 +56,7 @@ export function useAlbumsInfiniteQuery({
     Error,
     InfiniteData<PaginatedStoreResponse<TShowcaseAlbum>>
   >({
-    queryKey: ['artist', 'showcase', 'albums'],
+    queryKey: ['artist', 'showcase', 'albums', artistSlug],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
       if (url) return getShowcaseAlbumsList({
@@ -60,7 +79,7 @@ export function useMerchInfiniteQuery({
   artistSlug,
   in_stock,
 }: {
-  artistSlug: string;
+  artistSlug: string | null;
   in_stock?: boolean | null;
 }) {
   const { data: session } = useSession();
@@ -125,63 +144,65 @@ export function usePromocodesInfiniteQuery({
   })
 };
 
-export function useToggleAlbumVisibility() {
+//-------обновление товара/промокода-------//
+export function useUpdateAlbum() {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
   const queryClient = useQueryClient();
 
-  return useMutation<TShowcaseAlbumDetail, Error, { id: number; is_published: boolean }>({
-    mutationFn: async ({ id, is_published }) => {
-      return togglePublishedAlbum({ token, id, is_published });
+  return useMutation<TShowcaseAlbumDetail, Error, { id: number; payload: TUpdateAlbumPayload }>({
+    mutationFn: async ({ id, payload }) => {
+      return updateAlbum({ token, id, payload });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
-      toast.success("Видимость альбома обнолвена")
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
+      toast.success("Альбом обновлён")
     },
     onError: () => {
-      toast.error('Ошибка обновления видимости альбома')
+      toast.error('Ошибка обновления альбома')
     }
   })
 };
 
-export function useToggleMerchVisibility() {
+export function useUpdateMerch() {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
   const queryClient = useQueryClient();
 
-  return useMutation<TShowcaseMerchDetail, Error, { id: number; is_published: boolean }>({
-    mutationFn: async ({ id, is_published }) => {
-      return togglePublishedMerch({ token, id, is_published });
+  return useMutation<TShowcaseMerchDetail, Error, { id: number; payload: TUpdateMerchPayload }>({
+    mutationFn: async ({ id, payload }) => {
+      return updateMerch({ token, id, payload });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
-      toast.success("Видимость мерча обнолвена")
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
+      toast.success("Мерч обновлён")
     },
     onError: () => {
-      toast.error('Ошибка обновления видимости мерча')
+      toast.error('Ошибка обновления мерча')
     }
   })
 };
 
-export function useToggPromocodeVisibility() {
+export function useUpdatePromocode() {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
   const queryClient = useQueryClient();
 
-  return useMutation<TShowcasePromocodeDetail, Error, { id: number; is_enabled: boolean }>({
-    mutationFn: async ({ id, is_enabled }) => {
-      return toggleEnabledPromocode({ token, id, is_enabled });
+  return useMutation<TShowcasePromocodeDetail, Error, { id: number; payload: TUpdatePromocodePayload }>({
+    mutationFn: async ({ id, payload }) => {
+      return updatePromocode({ token, id, payload });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "promo"] });
-      toast.success("Видимость промокода обнолвена")
+      void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "promo"] });
+      toast.success("Промокод обновлён")
     },
     onError: () => {
-      toast.error('Ошибка обновления видимости промокода')
+      toast.error('Ошибка обновления промокода')
     }
   })
 };
 
+//-------удаление товара/промокода-------//
 export function useDeleteAlbum() {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
@@ -192,7 +213,7 @@ export function useDeleteAlbum() {
       return deleteAlbum({ token, id });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
       toast.success("Альбом удалён")
     },
     onError: () => {
@@ -211,7 +232,7 @@ export function useDeleteMerch() {
       return deleteMerch({ token, id });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
       toast.success("Мерч удалён")
     },
     onError: () => {
@@ -230,11 +251,132 @@ export function useDeletePromocode() {
       return deletePromocode({ token, id });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'promo'] });
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'promo'] });
       toast.success("Промокод удалён")
     },
     onError: () => {
       toast.error('Не удалось удалить промокод')
     }
   })
+};
+
+//-------создание товара/промокода-------//
+export function useCreateAlbum() {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation({
+    mutationFn: (payload: TCreateAlbumRequest) =>
+      createAlbum(token, payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
+      toast.success("Товар создан")
+    },
+    onError: () => {
+      toast.error('Не удалось создать товар')
+    }
+  });
+};
+
+export function useCreateMerch() {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation({
+    mutationFn: (payload: TCreateMerchRequest) =>
+      createMerch(token, payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
+      toast.success("Мерч создан")
+    },
+    onError: () => {
+      toast.error('Не удалось создать мерч')
+    }
+  });
+};
+
+//-------получение детальной информации об альбоме(сингле) или мерче (для формы редактирования)-------//
+export function useDetailInfo(type: string, id?: number) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useQuery({
+    queryKey: ['showcase', 'detai', type,  id],
+    queryFn: async () => {
+      return type === 'merch'
+      ? getDetailMerch({ token, id })
+      : getDetailAlbum({ token, id });
+    },
+    enabled: !!token && !!id
+  });
+};
+
+//-------получение cписка жанров-------//
+export function useGenresList() {
+
+  return useQuery({
+    queryKey: ['genres', 'list'],
+    queryFn: () => getGenresKinds(),
+    staleTime: 30 * 60 * 1000
+  });
+};
+
+//-------получение cписка видов мерча-------//
+export function useMerchKindsList() {
+  return useQuery({
+    queryKey: ['merch', 'list'],
+    queryFn: () => getMerchKinds(),
+    staleTime: 30 * 60 * 1000
+  });
+};
+
+//-------загрузка изображения для мерча-------//
+export function useAddImage() {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation<TAddImageResponse, Error, { id: number; payload: TAddImagePayload }>({
+    mutationFn: ({ id, payload }) =>
+      addImage({ token, id, payload }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
+      //toast.success("Изображение добавлено")
+    },
+    onError: () => {
+      //toast.error('Не удалось добавить изображение')
+    }
+  });
+};
+
+//-------обновление изображения для мерча-------//
+export function useUpdateImage() {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation<TAddImageResponse, Error, { id: number; payload: TUpdateImagePayload }>({
+    mutationFn: ({ id, payload }) =>
+      updateImage({ token, id, payload }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
+    },
+  });
+};
+
+//-------удаление изображения для мерча-------//
+export function useDeleteImage() {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation<void, Error, TDeleteImageRequest>({
+    mutationFn: (data) =>
+      deleteImage(token, data),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
+    },
+  });
 };
