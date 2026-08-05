@@ -3,7 +3,7 @@
 import s from "./showcaseItemsList.module.scss";
 import { 
   ShowcaseCard, 
-  TShowcaseItem, 
+  type TShowcaseItem, 
   useDeleteAlbum, 
   useDeleteMerch, 
   useDeletePromocode,

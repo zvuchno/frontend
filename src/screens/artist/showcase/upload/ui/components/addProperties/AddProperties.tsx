@@ -3,7 +3,7 @@
 import { ButtonUI, CustomInput } from "@/shared/ui";
 import s from "./AddProperties.module.scss";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import { UploadFormValues } from "@/features/showcaseUpload";
+import type { UploadFormValues } from "@/features/showcaseUpload";
 
 export const AddPropertises = () => {
   const { control } = useFormContext<UploadFormValues>();

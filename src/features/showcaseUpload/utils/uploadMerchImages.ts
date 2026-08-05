@@ -1,4 +1,4 @@
-import { TAddImagePayload, TAddImageResponse } from "@/entities/Artist/model/types";
+import type { TAddImagePayload, TAddImageResponse } from "@/entities/Artist";
 
 export async function uploadMerchImages(
   merchId: number,

@@ -1,4 +1,4 @@
-import { TDeleteImageRequest } from "@/entities/Artist/model/types";
+import type { TDeleteImageRequest } from "@/entities/Artist";
 
 export async function deleteMerchImages(
   merchId: number,

@@ -31,9 +31,9 @@ export async function getShowcaseAlbumsList({
   url,
 }: TShowcaseListRequest): Promise<PaginatedStoreResponse<TShowcaseAlbum>> {
   const params = new URLSearchParams();
-  params.append("artist", artist.toString());
+  if ( artist) params.append("artist", artist.toString());
 
-  const mainUrl = `${baseUrl}/v1/store/albums/?limit=6&${params.toString()}`;
+  const mainUrl = `${baseUrl}/v1/store/albums/?limit=15&${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseAlbum>>(currentUrl, {
@@ -52,13 +52,13 @@ export async function getShowcaseMerchList({
   in_stock,
 }: TShowcaseMerchRequest): Promise<PaginatedStoreResponse<TShowcaseMerch>> {
   const params = new URLSearchParams();
-  params.append("artist", artist.toString());
+  if (artist) params.append("artist", artist.toString());
 
   if (in_stock !== null && in_stock !== undefined) {
     params.append('in_stock', String(in_stock));
   }
 
-  const mainUrl = `${baseUrl}/v1/store/merch/?limit=6&${params.toString()}`;
+  const mainUrl = `${baseUrl}/v1/store/merch/?limit=15&${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseMerch>>(currentUrl, {
@@ -86,7 +86,7 @@ export async function getShowcasePromocodes({
     params.append('in_stock', String(is_available));
   }
 
-  const mainUrl = `${baseUrl}/v1/store/promocodes/?limit=6&${params.toString()}`;
+  const mainUrl = `${baseUrl}/v1/store/promocodes/?limit=15&${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
 
 

@@ -89,7 +89,7 @@ export type TShowcasePromocodeDetail = TShowcasePromocode & {
 
 export type TShowcaseListRequest = {
   token: string | undefined;
-  artist: string;
+  artist: string | null;
   url?: string;
 };
 

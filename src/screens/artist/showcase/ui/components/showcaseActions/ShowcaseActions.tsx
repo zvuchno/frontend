@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import s from "./ShowcaseActions.module.scss";
 import { ButtonUI, SelectUI } from "@/shared/ui";
 import clsx from "clsx";
-import { PromoTypeFilter, TShowcaseItem } from "@/entities/Artist";
+import type { PromoTypeFilter, TShowcaseItem } from "@/entities/Artist";
 import Link from "next/link";
 
 type PopupType = 'promo' | 'product' | null;
@@ -147,7 +147,7 @@ export const ShowcaseActions = ({
 
         {activePopup === 'product' && (
           <div 
-            className={clsx(s.popup, s.popup_album)} 
+            className={clsx(s.popup, s.popup_product)} 
             ref={productPopupRef}
           >
             <Link 
@@ -192,7 +192,7 @@ export const ShowcaseActions = ({
         {itemType === 'promo' ? (
           <SelectUI
             value={promoType}
-            onChange={(e) => handleChangeTypePromo(e.target.value)}
+            onChange={handleChangeTypePromo}
             options={[
               { value: "ALL", label: "все" },
               { value: "PERСENT", label: "процент" },
@@ -208,7 +208,7 @@ export const ShowcaseActions = ({
         ) : (
           <SelectUI
             value={productType}
-            onChange={(e) => handleChangeTypeProduct(e.target.value)}
+            onChange={handleChangeTypeProduct}
             options={[
               { value: "products", label: "все товары" },
               { value: "merch", label: "мерч" },
@@ -226,7 +226,7 @@ export const ShowcaseActions = ({
         {itemType === 'promo' ? (
           <SelectUI
             value={availability}
-            onChange={(e) => handleChangeAvailability(e.target.value)}
+            onChange={handleChangeAvailability}
             options={[
               { value: "", label: "все" },
               { value: "true", label: "доступен" },
@@ -242,7 +242,7 @@ export const ShowcaseActions = ({
         ) : (
           <SelectUI
             value={stockFilter}
-            onChange={(e) => hamdleChangeStock(e.target.value)}
+            onChange={hamdleChangeStock}
             options={[
               { value: "", label: "все" },
               { value: "true", label: "в наличии" },

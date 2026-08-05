@@ -21,7 +21,7 @@ const formatTotalPrice = (totalPrice: number) => totalPriceFormatter.format(tota
 
 const formatter = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit' });
 
-export const formatDateRangeIntl = (startAt?: string | null, endAt?: string  | null) => {
+const formatDateRangeIntl = (startAt?: string | null, endAt?: string  | null) => {
   if (!startAt || !endAt) return null;
   const start = formatter.format(new Date(startAt));
   const end = formatter.format(new Date(endAt));
@@ -39,20 +39,20 @@ export const ShowcaseCard = ({
 }: ShowcaseCardProps) => {
   const id = item.id
 
-  const handleToggleVisibility = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
+  const handleToggleVisibility = async (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
     const isCheked = e.target.checked;
     if (id) {
-      if (type === 'album') onToggleAlbumVisibility(isCheked, id);
-      if (type === 'merch') onToggleMerchVisibility(isCheked, id);
-      if (type === 'promo') onTogglePromoVisibility(isCheked, id);
+      if (type === 'album') await onToggleAlbumVisibility(isCheked, id);
+      if (type === 'merch') await onToggleMerchVisibility(isCheked, id);
+      if (type === 'promo') await onTogglePromoVisibility(isCheked, id);
     } 
   };
 
-  const handleDeleteItem = (type: string) => {
+  const handleDeleteItem = async (type: string) => {
     if (id) {
-      if (type === 'album') onDeleteAlbum(id);
-      if (type === 'merch') onDeleteMerch(id);
-      if (type === 'promo') onDeletePromocode(id);
+      if (type === 'album') await onDeleteAlbum(id);
+      if (type === 'merch') await onDeleteMerch(id);
+      if (type === 'promo') await onDeletePromocode(id);
     }
   };
 
@@ -67,7 +67,7 @@ export const ShowcaseCard = ({
           type="checkbox"
           className={s.visuallyHidden}
           checked={isChecked}
-          onChange={(e) => handleToggleVisibility(e, type)}
+          onChange={(e) => void handleToggleVisibility(e, type)}
           aria-label="переключение видимости"
         />
         <span className={s.checkboxMark}></span>
@@ -82,7 +82,7 @@ export const ShowcaseCard = ({
         <button 
           type="button" 
           className={s.deleteButton} 
-          onClick={() => handleDeleteItem(type)}
+          onClick={() => void handleDeleteItem(type)}
         >
           {DeleteIcon()}
         </button>

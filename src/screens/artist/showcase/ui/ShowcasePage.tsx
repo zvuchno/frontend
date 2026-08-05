@@ -31,12 +31,6 @@ export const ShowcasePage = () => {
 
   const currentArtistSlug = useShowcaseArtistSlug();
 
-  if (!currentArtistSlug || status === 'loading') {
-    return (
-      <Loader />
-    );
-  }
-
   const albumsQuery = useAlbumsInfiniteQuery({
     artistSlug: currentArtistSlug
   });
@@ -63,15 +57,20 @@ export const ShowcasePage = () => {
     ? 'нет товаров' 
     : 'нет промокодов';
 
-  const currentItems = useMemo(() => {
-    switch (itemType) {
-      case 'products': return allProducts;
-      case 'album': return albums;
-      case 'merch': return merch;
-      case 'promo': return promocodes;
-      default: return allProducts;
-    }
-  }, [itemType, allProducts, albums, merch, promocodes]);
+  console.log('merch:', merch)
+
+  const currentItems =
+    itemType === 'products' ? allProducts :
+    itemType === 'album'    ? albums :
+    itemType === 'merch'    ? merch :
+    itemType === 'promo'    ? promocodes :
+    allProducts;
+
+  if (!currentArtistSlug || status === 'loading') {
+    return (
+      <Loader />
+    );
+  }
 
   if (isLoadingData) {
     return (

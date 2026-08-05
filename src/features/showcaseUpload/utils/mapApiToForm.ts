@@ -1,5 +1,5 @@
-import { TShowcaseAlbumDetail, TShowcaseMerchDetail } from "@/entities/Artist/model/types";
-import { UploadFormValues } from "../model/types";
+import type { TShowcaseAlbumDetail, TShowcaseMerchDetail } from "@/entities/Artist";
+import type { UploadFormValues } from "../model/types";
 
 type TShowcaseItemDetail = TShowcaseAlbumDetail | TShowcaseMerchDetail;
 

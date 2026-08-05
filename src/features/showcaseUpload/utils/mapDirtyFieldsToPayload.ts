@@ -1,4 +1,5 @@
-import type { TUpdateAlbumPayload, TUpdateMerchPayload } from "@/entities/Artist/model/types";
+
+import type { TUpdateAlbumPayload, TUpdateMerchPayload } from "@/entities/Artist";
 import type { UploadFormValues } from "../model/types";
 
 const normalizePrice = (val: number): string => {
@@ -81,7 +82,7 @@ export function mapDirtyFieldsToPayload(
         break;
 
       case 'quantity':
-        payload.stock = Number(value);
+        payload.stock = data.variants && data.variants?.length > 0 ? null : Number(value);
         break;
 
       case 'variants':

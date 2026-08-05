@@ -10,7 +10,6 @@ export const fillFormData = (
       return;
     }
 
-    // Файлы и Blob добавляем напрямую
     if (value instanceof File || value instanceof Blob) {
       formData.append(key, value);
       return;

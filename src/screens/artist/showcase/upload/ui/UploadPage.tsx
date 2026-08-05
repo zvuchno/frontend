@@ -16,6 +16,12 @@ import {
 
 } from "@/features/showcaseUpload";
 import { 
+  type TCreateAlbumRequest,
+  type TCreateMerchRequest,
+  type TShowcaseAlbumDetail,
+  type TShowcaseMerchDetail,
+  type TUpdateAlbumPayload,
+  type TUpdateMerchPayload,
   useAddImage, 
   useCreateAlbum, 
   useCreateMerch, 
@@ -27,14 +33,7 @@ import {
 import { UploadTrackModal } from "./components/uploadTrackModal/UploadTrackModal";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import type { 
-  TCreateAlbumRequest, 
-  TCreateMerchRequest, 
-  TShowcaseAlbumDetail, 
-  TShowcaseMerchDetail, 
-  TUpdateAlbumPayload, 
-  TUpdateMerchPayload 
-} from "@/entities/Artist/model/types";
+
 
 const normalizePrice = (val: number): string => {
   const rounded = Math.round(val * 100) / 100;
@@ -51,12 +50,12 @@ const initialFormValues: UploadFormValues = {
   releaseDate: '',
   kind: '',
   genre: '7',
-  price: 0,
+  price: null,
   privacy: 'public',
   allowHigherPrice: false,
   mainImage: null,
   additionalImages: [],
-  quantity: 0,
+  quantity: null,
   album: '',
 };
 
@@ -175,7 +174,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
 
   const onSubmit = async (data: UploadFormValues, action: 'uploadTrack' | 'publish' | 'draft' | 'save' | 'cancel') => {
     if (isSubmitting) return;
-    const priceStr = normalizePrice(data.price);
+    const priceStr = data.price ? normalizePrice(data.price) : '';
     const hasImagesToUpload = data.mainImage || (data.additionalImages && data.additionalImages?.length > 0);
 
     // при сохранении мерча: сначала создавать сам мерч, а потом изображения

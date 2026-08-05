@@ -46,7 +46,7 @@ import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
 export function useAlbumsInfiniteQuery({
   artistSlug,
 }: {
-  artistSlug: string;
+  artistSlug: string | null;
 }) {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
@@ -79,7 +79,7 @@ export function useMerchInfiniteQuery({
   artistSlug,
   in_stock,
 }: {
-  artistSlug: string;
+  artistSlug: string | null;
   in_stock?: boolean | null;
 }) {
   const { data: session } = useSession();
@@ -155,7 +155,7 @@ export function useUpdateAlbum() {
       return updateAlbum({ token, id, payload });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
       toast.success("Альбом обновлён")
     },
     onError: () => {
@@ -174,7 +174,7 @@ export function useUpdateMerch() {
       return updateMerch({ token, id, payload });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
       toast.success("Мерч обновлён")
     },
     onError: () => {
@@ -193,7 +193,7 @@ export function useUpdatePromocode() {
       return updatePromocode({ token, id, payload });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "promo"] });
+      void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "promo"] });
       toast.success("Промокод обновлён")
     },
     onError: () => {
@@ -213,7 +213,7 @@ export function useDeleteAlbum() {
       return deleteAlbum({ token, id });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
       toast.success("Альбом удалён")
     },
     onError: () => {
@@ -232,7 +232,7 @@ export function useDeleteMerch() {
       return deleteMerch({ token, id });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
       toast.success("Мерч удалён")
     },
     onError: () => {
@@ -251,7 +251,7 @@ export function useDeletePromocode() {
       return deletePromocode({ token, id });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'promo'] });
+      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'promo'] });
       toast.success("Промокод удалён")
     },
     onError: () => {

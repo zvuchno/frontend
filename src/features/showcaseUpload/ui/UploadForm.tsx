@@ -1,5 +1,7 @@
+"use client"
+
 import { Controller, useFormContext } from "react-hook-form";
-import { UploadFormValues } from "../model/types";
+import type { UploadFormValues } from "../model/types";
 import { AddImageBlock } from "../components/addImageBlock/AddImageBlock";
 import s from "./UploadForm.module.scss";
 import { CheckboxUI, CustomInput, Loader, SelectUI } from "@/shared/ui";
@@ -34,12 +36,6 @@ export const UploadForm = ({
   } = useFormContext<UploadFormValues>();
 
   const currentArtistSlug = useShowcaseArtistSlug();
-
-  if (!currentArtistSlug) {
-    return (
-      <Loader />
-    );
-  }
 
   // Список альбомов (для селекта)
   const albumsQuery = useAlbumsInfiniteQuery({ artistSlug: currentArtistSlug });
@@ -83,6 +79,12 @@ export const UploadForm = ({
   }, [merchKindsQuery.data]);
 
   const isLoadingMerchKinds = merchKindsQuery.isFetching || merchKindsQuery.isPending;
+
+  if (!currentArtistSlug) {
+    return (
+      <Loader />
+    );
+  }
   
   return (
     <div className={s.container}>

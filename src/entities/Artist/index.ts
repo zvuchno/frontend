@@ -7,6 +7,15 @@ export type {
   StockFilter,
   TShowcaseItem,
   PromoTypeFilter,
+  TDeleteImageRequest,
+  TShowcaseAlbumDetail,
+  TShowcaseMerchDetail,
+  TUpdateAlbumPayload,
+  TUpdateMerchPayload,
+  TAddImagePayload,
+  TAddImageResponse,
+  TCreateAlbumRequest,
+  TCreateMerchRequest,
 } from "./model/types";
 export {
   getShowcaseAlbumsList,

@@ -2,7 +2,7 @@
 
 import { ButtonUI, CheckboxUI, CustomInput, ModalUI, Text, Title } from "@/shared/ui";
 import s from "./UploadTrackModal.module.scss";
-import { ChangeEvent, useRef } from "react";
+import { type ChangeEvent, useRef } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";

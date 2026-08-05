@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ButtonUI } from "@/shared/ui";
 
 import styles from "./AddImageBlock.module.scss";
-import { TImage, type AddImageBlockProps } from "./AddImageBlock.types";
+import type { TImage, AddImageBlockProps } from "./AddImageBlock.types";
 import toast from "react-hot-toast";
 import { checkMediaFiles } from "../../lib/checkMediaFiles";
 
@@ -101,7 +101,7 @@ export const AddImageBlock = ({
     });
   };
 
-  const clearMainImage = async (id?: number) => {
+  const clearMainImage = (id?: number) => {
     // Отзываем старый временный URL
     if (mainPreview && !mainPreview.image.startsWith('http')) {
       URL.revokeObjectURL(mainPreview.image);
@@ -157,7 +157,7 @@ export const AddImageBlock = ({
 
     // Отзываем старый URL, если был
     if (additionalPreviews[index] && !additionalPreviews[index]?.image.startsWith('http')) {
-      URL.revokeObjectURL(additionalPreviews[index].image!);
+      URL.revokeObjectURL(additionalPreviews[index].image);
     }
 
     const url = URL.createObjectURL(file);
@@ -180,10 +180,10 @@ export const AddImageBlock = ({
 
   };
 
-  const clearAdditionalImageAt = async (index: number, id?: number) => {
+  const clearAdditionalImageAt = (index: number, id?: number) => {
     // Отзываем временный URL, если он был
     if (additionalPreviews[index] && !additionalPreviews[index]?.image.startsWith('http')) {
-      URL.revokeObjectURL(additionalPreviews[index].image!);
+      URL.revokeObjectURL(additionalPreviews[index].image);
     }
 
     setAdditionalPreviews((prev) => {
@@ -244,7 +244,7 @@ export const AddImageBlock = ({
           ref={(el) => {
             additionalInputsRef.current[index] = el;
           }}
-          onChange={(e) => handleAdditionalFileChange(e, index)}
+          onChange={(e) => void handleAdditionalFileChange(e, index)}
           accept='image/*'
           hidden
         />
