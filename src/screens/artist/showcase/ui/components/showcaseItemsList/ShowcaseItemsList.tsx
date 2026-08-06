@@ -20,11 +20,13 @@ import clsx from "clsx";
 interface ShowcaseItemsListProps {
   itemType: TShowcaseItem;
   items: TShowcasePromocode[] | (TShowcaseAlbum | TShowcaseMerch)[];
+  onEditPromo: (id: number) => void;
 };
 
 export const ShowcaseItemsList = ({ 
   itemType, 
   items,
+  onEditPromo
 }: ShowcaseItemsListProps) => {
   const toggleAlbumMutation = useUpdateAlbum();
   const toggleMerchMutation = useUpdateMerch();
@@ -116,6 +118,7 @@ export const ShowcaseItemsList = ({
             onDeleteAlbum={handleDeleteAlbum}
             onDeleteMerch={handleDeleteMerch}
             onDeletePromocode={handleDeletePromocode}
+            onEditPromo={onEditPromo}
           />
         ))}
       </ul>

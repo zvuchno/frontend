@@ -16,6 +16,7 @@ export type {
   TAddImageResponse,
   TCreateAlbumRequest,
   TCreateMerchRequest,
+  TCreatePromocodeRequest,
 } from "./model/types";
 export {
   getShowcaseAlbumsList,
@@ -41,6 +42,8 @@ export {
   useAddImage,
   useUpdateImage,
   useDeleteImage,
+  useDetailPromocode,
+  useCreatePromocode,
 } from "./model/useShowcase";
 
 export { useGetArtistLegalData } from "./model/useGetArtistLegalData";

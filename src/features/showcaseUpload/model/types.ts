@@ -21,3 +21,13 @@ export type UploadFormValues = {
   variants?: VariantForm[]; // для мерча
   hasProperty?: boolean; 
 };
+
+export type PromocodeFormValues = {
+  code: string;
+  discountType?: "PERCENT" | "FIXED";
+  discountValue: number | null;
+  description?: string;
+  limit?: number | null;
+  startAt?: string;
+  endAt?: string;
+}

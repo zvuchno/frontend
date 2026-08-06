@@ -19,6 +19,7 @@ import type {
   TAddImageResponse,
   TUpdateImageRequest,
   TDeleteImageRequest,
+  TCreatePromocodeRequest,
 } from "../model/types";
 import { fillFormData } from "@/features/showcaseUpload";
 
@@ -138,13 +139,9 @@ export async function deletePromocode({
 }): Promise<void> {
   const url = `${baseUrl}/v1/store/promocodes/${id}`;
 
-  const response = await authFetchClient<void>(url, {
+  await authFetchClient<void>(url, {
     method: "DELETE",
   }, token);
-
-  if (!response) throw new Error('Не удалось удалить промокод')
-
-  return response;
 };
 
 //-------создание товара/промокода-------//
@@ -173,6 +170,22 @@ export async function createMerch(token: string | undefined, payload: TCreateMer
   }, token);
 
   if (!response) throw new Error('Не удалось создать мерч')
+
+  return response;
+};
+
+export async function createPromocode(
+  token: string | undefined, 
+  payload: TCreatePromocodeRequest
+): Promise<TShowcasePromocodeDetail> {
+  const url = `${baseUrl}/v1/store/promocodes/`;
+
+  const response = await authFetchClient<TShowcasePromocodeDetail>(url, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  }, token);
+
+  if (!response) throw new Error('Не удалось создать промокод')
 
   return response;
 };
@@ -210,6 +223,24 @@ export async function getDetailMerch({
   }, token);
 
   if (!response) throw new Error('Не удалось получить мерч')
+
+  return response;
+};
+
+export async function getDetailPromocode({
+  token,
+  id
+}: {
+  token: string | undefined;
+  id?: number;
+}): Promise<TShowcasePromocodeDetail> {
+  const url = `${baseUrl}/v1/store/promocodes/${id}`;
+
+  const response = await authFetchClient<TShowcasePromocodeDetail>(url, {
+    method: "GET",
+  }, token);
+
+  if (!response) throw new Error('Не удалось получить промокод')
 
   return response;
 };

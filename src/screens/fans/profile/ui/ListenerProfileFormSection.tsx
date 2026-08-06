@@ -156,7 +156,6 @@ export function ListenerProfileFormSection() {
 
       // 3. Обновление имени пользователя
       if (dirtyFields.userName && shouldUpdateUserName) {
-        console.log('я тут')
         const userNameResponse = await updateUserNameMutation.mutateAsync({ username: nextUserName });
         nextAccount = {
           ...nextAccount,

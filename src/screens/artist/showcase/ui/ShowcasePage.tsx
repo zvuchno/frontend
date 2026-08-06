@@ -20,9 +20,13 @@ import { Loader, RoleCard } from "@/shared/ui";
 import s from "./ShowcasePage.module.scss";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
+import { AddPromocodeModal } from "./components/addPromocodeModal/AddPromocodeModal";
 
 export const ShowcasePage = () => {
   const { status } = useSession();
+
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false);
+  const [promoIdForModal, setPromoIdForModal] = useState<number | undefined>(undefined);
 
   // состояние для типа карточек отображемых на странице (промокоды или товары (все товары, альбомы, мерч))
   const [itemType, setItemType] = useState<TShowcaseItem>("products");
@@ -59,8 +63,6 @@ export const ShowcasePage = () => {
 
   const emptyText = itemType === "album" || itemType === "merch" ? "нет товаров" : "нет промокодов";
 
-  console.log("merch:", merch);
-
   const currentItems =
     itemType === "products"
       ? allProducts
@@ -71,6 +73,11 @@ export const ShowcasePage = () => {
           : itemType === "promo"
             ? promocodes
             : allProducts;
+
+  const handleEditPromo = (id: number) => {
+    setPromoIdForModal(id);
+    setIsPromoModalOpen(true);
+  }
 
   if (!currentArtistSlug || status === "loading") {
     return <Loader />;
@@ -124,14 +131,26 @@ export const ShowcasePage = () => {
         filterByPromoType={(value: PromoTypeFilter) => {
           setTypePromoFilter(value);
         }}
-        addProduct={() => undefined}
-        addPromo={() => undefined}
+        addPromo={() => setIsPromoModalOpen(true)}
       />
       {currentItems.length > 0 ? (
-        <ShowcaseItemsList itemType={itemType} items={currentItems} />
+        <ShowcaseItemsList 
+          itemType={itemType}
+          items={currentItems}
+          onEditPromo={handleEditPromo}
+        />
       ) : (
         <div>{emptyText}</div>
       )}
+
+      <AddPromocodeModal 
+        isOpen={isPromoModalOpen} 
+        onClose={() => {
+          setIsPromoModalOpen(false)
+          setPromoIdForModal(undefined);
+        }}
+        id={promoIdForModal}
+      />
     </div>
   );
 };

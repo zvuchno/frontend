@@ -7,6 +7,7 @@ import type {
   TAddImageResponse, 
   TCreateAlbumRequest, 
   TCreateMerchRequest, 
+  TCreatePromocodeRequest, 
   TDeleteImageRequest, 
   TShowcaseAlbum, 
   TShowcaseAlbumDetail, 
@@ -23,12 +24,14 @@ import {
   addImage,
   createAlbum,
   createMerch,
+  createPromocode,
   deleteAlbum,
   deleteImage,
   deleteMerch,
   deletePromocode,
   getDetailAlbum,
   getDetailMerch,
+  getDetailPromocode,
   getShowcaseAlbumsList, 
   getShowcaseMerchList, 
   getShowcasePromocodes,
@@ -251,7 +254,7 @@ export function useDeletePromocode() {
       return deletePromocode({ token, id });
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'promo'] });
+      void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "promo"] });
       toast.success("Промокод удалён")
     },
     onError: () => {
@@ -271,10 +274,10 @@ export function useCreateAlbum() {
       createAlbum(token, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'albums'] });
-      toast.success("Товар создан")
+      toast.success("Альбом создан создан")
     },
     onError: () => {
-      toast.error('Не удалось создать товар')
+      toast.error('Не удалось создать альбом')
     }
   });
 };
@@ -297,18 +300,48 @@ export function useCreateMerch() {
   });
 };
 
+export function useCreatePromocode() {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useMutation({
+    mutationFn: (payload: TCreatePromocodeRequest) =>
+      createPromocode(token, payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "promo"] });
+      toast.success("Промокод создан")
+    },
+    onError: () => {
+      toast.error('Не удалось создать промокод')
+    }
+  });
+};
+
 //-------получение детальной информации об альбоме(сингле) или мерче (для формы редактирования)-------//
 export function useDetailInfo(type: string, id?: number) {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
 
   return useQuery({
-    queryKey: ['showcase', 'detai', type,  id],
+    queryKey: ['showcase', 'detail', type,  id],
     queryFn: async () => {
       return type === 'merch'
       ? getDetailMerch({ token, id })
       : getDetailAlbum({ token, id });
     },
+    enabled: !!token && !!id
+  });
+};
+
+//-------получение детальной информации о промокоде-------//
+export function useDetailPromocode(id?: number) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useQuery({
+    queryKey: ['showcase', 'detail', 'promo', id],
+    queryFn: async () => getDetailPromocode({ token, id}),
     enabled: !!token && !!id
   });
 };
@@ -326,7 +359,7 @@ export function useGenresList() {
 //-------получение cписка видов мерча-------//
 export function useMerchKindsList() {
   return useQuery({
-    queryKey: ['merch', 'list'],
+    queryKey: ['merchKind', 'list'],
     queryFn: () => getMerchKinds(),
     staleTime: 30 * 60 * 1000
   });

@@ -12,7 +12,6 @@ type PopupType = 'promo' | 'product' | null;
 interface ShowcaseActionsProps {
   itemType: TShowcaseItem;
   selectItemType: (item: TShowcaseItem) => void;
-  addProduct: () => void; // ссылка на форму
   addPromo: () => void; // ссылка на форму
   filterByStock: (value: 'true' | 'false' | '') => void;
   filterByAvailability: (value: 'true' | 'false' | '') => void;
@@ -21,8 +20,7 @@ interface ShowcaseActionsProps {
 
 export const ShowcaseActions = ({ 
   itemType,
-  selectItemType, 
-  addProduct,
+  selectItemType,
   addPromo, 
   filterByStock,
   filterByAvailability,
@@ -97,14 +95,6 @@ export const ShowcaseActions = ({
     setActivePopup((prev) => (prev === 'product' ? null : 'product'));
   };
 
-  const handleAddAlbum = () => {
-    addProduct();
-  };
-
-  const handleAddPromo = () => {
-    addPromo();
-  };
-
   const handleChangeTypeProduct = (value: string) => {
     setProductType(value);
     selectItemType(value as TShowcaseItem);
@@ -173,7 +163,7 @@ export const ShowcaseActions = ({
             <button 
               type='button' 
               className={s.popup__item} 
-              onClick={handleAddPromo}
+              onClick={() => addPromo()}
             >
               создать промокод
             </button>

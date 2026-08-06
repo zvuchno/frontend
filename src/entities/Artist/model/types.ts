@@ -25,6 +25,7 @@ export type TShowcaseMerch = {
 
 export type TShowcasePromocode = {
   id: number;
+  artist: number;
   code: string;
   discount_value: string;
   discount_type: "PERCENT" | "FIXED";
@@ -137,6 +138,18 @@ export type TCreateMerchRequest = {
   property_name: string;
   stock: number;
   variants: TMerchVariantDetail[];
+};
+
+export type TCreatePromocodeRequest = {
+  artist?: number;
+  code: string;
+  discount_value: string;
+  discount_type: "PERCENT" | "FIXED";
+  start_at: string | null;
+  end_at: string | null;
+  usage_limit: number | null; // Макс. количество использований. Пусто = неограничено
+  is_enabled: boolean;
+  description: string
 };
 
 type TUpdateRequest = {
