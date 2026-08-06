@@ -26,7 +26,7 @@ export const authConfig: AuthOptions = {
           access_type: "offline",
           prompt: "select_account",
         },
-      }
+      },
     }),
     // {
     //   id: 'customVk',
@@ -46,7 +46,7 @@ export const authConfig: AuthOptions = {
     //     params: {
     //       code: 'code',
     //       client_id: process.env.VK_CLIENT_ID as string,
-    //       //device_id: 'device_id', 
+    //       //device_id: 'device_id',
     //       client_secret: process.env.VK_SECRET as string,
     //       grant_type: 'authorization_code',
     //     },
@@ -64,7 +64,7 @@ export const authConfig: AuthOptions = {
     //       id: payload.sub,
     //       email: payload.email || '',
     //       //image: payload.picture,
-    //       userName: payload.name || payload.preferred_username || '', 
+    //       userName: payload.name || payload.preferred_username || '',
     //       phone: null,
     //       isPhoneVerified: false,
     //       isEmailVerified: !!payload.email,
@@ -77,9 +77,9 @@ export const authConfig: AuthOptions = {
       clientId: process.env.VK_CLIENT_ID as string,
       clientSecret: process.env.VK_SECRET as string,
       authorization: {
-        url: 'https://id.vk.com/authorize',
+        url: "https://id.vk.com/authorize",
         params: {
-          scope: 'email',
+          scope: "email",
           //response_type: 'code',
           //v: '5.131',
         },
@@ -116,7 +116,8 @@ export const authConfig: AuthOptions = {
           const user = await getCurrentUser(tokens.access);
           // Если пользователь не нажал "Запомнить меня"
           // устанавливаем время, через которое разлогиним пользователя (6 ч)
-          const sessionExpires = credentials.rememberme === 'true' ? null : Date.now() + 6 * 60 * 60 * 1000;
+          const sessionExpires =
+            credentials.rememberme === "true" ? null : Date.now() + 6 * 60 * 60 * 1000;
           //получаем срок жизни access токена
           const decodedTokenExp = getTokenExp(tokens.access);
 
@@ -129,6 +130,7 @@ export const authConfig: AuthOptions = {
             isEmailVerified: user.is_email_verified,
             isArtist: user.is_artist,
             isListener: user.is_listener,
+            profileType: user.profile_type,
             accessToken: tokens.access,
             refreshToken: tokens.refresh,
             sessionExpires,
@@ -144,7 +146,7 @@ export const authConfig: AuthOptions = {
 
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === 'vk' || account?.provider === 'yandex') {
+      if (account?.provider === "vk" || account?.provider === "yandex") {
         const res = await socialAuth({
           provider: account.provider,
           access_token: account.access_token ?? "",
@@ -175,6 +177,7 @@ export const authConfig: AuthOptions = {
         token.isPhoneVerified = user.isPhoneVerified;
         token.isListener = user.isListener;
         token.isArtist = user.isArtist;
+        token.profileType = user.profileType;
         token.accessToken = user.accessToken;
         token.artistName = user.artistName;
         token.refreshToken = user.refreshToken;
@@ -182,11 +185,11 @@ export const authConfig: AuthOptions = {
         token.accessTokenExpires = user.accessTokenExpires;
       }
 
-      // получение пользоваетля, авторизованного через vk или yandex, от бэкенда  
-      if (account && (account.provider === 'vk' || account.provider === 'yandex')) {
-         const userFromServer = await getCurrentUser(token.accessToken ?? '');
+      // получение пользоваетля, авторизованного через vk или yandex, от бэкенда
+      if (account && (account.provider === "vk" || account.provider === "yandex")) {
+        const userFromServer = await getCurrentUser(token.accessToken ?? "");
 
-         if (userFromServer) {
+        if (userFromServer) {
           token.id = String(userFromServer.id);
           token.userName = userFromServer.username;
           token.email = userFromServer.email;
@@ -195,17 +198,18 @@ export const authConfig: AuthOptions = {
           token.isEmailVerified = userFromServer.is_email_verified;
           token.isArtist = userFromServer.is_artist;
           token.isListener = userFromServer.is_listener;
-         }
+          token.profileType = userFromServer.profile_type;
+        }
       }
 
       // Проверка жизни сессии, если rememberme: true
       if (token.sessionExpires) {
         if (Date.now() > token.sessionExpires) {
-          token.sessionError = 'SessionExpire';
+          token.sessionError = "SessionExpire";
         } else {
-          token.sessionError = '';
+          token.sessionError = "";
         }
-      } 
+      }
 
       if (trigger === "update" && session) {
         if ("userName" in session) {
@@ -232,34 +236,35 @@ export const authConfig: AuthOptions = {
         if ("artistName" in session) {
           token.artistName = session.artistName as string | undefined;
         }
+        if ("profileType" in session) {
+          token.profileType = session.profileType as "label" | "artist" | undefined;
+        }
       }
 
-      const isExpired = !token.accessTokenExpires ||  Date.now() >= token.accessTokenExpires;
-      
+      const isExpired = !token.accessTokenExpires || Date.now() >= token.accessTokenExpires;
+
       if (isExpired) {
-        console.log('***Update Access Token***')
+        console.log("***Update Access Token***");
         try {
           if (token.refreshToken) {
             const refreshed = await refreshAccessToken(token.refreshToken);
             const decodedTokenExp = getTokenExp(refreshed.access)?.exp;
             token.accessToken = refreshed.access;
-            token.accessTokenExpires = decodedTokenExp ? decodedTokenExp: null;
-            token.sessionError = '';
+            token.accessTokenExpires = decodedTokenExp ? decodedTokenExp : null;
+            token.sessionError = "";
             console.log("***Token successfully updated***");
           } else {
-            console.log('No refresh token')
+            console.log("No refresh token");
             token.accessToken = undefined;
             token.accessTokenExpires = null;
-            token.sessionError = 'RefreshTokenError';
+            token.sessionError = "RefreshTokenError";
           }
-          
-        } catch(error) {
+        } catch (error) {
           console.error("Token refresh failed:", error);
           token.accessToken = undefined;
           token.accessTokenExpires = null;
-          token.sessionError = 'RefreshTokenError';
+          token.sessionError = "RefreshTokenError";
         }
-
       }
       return token;
     },
@@ -274,6 +279,7 @@ export const authConfig: AuthOptions = {
         session.user.isPhoneVerified = token.isPhoneVerified;
         session.user.isListener = token.isListener;
         session.user.isArtist = token.isArtist;
+        session.user.profileType = token.profileType;
         session.user.accessToken = token.accessToken;
         session.user.artistName = token.artistName;
         session.user.sessionError = token.sessionError;

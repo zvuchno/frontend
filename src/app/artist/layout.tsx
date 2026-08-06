@@ -1,27 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-import { NavBar } from "@/features/profile";
+import { AccountNavigation } from "@/features/profile";
 
-import { artistsProfileRoutes } from "@/shared/constants";
+import {
+  useSetArtistId,
+  useSetArtistSlug,
+  useShowcaseArtistId,
+  useShowcaseArtistSlug,
+} from "@/entities/Artist/store/useShowcaseStore";
+import {
+  type ArtistApiDataItem,
+  type CurrentArtistResponse,
+  type UpdateCurrentArtistPayload,
+  useCurrentArtist,
+  useUpdateArtist,
+  useUpdateArtistCover,
+} from "@/entities/profile";
+
 import { AccentContainer, Loader, Title } from "@/shared/ui";
 
 import { ArtistDataSection, type TArtistDataItem } from "./components/ArtistDataSection";
 import s from "./layout.module.scss";
-import { 
-  type ArtistApiDataItem, 
-  type CurrentArtistResponse, 
-  UpdateCurrentArtistPayload, 
-  useCurrentArtist, 
-  useUpdateArtist, 
-  useUpdateArtistCover 
-} from "@/entities/profile";
-import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
-import { useSetArtistId, useSetArtistSlug, useShowcaseArtistId, useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
 
 const artistProfilePathnames = ["/artist/profile"];
 
@@ -66,7 +71,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   const [deletingContactKey, setDeletingContactKey] = useState<string | null>(null);
   const [deletingSocialKey, setDeletingSocialKey] = useState<string | null>(null);
 
-  const isLoadingDataArtist = status === 'loading' || isLoading;
+  const isLoadingDataArtist = status === "loading" || isLoading;
 
   useEffect(() => {
     if (!artist) return;
@@ -81,16 +86,16 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
     if (currentArtistId !== newArtistId) {
       setArtistId(newArtistId);
     }
-  }, [artist?.slug, currentSlug, setArtistSlug]);
+  }, [artist?.slug, currentSlug, setArtistSlug, artist, currentArtistId, setArtistId]);
 
   const handleCoverChange = async (file: File) => {
     setIsUploadingCover(true);
     try {
       await updateCover.mutateAsync({ cover: file });
-      toast.success('Обложка успешно обновлена');
+      toast.success("Обложка успешно обновлена");
     } catch (err) {
       console.error(err);
-      toast.error('Не удалось обновить обложку');
+      toast.error("Не удалось обновить обложку");
     } finally {
       setIsUploadingCover(false);
     }
@@ -104,10 +109,10 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
         contacts: [...artist.contacts, toApiDataItem(item)],
       });
       await updateArtist.mutateAsync(payload);
-      toast.success('Контакт успешно добавлен');
+      toast.success("Контакт успешно добавлен");
     } catch (err) {
       console.error(err);
-      toast.error('Не удалось добавить контакт');
+      toast.error("Не удалось добавить контакт");
     } finally {
       setIsAddingContact(false);
     }
@@ -121,10 +126,10 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
         socials: [...artist.socials, toApiDataItem(item)],
       });
       await updateArtist.mutateAsync(payload);
-      toast.success('Соцсеть успешно добавлена');
+      toast.success("Соцсеть успешно добавлена");
     } catch (err) {
       console.error(err);
-      toast.error('Не удалось добавить соцсеть');
+      toast.error("Не удалось добавить соцсеть");
     } finally {
       setIsAddingSocial(false);
     }
@@ -136,15 +141,13 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
     setDeletingContactKey(key);
     try {
       const payload = buildArtistUpdatePayload(artist, {
-        contacts: artist.contacts.filter(
-          (c) => getArtistDataItemKey(c) !== key
-        ),
+        contacts: artist.contacts.filter((c) => getArtistDataItemKey(c) !== key),
       });
       await updateArtist.mutateAsync(payload);
-      toast.success('Контат удалён');
+      toast.success("Контат удалён");
     } catch (err) {
       console.error(err);
-      toast.error('Не удалось удалить контакт');
+      toast.error("Не удалось удалить контакт");
     } finally {
       setDeletingContactKey(null);
     }
@@ -156,15 +159,13 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
     setDeletingSocialKey(key);
     try {
       const payload = buildArtistUpdatePayload(artist, {
-        socials: artist.socials.filter(
-          (s) => getArtistDataItemKey(s) !== key
-        ),
+        socials: artist.socials.filter((s) => getArtistDataItemKey(s) !== key),
       });
       await updateArtist.mutateAsync(payload);
-      toast.success('Соцсеть удалена');
+      toast.success("Соцсеть удалена");
     } catch (err) {
       console.error(err);
-      toast.error('Не удалось удалить соцсеть');
+      toast.error("Не удалось удалить соцсеть");
     } finally {
       setDeletingSocialKey(null);
     }
@@ -178,34 +179,37 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
             Личный кабинет
           </Title>
           <section className={s.section}>
-            <NavBar links={artistsProfileRoutes} />
+            <AccountNavigation />
+
             <div className={s.section__content}>{children}</div>
           </section>
         </div>
       </AccentContainer>
 
-      {shouldShowArtistInfo ? isLoadingDataArtist ? (
-        <Loader />
-      ) : (
-        <div className={s.profileInfo}>
-          <ArtistDataSection
-            coverSrc={artist?.cover ?? ""}
-            description={artist?.description ?? ""}
-            contacts={artist?.contacts ?? []}
-            socials={artist?.socials ?? []}
-            isAddingContact={isAddingContact}
-            isAddingSocial={isAddingSocial}
-            isUploadingCover={isUploadingCover}
-            deletingContactKey={deletingContactKey}
-            deletingSocialKey={deletingSocialKey}
-            errorMessage={error?.message}
-            onCoverChange={handleCoverChange}
-            onAddContactClick={handleAddContact}
-            onAddSocialClick={handleAddSocial}
-            onDeleteContactClick={(item) => void handleDeleteContact(item)}
-            onDeleteSocialClick={(item) => void handleDeleteSocial(item)}
-          />
-        </div>
+      {shouldShowArtistInfo ? (
+        isLoadingDataArtist ? (
+          <Loader />
+        ) : (
+          <div className={s.profileInfo}>
+            <ArtistDataSection
+              coverSrc={artist?.cover ?? ""}
+              description={artist?.description ?? ""}
+              contacts={artist?.contacts ?? []}
+              socials={artist?.socials ?? []}
+              isAddingContact={isAddingContact}
+              isAddingSocial={isAddingSocial}
+              isUploadingCover={isUploadingCover}
+              deletingContactKey={deletingContactKey}
+              deletingSocialKey={deletingSocialKey}
+              errorMessage={error?.message}
+              onCoverChange={handleCoverChange}
+              onAddContactClick={handleAddContact}
+              onAddSocialClick={handleAddSocial}
+              onDeleteContactClick={(item) => void handleDeleteContact(item)}
+              onDeleteSocialClick={(item) => void handleDeleteSocial(item)}
+            />
+          </div>
+        )
       ) : null}
     </div>
   );

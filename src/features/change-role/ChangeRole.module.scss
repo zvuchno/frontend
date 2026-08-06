@@ -1,0 +1,18 @@
+.becomeArtist {
+  margin-block-start: -44px;
+  &Text {
+    max-width: 578px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: var(--font-feat);
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -0.06em;
+  }
+
+  @media (max-width: 768px) {
+    margin-block-start: 0;
+  }
+}

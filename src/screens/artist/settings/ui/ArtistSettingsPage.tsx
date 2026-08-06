@@ -3,15 +3,16 @@
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import Link from "next/link";
+
 import { CdekDelivery } from "@/features/CdekDelivery";
-import { WidgetCdek } from "@/features/CdekDelivery/components/WidgetCdek";
 
 import { DeliverySelectionProvider } from "@/entities/order";
 
 import { ModalUI } from "@/shared/ui";
 
+import { ArtistSettingsButtons } from "../components/ArtistSettingsButtons/ArtistSettingsButons";
 import { ArtistSettingsDelivery } from "../components/ArtistSettingsDelivery/ArtistSettingsDelivery";
-import { ArtistSettingsPersonal } from "../components/ArtistSettingsPersonal/ArtistSettingsPersonal";
 import { ArtistSettingsReturn } from "../components/ArtistSettingsReturn/ArtistSettingsReturn";
 import styles from "./ArtistSettingsPage.module.scss";
 
@@ -24,9 +25,16 @@ export const ArtistSettingsPage = () => {
     <DeliverySelectionProvider>
       <FormProvider {...methods}>
         <div className={styles.artistSettings}>
-          <ArtistSettingsPersonal />
           <ArtistSettingsDelivery onChooseButtonClick={() => setIsModalOpen(true)} />
           <ArtistSettingsReturn />
+          <ArtistSettingsButtons />
+          <div className={styles.hint}>
+            Для удобства обработки и отслеживания заказов{" "}
+            <Link href={"#"} className={styles.hintLink}>
+              присоединитесь
+            </Link>{" "}
+            к нашему телеграм-боту
+          </div>
         </div>
         {isModalOpen && (
           <ModalUI

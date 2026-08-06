@@ -60,7 +60,7 @@ export const DatePickerInput = ({
       dateFormat='dd.MM.yyyy'
       locale={ru}
       selected={selectedDate}
-      placeholderText='__. __. __'
+      placeholderText='__.__.__'
       peekNextMonth
       showMonthDropdown
       showYearDropdown

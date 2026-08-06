@@ -1,4 +1,5 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
+
 import {
   type TAuthResponse,
   type TCurrentUserResponse,
@@ -80,11 +81,7 @@ export const logInUser = async (
 
   if (!response.ok) {
     throw new Error(
-      data.message ||
-        data.detail ||
-        data.password ||
-        data.email ||
-        'Неверная почта или пароль'
+      data.message || data.detail || data.password || data.email || "Неверная почта или пароль"
     );
   }
 
@@ -96,7 +93,7 @@ export const getTokenExp = (token: string | null): { exp: number; isValid: boole
   if (!token) return null;
 
   try {
-    const parts = token.split('.');
+    const parts = token.split(".");
     const payload = JSON.parse(atob(parts[1]));
     const exp = payload.exp * 1000;
     const isValid = Date.now() > exp;
@@ -104,21 +101,21 @@ export const getTokenExp = (token: string | null): { exp: number; isValid: boole
     return {
       exp,
       isValid,
-    }
+    };
   } catch {
     return null;
   }
 };
 
-// обновление токена 
+// обновление токена
 export const refreshAccessToken = async (refreshToken: string): Promise<{ access: string }> => {
   const res = await fetch(`${BASE_URL}/v1/auth/token/refresh/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refresh: refreshToken }),
   });
 
-  const data = await  res.json();
+  const data = await res.json();
 
   if (!res.ok) throw new Error(data.detail);
 
@@ -162,9 +159,13 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
 };
 
 export const resendEmailForVerify = async (token?: string): Promise<void> => {
-  await authFetchClient<void>('/v1/auth/account/me/resend-email', {
-    method: 'POST',
-  }, token);
+  await authFetchClient<void>(
+    "/v1/auth/account/me/resend-email",
+    {
+      method: "POST",
+    },
+    token
+  );
 };
 
 export const resetPassword = async (data: TResetPasswordRequest): Promise<void> => {
@@ -198,3 +199,29 @@ export const socialAuth = async (data: TSocialAuthRequest): Promise<TSocialAuthR
     defaultMessage: `Ошибка авторизации через ${data.provider}`,
   });
 };
+
+export async function fanBecomeArtist(
+  name: string,
+  profile_type: "artist" | "label",
+  token?: string
+): Promise<{ name: string; profile_type: "artist" | "label" }> {
+  const endPoint = BASE_URL + "/v1" + "/auth/account/me/become_artist/";
+  const response = await authFetchClient<{ name: string; profile_type: "artist" | "label" }>(
+    endPoint,
+    {
+      method: "POST",
+      body: JSON.stringify({ name, profile_type }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    },
+    token
+  );
+
+  if (!response) {
+    throw new Error(`Попытка стать артистом не удалась `);
+  }
+
+  return response;
+}

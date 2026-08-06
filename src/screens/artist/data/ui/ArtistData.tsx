@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { useSession } from "next-auth/react";
+
 import { ArtistFormPersonal } from "@/features/artist/";
 import { type FieldValues } from "@/features/artist/";
 import { LegalFormSelector } from "@/features/artist/";
@@ -14,6 +16,7 @@ import { Loader } from "@/shared/ui";
 import styles from "./ArtistData.module.scss";
 
 export const ArtistData = () => {
+  const { status } = useSession();
   const { data, isLoading } = useGetArtistLegalData();
 
   //const formValues = useMemo(() => toArtistDataFormValues(data), [data]);
@@ -27,7 +30,7 @@ export const ArtistData = () => {
   const artistType = data?.legal_profile?.recipient_type;
   const [isFormOpen, setFormOpen] = useState(!!artistType);
 
-  if (isLoading) return <Loader />;
+  if (isLoading || status === "loading") return <Loader />;
 
   if (!isFormOpen && (!artistType || artistType.length === 0))
     return (

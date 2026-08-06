@@ -1,6 +1,6 @@
 import { AuthModal } from "@/widgets/AuthModal";
 
-import { RoleSelectBlock } from "@/features/auth";
+import { RoleSelectBlock } from "@/entities/RoleSelectBlock";
 
 import { Link, RoleCard, Text, Title } from "@/shared/ui";
 

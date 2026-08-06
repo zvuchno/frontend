@@ -3,6 +3,7 @@
   max-width: 810px;
   padding-bottom: 170px;
   color: var(--color-text-primary, #100f0d);
+  margin-inline: auto;
 
   @media (max-width: 768px) {
     padding-bottom: 0;

@@ -20,7 +20,7 @@ export const CalendarField = ({
 }) => (
   <DatePicker
     id={`${field.row}.${field.column}`}
-    className={clsx("input input_size_small", {
+    className={clsx("input-calendar input_size_small", {
       ["error"]: !!fieldError,
     })}
     wrapperClassName={styles.datePickerWrapper}

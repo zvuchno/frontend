@@ -20,11 +20,12 @@ export const ArtistSettingsPickupPoint = () => {
         <div className={styles.artistSettingsDeliveryDatePicker}>
           <DatePicker
             id='pickup-date'
+            className={clsx("input_pickup_date input_size_small")}
             popperClassName={styles.artistSettingsDeliveryDatePopper}
             wrapperClassName={styles.datePickerWrapper}
             dateFormat='dd.MM.yyyy'
             locale={ru}
-            //selected={value instanceof Date ? value : null}
+            //selected={value}
             //onChange={(date: Date | null) => onChange(date)}
             placeholderText='дд.мм.гггг'
             peekNextMonth

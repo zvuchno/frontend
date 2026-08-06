@@ -6,6 +6,7 @@ export {
   mainNavRoutes,
   fansProfileRoutes,
   artistsProfileRoutes,
+  fansProfileArtistRoute,
   type MainNavRoute,
   type MainNavRouteItem,
 } from "./mainNavRoutes";

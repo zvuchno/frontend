@@ -46,7 +46,7 @@
     &::after {
       content: "-";
       position: absolute;
-      left: 122px;
+      left: 130px;
       top: 0;
       width: 10px;
       height: 100%;
@@ -100,16 +100,30 @@
   width: fit-content !important;
 }
 
+:global(#finance-period-first-day){
+  padding-inline: 0 !important;
+}
+
+:global(#finance-period-last-day) {
+  padding-inline-end: 0 !important;
+}
+
 :global(#finance-period-first-day),
 :global(#finance-period-last-day) {
-  width: 112px !important;
+  width: 121px !important;
   font-size: 20px !important;
   line-height: 1;
+  border: none;
+  letter-spacing: -0.04em !important;
+  height: 100%;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  font-family: var(--font-feat) !important;
 
   ::placeholder {
     font-size: 20px !important;
     font-weight: 500 !important;
-    letter-spacing: -0.04em !important;
     line-height: 1 !important;
     color: var(--color-bg-secondary) !important;
   }
