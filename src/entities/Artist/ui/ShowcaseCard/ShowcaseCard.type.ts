@@ -10,4 +10,5 @@ export interface ShowcaseCardProps {
   onDeleteAlbum: (id: number) => Promise<void> | void;
   onDeleteMerch: (id: number) => Promise<void> | void;
   onDeletePromocode: (id: number) => Promise<void> | void;
+  onEditPromo: (id: number) => void;
 }

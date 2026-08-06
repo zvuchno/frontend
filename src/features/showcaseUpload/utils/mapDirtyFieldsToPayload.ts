@@ -1,4 +1,3 @@
-
 import type { TUpdateAlbumPayload, TUpdateMerchPayload } from "@/entities/Artist";
 import type { UploadFormValues } from "../model/types";
 
@@ -18,15 +17,6 @@ export function mapDirtyFieldsToPayload(
     const num = Number(val);
     return Number.isNaN(num) ? null : num;
   };
-
-  // // 1. Проверяем, есть ли хоть одно изменённое поле внутри variants
-  // const hasDirtyVariants = Object.keys(dirtyFields).some((key) =>
-  //   key.startsWith('variants.')
-  // );
-
-  // if (hasDirtyVariants) {
-  //   payload.variants = data.variants ?? [];
-  // }
 
   Object.keys(dirtyFields).forEach((key) => {
     if (key.startsWith('variants.')) return;

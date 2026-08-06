@@ -36,6 +36,7 @@ export const ShowcaseCard = ({
   onDeleteAlbum,
   onDeleteMerch,
   onDeletePromocode,
+  onEditPromo
 }: ShowcaseCardProps) => {
   const id = item.id
 
@@ -54,6 +55,10 @@ export const ShowcaseCard = ({
       if (type === 'merch') await onDeleteMerch(id);
       if (type === 'promo') await onDeletePromocode(id);
     }
+  };
+
+  const handleEditPromoClick = () => {
+    onEditPromo(id);
   };
 
   const renderActions = (type: string, editType: string, isChecked?: boolean) => {
@@ -76,6 +81,7 @@ export const ShowcaseCard = ({
         <Link  
           className={s.editButton} 
           href={editType === 'promo' ? '' : `/artist/showcase/upload/${editType}/?${params.toString()}`}
+          onClick={editType === 'promo' ? handleEditPromoClick : undefined}
         >
           {EditIcon()}
         </Link>

@@ -255,27 +255,19 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
         case 'save':
             if (deletedImageIds.length > 0) {
               await deleteMerchImages(currentProductId!, deletedImageIds, deleteImageMutation.mutateAsync)
-              console.log('1: удалил изображения')
             }
 
             if (data.mainImage || data.additionalImages) {
               await uploadMerchImages(currentProductId!, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
-              console.log('2: добавил новые картинки')
             }
 
-            console.log('isDirty:', isDirty)
             if (!isDirty) {
               router.replace('/artist/showcase')
               break;
             }
             const newData = mapDirtyFieldsToPayload(dirtyFields, data);
-            
-            console.log('data:', data)
-            console.log('dirtyFields:', dirtyFields)
-            console.log('newData:', newData)
             if (productType === 'merch') {
               await updateMerchMutation.mutateAsync({id: currentProductId!, payload: newData})
-              console.log('2: обновил весь мерч')
               
             } else {
               await updateAlbumMutation.mutateAsync({ id: currentProductId!, payload: newData })
