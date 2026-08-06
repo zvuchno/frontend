@@ -20,3 +20,5 @@ export {
   resetPasswordConfirm,
   socialAuth,
 } from "./api/api";
+
+export { useBecomeArtist } from "./model/useBecomeArtist";

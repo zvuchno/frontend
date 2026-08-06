@@ -10,6 +10,7 @@ declare module "next-auth" {
     isEmailVerified: boolean;
     isListener: boolean;
     isArtist: boolean;
+    profileType?: "artist" | "label";
     artistName?: string;
     accessToken?: string;
     refreshToken?: string;
@@ -33,6 +34,7 @@ declare module "next-auth/jwt" {
     isEmailVerified: boolean;
     isListener: boolean;
     isArtist: boolean;
+    profileType?: "artist" | "label";
     artistName?: string;
     accessToken?: string;
     refreshToken?: string;

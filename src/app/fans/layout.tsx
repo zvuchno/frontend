@@ -1,14 +1,11 @@
 //"use client";
+import { AccountNavigation } from "@/features/profile";
 
-import { NavBar } from "@/features/profile";
-
-import { fansProfileRoutes } from "@/shared/constants";
 import { AccentContainer, Title } from "@/shared/ui";
 
 import s from "./layout.module.scss";
 
 const FansLayout = ({ children }: { children: React.ReactNode }) => {
-  // const { data: session, status } = useSession();
   // const router = useRouter();
   // const pathname = usePathname();
 
@@ -31,7 +28,7 @@ const FansLayout = ({ children }: { children: React.ReactNode }) => {
             Личный кабинет
           </Title>
           <section className={s.section}>
-            <NavBar links={fansProfileRoutes} />
+            <AccountNavigation />
             <div className={s.section__content}>{children}</div>
           </section>
         </div>

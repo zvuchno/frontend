@@ -140,7 +140,7 @@
   }
 }
 
-select.input {
+select.input, select.input-calendar {
   border: 1px solid var(--color-text-primary);
   width: 100%;
   font-family: var(--font-feature-mono);
@@ -232,7 +232,7 @@ select.input {
   gap: 4px;
 }
 
-:global(.react-datepicker__input-container input) {
+:global(.react-datepicker__input-container .input-calendar) {
   height: 40px !important;
   padding-inline-start: 40px !important;
   box-sizing: border-box;

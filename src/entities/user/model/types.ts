@@ -26,6 +26,7 @@ export type TCurrentUserResponse = {
   is_email_verified: boolean;
   is_listener: boolean;
   is_artist: boolean;
+  profile_type?: "artist" | "label";
 };
 
 export type TLoginData = {

@@ -49,58 +49,95 @@ export const mainNavRoutes = [
   },
 ] satisfies readonly MainNavRoute[];
 
+//основные разделы кабинета фаната
 export const fansProfileRoutes = [
   {
-    id: "Профиль",
+    id: "fans-profile",
     href: "/fans/profile",
     label: "Профиль",
   },
   {
-    id: "Избранное",
+    id: "fans-library",
+    href: "/fans/releases",
+    label: "Библиотека",
+  },
+  {
+    id: "fans-favorites",
     href: "/fans/favorites",
     label: "Избранное",
   },
   {
-    id: "Заказы",
+    id: "fans-orders",
     href: "/fans/orders",
     label: "Заказы",
   },
+] satisfies readonly MainNavRouteItem[];
+
+//раздел кабинета фаната "стать артистом" (если еще не артист)
+export const fansProfileArtistRoute = [
   {
-    id: "Релизы",
-    href: "/fans/releases",
-    label: "Релизы",
+    id: "become-artist",
+    href: "/fans/change-account-type",
+    label: "Стать артистом",
   },
 ] satisfies readonly MainNavRouteItem[];
 
-export const artistsProfileRoutes = [
-  {
-    id: "profile",
-    href: "/artist/profile",
-    label: "Профиль",
-  },
-  {
-    id: "data",
-    href: "/artist/data",
-    label: "Данные",
-  },
-  {
-    id: "showcase",
-    href: "/artist/showcase",
-    label: "Витрина",
-  },
-  {
-    id: "orders",
-    href: "/artist/orders",
-    label: "Заказы",
-  },
-  {
-    id: "finance",
-    href: "/artist/finance",
-    label: "Финансы",
-  },
-  {
-    id: "settings",
-    href: "/artist/settings",
-    label: "Настройки",
-  },
-] satisfies readonly MainNavRouteItem[];
+//разделы кабинета артиста / лейбла
+export const artistsProfileRoutes = (role: "artist" | "label") => {
+  const mainLinks = [
+    {
+      id: "artist-data",
+      href: "/artist/data",
+      label: "Данные",
+    },
+    {
+      id: "artist-showcase",
+      href: "/artist/showcase",
+      label: "Витрина",
+    },
+    {
+      id: "artist-orders",
+      href: "/artist/orders",
+      label: "Продажи",
+    },
+    {
+      id: "artist-finance",
+      href: "/artist/finance",
+      label: "Финансы",
+    },
+    {
+      id: "artist-settings",
+      href: "/artist/settings",
+      label: "Настройки",
+    },
+  ];
+
+  const profileLink = [
+    {
+      id: "artist-profile",
+      href: "/artist/profile",
+      label: role === "artist" ? "Кабинет артиста" : "Кабинет лейбла",
+    },
+  ];
+
+  const extraLink =
+    role === "label"
+      ? [
+          {
+            id: "artist-label",
+            href: "/artist/label",
+            label: "Артисты",
+          },
+        ]
+      : [
+          {
+            id: "become-artist",
+            href: "/artist/change-account-type",
+            label: "Стать лейблом",
+          },
+        ];
+
+  const artistLinks = profileLink.concat(mainLinks).concat(extraLink);
+
+  return artistLinks satisfies readonly MainNavRouteItem[];
+};
