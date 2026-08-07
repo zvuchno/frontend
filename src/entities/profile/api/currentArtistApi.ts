@@ -20,7 +20,7 @@ export async function getCurrentArtist(token?: string): Promise<CurrentArtistRes
   )
 
   if (!response) {
-    throw new Error('Не удалось получить профиль слушателя');
+    throw new Error('Не удалось получить профиль артиста');
   }
 
   return response;

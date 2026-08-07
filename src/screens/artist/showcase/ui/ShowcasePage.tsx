@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useSession } from "next-auth/react";
 
@@ -21,12 +21,13 @@ import s from "./ShowcasePage.module.scss";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
 import { AddPromocodeModal } from "./components/addPromocodeModal/AddPromocodeModal";
+import { useManagedProfiles } from "@/entities/Label";
 
 export const ShowcasePage = () => {
   const { data, status } = useSession();
-  //const profileType = data?.user.profileType;
+  const profileType = data?.user.profileType;
 
-  const profileType = 'label';
+  //const profileType = 'artist';
 
   const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false);
   const [promoIdForModal, setPromoIdForModal] = useState<number | undefined>(undefined);
@@ -39,21 +40,40 @@ export const ShowcasePage = () => {
   const [availableFilter, setAvailableFilter] = useState<StockFilter>(null);
   // состояние для фильтрации промокодов по типу скидки
   const [typePromoFilter, setTypePromoFilter] = useState<PromoTypeFilter>("ALL");
+  // состояние для фильтрации по артисту
+  const [artistFilter, setArtistFilter] = useState<string>("");
 
   const currentArtistSlug = useShowcaseArtistSlug();
 
+  const managedProfilesQuery = useManagedProfiles(profileType);
+
+  const artistsOptions = useMemo(() => {
+    if (!managedProfilesQuery.data) return [];
+    return managedProfilesQuery.data
+      .map((artist) => ({
+        value: String(artist.id),
+        label: artist.name,
+      }));
+  }, [managedProfilesQuery.data]);
+
   const albumsQuery = useAlbumsInfiniteQuery({
     artistSlug: currentArtistSlug,
+    artist_id: artistFilter,
+    itemType
   });
 
   const merchQuery = useMerchInfiniteQuery({
     artistSlug: currentArtistSlug,
     in_stock: inStockFilter,
+    artist_id: artistFilter,
+    itemType
   });
 
   const promoQuery = usePromocodesInfiniteQuery({
     discount_type: typePromoFilter,
     is_available: availableFilter,
+    artist_id: artistFilter,
+    itemType
   });
 
   const promocodes = promoQuery.data?.pages.flatMap((page) => page.results) ?? [];
@@ -61,7 +81,12 @@ export const ShowcasePage = () => {
   const merch = merchQuery.data?.pages.flatMap((page) => page.results) ?? [];
   const allProducts = [...albums, ...merch];
 
-  const isLoadingData = albumsQuery.isLoading || merchQuery.isLoading || promoQuery.isLoading;
+  const isLoadingData = 
+    albumsQuery.isLoading || 
+    merchQuery.isLoading || 
+    promoQuery.isLoading ||
+    managedProfilesQuery.isLoading;
+
   const error = albumsQuery.error || merchQuery.error || promoQuery.error;
 
   const emptyText = itemType === "promo" ? "нет промокодов" : "нет нет товаров";
@@ -138,6 +163,8 @@ export const ShowcasePage = () => {
     <div className={s.container}>
       <ShowcaseActions
         itemType={itemType}
+        artistOptions={artistsOptions}
+        onChangeArtist={setArtistFilter}
         selectItemType={setItemType}
         filterByStock={(value: "true" | "false" | "none") => {
           if (value === "true") setInStockFilter(true);

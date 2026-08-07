@@ -95,6 +95,8 @@ export type TShowcaseListRequest = {
   token: string | undefined;
   artist: string | null;
   url?: string;
+  artist_id?: string;
+  itemType?: TShowcaseItem;
 };
 
 export type PromoTypeFilter = 'PERCENT' | 'FIXED' | 'ALL';

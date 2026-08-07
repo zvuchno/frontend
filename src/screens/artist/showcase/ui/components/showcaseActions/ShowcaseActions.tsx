@@ -8,6 +8,10 @@ import type { PromoTypeFilter, TShowcaseItem } from "@/entities/Artist";
 import Link from "next/link";
 
 type PopupType = 'promo' | 'product' | null;
+type TOption = {
+  value: string;
+  label: string;
+}
 
 interface ShowcaseActionsProps {
   itemType: TShowcaseItem;
@@ -16,15 +20,19 @@ interface ShowcaseActionsProps {
   filterByStock: (value: 'true' | 'false' | 'none') => void;
   filterByAvailability: (value: 'true' | 'false' | 'none') => void;
   filterByPromoType: (value: PromoTypeFilter) => void;
+  artistOptions?: TOption[];
+  onChangeArtist?: (id: string) => void;
 };
 
 export const ShowcaseActions = ({ 
   itemType,
+  artistOptions,
   selectItemType,
   addPromo, 
   filterByStock,
   filterByAvailability,
-  filterByPromoType
+  filterByPromoType,
+  onChangeArtist
 }: ShowcaseActionsProps) => {
   const [activePopup, setActivePopup] = useState<PopupType>(null);
   const promoPopupRef = useRef<HTMLDivElement | null>(null);
@@ -38,6 +46,8 @@ export const ShowcaseActions = ({
   const [promoType, setPromoType] = useState<string>("");
   // состояние для селекта выбора фильтра для промокода по доступности
   const [availability, setAvailability] = useState<string>("");
+  // состояние для селекта фильтрации по артисту
+  const [artist, setArtist] = useState<string>("");
 
   const closeAll = () => setActivePopup(null);
 
@@ -94,6 +104,11 @@ export const ShowcaseActions = ({
   const toggleProductPopup = () => {
     setActivePopup((prev) => (prev === 'product' ? null : 'product'));
   };
+
+  const handleChangeArtist = (id: string) => {
+    setArtist(id);
+    if (onChangeArtist) onChangeArtist(id);
+  }
 
   const handleChangeTypeProduct = (value: string) => {
     setProductType(value);
@@ -185,6 +200,19 @@ export const ShowcaseActions = ({
       </div>
 
       <div className={s.actions__select}>
+        {artistOptions && artistOptions.length > 0 && (
+          <SelectUI
+            value={artist}
+            onChange={handleChangeArtist}
+            options={artistOptions}
+            placeholder='артист'
+            containerClassName={s.containerOnPersonalAccountPage}
+            selectClassName={s.selectOnPersonalAccountPage}
+            contentClassName={s.itemListOnPersonalAccountPage}
+            optionClassName={s.itemOnPersonalAccountPage}
+            iconClassName={s.selectIcon}
+          />
+        )}
         {itemType === 'promo' ? (
           <SelectUI
             value={promoType}
