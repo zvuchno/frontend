@@ -9,7 +9,8 @@ import { useUpdateArtistLegalData } from "@/entities/Artist";
 import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
 
 import { ButtonUI } from "@/shared/ui";
-import { parseDateFromApi } from "@/shared/utils/formatDate";
+
+//import { parseDateFromApi } from "@/shared/utils/formatDate";
 
 import styles from "./artistFormPersonal.module.scss";
 import { LegalEntityFieldset } from "./components/LegalEntityFieldset/LegalEntityFieldset";
@@ -48,8 +49,6 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
     }
   }, [values, trigger]);
 
-  const birthDay = watch("identity_data.birth_date");
-  const pasportIssueDay = watch("identity_data.passport_issue_date");
   const recipienType = watch("legal_profile.recipient_type");
 
   useEffect(() => {
@@ -58,25 +57,6 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
         message: "Выберите из списка",
       });
   }, [recipienType, setError, clearErrors]);
-
-  useEffect(() => {
-    if (!birthDay || !pasportIssueDay) {
-      return;
-    }
-
-    const compareDates = parseDateFromApi(pasportIssueDay) >= parseDateFromApi(birthDay);
-    if (compareDates === true) {
-      clearErrors("identity_data.passport_issue_date");
-      clearErrors("identity_data.birth_date");
-      return;
-    }
-
-    clearErrors("identity_data.birth_date");
-
-    setError("identity_data.passport_issue_date", {
-      message: "Дата выдачи паспорта не может быть раньше даты рождения",
-    });
-  }, [birthDay, pasportIssueDay, setError, clearErrors]);
 
   const onHandleSubmit = (data: FieldValues) => {
     const currentRecipientType = methods.getValues("legal_profile.recipient_type") ?? null;

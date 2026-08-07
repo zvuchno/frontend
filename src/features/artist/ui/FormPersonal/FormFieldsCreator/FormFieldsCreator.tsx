@@ -22,6 +22,7 @@ export const createFormField = (
   const {
     control,
     formState: { errors },
+    trigger,
   } = methods;
 
   const fieldError = get(errors, field.name) as FieldError;
@@ -66,6 +67,8 @@ export const createFormField = (
                         } else {
                           onChange(null);
                         }
+                        if (field.name === "identity_data.birth_date")
+                          void trigger("identity_data.passport_issue_date");
                       }}
                       onBlur={onBlur}
                     />
