@@ -1,4 +1,4 @@
-import { type FieldPath, type RegisterOptions, type Validate } from "react-hook-form";
+import { type FieldPath, type RegisterOptions } from "react-hook-form";
 
 import { errorsMessages } from "@/shared/constants/formErrorMessages";
 
@@ -11,9 +11,11 @@ export const artistFormPersonalRules = <TFieldValues extends FieldValues>(
   const config = fieldsConfig;
   const rules: RegisterOptions<TFieldValues, FieldPath<TFieldValues>> = {};
 
-  rules.required = errorsMessages.requiredMessage;
-
   const fieldConfig = config[field.name];
+
+  if (field.required === true || fieldConfig?.required === true) {
+    rules.required = errorsMessages.requiredMessage;
+  }
 
   if (!fieldConfig) return {};
 
@@ -36,9 +38,7 @@ export const artistFormPersonalRules = <TFieldValues extends FieldValues>(
     };
   }
   if ("validate" in fieldConfig && fieldConfig.validate) {
-    rules.validate = fieldConfig.validate as
-      | Validate<unknown, FieldValues>
-      | Record<string, Validate<unknown, FieldValues>>;
+    rules.validate = fieldConfig.validate;
   }
 
   return rules;

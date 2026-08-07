@@ -4,6 +4,8 @@ import clsx from "clsx";
 
 import { type TArtistLegalData } from "@/entities/Artist/store/types";
 
+import { FieldErrorMessage } from "@/shared/ui/CustomInput/FieldErrorMessage/FieldErrorMessage";
+
 import styles from "../../artistFormPersonal.module.scss";
 import { issuerCodeFormatter } from "../../utils/issuerCodeFormatter";
 import { type FieldValues, type TArtistFormPersonalField } from "../../utils/types";
@@ -45,12 +47,10 @@ export const FieldWithOptions = ({
         style={{
           height: "40px",
           paddingBlock: "10px",
-          color:
-            !currentValue || currentValue === "individual_temporary"
-              ? "rgba(16, 15, 13, 0.4)"
-              : "inherit",
+          color: "inherit",
+          opacity: "1",
           borderColor:
-            !currentValue || currentValue === "individual_temporary"
+            hasError && (!currentValue || currentValue === "individual_temporary")
               ? "var(--color-primary-blue)"
               : "inherit",
         }}
@@ -76,6 +76,7 @@ export const FieldWithOptions = ({
           </option>
         ))}
       </select>
+      {hasError && <FieldErrorMessage message={"Выберите из списка"} hasError={hasError} />}
     </div>
   );
 };

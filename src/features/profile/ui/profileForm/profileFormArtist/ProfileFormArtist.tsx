@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { type FieldError, get, useFormContext } from "react-hook-form";
 
@@ -52,18 +52,22 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
                 type={field.type}
                 label={field.title}
                 placeholder={field.placeholder}
-                style={field.name !== 'description' ? {
-                  height: "40px",
-                } : {
-                  resize: "none",
-                }}
+                style={
+                  field.name !== "description"
+                    ? {
+                        height: "40px",
+                      }
+                    : {
+                        resize: "none",
+                      }
+                }
                 error={!!fieldError}
                 message={fieldError?.message}
                 disabled={isFieldDisabled}
                 aria-disabled={isFieldDisabled}
                 required={field.required}
                 aria-required={field.required}
-                multiline={field.name === 'description'}
+                multiline={field.name === "description"}
               />
             )}
           </div>

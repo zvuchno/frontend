@@ -15,7 +15,7 @@ export const RegularField = ({
   className,
 }: {
   field: TArtistFormPersonalField;
-  fieldError: FieldError;
+  fieldError?: FieldError;
   className: string;
   methods: UseFormReturn<TArtistLegalData, undefined, TArtistLegalData>;
 }) => {

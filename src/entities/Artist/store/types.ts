@@ -5,7 +5,7 @@ export type TLegalProfile = {
     | "individual_entrepreneur"
     | "legal_entity"
     | "self_employed"
-    | "individual_temporary"; // "individual_temporary" только для промежуточного использования при выборе типа артиста ЮЛ или ФЛ. Делится на "individual_entrepreneur" или  "self_employed" в форме данных артиста
+    | "individual_temporary" | null; // "individual_temporary" только для промежуточного использования при выборе типа артиста ЮЛ или ФЛ. Делится на "individual_entrepreneur" или  "self_employed" в форме данных артиста
   is_veryfied: boolean;
   comment: string;
 };
@@ -14,12 +14,12 @@ export type TIdentityData = {
   first_name: string;
   last_name: string;
   middle_name: string;
-  birth_date: Date;
+  birth_date: string;
   registration_address: string;
   passport_series: string;
   passport_number: string;
   passport_issued_by: string;
-  passport_issue_date: Date;
+  passport_issue_date: string;
   inn: string;
 };
 

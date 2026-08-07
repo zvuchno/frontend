@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import { useGetFinanceReports } from "@/entities/financeReports";
 
+import { formatDate } from "@/shared/utils/formatDate";
+
 import { CalendarPicker } from "../components/CalendarPicker/CalendarPicker";
 import { FinanceStatementList } from "../components/FinanceStatementList/FinanceStatementList";
 import styles from "./ArtistFinance.module.scss";
@@ -14,12 +16,6 @@ export const ArtistFinance = () => {
 
   const { data } = useGetFinanceReports(dateFrom, dateTo, "month");
   const reports = data?.results;
-
-  const formatDate = (date: string) => {
-    if (!date) return "";
-    const [year, month, day] = date.split("-");
-    return `${day}.${month}.${year}`;
-  };
 
   return (
     <section className={styles.artistFinance}>

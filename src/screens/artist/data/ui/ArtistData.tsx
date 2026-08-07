@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { DevTool } from "@hookform/devtools";
 import { useSession } from "next-auth/react";
 
 import { ArtistFormPersonal } from "@/features/artist/";
@@ -19,8 +20,6 @@ export const ArtistData = () => {
   const { status } = useSession();
   const { data, isLoading } = useGetArtistLegalData();
 
-  //const formValues = useMemo(() => toArtistDataFormValues(data), [data]);
-
   const methods = useForm<FieldValues>({
     defaultValues: data,
     mode: "onChange",
@@ -28,25 +27,33 @@ export const ArtistData = () => {
   });
 
   const artistType = data?.legal_profile?.recipient_type;
-  const [isFormOpen, setFormOpen] = useState(!!artistType);
 
-  if (isLoading || status === "loading") return <Loader />;
+  const [isManuallyOpened, setIsManuallyOpened] = useState(false);
 
-  if (!isFormOpen && (!artistType || artistType.length === 0))
+  const isFormOpen = Boolean(artistType) || isManuallyOpened;
+
+  if (isLoading || status === "loading" || status === "unauthenticated") return <Loader />;
+
+  if (!isLoading && !isFormOpen)
     return (
       <div className={styles.formContentWrapper}>
         <h3 className={styles.formTitle}>Данные профиля</h3>
-        <LegalFormSelector
-          onSelect={() => {
-            setFormOpen(true);
-          }}
-        />
+        <FormProvider {...methods}>
+          <LegalFormSelector
+            onSelect={(type?: "legal_entity") => {
+              setIsManuallyOpened(true);
+              if (type) methods.setValue("legal_profile.recipient_type", type);
+            }}
+          />
+          <input type='hidden' {...methods.register("legal_profile.recipient_type")} />
+        </FormProvider>
       </div>
     );
 
   return (
     <FormProvider {...methods}>
-      <ArtistFormPersonal onSubmit={() => {}} values={data} />
+      <ArtistFormPersonal values={data} />
+      <DevTool control={methods.control} />
     </FormProvider>
   );
 };

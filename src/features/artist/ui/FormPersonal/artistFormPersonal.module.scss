@@ -140,7 +140,8 @@
   }
 }
 
-select.input, select.input-calendar {
+select.input,
+select.input-calendar {
   border: 1px solid var(--color-text-primary);
   width: 100%;
   font-family: var(--font-feature-mono);
@@ -291,6 +292,16 @@ select:invalid {
   & > :first-child {
     margin-block-end: 4px;
   }
+}
+
+.fieldsetWrapper {
+  border: none;
+}
+
+.fieldsetWrapper:disabled input,
+.fieldsetWrapper:disabled select {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
 }
 
 .field {

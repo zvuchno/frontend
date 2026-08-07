@@ -8,12 +8,14 @@ import { artistPasportFields } from "../../utils/constants";
 import { type FieldValues } from "../../utils/types";
 
 export const PassportFieldset = ({
+  disabled,
   methods,
 }: {
+  disabled: boolean;
   methods: UseFormReturn<FieldValues, undefined, FieldValues>;
 }) => (
   <fieldset className={clsx(styles.formContent, styles.passportlContent)}>
     <legend className={styles.visuallyHidden}>Паспортные данные</legend>
-    {artistPasportFields.map((field, index) => createFormField(field, index, methods))}
+    {artistPasportFields.map((field, index) => createFormField(field, index, methods, disabled))}
   </fieldset>
 );

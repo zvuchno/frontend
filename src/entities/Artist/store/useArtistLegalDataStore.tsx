@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { parseDateFromApi } from "@/shared/utils/formatDate";
+//import { parseDateFromApi } from "@/shared/utils/formatDate";
 
 import { getArtistLegalData, updateArtistLegalData } from "./api";
 import { type TArtistLegalData, type TArtistLegalDataForApi } from "./types";
@@ -18,7 +18,7 @@ export interface ArtistLegalDataStoreProps {
   clearStore: () => void;
 }
 
-const parseLegalDataDate = (value: Date | string | null | undefined) => {
+/*const parseLegalDataDate = (value: Date | string | null | undefined) => {
   if (value instanceof Date) {
     return Number.isNaN(value.getTime()) ? undefined : value;
   }
@@ -30,9 +30,9 @@ const parseLegalDataDate = (value: Date | string | null | undefined) => {
   const date = parseDateFromApi(value);
 
   return Number.isNaN(date.getTime()) ? undefined : date;
-};
+};*/
 
-const prepareArtistLegalData = (data: Partial<TArtistLegalData>): Partial<TArtistLegalData> => ({
+/*const prepareArtistLegalData = (data: Partial<TArtistLegalData>): Partial<TArtistLegalData> => ({
   ...data,
   identity_data: data.identity_data
     ? {
@@ -41,7 +41,7 @@ const prepareArtistLegalData = (data: Partial<TArtistLegalData>): Partial<TArtis
         passport_issue_date: parseLegalDataDate(data.identity_data.passport_issue_date),
       }
     : data.identity_data,
-});
+});*/
 
 export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()((set) => ({
   artistLegalData: null,
@@ -54,8 +54,8 @@ export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()((set)
     set({ isLoading: true, error: null });
     try {
       const data = await getArtistLegalData();
-      const preparedData = prepareArtistLegalData(data);
-      set({ artistLegalData: preparedData, isLoading: false });
+      //const preparedData = prepareArtistLegalData(data);
+      set({ artistLegalData: data, isLoading: false });
     } catch (error) {
       set({ error: (error as Error).message, isLoading: false });
     }
@@ -65,11 +65,11 @@ export const useArtistLegalDataStore = create<ArtistLegalDataStoreProps>()((set)
     set({ isLoading: true, error: null });
     try {
       const updatedData = await updateArtistLegalData(newData);
-      const preparedData = prepareArtistLegalData(updatedData);
+      //const preparedData = prepareArtistLegalData(updatedData);
       set((state) => ({
         artistLegalData: state.artistLegalData
-          ? { ...state.artistLegalData, ...preparedData }
-          : preparedData,
+          ? { ...state.artistLegalData, ...updatedData }
+          : updatedData,
         isLoading: false,
       }));
     } catch (error) {

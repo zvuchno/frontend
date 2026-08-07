@@ -8,12 +8,14 @@ import { artistPersonalFields } from "../../utils/constants";
 import { type FieldValues } from "../../utils/types";
 
 export const PersonalFieldset = ({
+  disabled,
   methods,
 }: {
+  disabled: boolean;
   methods: UseFormReturn<FieldValues, undefined, FieldValues>;
 }) => (
   <fieldset className={clsx(styles.formContent, styles.personalContent)}>
     <legend className={styles.visuallyHidden}>Персональная информация</legend>
-    {artistPersonalFields.map((field, index) => createFormField(field, index, methods))}
+    {artistPersonalFields.map((field, index) => createFormField(field, index, methods, disabled))}
   </fieldset>
 );

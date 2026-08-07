@@ -19,7 +19,7 @@ export type TArtistFormPersonalProps = {
   control?: Control<FieldValues>;
   values?: Partial<FieldValues>;
   errors?: Partial<FieldErrors<FieldValues>>;
-  onSubmit: SubmitHandler<TArtistLegalDataForApi>;
+  onSubmit?: SubmitHandler<TArtistLegalDataForApi>;
   onError?: SubmitErrorHandler<FieldValues>;
 };
 

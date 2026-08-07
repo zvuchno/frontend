@@ -47,3 +47,5 @@ export {
 } from "./model/useShowcase";
 
 export { useGetArtistLegalData } from "./model/useGetArtistLegalData";
+export { useGetRecipientTypes } from "./model/useGetRecipientTypes";
+export { useUpdateArtistLegalData } from "./model/useUpdateArtistLegalData";

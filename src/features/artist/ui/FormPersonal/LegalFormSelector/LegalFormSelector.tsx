@@ -4,12 +4,12 @@ import { ButtonUI } from "@/shared/ui";
 
 import styles from "./LegalFormSelector.module.scss";
 
-export const LegalFormSelector = ({ onSelect }: { onSelect: () => void }) => {
-  //const { setValue } = useFormContext();
+export const LegalFormSelector = ({ onSelect }: { onSelect: (type?: "legal_entity") => void }) => {
+
   const setTemporaryType = useArtistLegalDataStore();
 
-  const handleSelect = (type: "legal_entity" | "individual_temporary") => {
-    //individual_temporary - промежуточное значение для открытия нужной формы ЮЛ/ФЛ, отсуттвует в бэкенде
+  const handleSelect = (type?: "legal_entity" | "individual_temporary") => {
+    //individual_temporary - промежуточное значение для открытия нужной формы ЮЛ/ФЛ, отсутствует в бэкенде
     setTemporaryType.setArtistLegalData({ legal_profile: { recipient_type: type } });
   };
 
@@ -20,7 +20,7 @@ export const LegalFormSelector = ({ onSelect }: { onSelect: () => void }) => {
         variant='primary'
         onClick={() => {
           handleSelect("legal_entity");
-          onSelect();
+          onSelect("legal_entity");
         }}
       >
         Юридическое лицо
