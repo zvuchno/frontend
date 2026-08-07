@@ -51,4 +51,34 @@
   flex-direction: column;
   gap: 20px;
   list-style: none; 
+  max-height: 700px;
+  overflow-y: auto;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  background-color: var(--color-bg-secondary);
+  border-radius: 36px;
+  border: none;
+  padding: 10px 16px;
+  font-family: var(--font-feature-mono);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -0.06em;
+  color: var(--color-text-inverse);
+  padding: 10px 20px;
+  background-color: var(--color-bg-secondary);
+  border-radius: 36px;
+  align-self: center;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-text-accent-blue);
+  }
 }

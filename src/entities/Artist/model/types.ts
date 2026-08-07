@@ -6,6 +6,7 @@ export type TShowcaseAlbum = {
   id: number;
   sku: string | null;
   name: string;
+  artist_name: string;
   price: string;
   cover_image: string | null;
   is_published: boolean;
@@ -16,6 +17,7 @@ export type TShowcaseMerch = {
   id: number;
   sku: string | null;
   name: string;
+  artist_name: string;
   description: string;
   price: string;
   stock: number;
@@ -27,6 +29,7 @@ export type TShowcasePromocode = {
   id: number;
   artist: number;
   code: string;
+  artist_name: string;
   discount_value: string;
   discount_type: "PERCENT" | "FIXED";
   start_at: string | null;

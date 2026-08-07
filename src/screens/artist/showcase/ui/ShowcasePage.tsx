@@ -24,9 +24,9 @@ import { AddPromocodeModal } from "./components/addPromocodeModal/AddPromocodeMo
 
 export const ShowcasePage = () => {
   const { data, status } = useSession();
-  const profileType = data?.user.profileType;
+  //const profileType = data?.user.profileType;
 
-  //const profileType = 'artist';
+  const profileType = 'label';
 
   const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false);
   const [promoIdForModal, setPromoIdForModal] = useState<number | undefined>(undefined);
@@ -76,6 +76,28 @@ export const ShowcasePage = () => {
           : itemType === "promo"
             ? promocodes
             : allProducts;
+
+  const hasMorePromo = itemType === 'promo' && promoQuery.hasNextPage;
+
+  const hasMoreProducts = (itemType === 'products' || itemType === 'album' || itemType === 'merch')
+    && (albumsQuery.hasNextPage || merchQuery.hasNextPage);
+
+  const loadMore = async () => {
+    if (itemType === 'promo') {
+      await promoQuery.fetchNextPage();
+    } else {
+      // Подгружаем и альбомы, и мерч одновременно
+      await Promise.all([
+        albumsQuery.fetchNextPage(),
+        merchQuery.fetchNextPage(),
+      ]);
+    }
+  };
+
+  const isLoadingMore =
+    (itemType === 'promo' && promoQuery.isFetchingNextPage) ||
+    ((itemType === 'products' || itemType === 'album' || itemType === 'merch') 
+      && (albumsQuery.isFetchingNextPage || merchQuery.isFetchingNextPage));
 
   const handleEditPromo = (id: number) => {
     setPromoIdForModal(id);
@@ -138,6 +160,9 @@ export const ShowcasePage = () => {
           items={currentItems}
           profileType={profileType}
           onEditPromo={handleEditPromo}
+          hasMoreData={(itemType === 'promo' ? hasMorePromo : hasMoreProducts)}
+          onLoadMore={loadMore}
+          isLoadingMore={isLoadingMore}
         />
       ) : (
         <div>{emptyText}</div>

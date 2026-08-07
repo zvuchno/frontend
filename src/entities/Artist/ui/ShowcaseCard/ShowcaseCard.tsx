@@ -129,7 +129,7 @@ export const ShowcaseCard = ({
           )}
         </div>
         {profileType === 'label' && (
-          <Text className={clsx(s.text, s.title)}>Имя Артиста</Text>
+          <Text className={clsx(s.text, s.title)}>{item.artist_name}</Text>
         )}
         <Text className={clsx(s.text, s.title, {[s.wide]: profileType === 'artist'})}>
           {item.name}
@@ -151,7 +151,7 @@ export const ShowcaseCard = ({
           )}
         </div>
         {profileType === 'label' && (
-          <Text className={clsx(s.text, s.title)}>Имя Артиста</Text>
+          <Text className={clsx(s.text, s.title)}>{item.artist_name}</Text>
         )}
         <Text className={clsx(s.text, s.title, {[s.wide]: profileType === 'artist'})}>
           {item.name}
@@ -184,7 +184,7 @@ export const ShowcaseCard = ({
           {item.code}
         </Text>
         {profileType === 'label' && (
-          <Text className={clsx(s.text, s.title, s.wide)}>Имя АртистаИмя Артиста</Text>
+          <Text className={clsx(s.text, s.title, s.wide)}>{item.artist_name}</Text>
         )}
         <Text className={s.text}>{discount}</Text>
         <Text className={s.text}>{period}</Text>

@@ -21,6 +21,9 @@ interface ShowcaseItemsListProps {
   itemType: TShowcaseItem;
   items: TShowcasePromocode[] | (TShowcaseAlbum | TShowcaseMerch)[];
   profileType: "artist" | "label" | undefined;
+  hasMoreData: boolean;
+  isLoadingMore : boolean;
+  onLoadMore: () => Promise<void>;
   onEditPromo: (id: number) => void;
 };
 
@@ -28,6 +31,9 @@ export const ShowcaseItemsList = ({
   itemType, 
   items,
   profileType,
+  hasMoreData,
+  onLoadMore,
+  isLoadingMore,
   onEditPromo
 }: ShowcaseItemsListProps) => {
   const toggleAlbumMutation = useUpdateAlbum();
@@ -137,6 +143,20 @@ export const ShowcaseItemsList = ({
             onEditPromo={onEditPromo}
           />
         ))}
+        {hasMoreData && (
+          <div className={s.buttonWrapper}>
+            <button
+              type="button"
+              className={s.button}
+              onClick={() => {
+                onLoadMore().catch(console.error)
+              }}
+              disabled={isLoadingMore}
+            >
+              {isLoadingMore ? "загрузка..." : "смотреть ещё"}
+            </button>
+          </div>
+        )}
       </ul>
     </div>
   )
