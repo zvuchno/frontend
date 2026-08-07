@@ -23,7 +23,10 @@ import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsL
 import { AddPromocodeModal } from "./components/addPromocodeModal/AddPromocodeModal";
 
 export const ShowcasePage = () => {
-  const { status } = useSession();
+  const { data, status } = useSession();
+  const profileType = data?.user.profileType;
+
+  //const profileType = 'artist';
 
   const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false);
   const [promoIdForModal, setPromoIdForModal] = useState<number | undefined>(undefined);
@@ -61,7 +64,7 @@ export const ShowcasePage = () => {
   const isLoadingData = albumsQuery.isLoading || merchQuery.isLoading || promoQuery.isLoading;
   const error = albumsQuery.error || merchQuery.error || promoQuery.error;
 
-  const emptyText = itemType === "album" || itemType === "merch" ? "нет товаров" : "нет промокодов";
+  const emptyText = itemType === "promo" ? "нет промокодов" : "нет нет товаров";
 
   const currentItems =
     itemType === "products"
@@ -77,13 +80,9 @@ export const ShowcasePage = () => {
   const handleEditPromo = (id: number) => {
     setPromoIdForModal(id);
     setIsPromoModalOpen(true);
-  }
+  };
 
-  if (!currentArtistSlug || status === "loading") {
-    return <Loader />;
-  }
-
-  if (isLoadingData) {
+  if (!currentArtistSlug || status === "loading" || isLoadingData) {
     return <Loader />;
   }
 
@@ -118,15 +117,15 @@ export const ShowcasePage = () => {
       <ShowcaseActions
         itemType={itemType}
         selectItemType={setItemType}
-        filterByStock={(value: "true" | "false" | "") => {
+        filterByStock={(value: "true" | "false" | "none") => {
           if (value === "true") setInStockFilter(true);
           else if (value === "false") setInStockFilter(false);
           else setInStockFilter(null);
         }}
-        filterByAvailability={(value: "true" | "false" | "") => {
+        filterByAvailability={(value: "true" | "false" | "none") => {
           if (value === "true") setAvailableFilter(true);
-          else if (value === "false") setInStockFilter(false);
-          else setInStockFilter(null);
+          else if (value === "false") setAvailableFilter(false);
+          else setAvailableFilter(null);
         }}
         filterByPromoType={(value: PromoTypeFilter) => {
           setTypePromoFilter(value);
@@ -137,6 +136,7 @@ export const ShowcasePage = () => {
         <ShowcaseItemsList 
           itemType={itemType}
           items={currentItems}
+          profileType={profileType}
           onEditPromo={handleEditPromo}
         />
       ) : (

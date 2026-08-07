@@ -20,12 +20,14 @@ import clsx from "clsx";
 interface ShowcaseItemsListProps {
   itemType: TShowcaseItem;
   items: TShowcasePromocode[] | (TShowcaseAlbum | TShowcaseMerch)[];
+  profileType: "artist" | "label" | undefined;
   onEditPromo: (id: number) => void;
 };
 
 export const ShowcaseItemsList = ({ 
   itemType, 
   items,
+  profileType,
   onEditPromo
 }: ShowcaseItemsListProps) => {
   const toggleAlbumMutation = useUpdateAlbum();
@@ -75,14 +77,27 @@ export const ShowcaseItemsList = ({
   return (
     <div className={s.content}>
       <Title Tag='h4' className={s.title}>
-        {itemType === 'products' ? 'Товары' : 'Промокоды'}
+        {itemType === 'promo' ? 'Промокоды' : 'Товары'}
       </Title>
 
       <div className={s.heading}>
-        <Text className={s.heading__text}>{isProduct ? "Фото" : "Промокод"}</Text>
+        <Text 
+          className={clsx(s.heading__text, {
+            [s.heading__text_wide]: profileType === 'artist' && isPromo
+          })}
+        >
+          {isProduct ? "Фото" : "Промокод"}
+        </Text>
+        {profileType === 'label' && (
+          <Text 
+            className={clsx(s.heading__text, {[s.heading__text_wide]: isPromo})}
+          >
+            Артист
+          </Text>
+        )}
         <Text
           className={clsx(s.heading__text, {
-            [s.heading__text_span]: isProduct,
+            [s.heading__text_wide]: isProduct && profileType === 'artist',
           })}
         >
           {isProduct ? "Наименование" : "Скидка"}
@@ -91,16 +106,16 @@ export const ShowcaseItemsList = ({
         <Text className={s.heading__text}>{isProduct ? "Цена" : "Количество"}</Text>
         <Text
           className={clsx(
-            s.heading__text,
-            { [s.heading__text_rightAligned]: isPromo },
-            { [s.heading__text_leftAligned]: isPromo }
-          )}
+            s.heading__text, { 
+              [s.heading__text_rightAligned]: isPromo && profileType === 'artist',
+              [s.heading__text_leftAligned]: isPromo && profileType === 'label'
+          })}
         >
           {isProduct ? "Остаток" : "Видимость"}
         </Text>
         {isProduct && (
           <Text
-            className={clsx(s.heading__text, s.heading__text_span, s.heading__text_leftAligned)}
+            className={clsx(s.heading__text, s.heading__text_wide, s.heading__text_leftAligned)}
           >
             Видимость
           </Text>
@@ -112,6 +127,7 @@ export const ShowcaseItemsList = ({
           <ShowcaseCard
             key={item.id}
             item={item}
+            profileType={profileType}
             onToggleAlbumVisibility={handleToggleAlbumVisibility}
             onToggleMerchVisibility={handleToggleMerchVisibility}
             onTogglePromoVisibility={handleTogglePromoVisibility}

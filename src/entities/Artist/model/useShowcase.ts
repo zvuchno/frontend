@@ -74,7 +74,8 @@ export function useAlbumsInfiniteQuery({
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,
-    enabled: !!token && !!artistSlug
+    enabled: !!token && !!artistSlug,
+    staleTime: 10 * 10 * 1000,
   });
 };
 
@@ -93,7 +94,7 @@ export function useMerchInfiniteQuery({
     Error,
     InfiniteData<PaginatedStoreResponse<TShowcaseMerch>>
   >({
-    queryKey: ['artist', 'showcase', 'merch'],
+    queryKey: ['artist', 'showcase', 'merch', artistSlug, in_stock],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
       if (url) return getShowcaseMerchList({
@@ -109,7 +110,8 @@ export function useMerchInfiniteQuery({
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,
-    enabled: !!token && !!artistSlug
+    enabled: !!token && !!artistSlug,
+    staleTime: 10 * 10 * 1000,
   });
 };
 
@@ -128,7 +130,7 @@ export function usePromocodesInfiniteQuery({
     Error,
     InfiniteData<PaginatedStoreResponse<TShowcasePromocode>>
   >({
-    queryKey: ["artist", "showcase", "promo"],
+    queryKey: ["artist", "showcase", "promo", discount_type, is_available],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
       if (url) return getShowcasePromocodes({
@@ -144,6 +146,7 @@ export function usePromocodesInfiniteQuery({
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,
     enabled: !!token,
+    staleTime: 10 * 10 * 1000,
   })
 };
 

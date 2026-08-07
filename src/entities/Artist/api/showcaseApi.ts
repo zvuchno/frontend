@@ -66,7 +66,7 @@ export async function getShowcaseMerchList({
     method: "GET",
   }, token);
 
-  if (!response) throw new Error('Не удалось получить альбомы')
+  if (!response) throw new Error('Не удалось получить мерч')
 
   return response;
 };
@@ -84,7 +84,7 @@ export async function getShowcasePromocodes({
   }
 
   if (is_available !== null && is_available !== undefined) {
-    params.append('in_stock', String(is_available));
+    params.append('is_available', String(is_available));
   }
 
   const mainUrl = `${baseUrl}/v1/store/promocodes/?limit=15&${params.toString()}`;
@@ -95,7 +95,7 @@ export async function getShowcasePromocodes({
     method: "GET",
   }, token);
 
-  if (!response) throw new Error('Не удалось получить альбомы')
+  if (!response) throw new Error('Не удалось получить промокоды')
 
   return response;
 };

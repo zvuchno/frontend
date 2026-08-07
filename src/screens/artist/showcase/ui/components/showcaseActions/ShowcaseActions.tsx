@@ -13,8 +13,8 @@ interface ShowcaseActionsProps {
   itemType: TShowcaseItem;
   selectItemType: (item: TShowcaseItem) => void;
   addPromo: () => void; // ссылка на форму
-  filterByStock: (value: 'true' | 'false' | '') => void;
-  filterByAvailability: (value: 'true' | 'false' | '') => void;
+  filterByStock: (value: 'true' | 'false' | 'none') => void;
+  filterByAvailability: (value: 'true' | 'false' | 'none') => void;
   filterByPromoType: (value: PromoTypeFilter) => void;
 };
 
@@ -33,11 +33,11 @@ export const ShowcaseActions = ({
   // состояние для селекта выбора отображаемого товара: все, мерч, альбомы
   const [productType, setProductType] = useState<string>("");
   // состояние для селекта выбора фильтра для мерча по наличию
-  const [stockFilter, setStockFilter] = useState<'true' | 'false' | ''>('');
+  const [stockFilter, setStockFilter] = useState<string>("");
   // состояние для селекта выбора типа скидки промокода
   const [promoType, setPromoType] = useState<string>("");
   // состояние для селекта выбора фильтра для промокода по доступности
-  const [availability, setAvailability] = useState<'true' | 'false' | ''>('');
+  const [availability, setAvailability] = useState<string>("");
 
   const closeAll = () => setActivePopup(null);
 
@@ -106,13 +106,13 @@ export const ShowcaseActions = ({
   };
 
   const hamdleChangeStock = (value: string) => {
-    setStockFilter(value as 'true' | 'false' | '');
-    filterByStock(value as 'true' | 'false' | '');
+    setStockFilter(value as 'true' | 'false' | 'none');
+    filterByStock(value as 'true' | 'false' | 'none');
   };
 
   const handleChangeAvailability = (value: string) => {
-    setAvailability(value as 'true' | 'false' | '');
-    filterByAvailability(value as 'true' | 'false' | '');
+    setAvailability(value as 'true' | 'false' | 'none');
+    filterByAvailability(value as 'true' | 'false' | 'none');
   };
 
   return (
@@ -149,7 +149,10 @@ export const ShowcaseActions = ({
             <button 
               type='button' 
               className={s.popup__item}
-              onClick={() => selectItemType('products')}
+              onClick={() => { 
+                selectItemType('products');
+                closeAll();
+              }}
             >
               все товары
             </button>
@@ -170,7 +173,10 @@ export const ShowcaseActions = ({
             <button 
               type='button' 
               className={s.popup__item} 
-              onClick={() => selectItemType('promo')}
+              onClick={() => {
+                selectItemType('promo');
+                closeAll();
+              }}
             >
               все промокоды
             </button>
@@ -184,8 +190,8 @@ export const ShowcaseActions = ({
             value={promoType}
             onChange={handleChangeTypePromo}
             options={[
-              { value: "ALL", label: "все" },
-              { value: "PERСENT", label: "процент" },
+              { value: "ALL", label: "все типы" },
+              { value: "PERCENT", label: "процент" },
               { value: "FIXED", label: "фиксированная" },
             ]}
             placeholder='по типу скидки'
@@ -218,34 +224,34 @@ export const ShowcaseActions = ({
             value={availability}
             onChange={handleChangeAvailability}
             options={[
-              { value: "", label: "все" },
-              { value: "true", label: "доступен" },
-              { value: "false", label: "не доступен" },
+              { value: "none", label: "все" },
+              { value: "true", label: "доступны" },
+              { value: "false", label: "не доступны" },
             ]}
-            placeholder='наличие'
+            placeholder='по доступности'
             containerClassName={s.containerOnPersonalAccountPage}
             selectClassName={s.selectOnPersonalAccountPage}
             contentClassName={s.itemListOnPersonalAccountPage}
             optionClassName={s.itemOnPersonalAccountPage}
             iconClassName={s.selectIcon}
           />
-        ) : (
+        ) : productType === 'merch' ? (
           <SelectUI
             value={stockFilter}
             onChange={hamdleChangeStock}
             options={[
-              { value: "", label: "все" },
+              { value: "none", label: "все" },
               { value: "true", label: "в наличии" },
               { value: "false", label: "закончились" },
             ]}
-            placeholder='наличие'
+            placeholder='по наличию'
             containerClassName={s.containerOnPersonalAccountPage}
             selectClassName={s.selectOnPersonalAccountPage}
             contentClassName={s.itemListOnPersonalAccountPage}
             optionClassName={s.itemOnPersonalAccountPage}
             iconClassName={s.selectIcon}
           />
-        )}
+        ) : null}
       </div>
     </div>
   )

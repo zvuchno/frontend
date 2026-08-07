@@ -19,6 +19,16 @@ const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
 
 const formatTotalPrice = (totalPrice: number) => totalPriceFormatter.format(totalPrice);
 
+const percentFormatter = new Intl.NumberFormat('ru-RU', {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+});
+
+const formatPercent = (value: number | null | undefined): string => {
+  if (value == null) return '';
+  return percentFormatter.format(value);
+};
+
 const formatter = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit' });
 
 const formatDateRangeIntl = (startAt?: string | null, endAt?: string  | null) => {
@@ -30,6 +40,7 @@ const formatDateRangeIntl = (startAt?: string | null, endAt?: string  | null) =>
 
 export const ShowcaseCard = ({
   item,
+  profileType,
   onToggleAlbumVisibility,
   onToggleMerchVisibility,
   onTogglePromoVisibility,
@@ -66,14 +77,21 @@ export const ShowcaseCard = ({
     params.append('id', encodeURIComponent(id));
 
     return (
-    <div className={clsx(s.actions, {[s.actions_span]: type === 'promo'})}>
-      <label className={s.checkboxContainer}>
+    <div 
+      className={clsx(s.actions, {
+        [s.actions_wide]: type === 'promo',
+        [s.actions_full]: profileType === 'label' && type === 'promo'
+      })}
+    >
+      <label className={s.checkboxContainer} 
+        aria-label="Переключить видимость"
+        title="Переключить видимость"
+      >
         <input
           type="checkbox"
           className={s.visuallyHidden}
           checked={isChecked}
           onChange={(e) => void handleToggleVisibility(e, type)}
-          aria-label="переключение видимости"
         />
         <span className={s.checkboxMark}></span>
       </label>
@@ -82,6 +100,8 @@ export const ShowcaseCard = ({
           className={s.editButton} 
           href={editType === 'promo' ? '' : `/artist/showcase/upload/${editType}/?${params.toString()}`}
           onClick={editType === 'promo' ? handleEditPromoClick : undefined}
+          aria-label="Редактировать"
+          title="Редактировать"
         >
           {EditIcon()}
         </Link>
@@ -89,6 +109,8 @@ export const ShowcaseCard = ({
           type="button" 
           className={s.deleteButton} 
           onClick={() => void handleDeleteItem(type)}
+          aria-label="Удалить"
+          title="Удалить"
         >
           {DeleteIcon()}
         </button>
@@ -106,11 +128,14 @@ export const ShowcaseCard = ({
             <img src={item.cover_image} alt={item.name} loading='lazy' />
           )}
         </div>
-        <Text className={clsx(s.text, s.name)}>
+        {profileType === 'label' && (
+          <Text className={clsx(s.text, s.title)}>Имя Артиста</Text>
+        )}
+        <Text className={clsx(s.text, s.title, {[s.wide]: profileType === 'artist'})}>
           {item.name}
         </Text>
         <Text className={s.text}>{item.sku}</Text>
-        <Text className={s.text}>{item.price}</Text>
+        <Text className={s.text}>{formatTotalPrice(Number(item.price))}</Text>
         <Text className={s.text}>-</Text>
         {renderActions('album', item.is_single ? 'single' : 'album', item.is_published)}
       </div>
@@ -125,11 +150,14 @@ export const ShowcaseCard = ({
             <img src={item.main_image} alt={item.name} loading='lazy' />
           )}
         </div>
-        <Text className={clsx(s.text, s.name)}>
+        {profileType === 'label' && (
+          <Text className={clsx(s.text, s.title)}>Имя Артиста</Text>
+        )}
+        <Text className={clsx(s.text, s.title, {[s.wide]: profileType === 'artist'})}>
           {item.name}
         </Text>
         <Text className={s.text}>{item.sku ? item.sku : '-'}</Text>
-        <Text className={s.text}>{item.price}</Text>
+        <Text className={s.text}>{formatTotalPrice(Number(item.price))}</Text>
         <Text className={s.text}>{item.stock} шт</Text>
         {renderActions('merch', 'merch', item.is_published)}
       </div>
@@ -139,7 +167,7 @@ export const ShowcaseCard = ({
   if (isPromo(item)) {
     let discount: string = '';
     if (item?.discount_type === 'PERCENT') {
-      discount = `${item.discount_value}%`;
+      discount = `${formatPercent(Number(item.discount_value))} %`;
     } else if (item?.discount_type === 'FIXED') {
       discount = formatTotalPrice(Number(item?.discount_value));
     }
@@ -152,9 +180,12 @@ export const ShowcaseCard = ({
     const period = formatDateRangeIntl(item?.start_at, item?.end_at);
     return (
       <div className={s.card}>
-        <Text className={clsx(s.text, s.name)}>
+        <Text className={clsx(s.text, s.title, {[s.wide]: profileType === 'artist'})}>
           {item.code}
         </Text>
+        {profileType === 'label' && (
+          <Text className={clsx(s.text, s.title, s.wide)}>Имя АртистаИмя Артиста</Text>
+        )}
         <Text className={s.text}>{discount}</Text>
         <Text className={s.text}>{period}</Text>
         <Text className={s.text}>{usageText}</Text>

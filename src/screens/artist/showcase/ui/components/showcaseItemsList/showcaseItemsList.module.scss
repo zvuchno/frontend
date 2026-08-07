@@ -31,16 +31,17 @@
     color: var(--color-bg-secondary);
     text-align: center;
 
-    &_span {
+    &_wide {
       grid-column: span 2;
     }
 
-    &_rightAligned {
-      grid-column: 6 / -1;
+    &_leftAligned {
+      grid-column: 7 / -1;
+      justify-self: start;
     }
 
-    &_leftAligned {
-      justify-self: start;
+    &_rightAligned {
+      justify-self: end;
     }
   }
 }
