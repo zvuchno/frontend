@@ -248,9 +248,9 @@ select.input-calendar {
   border-color: var(--color-primary-blue) !important;
 }
 
-:global(.react-datepicker__calendar-icon) {
+:global(.react-datepicker__input-container .react-datepicker__calendar-icon) {
   margin-inline-end: 5px !important;
-  height: 100%;
+  height: 100% !important;
   padding-block: 0 !important;
 }
 
