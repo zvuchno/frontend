@@ -28,7 +28,7 @@ export const PhoneField = ({
     value={value}
     type='text'
     inputMode='tel'
-    unmask={true}
+    unmask={false}
     onAccept={(val) => onChange(val)}
     onBlur={onBlur}
     inputRef={ref}

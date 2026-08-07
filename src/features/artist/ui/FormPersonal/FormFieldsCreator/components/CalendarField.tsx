@@ -12,11 +12,13 @@ export const CalendarField = ({
   fieldError,
   value,
   onChange,
+  onBlur,
 }: {
   field: TArtistFormPersonalField;
   fieldError?: FieldError;
   value: Date | null;
   onChange: (date: Date | null) => void;
+  onBlur: () => void;
 }) => (
   <DatePicker
     id={`${field.row}.${field.column}`}
@@ -28,6 +30,7 @@ export const CalendarField = ({
     dateFormat='dd.MM.yyyy'
     locale={ru}
     selected={value}
+    onBlur={onBlur}
     onChange={(date: Date | null) => onChange(date)}
     placeholderText='дд.мм.гггг'
     peekNextMonth
@@ -35,5 +38,9 @@ export const CalendarField = ({
     showYearDropdown
     dropdownMode='select'
     showIcon
+    maxDate={new Date()}
+    onKeyDown={(e) => {
+      e.preventDefault();
+    }}
   />
 );

@@ -1,5 +1,6 @@
 import type { Validate } from "react-hook-form";
 
+import { validateDateInPast } from "@/shared/utils/validateDateInPast";
 import { validatePhone } from "@/shared/utils/validatePhone";
 
 import type { FieldName, FieldValues } from "../utils/types";
@@ -11,7 +12,7 @@ export const fieldsConfig: Record<
     minLength?: number;
     maxLength?: number;
     pattern?: RegExp;
-    validate?: Validate<string | undefined, FieldValues>;
+    validate?: Validate<unknown, FieldValues>;
   }
 > = {
   "company_data.company_name": {
@@ -41,7 +42,7 @@ export const fieldsConfig: Record<
   },
   "identity_data.birth_date": {
     required: true,
-    validate: (value: unknown) => value instanceof Date && !isNaN(value.getTime()),
+    validate: (value, fields) => validateDateInPast(value, fields),
   },
   "identity_data.registration_address": {
     required: true,
@@ -70,7 +71,7 @@ export const fieldsConfig: Record<
   },
   "identity_data.passport_issue_date": {
     required: true,
-    validate: (value: unknown) => value instanceof Date && !isNaN(value.getTime()),
+    validate: (value, fields) => validateDateInPast(value, fields),
   },
   "identity_data.inn": {
     required: true,

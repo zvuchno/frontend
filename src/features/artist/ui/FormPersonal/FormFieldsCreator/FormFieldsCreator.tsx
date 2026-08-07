@@ -2,6 +2,8 @@ import { Controller, type FieldError, get, type useFormContext } from "react-hoo
 
 import clsx from "clsx";
 
+import { parseServerDate } from "@/shared/utils/formatDate";
+
 import styles from "../artistFormPersonal.module.scss";
 import { type FieldValues, type TArtistFormPersonalField } from "../utils/types";
 import { artistFormPersonalRules } from "../utils/validation";
@@ -14,7 +16,8 @@ import { RegularField } from "./components/RegularField";
 export const createFormField = (
   field: TArtistFormPersonalField,
   fieldSet: number,
-  methods: ReturnType<typeof useFormContext<FieldValues>>
+  methods: ReturnType<typeof useFormContext<FieldValues>>,
+  disabled: boolean
 ) => {
   const {
     control,
@@ -28,38 +31,57 @@ export const createFormField = (
       {field.type === "date" || field.type === "tel" ? (
         <Controller
           control={control}
+          shouldUnregister={false}
           name={field.name}
           rules={artistFormPersonalRules(field) as Record<string, undefined>}
           render={({ field: { onChange, value, name, ref, onBlur } }) => {
-            const fieldError = get(errors, name) as FieldError | undefined;
+            //const isFieldDirty = Boolean(get(dirtyFields, name));
+            //const isFieldTouched = Boolean(get(touchedFields, name));
+
+            const showError = !disabled;
+            const currentFieldError = get(errors, name) as FieldError | undefined;
+            const dateValue = field.type === "date" ? parseServerDate(value) : null;
             return (
               <div
                 style={{ position: "relative" }}
                 className={clsx(
                   "field",
-                  { ["error"]: !!fieldError },
+                  { ["error"]: showError && !!currentFieldError },
                   { ["calendar"]: field.type === "date" }
                 )}
               >
                 <FieldLabel field={field} forField={`${field.row}.${field.column}`} />
                 {field.type === "date" && (
-                  <CalendarField
-                    field={field}
-                    fieldError={fieldError}
-                    value={value instanceof Date ? value : null}
-                    onChange={onChange}
-                  />
+                  <>
+                    <CalendarField
+                      field={field}
+                      fieldError={showError ? currentFieldError : undefined}
+                      value={dateValue}
+                      onChange={(selectedDate: Date | null) => {
+                        if (selectedDate instanceof Date && !isNaN(selectedDate.getTime())) {
+                          const year = selectedDate.getFullYear();
+                          const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+                          const day = String(selectedDate.getDate()).padStart(2, "0");
+                          onChange(`${year}-${month}-${day}`);
+                        } else {
+                          onChange(null);
+                        }
+                      }}
+                      onBlur={onBlur}
+                    />
+                  </>
                 )}
                 {field.type === "tel" && (
                   <PhoneField
                     field={field}
+                    fieldError={fieldError}
                     value={(value as string) || ""}
                     onChange={onChange}
                     ref={ref}
                     onBlur={onBlur}
                   />
                 )}
-                {fieldError && (
+                {showError && currentFieldError && (
                   <span
                     className='message error'
                     style={{
@@ -68,7 +90,7 @@ export const createFormField = (
                       color: "var(--color-primary-blue)",
                     }}
                   >
-                    {fieldError.message}
+                    {currentFieldError.message}
                   </span>
                 )}
               </div>
@@ -76,11 +98,11 @@ export const createFormField = (
           }}
         />
       ) : field.options ? (
-        <FieldWithOptions field={field} hasError={!!fieldError} methods={methods} />
+        <FieldWithOptions field={field} hasError={!disabled && !!fieldError} methods={methods} />
       ) : (
         <RegularField
           field={field}
-          fieldError={fieldError}
+          fieldError={!disabled ? fieldError : undefined}
           methods={methods}
           className={styles.height_100}
         />
