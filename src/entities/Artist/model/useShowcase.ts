@@ -11,6 +11,7 @@ import type {
   TDeleteImageRequest, 
   TShowcaseAlbum, 
   TShowcaseAlbumDetail, 
+  TShowcaseItem, 
   TShowcaseMerch, 
   TShowcaseMerchDetail, 
   TShowcasePromocode, 
@@ -48,8 +49,12 @@ import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
 //-------получение списка для витрины-------//
 export function useAlbumsInfiniteQuery({
   artistSlug,
+  artist_id,
+  itemType
 }: {
   artistSlug: string | null;
+  artist_id?: string;
+  itemType?: TShowcaseItem;
 }) {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
@@ -59,31 +64,40 @@ export function useAlbumsInfiniteQuery({
     Error,
     InfiniteData<PaginatedStoreResponse<TShowcaseAlbum>>
   >({
-    queryKey: ['artist', 'showcase', 'albums', artistSlug],
+    queryKey: ['artist', 'showcase', 'albums', artistSlug, artist_id],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
       if (url) return getShowcaseAlbumsList({
         token,
         artist: artistSlug,
-        url
+        url,
+        artist_id,
+        itemType
       });
       return getShowcaseAlbumsList({
         token,
         artist: artistSlug,
+        artist_id,
+        itemType
       });
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,
-    enabled: !!token && !!artistSlug
+    enabled: !!token && !!artistSlug,
+    staleTime: 10 * 10 * 1000,
   });
 };
 
 export function useMerchInfiniteQuery({
   artistSlug,
   in_stock,
+  artist_id,
+  itemType
 }: {
   artistSlug: string | null;
   in_stock?: boolean | null;
+  artist_id?: string;
+  itemType?: TShowcaseItem;
 }) {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
@@ -93,32 +107,42 @@ export function useMerchInfiniteQuery({
     Error,
     InfiniteData<PaginatedStoreResponse<TShowcaseMerch>>
   >({
-    queryKey: ['artist', 'showcase', 'merch'],
+    queryKey: ['artist', 'showcase', 'merch', artistSlug, in_stock, artist_id],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
       if (url) return getShowcaseMerchList({
         token,
         artist: artistSlug,
         url,
+        in_stock,
+        artist_id,
+        itemType
       });
       return getShowcaseMerchList({
         token,
         artist: artistSlug,
-        in_stock
+        in_stock,
+        artist_id,
+        itemType
       });
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,
-    enabled: !!token && !!artistSlug
+    enabled: !!token && !!artistSlug,
+    staleTime: 10 * 10 * 1000,
   });
 };
 
 export function usePromocodesInfiniteQuery({
   discount_type,
   is_available,
+  artist_id,
+  itemType
 }: {
   discount_type?: PromoTypeFilter,
   is_available?: boolean | null;
+  artist_id?: string;
+  itemType?: TShowcaseItem;
 }) {
   const { data: session } = useSession();
   const token = session?.user.accessToken;
@@ -128,22 +152,27 @@ export function usePromocodesInfiniteQuery({
     Error,
     InfiniteData<PaginatedStoreResponse<TShowcasePromocode>>
   >({
-    queryKey: ["artist", "showcase", "promo"],
+    queryKey: ["artist", "showcase", "promo", discount_type, is_available, artist_id],
     queryFn: async ({ pageParam }) =>  {
       const url = pageParam as string | undefined;
       if (url) return getShowcasePromocodes({
         token,
-        url
+        url,
+        artist_id,
+        itemType
       });
       return getShowcasePromocodes({
         token,
         discount_type,
-        is_available
+        is_available,
+        artist_id,
+        itemType
       });
     },
     initialPageParam: '',
     getNextPageParam: (lastPage) => lastPage?.next,
     enabled: !!token,
+    staleTime: 10 * 10 * 1000,
   })
 };
 

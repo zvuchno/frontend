@@ -36,6 +36,10 @@
 .select {
   border-radius: 0;
   border-width: 1px;
+
+  &_short {
+    max-width: 240px;
+  }
 }
 
 .input {

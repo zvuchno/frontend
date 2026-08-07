@@ -9,6 +9,7 @@ import clsx from "clsx";
 import { useAlbumsInfiniteQuery, useGenresList, useMerchKindsList } from "@/entities/Artist";
 import { useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
 import { useMemo } from "react";
+import { useManagedProfiles } from "@/entities/Label";
 
 type TImage = {
   image: string;
@@ -18,11 +19,15 @@ type TImage = {
 
 export const UploadForm = ({ 
   productType,
+  profileType,
+  isEditForm,
   mainPreview,
   additionalPreviews,
   onDeleteImage
 }: { 
   productType: 'album' | 'single' | 'merch';
+  profileType: "artist" | "label" | undefined;
+  isEditForm: boolean;
   onDeleteImage: (data: number[]) => void;
   mainPreview?: TImage | null;
   additionalPreviews?: TImage[];
@@ -36,6 +41,20 @@ export const UploadForm = ({
   } = useFormContext<UploadFormValues>();
 
   const currentArtistSlug = useShowcaseArtistSlug();
+
+  // Список артистов (для селекта)
+  const managedProfilesQuery = useManagedProfiles(profileType);
+  
+  const artistsOptions = useMemo(() => {
+    if (!managedProfilesQuery.data) return [];
+    return managedProfilesQuery.data
+      .map((artist) => ({
+        value: String(artist.id),
+        label: artist.name,
+      }));
+  }, [managedProfilesQuery.data]);
+
+  const isLoadingArtists = managedProfilesQuery.isFetching || managedProfilesQuery.isPending;
 
   // Список альбомов (для селекта)
   const albumsQuery = useAlbumsInfiniteQuery({ artistSlug: currentArtistSlug });
@@ -95,6 +114,26 @@ export const UploadForm = ({
         initialAdditionalPreviews={additionalPreviews}
         onDelete={onDeleteImage}
       />
+      {profileType === 'label' && (
+        <Controller 
+          name="artistId"
+          control={control}
+          render={({ field }) => (
+            <SelectUI 
+              name="artistId"
+              label="Артист"
+              options={artistsOptions}
+              value={field.value ?? ''}
+              onChange={field.onChange}
+              containerClassName={s.select_short}
+              selectClassName={s.select}
+              labelClassName={s.label}
+              disabled={isLoadingArtists || isEditForm}
+              placeholder="Выбрать артиста"
+            />
+          )}
+        />
+      )}
       <div className={s.fildsContainer}>
           <CustomInput 
             id='name'

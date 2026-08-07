@@ -30,9 +30,14 @@ export async function getShowcaseAlbumsList({
   token,
   artist,
   url,
+  artist_id,
+  itemType
 }: TShowcaseListRequest): Promise<PaginatedStoreResponse<TShowcaseAlbum>> {
   const params = new URLSearchParams();
   if ( artist) params.append("artist", artist.toString());
+  if ((itemType === 'album' || itemType === 'products') && artist_id) {
+    params.append("artist_id", artist_id.toString());
+  }
 
   const mainUrl = `${baseUrl}/v1/store/albums/?limit=15&${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
@@ -51,12 +56,18 @@ export async function getShowcaseMerchList({
   artist,
   url,
   in_stock,
+  artist_id,
+  itemType
 }: TShowcaseMerchRequest): Promise<PaginatedStoreResponse<TShowcaseMerch>> {
   const params = new URLSearchParams();
   if (artist) params.append("artist", artist.toString());
 
   if (in_stock !== null && in_stock !== undefined) {
     params.append('in_stock', String(in_stock));
+  }
+
+  if ((itemType === 'merch' || itemType === 'products') && artist_id) {
+    params.append("artist_id", artist_id.toString());
   }
 
   const mainUrl = `${baseUrl}/v1/store/merch/?limit=15&${params.toString()}`;
@@ -66,7 +77,7 @@ export async function getShowcaseMerchList({
     method: "GET",
   }, token);
 
-  if (!response) throw new Error('Не удалось получить альбомы')
+  if (!response) throw new Error('Не удалось получить мерч')
 
   return response;
 };
@@ -75,7 +86,9 @@ export async function getShowcasePromocodes({
   token,
   url,
   discount_type,
-  is_available
+  is_available,
+  artist_id,
+  itemType,
 }: TShowcasePromocodesRequest): Promise<PaginatedStoreResponse<TShowcasePromocode>> {
   const params = new URLSearchParams();
 
@@ -84,8 +97,10 @@ export async function getShowcasePromocodes({
   }
 
   if (is_available !== null && is_available !== undefined) {
-    params.append('in_stock', String(is_available));
+    params.append('is_available', String(is_available));
   }
+
+  if (itemType === 'promo' && artist_id) params.append("artist_id", artist_id.toString());
 
   const mainUrl = `${baseUrl}/v1/store/promocodes/?limit=15&${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
@@ -95,7 +110,7 @@ export async function getShowcasePromocodes({
     method: "GET",
   }, token);
 
-  if (!response) throw new Error('Не удалось получить альбомы')
+  if (!response) throw new Error('Не удалось получить промокоды')
 
   return response;
 };
