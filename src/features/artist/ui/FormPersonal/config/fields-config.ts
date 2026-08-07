@@ -1,5 +1,6 @@
 import type { Validate } from "react-hook-form";
 
+import { comparePassportDate } from "@/shared/utils/comparePassportDate";
 import { validateDateInPast } from "@/shared/utils/validateDateInPast";
 import { validatePhone } from "@/shared/utils/validatePhone";
 
@@ -71,7 +72,7 @@ export const fieldsConfig: Record<
   },
   "identity_data.passport_issue_date": {
     required: true,
-    validate: (value, fields) => validateDateInPast(value, fields),
+    validate: (value, fields) => comparePassportDate(value, fields),
   },
   "identity_data.inn": {
     required: true,
