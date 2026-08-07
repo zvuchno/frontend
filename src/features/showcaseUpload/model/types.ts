@@ -20,6 +20,7 @@ export type UploadFormValues = {
   propertyName?: string; // для мерча
   variants?: VariantForm[]; // для мерча
   hasProperty?: boolean; 
+  artistId?: string;
 };
 
 export type PromocodeFormValues = {
@@ -30,4 +31,5 @@ export type PromocodeFormValues = {
   limit?: number | null;
   startAt?: string;
   endAt?: string;
+  artistId?: string;
 }

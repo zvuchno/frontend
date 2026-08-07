@@ -20,6 +20,7 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
       kind: undefined,
       album: undefined,
       quantity: undefined,
+      //artistId: String(album.artist_id)
       
     };
   }
@@ -41,6 +42,7 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
     genre: '',
     variants: merch.variants,
     propertyName: merch.property_name,
-    hasProperty: merch.property_name ? true : false
+    hasProperty: merch.property_name ? true : false,
+    //artistId: String(merch.artist_id)
   };
 }

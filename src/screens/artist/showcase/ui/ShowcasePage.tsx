@@ -197,6 +197,7 @@ export const ShowcasePage = () => {
 
       <AddPromocodeModal 
         isOpen={isPromoModalOpen} 
+        profileType={profileType}
         onClose={() => {
           setIsPromoModalOpen(false)
           setPromoIdForModal(undefined);

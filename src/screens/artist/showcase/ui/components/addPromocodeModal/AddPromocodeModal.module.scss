@@ -41,6 +41,11 @@
   }
 }
 
+.select {
+  border-radius: 0;
+  border-width: 1px;
+}
+
 .fildsContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

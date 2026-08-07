@@ -33,7 +33,7 @@ import {
 import { UploadTrackModal } from "./components/uploadTrackModal/UploadTrackModal";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
+import { useSession } from "next-auth/react";
 
 const normalizePrice = (val: number): string => {
   const rounded = Math.round(val * 100) / 100;
@@ -61,6 +61,8 @@ const initialFormValues: UploadFormValues = {
 
 // Страница формы создания/редактирования товара
 export const UploadPage = ({ type, id }: UploadPageProps) => {
+  const { data } = useSession();
+  const profileType = data?.user.profileType;
   // тип товара на форме
   const [productType, setProductType] = useState<'album' | 'single' | 'merch'>(type);
   const [isTrackModalOpen, setIsTrackModalOpen] = useState<boolean>(false);
@@ -70,7 +72,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
   // id созданного как черновик товра перед загрузкой трека/изображений
   const [newAlbumId, setNewAlbumId] = useState<number | null>(null);
 
-  // id текущего артиста
+  // id текущего артиста/лейбла
   const currentArtistId = useShowcaseArtistId();
   // id товара, который необходимо отредактировать
   const currentProductId = id ? Number(id) : undefined;
@@ -80,7 +82,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
 
   // данные товра, получаемые, если перешли на эту страницу для редактирования
   const { 
-    data, 
+    data: productData, 
     isLoading, 
     error 
   } = useDetailInfo(type, currentProductId);
@@ -95,18 +97,18 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
   const deleteImageMutation = useDeleteImage();
 
   const initialValues = useMemo(() => {
-    if (!id || !data) {
+    if (!id || !productData) {
       return initialFormValues;
     }
-    return mapApiToForm(data);
-  }, [id, data]);
+    return mapApiToForm(productData);
+  }, [id, productData]);
 
   const mainImagePreview = useMemo(() => {
-    if (!id || !data) {
+    if (!id || !productData) {
       return null;
     }
     if (type === 'merch') {
-      const main = (data as TShowcaseMerchDetail).images_merch
+      const main = (productData as TShowcaseMerchDetail).images_merch
         .find((i) => i.is_main);
       if (!main) return null;
       return {
@@ -116,7 +118,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
       };
     }
 
-    const coverUrl = (data as TShowcaseAlbumDetail).cover_image;
+    const coverUrl = (productData as TShowcaseAlbumDetail).cover_image;
     if (!coverUrl) return null;
 
     return {
@@ -124,18 +126,18 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
       is_main: true,
     };
 
-  }, [id, type, data]);
+  }, [id, type, productData]);
 
   const additionalImagesPreviews = useMemo(() => {
-    if (!id || !data) {
+    if (!id || !productData) {
       return undefined;
     }
     return type === 'merch'
-      ? (data as TShowcaseMerchDetail).images_merch
+      ? (productData as TShowcaseMerchDetail).images_merch
         .filter((img) => !img.is_main)
       : undefined;
 
-  }, [id, type, data]);
+  }, [id, type, productData]);
 
   const methods = useForm<UploadFormValues>({
     mode: "onChange",
@@ -184,7 +186,11 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
     if (productType === 'album' || productType === 'single') {
       payload = {
         name: data.name,
-        artist: currentArtistId!,
+        artist: profileType === 'artist' 
+          ? currentArtistId! 
+          : data.artistId 
+            ? Number(data.artistId) 
+            : currentArtistId!,
         is_single: false,
         release_date: data.releaseDate,
         genre: data.genre ? Number(data.genre) : null,
@@ -203,7 +209,11 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
         kind: data.kind ? Number(data.kind) : null,
         price: priceStr,
         album: data.album ? Number(data.album) : null,
-        artist: currentArtistId!,
+        artist: profileType === 'artist' 
+          ? currentArtistId! 
+          : data.artistId 
+            ? Number(data.artistId) 
+            : currentArtistId!,
         description: data.description ?? '',
         allow_overpay: data.allowHigherPrice,
         visibility: data.privacy,
@@ -308,11 +318,13 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
             containerClassName={s.typeSelect}
             selectClassName={s.typeSelect__select}
             labelClassName={s.label}
-            disabled={!!data}
+            disabled={!!productData}
           />
 
           <UploadForm 
             productType={productType} 
+            profileType={profileType}
+            isEditForm={isEditForm}
             mainPreview={mainImagePreview} 
             additionalPreviews={additionalImagesPreviews} 
             onDeleteImage={(imageId) => setDeletedImageIds(imageId)}

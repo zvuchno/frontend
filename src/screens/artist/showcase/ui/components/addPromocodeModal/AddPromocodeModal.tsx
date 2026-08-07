@@ -1,6 +1,6 @@
 "use client"
 
-import { ButtonUI, CheckboxUI, CustomInput, Loader, ModalUI, Title } from "@/shared/ui";
+import { ButtonUI, CheckboxUI, CustomInput, Loader, ModalUI, SelectUI, Title } from "@/shared/ui";
 import s from "./AddPromocodeModal.module.scss";
 import { 
   mapPromoDirtyFieldsToPayload, 
@@ -8,7 +8,7 @@ import {
   toIsoUtc, 
   toLocalDatetimeString 
 } from "@/features/showcaseUpload";
-import { FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import clsx from "clsx";
 import { 
   type TCreatePromocodeRequest, 
@@ -18,9 +18,12 @@ import {
 } from "@/entities/Artist";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
+import { useManagedProfiles } from "@/entities/Label";
+import { useShowcaseArtistId } from "@/entities/Artist/store/useShowcaseStore";
 
 interface AddPromocodeModalProps {
   isOpen: boolean;
+  profileType: "artist" | "label" | undefined;
   onClose: () => void;
   id?: number;
 };
@@ -36,9 +39,13 @@ const initialFormValues: PromocodeFormValues = {
 
 export const AddPromocodeModal = ({
   isOpen,
+  profileType,
   id,
   onClose
 }: AddPromocodeModalProps) => {
+
+  // id текущего артиста/лейбла
+  const currentArtistId = useShowcaseArtistId();
 
   // данные промокода, получаемые, если перешли для редактирования
   const { 
@@ -61,6 +68,7 @@ export const AddPromocodeModal = ({
       discountType: data.discount_type,
       startAt: toLocalDatetimeString(data.start_at) ?? '',
       endAt: toLocalDatetimeString(data.end_at) ?? '',
+      artistId: String(data.artist),
     };
   }, [id, data]);
 
@@ -74,12 +82,27 @@ export const AddPromocodeModal = ({
     handleSubmit,
     watch,
     register,
+    control,
     formState: { isSubmitting, dirtyFields, isDirty, errors } 
   } = methods;
 
   useEffect(() => {
     reset(initialValues);
   }, [initialValues, reset]);
+
+  // Список артистов (для селекта)
+  const managedProfilesQuery = useManagedProfiles(profileType);
+  
+  const artistsOptions = useMemo(() => {
+    if (!managedProfilesQuery.data) return [];
+    return managedProfilesQuery.data
+      .map((artist) => ({
+        value: String(artist.id),
+        label: artist.name,
+      }));
+  }, [managedProfilesQuery.data]);
+
+  const isLoadingArtists = managedProfilesQuery.isFetching || managedProfilesQuery.isPending;
 
   const currentDiscountType = watch('discountType'); 
 
@@ -97,8 +120,6 @@ export const AddPromocodeModal = ({
 
   const onSubmit = async (data: PromocodeFormValues, action: 'create' | 'save') => {
     if (isSubmitting) return;
-
-    
     
     try {
       switch (action) {
@@ -112,6 +133,7 @@ export const AddPromocodeModal = ({
             usage_limit: data.limit ? Number(data.limit) : null,
             is_enabled: true,
             description: data.description ?? '',
+            artist: data.artistId ? Number(data.artistId) : currentArtistId ? currentArtistId : undefined
           }
           await createPromocodeMutation.mutateAsync(payload);
           handleClose();
@@ -257,6 +279,25 @@ export const AddPromocodeModal = ({
               labelClassName={s.label}
               inputClassName={s.input}
             />
+            {profileType === 'label' && (
+              <Controller 
+                name="artistId"
+                control={control}
+                render={({ field }) => (
+                  <SelectUI 
+                    name="artistId"
+                    label="Артист"
+                    options={artistsOptions}
+                    value={field.value ?? ''}
+                    onChange={field.onChange}
+                    selectClassName={s.select}
+                    labelClassName={s.label}
+                    disabled={isLoadingArtists || isEditForm}
+                    placeholder="Выбрать артиста"
+                  />
+                )}
+              />
+            )}
           </div>
 
           {isEditForm ? (
