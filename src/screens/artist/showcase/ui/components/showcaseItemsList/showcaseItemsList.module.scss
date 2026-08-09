@@ -53,6 +53,10 @@
   list-style: none; 
   max-height: 700px;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 
 .buttonWrapper {

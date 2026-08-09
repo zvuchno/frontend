@@ -25,7 +25,7 @@ export function mapPromoDirtyFieldsToPayload(
         break;
 
       case 'limit':
-        payload.usage_limit = value ?? null;
+        payload.usage_limit = value.trim() ? value : null;
         break;
 
       case 'startAt':

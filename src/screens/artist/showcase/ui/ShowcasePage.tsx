@@ -199,8 +199,9 @@ export const ShowcasePage = () => {
         isOpen={isPromoModalOpen} 
         profileType={profileType}
         onClose={() => {
-          setIsPromoModalOpen(false)
+          setIsPromoModalOpen(false);
           setPromoIdForModal(undefined);
+          if (itemType !== 'promo') setItemType('promo');
         }}
         id={promoIdForModal}
       />
