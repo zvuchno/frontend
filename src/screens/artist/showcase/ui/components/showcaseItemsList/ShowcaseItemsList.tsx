@@ -88,15 +88,13 @@ export const ShowcaseItemsList = ({
 
       <div className={s.heading}>
         <Text 
-          className={clsx(s.heading__text, {
-            [s.heading__text_wide]: profileType === 'artist' && isPromo
-          })}
+          className={clsx(s.heading__text)}
         >
           {isProduct ? "Фото" : "Промокод"}
         </Text>
         {profileType === 'label' && (
           <Text 
-            className={clsx(s.heading__text, {[s.heading__text_wide]: isPromo})}
+            className={clsx(s.heading__text)}
           >
             Артист
           </Text>
@@ -108,7 +106,7 @@ export const ShowcaseItemsList = ({
         >
           {isProduct ? "Наименование" : "Скидка"}
         </Text>
-        <Text className={s.heading__text}>{isProduct ? "Артикул" : "Период"}</Text>
+        <Text className={clsx(s.heading__text, {[s.heading__text_wide]: isPromo})}>{isProduct ? "Артикул" : "Период"}</Text>
         <Text className={s.heading__text}>{isProduct ? "Цена" : "Количество"}</Text>
         <Text
           className={clsx(

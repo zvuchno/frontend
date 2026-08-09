@@ -29,10 +29,14 @@ const formatPercent = (value: number | null | undefined): string => {
   return percentFormatter.format(value);
 };
 
-const formatter = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit' });
+const formatter = new Intl.DateTimeFormat('ru-RU', { 
+  day: '2-digit', 
+  month: '2-digit', 
+  year: 'numeric' 
+});
 
 const formatDateRangeIntl = (startAt?: string | null, endAt?: string  | null) => {
-  if (!startAt || !endAt) return null;
+  if (!startAt || !endAt) return 'неограничено';
   const start = formatter.format(new Date(startAt));
   const end = formatter.format(new Date(endAt));
   return `${start} - ${end}`;
@@ -180,14 +184,14 @@ export const ShowcaseCard = ({
     const period = formatDateRangeIntl(item?.start_at, item?.end_at);
     return (
       <div className={s.card}>
-        <Text className={clsx(s.text, s.title, {[s.wide]: profileType === 'artist'})}>
+        <Text className={clsx(s.text, s.title)}>
           {item.code}
         </Text>
         {profileType === 'label' && (
-          <Text className={clsx(s.text, s.title, s.wide)}>{item.artist_name}</Text>
+          <Text className={clsx(s.text, s.title)}>{item.artist_name}</Text>
         )}
         <Text className={s.text}>{discount}</Text>
-        <Text className={s.text}>{period}</Text>
+        <Text className={clsx(s.text, s.wide)}>{period}</Text>
         <Text className={s.text}>{usageText}</Text>
         {renderActions('promo', 'promo', item.is_enabled)}
       </div>

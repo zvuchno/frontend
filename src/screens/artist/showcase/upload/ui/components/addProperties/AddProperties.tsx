@@ -4,6 +4,7 @@ import { ButtonUI, CustomInput } from "@/shared/ui";
 import s from "./AddProperties.module.scss";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import type { UploadFormValues } from "@/features/showcaseUpload";
+import clsx from "clsx";
 
 export const AddPropertises = () => {
   const { control } = useFormContext<UploadFormValues>();
@@ -75,6 +76,22 @@ export const AddPropertises = () => {
                   value={field.value ?? ''}
                   onChange={field.onChange}
                   placeholder="0"
+                />
+              )}
+            />
+            <Controller 
+              name={`variants.${index}.sku`}
+              control={control}
+              render={({ field }) => (
+                <CustomInput 
+                  id={`sku_${variantField.id}`} 
+                  name={`variants.${index}.sku`}
+                  label="SKU"
+                  labelClassName={s.label}
+                  inputClassName={clsx(s.input, s.input_wide)}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  readOnly
                 />
               )}
             />

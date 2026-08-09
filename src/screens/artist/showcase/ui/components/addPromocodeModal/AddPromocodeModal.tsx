@@ -83,6 +83,7 @@ export const AddPromocodeModal = ({
     watch,
     register,
     control,
+    setValue,
     formState: { isSubmitting, dirtyFields, isDirty, errors } 
   } = methods;
 
@@ -128,8 +129,8 @@ export const AddPromocodeModal = ({
             code: data.code,
             discount_value: data.discountValue ? String(data.discountValue) : '',
             discount_type: data.discountType ?? 'FIXED',
-            start_at: toIsoUtc(data.startAt),
-            end_at: toIsoUtc(data.endAt),
+            start_at: data.startAt ? toIsoUtc(data.startAt) : null,
+            end_at: data.endAt ? toIsoUtc(data.endAt) : null,
             usage_limit: data.limit ? Number(data.limit) : null,
             is_enabled: true,
             description: data.description ?? '',
@@ -189,6 +190,10 @@ export const AddPromocodeModal = ({
               },
               required: "Укажите код промокода",
             })}
+            onChange={(e) => {
+              const target = e.target as HTMLInputElement;
+              setValue('code', target.value.toUpperCase());
+            }}
             labelClassName={s.label}
             inputClassName={s.input}
             disabled={isEditForm}
@@ -211,8 +216,7 @@ export const AddPromocodeModal = ({
               error={!!errors.startAt}
               message={errors.startAt?.message}
               {...register('startAt', {
-                required: 'Укажите дату начала',
-                validate: (v) => !!v && new Date(v).getTime() > 0 || 'Некорректная дата',
+                //validate: (v) => !!v && new Date(v).getTime() > 0 || 'Некорректная дата',
               })}
               //type="date"
               type="datetime-local"
@@ -225,13 +229,12 @@ export const AddPromocodeModal = ({
               error={!!errors.endAt}
               message={errors.endAt?.message}
               {...register('endAt', {
-                required: 'Укажите дату окончания',
-                validate: (v) => {
-                  if (!v) return false;
-                  const start = new Date(watch('startAt') ?? '');
-                  const end = new Date(v);
-                  return end.getTime() >= start.getTime() || 'Дата окончания должна быть не раньше начала';
-                },
+                // validate: (v) => {
+                //   if (!v) return false;
+                //   const start = new Date(watch('startAt') ?? '');
+                //   const end = new Date(v);
+                //   return end.getTime() >= start.getTime() || 'Дата окончания должна быть не раньше начала';
+                // },
               })}
               //type="date"
               type="datetime-local"
