@@ -13,7 +13,6 @@ import {
   UploadForm, 
   uploadMerchImages, 
   type UploadFormValues 
-
 } from "@/features/showcaseUpload";
 import { 
   type TCreateAlbumRequest,
@@ -26,7 +25,9 @@ import {
   useCreateAlbum, 
   useCreateMerch, 
   useDeleteImage, 
+  useDeleteTrack, 
   useDetailInfo, 
+  useTracksInfiniteQuery, 
   useUpdateAlbum, 
   useUpdateMerch 
 } from "@/entities/Artist";
@@ -34,6 +35,7 @@ import { UploadTrackModal } from "./components/uploadTrackModal/UploadTrackModal
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import TrackCard from "@/entities/albums/ui/trackCard/TrackCard";
 
 const normalizePrice = (val: number): string => {
   const rounded = Math.round(val * 100) / 100;
@@ -49,7 +51,7 @@ const initialFormValues: UploadFormValues = {
   name: '',
   releaseDate: '',
   kind: '',
-  genre: '7',
+  genre: '',
   price: null,
   privacy: 'public',
   allowHigherPrice: false,
@@ -66,6 +68,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
   // тип товара на форме
   const [productType, setProductType] = useState<'album' | 'single' | 'merch'>(type);
   const [isTrackModalOpen, setIsTrackModalOpen] = useState<boolean>(false);
+  const [trackId, setTrackId] = useState<number | undefined>(undefined);
 
   const router = useRouter();
 
@@ -95,6 +98,27 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
 
   const addImageMutation = useAddImage();
   const deleteImageMutation = useDeleteImage();
+
+  const { 
+    data: tracks, 
+    error: tracksError,
+    fetchNextPage,
+    isLoading: tracksLoading,
+    isFetchingNextPage,
+    hasNextPage, 
+  } = useTracksInfiniteQuery(productType, currentProductId);
+  const tracksList = tracks?.pages.flatMap((page) => page.results) ?? [];
+
+  const deleteTrackMutation = useDeleteTrack(currentProductId);
+
+  const handleDeleteTrack = async (id: number) => {
+    await deleteTrackMutation.mutateAsync({ id });
+  };
+
+  const handleEditTrack = (id: number) => {
+    setIsTrackModalOpen(true);
+    setTrackId(id);
+  };
 
   const initialValues = useMemo(() => {
     if (!id || !productData) {
@@ -243,9 +267,11 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               await uploadMerchImages(createdMerch.id, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
             }
           } else {
-            newAlbumId
-              ? await updateAlbumMutation.mutateAsync({ id: newAlbumId, payload: payload })
-              : await createAlbumMutation.mutateAsync(payload as TCreateAlbumRequest)
+            if (newAlbumId) {
+              await updateAlbumMutation.mutateAsync({ id: newAlbumId, payload });
+            } else {
+              await createAlbumMutation.mutateAsync(payload as TCreateAlbumRequest);
+            }
           }
           router.replace('/artist/showcase')
           break;
@@ -256,9 +282,11 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               await uploadMerchImages(createdMerch.id, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
             }
           } else {
-            newAlbumId
-              ? await updateAlbumMutation.mutateAsync({ id: newAlbumId, payload: payload })
-              : await createAlbumMutation.mutateAsync(payload as TCreateAlbumRequest)
+            if (newAlbumId) {
+              await updateAlbumMutation.mutateAsync({ id: newAlbumId, payload });
+            } else {
+              await createAlbumMutation.mutateAsync(payload as TCreateAlbumRequest);
+            }
           }
           router.replace('/artist/showcase')
           break;
@@ -329,6 +357,40 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
             additionalPreviews={additionalImagesPreviews} 
             onDeleteImage={(imageId) => setDeletedImageIds(imageId)}
           />
+
+          {tracksLoading ? (
+            <Loader />
+          ) : tracksError ? (
+            <div>Не удалось загрузить список треков</div>
+          ) : tracksList && tracksList.length > 0 ? (
+            <div className={s.tracksList}>
+              {tracksList.map((track) => (
+                <TrackCard 
+                  key={track.id}
+                  image={track.image} 
+                  title={track.artist_name} 
+                  description={track.name} 
+                  duration={track.duration}
+                  onDelete={() => void handleDeleteTrack(track.id)}
+                  onEdit={() => handleEditTrack(track.id)}
+                />
+              ))}
+              {hasNextPage && (
+                <div className={s.buttonWrapper}>
+                  <button
+                    type="button"
+                    className={s.button}
+                    onClick={() => {
+                      fetchNextPage().catch(console.error)
+                    }}
+                    disabled={isFetchingNextPage}
+                  >
+                    {isFetchingNextPage ? "загрузка..." : "смотреть ещё"}
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : null}
           
           <div className={s.buttonsContainer}>
             {productType !== 'merch' ? (
@@ -386,8 +448,12 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
       </FormProvider>
       <UploadTrackModal 
         isOpen={isTrackModalOpen} 
-        onClose={() => setIsTrackModalOpen(false)}
-        onUploadTrack={() => {}}
+        albumId={newAlbumId ? newAlbumId : currentProductId!}
+        onClose={() => {
+          setIsTrackModalOpen(false)
+          setTrackId(undefined);
+        }}
+        trackId={trackId}
       />
     </>
   )

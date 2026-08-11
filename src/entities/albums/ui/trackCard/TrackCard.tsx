@@ -32,7 +32,7 @@ const deleteIcon: React.ReactNode = (
   </svg>
 );
 
-const Trackcard = ({
+const TrackCard = ({
   image,
   title,
   description,
@@ -51,12 +51,14 @@ const Trackcard = ({
     <div className={s.container}>
       <div className={s.card}>
         <div className={s.card__img}>
-          <img src={image} loading="lazy" />
+          {image && <img src={image} loading="lazy" />}
         </div>
         <div className={s.card__content}>
-          <Title className={s.text} Tag="h6">
-            {title}
-          </Title>
+          {title && (
+            <Title className={s.text} Tag="h6">
+              {title}
+            </Title>
+          )}
           <Text className={clsx(s.text, s.description)} Tag="p">
             {description}
           </Text>
@@ -66,14 +68,14 @@ const Trackcard = ({
         </div>
       </div>
 
-      <button className={s.editButton} onClick={onEdit}>
+      <button className={s.editButton} onClick={onEdit} type='button'>
         {editIcon}
       </button>
-      <button className={s.deleteButton} onClick={onDelete}>
+      <button className={s.deleteButton} onClick={onDelete} type='button'>
         {deleteIcon}
       </button>
     </div>
   );
 };
 
-export default Trackcard;
+export default TrackCard;

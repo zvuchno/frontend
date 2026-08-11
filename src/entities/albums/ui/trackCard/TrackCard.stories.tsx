@@ -1,14 +1,14 @@
 import { type Meta, type StoryObj } from "@storybook/nextjs-vite";
-import Trackcard from "./TrackCard";
+import TrackCard from "./TrackCard";
 
-const meta: Meta<typeof Trackcard> = {
+const meta: Meta<typeof TrackCard> = {
   title: 'entities/TrackCard',
-  component: Trackcard,
+  component: TrackCard,
   tags: ['autodocs']
 };
 
 export default meta;
-type Story = StoryObj<typeof Trackcard>;
+type Story = StoryObj<typeof TrackCard>;
 
 export const TrackCardWithPrice: Story = {
   render: () => {
@@ -18,10 +18,11 @@ export const TrackCardWithPrice: Story = {
         height: '200px',
         padding: '20px',
       }}>
-        <Trackcard
+        <TrackCard
           image="https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg" 
           title="Заголовок" 
           description="Описание" 
+          duration={null}
           price={1000} 
           onDelete={() => console.log('delete')} 
           onEdit={() => console.log('edit')}
@@ -39,7 +40,7 @@ export const TrackCardWithDuration: Story = {
         height: '200px',
         padding: '20px',
       }}>
-        <Trackcard
+        <TrackCard
           image="https://img.freepik.com/free-photo/musician-playing-electric-guitar_23-2151414264.jpg" 
           title="Заголовок" 
           description="Описание" 
