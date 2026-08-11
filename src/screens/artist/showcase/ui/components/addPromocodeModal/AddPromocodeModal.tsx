@@ -124,7 +124,7 @@ export const AddPromocodeModal = ({
     
     try {
       switch (action) {
-        case 'create':
+        case 'create': {
           const payload: TCreatePromocodeRequest = {
             code: data.code,
             discount_value: data.discountValue ? String(data.discountValue) : '',
@@ -139,7 +139,8 @@ export const AddPromocodeModal = ({
           await createPromocodeMutation.mutateAsync(payload);
           handleClose();
           break;
-        case 'save':
+        }
+        case 'save': {
           if (!isDirty) {
             handleClose();
             break;
@@ -151,6 +152,7 @@ export const AddPromocodeModal = ({
           });
           handleClose();
           break;
+        }
       }
     } catch (e) {
       console.error(e);

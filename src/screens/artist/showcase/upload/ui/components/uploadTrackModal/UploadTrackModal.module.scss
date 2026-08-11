@@ -47,6 +47,34 @@
   }
 }
 
+.selectedFileBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f5f5f7; /* под твой дизайн */
+}
+
+.selectedFileBlock__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.selectedFileBlock__name {
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.selectedFileBlock__size {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.selectedFileBlock__removeBtn {
+  margin-left: 12px; /* или через gap */
+}
+
 .label {
   font-family: var(--font-feature-mono);
   font-size: 16px;
@@ -157,6 +185,12 @@
       color: var(--color-bg-secondary);
     }
   }
+}
+
+.checkbox {
+  align-self: end;
+  margin-block-end: 6px;
+  gap: 4px;
 }
 
 .textarea {

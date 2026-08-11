@@ -33,3 +33,11 @@ export type PromocodeFormValues = {
   endAt?: string;
   artistId?: string;
 }
+
+export type TrackFormValues = {
+  name: string;
+  price?: number | null;
+  allowHigherPrice: boolean;
+  description: string;
+  track: File | null;
+};

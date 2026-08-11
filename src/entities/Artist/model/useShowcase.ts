@@ -16,10 +16,15 @@ import type {
   TShowcaseMerchDetail, 
   TShowcasePromocode, 
   TShowcasePromocodeDetail,
+  TShowcaseTrack,
+  TShowcaseTrackDetail,
+  TShowcaseUpdateTrackInfoPayload,
   TUpdateAlbumPayload,
   TUpdateImagePayload,
   TUpdateMerchPayload,
   TUpdatePromocodePayload,
+  TUpdateTrackPayload,
+  TUploadTrackPayload,
 } from "./types";
 import { 
   addImage,
@@ -30,16 +35,22 @@ import {
   deleteImage,
   deleteMerch,
   deletePromocode,
+  deleteTrack,
+  directUpdateTrack,
+  directUploadTrack,
   getDetailAlbum,
   getDetailMerch,
   getDetailPromocode,
+  getDetailTrack,
   getShowcaseAlbumsList, 
   getShowcaseMerchList, 
   getShowcasePromocodes,
+  getShowcaseTracksList,
   updateAlbum,
   updateImage,
   updateMerch,
   updatePromocode,
+  updateTrackInfo,
 } from "../api/showcaseApi";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
@@ -359,7 +370,8 @@ export function useDetailInfo(type: string, id?: number) {
       ? getDetailMerch({ token, id })
       : getDetailAlbum({ token, id });
     },
-    enabled: !!token && !!id
+    enabled: !!token && !!id,
+    staleTime: 10 * 10 * 1000,
   });
 };
 
@@ -371,7 +383,8 @@ export function useDetailPromocode(id?: number) {
   return useQuery({
     queryKey: ['showcase', 'detail', 'promo', id],
     queryFn: async () => getDetailPromocode({ token, id}),
-    enabled: !!token && !!id
+    enabled: !!token && !!id,
+    staleTime: 10 * 10 * 1000,
   });
 };
 
@@ -441,4 +454,125 @@ export function useDeleteImage() {
       void queryClient.invalidateQueries({ queryKey: ['artist', 'showcase', 'merch'] });
     },
   });
+};
+
+//-------треки-------//
+export function useTracksInfiniteQuery(
+  type: string,
+  album?: number,
+) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useInfiniteQuery<
+    PaginatedStoreResponse<TShowcaseTrack>,
+    Error,
+    InfiniteData<PaginatedStoreResponse<TShowcaseTrack>>
+  >({
+    queryKey: ['showcase', 'tracks', album],
+    queryFn: async ({ pageParam }) =>  {
+      const url = pageParam as string | undefined;
+      if (url) return getShowcaseTracksList({
+        token,
+        album,
+        url,
+      });
+      return getShowcaseTracksList({
+        token,
+        album
+      });
+    },
+    initialPageParam: '',
+    getNextPageParam: (lastPage) => lastPage?.next,
+    enabled: !!token && !!album && type === 'album',
+    staleTime: 10 * 10 * 1000,
+  });
+};
+
+export function useDetailTrack(id?: number) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+
+  return useQuery({
+    queryKey: ['showcase', 'detail', 'track', id],
+    queryFn: async () => getDetailTrack({ token, id}),
+    enabled: !!token && !!id,
+    staleTime: 10 * 10 * 1000,
+  });
+};
+
+export function useDeleteTrack(album?: number) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, { id: number }>({
+    mutationFn: async ({ id }) => {
+      return deleteTrack({ token, id });
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['showcase', 'tracks', album] });
+      toast.success("Трек удалён")
+    },
+    onError: () => {
+      toast.error('Не удалось удалить трек')
+    }
+  })
+};
+
+export function useUpdateTrackInfo(album: number) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const queryClient = useQueryClient();
+
+  return useMutation<TShowcaseTrackDetail, Error, TShowcaseUpdateTrackInfoPayload>({
+    mutationFn: async (data) => {
+      return updateTrackInfo(token, data);
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['showcase', 'tracks', album] });
+      toast.success("Информация о треке обновлена")
+    },
+    onError: () => {
+      toast.error('Ошибка обновления информации о треке')
+    }
+  })
+};
+
+export function useUploadTrack(album: number) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, { file: File, data: TUploadTrackPayload }>({
+    mutationFn: async ({ file, data }) => {
+      return directUploadTrack(token, file, data);
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['showcase', 'tracks', album] });
+      toast.success("Трек загружен")
+    },
+    onError: (error) => {
+      toast.error(`Не удалось загрузить трек: ${error.message}`)
+    }
+  })
+};
+
+export function useUpdateTrack(album: number) {
+  const { data: session } = useSession();
+  const token = session?.user.accessToken;
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, { file: File, data: TUpdateTrackPayload }>({
+    mutationFn: async ({ file, data }) => {
+      return directUpdateTrack(token, file, data);
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['showcase', 'tracks', album] });
+      toast.success("Файл трека обновлён")
+    },
+    onError: (error) => {
+      toast.error(`Не удалось обновить файл трека: ${error.message}`)
+    }
+  })
 };
