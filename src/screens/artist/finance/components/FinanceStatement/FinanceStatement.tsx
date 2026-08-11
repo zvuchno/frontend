@@ -1,40 +1,10 @@
-import { useState } from "react";
-
-
-
-import clsx from "clsx";
 import Link from "next/link";
-
-
 
 import { type TFinanceReportPreview } from "@/entities/financeReports";
 
-
-
 import { formatDate } from "@/shared/utils/formatDate";
 
-
-
-//import AarrowInCircle from "../../../../../../public/icons/arrow-right.svg";
 import styles from "./FinanceStatement.module.scss";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//import { FinanceStatementDetails } from "./FinanceStatementDetails";
 
 export const FinanceStatement = ({
   statement,
@@ -43,8 +13,6 @@ export const FinanceStatement = ({
   statement: TFinanceReportPreview;
   mode: "row" | "column";
 }) => {
-  //const [isStatementOpen, setIsStatementOpen] = useState(false);
-
   return (
     <>
       <div className={styles.financeStatement}>
@@ -69,7 +37,7 @@ export const FinanceStatement = ({
         <span className={styles.financeStatementItem}>{`${statement.sales_amount} руб.`}</span>
         <span className={styles.financeStatementItem}>
           <Link
-            href={statement.file_url}
+            href={statement.download_url}
             className={styles.financeStatementLink}
             target='_blank'
             rel='noopener noreferrer'
