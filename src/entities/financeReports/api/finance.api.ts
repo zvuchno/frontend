@@ -1,6 +1,7 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
 import {
+  type PaginatedStoreResponse,
   type TFinanceReportDetails,
   type TFinanceReportsRequest,
   type TFinanceReportsResponse,
@@ -13,9 +14,18 @@ export async function getFinanceReportsAll({
   periodEnd,
   periodType = "month",
   token,
-}: TFinanceReportsRequest): Promise<TFinanceReportsResponse> {
-  const response = await authFetchClient<TFinanceReportsResponse>(
-    `${baseUrl}/v1/store/me/reports/?date_from=${periodStart}&date_to=${periodEnd}&limit=5&offset=5&period_type=${periodType}`,
+}: TFinanceReportsRequest): Promise<PaginatedStoreResponse<TFinanceReportsResponse>> {
+  const page = 1;
+  const limit = 5;
+  const offset = limit * (page - 1);
+  const periodStartParams = periodStart && `date_from=${periodStart}`;
+  const periodEndParams = periodEnd && `date_to=${periodEnd}`;
+  const periodTypeParams = periodType && `period_type=${periodType}`;
+
+  const targetUrl = `${baseUrl}/v1/store/me/reports/?${periodStartParams}&${periodEndParams}&limit=${limit}&offset=${offset}&${periodTypeParams}`;
+
+  const response = await authFetchClient<PaginatedStoreResponse<TFinanceReportsResponse>>(
+    targetUrl,
     {
       method: "GET",
       credentials: "include",

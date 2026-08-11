@@ -1,0 +1,27 @@
+.statementConditions {
+  font-size: 12px;
+  font-family: var(--font-feat);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  line-height: 1.1;
+  color: var(--color-primary-blue);
+  padding-inline: 10px;
+
+  &Title {
+    font-size: 14px;
+  }
+
+  &List {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &Item {
+    & span {
+      font-weight: 600;
+    }
+  }
+}

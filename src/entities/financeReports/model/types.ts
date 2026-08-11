@@ -12,9 +12,9 @@ export type TFinanceReportPreview = {
 };
 
 export type TFinanceReportsRequest = {
-  periodStart: string;
-  periodEnd: string;
-  periodType: TReportPeriodType;
+  periodStart?: string;
+  periodEnd?: string;
+  periodType?: TReportPeriodType;
   token?: string;
 };
 
@@ -34,4 +34,11 @@ export type TFinanceReportDetails = TFinanceReportPreview & {
   delivery_amount: string;
   commission_amount: string;
   payout_amount: string;
+};
+
+export type PaginatedStoreResponse<T> = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
 };

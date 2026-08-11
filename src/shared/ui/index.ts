@@ -32,3 +32,4 @@ export { VerifyLoader } from "./VerifyLoader";
 export { Loader } from "./Loader";
 export { FormSocialButtons } from "./FormSocialButtons/FormSocialButtons";
 export { LoadingButton } from "./LoadingButton/LoadingButton";
+export { Paginator } from "./Paginator/Paginator";
