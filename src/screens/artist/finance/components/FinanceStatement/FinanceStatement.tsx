@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-import { type TFinanceReportPreview } from "@/entities/financeReports";
+import { type TFinanceReportPreview, useDownloadReport } from "@/entities/financeReports";
 
 import { formatDate } from "@/shared/utils/formatDate";
 
@@ -13,6 +11,8 @@ export const FinanceStatement = ({
   statement: TFinanceReportPreview;
   mode: "row" | "column";
 }) => {
+  const { mutate } = useDownloadReport();
+
   return (
     <>
       <div className={styles.financeStatement}>
@@ -36,14 +36,12 @@ export const FinanceStatement = ({
         {/*<span className={styles.financeStatementItem}>{`${statement.items_count} шт.`}</span>*/}
         <span className={styles.financeStatementItem}>{`${statement.sales_amount} руб.`}</span>
         <span className={styles.financeStatementItem}>
-          <Link
-            href={statement.download_url}
-            className={styles.financeStatementLink}
-            target='_blank'
-            rel='noopener noreferrer'
+          <button
+            className={styles.financeStatementDownload}
+            onClick={() => mutate(statement.download_url)}
           >
             скачать
-          </Link>
+          </button>
         </span>
         {/*<span className={styles.financeStatementItem}>
           <button

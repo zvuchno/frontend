@@ -6,3 +6,4 @@ export type {
 
 export { useGetFinanceReports } from "./model/useGetFinanceReports";
 export { useGetFinanceReportDetails } from "./model/useGetFinanceReportDetails";
+export { useDownloadReport } from "./model/useDownloadReport";
