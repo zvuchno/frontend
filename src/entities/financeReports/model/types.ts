@@ -2,13 +2,10 @@ export type TReportPeriodType = "day" | "month";
 type TReportRequestStatus = "pending" | "ready" | "failed";
 
 export type TFinanceReportPreview = {
-  id: number;
   period_start: string;
   period_end: string;
-  items_count: number;
   sales_amount: string;
-  file_url: string;
-  created_at: string;
+  download_url: string;
 };
 
 export type TFinanceReportsRequest = {
@@ -16,6 +13,7 @@ export type TFinanceReportsRequest = {
   periodEnd?: string;
   periodType?: TReportPeriodType;
   token?: string;
+  page: number;
 };
 
 export type TFinanceReportsResponse = {

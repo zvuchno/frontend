@@ -17,17 +17,14 @@ export const ArtistFinance = () => {
   const [dateTo, setDateTo] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading } = useGetFinanceReports(dateFrom, dateTo, "month");
+  const { data, isLoading } = useGetFinanceReports(dateFrom, dateTo, "month", currentPage);
   const limit = 5;
 
-  const allresults = data?.pages.flatMap((page) => page.results) ?? [];
+  const allresults = data?.count ?? 0;
 
-  const pageCount = Math.ceil(allresults.length / limit);
+  const pageCount = Math.ceil(allresults / limit);
 
-  const startIndex = (currentPage - 1) * limit;
-  const endIndex = startIndex + limit;
-
-  const reportsToShow = allresults?.slice(startIndex, endIndex);
+  const reportsToShow = data?.results ?? [];
 
   return (
     <section className={styles.artistFinance}>
@@ -36,7 +33,7 @@ export const ArtistFinance = () => {
         <Loader />
       ) : (
         <>
-          {allresults && allresults.length > 0 ? (
+          {reportsToShow.length > 0 ? (
             <>
               {pageCount > 1 && (
                 <Paginator

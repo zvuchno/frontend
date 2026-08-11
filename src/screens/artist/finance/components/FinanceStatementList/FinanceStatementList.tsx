@@ -30,8 +30,8 @@ export const FinanceStatementList = ({ statements }: { statements: TFinanceRepor
     <div className={styles.financeStatementContent}>
       <StatementHeading mode={tableMode} />
       <div className={styles.financeStatementList}>
-        {statements.map((statement) => (
-          <FinanceStatement key={statement.id} statement={statement} mode={tableMode} />
+        {statements.map((statement, index) => (
+          <FinanceStatement key={index} statement={statement} mode={tableMode} />
         ))}
       </div>
     </div>
