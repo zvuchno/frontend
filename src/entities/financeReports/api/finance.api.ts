@@ -82,11 +82,11 @@ export async function downloadFinanceReport({
   }
 
   const disposition = response.headers.get("content-disposition");
-  console.log(disposition);
+
   const matches = disposition?.match(/filename="?([^"]+)"?/) ?? null;
-  console.log(matches);
+
   const filename = matches !== null ? matches[1] : "report.pdf";
-  console.log(filename);
+
   const blob = await response.blob();
   return { blob, filename };
 }
