@@ -12,7 +12,7 @@ export const FinanceStatementList = ({ statements }: { statements: TFinanceRepor
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width > 1025) {
+      if (width > 850 || (width < 769 && width > 480)) {
         setTableMode("row");
       } else {
         setTableMode("column");

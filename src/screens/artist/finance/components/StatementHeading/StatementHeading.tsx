@@ -1,21 +1,8 @@
 import styles from "./StatementHeading.module.scss";
 
-const headingColumnNames = [
-  "Номер отчета",
-  "Дата начала",
-  "Дата конца",
-  "Дата формирования",
-  "Продано",
-  "Сумма",
-];
+const headingColumnNames = ["Дата начала", "Дата конца", "Сумма"];
 
-const headingColumnNamesChanged = [
-  "Номер",
-  "Период отчета",
-  "Дата формирования",
-  "Продано",
-  "Сумма",
-];
+const headingColumnNamesChanged = ["Период отчета", "Сумма"];
 
 export const StatementHeading = ({ mode }: { mode: "row" | "column" }) => {
   const names = mode === "row" ? headingColumnNames : headingColumnNamesChanged;

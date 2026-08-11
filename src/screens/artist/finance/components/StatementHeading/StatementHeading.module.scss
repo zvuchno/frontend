@@ -1,77 +1,46 @@
 .financeStatementHeading {
   display: flex;
-  gap: 20px;
-  width: 100%;
-  max-width: 73.18%;
+  gap: 30px;
+  max-width: calc(100% - 115px);
   font-size: 12px;
   font-weight: 700;
-  line-height: 5 / 3;
-  padding-inline-start: 20px;
+  padding-inline: 51px;
   color: var(--color-bg-secondary);
 
-  @media (max-width: 1024px) {
-    padding-inline-start: 5px;
-    gap: 15px;
-  }
-
   @media (max-width: 950px) {
-    padding-inline-start: 0;
-    gap: 10px;
+    padding-inline: 21px;
+    gap: 15px;
+    max-width: calc(100% - 95px);
   }
 
   @media (max-width: 768px) {
-    padding-inline-start: 10px;
-    gap: 20px;
+    max-width: calc(100% - 110px);
+    gap: 30px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: calc(100% - 55px);
+    gap: 10px;
+    padding-inline: 15px;
   }
 
   &Column {
-    min-width: 96px;
-    width: max-content;
+    width: 100px;
+    //width: max-content;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
 
-    &:nth-child(4) {
-      margin-inline-start: -10px;
-      width: 123px;
-
-      @media (max-width: 1024px) {
-        width: 65px;
-        margin-inline-start: 3px;
-      }
-    }
-
-    &:nth-child(5) {
-      margin-inline-start: -15px;
-
-      @media (max-width: 1024px) {
-        margin-inline-start: 3px;
-      }
-    }
-
-    @media (max-width: 1300px) {
-      width: 90px;
-      min-width: 0;
+    &:last-child {
+      flex: 1;
     }
 
     @media (max-width: 1024px) {
-      width: 60px;
-
-      &:nth-child(4),
-      &:nth-child(5),
-      &:nth-child(6) {
-        margin-inline-start: 15px;
-      }
+      width: 90px;
     }
-
-    @media (max-width: 550px) {
-      gap: 5px;
-
-      &:nth-child(4),
-      &:nth-child(5) {
-        margin-inline-start: 0;
-      }
+    @media (max-width: 850px) {
+      width: 80px;
     }
   }
 }
