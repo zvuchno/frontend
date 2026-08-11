@@ -61,3 +61,24 @@ export async function getFinanceReport({
   }
   return response;
 }
+
+export async function downloadFinanceReport({
+  downloadUrl,
+  token,
+}: {
+  downloadUrl: string;
+  token?: string;
+}): Promise<Blob> {
+  const response = await fetch(downloadUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Ошибка при скачивании файла`);
+  }
+  return await response.blob();
+}

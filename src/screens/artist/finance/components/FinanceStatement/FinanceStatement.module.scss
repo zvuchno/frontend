@@ -108,8 +108,15 @@
     }
   }
 
-  &Link {
+  &Download {
     color: var(--color-bg-secondary);
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    cursor: pointer;
   }
 
   &Button {
