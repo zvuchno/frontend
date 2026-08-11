@@ -5,8 +5,8 @@ export const StatementConditions = () => (
     <p className={styles.statementConditionsTitle}>ВАЖНО:</p>
     <ul className={styles.statementConditionsList}>
       <li className={styles.statementConditionsItem}>
-        * Отчет за текущий календарный месяц формируется автоматически <span>1-го числа</span>{" "}
-        следующего месяца
+        * Ежемесячные отчеты агента формируются автоматически <span>1-го числа</span> месяца,
+        следующего за отчетным
       </li>
       <li className={styles.statementConditionsItem}>
         * Если выбранный диапазон дат включает в себя более одного календарного месяца, отчеты по
