@@ -1,8 +1,8 @@
 export interface TrackCardProps {
-  image: string;
-  title: string;
+  image: string | null;
+  title: string | null;
   description: string;
-  duration?: number;
+  duration: number | null;
   price?: number;
   onEdit: () => void;
   onDelete: () => void;

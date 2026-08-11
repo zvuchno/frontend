@@ -20,8 +20,14 @@ import type {
   TUpdateImageRequest,
   TDeleteImageRequest,
   TCreatePromocodeRequest,
+  TShowcaseTrack,
+  TShowcaseUpdateTrackInfoPayload,
+  TShowcaseTrackDetail,
+  TUploadTrackPayload,
+  TUploadTrackResponse,
+  TUpdateTrackPayload,
 } from "../model/types";
-import { fillFormData } from "@/features/showcaseUpload";
+import { fillFormData } from "../utils/formDataHelper";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -354,4 +360,179 @@ export async function deleteImage(token: string | undefined, data: TDeleteImageR
   await authFetchClient<void>(url, {
     method: "DELETE",
   }, token);
+};
+
+//-------Треки-------//
+export async function getShowcaseTracksList({
+  token,
+  album,
+  url,
+}: {
+  token: string | undefined;
+  album?: number;
+  url?: string;
+}): Promise<PaginatedStoreResponse<TShowcaseTrack>> {
+  const params = new URLSearchParams();
+  if ( album ) params.append("album", album.toString());
+
+  const mainUrl = `${baseUrl}/v1/store/tracks/?${params.toString()}`;
+  const currentUrl = url ? url : mainUrl;
+
+  const response = await authFetchClient<PaginatedStoreResponse<TShowcaseTrack>>(currentUrl, {
+    method: "GET",
+  }, token);
+
+  if (!response) throw new Error('Не удалось получить треки')
+
+  return response;
+};
+
+export async function getDetailTrack({
+  token,
+  id
+}: {
+  token: string | undefined;
+  id?: number;
+}): Promise<TShowcaseTrackDetail> {
+  const url = `${baseUrl}/v1/store/tracks/${id}`;
+
+  const response = await authFetchClient<TShowcaseTrackDetail>(url, {
+    method: "GET",
+  }, token);
+
+  if (!response) throw new Error('Не удалось получить трек')
+
+  return response;
+};
+
+export async function deleteTrack({
+  token,
+  id,
+}: {
+  token: string | undefined;
+  id: number;
+}): Promise<void> {
+  const url = `${baseUrl}/v1/store/tracks/${id}/`;
+
+  await authFetchClient<void>(url, {
+    method: "DELETE",
+  }, token);
+};
+
+export async function updateTrackInfo(
+  token: string | undefined,
+  data: TShowcaseUpdateTrackInfoPayload
+): Promise<TShowcaseTrackDetail> {
+  const { id, ...payload } = data;
+
+  const url = `${baseUrl}/v1/store/tracks/${id}`;
+
+  const response = await authFetchClient<TShowcaseTrackDetail>(url, {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  }, token);
+
+  if (!response) throw new Error('Не удалось обновить трек')
+
+  return response;
+};
+
+export async function directUploadTrack(
+  token: string | undefined,
+  file: File,
+  data: TUploadTrackPayload
+) {
+  const { album_id, ...payload } = data;
+
+  const url = `${baseUrl}/v1/store/albums/${album_id}/track-uploads/initiate/`;
+
+  const response = await authFetchClient<TUploadTrackResponse>(url, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  }, token);
+
+  if (!response) throw new Error('Не удалось инициировать загрузку трека')
+
+  const transport = response.upload.transport;
+  const formData = new FormData();
+
+  Object.entries(transport.fields).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+
+  formData.append(transport.file_field_name, file);
+
+  const headers: HeadersInit = {};
+  if (transport.headers) {
+    Object.entries(transport.headers).forEach(([k, v]) => {
+      headers[k] = v;
+    });
+  }
+
+  const uploadRes = await fetch(transport.url, {
+    method: transport.method || 'POST',
+    body: formData,
+    headers,
+  });
+  if (!uploadRes.ok) throw new Error('Ошибка загрузки файла на транспорт');
+  const res = await authFetchClient<void>(response.upload.complete_url, {
+    method: 'POST'
+  }, token);
+
+  if (res) await authFetchClient<TUploadTrackResponse>(
+    `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete/`, 
+    {
+      method: "POST",
+      body: JSON.stringify(payload)
+    }, token);
+};
+
+export async function directUpdateTrack(
+  token: string | undefined,
+  file: File,
+  data: TUpdateTrackPayload
+) {
+  const { track_id, ...payload } = data;
+
+  const url = `${baseUrl}/v1/store/tracks/${track_id}/file-upload/initiate/`;
+
+  const response = await authFetchClient<TUploadTrackResponse>(url, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  }, token);
+
+  if (!response) throw new Error('Не удалось инициировать загрузку трека')
+
+  const transport = response.upload.transport;
+  const formData = new FormData();
+
+  Object.entries(transport.fields).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+
+  formData.append(transport.file_field_name, file);
+
+  const headers: HeadersInit = {};
+  if (transport.headers) {
+    Object.entries(transport.headers).forEach(([k, v]) => {
+      headers[k] = v;
+    });
+  }
+
+  const uploadRes = await fetch(transport.url, {
+    method: transport.method || 'POST',
+    body: formData,
+    headers,
+  });
+  if (!uploadRes.ok) throw new Error('Ошибка загрузки файла на транспорт');
+  await authFetchClient<void>(response.upload.complete_url, {
+    method: 'POST'
+  }, token);
+
+  // if (res) await authFetchClient<TUploadTrackResponse>(
+  //   `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete/`, 
+  //   {
+  //     method: "POST",
+  //     body: JSON.stringify(payload)
+  //   }, token);
 };
