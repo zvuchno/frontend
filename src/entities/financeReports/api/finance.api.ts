@@ -68,7 +68,7 @@ export async function downloadFinanceReport({
 }: {
   downloadUrl: string;
   token?: string;
-}): Promise<Blob> {
+}): Promise<{ blob: Blob; filename: string }> {
   const response = await fetch(downloadUrl, {
     method: "GET",
     headers: {
@@ -80,5 +80,13 @@ export async function downloadFinanceReport({
   if (!response.ok) {
     throw new Error(`Ошибка при скачивании файла`);
   }
-  return await response.blob();
+
+  const disposition = response.headers.get("content-disposition");
+  console.log(disposition);
+  const matches = disposition?.match(/filename="?([^"]+)"?/) ?? null;
+  console.log(matches);
+  const filename = matches !== null ? matches[1] : "report.pdf";
+  console.log(filename);
+  const blob = await response.blob();
+  return { blob, filename };
 }
