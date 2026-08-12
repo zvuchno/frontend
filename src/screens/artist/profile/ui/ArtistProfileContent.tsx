@@ -45,7 +45,7 @@ export function ArtistProfileContent() {
       name: formData.name,
       description: formData.description,
       city: formData.city,
-      url: formData.url,
+      slug: formData.url,
     };
 
     // Отправляем только если есть изменения
@@ -53,7 +53,7 @@ export function ArtistProfileContent() {
       artist.name !== payload.name ||
       artist.description !== payload.description ||
       artist.city !== payload.city ||
-      artist.url !== payload.url;
+      artist.slug !== payload.slug;
 
     if (!hasChanges) {
       setIsEditMode(false);
@@ -76,7 +76,7 @@ export function ArtistProfileContent() {
         name: artist.name,
         description: artist.description ?? '',
         city: artist.city ?? '',
-        url: artist.url ?? '',
+        url: artist.slug ?? '',
       });
     }
   }, [artist, methods]);

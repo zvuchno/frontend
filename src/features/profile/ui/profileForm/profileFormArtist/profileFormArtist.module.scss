@@ -89,6 +89,23 @@
     letter-spacing: -0.06em;
     white-space: nowrap;
   }
+
+}
+
+.labelContainer {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  &__markRequired {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 130%;
+    letter-spacing: -0.06em;
+    font-family: var(--font-feature-mono);
+    color: var(--color-primary-blue);
+  }
 }
 
 @media (max-width: 768px) {

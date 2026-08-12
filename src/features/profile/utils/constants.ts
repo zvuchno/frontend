@@ -181,7 +181,7 @@ export const fieldsConfig: Record<
   url: {
     required: true,
     pattern:
-      /^(?:[a-z0-9]+(?:[-_][a-z0-9]+)*|(?:https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?)$/i,
+      /^[-a-zA-Z0-9_]+$/,
   },
   description: {
     required: false,

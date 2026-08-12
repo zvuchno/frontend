@@ -47,7 +47,7 @@ export function hasArtistProfileChanges(
     (formData.name ?? "") !== (artist.name ?? "") ||
     (formData.description ?? "") !== (artist.description ?? "") ||
     (formData.city ?? "") !== (artist.city ?? "") ||
-    (formData.url ?? "") !== (artist.url ?? "")
+    (formData.url ?? "") !== (artist.slug ?? "")
   );
 }
 
@@ -63,7 +63,7 @@ export function buildArtistProfileUpdatePayload(
     name: formData.name ?? "",
     description: artist.description ?? "",
     city: formData.city ?? "",
-    url: formData.url ?? "",
+    slug: formData.url ?? "",
     contacts: artist.contacts,
     socials: artist.socials,
   };
