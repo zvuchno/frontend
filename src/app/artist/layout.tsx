@@ -46,7 +46,7 @@ const buildArtistUpdatePayload = (
   name: artist.name,
   description: artist.description ?? "",
   city: artist.city ?? "",
-  url: artist.url ?? "",
+  slug: artist.slug ?? "",
   contacts: overrides.contacts ?? artist.contacts,
   socials: overrides.socials ?? artist.socials,
 });

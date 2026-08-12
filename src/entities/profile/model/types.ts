@@ -69,7 +69,7 @@ export type CurrentArtistResponse = {
   description: string | null;
   cover: string | null;
   city: string | null;
-  url: string | null;
+  //url: string | null;
   slug: string;
   contacts: ArtistApiDataItem[];
   socials: ArtistApiDataItem[];
@@ -79,7 +79,7 @@ export type UpdateCurrentArtistPayload = {
   name?: string;
   description?: string;
   city?: string;
-  url?: string;
+  slug?: string;
   contacts?: ArtistApiDataItem[];
   socials?: ArtistApiDataItem[];
 };
@@ -88,7 +88,7 @@ export type UpdateCurrentArtistResponse = {
   name: string;
   description: string | null;
   city: string | null;
-  url: string | null;
+  slug: string;
   contacts: ArtistApiDataItem[];
   socials: ArtistApiDataItem[];
 };
