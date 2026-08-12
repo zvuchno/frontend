@@ -21,6 +21,7 @@ import {
 } from "@/entities/profile";
 import { useSetAccountPassword, useUpdateAccountPassword, useUpdateAccountUsername } from "@/entities/profile/model/useListenerProfile";
 import toast from "react-hot-toast";
+import { UpdatePasswordModal } from "@/features/updatePasswordModal";
 
 function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
@@ -66,6 +67,7 @@ export function ListenerProfileFormSection() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isProfileSaving, setIsProfileSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const methods = useForm<FieldValues>({
     mode: "onChange",
@@ -217,23 +219,32 @@ export function ListenerProfileFormSection() {
   };
 
   return (
-    <FormProvider {...methods}>
-      <ProfileFormUI
-        className={styles.profileForm}
-        title='Профиль'
-        isChecked={isEditMode && isDirty && isValid && !isProfileBusy}
-        isOnChange={isEditMode || isProfileBusy}
-        isSubmitting={isProfileSaving}
-        errorMessage={formError ?? (visibleProfileError?.message ?? null)}
-        onEdit={handleEdit}
-        onSubmit={handleSubmitForm}
-      >
-        <ProfileFormListenerUI
-          fieldsDisabled={!isEditMode || isProfileBusy || !account}
-          disabledFields={["email"]}
-          has_usable_password={account?.has_usable_password || false}
-        />
-      </ProfileFormUI>
-    </FormProvider>
+    <>
+      <FormProvider {...methods}>
+        <ProfileFormUI
+          className={styles.profileForm}
+          title='Профиль'
+          isChecked={isEditMode && isDirty && isValid && !isProfileBusy}
+          isOnChange={isEditMode || isProfileBusy}
+          isSubmitting={isProfileSaving}
+          errorMessage={formError ?? (visibleProfileError?.message ?? null)}
+          has_usable_password={account?.has_usable_password}
+          onEdit={handleEdit}
+          onSubmit={handleSubmitForm}
+          onUpdatePassword={() => setIsModalOpen(true)}
+        >
+          <ProfileFormListenerUI
+            fieldsDisabled={!isEditMode || isProfileBusy || !account}
+            disabledFields={["email"]}
+            has_usable_password={account?.has_usable_password || false}
+          />
+        </ProfileFormUI>
+      </FormProvider>
+      <UpdatePasswordModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        has_usable_password={account?.has_usable_password}
+      />
+    </>
   );
 }

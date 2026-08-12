@@ -17,9 +17,11 @@ export const ProfileFormUI = ({
   isOnChange = true,
   isSubmitting = false,
   errorMessage,
+  has_usable_password = false,
   onSubmit,
   onError,
   onEdit,
+  onUpdatePassword,
 }: TProfileFormUIProps) => {
   const {
     handleSubmit,
@@ -34,6 +36,13 @@ export const ProfileFormUI = ({
       <div className={styles.formContentWrapper}>
         <h3 className={styles.formTitle}>{title}</h3>
         <div className={styles.formContent}>{children}</div>
+        {onUpdatePassword && (
+          <button type='button' className={styles.passwordButton} onClick={onUpdatePassword}>
+            <span className={styles.passwordButton__text}>
+              {has_usable_password ? 'Изменить пароль' : 'Установить пароль'}
+            </span>
+          </button>
+        )}
       </div>
 
       {errorMessage && <p className={styles.formError}>{errorMessage}</p>}

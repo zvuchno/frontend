@@ -108,24 +108,24 @@ export const listenerFormFields: TProfileFormField[] = [
     row: 2,
     column: 2,
   },
-  {
-    title: "Пароль",
-    name: "password",
-    placeholder: "",
-    type: "password",
-    required: false,
-    row: 3,
-    column: 1,
-  },
-  {
-    title: "Старый пароль",
-    name: "oldPassword",
-    placeholder: "",
-    type: "password",
-    required: false,
-    row: 3,
-    column: 2,
-  },
+  // {
+  //   title: "Пароль",
+  //   name: "password",
+  //   placeholder: "",
+  //   type: "password",
+  //   required: false,
+  //   row: 3,
+  //   column: 1,
+  // },
+  // {
+  //   title: "Старый пароль",
+  //   name: "oldPassword",
+  //   placeholder: "",
+  //   type: "password",
+  //   required: false,
+  //   row: 3,
+  //   column: 2,
+  // },
 ];
 
 export const fieldsConfig: Record<

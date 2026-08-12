@@ -47,3 +47,23 @@
     color: #c53535;
   }
 }
+
+.passwordButton {
+  background-color: transparent;
+  border: none;
+  color: var(--color-primary-blue);
+  align-self: start;
+  cursor: pointer;
+
+  &__text {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 100%;
+    letter-spacing: -0.06em;
+    text-decoration: underline;
+  }
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+}

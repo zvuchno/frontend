@@ -25,6 +25,10 @@
   align-items: center;
   gap: 20px;
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
   &__hint {
     font-size: 16px;
     font-weight: 400;
@@ -99,6 +103,11 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
 }
 
 .popup {
