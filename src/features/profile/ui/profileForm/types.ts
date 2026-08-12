@@ -31,6 +31,8 @@ export interface TProfileFormUIProps {
   control?: Control<FieldValues>;
   values?: Partial<FieldValues>;
   errors?: Partial<FieldErrors<FieldValues>>;
+  has_usable_password?: boolean;
+  onUpdatePassword?: () => void;
   onSubmit: SubmitHandler<FieldValues>;
   onError?: SubmitErrorHandler<FieldValues>;
   onEdit: () => void;
