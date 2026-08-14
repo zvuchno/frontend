@@ -36,7 +36,7 @@ export const PlayerUI = ({
 
   const title = track?.name ?? '';
   const artistName = track?.artist_name ?? '';
-  const variantId = track?.purchase ? track.purchase.variant_id : track?.variant_id;
+  const variantId = track?.favorite_variant_id;
 
   const playback = track?.playback;
   const isReady = playback?.status === 'ready' && !!playback?.url;

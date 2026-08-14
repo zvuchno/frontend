@@ -98,7 +98,6 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
           <Title className={s.title}>Плеер</Title>
           <div className={s.tracksContainer}>
             {tracks.map((track) => {
-              const variant_id = track.purchase ? track.purchase.variant_id : track.variant_id;
               return (
                 <Track
                   key={track.id}
@@ -125,8 +124,8 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
                   }
                     
                   }
-                  onLikeClick={variant_id ? (value) => {
-                    handleToggleFavorites(value, variant_id, token).catch(console.error)
+                  onLikeClick={track.favorite_variant_id ? (value) => {
+                    handleToggleFavorites(value, track.favorite_variant_id, token).catch(console.error)
                   } : undefined}
                 />
               );

@@ -22,7 +22,7 @@ export type TTrack = {
   is_favorite: boolean;
   playback: TPlayBack;
   purchase?: TPurchase;
-  variant_id: number;
+  favorite_variant_id: number;
 }
 
 export type TracksListResponse = {
