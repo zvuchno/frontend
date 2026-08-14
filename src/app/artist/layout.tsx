@@ -23,10 +23,11 @@ import {
   useUpdateArtistCover,
 } from "@/entities/profile";
 
-import { AccentContainer, Loader, Title } from "@/shared/ui";
+import { Loader, Title } from "@/shared/ui";
 
 import { ArtistDataSection, type TArtistDataItem } from "./components/ArtistDataSection";
 import s from "./layout.module.scss";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 const artistProfilePathnames = ["/artist/profile"];
 
@@ -173,7 +174,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className={s.page}>
-      <AccentContainer className={s.container}>
+      <AccentContainerWithPlayer className={s.container}>
         <div className={s.body}>
           <Title Tag='h2' className={s.title}>
             Личный кабинет
@@ -184,7 +185,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
             <div className={s.section__content}>{children}</div>
           </section>
         </div>
-      </AccentContainer>
+      </AccentContainerWithPlayer>
 
       {shouldShowArtistInfo ? (
         isLoadingDataArtist ? (

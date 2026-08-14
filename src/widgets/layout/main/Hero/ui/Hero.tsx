@@ -4,6 +4,7 @@ import { Title } from "@/shared/ui";
 
 import type { HeroUIProps } from "../model/Hero.types";
 import styles from "./Hero.module.scss";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 export const HeroUI = ({
   mainTitle = "ЗВУЧНО",
@@ -25,7 +26,7 @@ export const HeroUI = ({
   };
 
   return (
-    <div className={clsx(styles.hero__container, className)}>
+    <AccentContainerWithPlayer className={clsx(styles.hero__container, className)}>
       {centerText && (
         <Title
           Tag='h4'
@@ -72,6 +73,6 @@ export const HeroUI = ({
           <img src='/images/vinyl_player.png' />
         </div>
       )}
-    </div>
+    </AccentContainerWithPlayer>
   );
 };

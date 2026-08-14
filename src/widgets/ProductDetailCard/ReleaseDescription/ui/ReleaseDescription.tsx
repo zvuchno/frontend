@@ -14,7 +14,7 @@ import {
   type TReleaseVariant,
 } from "../model/ReleaseDescription.types";
 import s from "./ReleaseDescription.module.scss";
-import { PlayerContainer } from "@/widgets/PlayerContainer";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 // Компонент отображает карточку релиза и носителей. Вариант носителя "Диджитал" отображает информацию самого релиза
 export const ReleaseDescription = ({
@@ -74,7 +74,7 @@ export const ReleaseDescription = ({
   };
 
   return (
-    <PlayerContainer className={s.containerWrapper}>
+    <AccentContainerWithPlayer className={s.containerWrapper}>
       <div className={s.container}>
         <Gallery images={imagesForGallery} />
 
@@ -128,6 +128,6 @@ export const ReleaseDescription = ({
           </div>
         </div>
       </div>
-    </PlayerContainer>
+    </AccentContainerWithPlayer>
   );
 };

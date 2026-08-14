@@ -2,12 +2,13 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
-import { AccentContainer, ButtonUI } from "@/shared/ui";
+import { ButtonUI } from "@/shared/ui";
 
 import styles from "../../CartPage.module.scss";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 export const EmptyCart = () => (
-  <AccentContainer
+  <AccentContainerWithPlayer
     className={clsx(styles.cartMain, styles.emptyCart)}
     style={{
       width: "100%",
@@ -42,5 +43,5 @@ export const EmptyCart = () => (
         Назад к покупкам
       </Link>
     </ButtonUI>
-  </AccentContainer>
+  </AccentContainerWithPlayer>
 );

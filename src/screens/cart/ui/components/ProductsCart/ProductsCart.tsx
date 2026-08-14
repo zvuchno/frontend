@@ -2,13 +2,12 @@ import clsx from "clsx";
 
 import { type CartItemRespond, useRemoveCartItem } from "@/entities/cart";
 
-import { AccentContainer } from "@/shared/ui";
-
 import styles from "../../CartPage.module.scss";
 import { CartItemsList } from "../CartItemsList";
 import { CartSummary } from "../CartSummary";
 import { CartUnavailableItemsList } from "../CartUnavailableItemsList/CartUnavailableItemsList";
 import { RemoveFromCart } from "../RemoveFromCart/RemoveFromCart";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 export const ProductsCart = ({ cartItems }: { cartItems: CartItemRespond[] }) => {
   const { mutate: removeItem } = useRemoveCartItem();
@@ -21,7 +20,7 @@ export const ProductsCart = ({ cartItems }: { cartItems: CartItemRespond[] }) =>
     unAvailableItems.forEach((item) => removeItem(item.product_variant));
   };
   return (
-    <AccentContainer className={styles.cartMain}>
+    <AccentContainerWithPlayer className={styles.cartMain}>
       <h1 className={styles.cartTitle}>Корзина</h1>
       <section className={styles.cartContent}>
         <div className={styles.cartContentList}>
@@ -42,6 +41,6 @@ export const ProductsCart = ({ cartItems }: { cartItems: CartItemRespond[] }) =>
         </div>
         <CartSummary />
       </section>
-    </AccentContainer>
+    </AccentContainerWithPlayer>
   );
 };

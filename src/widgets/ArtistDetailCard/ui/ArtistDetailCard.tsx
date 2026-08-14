@@ -4,14 +4,15 @@ import { ArtistDescription } from "@/widgets/ArtistDescription";
 
 import { CardArtist } from "@/entities/Artist";
 
-import { AccentContainer, Title } from "@/shared/ui";
+import { Title } from "@/shared/ui";
 
 import { type IArtistDetailCardProps } from "../model/ArtistDetailCard.types";
 import s from "./ArtistDatailCard.module.scss";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
   return (
-    <AccentContainer className={s.containerWrapper}>
+    <AccentContainerWithPlayer className={s.containerWrapper}>
       <div className={s.container}>
         <CardArtist image={artist.cover ?? undefined} />
 
@@ -60,6 +61,6 @@ export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
           </div>
         </div>
       </div>
-    </AccentContainer>
+    </AccentContainerWithPlayer>
   );
 };
