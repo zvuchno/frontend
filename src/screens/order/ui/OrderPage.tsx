@@ -7,11 +7,10 @@ import { DevTool } from "@hookform/devtools";
 import { DeliverySelectionProvider, type TOrder } from "@/entities/order";
 import { useGetCheckoutData } from "@/entities/order";
 
-import { AccentContainer } from "@/shared/ui";
-
 import styles from "./OrderPage.module.scss";
 import { OrderDetails } from "./components/OrderDetails/OrderDetails";
 import { OrderSummary } from "./components/OrderSummary/OrderSummary";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 export const OrderPage = () => {
   const { data } = useGetCheckoutData();
@@ -41,7 +40,7 @@ export const OrderPage = () => {
   return (
     <DeliverySelectionProvider>
       <FormProvider {...methods}>
-        <AccentContainer className={styles.order}>
+        <AccentContainerWithPlayer className={styles.order}>
           <h1 className={styles.orderTitle}>Оформление заказа</h1>
           <form className={styles.orderWrapper}>
             <section className={styles.orderDetails}>
@@ -51,7 +50,7 @@ export const OrderPage = () => {
               <OrderSummary />
             </section>
           </form>
-        </AccentContainer>
+        </AccentContainerWithPlayer>
         <DevTool control={methods.control} />
       </FormProvider>
     </DeliverySelectionProvider>

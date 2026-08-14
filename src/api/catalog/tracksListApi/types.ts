@@ -1,4 +1,4 @@
-type TPlayBack = {
+export type TPlayBack = {
   status: 'pending' | 'building' | 'ready' | 'failed';
   kind: string | null;
   duration: number | null;
@@ -22,6 +22,7 @@ export type TTrack = {
   is_favorite: boolean;
   playback: TPlayBack;
   purchase?: TPurchase;
+  variant_id: number;
 }
 
 export type TracksListResponse = {

@@ -19,6 +19,9 @@ import { Track } from "@/shared/ui/Track";
 import s from "./ReleasePageContent.module.scss";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 import { useSession } from "next-auth/react";
+import { usePlayerStore } from "@/features/player";
+import type { TTrack } from "@/api/catalog/tracksListApi/types";
+import toast from "react-hot-toast";
 
 interface ReleasePageContentProps {
   release: TDetailRelease;
@@ -26,7 +29,6 @@ interface ReleasePageContentProps {
 }
 
 const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
-  const [playingTrack, setPlayingTrack] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataForModal, setDataForModl] = useState<TDataForModal | null>(null);
 
@@ -34,6 +36,13 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const isAuth = status === 'authenticated';
   const token = session?.user.accessToken;
   const hasFetching = isAuth || status === 'unauthenticated';
+
+  const { 
+    track: playTrack, 
+    isPlaying, 
+    togglePlay, 
+    setTrack 
+  } = usePlayerStore();
 
   const tracksQuery = useQuery({
     queryKey: ["tracks", release.id],
@@ -51,12 +60,18 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
     setIsModalOpen(false);
   };
 
-  const handlePlay = (id: number) => {
-    if (id === playingTrack) {
-      setPlayingTrack(null);
-    } else {
-      setPlayingTrack(id);
+  const handlePlay = (track: TTrack) => {
+    if (track.id !== playTrack?.id) {
+      setTrack(track);
+      return;
     }
+    
+    if (track.playback.status === 'ready') {
+      togglePlay();
+      return;
+    }
+
+    toast.error('Трек подготавливается...');
   };
 
   const handleOpenAddtoCartModal = (data: TDataForModal) => {
@@ -83,7 +98,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
           <Title className={s.title}>Плеер</Title>
           <div className={s.tracksContainer}>
             {tracks.map((track) => {
-              const variant_id = track.purchase?.variant_id;
+              const variant_id = track.purchase ? track.purchase.variant_id : track.variant_id;
               return (
                 <Track
                   key={track.id}
@@ -91,10 +106,11 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
                   artistName={track.artist_name || ""}
                   image={track.image}
                   isLiked={track.is_favorite}
-                  isPlaying={playingTrack === track.id}
+                  isPlaying={playTrack?.id === track.id && isPlaying}
                   hasCart={track.purchase ? true : false}
                   isAuth={isAuth}
-                  onPlayClick={() => handlePlay(track.id)}
+                  isReady={track.playback.status === 'ready' && !!track.playback.url}
+                  onPlayClick={() => handlePlay(track)}
                   onCartClick={() => {
                     if (track.purchase) {
                       handleOpenAddtoCartModal({
@@ -110,7 +126,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
                     
                   }
                   onLikeClick={(value) => {
-                    handleToggleFavorites(value, variant_id!, token).catch(console.error)
+                    handleToggleFavorites(value, variant_id, token).catch(console.error)
                   }}
                 />
               );

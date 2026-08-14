@@ -1,10 +1,10 @@
-import { AccentContainer } from "@/shared/ui";
 import Hero from "../components/hero/Hero";
 import FiltersBlock from "../components/filtersBlock/FiltersBlock";
 import { Suspense } from "react";
 import GenericCatalogList from "../components/genericCatalogList/GenericCatalogList";
 import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
 import s from "./CategoryPage.module.scss";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 interface CategoryPageProps {
   category: 'album' | 'all' | 'merch' | 'artists';
@@ -32,14 +32,14 @@ export const CategoryPage = async ({
 
   return (
     <>
-      <AccentContainer>
+      <AccentContainerWithPlayer>
         <Hero />
         <FiltersBlock
           сategory={category}
           basePath={`/catalog/${category}/`}
           merchList={merchKinds}
         />
-      </AccentContainer>
+      </AccentContainerWithPlayer>
       <Suspense
         fallback={<div className={s.message}>Загрузка карточек...</div>}
       >

@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { type MerchDescriptionProps } from "../model/MerchDescription.types";
 import s from "./MerchDescription.module.scss";
-import { AccentContainer, ButtonUI, Text, Title } from "@/shared/ui";
+import { ButtonUI, Text, Title } from "@/shared/ui";
 import Gallery from "../../components/Gallery/Gallery";
 import VariantRange from "../../components/VariantRange/VariantRange";
 import TabBar from "../../components/TabBar/TabBar";
 import { type TDataForModal } from "@/features/addToCartModal";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 // Компонент отображает карточку обычного мерча, не относящегося к носителям
 
@@ -57,7 +58,7 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
   };
 
   return (
-    <AccentContainer className={s.containerWrapper}>
+    <AccentContainerWithPlayer className={s.containerWrapper}>
       <div className={s.container}>
 
         <Gallery images={imagesForGallery} />
@@ -101,6 +102,6 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
         </div>
 
       </div>
-    </AccentContainer>
+    </AccentContainerWithPlayer>
   )
 };

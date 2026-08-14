@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useRef, useState } from "react";
 
 import clsx from "clsx";
@@ -6,62 +8,49 @@ import { ButtonLike } from "@/features/ButtonLike";
 
 import styles from "./Player.module.scss";
 import type { PlayerUIProps } from "./Player.types";
+import { usePlayerStore } from "../store/usePlayerStore";
+import { useUserStore } from "@/entities/user";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 export const PlayerUI = ({
   className,
-  image,
-  title,
-  artistName,
-  audioTrack,
-  isAuth,
-  isLiked = false,
 }: PlayerUIProps) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const {
+    track,
+    isPlaying,
+    currentTime,
+    totalDuration,
+    togglePlay,
+    seek,
+  } = usePlayerStore();
+
+  const { user } = useUserStore();
+  const isAuth = !!user?.id;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLSpanElement>(null);
   const nameRef = useRef<HTMLSpanElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [totalDuration, setTotalDuration] = useState(0);
+
   const [isTitleOverflowing, setIsTitleOverflowing] = useState(false);
   const [isNameOverflowing, setIsNameOverflowing] = useState(false);
 
-  const togglePlay = async () => {
-    if (isPlaying) {
-      audioRef.current?.pause();
-    } else {
-      await audioRef.current?.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
+  const title = track?.name ?? '';
+  const artistName = track?.artist_name ?? '';
+  const variantId = track?.purchase ? track.purchase.variant_id : track?.variant_id;
+
+  const playback = track?.playback;
+  const isReady = playback?.status === 'ready' && !!playback?.url;
 
   const formatTime = (time: number) => {
-    if (isNaN(time)) return "0:00";
-    const timeInSeconds = Math.floor(time);
-    const minutes =
-      timeInSeconds > 0 ? Math.floor(timeInSeconds / 60) : Math.ceil(timeInSeconds / 60);
-    const seconds = Math.abs(Math.floor(timeInSeconds % 60));
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    if (!Number.isFinite(time)) return '0:00';
+    const m = Math.floor(time / 60);
+    const s = Math.floor(time % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setCurrentTime(Math.floor(audioRef.current.currentTime));
-    }
-  };
-
-  const handleLoadedMetadata = () => {
-    if (audioRef.current) {
-      setTotalDuration(Math.floor(audioRef.current.duration));
-    }
-  };
-
-  const handleSet = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const time = Math.floor(Number(e.target.value));
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-      setCurrentTime(time);
-    }
+    seek(time);
   };
 
   useEffect(() => {
@@ -76,10 +65,12 @@ export const PlayerUI = ({
     }
   }, [title]);
 
+  if (!track) return null;
+
   return (
     <div className={clsx(styles.container, className)}>
       <div className={styles.infoWrapper}>
-        <div className={styles.image} style={{ backgroundImage: `url(${image})` }}></div>
+        <div className={styles.image} style={{ backgroundImage: `url(${track.image})` }}></div>
         <div className={styles.info} ref={containerRef}>
           <span
             className={clsx(styles.title, { [styles.animatedText]: isTitleOverflowing })}
@@ -95,40 +86,47 @@ export const PlayerUI = ({
           </span>
         </div>
       </div>
+
       <div className={styles.player}>
-        <audio
-          ref={audioRef}
-          src={audioTrack}
-          onTimeUpdate={handleTimeUpdate}
-          onLoadedMetadata={handleLoadedMetadata}
-          onEnded={() => setIsPlaying(false)}
-        />
         <div
-          onClick={() => togglePlay}
+          onClick={isReady ? togglePlay : undefined}
           className={styles.playButton}
           style={{
             backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')",
+            cursor: isReady ? 'pointer' : 'not-allowed',
           }}
-        ></div>
+          aria-label={isReady ? (isPlaying ? 'Пауза' : 'Воспроизвести') : 'Трек загружается'}
+          title={isReady ? '' : 'Трек ещё не готов'}
+          role="button"
+        />
+
         <div className={styles.controls}>
           <span>{formatTime(currentTime)}</span>
           <input
             type='range'
             min={0}
-            max={totalDuration}
+            max={totalDuration || 100}
             value={currentTime}
-            onChange={handleSet}
+            onChange={handleSeek}
             className={styles.progressBar}
           />
-          <span className={styles.timer}>{formatTime(currentTime - totalDuration)}</span>
+          <span className={styles.timer}>
+            -{formatTime((totalDuration || 0) - currentTime)}
+          </span>
         </div>
+
         <div className={styles.likeContainer}>
-          <ButtonLike
-            isAuth={isAuth}
-            isLiked={isLiked}
-            className={styles.buttonLike}
-            iconClassName={styles.iconLike}
-          />
+          {variantId ? (
+            <ButtonLike
+              isAuth={isAuth}
+              isLiked={track.is_favorite}
+              className={styles.buttonLike}
+              iconClassName={styles.iconLike}
+              onToggle={(value) => {
+                handleToggleFavorites(value, variantId, user?.accessToken).catch(console.error)
+              }}
+            />
+          ) : null}
         </div>
       </div>
     </div>

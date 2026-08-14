@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { type TDataForModal } from "@/features/addToCartModal";
 
-import { AccentContainer, ButtonUI, Text, Title } from "@/shared/ui";
+import { ButtonUI, Text, Title } from "@/shared/ui";
 
 import Gallery from "../../components/Gallery/Gallery";
 import TabBar from "../../components/TabBar/TabBar";
@@ -14,6 +14,7 @@ import {
   type TReleaseVariant,
 } from "../model/ReleaseDescription.types";
 import s from "./ReleaseDescription.module.scss";
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 // Компонент отображает карточку релиза и носителей. Вариант носителя "Диджитал" отображает информацию самого релиза
 export const ReleaseDescription = ({
@@ -73,7 +74,7 @@ export const ReleaseDescription = ({
   };
 
   return (
-    <AccentContainer className={s.containerWrapper}>
+    <AccentContainerWithPlayer className={s.containerWrapper}>
       <div className={s.container}>
         <Gallery images={imagesForGallery} />
 
@@ -127,6 +128,6 @@ export const ReleaseDescription = ({
           </div>
         </div>
       </div>
-    </AccentContainer>
+    </AccentContainerWithPlayer>
   );
 };
