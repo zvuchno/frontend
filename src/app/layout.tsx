@@ -10,6 +10,7 @@ import { SessionProviders } from "@/entities/user/providers/providers";
 
 import "./globals.scss";
 import { QueryProvider } from "./providers/QueryClientProvider";
+import { GlobalAudio } from "@/features/player";
 
 const featureMono = localFont({
   src: [
@@ -63,6 +64,7 @@ export default function RootLayout({
       <body className={`${featureMono.variable} ${betterVcr.variable}`}>
         <SessionProviders>
           <QueryProvider>
+            <GlobalAudio />
             <div className='global-noise' />
             <div className='app-shell'>
               <div className='app-container app-header-container'>

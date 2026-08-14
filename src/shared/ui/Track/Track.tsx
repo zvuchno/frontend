@@ -14,6 +14,7 @@ interface TrackProps {
   artistName: string;
   hasCart: boolean;
   isAuth: boolean;
+  isReady: boolean;
   onPlayClick: () => void;
   onCartClick?: () => void;
   onLikeClick: (value: boolean) => void;
@@ -27,6 +28,7 @@ export const Track = ({
   artistName,
   hasCart,
   isAuth,
+  isReady,
   onPlayClick,
   onCartClick,
   onLikeClick,
@@ -36,13 +38,16 @@ export const Track = ({
       <div className={s.actions}>
         <div
           className={s.playButton}
-          aria-label='button'
           style={{
             backgroundImage: isPlaying
               ? "url('/icons/pause.svg')"
               : "url('/icons/play-in-circle.svg')",
+            cursor: isReady ? 'pointer' : 'not-allowed',
           }}
           onClick={onPlayClick}
+          aria-label={isReady ? (isPlaying ? 'Пауза' : 'Воспроизвести') : 'Трек загружается'}
+          title={isReady ? '' : 'Трек ещё не готов'}
+          role="button"
         />
         {image && (
           <div 
