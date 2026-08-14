@@ -125,9 +125,9 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
                   }
                     
                   }
-                  onLikeClick={(value) => {
+                  onLikeClick={variant_id ? (value) => {
                     handleToggleFavorites(value, variant_id, token).catch(console.error)
-                  }}
+                  } : undefined}
                 />
               );
             })}

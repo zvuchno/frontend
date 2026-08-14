@@ -49,7 +49,6 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 
     try {
       const isCurrentlyPlaying = !audioInstance.paused && audioInstance.readyState > 2;
-      console.log('isCurrentlyPlaying:', isCurrentlyPlaying)
       if (isCurrentlyPlaying) {
         audioInstance.pause();
         set({ isPlaying: false });

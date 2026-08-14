@@ -17,7 +17,7 @@ interface TrackProps {
   isReady: boolean;
   onPlayClick: () => void;
   onCartClick?: () => void;
-  onLikeClick: (value: boolean) => void;
+  onLikeClick?: (value: boolean) => void;
 }
 
 export const Track = ({
@@ -66,13 +66,15 @@ export const Track = ({
         {hasCart && onCartClick && (
           <div className={s.cartButton} onClick={onCartClick} aria-label='button' />
         )}
-        <ButtonLike
-          isLiked={isLiked}
-          className={s.likeButton}
-          iconClassName={s.likeButton__icon}
-          isAuth={isAuth}
-          onToggle={onLikeClick}
-        />
+        {onLikeClick && (
+          <ButtonLike
+            isLiked={isLiked}
+            className={s.likeButton}
+            iconClassName={s.likeButton__icon}
+            isAuth={isAuth}
+            onToggle={onLikeClick}
+          />
+        )}
       </div>
     </div>
   );
