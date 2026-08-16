@@ -134,7 +134,7 @@ async function proxy(
   const isUnsafeMethod = !["GET", "HEAD", "OPTIONS"].includes(request.method);
 
   if (isUnsafeMethod) {
-    setCsrfHeaders(request, cookieStore, backendHeaders);
+    setCsrfHeaders(cookieStore, backendHeaders);
   }
 
   const body = hasBody ? await request.arrayBuffer() : undefined;
