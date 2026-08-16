@@ -1,8 +1,8 @@
 import { type ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
-import { type NextRequest } from "next/server";
+
+const frontendOrigin = process.env.FRONTEND_ORIGIN || "https://dev.zvuchno.space";
 
 export const setCsrfHeaders = (
-  request: NextRequest,
   cookieStore: ReadonlyRequestCookies,
   backendHeaders: Headers
 ): void => {
@@ -12,6 +12,10 @@ export const setCsrfHeaders = (
     backendHeaders.set("x-csrftoken", csrfToken);
   }
 
-  backendHeaders.set("origin", request.nextUrl.origin);
-  backendHeaders.set("referer", `${request.nextUrl.origin}/`);
+  if (!frontendOrigin) {
+    throw new Error("FRONTEND_ORIGIN is not configured");
+  }
+
+  backendHeaders.set("origin", frontendOrigin);
+  backendHeaders.set("referer", `${frontendOrigin}/`);
 };

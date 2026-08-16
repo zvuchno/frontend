@@ -24,6 +24,7 @@ services:
       - NEXT_PUBLIC_YANDEX_MAPS_API_KEY=${NEXT_PUBLIC_YANDEX_MAPS_API_KEY}
       - NEXT_PUBLIC_DADATA_API_KEY=${NEXT_PUBLIC_DADATA_API_KEY}
       - NEXT_PUBLIC_BASE_API_URL=${NEXT_PUBLIC_BASE_API_URL}
+      - FRONTEND_ORIGIN=${FRONTEND_ORIGIN}
 
     volumes:
       - next_image_cache:/app/.next/cache/images
