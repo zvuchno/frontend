@@ -10,7 +10,7 @@ export type CurrentAccountResponse = {
   id: number;
   username: string;
   email: string;
-  phone: string | null;
+  phone?: string;
   is_phone_verified: boolean;
   is_email_verified: boolean;
   is_listener: boolean;
@@ -28,7 +28,7 @@ export type UpdateAccountPhonePayload = {
 };
 
 export type UpdateAccountPhoneResponse = {
-  phone: string | null;
+  phone?: string;
 };
 
 export type UpdateAccountPasswordPayload = {
@@ -40,7 +40,7 @@ export type UpdateAccountPasswordPayload = {
 export type SetAccountPasswordPayload = {
   new_password: string;
   retype_new_password: string;
-}
+};
 
 export type SetAccountPasswordResponse = void;
 

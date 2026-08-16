@@ -1,23 +1,27 @@
 "use client";
 
-import { getDownloadOptions, getPurchasedReleases, type PurchasedReleases } from "@/api/store";
+import { useState } from "react";
+
+import { type PurchasedReleases, getDownloadOptions, getPurchasedReleases } from "@/api/store";
+import {
+  type PaginatedStoreResponse,
+  type PurchasedReleaseDownloadOptions,
+} from "@/api/store/types";
+import type { InfiniteData } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
 import { ProductCard } from "@/entities/ProductCard";
 
+import { Loader } from "@/shared/ui";
 import { DownloadIcon } from "@/shared/ui/Icons";
 
-import styles from "./releasesPageClient.module.scss";
-import type { InfiniteData } from "@tanstack/react-query";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { type PurchasedReleaseDownloadOptions, type PaginatedStoreResponse } from "@/api/store/types";
-import { Loader } from "@/shared/ui";
 import { DownloadReleaseModal } from "../components/DownloadReleaseModal/DownloadReleaseModal";
-import { useState } from "react";
+import styles from "./releasesPageClient.module.scss";
 
 export function ReleasesPageClient() {
-  const { status, data: session } = useSession();
-  const token = session?.user.accessToken;
+  const { status } = useSession();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // Состояние для данных скачивания
@@ -25,27 +29,21 @@ export function ReleasesPageClient() {
   const [loading, setLoading] = useState(false);
   const [errorDownload, setErrorDownload] = useState<string | null>(null);
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useInfiniteQuery<
-    PaginatedStoreResponse<PurchasedReleases>,
-    Error,
-    InfiniteData<PaginatedStoreResponse<PurchasedReleases>>
-  >({
-    queryKey: ["listener", "releases"],
-    queryFn: async ({ pageParam }) =>  {
-      const url = pageParam as string | undefined;
-      if (url) return getPurchasedReleases(token, url);
-      return getPurchasedReleases(token);
-    },
-    initialPageParam: '',
-    getNextPageParam: (lastPage) => lastPage?.next,
-  });
+  const { data, error, fetchNextPage, isLoading, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery<
+      PaginatedStoreResponse<PurchasedReleases>,
+      Error,
+      InfiniteData<PaginatedStoreResponse<PurchasedReleases>>
+    >({
+      queryKey: ["listener", "releases"],
+      queryFn: async ({ pageParam }) => {
+        const url = pageParam as string | undefined;
+        if (url) return getPurchasedReleases(url);
+        return getPurchasedReleases();
+      },
+      initialPageParam: "",
+      getNextPageParam: (lastPage) => lastPage?.next,
+    });
 
   const cards = data?.pages.flatMap((page) => page.results) ?? [];
 
@@ -55,20 +53,22 @@ export function ReleasesPageClient() {
     setIsOpen(true);
     setLoading(true);
     setErrorDownload(null);
-    setDownloadData(null); 
+    setDownloadData(null);
 
     try {
-      const data = await getDownloadOptions(albumId, token);
+      const data = await getDownloadOptions(albumId);
       setDownloadData(data);
     } catch (err) {
-      setErrorDownload(err instanceof Error ? err.message : 'Не удалось получить варианты скачивания');
+      setErrorDownload(
+        err instanceof Error ? err.message : "Не удалось получить варианты скачивания"
+      );
     } finally {
       setLoading(false);
     }
   };
-  
+
   if (status !== "authenticated" || isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   if (error) {
@@ -83,36 +83,37 @@ export function ReleasesPageClient() {
     <div className={styles.container}>
       {cards.map((card) => {
         return (
-        <ProductCard
-          key={card.id}
-          image={card.image}
-          title={card.artist_name}
-          description={
-            card.year === null
-              ? `${card.kind} ${card.name}`
-              : `${card.kind} ${card.name} (${card.year.toString()})`
-          }
-          actionButton={
-            <button
-              type='button'
-              className={styles.downloadButton}
-              aria-label='Скачать релиз'
-              onClick={(e) => void handleDownloadClick(e, card.id)}
-              disabled={loading}
-            >
-              <DownloadIcon />
-            </button>
-          }
-          link={`/catalog/release/${card.id}?kind=release`}
-        />
-      )})}
+          <ProductCard
+            key={card.id}
+            image={card.image}
+            title={card.artist_name}
+            description={
+              card.year === null
+                ? `${card.kind} ${card.name}`
+                : `${card.kind} ${card.name} (${card.year.toString()})`
+            }
+            actionButton={
+              <button
+                type='button'
+                className={styles.downloadButton}
+                aria-label='Скачать релиз'
+                onClick={(e) => void handleDownloadClick(e, card.id)}
+                disabled={loading}
+              >
+                <DownloadIcon />
+              </button>
+            }
+            link={`/catalog/release/${card.id}?kind=release`}
+          />
+        );
+      })}
       {hasNextPage && (
         <div className={styles.buttonWrapper}>
           <button
-            type="button"
+            type='button'
             className={styles.button}
             onClick={() => {
-              fetchNextPage().catch(console.error)
+              fetchNextPage().catch(console.error);
             }}
             disabled={isFetchingNextPage}
           >
@@ -120,8 +121,8 @@ export function ReleasesPageClient() {
           </button>
         </div>
       )}
-      <DownloadReleaseModal 
-        isOpen={isOpen} 
+      <DownloadReleaseModal
+        isOpen={isOpen}
         onClose={() => {
           setIsOpen(false);
           setDownloadData(null);
@@ -133,4 +134,4 @@ export function ReleasesPageClient() {
       />
     </div>
   );
-};
+}

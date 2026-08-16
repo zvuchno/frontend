@@ -1,10 +1,8 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
-//import { getApiAccessToken } from "@/api/authToken";
-
 import type { TCdekData, TCdekPickupDetailsResponse } from "../model/types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl = "/api/backend";
 
 export type TCdekCity = {
   city_uuid: string; //"770f3275-921b-4552-a856-a16697d45691"
@@ -14,25 +12,13 @@ export type TCdekCity = {
 };
 
 // справочник населенных пунктов из справочника ПВЗ СДЕК (если есть ПВЗ)
-export async function getCdekCities(location: string, token?: string): Promise<TCdekCity[]> {
-  //const token = await getApiAccessToken();
-
-  /*const init: RequestInit = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    credentials: "include",
-  };*/
-
+export async function getCdekCities(location: string): Promise<TCdekCity[]> {
   const response = await authFetchClient<TCdekCity[]>(
     `${baseUrl}/v1/store/cdek-cities?query=${location}`,
     {
       method: "GET",
       credentials: "include",
-    },
-    token
+    }
   );
 
   if (!response) {
@@ -43,21 +29,8 @@ export async function getCdekCities(location: string, token?: string): Promise<T
 
 // запрос рассчета стоимости доставки в выбранный пвз
 export async function calculateCdekDelivery(
-  cdekData: TCdekData,
-  token?: string
+  cdekData: TCdekData
 ): Promise<TCdekPickupDetailsResponse> {
-  //const token = await getApiAccessToken();
-
-  /*const init: RequestInit = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(cdekData),
-    credentials: "include",
-  };*/
-
   const response = await authFetchClient<TCdekPickupDetailsResponse>(
     `${baseUrl}/v1/store/cdek-calculate/`,
     {
@@ -67,8 +40,7 @@ export async function calculateCdekDelivery(
       },
       body: JSON.stringify(cdekData),
       credentials: "include",
-    },
-    token
+    }
   );
 
   if (!response) {

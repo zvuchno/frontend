@@ -27,11 +27,13 @@ export type TCurrentUserResponse = {
   is_listener: boolean;
   is_artist: boolean;
   profile_type?: "artist" | "label";
+  artist_name?: string
 };
 
 export type TLoginData = {
   email: string;
   password: string;
+  rememberme: boolean;
 };
 
 export type TAuthResponse = {
@@ -71,27 +73,27 @@ export type TResetPasswordConfirmRequest = {
 };
 
 export interface UserDataProps {
-  id: number | null;
-  userName: string | null;
-  email: string | null;
-  phone: string | null;
-  isPhoneVerified: boolean;
-  isEmailVerified: boolean;
-  isListener: boolean;
-  isArtist: boolean;
-  artistName?: string | null;
+  id?: number;
+  userName?: string;
+  email?: string;
+  phone?: string;
+  isPhoneVerified?: boolean;
+  isEmailVerified?: boolean;
+  isListener?: boolean;
+  isArtist?: boolean;
+  artistName?: string;
   accessToken?: string;
 }
 
 export interface UserStoreProps {
-  user: UserDataProps | null;
-  isUserAuthorized: boolean | undefined;
+  user?: UserDataProps;
+  isUserAuthorized?: boolean;
   isLoading: boolean;
   error: string | null;
   // email на этапе регистрации для модального окна о письме подтверждения
   tempEmail: string | null;
 
-  setUser: (user: UserDataProps | null) => void;
+  setUser: (user: UserDataProps) => void;
   setIsUserAuthorized: (auth: boolean) => void;
   setIsLoading: (load: boolean) => void;
   setError: (error: string | null) => void;
@@ -103,9 +105,9 @@ export type TSocialAuthRequest = {
   provider: string; // "vk" | "yandex";
   access_token: string;
   code?: string;
-}
+};
 
 export type TSocialAuthResponse = {
   access: string;
   refresh: string;
-}
+};

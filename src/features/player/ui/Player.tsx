@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -6,23 +6,16 @@ import clsx from "clsx";
 
 import { ButtonLike } from "@/features/ButtonLike";
 
-import styles from "./Player.module.scss";
-import type { PlayerUIProps } from "./Player.types";
-import { usePlayerStore } from "../store/usePlayerStore";
 import { useUserStore } from "@/entities/user";
+
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
-export const PlayerUI = ({
-  className,
-}: PlayerUIProps) => {
-  const {
-    track,
-    isPlaying,
-    currentTime,
-    totalDuration,
-    togglePlay,
-    seek,
-  } = usePlayerStore();
+import { usePlayerStore } from "../store/usePlayerStore";
+import styles from "./Player.module.scss";
+import type { PlayerUIProps } from "./Player.types";
+
+export const PlayerUI = ({ className }: PlayerUIProps) => {
+  const { track, isPlaying, currentTime, totalDuration, togglePlay, seek } = usePlayerStore();
 
   const { user } = useUserStore();
   const isAuth = !!user?.id;
@@ -34,18 +27,18 @@ export const PlayerUI = ({
   const [isTitleOverflowing, setIsTitleOverflowing] = useState(false);
   const [isNameOverflowing, setIsNameOverflowing] = useState(false);
 
-  const title = track?.name ?? '';
-  const artistName = track?.artist_name ?? '';
+  const title = track?.name ?? "";
+  const artistName = track?.artist_name ?? "";
   const variantId = track?.favorite_variant_id;
 
   const playback = track?.playback;
-  const isReady = playback?.status === 'ready' && !!playback?.url;
+  const isReady = playback?.status === "ready" && !!playback?.url;
 
   const formatTime = (time: number) => {
-    if (!Number.isFinite(time)) return '0:00';
+    if (!Number.isFinite(time)) return "0:00";
     const m = Math.floor(time / 60);
     const s = Math.floor(time % 60);
-    return `${m}:${s < 10 ? '0' : ''}${s}`;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,11 +86,11 @@ export const PlayerUI = ({
           className={styles.playButton}
           style={{
             backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')",
-            cursor: isReady ? 'pointer' : 'not-allowed',
+            cursor: isReady ? "pointer" : "not-allowed",
           }}
-          aria-label={isReady ? (isPlaying ? 'Пауза' : 'Воспроизвести') : 'Трек загружается'}
-          title={isReady ? '' : 'Трек ещё не готов'}
-          role="button"
+          aria-label={isReady ? (isPlaying ? "Пауза" : "Воспроизвести") : "Трек загружается"}
+          title={isReady ? "" : "Трек ещё не готов"}
+          role='button'
         />
 
         <div className={styles.controls}>
@@ -110,9 +103,7 @@ export const PlayerUI = ({
             onChange={handleSeek}
             className={styles.progressBar}
           />
-          <span className={styles.timer}>
-            -{formatTime((totalDuration || 0) - currentTime)}
-          </span>
+          <span className={styles.timer}>-{formatTime((totalDuration || 0) - currentTime)}</span>
         </div>
 
         <div className={styles.likeContainer}>
@@ -123,7 +114,7 @@ export const PlayerUI = ({
               className={styles.buttonLike}
               iconClassName={styles.iconLike}
               onToggle={(value) => {
-                handleToggleFavorites(value, variantId, user?.accessToken).catch(console.error)
+                handleToggleFavorites(value, variantId).catch(console.error);
               }}
             />
           ) : null}

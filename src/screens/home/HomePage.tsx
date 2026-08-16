@@ -1,5 +1,8 @@
 "use client";
 
+import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
+import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import { SectionFAQ } from "@/widgets/SectionFAQ";
@@ -15,12 +18,9 @@ import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { mockBlogs, questions } from "@/shared/constants";
 import { ListSection } from "@/shared/ui";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 import styles from "./HomePage.module.scss";
-import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
-import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
-import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
-import { useSession } from "next-auth/react";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -31,9 +31,8 @@ interface HomePageProps {
 export function HomePage({ artists, albums, merch }: HomePageProps) {
   const { addProduct } = useRecentlyViewed();
 
-  const { status, data: session } = useSession();
-  const isAuth = status === 'authenticated';
-  const token = session?.user.accessToken;
+  const { status } = useSession();
+  const isAuth = status === "authenticated";
 
   return (
     <div className={styles.page}>
@@ -43,7 +42,11 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
         <ListSection title='Артисты' link={`/catalog/artists`} gap='70px'>
           {artists.map((artist) => (
             <Link key={artist.slug} href={`/catalog/artists/${artist.slug}/?kind=artists`}>
-              <CardArtist image={artist.cover ?? undefined} description={artist.name} hasButton={false}/>
+              <CardArtist
+                image={artist.cover ?? undefined}
+                description={artist.name}
+                hasButton={false}
+              />
             </Link>
           ))}
         </ListSection>
@@ -69,10 +72,10 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 }
                 price={item.price ?? undefined}
                 likeButton={
-                  <ButtonLike 
-                    isLiked={item.is_favorite} 
+                  <ButtonLike
+                    isLiked={item.is_favorite}
                     onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error);
                     }}
                     isAuth={isAuth}
                   />
@@ -83,7 +86,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
             );
           })}
         </ListSection>
-        
+
         <ListSection title='Мерч' link={`/catalog/merch`}>
           {merch.map((item) => {
             const url = item.target.url;
@@ -105,10 +108,10 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 }
                 price={item.price ?? undefined}
                 likeButton={
-                  <ButtonLike 
-                    isLiked={item.is_favorite} 
+                  <ButtonLike
+                    isLiked={item.is_favorite}
                     onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error);
                     }}
                     isAuth={isAuth}
                   />

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 
 import { getFinanceReportsAll } from "../api/finance.api";
 import {
@@ -14,21 +13,16 @@ export function useGetFinanceReports(
   periodType: TReportPeriodType,
   page: number
 ) {
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
-
   return useQuery<PaginatedStoreResponse<TFinanceReportPreview>, Error>({
-    queryKey: ["finance-reports", dateFrom, dateTo, periodType, page, { authorized: !!token }],
+    queryKey: ["finance-reports", dateFrom, dateTo, periodType, page],
     queryFn: async () => {
       return getFinanceReportsAll({
         periodStart: dateFrom,
         periodEnd: dateTo,
         periodType: periodType,
         page: page,
-        token: token,
       });
     },
-
-    enabled: !!token,
+    refetchOnWindowFocus: false,
   });
 }

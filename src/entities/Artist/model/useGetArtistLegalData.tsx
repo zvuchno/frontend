@@ -5,13 +5,14 @@ import { getArtistLegalData } from "../store/api";
 import { type TArtistLegalData } from "../store/types";
 
 export function useGetArtistLegalData() {
-  const { data: session, status } = useSession();
-  const token = session?.user.accessToken;
+  const { status } = useSession();
+
   const isSessionLoading = status === "loading";
 
   return useQuery<Partial<TArtistLegalData>>({
-    queryKey: ["artist-legal-data", { isAuthorized: !!token }],
-    queryFn: () => getArtistLegalData(token),
-    enabled: !isSessionLoading && !!token,
+    queryKey: ["artist-legal-data"],
+    queryFn: () => getArtistLegalData(),
+    enabled: !isSessionLoading,
+    refetchOnWindowFocus: false,
   });
 }

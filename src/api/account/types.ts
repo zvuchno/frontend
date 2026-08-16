@@ -14,7 +14,7 @@ export type UpdateAccountPhonePayload = {
 };
 
 export type UpdateAccountPhoneResponse = {
-  phone: string | null;
+  phone?: string;
 };
 
 export type UpdateAccountPasswordPayload = {

@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 
+import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
 import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 import clsx from "clsx";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import { ButtonLike } from "@/features/ButtonLike";
@@ -13,6 +15,7 @@ import { CardArtist } from "@/entities/Artist";
 import { ProductCard } from "@/entities/ProductCard";
 
 import { ButtonUI } from "@/shared/ui";
+import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 import s from "./ProductsList.module.scss";
 import {
@@ -21,9 +24,6 @@ import {
   isArtistCard,
   isProductCard,
 } from "./ProductsList.types";
-import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
-import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
-import { useSession } from "next-auth/react";
 
 const ProductsList = ({ products, link }: ProductsListProps) => {
   const [allProducts, setAllProducts] = useState<TCatalogCard[] | TArtistCard[] | []>(products);
@@ -31,9 +31,8 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const {status, data: session} = useSession();
-  const isAuth = status === 'authenticated';
-  const token = session?.user.accessToken;
+  const { status } = useSession();
+  const isAuth = status === "authenticated";
 
   useEffect(() => {
     setAllProducts(products);
@@ -47,8 +46,8 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
 
     try {
       const data = await authFetchClient<ProductsListResponse>(url, {
-        method: 'GET'
-      }, token);
+        method: "GET",
+      });
 
       if (!data) throw new Error("Ошибка получения карточек каталога");
 
@@ -74,9 +73,9 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
             {artistsCards.map((artist) => (
               <li key={artist.slug}>
                 <Link href={`/catalog/artists/${artist.slug}/?kind=artists`}>
-                  <CardArtist 
-                    image={artist.cover ?? undefined} 
-                    description={artist.name} 
+                  <CardArtist
+                    image={artist.cover ?? undefined}
+                    description={artist.name}
                     hasButton={false}
                   />
                 </Link>
@@ -107,11 +106,13 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                     }
                     price={product.price}
                     likeButton={
-                      <ButtonLike 
-                        isLiked={product.is_favorite} 
+                      <ButtonLike
+                        isLiked={product.is_favorite}
                         isAuth={isAuth}
                         onToggle={(isLiked) => {
-                          handleToggleFavorites(isLiked, product.favorite_variant_id, token).catch(console.error)
+                          handleToggleFavorites(isLiked, product.favorite_variant_id).catch(
+                            console.error
+                          );
                         }}
                       />
                     }

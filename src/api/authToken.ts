@@ -1,4 +1,4 @@
-import { getSession } from "next-auth/react";
+/*import { getSession } from "next-auth/react";
 
 export async function getApiAccessToken(): Promise<string> {
   const session = await getSession();
@@ -22,3 +22,4 @@ export const checkAccessToken = async () => {
   }
   return token;
 };
+*/

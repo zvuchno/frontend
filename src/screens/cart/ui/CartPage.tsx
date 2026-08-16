@@ -12,12 +12,11 @@ import { ProductsCart } from "./components/ProductsCart/ProductsCart";
 import { ShowCartChanges } from "./components/ShowCartChanges/ShowCartChanges";
 
 export const CartPage = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isAuth = status === "authenticated";
-  const token = session?.user.accessToken;
 
   const { data: cart, isLoading } = useCart({
-    enabled: isAuth !== undefined && (isAuth ? !!token : true),
+    enabled: isAuth !== undefined,
   });
 
   const items = cart?.items;

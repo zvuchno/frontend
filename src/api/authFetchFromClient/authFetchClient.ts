@@ -1,14 +1,9 @@
-import { getSession, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
-// Специальный тип для ошибки о частых запросах
-export class RateLimitError extends Error {
-  retryAfterMs: number;
-  constructor(retryAfterMs: number) {
-    super("Rate limit exceeded");
-    this.retryAfterMs = retryAfterMs;
-    this.name = "RateLimitError";
-  }
-}
+import { getErrorMessage } from "../errors/getErrorMessage";
+import { RateLimitError } from "../errors/rateLimitError";
+import { logoutFromBackend } from "../lib/handlers/logoutFromBackend";
+import { refreshSession } from "../lib/handlers/refreshSession";
 
 // Парсинг Retry-After: число (секунды) или HTTP-дата
 const parseRetryAfter = (header: string | null): number => {
@@ -27,32 +22,63 @@ const parseRetryAfter = (header: string | null): number => {
 
 export const authFetchClient = async <T>(
   input: RequestInfo,
-  init?: RequestInit,
-  token?: string
+  init?: RequestInit
 ): Promise<T | null> => {
-  //const session = await getSession();
-  //const accessToken = session?.user.accessToken;
+  //первоначальный запрос
 
   const headers = new Headers(init?.headers);
 
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
+  if (typeof init?.body === "string" && !headers.has("content-type")) {
+    headers.set("content-type", "application/json");
   }
 
-  const hasFormData = init?.body instanceof FormData;
+  const requestInit: RequestInit = {
+    ...init,
+    headers,
+    credentials: "same-origin",
+  };
 
-  if (!hasFormData && !headers.has('Content-Type')) {
-    headers.set('Content-Type', 'application/json');
-  }
+  let res = await fetch(input, requestInit);
 
-  const res = await fetch(input, { ...init, headers });
+  //const hasFormData = init?.body instanceof FormData;
 
-  //Обработка 401
-  if (res.status === 401) {
+  /*if (!hasFormData && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }*/
+
+  //const res = await fetch(input, { ...init, headers });
+
+  // проверка срок локальной NextAuth-сессии. Если BFF вернул x-session-expired: 1, не пытаемся обновлять backend access-token -> делаем backend logout, затем NextAuth logout
+  if (res.status === 401 && res.headers.get("x-session-expired") === "1") {
+    await logoutFromBackend();
+
     await signOut({
       redirect: true,
-        callbackUrl: "/",
+      callbackUrl: "/signin",
     });
+
+    throw new Error("Session expired");
+  }
+
+  //Обработка 401 через попытку refresh
+  if (res.status === 401) {
+    const refreshed = await refreshSession();
+
+    //один повторный запрос после refresh
+    if (refreshed) {
+      res = await fetch(input, requestInit);
+    }
+    //если refresh не получился -> разлогиниваем пользователя
+    if (res.status === 401) {
+      await logoutFromBackend();
+
+      await signOut({
+        redirect: true,
+        callbackUrl: "/signin",
+      });
+
+      throw new Error("Unauthorized");
+    }
   }
 
   // Обработка 429 — с учётом Retry-After
@@ -68,21 +94,14 @@ export const authFetchClient = async <T>(
     return null;
   }
 
-  const data = await res.json();
+  const contentType = res.headers.get("content-type") ?? "";
+
+  const data: unknown = contentType.includes("application/json")
+    ? await res.json()
+    : await res.text();
 
   if (!res.ok) {
-    throw new Error(
-      data.message ||
-        data.detail ||
-        data.phone ||
-        data.email ||
-        data.token ||
-        data.uid ||
-        data.old_password ||
-        data.password ||
-        data.stock ||
-        `HTTP ${res.statusText}`
-    );
+    throw new Error(getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`));
   }
 
   return data as T;

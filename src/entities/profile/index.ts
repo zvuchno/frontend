@@ -1,18 +1,20 @@
-export { 
-  useListenerProfile, 
+import {
+  useSetAccountPassword,
+  useUpdateAccountPassword,
+  useUpdateAccountUsername,
+} from "@/entities/profile/model/useListenerProfile";
+
+export {
+  useListenerProfile,
   useUpdateListenerName,
-  useUpdateAccountPhone
+  useUpdateAccountPhone,
 } from "./model/useListenerProfile";
 
-export { 
-  useCurrentArtist,
-  useUpdateArtist,
-  useUpdateArtistCover,
-} from "./model/useArtistProfile";
+export { useCurrentArtist, useUpdateArtist, useUpdateArtistCover } from "./model/useArtistProfile";
 
-export type { 
-  ListenerMe, 
-  UpdateListenerPayload, 
+export type {
+  ListenerMe,
+  UpdateListenerPayload,
   CurrentAccountResponse,
   TListenerProfile,
   SetAccountPasswordPayload,
@@ -30,3 +32,9 @@ export type {
   UpdateCurrentArtistCoverPayload,
   UpdateCurrentArtistCoverResponse,
 } from "./model/types";
+
+export {
+  useSetAccountPassword,
+  useUpdateAccountPassword,
+  useUpdateAccountUsername,
+} from "./model/useListenerProfile";

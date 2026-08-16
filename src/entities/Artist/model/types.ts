@@ -1,5 +1,5 @@
 // showcase types
-export type TShowcaseItem = 'products' | 'album' | 'merch' | 'promo';
+export type TShowcaseItem = "products" | "album" | "merch" | "promo";
 
 // для списка товаров/промокодов в витрине
 export type TShowcaseAlbum = {
@@ -35,8 +35,8 @@ export type TShowcasePromocode = {
   start_at: string | null;
   end_at: string | null;
   usage_limit: number | null; // Макс. количество использований. Пусто = неограничено
-  used_count: number, // Использовано раз
-  is_enabled: boolean
+  used_count: number; // Использовано раз
+  is_enabled: boolean;
 };
 
 // Для предзаполнения формы редактирования/создания товара/промокода
@@ -59,14 +59,14 @@ type TMerchImage = {
   id: number;
   image: string;
   is_main: boolean;
-}
+};
 
 type TMerchVariantDetail = {
   id?: number;
   sku: string;
   stock: number | null;
   value: string;
-}
+};
 
 export type TShowcaseMerchDetail = {
   id: number;
@@ -89,19 +89,19 @@ export type TShowcaseMerchDetail = {
 
 export type TShowcasePromocodeDetail = TShowcasePromocode & {
   description: string;
-}
+};
 
 export type TShowcaseListRequest = {
-  token: string | undefined;
+  //token: string | undefined;
   artist: string | null;
   url?: string;
   artist_id?: string;
   itemType?: TShowcaseItem;
 };
 
-export type PromoTypeFilter = 'PERCENT' | 'FIXED' | 'ALL';
+export type PromoTypeFilter = "PERCENT" | "FIXED" | "ALL";
 
-export type TShowcasePromocodesRequest = Omit<TShowcaseListRequest, 'artist'> & {
+export type TShowcasePromocodesRequest = Omit<TShowcaseListRequest, "artist"> & {
   discount_type?: PromoTypeFilter;
   is_available?: boolean | null;
 };
@@ -111,10 +111,6 @@ export type TShowcaseMerchRequest = TShowcaseListRequest & {
 };
 
 export type StockFilter = true | false | null;
-
-
-
-
 
 export type TCreateAlbumRequest = {
   name: string;
@@ -154,15 +150,14 @@ export type TCreatePromocodeRequest = {
   end_at: string | null;
   usage_limit: number | null; // Макс. количество использований. Пусто = неограничено
   is_enabled: boolean;
-  description: string
+  description: string;
 };
 
 type TUpdateRequest = {
-  token: string | undefined;
   id: number;
 };
 
-export type TUpdateAlbumPayload = Partial<TCreateAlbumRequest>
+export type TUpdateAlbumPayload = Partial<TCreateAlbumRequest>;
 
 export type TUpdatePromocodePayload = {
   description?: string;
@@ -174,7 +169,7 @@ export type TUpdatePromocodePayload = {
   is_enabled?: boolean;
 };
 
-export type TUpdateMerchPayload = Partial<TCreateMerchRequest>
+export type TUpdateMerchPayload = Partial<TCreateMerchRequest>;
 
 export type TUpdateAlbumRequest = TUpdateRequest & {
   payload: TUpdateAlbumPayload;
@@ -188,16 +183,13 @@ export type TUpdatePromocodeRequest = TUpdateRequest & {
   payload: TUpdatePromocodePayload;
 };
 
-
-
-
 export type TAddImagePayload = {
   image: File | Blob;
   is_main: boolean;
 };
 
 export type TAddImageRequest = TUpdateRequest & {
-  payload: TAddImagePayload
+  payload: TAddImagePayload;
 };
 
 export type TAddImageResponse = {
@@ -206,7 +198,6 @@ export type TAddImageResponse = {
   is_main: boolean;
 };
 
-
 export type TUpdateImagePayload = {
   image_id: string;
   image: File | Blob;
@@ -214,7 +205,7 @@ export type TUpdateImagePayload = {
 };
 
 export type TUpdateImageRequest = TUpdateRequest & {
-  payload: TUpdateImagePayload
+  payload: TUpdateImagePayload;
 };
 
 export type TDeleteImageRequest = {
@@ -244,7 +235,7 @@ export type TShowcaseUpdateTrackInfoPayload = {
   price?: string;
   allow_overpay?: boolean;
   description?: string;
-  audio_file?: File
+  audio_file?: File;
 };
 
 export type TShowcaseTrackDetail = TShowcaseTrack & {
@@ -278,7 +269,7 @@ type TUploadTrackTransport = {
   headers: Record<string, string>;
   fields: Record<string, string>;
   file_field_name: string;
-}
+};
 
 type TUploadTrackState = {
   id: number;
@@ -287,17 +278,17 @@ type TUploadTrackState = {
   expires_at: string;
   completed_at: string | null;
   complete_url: string;
-  transport: TUploadTrackTransport
-}
+  transport: TUploadTrackTransport;
+};
 
 export type TUploadTrackResponse = {
   track: TUploadTrack;
   upload: TUploadTrackState;
-}
+};
 
 export type TUpdateTrackPayload = {
   track_id: number;
   filename: string;
   size: number;
   content_type?: string;
-}
+};

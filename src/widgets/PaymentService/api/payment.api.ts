@@ -2,13 +2,9 @@ import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
 import { type TPaymentRequest, type TPaymentResponse } from "../model/types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl = "/api/backend";
 
-export async function initiatePayment(
-  payload: TPaymentRequest,
-  token?: string
-): Promise<TPaymentResponse> {
-  //let confirmationToken;
+export async function initiatePayment(payload: TPaymentRequest): Promise<TPaymentResponse> {
   try {
     const res = await authFetchClient<TPaymentResponse | null>(
       `${baseUrl}/v1/store/payments/create/`,
@@ -19,8 +15,7 @@ export async function initiatePayment(
           "Content-Type": "application/json",
         },
         credentials: "include",
-      },
-      token
+      }
     );
 
     return res;

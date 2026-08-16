@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 
+import { logoutFromBackend } from "@/api/lib/handlers/logoutFromBackend";
 import { SessionProvider } from "next-auth/react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import { useUserStore } from "../store/useUserStore";
 
@@ -13,21 +14,34 @@ const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
   const clearStore = useUserStore((state) => state.clearStore);
 
   useEffect(() => {
+    if (session?.error === "RefreshAccessTokenError") {
+      clearStore();
+
+      void (async () => {
+        await logoutFromBackend();
+
+        await signOut({
+          redirect: true,
+          callbackUrl: "/signin",
+        });
+      })();
+
+      return;
+    }
+
     if (status === "authenticated" && session?.user) {
-      const userData = session.user;
       setUser({
-        id: Number(userData.id),
-        userName: userData.userName,
-        email: userData.email,
-        phone: userData.phone,
-        isPhoneVerified: userData.isPhoneVerified,
-        isEmailVerified: userData.isEmailVerified,
-        isListener: userData.isListener,
-        isArtist: userData.isArtist,
-        accessToken: userData.accessToken,
-        artistName: userData.artistName,
+        id: Number(session.user.id),
+        userName: session.user.userName,
+        email: session.user.email,
+        phone: session.user.phone,
+        isPhoneVerified: session.user.isPhoneVerified,
+        isEmailVerified: session.user.isEmailVerified,
+        isListener: session.user.isListener,
+        isArtist: session.user.isArtist,
+        artistName: session.user.artistName,
       });
-    } else if (status === "unauthenticated") {
+    } else if (status === "unauthenticated" || !session?.user) {
       clearStore();
     }
   }, [session, status, setUser, clearStore]);

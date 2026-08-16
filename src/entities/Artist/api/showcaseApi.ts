@@ -1,47 +1,47 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import type { PaginatedStoreResponse } from "@/api/store/types";
-import type { 
-  TShowcaseAlbum, 
-  TShowcaseAlbumDetail,
-  TCreateMerchRequest, 
-  TShowcaseListRequest, 
-  TShowcaseMerch, 
-  TShowcaseMerchDetail, 
-  TShowcaseMerchRequest, 
-  TShowcasePromocode, 
-  TShowcasePromocodeDetail, 
-  TShowcasePromocodesRequest,
-  TUpdateAlbumRequest,
-  TUpdateMerchRequest,
-  TUpdatePromocodeRequest,
-  TCreateAlbumRequest,
+
+import type {
   TAddImageRequest,
   TAddImageResponse,
-  TUpdateImageRequest,
-  TDeleteImageRequest,
+  TCreateAlbumRequest,
+  TCreateMerchRequest,
   TCreatePromocodeRequest,
+  TDeleteImageRequest,
+  TShowcaseAlbum,
+  TShowcaseAlbumDetail,
+  TShowcaseListRequest,
+  TShowcaseMerch,
+  TShowcaseMerchDetail,
+  TShowcaseMerchRequest,
+  TShowcasePromocode,
+  TShowcasePromocodeDetail,
+  TShowcasePromocodesRequest,
   TShowcaseTrack,
-  TShowcaseUpdateTrackInfoPayload,
   TShowcaseTrackDetail,
+  TShowcaseUpdateTrackInfoPayload,
+  TUpdateAlbumRequest,
+  TUpdateImageRequest,
+  TUpdateMerchRequest,
+  TUpdatePromocodeRequest,
+  TUpdateTrackPayload,
   TUploadTrackPayload,
   TUploadTrackResponse,
-  TUpdateTrackPayload,
 } from "../model/types";
 import { fillFormData } from "../utils/formDataHelper";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl = "/api/backend";
 
 //-------получение списка для витрины-------//
 export async function getShowcaseAlbumsList({
-  token,
   artist,
   url,
   artist_id,
-  itemType
+  itemType,
 }: TShowcaseListRequest): Promise<PaginatedStoreResponse<TShowcaseAlbum>> {
   const params = new URLSearchParams();
-  if ( artist) params.append("artist", artist.toString());
-  if ((itemType === 'album' || itemType === 'products') && artist_id) {
+  if (artist) params.append("artist", artist.toString());
+  if ((itemType === "album" || itemType === "products") && artist_id) {
     params.append("artist_id", artist_id.toString());
   }
 
@@ -50,29 +50,28 @@ export async function getShowcaseAlbumsList({
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseAlbum>>(currentUrl, {
     method: "GET",
-  }, token);
+  });
 
-  if (!response) throw new Error('Не удалось получить альбомы')
+  if (!response) throw new Error("Не удалось получить альбомы");
 
   return response;
-};
+}
 
 export async function getShowcaseMerchList({
-  token,
   artist,
   url,
   in_stock,
   artist_id,
-  itemType
+  itemType,
 }: TShowcaseMerchRequest): Promise<PaginatedStoreResponse<TShowcaseMerch>> {
   const params = new URLSearchParams();
   if (artist) params.append("artist", artist.toString());
 
   if (in_stock !== null && in_stock !== undefined) {
-    params.append('in_stock', String(in_stock));
+    params.append("in_stock", String(in_stock));
   }
 
-  if ((itemType === 'merch' || itemType === 'products') && artist_id) {
+  if ((itemType === "merch" || itemType === "products") && artist_id) {
     params.append("artist_id", artist_id.toString());
   }
 
@@ -81,15 +80,14 @@ export async function getShowcaseMerchList({
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseMerch>>(currentUrl, {
     method: "GET",
-  }, token);
+  });
 
-  if (!response) throw new Error('Не удалось получить мерч')
+  if (!response) throw new Error("Не удалось получить мерч");
 
   return response;
-};
+}
 
 export async function getShowcasePromocodes({
-  token,
   url,
   discount_type,
   is_available,
@@ -98,75 +96,55 @@ export async function getShowcasePromocodes({
 }: TShowcasePromocodesRequest): Promise<PaginatedStoreResponse<TShowcasePromocode>> {
   const params = new URLSearchParams();
 
-  if (discount_type !== undefined && discount_type !== 'ALL') {
-    params.append('discount_type', String(discount_type));
+  if (discount_type !== undefined && discount_type !== "ALL") {
+    params.append("discount_type", String(discount_type));
   }
 
   if (is_available !== null && is_available !== undefined) {
-    params.append('is_available', String(is_available));
+    params.append("is_available", String(is_available));
   }
 
-  if (itemType === 'promo' && artist_id) params.append("artist_id", artist_id.toString());
+  if (itemType === "promo" && artist_id) params.append("artist_id", artist_id.toString());
 
   const mainUrl = `${baseUrl}/v1/store/promocodes/?limit=15&${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
 
-
   const response = await authFetchClient<PaginatedStoreResponse<TShowcasePromocode>>(currentUrl, {
     method: "GET",
-  }, token);
+  });
 
-  if (!response) throw new Error('Не удалось получить промокоды')
+  if (!response) throw new Error("Не удалось получить промокоды");
 
   return response;
-};
-
+}
 
 //-------удаление товара/промокода-------//
-export async function deleteAlbum({
-  token,
-  id,
-}: {
-  token: string | undefined;
-  id: number;
-}) {
+export async function deleteAlbum({ id }: { id: number }) {
   const url = `${baseUrl}/v1/store/albums/${id}`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",
-  }, token);
-};
+  });
+}
 
-export async function deleteMerch({
-  token,
-  id,
-}: {
-  token: string | undefined;
-  id: number;
-}): Promise<void> {
+export async function deleteMerch({ id }: { id: number }): Promise<void> {
   const url = `${baseUrl}/v1/store/merch/${id}/`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",
-  }, token);
-};
+  });
+}
 
-export async function deletePromocode({
-  token,
-  id,
-}: {
-  token: string | undefined;
-  id: number;
-}): Promise<void> {
+export async function deletePromocode({ id }: { id: number }): Promise<void> {
   const url = `${baseUrl}/v1/store/promocodes/${id}`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",
-  }, token);
-};
+  });
+}
 
 //-------создание товара/промокода-------//
-export async function createAlbum(token: string | undefined, payload: TCreateAlbumRequest): Promise<TShowcaseAlbumDetail> {
+export async function createAlbum(payload: TCreateAlbumRequest): Promise<TShowcaseAlbumDetail> {
   const formData = new FormData();
   fillFormData(formData, payload);
 
@@ -174,253 +152,225 @@ export async function createAlbum(token: string | undefined, payload: TCreateAlb
 
   const response = await authFetchClient<TShowcaseAlbumDetail>(url, {
     method: "POST",
-    body: formData
-  }, token);
+    body: formData,
+  });
 
-  if (!response) throw new Error('Не удалось создать альбом')
+  if (!response) throw new Error("Не удалось создать альбом");
 
   return response;
-};
+}
 
-export async function createMerch(token: string | undefined, payload: TCreateMerchRequest): Promise<TShowcaseMerchDetail> {
+export async function createMerch(payload: TCreateMerchRequest): Promise<TShowcaseMerchDetail> {
   const url = `${baseUrl}/v1/store/merch/`;
 
   const response = await authFetchClient<TShowcaseMerchDetail>(url, {
     method: "POST",
-    body: JSON.stringify(payload)
-  }, token);
+    body: JSON.stringify(payload),
+  });
 
-  if (!response) throw new Error('Не удалось создать мерч')
+  if (!response) throw new Error("Не удалось создать мерч");
 
   return response;
-};
+}
 
 export async function createPromocode(
-  token: string | undefined, 
   payload: TCreatePromocodeRequest
 ): Promise<TShowcasePromocodeDetail> {
   const url = `${baseUrl}/v1/store/promocodes/`;
 
   const response = await authFetchClient<TShowcasePromocodeDetail>(url, {
     method: "POST",
-    body: JSON.stringify(payload)
-  }, token);
+    body: JSON.stringify(payload),
+  });
 
-  if (!response) throw new Error('Не удалось создать промокод')
+  if (!response) throw new Error("Не удалось создать промокод");
 
   return response;
-};
+}
 
 //-------получение детальной информации о товаре/промокоде (для формы редактирования)-------//
-export async function getDetailAlbum({
-  token,
-  id
-}: {
-  token: string | undefined;
-  id?: number;
-}): Promise<TShowcaseAlbumDetail> {
+export async function getDetailAlbum({ id }: { id?: number }): Promise<TShowcaseAlbumDetail> {
   const url = `${baseUrl}/v1/store/albums/${id}`;
 
   const response = await authFetchClient<TShowcaseAlbumDetail>(url, {
     method: "GET",
-  }, token);
+  });
 
-  if (!response) throw new Error('Не удалось получить альбом')
+  if (!response) throw new Error("Не удалось получить альбом");
 
   return response;
-};
+}
 
-export async function getDetailMerch({
-  token,
-  id
-}: {
-  token: string | undefined;
-  id?: number;
-}): Promise<TShowcaseMerchDetail> {
+export async function getDetailMerch({ id }: { id?: number }): Promise<TShowcaseMerchDetail> {
   const url = `${baseUrl}/v1/store/merch/${id}`;
 
   const response = await authFetchClient<TShowcaseMerchDetail>(url, {
     method: "GET",
-  }, token);
+  });
 
-  if (!response) throw new Error('Не удалось получить мерч')
+  if (!response) throw new Error("Не удалось получить мерч");
 
   return response;
-};
+}
 
 export async function getDetailPromocode({
-  token,
-  id
+  id,
 }: {
-  token: string | undefined;
   id?: number;
 }): Promise<TShowcasePromocodeDetail> {
   const url = `${baseUrl}/v1/store/promocodes/${id}`;
 
   const response = await authFetchClient<TShowcasePromocodeDetail>(url, {
     method: "GET",
-  }, token);
+  });
 
-  if (!response) throw new Error('Не удалось получить промокод')
+  if (!response) throw new Error("Не удалось получить промокод");
 
   return response;
-};
+}
 
 //-------обновление товара/промокода-------//
 export async function updateAlbum(data: TUpdateAlbumRequest): Promise<TShowcaseAlbumDetail> {
-  const { token, id, payload } = data;
+  const { id, payload } = data;
   const url = `${baseUrl}/v1/store/albums/${id}`;
   const formData = new FormData();
   fillFormData(formData, payload);
 
   const response = await authFetchClient<TShowcaseAlbumDetail>(url, {
     method: "PATCH",
-    body: formData
-  }, token);
+    body: formData,
+  });
 
-  if (!response) throw new Error('Не удалось обновить альбом')
+  if (!response) throw new Error("Не удалось обновить альбом");
 
   return response;
-};
+}
 
 export async function updateMerch(data: TUpdateMerchRequest): Promise<TShowcaseMerchDetail> {
-  const { token, id, payload } = data;
+  const { id, payload } = data;
 
   const url = `${baseUrl}/v1/store/merch/${id}`;
 
   const response = await authFetchClient<TShowcaseMerchDetail>(url, {
     method: "PATCH",
-    body: JSON.stringify(payload)
-  }, token);
+    body: JSON.stringify(payload),
+  });
 
-  if (!response) throw new Error('Не удалось обновить мерч')
+  if (!response) throw new Error("Не удалось обновить мерч");
 
   return response;
-};
+}
 
-export async function updatePromocode(data: TUpdatePromocodeRequest): Promise<TShowcasePromocodeDetail> {
-  const { token, id, payload } = data;
+export async function updatePromocode(
+  data: TUpdatePromocodeRequest
+): Promise<TShowcasePromocodeDetail> {
+  const { id, payload } = data;
 
   const url = `${baseUrl}/v1/store/promocodes/${id}`;
 
   const response = await authFetchClient<TShowcasePromocodeDetail>(url, {
     method: "PATCH",
-    body: JSON.stringify(payload)
-  }, token);
+    body: JSON.stringify(payload),
+  });
 
-  if (!response) throw new Error('Не удалось обновить промокод');
+  if (!response) throw new Error("Не удалось обновить промокод");
 
   return response;
-};
+}
 
 //-------загрузка изображения для мерча-------//
 export async function addImage(data: TAddImageRequest): Promise<TAddImageResponse> {
-  const { token, id, payload } = data;
+  const { id, payload } = data;
   const formData = new FormData();
-  formData.append('image', payload.image);
-  formData.append('is_main', String(payload.is_main));
+  formData.append("image", payload.image);
+  formData.append("is_main", String(payload.is_main));
 
   const url = `${baseUrl}/v1/store/merch/${id}/images/`;
 
   const response = await authFetchClient<TAddImageResponse>(url, {
     method: "POST",
-    body: formData
-  }, token);
+    body: formData,
+  });
 
-  if (!response) throw new Error('Не добавить изображение')
+  if (!response) throw new Error("Не добавить изображение");
 
   return response;
-};
+}
 
 //-------обновлние изображений для мерча-------//
 export async function updateImage(data: TUpdateImageRequest): Promise<TAddImageResponse> {
-  const { token, id, payload } = data;
+  const { id, payload } = data;
   const formData = new FormData();
-  formData.append('image', payload.image);
-  formData.append('is_main', String(payload.is_main));
+  formData.append("image", payload.image);
+  formData.append("is_main", String(payload.is_main));
 
   const url = `${baseUrl}/v1/store/merch/${id}/images/${payload.image_id}/`;
 
   const response = await authFetchClient<TAddImageResponse>(url, {
     method: "PATCH",
-    body: formData
-  }, token);
+    body: formData,
+  });
 
-  if (!response) throw new Error('Не удалось обновить изображение')
+  if (!response) throw new Error("Не удалось обновить изображение");
 
   return response;
-};
+}
 
 //-------удаление изображений для мерча-------//
-export async function deleteImage(token: string | undefined, data: TDeleteImageRequest): Promise<void> {
+export async function deleteImage(data: TDeleteImageRequest): Promise<void> {
   const { id, image_id } = data;
 
   const url = `${baseUrl}/v1/store/merch/${id}/images/${image_id}/`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",
-  }, token);
-};
+  });
+}
 
 //-------Треки-------//
 export async function getShowcaseTracksList({
-  token,
   album,
   url,
 }: {
-  token: string | undefined;
   album?: number;
   url?: string;
 }): Promise<PaginatedStoreResponse<TShowcaseTrack>> {
   const params = new URLSearchParams();
-  if ( album ) params.append("album", album.toString());
+  if (album) params.append("album", album.toString());
 
   const mainUrl = `${baseUrl}/v1/store/tracks/?${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseTrack>>(currentUrl, {
     method: "GET",
-  }, token);
+  });
 
-  if (!response) throw new Error('Не удалось получить треки')
+  if (!response) throw new Error("Не удалось получить треки");
 
   return response;
-};
+}
 
-export async function getDetailTrack({
-  token,
-  id
-}: {
-  token: string | undefined;
-  id?: number;
-}): Promise<TShowcaseTrackDetail> {
+export async function getDetailTrack({ id }: { id?: number }): Promise<TShowcaseTrackDetail> {
   const url = `${baseUrl}/v1/store/tracks/${id}`;
 
   const response = await authFetchClient<TShowcaseTrackDetail>(url, {
     method: "GET",
-  }, token);
+  });
 
-  if (!response) throw new Error('Не удалось получить трек')
+  if (!response) throw new Error("Не удалось получить трек");
 
   return response;
-};
+}
 
-export async function deleteTrack({
-  token,
-  id,
-}: {
-  token: string | undefined;
-  id: number;
-}): Promise<void> {
+export async function deleteTrack({ id }: { id: number }): Promise<void> {
   const url = `${baseUrl}/v1/store/tracks/${id}/`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",
-  }, token);
-};
+  });
+}
 
 export async function updateTrackInfo(
-  token: string | undefined,
   data: TShowcaseUpdateTrackInfoPayload
 ): Promise<TShowcaseTrackDetail> {
   const { id, ...payload } = data;
@@ -429,29 +379,25 @@ export async function updateTrackInfo(
 
   const response = await authFetchClient<TShowcaseTrackDetail>(url, {
     method: "PATCH",
-    body: JSON.stringify(payload)
-  }, token);
+    body: JSON.stringify(payload),
+  });
 
-  if (!response) throw new Error('Не удалось обновить трек')
+  if (!response) throw new Error("Не удалось обновить трек");
 
   return response;
-};
+}
 
-export async function directUploadTrack(
-  token: string | undefined,
-  file: File,
-  data: TUploadTrackPayload
-) {
+export async function directUploadTrack(file: File, data: TUploadTrackPayload) {
   const { album_id, ...payload } = data;
 
   const url = `${baseUrl}/v1/store/albums/${album_id}/track-uploads/initiate/`;
 
   const response = await authFetchClient<TUploadTrackResponse>(url, {
     method: "POST",
-    body: JSON.stringify(payload)
-  }, token);
+    body: JSON.stringify(payload),
+  });
 
-  if (!response) throw new Error('Не удалось инициировать загрузку трека')
+  if (!response) throw new Error("Не удалось инициировать загрузку трека");
 
   const transport = response.upload.transport;
   const formData = new FormData();
@@ -470,38 +416,36 @@ export async function directUploadTrack(
   }
 
   const uploadRes = await fetch(transport.url, {
-    method: transport.method || 'POST',
+    method: transport.method || "POST",
     body: formData,
     headers,
   });
-  if (!uploadRes.ok) throw new Error('Ошибка загрузки файла на транспорт');
+  if (!uploadRes.ok) throw new Error("Ошибка загрузки файла на транспорт");
   const res = await authFetchClient<void>(response.upload.complete_url, {
-    method: 'POST'
-  }, token);
+    method: "POST",
+  });
 
-  if (res) await authFetchClient<TUploadTrackResponse>(
-    `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete/`, 
-    {
-      method: "POST",
-      body: JSON.stringify(payload)
-    }, token);
-};
+  if (res)
+    await authFetchClient<TUploadTrackResponse>(
+      `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete/`,
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }
+    );
+}
 
-export async function directUpdateTrack(
-  token: string | undefined,
-  file: File,
-  data: TUpdateTrackPayload
-) {
+export async function directUpdateTrack(file: File, data: TUpdateTrackPayload) {
   const { track_id, ...payload } = data;
 
   const url = `${baseUrl}/v1/store/tracks/${track_id}/file-upload/initiate/`;
 
   const response = await authFetchClient<TUploadTrackResponse>(url, {
     method: "POST",
-    body: JSON.stringify(payload)
-  }, token);
+    body: JSON.stringify(payload),
+  });
 
-  if (!response) throw new Error('Не удалось инициировать загрузку трека')
+  if (!response) throw new Error("Не удалось инициировать загрузку трека");
 
   const transport = response.upload.transport;
   const formData = new FormData();
@@ -520,19 +464,19 @@ export async function directUpdateTrack(
   }
 
   const uploadRes = await fetch(transport.url, {
-    method: transport.method || 'POST',
+    method: transport.method || "POST",
     body: formData,
     headers,
   });
-  if (!uploadRes.ok) throw new Error('Ошибка загрузки файла на транспорт');
+  if (!uploadRes.ok) throw new Error("Ошибка загрузки файла на транспорт");
   await authFetchClient<void>(response.upload.complete_url, {
-    method: 'POST'
-  }, token);
+    method: "POST",
+  });
 
   // if (res) await authFetchClient<TUploadTrackResponse>(
-  //   `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete/`, 
+  //   `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete/`,
   //   {
   //     method: "POST",
   //     body: JSON.stringify(payload)
   //   }, token);
-};
+}

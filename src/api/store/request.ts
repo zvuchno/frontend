@@ -1,4 +1,4 @@
-import { getApiAccessToken } from "@/api/authToken";
+/*import { getApiAccessToken } from "@/api/authToken";
 
 export function createAuthHeaders(token: string, headers?: HeadersInit): Headers {
   const authHeaders = new Headers(headers);
@@ -83,3 +83,4 @@ export async function requestStoreWithoutResponse(
     return throwStoreApiError(response);
   }
 }
+*/

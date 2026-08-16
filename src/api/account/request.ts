@@ -1,4 +1,4 @@
-import { getApiAccessToken } from "@/api/authToken";
+/*import { getApiAccessToken } from "@/api/authToken";
 
 function createAuthHeaders(token: string, headers?: HeadersInit): Headers {
   const authHeaders = new Headers(headers);
@@ -69,3 +69,4 @@ export async function requestAccountWithoutResponse(
     return throwAccountApiError(response);
   }
 }
+*/

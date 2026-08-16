@@ -1,18 +1,22 @@
-"use client"
+"use client";
 
-import { ButtonUI, Text, Title } from "@/shared/ui"
-import { AuthModal } from "@/widgets/AuthModal"
-import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import s from "./VerifySuccess.module.scss";
+
 import clsx from "clsx";
-import { resendEmailForVerify, verifyEmail } from "@/entities/user";
 import { useSession } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import { AuthModal } from "@/widgets/AuthModal";
+
+import { resendEmailForVerify, verifyEmail } from "@/entities/user";
+
+import { ButtonUI, Text, Title } from "@/shared/ui";
+
+import s from "./VerifySuccess.module.scss";
 
 export const VerifySuccessPage = () => {
-  const { status, data: session } = useSession();
-  const token = session?.user.accessToken;
-  const isAuthorized = status === 'authenticated';
+  const { status } = useSession();
+  const isAuthorized = status === "authenticated";
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -23,15 +27,15 @@ export const VerifySuccessPage = () => {
   const hasSentInitialRequest = useRef<boolean>(false);
   const [secondsLeft, setSecondsLeft] = useState<number>(5);
 
-  const uidFromLink = searchParams.get('uid');
-  const tokenFromLink = searchParams.get('token');
+  const uidFromLink = searchParams.get("uid");
+  const tokenFromLink = searchParams.get("token");
 
   const data = {
-    uid: uidFromLink || '',
-    token: tokenFromLink || '',
+    uid: uidFromLink || "",
+    token: tokenFromLink || "",
   };
 
-  const verifyAccount = async (data: { uid: string, token: string}) => {
+  const verifyAccount = async (data: { uid: string; token: string }) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -39,11 +43,9 @@ export const VerifySuccessPage = () => {
       await verifyEmail(data);
 
       setVerified(true);
-
     } catch (error) {
       setVerified(false);
-      setError(error instanceof Error ? error.message : 'Неизвестная ошибка')
-
+      setError(error instanceof Error ? error.message : "Неизвестная ошибка");
     } finally {
       setIsLoading(false);
     }
@@ -53,28 +55,26 @@ export const VerifySuccessPage = () => {
     try {
       setIsLoading(true);
       setError(null);
-      await resendEmailForVerify(token);
-      router.replace('/verify/verify-email');
-    } catch (error) { 
-      setError(error instanceof Error ? error.message : 'Не удалось отправить письмо')
-
+      await resendEmailForVerify();
+      router.replace("/verify/verify-email");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Не удалось отправить письмо");
     } finally {
       setIsLoading(false);
     }
-  }, [router, token]);
+  }, [router]);
 
   useEffect(() => {
     if (!hasSentInitialRequest.current) {
       hasSentInitialRequest.current = true;
       void verifyAccount(data);
     }
-  },);
+  });
 
   useEffect(() => {
     if (isVerified) {
-
       const timer = setTimeout(() => {
-        const route = isAuthorized ? '/' : '/signin';
+        const route = isAuthorized ? "/" : "/signin";
         router.replace(route);
       }, 5000);
 
@@ -90,9 +90,9 @@ export const VerifySuccessPage = () => {
   }, [isVerified, isAuthorized, router]);
 
   const handleClick = () => {
-    const route = isAuthorized ? '/' : '/signin';
+    const route = isAuthorized ? "/" : "/signin";
     router.replace(route);
-  }
+  };
 
   const handleRetry = () => {
     void verifyAccount(data);
@@ -103,77 +103,86 @@ export const VerifySuccessPage = () => {
   };
 
   const handleToLogin = () => {
-    router.replace('/signin');
+    router.replace("/signin");
   };
 
   const handleToMain = () => {
-    router.replace('/');
+    router.replace("/");
   };
 
   return (
     <AuthModal>
       {isLoading ? (
         <div className={s.container}>
-          <Title Tag="h2" className={s.text}>Обработка!</Title>
-          <Text Tag="p" className={s.text}>Пожалуйста, подождите...</Text>
+          <Title Tag='h2' className={s.text}>
+            Обработка!
+          </Title>
+          <Text Tag='p' className={s.text}>
+            Пожалуйста, подождите...
+          </Text>
           <div className={s.loader} />
         </div>
       ) : error ? (
         <div className={s.container}>
-          <Title Tag="h2" className={s.text}>Ошибка!</Title>
-          <Text Tag="p" className={s.text}>
-            {error.includes('Ссылка не действительна') 
-              ? isAuthorized 
-                ? `${error}: запросите отправку нового письма.` 
+          <Title Tag='h2' className={s.text}>
+            Ошибка!
+          </Title>
+          <Text Tag='p' className={s.text}>
+            {error.includes("Ссылка не действительна")
+              ? isAuthorized
+                ? `${error}: запросите отправку нового письма.`
                 : `${error}: пройдите авторизацию и снова перейдите по ссылке из письма.`
-              : error.includes('Пользователь не найден') 
-                ? error 
-                : `${error}: попробуйте снова.`} 
+              : error.includes("Пользователь не найден")
+                ? error
+                : `${error}: попробуйте снова.`}
           </Text>
-          {error.includes('Ссылка не действительна') && isAuthorized && (
-            <ButtonUI variant="primary" onClick={handleResend}>
+          {error.includes("Ссылка не действительна") && isAuthorized && (
+            <ButtonUI variant='primary' onClick={handleResend}>
               Отправить новое письмо
             </ButtonUI>
           )}
-          {error.includes('Ссылка не действительна') && !isAuthorized && (
-            <ButtonUI variant="primary" onClick={handleToLogin}>
+          {error.includes("Ссылка не действительна") && !isAuthorized && (
+            <ButtonUI variant='primary' onClick={handleToLogin}>
               Перейти к авторизации
             </ButtonUI>
           )}
-          {!error.includes('Ссылка не действительна') && !error.includes('Пользователь не найден') && (
-            <>
-              <ButtonUI variant="primary" onClick={handleToMain}>
-                Перейти на главную
-              </ButtonUI>
-              <ButtonUI variant="primary" onClick={handleRetry}>
-                Попробовать снова
-              </ButtonUI>
-            </>
-          )}
+          {!error.includes("Ссылка не действительна") &&
+            !error.includes("Пользователь не найден") && (
+              <>
+                <ButtonUI variant='primary' onClick={handleToMain}>
+                  Перейти на главную
+                </ButtonUI>
+                <ButtonUI variant='primary' onClick={handleRetry}>
+                  Попробовать снова
+                </ButtonUI>
+              </>
+            )}
         </div>
       ) : isVerified ? (
         <div className={s.container}>
-          <Title Tag="h2" className={s.text}>Email успешно подтверждён!</Title>
-          <Text Tag="p" className={s.text}>
-            Ваш адрес электронной почты был успешно подтверждён. Теперь вы можете продолжить покупки.
+          <Title Tag='h2' className={s.text}>
+            Email успешно подтверждён!
+          </Title>
+          <Text Tag='p' className={s.text}>
+            Ваш адрес электронной почты был успешно подтверждён. Теперь вы можете продолжить
+            покупки.
           </Text>
-          <ButtonUI variant="primary" onClick={handleClick}>
-            Перейти {isAuthorized ? 'на главную' : 'к авторизации'}
+          <ButtonUI variant='primary' onClick={handleClick}>
+            Перейти {isAuthorized ? "на главную" : "к авторизации"}
           </ButtonUI>
-          <Text Tag="p" className={clsx(s.text, s.leftText)}>
+          <Text Tag='p' className={clsx(s.text, s.leftText)}>
             Автоматический переход через {secondsLeft}{" "}
             {secondsLeft % 10 === 1 && secondsLeft % 100 !== 11
-              ? 'секунду'
+              ? "секунду"
               : secondsLeft % 10 >= 2 &&
                   secondsLeft % 10 <= 4 &&
                   (secondsLeft % 100 < 10 || secondsLeft % 100 >= 20)
-                ? 'секунды'
-                : 'секунд'}
-              ...
+                ? "секунды"
+                : "секунд"}
+            ...
           </Text>
         </div>
       ) : null}
-      
     </AuthModal>
-  )
+  );
 };
