@@ -4,10 +4,9 @@ import type { NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
   //ищем токен (если есть)
-
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
 
-  const isAuth = !!token;
+  const isAuth = Boolean(token?.id && !token.error);
 
   const isArtist = token?.isArtist;
   const isListener = token?.isListener;

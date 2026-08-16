@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useSession } from "next-auth/react";
-
 import { useGetCheckoutData } from "@/entities/order";
 
 import { CustomInput } from "@/shared/ui";
@@ -17,9 +15,6 @@ export interface TCitySuggestionsInput extends InputProps {
 }
 
 export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
-
   const { data } = useGetCheckoutData();
   const defaultCity = data?.user_defaults.city || "";
   const [suggestions, setSuggestions] = useState<TCdekCity[]>([]);
@@ -46,7 +41,7 @@ export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
 
     const fetchSuggestions = async () => {
       try {
-        const res = await getCdekCities(value, token);
+        const res = await getCdekCities(value);
         if (res) {
           setSuggestions(res);
         }

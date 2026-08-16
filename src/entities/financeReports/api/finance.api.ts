@@ -6,13 +6,13 @@ import {
   type TFinanceReportsResponse,
 } from "../model/types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl = "/api/backend";
 
 export async function getFinanceReportsAll({
   periodStart,
   periodEnd,
   periodType = "month",
-  token,
+
   page,
 }: TFinanceReportsRequest): Promise<TFinanceReportsResponse> {
   const limit = 5;
@@ -23,14 +23,10 @@ export async function getFinanceReportsAll({
 
   const targetUrl = `${baseUrl}/v1/store/me/reports/?${periodStartParams}&${periodEndParams}&limit=${limit}&offset=${offset}&${periodTypeParams}`;
 
-  const response = await authFetchClient<TFinanceReportsResponse>(
-    targetUrl,
-    {
-      method: "GET",
-      credentials: "include",
-    },
-    token
-  );
+  const response = await authFetchClient<TFinanceReportsResponse>(targetUrl, {
+    method: "GET",
+    credentials: "include",
+  });
 
   if (!response) {
     throw new Error(
@@ -42,18 +38,15 @@ export async function getFinanceReportsAll({
 
 export async function getFinanceReport({
   reportId,
-  token,
 }: {
   reportId: string;
-  token?: string;
 }): Promise<TFinanceReportDetails> {
   const response = await authFetchClient<TFinanceReportDetails>(
     `${baseUrl}/v1/store/me/reports/${reportId}/`,
     {
       method: "GET",
       credentials: "include",
-    },
-    token
+    }
   );
 
   if (!response) {
@@ -64,16 +57,12 @@ export async function getFinanceReport({
 
 export async function downloadFinanceReport({
   downloadUrl,
-  token,
 }: {
   downloadUrl: string;
-  token?: string;
 }): Promise<{ blob: Blob; filename: string }> {
   const response = await fetch(downloadUrl, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: {},
     credentials: "include",
   });
 

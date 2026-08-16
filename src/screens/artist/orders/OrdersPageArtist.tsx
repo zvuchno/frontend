@@ -1,47 +1,43 @@
 "use client";
 
+import { type TArtistOrder, getArtistOrders } from "@/api/artist";
 import { type PaginatedStoreResponse } from "@/api/store/types";
-import { Loader, Title } from "@/shared/ui";
 import type { InfiniteData } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import s from "./OrdersPageArtist.module.scss";
+
 import { CardOrderArtist } from "@/widgets/orders";
+
 import { ORDER_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
+import { Loader, Title } from "@/shared/ui";
 import { getRelativeDateLabel } from "@/shared/utils/getRelativeDateLabel";
-import { getArtistOrders, type TArtistOrder } from "@/api/artist";
+
+import s from "./OrdersPageArtist.module.scss";
 
 export function OrdersPageArtist() {
-  const { status, data: session } = useSession();
-  const token = session?.user.accessToken;
+  const { status } = useSession();
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useInfiniteQuery<
-    PaginatedStoreResponse<TArtistOrder>,
-    Error,
-    InfiniteData<PaginatedStoreResponse<TArtistOrder>>
-  >({
-    queryKey: ["orders", "artist"],
-    queryFn: async ({ pageParam }) =>  {
-      const url = pageParam as string | undefined;
-      if (url) return getArtistOrders(token, url);
-      return getArtistOrders(token);
-    },
-    initialPageParam: '',
-    getNextPageParam: (lastPage) => lastPage?.next,
-  });
+  const { data, error, fetchNextPage, isLoading, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery<
+      PaginatedStoreResponse<TArtistOrder>,
+      Error,
+      InfiniteData<PaginatedStoreResponse<TArtistOrder>>
+    >({
+      queryKey: ["orders", "artist"],
+      queryFn: async ({ pageParam }) => {
+        const url = pageParam as string | undefined;
+        if (url) return getArtistOrders(url);
+        return getArtistOrders();
+      },
+      initialPageParam: "",
+      getNextPageParam: (lastPage) => lastPage?.next,
+    });
 
   const orders = data?.pages.flatMap((page) => page.results) ?? [];
   const grouped = groupOrdersByDate(orders);
 
   if (status !== "authenticated" || isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   if (error) {
@@ -56,7 +52,9 @@ export function OrdersPageArtist() {
     <div className={s.container}>
       {grouped.map((group, index) => (
         <section key={index} className={s.section}>
-          <Title Tag="h3" className={s.sectionHeader}>{group.label}</Title>
+          <Title Tag='h3' className={s.sectionHeader}>
+            {group.label}
+          </Title>
           <div className={s.section}>
             {group.orders.map((order) => (
               <CardOrderArtist
@@ -76,10 +74,10 @@ export function OrdersPageArtist() {
       {hasNextPage && (
         <div className={s.buttonWrapper}>
           <button
-            type="button"
+            type='button'
             className={s.button}
             onClick={() => {
-              fetchNextPage().catch(console.error)
+              fetchNextPage().catch(console.error);
             }}
             disabled={isFetchingNextPage}
           >
@@ -89,7 +87,7 @@ export function OrdersPageArtist() {
       )}
     </div>
   );
-};
+}
 
 interface GroupedOrder {
   label: string;
@@ -129,4 +127,4 @@ function groupOrdersByDate(orders: TArtistOrder[]): GroupedOrder[] {
   }
 
   return grouped;
-};
+}

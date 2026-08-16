@@ -2,17 +2,13 @@ import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
 import { type TArtistLegalData, type TArtistLegalDataForApi } from "./types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl = "/api/backend";
 const ARTIST_LEGAL_PATH = `${baseUrl}/v1/artists/me/legal/`;
 
-export const getArtistLegalData = async (token?: string): Promise<Partial<TArtistLegalData>> => {
-  const response = await authFetchClient<Partial<TArtistLegalData>>(
-    ARTIST_LEGAL_PATH,
-    {
-      method: "GET",
-    },
-    token
-  );
+export const getArtistLegalData = async (): Promise<Partial<TArtistLegalData>> => {
+  const response = await authFetchClient<Partial<TArtistLegalData>>(ARTIST_LEGAL_PATH, {
+    method: "GET",
+  });
 
   if (!response) {
     throw new Error("Не удалось получить данные");
@@ -22,17 +18,12 @@ export const getArtistLegalData = async (token?: string): Promise<Partial<TArtis
 };
 
 export const updateArtistLegalData = async (
-  legalData: TArtistLegalDataForApi,
-  token?: string
+  legalData: TArtistLegalDataForApi
 ): Promise<Partial<TArtistLegalData>> => {
-  const response = await authFetchClient<Partial<TArtistLegalData>>(
-    ARTIST_LEGAL_PATH,
-    {
-      method: "PATCH",
-      body: JSON.stringify(legalData),
-    },
-    token
-  );
+  const response = await authFetchClient<Partial<TArtistLegalData>>(ARTIST_LEGAL_PATH, {
+    method: "PATCH",
+    body: JSON.stringify(legalData),
+  });
 
   if (!response) {
     throw new Error("Не удалось получить данные");
@@ -41,14 +32,10 @@ export const updateArtistLegalData = async (
   return response;
 };
 
-export const getRecipientTypes = async (token?: string): Promise<unknown> => {
-  const response = await authFetchClient<unknown>(
-    `${ARTIST_LEGAL_PATH}recipient-types/`,
-    {
-      method: "GET",
-    },
-    token
-  );
+export const getRecipientTypes = async (): Promise<unknown> => {
+  const response = await authFetchClient<unknown>(`${ARTIST_LEGAL_PATH}recipient-types/`, {
+    method: "GET",
+  });
 
   if (!response) {
     throw new Error("Не удалось получить данные");

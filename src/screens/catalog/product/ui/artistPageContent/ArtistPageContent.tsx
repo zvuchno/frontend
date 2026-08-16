@@ -1,6 +1,8 @@
 "use client";
 
+import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 import { ArtistDetailCard } from "@/widgets/ArtistDetailCard";
 import { type TDetalArtist } from "@/widgets/ArtistDetailCard";
@@ -11,9 +13,7 @@ import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection, Loader } from "@/shared/ui";
-import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
-import { useSession } from "next-auth/react";
 
 interface IArtistPageContentProps {
   artist: TDetalArtist;
@@ -21,36 +21,34 @@ interface IArtistPageContentProps {
 
 const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const { addProduct } = useRecentlyViewed();
-  const { status, data: session } = useSession();
+  const { status } = useSession();
 
-  const isAuth = status === 'authenticated';
-  const token = session?.user.accessToken;
-  const hasFetching = isAuth || status === 'unauthenticated';
+  const isAuth = status === "authenticated";
+
+  const hasFetching = isAuth || status === "unauthenticated";
 
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
     queryFn: () =>
       getCatalogListClient({
-        token,
         type: "album",
         artist: artist.slug,
         ordering: "random",
         limit: "4",
       }),
-      enabled: hasFetching,
+    enabled: hasFetching,
   });
 
   const queryMerch = useQuery({
     queryKey: ["recom", "merch", artist.slug],
     queryFn: () =>
       getCatalogListClient({
-        token,
         type: "merch",
         artist: artist.slug,
         ordering: "random",
         limit: "4",
       }),
-      enabled: hasFetching,
+    enabled: hasFetching,
   });
 
   const albumsRecommend = queryAlbums.data?.results;
@@ -58,7 +56,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const merchRecommend = queryMerch.data?.results;
   const hasMoreMerch = !!queryMerch.data?.next;
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <Loader />;
   }
 
@@ -91,11 +89,11 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 image={item.image}
                 price={item.price}
                 likeButton={
-                  <ButtonLike 
-                    isLiked={item.is_favorite} 
+                  <ButtonLike
+                    isLiked={item.is_favorite}
                     isAuth={isAuth}
                     onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error);
                     }}
                   />
                 }
@@ -132,11 +130,11 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 image={item.image}
                 price={item.price}
                 likeButton={
-                  <ButtonLike 
-                    isLiked={item.is_favorite} 
+                  <ButtonLike
+                    isLiked={item.is_favorite}
                     isAuth={isAuth}
                     onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
+                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error);
                     }}
                   />
                 }

@@ -1,10 +1,10 @@
 import { authFetchServer } from "@/api/authFetchFromServer/authFetchServer";
+
 import { type TCatalogListRequest, type TCatalogListResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export async function getCatalogListServer({
-  token,
   type,
   genre,
   kind,
@@ -58,12 +58,11 @@ export async function getCatalogListServer({
   try {
     const response = await authFetchServer<TCatalogListResponse>(url, {
       method: "GET",
-    },
-      token,
-    );
+    });
     return response;
-
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : `Ошибка получения продуктов категории: ${type}`);
+    throw new Error(
+      error instanceof Error ? error.message : `Ошибка получения продуктов категории: ${type}`
+    );
   }
 }

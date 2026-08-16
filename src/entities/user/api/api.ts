@@ -1,23 +1,18 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
+import { getErrorMessage } from "@/api/errors/getErrorMessage";
 
 import {
-  type TAuthResponse,
-  type TCurrentUserResponse,
   type TFetchProps,
-  type TLoginData,
-  type TLogoutdata,
   type TNewArtistRequest,
   type TNewListenerRequest,
   type TNewUserResponse,
   type TResetPasswordConfirmRequest,
   type TResetPasswordRequest,
   type TResetPasswordVerifyRequest,
-  type TSocialAuthRequest,
-  type TSocialAuthResponse,
   type TVerifyEmailRequest,
 } from "../model/types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
+const BASE_URL = "/api/backend";
 
 export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => {
   const endPoint = BASE_URL + "/v1" + props.url;
@@ -27,20 +22,16 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
     body: JSON.stringify(props.fetchData),
   });
 
-  const data = await res.json();
+  const contentType = res.headers.get("content-type") ?? "";
+
+  const data: unknown = contentType.includes("application/json")
+    ? await res.json()
+    : await res.text();
+
   if (!res.ok) {
-    // console.error("Server error:", res.statusText);
-    // console.error("Server message:", data.message || data.detail);
-    throw new Error(
-      data.message ||
-        data.detail ||
-        data.phone ||
-        data.email ||
-        data.token ||
-        data.uid ||
-        props.defaultMessage
-    );
+    throw new Error(getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`));
   }
+
   return data as T;
 };
 
@@ -62,7 +53,8 @@ export const registerNewListener = async (
   });
 };
 
-export const logInUser = async (
+// не используется после перехода на HTTP-Only cookie
+/*export const logInUser = async (
   userData: TLoginData,
   sessionId?: string
 ): Promise<TAuthResponse> => {
@@ -86,10 +78,11 @@ export const logInUser = async (
   }
 
   return data as Promise<TAuthResponse>;
-};
+};*/
 
+// не используется после перехода на HTTP-Only cookie
 // Получение информации о токене
-export const getTokenExp = (token: string | null): { exp: number; isValid: boolean } | null => {
+/*export const getTokenExp = (token: string | null): { exp: number; isValid: boolean } | null => {
   if (!token) return null;
 
   try {
@@ -105,8 +98,10 @@ export const getTokenExp = (token: string | null): { exp: number; isValid: boole
   } catch {
     return null;
   }
-};
+};*/
 
+// не используется после перехода на HTTP-Only cookie
+/*
 // обновление токена
 export const refreshAccessToken = async (refreshToken: string): Promise<{ access: string }> => {
   const res = await fetch(`${BASE_URL}/v1/auth/token/refresh/`, {
@@ -120,8 +115,10 @@ export const refreshAccessToken = async (refreshToken: string): Promise<{ access
   if (!res.ok) throw new Error(data.detail);
 
   return data; // { accessToken }
-};
+};*/
 
+// не используется после перехода на HTTP-Only cookie
+/*
 export const logOutUser = async (userData: TLogoutdata): Promise<void> => {
   const endPoint = BASE_URL + "/v1" + "/auth/token/logout/";
   const res = await fetch(endPoint, {
@@ -133,22 +130,7 @@ export const logOutUser = async (userData: TLogoutdata): Promise<void> => {
   if (res.status === 400) {
     throw new Error(res.statusText || "Ошибка при выходе из системы");
   }
-};
-
-export const getCurrentUser = async (token: string): Promise<TCurrentUserResponse> => {
-  const res = await fetch(`${BASE_URL}/v1/auth/account/me/`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!res.ok) {
-    const errorData = (await res.json()) as Error;
-    throw new Error(errorData.message);
-  }
-  return (await res.json()) as TCurrentUserResponse;
-};
+};*/
 
 export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
   return await createFetchFunction<void>({
@@ -158,14 +140,10 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
   });
 };
 
-export const resendEmailForVerify = async (token?: string): Promise<void> => {
-  await authFetchClient<void>(
-    "/v1/auth/account/me/resend-email",
-    {
-      method: "POST",
-    },
-    token
-  );
+export const resendEmailForVerify = async (): Promise<void> => {
+  await authFetchClient<void>("/api/backend/v1/auth/account/me/resend-email/", {
+    method: "POST",
+  });
 };
 
 export const resetPassword = async (data: TResetPasswordRequest): Promise<void> => {
@@ -192,31 +170,29 @@ export const resetPasswordConfirm = async (data: TResetPasswordConfirmRequest): 
   });
 };
 
+// не используется после перехода на HTTP-Only cookie
+/*
 export const socialAuth = async (data: TSocialAuthRequest): Promise<TSocialAuthResponse> => {
   return await createFetchFunction<TSocialAuthResponse>({
     url: `/auth/social/${data.provider}/`,
     fetchData: data,
     defaultMessage: `Ошибка авторизации через ${data.provider}`,
   });
-};
+};*/
 
 export async function fanBecomeArtist(
   name: string,
-  profile_type: "artist" | "label",
-  token?: string
+  profile_type: "artist" | "label"
 ): Promise<{ name: string; profile_type: "artist" | "label" }> {
-  const endPoint = BASE_URL + "/v1" + "/auth/account/me/become_artist/";
   const response = await authFetchClient<{ name: string; profile_type: "artist" | "label" }>(
-    endPoint,
+    "/api/backend/v1/auth/account/me/become_artist/",
     {
       method: "POST",
       body: JSON.stringify({ name, profile_type }),
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
-    },
-    token
+    }
   );
 
   if (!response) {

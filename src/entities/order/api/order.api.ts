@@ -1,10 +1,8 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
-//import { getApiAccessToken } from "@/api/authToken";
-
 import type { TCheckoutData, TDeliveryOption, TOrder, TOrderResponse } from "../model/types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl = "/api/backend";
 
 export async function getDeliveryOptions(): Promise<TDeliveryOption[]> {
   const init: RequestInit = { method: "GET" };
@@ -20,23 +18,11 @@ export async function getDeliveryOptions(): Promise<TDeliveryOption[]> {
   return response.json() as Promise<TDeliveryOption[]>;
 }
 
-export async function getCheckoutData(token?: string): Promise<TCheckoutData> {
-  //const token = await getApiAccessToken();
-  /*const init: RequestInit = {
+export async function getCheckoutData(): Promise<TCheckoutData> {
+  const response = await authFetchClient<TCheckoutData>(`${baseUrl}/v1/store/orders/checkout/`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
     credentials: "include",
-  };*/
-  const response = await authFetchClient<TCheckoutData>(
-    `${baseUrl}/v1/store/orders/checkout/`,
-    {
-      method: "GET",
-      credentials: "include",
-    },
-    token
-  );
+  });
 
   if (!response) {
     throw new Error("Ошибка получения данных заказа");
@@ -44,30 +30,15 @@ export async function getCheckoutData(token?: string): Promise<TCheckoutData> {
   return response;
 }
 
-export async function placeOrder(orderData: TOrder, token?: string): Promise<TOrderResponse> {
-  //const token = await getApiAccessToken();
-  /*const init: RequestInit = {
+export async function placeOrder(orderData: TOrder): Promise<TOrderResponse> {
+  const response = await authFetchClient<TOrderResponse>(`${baseUrl}/v1/store/orders/checkout/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(orderData),
     credentials: "include",
-  };*/
-
-  const response = await authFetchClient<TOrderResponse>(
-    `${baseUrl}/v1/store/orders/checkout/`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(orderData),
-      credentials: "include",
-    },
-    token
-  );
+  });
 
   if (!response) {
     throw new Error("Ошибка создания заказа");

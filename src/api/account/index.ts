@@ -1,6 +1,6 @@
 // export { getCurrentAccount } from "./getCurrentAccount";
 // export { updateAccountPassword } from "./updateAccountPassword";
-export { updateAccountPhone } from "./updateAccountPhone";
+//export { updateAccountPhone } from "./updateAccountPhone";
 // export { updateAccountUsername } from "./updateAccountUsername";
 
 export type {

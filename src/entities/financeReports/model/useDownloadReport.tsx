@@ -1,14 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 
 import { downloadFinanceReport } from "../api/finance.api";
 
 export function useDownloadReport() {
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
-
   return useMutation({
-    mutationFn: async (url: string) => downloadFinanceReport({ downloadUrl: url, token: token }),
+    mutationFn: async (url: string) => downloadFinanceReport({ downloadUrl: url }),
     onSuccess: ({ blob, filename }) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");

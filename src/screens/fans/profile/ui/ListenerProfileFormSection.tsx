@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -9,23 +10,26 @@ import { usePathname } from "next/navigation";
 import { ProfileFormUI } from "@/features/profile";
 import { ProfileFormListenerUI } from "@/features/profile";
 import { type FieldValues } from "@/features/profile";
+import { UpdatePasswordModal } from "@/features/updatePasswordModal";
 
+import {
+  type CurrentAccountResponse,
+  useListenerProfile,
+  useUpdateAccountPhone,
+  useUpdateListenerName,
+} from "@/entities/profile";
+import {
+  useSetAccountPassword,
+  useUpdateAccountPassword,
+  useUpdateAccountUsername,
+} from "@/entities/profile";
 import { type UserDataProps, useUserStore } from "@/entities/user";
 
 import styles from "./ListenerProfileFormSection.module.scss";
-import { 
-  type CurrentAccountResponse, 
-  useListenerProfile, 
-  useUpdateAccountPhone, 
-  useUpdateListenerName 
-} from "@/entities/profile";
-import { useSetAccountPassword, useUpdateAccountPassword, useUpdateAccountUsername } from "@/entities/profile/model/useListenerProfile";
-import toast from "react-hot-toast";
-import { UpdatePasswordModal } from "@/features/updatePasswordModal";
 
 function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
-};
+}
 
 function toUserStoreData(account: CurrentAccountResponse, accessToken?: string): UserDataProps {
   return {
@@ -39,7 +43,7 @@ function toUserStoreData(account: CurrentAccountResponse, accessToken?: string):
     isArtist: account.is_artist,
     accessToken,
   };
-};
+}
 
 export function ListenerProfileFormSection() {
   const { data: session, status, update: updateSession } = useSession();
@@ -49,9 +53,9 @@ export function ListenerProfileFormSection() {
   //const router = useRouter();
   const pathname = usePathname();
 
-  const { 
-    data: profileData, 
-    isLoading: isProfileLoading, 
+  const {
+    data: profileData,
+    isLoading: isProfileLoading,
     error: profileError,
   } = useListenerProfile();
 
@@ -81,7 +85,10 @@ export function ListenerProfileFormSection() {
     },
   });
 
-  const { reset, formState: { isDirty, isValid, dirtyFields } } = methods;
+  const {
+    reset,
+    formState: { isDirty, isValid, dirtyFields },
+  } = methods;
 
   // Сброс формы при загрузке данных
   useEffect(() => {
@@ -118,7 +125,7 @@ export function ListenerProfileFormSection() {
 
   const handleSubmitForm = async (data: FieldValues) => {
     if (!account) {
-      setFormError('Не удалось подготовить данные профиля к сохранению');
+      setFormError("Не удалось подготовить данные профиля к сохранению");
       return;
     }
 
@@ -158,7 +165,9 @@ export function ListenerProfileFormSection() {
 
       // 3. Обновление имени пользователя
       if (dirtyFields.userName && shouldUpdateUserName) {
-        const userNameResponse = await updateUserNameMutation.mutateAsync({ username: nextUserName });
+        const userNameResponse = await updateUserNameMutation.mutateAsync({
+          username: nextUserName,
+        });
         nextAccount = {
           ...nextAccount,
           username: userNameResponse.username,
@@ -171,11 +180,10 @@ export function ListenerProfileFormSection() {
 
       // 4. Обновление или установление пароля
       if (dirtyFields.password && data.password) {
-        
         if (account.has_usable_password) {
           // меняем существующий пароль
-          if(!data.oldPassword) {
-            setFormError('Для смены пароля требуется ввести текущий пароль');
+          if (!data.oldPassword) {
+            setFormError("Для смены пароля требуется ввести текущий пароль");
             return;
           }
 
@@ -183,20 +191,20 @@ export function ListenerProfileFormSection() {
             old_password: data.oldPassword,
             new_password: data.password,
             retype_new_password: data.password,
-          })
+          });
         } else {
           // устанавливаем пароль впервые
           await setPasswordMutation.mutateAsync({
             new_password: data.password,
             retype_new_password: data.password,
-          })
+          });
         }
       }
 
-      toast.success('Профиль успешно обновлён');
+      toast.success("Профиль успешно обновлён");
 
       // Обновляем локальный стейт и сбрасываем форму
-      setUser({ ...useUserStore.getState(), ...toUserStoreData(nextAccount, sessionUser?.accessToken) });
+      setUser({ ...useUserStore.getState(), ...toUserStoreData(nextAccount) });
 
       reset({
         name: savedName,
@@ -207,12 +215,11 @@ export function ListenerProfileFormSection() {
       });
 
       setIsEditMode(false);
-
     } catch (requestError) {
       setFormError(
         requestError instanceof Error ? requestError.message : "Не удалось сохранить профиль"
       );
-      toast.error('Не удалось сохранить профиль. Проверьте данные.');
+      toast.error("Не удалось сохранить профиль. Проверьте данные.");
     } finally {
       setIsProfileSaving(false);
     }
@@ -227,7 +234,7 @@ export function ListenerProfileFormSection() {
           isChecked={isEditMode && isDirty && isValid && !isProfileBusy}
           isOnChange={isEditMode || isProfileBusy}
           isSubmitting={isProfileSaving}
-          errorMessage={formError ?? (visibleProfileError?.message ?? null)}
+          errorMessage={formError ?? visibleProfileError?.message ?? null}
           has_usable_password={account?.has_usable_password}
           onEdit={handleEdit}
           onSubmit={handleSubmitForm}
@@ -240,8 +247,8 @@ export function ListenerProfileFormSection() {
           />
         </ProfileFormUI>
       </FormProvider>
-      <UpdatePasswordModal 
-        isOpen={isModalOpen} 
+      <UpdatePasswordModal
+        isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         has_usable_password={account?.has_usable_password}
       />

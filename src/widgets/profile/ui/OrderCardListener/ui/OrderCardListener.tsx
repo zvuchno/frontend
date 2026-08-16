@@ -1,15 +1,15 @@
+import { type KeyboardEvent, useState } from "react";
+
+import { getOrderDetail } from "@/api/store";
+import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
+import Link from "next/link";
 
 import { ArrowIcon, Definition, Loader } from "@/shared/ui";
 
-import styles from "./OrderCardListener.module.scss";
 import type { TOrderCardListenerProps } from "../model/types";
-import { type KeyboardEvent, useState } from "react";
-import { getOrderDetail } from "@/api/store";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
+import styles from "./OrderCardListener.module.scss";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -36,15 +36,16 @@ export const OrderCardListener = ({
   orderDate,
   images,
 }: TOrderCardListenerProps) => {
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
-
   const [isExpanded, setIsExpanded] = useState(false);
   const contentId = `content-${orderId}`;
 
-  const { data: details, isLoading, error } = useQuery({
-    queryKey: ['order-details', 'listener', orderId],
-    queryFn: () => getOrderDetail(orderId, token),
+  const {
+    data: details,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["order-details", "listener", orderId],
+    queryFn: () => getOrderDetail(orderId),
     enabled: isExpanded,
     staleTime: 3 * 60 * 1000,
   });
@@ -55,8 +56,8 @@ export const OrderCardListener = ({
 
   const allComments = details?.items
     .map((item) => item.comment)
-    .filter((comment) => comment && comment.trim() !== '')
-    .join('. ');
+    .filter((comment) => comment && comment.trim() !== "")
+    .join(". ");
 
   const handleHeaderKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
@@ -100,7 +101,7 @@ export const OrderCardListener = ({
           {images.map((image, index) => (
             <div className={styles.media} key={index}>
               {image && (
-                <Image 
+                <Image
                   className={styles.image}
                   src={image}
                   alt={image}
@@ -122,32 +123,31 @@ export const OrderCardListener = ({
           <div className={styles.contentInner}>
             <dl>
               {details.full_address && (
-                <Definition 
-                  className={styles.definition} 
-                  label='Адрес' 
-                  value={details.full_address} 
+                <Definition
+                  className={styles.definition}
+                  label='Адрес'
+                  value={details.full_address}
                 />
               )}
-              <Definition 
-                className={styles.definition} 
-                label='ФИО получателя' 
-                value={details.full_name} 
+              <Definition
+                className={styles.definition}
+                label='ФИО получателя'
+                value={details.full_name}
               />
               {details.delivery && (
-                <Definition 
-                  className={styles.definition} 
-                  label='Способ доставки' 
-                  value={details.delivery} 
+                <Definition
+                  className={styles.definition}
+                  label='Способ доставки'
+                  value={details.delivery}
                 />
               )}
               {details.delivery_price && (
-                <Definition 
-                  className={styles.definition} 
-                  label='Стоимость доставки' 
-                  value={formatTotalPrice(Number(details.delivery_price))} 
+                <Definition
+                  className={styles.definition}
+                  label='Стоимость доставки'
+                  value={formatTotalPrice(Number(details.delivery_price))}
                 />
               )}
-              
             </dl>
             {allComments && (
               <dl>
@@ -165,13 +165,13 @@ export const OrderCardListener = ({
                     : undefined;
                 return (
                   <div key={product.sku}>
-                    <Link 
-                      href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`} 
+                    <Link
+                      href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}
                       className={styles.productCard}
                     >
                       <div className={styles.media}>
                         {product.image && (
-                          <Image 
+                          <Image
                             className={styles.image}
                             src={product.image}
                             alt={product.name}
@@ -182,8 +182,11 @@ export const OrderCardListener = ({
                         )}
                       </div>
                       <div className={styles.cardContent}>
-                        <h4 className={styles.title}>{product.kind} {product.name}</h4>
-                        {product.price_at_purchase !== undefined && product.price_at_purchase !== null ? (
+                        <h4 className={styles.title}>
+                          {product.kind} {product.name}
+                        </h4>
+                        {product.price_at_purchase !== undefined &&
+                        product.price_at_purchase !== null ? (
                           <p className={styles.price}>
                             {formatTotalPrice(Number(product.line_total))}
                           </p>
@@ -196,7 +199,7 @@ export const OrderCardListener = ({
                       <p className={styles.quantity}>{`количество ${product.quantity}шт`}</p>
                     )}
                   </div>
-                )
+                );
               })}
             </div>
           </div>

@@ -1,13 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { type PurchasedReleasesDownloadItem, type PurchasedReleaseDownloadOptions } from "@/api/store/types";
-import { Loader, ModalUI, Title } from "@/shared/ui";
-import s from "./DownloadReleaseModal.module.scss";
-import { RELEASE_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
-import { getDownloadData } from "@/api/store";
 import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
+
+import { getDownloadData } from "@/api/store";
+import {
+  type PurchasedReleaseDownloadOptions,
+  type PurchasedReleasesDownloadItem,
+} from "@/api/store/types";
+
+import { RELEASE_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
+import { Loader, ModalUI, Title } from "@/shared/ui";
+
+import s from "./DownloadReleaseModal.module.scss";
 
 interface DownloadReleaseModalProps {
   isOpen: boolean;
@@ -15,21 +20,19 @@ interface DownloadReleaseModalProps {
   error: string | null;
   data: PurchasedReleaseDownloadOptions | null;
   onClose: () => void;
-};
+}
 
-export const DownloadReleaseModal = ({ 
+export const DownloadReleaseModal = ({
   isOpen,
   loading,
   error,
   data,
   onClose,
 }: DownloadReleaseModalProps) => {
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
   const [downloading, setDownloading] = useState<Record<string, boolean>>({});
 
   if (!isOpen) return null;
-  
+
   const items = data?.items ?? [];
 
   const startDownload = async (item: PurchasedReleasesDownloadItem) => {
@@ -37,35 +40,31 @@ export const DownloadReleaseModal = ({
     setDownloading((prev) => ({ ...prev, [item.type]: true }));
 
     try {
-      const result = await getDownloadData(item.download_action_url!, token);
-      window.open(result.url, '_blank');
+      const result = await getDownloadData(item.download_action_url!);
+      window.open(result.url, "_blank");
     } catch (err) {
       console.error(err);
-      toast.error('Не удалось получить ссылку для скачивания')
+      toast.error("Не удалось получить ссылку для скачивания");
     } finally {
       setDownloading((prev) => ({ ...prev, [item.type]: false }));
     }
   };
 
   return (
-    <ModalUI 
+    <ModalUI
       isOpen={isOpen}
       hasClickOnOverlay={false}
       onClose={onClose}
-      closeButtonStyle="circledX"
+      closeButtonStyle='circledX'
     >
       <div className={s.modalContent}>
-        <Title Tag="h2" className={s.title}>Варианты для скачивания</Title>
+        <Title Tag='h2' className={s.title}>
+          Варианты для скачивания
+        </Title>
 
-        {loading && (
-          <Loader />
-        )}
+        {loading && <Loader />}
 
-        {error && (
-          <div className={s.errorMessage}>
-            {error}
-          </div>
-        )}
+        {error && <div className={s.errorMessage}>{error}</div>}
 
         {!loading && !error && items.length > 0 && (
           <ul className={s.list}>
@@ -76,24 +75,21 @@ export const DownloadReleaseModal = ({
                   <div className={s.item__info}>
                     <span className={s.item__title}>{item.title}</span>
                     <span className={s.item__type}>
-                      {item.type === 'archive' ? 'Архив' : 'Трек'}
+                      {item.type === "archive" ? "Архив" : "Трек"}
                     </span>
                   </div>
 
-                  {item.status !== 'ready' && (
+                  {item.status !== "ready" && (
                     <div className={s.item__status}>
-                      <span 
-                        className={s.badge}
-                        data-status={item.status}
-                      >
+                      <span className={s.badge} data-status={item.status}>
                         {RELEASE_STATUS_TRANSLATIONS[item.status]}
                       </span>
                     </div>
                   )}
 
-                  {item.status === 'ready' && item.download_action_url && (
+                  {item.status === "ready" && item.download_action_url && (
                     <button
-                      type="button"
+                      type='button'
                       className={s.downloadButton}
                       onClick={() => void startDownload(item)}
                       disabled={isDownloading}
@@ -109,7 +105,7 @@ export const DownloadReleaseModal = ({
                     </button>
                   )}
                 </li>
-              )
+              );
             })}
           </ul>
         )}
@@ -119,5 +115,5 @@ export const DownloadReleaseModal = ({
         )}
       </div>
     </ModalUI>
-  )
+  );
 };

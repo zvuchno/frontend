@@ -1,42 +1,35 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
-import type {
-  ListenerMe, 
-  UpdateListenerPayload 
-} from "../model/types";
+
+import type { ListenerMe, UpdateListenerPayload } from "../model/types";
 
 const LISTENER_ME_PATH = "/v1/listener/me";
-const baseURL = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseURL = "/api/backend";
 
-export async function getCurrentListener(token?: string): Promise<ListenerMe> {
+export async function getCurrentListener(): Promise<ListenerMe> {
   const url = `${baseURL}${LISTENER_ME_PATH}`;
 
   const response = await authFetchClient<ListenerMe>(url, {
-    method: "GET"
-  },
-    token
-  )
+    method: "GET",
+  });
 
   if (!response) {
-    throw new Error('Не удалось получить профиль слушателя');
+    throw new Error("Не удалось получить профиль слушателя");
   }
 
   return response;
-};
+}
 
-export async function updateListener(data: UpdateListenerPayload, token?: string): Promise<ListenerMe> {
-
+export async function updateListener(data: UpdateListenerPayload): Promise<ListenerMe> {
   const url = `${baseURL}${LISTENER_ME_PATH}`;
 
   const response = await authFetchClient<ListenerMe>(url, {
     method: "PATCH",
-    body: JSON.stringify(data)
-  },
-    token
-  )
+    body: JSON.stringify(data),
+  });
 
   if (!response) {
-    throw new Error('Не удалось обновить профиль слушателя');
+    throw new Error("Не удалось обновить профиль слушателя");
   }
 
   return response;
-};
+}

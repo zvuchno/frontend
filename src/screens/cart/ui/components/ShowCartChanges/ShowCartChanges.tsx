@@ -11,11 +11,10 @@ import { CartChangesButtons } from "./CartChangesButtons";
 import { CartChangesList } from "./CartChangesList";
 
 export const ShowCartChanges = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isAuth = status === "authenticated";
-  const token = session?.user.accessToken;
 
-  const isEnabled = isAuth ? Boolean(token) : status !== "loading";
+  const isEnabled = isAuth;
   const { data: cart } = useCart({
     enabled: isEnabled,
   });

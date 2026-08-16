@@ -2,7 +2,9 @@
 
 import { Suspense } from "react";
 
+import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 import { ButtonLike } from "@/features/ButtonLike";
@@ -11,16 +13,13 @@ import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection, Loader } from "@/shared/ui";
-import { useUserStore } from "@/entities/user";
-import { getCatalogListClient } from "@/api/catalog/catalogListApi/getCatalogListClient";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
-import { useSession } from "next-auth/react";
 
 export const RecomendationsList = () => {
-  const { status, data: session } = useSession();
-  const isAuth = status === 'authenticated';
-  const token = session?.user.accessToken;
-  const hasFetching = isAuth || status === 'unauthenticated';
+  const { status } = useSession();
+  const isAuth = status === "authenticated";
+
+  const hasFetching = isAuth || status === "unauthenticated";
 
   const { viewedProducts, addProduct } = useRecentlyViewed();
 
@@ -34,13 +33,12 @@ export const RecomendationsList = () => {
     queryKey: ["recom", "album", limitToShow],
     queryFn: () =>
       getCatalogListClient({
-        token,
         type: "album",
         ordering: "random",
         limit: limitToShow,
       }),
-      enabled: hasFetching,
-      refetchOnWindowFocus: false,
+    enabled: hasFetching,
+    refetchOnWindowFocus: false,
   });
 
   const showRecentViewed = isCartPage && viewedProducts.length > 0;
@@ -50,7 +48,7 @@ export const RecomendationsList = () => {
 
   if (!recommendations) return;
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <Loader />;
   }
 
@@ -79,11 +77,11 @@ export const RecomendationsList = () => {
               image={item.image}
               price={item.price}
               likeButton={
-                <ButtonLike 
-                  isLiked={item.is_favorite} 
+                <ButtonLike
+                  isLiked={item.is_favorite}
                   isAuth={isAuth}
                   onToggle={(isLiked) => {
-                    handleToggleFavorites(isLiked, item.favorite_variant_id, token).catch(console.error)
+                    handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error);
                   }}
                 />
               }

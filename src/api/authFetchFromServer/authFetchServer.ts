@@ -1,4 +1,8 @@
-import { RateLimitError } from '../authFetchFromClient/authFetchClient';
+import { cookies } from "next/headers";
+import "server-only";
+
+import { getErrorMessage } from "../errors/getErrorMessage";
+import { RateLimitError } from "../errors/rateLimitError";
 
 // Парсинг Retry-After: число (секунды) или HTTP-дата
 const parseRetryAfter = (header: string | null): number => {
@@ -17,29 +21,36 @@ const parseRetryAfter = (header: string | null): number => {
 
 export const authFetchServer = async <T>(
   input: RequestInfo,
-  init?: RequestInit,
-  token?: string,
+  init?: RequestInit
 ): Promise<T | null> => {
+  const headers = new Headers(init?.headers);
 
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...(init?.headers as Record<string, string>),
-  };
+  if (!headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
 
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+  const cookieStore = await cookies();
+
+  const cookieHeader = cookieStore
+    .getAll()
+    .filter((cookie) => cookie.name === "zvuchno_access" || cookie.name === "zvuchno_refresh")
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ");
+
+  if (cookieHeader) {
+    headers.set("cookie", cookieHeader);
   }
 
   const res = await fetch(input, { ...init, headers });
 
   //Обработка 401
   if (res.status === 401) {
-    throw new Error('Unauthorized');
+    throw new Error("Unauthorized");
   }
 
-  // Обработка 429 — с учётом Retry-After 
+  // Обработка 429 — с учётом Retry-After
   if (res.status === 429) {
-    const retryAfterMs = parseRetryAfter(res.headers.get('retry-after'));
+    const retryAfterMs = parseRetryAfter(res.headers.get("retry-after"));
 
     // использовать для перезапроса
     // или информирования пользователя о том, что слишком много запросов
@@ -50,18 +61,14 @@ export const authFetchServer = async <T>(
     return null;
   }
 
-  const data = await res.json();
+  const contentType = res.headers.get("content-type") ?? "";
+
+  const data: unknown = contentType.includes("application/json")
+    ? await res.json()
+    : await res.text();
 
   if (!res.ok) {
-    throw new Error(
-      data.message ||
-        data.detail ||
-        data.phone ||
-        data.email ||
-        data.token ||
-        data.uid ||
-        `HTTP ${res.statusText}`
-    );
+    throw new Error(getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`));
   }
 
   return data as T;

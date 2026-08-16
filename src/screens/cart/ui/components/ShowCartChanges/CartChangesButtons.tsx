@@ -8,12 +8,11 @@ import styles from "../../CartPage.module.scss";
 
 export const CartChangesButtons = ({ onChancel }: { onChancel: (isOpen: boolean) => void }) => {
   const { mutate: updateCart } = useUpdateCart();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isAuth = status === "authenticated";
 
-  const token = session?.user.accessToken;
   const { data: cart } = useCart({
-    enabled: isAuth !== undefined && (isAuth ? !!token : true),
+    enabled: isAuth !== undefined,
   });
   const items = cart?.items;
   const changedItems = items && items.filter((item) => item.quantity > item.stock);

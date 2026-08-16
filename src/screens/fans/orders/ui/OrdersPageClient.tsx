@@ -1,46 +1,41 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-
 import { getOrders } from "@/api/store";
-import { OrderCardListener } from "@/widgets/profile";
-import styles from "./ordersPageClient.module.scss";
+import { type PaginatedStoreResponse, type StoreOrder } from "@/api/store/types";
 import type { InfiniteData } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { type PaginatedStoreResponse, type StoreOrder } from "@/api/store/types";
-import { Loader } from "@/shared/ui";
+import { useSession } from "next-auth/react";
+
+import { OrderCardListener } from "@/widgets/profile";
+
 import { ORDER_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
+import { Loader } from "@/shared/ui";
+
+import styles from "./ordersPageClient.module.scss";
 
 export function OrdersPageClient() {
-  const { status, data: session } = useSession();
-  const token = session?.user.accessToken;
+  const { status } = useSession();
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useInfiniteQuery<
-    PaginatedStoreResponse<StoreOrder>,
-    Error,
-    InfiniteData<PaginatedStoreResponse<StoreOrder>>
-  >({
-    queryKey: ["orders", "listener"],
-    queryFn: async ({ pageParam }) =>  {
-      const url = pageParam as string | undefined;
-      if (url) return getOrders(token, url);
-      return getOrders(token);
-    },
-    initialPageParam: '',
-    getNextPageParam: (lastPage) => lastPage?.next,
-  });
+  const { data, error, fetchNextPage, isLoading, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery<
+      PaginatedStoreResponse<StoreOrder>,
+      Error,
+      InfiniteData<PaginatedStoreResponse<StoreOrder>>
+    >({
+      queryKey: ["orders", "listener"],
+      queryFn: async ({ pageParam }) => {
+        const url = pageParam as string | undefined;
+        if (url) return getOrders(url);
+        return getOrders();
+      },
+      initialPageParam: "",
+      getNextPageParam: (lastPage) => lastPage?.next,
+    });
 
   const orders = data?.pages.flatMap((page) => page.results) ?? [];
 
   if (status !== "authenticated" || isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   if (error) {
@@ -67,10 +62,10 @@ export function OrdersPageClient() {
       {hasNextPage && (
         <div className={styles.buttonWrapper}>
           <button
-            type="button"
+            type='button'
             className={styles.button}
             onClick={() => {
-              fetchNextPage().catch(console.error)
+              fetchNextPage().catch(console.error);
             }}
             disabled={isFetchingNextPage}
           >

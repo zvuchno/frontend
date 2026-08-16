@@ -8,11 +8,12 @@ import type {
   StoreOrderDetail,
   StoreOrderItem,
 } from "@/api/store/types";
+
 import { authFetchClient } from "../authFetchFromClient/authFetchClient";
 
 // const FALLBACK_PRODUCT_IMAGE = "/images/favorite-cassette.png";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl = "/api/backend";
 
 // function formatPrice(value?: string | number | null): string | number | null {
 //   if (value === undefined || value === null || value === "") {
@@ -67,18 +68,18 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 //   );
 // }
 
-export async function getFavoriteProducts(token?: string, url?: string): Promise<PaginatedStoreResponse<StoreFavorite>> {
+export async function getFavoriteProducts(
+  url?: string
+): Promise<PaginatedStoreResponse<StoreFavorite>> {
   const mainUrl = `${baseUrl}/v1/store/me/favorites/?limit=6`;
   const currentUrl = url ? url : mainUrl;
 
   try {
     const data = await authFetchClient<PaginatedStoreResponse<StoreFavorite>>(currentUrl, {
       method: "GET",
-    },
-      token
-    );
+    });
 
-    if (!data) throw new Error('Ошибка получения избранного')
+    if (!data) throw new Error("Ошибка получения избранного");
 
     return data;
   } catch (error) {
@@ -86,74 +87,77 @@ export async function getFavoriteProducts(token?: string, url?: string): Promise
   }
 }
 
-export async function getOrders(token?: string, url?: string): Promise<PaginatedStoreResponse<StoreOrder>> {
+export async function getOrders(url?: string): Promise<PaginatedStoreResponse<StoreOrder>> {
   const mainUrl = `${baseUrl}/v1/store/orders?limit=6`;
   const currentUrl = url ? url : mainUrl;
 
   try {
     const data = await authFetchClient<PaginatedStoreResponse<StoreOrder>>(currentUrl, {
       method: "GET",
-    }, token);
+    });
 
-    if (!data) throw new Error('Ошибка получения заказов');
+    if (!data) throw new Error("Ошибка получения заказов");
 
     return data;
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : `Ошибка получения заказов`);
   }
-  
 }
 
-export async function getOrderDetail(orderId: string | number, token?: string): Promise<StoreOrderDetail> {
-  const url = `${baseUrl}/v1/store/orders/${orderId}`
+export async function getOrderDetail(orderId: string | number): Promise<StoreOrderDetail> {
+  const url = `${baseUrl}/v1/store/orders/${orderId}`;
   const data = await authFetchClient<StoreOrderDetail>(url, {
     method: "GET",
-  }, token);
+  });
 
   if (!data) {
-    throw new Error('Пустой ответ от сервера');
+    throw new Error("Пустой ответ от сервера");
   }
 
   return data;
 }
 
-export async function getPurchasedReleases(token?: string, url?: string): Promise<PaginatedStoreResponse<PurchasedReleases>> {
+export async function getPurchasedReleases(
+  url?: string
+): Promise<PaginatedStoreResponse<PurchasedReleases>> {
   const mainUrl = `${baseUrl}/v1/store/me/purchased-music?limit=6`;
   const currentUrl = url ? url : mainUrl;
   const data = await authFetchClient<PaginatedStoreResponse<PurchasedReleases>>(currentUrl, {
     method: "GET",
-  }, token);
+  });
 
   if (!data) {
-    throw new Error('Пустой ответ от сервера');
+    throw new Error("Пустой ответ от сервера");
   }
 
   return data;
-};
+}
 
-export async function getDownloadOptions(albumId: number, token?: string): Promise<PurchasedReleaseDownloadOptions> {
-  const url = `${baseUrl}/v1/store/me/purchased-music/${albumId}`
+export async function getDownloadOptions(
+  albumId: number
+): Promise<PurchasedReleaseDownloadOptions> {
+  const url = `${baseUrl}/v1/store/me/purchased-music/${albumId}`;
   const data = await authFetchClient<PurchasedReleaseDownloadOptions>(url, {
     method: "GET",
-  }, token);
+  });
 
   if (!data) {
-    throw new Error('Пустой ответ от сервера');
+    throw new Error("Пустой ответ от сервера");
   }
 
   return data;
-};
+}
 
-export async function getDownloadData(url: string, token?: string): Promise<PurchasedReleaseDownloadData> {
+export async function getDownloadData(url: string): Promise<PurchasedReleaseDownloadData> {
   const data = await authFetchClient<PurchasedReleaseDownloadData>(url, {
     method: "POST",
-  }, token);
+  });
 
   if (!data) {
-    throw new Error('Пустой ответ от сервера');
+    throw new Error("Пустой ответ от сервера");
   }
 
   return data;
-};
+}
 
 export type { PurchasedReleases, StoreOrder, StoreOrderDetail, StoreOrderItem };

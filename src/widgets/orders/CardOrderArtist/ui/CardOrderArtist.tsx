@@ -2,18 +2,17 @@
 
 import { type KeyboardEvent, useState } from "react";
 
+import { getArtistOrderDetails } from "@/api/artist";
+import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
 
 import { Definition, Loader } from "@/shared/ui";
 import { ArrowIcon } from "@/shared/ui/Icons";
 
 import type { CardOrderArtistProps } from "../model/CardOrderArtist.types";
 import styles from "./CardOrderArtist.module.scss";
-import Link from "next/link";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
-import { getArtistOrderDetails } from "@/api/artist";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -41,15 +40,16 @@ export const CardOrderArtist = ({
   // onAccepted,
   // onRejected,
 }: CardOrderArtistProps) => {
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
-
   const [isExpanded, setIsExpanded] = useState(false);
   const contentId = `content-${orderId}`;
 
-  const { data: details, isLoading, error } = useQuery({
-    queryKey: ['order-details', 'listener', orderId],
-    queryFn: () => getArtistOrderDetails(orderId, token),
+  const {
+    data: details,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["order-details", "listener", orderId],
+    queryFn: () => getArtistOrderDetails(orderId),
     enabled: isExpanded,
     staleTime: 3 * 60 * 1000,
   });
@@ -60,8 +60,8 @@ export const CardOrderArtist = ({
 
   const allComments = details?.items
     .map((item) => item.comment)
-    .filter((comment) => comment && comment.trim() !== '')
-    .join('. ');
+    .filter((comment) => comment && comment.trim() !== "")
+    .join(". ");
 
   const handleHeaderKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter") {
@@ -109,29 +109,29 @@ export const CardOrderArtist = ({
           <div className={styles.contentInner}>
             <dl>
               {details.full_address && (
-                <Definition 
-                  className={styles.definition} 
-                  label='Адрес' 
-                  value={details.full_address} 
+                <Definition
+                  className={styles.definition}
+                  label='Адрес'
+                  value={details.full_address}
                 />
               )}
-              <Definition 
-                className={styles.definition} 
-                label='ФИО получателя' 
-                value={details.full_name} 
+              <Definition
+                className={styles.definition}
+                label='ФИО получателя'
+                value={details.full_name}
               />
               {details.delivery && (
-                <Definition 
-                  className={styles.definition} 
-                  label='Способ доставки' 
-                  value={details.delivery} 
+                <Definition
+                  className={styles.definition}
+                  label='Способ доставки'
+                  value={details.delivery}
                 />
               )}
               {details.cdek_number && (
-                <Definition 
-                  className={styles.definition} 
-                  label='Номер отправления' 
-                  value={details.cdek_number} 
+                <Definition
+                  className={styles.definition}
+                  label='Номер отправления'
+                  value={details.cdek_number}
                 />
               )}
             </dl>
@@ -150,60 +150,61 @@ export const CardOrderArtist = ({
                     ? product.target.selected_variant_id
                     : undefined;
                 return (
-                <div key={product.sku}>
-                  <Link 
-                    href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`} 
-                    className={styles.productCard}
-                  >
-                    <div className={styles.media}>
-                      {product.image && (
-                        <Image 
-                          className={styles.image}
-                          src={product.image}
-                          alt={product.name}
-                          width={136}
-                          height={136}
-                          sizes='136px'
-                        />
-                      )}
-                    </div>
-                    <div className={styles.cardContent}>
-                      <dl>
-                        <Definition 
-                          className={styles.definition} 
-                          label={product.kind} 
-                          value={product.name} 
-                        />
-                        {product.property_name && product.property_value && (
-                          <Definition 
-                            className={styles.definition} 
-                            label={product.property_name} 
-                            value={product.property_value} 
+                  <div key={product.sku}>
+                    <Link
+                      href={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}
+                      className={styles.productCard}
+                    >
+                      <div className={styles.media}>
+                        {product.image && (
+                          <Image
+                            className={styles.image}
+                            src={product.image}
+                            alt={product.name}
+                            width={136}
+                            height={136}
+                            sizes='136px'
                           />
                         )}
-                        {/* <Definition className={styles.definition} label='Тип' value={product.kind} /> */}
-                        <Definition 
-                          className={styles.definition} 
-                          label='Артикул' 
-                          value={product.sku} 
-                        />
-                        {product.quantity === null ? (
-                          <Definition 
-                            className={styles.definition} 
-                            label='Кол-во' 
-                            value='цифровой товар' 
+                      </div>
+                      <div className={styles.cardContent}>
+                        <dl>
+                          <Definition
+                            className={styles.definition}
+                            label={product.kind}
+                            value={product.name}
                           />
-                        ) : (
-                          <Definition 
-                            className={styles.definition} 
-                            label='Кол-во' 
-                            value={product.quantity} 
+                          {product.property_name && product.property_value && (
+                            <Definition
+                              className={styles.definition}
+                              label={product.property_name}
+                              value={product.property_value}
+                            />
+                          )}
+                          {/* <Definition className={styles.definition} label='Тип' value={product.kind} /> */}
+                          <Definition
+                            className={styles.definition}
+                            label='Артикул'
+                            value={product.sku}
                           />
-                        )}
-                      </dl>
-                    </div>
-                  </Link>
-                </div>)
+                          {product.quantity === null ? (
+                            <Definition
+                              className={styles.definition}
+                              label='Кол-во'
+                              value='цифровой товар'
+                            />
+                          ) : (
+                            <Definition
+                              className={styles.definition}
+                              label='Кол-во'
+                              value={product.quantity}
+                            />
+                          )}
+                        </dl>
+                      </div>
+                    </Link>
+                  </div>
+                );
               })}
             </div>
             {/* <div className={styles.buttons}>

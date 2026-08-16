@@ -1,22 +1,24 @@
-import { type UserDataProps, useUserStore } from "@/entities/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import { getCurrentListener, updateListener } from "../api/currentListenerApi";
-import { 
-  getCurrentAccount, 
-  setAccountPassword, 
-  updateAccountPassword, 
-  updateAccountPhone, 
-  updateAccountUsername 
-} from "../api/currentAccountApi";
-import type { 
-  TListenerProfile, 
-  CurrentAccountResponse, 
-  UpdateAccountPasswordPayload, 
-  UpdateAccountUsernamePayload, 
-  SetAccountPasswordPayload 
-} from "./types";
 import type { Session } from "next-auth";
+import { useSession } from "next-auth/react";
+
+import { type UserDataProps, useUserStore } from "@/entities/user";
+
+import {
+  getCurrentAccount,
+  setAccountPassword,
+  updateAccountPassword,
+  updateAccountPhone,
+  updateAccountUsername,
+} from "../api/currentAccountApi";
+import { getCurrentListener, updateListener } from "../api/currentListenerApi";
+import type {
+  CurrentAccountResponse,
+  SetAccountPasswordPayload,
+  TListenerProfile,
+  UpdateAccountPasswordPayload,
+  UpdateAccountUsernamePayload,
+} from "./types";
 
 function toUserStoreData(account: CurrentAccountResponse, accessToken?: string): UserDataProps {
   return {
@@ -30,7 +32,7 @@ function toUserStoreData(account: CurrentAccountResponse, accessToken?: string):
     isArtist: account.is_artist,
     accessToken,
   };
-};
+}
 
 function shouldSyncSessionAccount(
   sessionUser: Session["user"] | undefined,
@@ -49,7 +51,7 @@ function shouldSyncSessionAccount(
     sessionUser.isListener !== account.is_listener ||
     sessionUser.isArtist !== account.is_artist
   );
-};
+}
 
 function getSessionAccountPatch(account: CurrentAccountResponse) {
   return {
@@ -61,32 +63,32 @@ function getSessionAccountPatch(account: CurrentAccountResponse) {
     isListener: account.is_listener,
     isArtist: account.is_artist,
   };
-};
+}
 
 // 1. Хук для получения данных (загрузка профиля)
 export function useListenerProfile() {
   const { data: session, update: updateSession } = useSession();
-  const token = session?.user.accessToken;
+
   const setUser = useUserStore((state) => state.setUser);
   const sessionUser = session?.user;
 
   return useQuery({
-    queryKey: ['listenerProfile', sessionUser?.id],
+    queryKey: ["listenerProfile", sessionUser?.id],
     queryFn: async () => {
       const [listener, accountResponse] = await Promise.all([
-        getCurrentListener(token),
-        getCurrentAccount(token),
+        getCurrentListener(),
+        getCurrentAccount(),
       ]);
 
       // Обновляем стейт пользователя
-      setUser(toUserStoreData(accountResponse, token));
+      setUser(toUserStoreData(accountResponse));
 
       // Пытаемся обновить сессию (если нужно)
       if (shouldSyncSessionAccount(sessionUser, accountResponse)) {
         try {
           await updateSession(getSessionAccountPatch(accountResponse));
         } catch (e) {
-          console.error('Failed to update session', e);
+          console.error("Failed to update session", e);
         }
       }
 
@@ -97,40 +99,37 @@ export function useListenerProfile() {
     },
     enabled: !!sessionUser, // Загружаем только если пользователь авторизован
   });
-};
+}
 
 // 2. Хук для обновления имени
 export function useUpdateListenerName() {
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
 
   return useMutation({
     mutationFn: async (fullName: string) => {
-      return await updateListener({ full_name: fullName }, token);
+      return await updateListener({ full_name: fullName });
     },
     onSuccess: (listener) => {
       // Оптимистичное обновление кэша
-      queryClient.setQueryData<TListenerProfile>(['listenerProfile'], (oldData) => {
+      queryClient.setQueryData<TListenerProfile>(["listenerProfile"], (oldData) => {
         if (!oldData) return oldData;
         return { ...oldData, listener: { ...oldData.listener, full_name: listener.full_name } };
       });
     },
   });
-};
+}
 
 // 3. Хук для обновления телефона
 export function useUpdateAccountPhone() {
   const queryClient = useQueryClient();
-  const { update: updateSession, data: session } = useSession();
-  const token = session?.user.accessToken;
+  const { update: updateSession } = useSession();
 
   return useMutation({
     mutationFn: async (phone: string) => {
-      return await updateAccountPhone({ phone }, token);
+      return await updateAccountPhone({ phone });
     },
     onSuccess: (phoneResponse) => {
-      queryClient.setQueryData<TListenerProfile>(['listenerProfile'], (oldData) => {
+      queryClient.setQueryData<TListenerProfile>(["listenerProfile"], (oldData) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
@@ -141,39 +140,35 @@ export function useUpdateAccountPhone() {
           },
         };
       });
-      
+
       void updateSession({
         phone: phoneResponse.phone,
         isPhoneVerified: false,
       });
     },
   });
-};
+}
 
 // 4. Хук для обновления пароля
 export function useUpdateAccountPassword() {
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
-
   return useMutation({
     mutationFn: async (payload: UpdateAccountPasswordPayload) => {
-      return await updateAccountPassword(payload, token);
+      return await updateAccountPassword(payload);
     },
   });
-};
+}
 
 // 5. Хук для обновления имени пользователя
 export function useUpdateAccountUsername() {
   const queryClient = useQueryClient();
-  const { update: updateSession, data: session } = useSession();
-  const token = session?.user.accessToken;
+  const { update: updateSession } = useSession();
 
   return useMutation({
     mutationFn: async (payload: UpdateAccountUsernamePayload) => {
-      return await updateAccountUsername(payload, token);
+      return await updateAccountUsername(payload);
     },
     onSuccess: (userNameResponse) => {
-      queryClient.setQueryData<TListenerProfile>(['listenerProfile'], (oldData) => {
+      queryClient.setQueryData<TListenerProfile>(["listenerProfile"], (oldData) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
@@ -183,22 +178,19 @@ export function useUpdateAccountUsername() {
           },
         };
       });
-      
+
       void updateSession({
         userName: userNameResponse.username,
       });
     },
   });
-};
+}
 
 // 6. Хук для установления пароля
 export function useSetAccountPassword() {
-  const { data: session } = useSession();
-  const token = session?.user.accessToken;
-
   return useMutation({
     mutationFn: async (payload: SetAccountPasswordPayload) => {
-      return await setAccountPassword(payload, token);
+      return await setAccountPassword(payload);
     },
   });
-};
+}
