@@ -53,6 +53,7 @@ export type TShowcaseAlbumDetail = {
   release_date: string | null;
   allow_overpay: boolean;
   is_published: boolean;
+  visibility: "public" | "link_only" | "hidden";
 };
 
 type TMerchImage = {
@@ -63,8 +64,8 @@ type TMerchImage = {
 
 type TMerchVariantDetail = {
   id?: number;
-  sku: string;
-  stock: number | null;
+  sku?: string;
+  stock?: number;
   value: string;
 };
 
@@ -85,6 +86,7 @@ export type TShowcaseMerchDetail = {
   property_name: string;
   is_published: boolean;
   variants: TMerchVariantDetail[];
+  visibility: "public" | "link_only" | "hidden";
 };
 
 export type TShowcasePromocodeDetail = TShowcasePromocode & {
@@ -114,31 +116,31 @@ export type StockFilter = true | false | null;
 
 export type TCreateAlbumRequest = {
   name: string;
-  artist: number;
-  is_single: boolean;
-  release_date: string | null;
-  genre: number | null;
+  artist?: number;
+  is_single?: boolean;
+  release_date?: string | null;
+  genre?: number | null;
   price: string;
-  description: string;
-  cover_image: File | Blob | null;
-  allow_overpay: boolean;
-  is_published: boolean;
-  visibility: "public" | "link_only" | "hidden";
+  description?: string;
+  cover_image?: File | Blob | null;
+  allow_overpay?: boolean;
+  is_published?: boolean;
+  visibility?: "public" | "link_only" | "hidden";
 };
 
 export type TCreateMerchRequest = {
   name: string;
-  kind: number | null;
+  kind?: number | null;
   price: string;
-  album: number | null;
-  artist: number;
-  description: string;
-  allow_overpay: boolean;
-  visibility: "public" | "link_only" | "hidden";
-  is_published: boolean;
-  property_name: string;
-  stock: number;
-  variants: TMerchVariantDetail[];
+  album?: number | null;
+  artist?: number;
+  description?: string;
+  allow_overpay?: boolean;
+  visibility?: "public" | "link_only" | "hidden";
+  is_published?: boolean;
+  property_name?: string;
+  stock?: number;
+  variants?: TMerchVariantDetail[];
 };
 
 export type TCreatePromocodeRequest = {

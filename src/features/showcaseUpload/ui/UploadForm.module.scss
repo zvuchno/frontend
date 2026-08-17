@@ -51,6 +51,11 @@
     line-height: 130%;
     letter-spacing: -0.06em;
   }
+
+  &:disabled {
+    background-color: var(--color-bg-main);
+    cursor: not-allowed;
+  }
 }
 
 .spanFull {

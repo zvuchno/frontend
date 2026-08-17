@@ -7,6 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useShowcaseArtistId } from "@/entities/Artist/store/useShowcaseStore";
 import { AddPropertises } from "./components/addProperties/AddProperties";
 import { 
+  createProductPayload,
   deleteMerchImages,
   mapApiToForm, 
   mapDirtyFieldsToPayload, 
@@ -15,12 +16,8 @@ import {
   type UploadFormValues 
 } from "@/features/showcaseUpload";
 import { 
-  type TCreateAlbumRequest,
-  type TCreateMerchRequest,
   type TShowcaseAlbumDetail,
   type TShowcaseMerchDetail,
-  type TUpdateAlbumPayload,
-  type TUpdateMerchPayload,
   useAddImage, 
   useCreateAlbum, 
   useCreateMerch, 
@@ -37,11 +34,6 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import TrackCard from "@/entities/albums/ui/trackCard/TrackCard";
 
-const normalizePrice = (val: number): string => {
-  const rounded = Math.round(val * 100) / 100;
-  return rounded.toString();
-};
-
 interface UploadPageProps {
   type: 'album' | 'single' | 'merch';
   id: string | undefined;
@@ -53,12 +45,19 @@ const initialFormValues: UploadFormValues = {
   kind: '',
   genre: '',
   price: null,
-  privacy: 'public',
+  privacy: undefined,
   allowHigherPrice: false,
   mainImage: null,
   additionalImages: [],
-  quantity: null,
+  quantity: undefined,
   album: '',
+  variants: [
+    {
+      value: '',
+      sku: '',
+      stock: undefined,
+    }
+  ]
 };
 
 // Страница формы создания/редактирования товара
@@ -200,52 +199,10 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
 
   const onSubmit = async (data: UploadFormValues, action: 'uploadTrack' | 'publish' | 'draft' | 'save' | 'cancel') => {
     if (isSubmitting) return;
-    const priceStr = data.price ? normalizePrice(data.price) : '';
-    const hasImagesToUpload = data.mainImage || (data.additionalImages && data.additionalImages?.length > 0);
+    const payload = createProductPayload(data, productType, profileType, currentArtistId, action, hasProperty);
+    const hasImagesToUpload = !!data.mainImage || (Array.isArray(data.additionalImages) && data.additionalImages.length > 0);
 
     // при сохранении мерча: сначала создавать сам мерч, а потом изображения
-
-    let payload: TUpdateAlbumPayload | TUpdateMerchPayload = {};
-
-    if (productType === 'album' || productType === 'single') {
-      payload = {
-        name: data.name,
-        artist: profileType === 'artist' 
-          ? currentArtistId! 
-          : data.artistId 
-            ? Number(data.artistId) 
-            : currentArtistId!,
-        is_single: false,
-        release_date: data.releaseDate,
-        genre: data.genre ? Number(data.genre) : null,
-        price: priceStr,
-        description: data.description ?? '',
-        cover_image: data.mainImage ?? null,
-        allow_overpay: data.allowHigherPrice,
-        is_published: action === 'publish',
-        visibility: data.privacy,
-      }
-    }
-
-    if (productType === 'merch') {
-      payload = {
-        name: data.name,
-        kind: data.kind ? Number(data.kind) : null,
-        price: priceStr,
-        album: data.album ? Number(data.album) : null,
-        artist: profileType === 'artist' 
-          ? currentArtistId! 
-          : data.artistId 
-            ? Number(data.artistId) 
-            : currentArtistId!,
-        description: data.description ?? '',
-        allow_overpay: data.allowHigherPrice,
-        visibility: data.privacy,
-        is_published: action === 'publish',
-        property_name: data.propertyName ?? '',
-        variants: data.variants ?? [],
-      }
-    }
 
     try {
       switch (action) {
@@ -253,7 +210,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           if (isEditForm) {
             setIsTrackModalOpen(true);
           } else {
-            const albumResponse = await createAlbumMutation.mutateAsync(payload as TCreateAlbumRequest);
+            const albumResponse = await createAlbumMutation.mutateAsync(payload);
             if (albumResponse) {
               setNewAlbumId(albumResponse.id);
               setIsTrackModalOpen(true);
@@ -261,23 +218,9 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           }
           break;
         case 'publish':
-          if (productType === 'merch') {
-            const createdMerch = await createMerchMutation.mutateAsync(payload as TCreateMerchRequest);
-            if (hasImagesToUpload && createdMerch.id) {
-              await uploadMerchImages(createdMerch.id, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
-            }
-          } else {
-            if (newAlbumId) {
-              await updateAlbumMutation.mutateAsync({ id: newAlbumId, payload });
-            } else {
-              await createAlbumMutation.mutateAsync(payload as TCreateAlbumRequest);
-            }
-          }
-          router.replace('/artist/showcase')
-          break;
         case 'draft':
           if (productType === 'merch') {
-            const createdMerch = await createMerchMutation.mutateAsync(payload as TCreateMerchRequest);
+            const createdMerch = await createMerchMutation.mutateAsync(payload);
             if (hasImagesToUpload && createdMerch.id) {
               await uploadMerchImages(createdMerch.id, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
             }
@@ -285,7 +228,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
             if (newAlbumId) {
               await updateAlbumMutation.mutateAsync({ id: newAlbumId, payload });
             } else {
-              await createAlbumMutation.mutateAsync(payload as TCreateAlbumRequest);
+              await createAlbumMutation.mutateAsync(payload);
             }
           }
           router.replace('/artist/showcase')
@@ -303,7 +246,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               router.replace('/artist/showcase')
               break;
             }
-            const newData = mapDirtyFieldsToPayload(dirtyFields, data);
+            const newData = mapDirtyFieldsToPayload(dirtyFields, data, hasProperty);
             if (productType === 'merch') {
               await updateMerchMutation.mutateAsync({id: currentProductId!, payload: newData})
               
@@ -319,7 +262,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
       }
     } catch (e) {
       console.error(e);
-      toast.error(`Произошла ошибка: ${error?.message}`)
+      toast.error(`Произошла ошибка: ${(e as Error)?.message ?? 'Неизвестная ошибка'}`);
     }
   };
 
@@ -337,8 +280,8 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
             value={productType}
             onChange={handleChangeProductType}
             options={[
-              { value: "single", label: "Сингл" },
               { value: "album", label: "Альбом" },
+              { value: "single", label: "Сингл" },
               { value: "merch", label: "Мерч" },
             ]}
             label="Категория"

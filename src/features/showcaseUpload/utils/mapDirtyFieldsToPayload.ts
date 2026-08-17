@@ -9,6 +9,7 @@ const normalizePrice = (val: number): string => {
 export function mapDirtyFieldsToPayload(
    dirtyFields: Partial<Record<string, unknown>>,
    data: UploadFormValues,
+   hasProperty?: boolean,
 ): TUpdateAlbumPayload | TUpdateMerchPayload {
   const payload: Record<string, unknown> = {};
 
@@ -72,11 +73,11 @@ export function mapDirtyFieldsToPayload(
         break;
 
       case 'quantity':
-        payload.stock = data.variants && data.variants?.length > 0 ? null : Number(value);
+        payload.stock = hasProperty ? undefined : Number(value);
         break;
 
       case 'variants':
-        payload.variants = value
+        payload.variants = hasProperty ? value : [];
         break;
         
       default:
