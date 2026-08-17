@@ -46,6 +46,7 @@ export type TShowcaseAlbumDetail = {
   name: string;
   price: string;
   cover_image: string | null;
+  artist_id: number;
   is_single: boolean;
   genre: string;
   genre_id: number;
@@ -83,6 +84,7 @@ export type TShowcaseMerchDetail = {
   kind_id: number;
   album: string;
   album_id: number;
+  artist_id: number;
   property_name: string;
   is_published: boolean;
   variants: TMerchVariantDetail[];
