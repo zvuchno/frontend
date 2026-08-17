@@ -33,6 +33,9 @@ const PROTECTED_PREFIXES = [
   "v1/listener/me/",
   "v1/invitations/",
   "v1/compliance/",
+  "v1/store/merch/",
+  "v1/store/albums/",
+  "v1/store/promocodes/",
 ];
 
 async function proxy(
