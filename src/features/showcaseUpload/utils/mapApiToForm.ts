@@ -14,8 +14,8 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
       price: Number(album.price) || 0,
       allowHigherPrice: album.allow_overpay ?? false,
       description: album.description ?? '',
-      privacy: 'public', // можно брать из бэкенда, если есть поле
-      mainImage: undefined, // картинки на форме не храним как File, только URL
+      privacy: album.visibility,
+      mainImage: undefined,
       additionalImages: [],
       kind: undefined,
       album: undefined,
@@ -34,13 +34,17 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
     price: Number(merch.price) || 0,
     allowHigherPrice: merch.allow_overpay ?? false,
     description: merch.description ?? '',
-    privacy: 'public',
+    privacy: merch.visibility,
     mainImage: undefined,
     additionalImages: [],
     quantity: merch.stock ?? undefined,
     releaseDate: '',
     genre: '',
-    variants: merch.variants,
+    variants: merch.variants && merch.variants.length > 0 ? merch.variants : [{
+      value: '',
+      //sku: '',
+      stock: 0,
+    }],
     propertyName: merch.property_name,
     hasProperty: merch.property_name ? true : false,
     //artistId: String(merch.artist_id)

@@ -337,8 +337,6 @@ export function useDetailInfo(type: string, id?: number) {
       return type === "merch" ? getDetailMerch({ id }) : getDetailAlbum({ id });
     },
     enabled: !!id,
-    staleTime: 10 * 10 * 1000,
-    refetchOnWindowFocus: false,
   });
 }
 
@@ -348,8 +346,6 @@ export function useDetailPromocode(id?: number) {
     queryKey: ["showcase", "detail", "promo", id],
     queryFn: async () => getDetailPromocode({ id }),
     enabled: !!id,
-    staleTime: 10 * 10 * 1000,
-    refetchOnWindowFocus: false,
   });
 }
 

@@ -40,6 +40,8 @@ export const UploadForm = ({
     control
   } = useFormContext<UploadFormValues>();
 
+  const hasProperty = watch('hasProperty');
+
   const currentArtistSlug = useShowcaseArtistSlug();
 
   // Список артистов (для селекта)
@@ -243,10 +245,15 @@ export const UploadForm = ({
               id='quantity'
               type='number'
               label='Количество'
+              error={!!errors.name}
+              message={errors.name?.message}
               inputSize="large"
-              {...register('quantity')}
+              {...register('quantity', {
+                min: { value: 0, message: 'Количество не может быть отрицательным' },
+              })}
               labelClassName={s.label}
               inputClassName={clsx(s.input, s.quantityInput)}
+              disabled={hasProperty}
             />
           ) : (
             <CheckboxUI 

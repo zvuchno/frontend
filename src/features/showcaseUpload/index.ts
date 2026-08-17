@@ -14,3 +14,4 @@ export { mapPromoDirtyFieldsToPayload } from "./utils/mapPromoDirtyFildsToPayloa
 export { toLocalDatetimeString } from "./utils/toLocalDatetimeString";
 export { toIsoUtc } from "./utils/toIsoUtc";
 export { mapTrackDirtyFieldsToPayload } from "./utils/mapTrackDirtyFieldsToPayload";
+export { createProductPayload } from "./utils/createProductPayload";
