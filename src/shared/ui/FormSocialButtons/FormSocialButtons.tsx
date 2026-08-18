@@ -11,10 +11,14 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
   const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
 
-    const nextRoute = searchParams.get("next");
-    await signIn(provider, {
-      callbackUrl: nextRoute ? nextRoute : "/",
-    });
+    if (provider === 'yandex') {
+      window.location.href = '/api/auth/yandex/start';
+    }
+
+    // const nextRoute = searchParams.get("next");
+    // await signIn(provider, {
+    //   callbackUrl: nextRoute ? nextRoute : "/",
+    // });
 
     // try {
 

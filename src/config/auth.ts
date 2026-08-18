@@ -1,7 +1,7 @@
 import { type AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-import { authorize } from "@/entities/user/server";
+import { authorize, OAuthorize } from "@/entities/user/server";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -12,15 +12,30 @@ export const authConfig: AuthOptions = {
         password: { label: "Password", type: "password" },
         rememberme: { label: "Remember Me", type: "boolean" },
         sessionId: { type: "text" },
+        provider: { type: 'text' },
+        code: { type: 'text' },
       },
 
       async authorize(credentials) {
-        if (!credentials?.identifier || !credentials.password) return null;
-        return await authorize({
-          email: credentials.identifier.trim(),
-          password: credentials.password,
-          rememberme: credentials.rememberme === "true",
-        });
+        if (!credentials) return null;
+
+        // Логика для обычного логина (email/password)
+        if (credentials.identifier && credentials.password) {
+          return await authorize({
+            email: credentials.identifier.trim(),
+            password: credentials.password,
+            rememberme: credentials.rememberme === "true",
+          });
+        }
+
+        // Логика для OAuth
+        if (credentials.provider === 'yandex') {
+          if (credentials.code) {
+            return await OAuthorize(credentials.code);
+          }
+        }
+
+        return null;
       },
     }),
   ],
