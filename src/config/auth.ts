@@ -31,6 +31,58 @@ export const authConfig: AuthOptions = {
           //v: '5.131',
         },
       },
+      token: {
+        async request(context) {
+          const { provider, checks, params } = context;
+          const code_verifier = checks.code_verifier;
+          const code = params.code;
+
+          const rawParams: Record<string, string> = {
+            client_id: provider.clientId!,
+            grant_type: "authorization_code",
+            redirect_uri: provider.callbackUrl,
+            device_id: String(params.device_id),
+          };
+
+          if (code) {
+            rawParams.code = code;
+          }
+          if (code_verifier) {
+            rawParams.code_verifier = code_verifier;
+          }
+
+          const formData = new URLSearchParams(rawParams);
+
+          const res = await fetch("https://id.vk.com/oauth2/auth", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: formData,
+          });
+
+          const data = await res.json();
+
+          if (!res.ok || !data.access_token) {
+            throw new Error(
+              `VK token exchange failed: ${res.status} ${
+                res.statusText
+              }\nResponse: ${JSON.stringify(data)}`
+            );
+          }
+          
+          return { 
+            tokens: {
+              access_token: data.access_token,
+              refresh_token: data.refresh_token,
+              id_token: data.id_token,
+              expires_in: data.expires_in,
+              scope: data.scope,
+              token_type: "bearer",
+            },
+           }
+        }
+      },
       checks: ['pkce', 'state'],
     }),
     Credentials({
