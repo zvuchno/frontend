@@ -15,10 +15,16 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
     //   window.location.href = '/api/auth/yandex/start';
     // }
 
-    const nextRoute = searchParams.get("next");
-    await signIn(provider, {
-      callbackUrl: nextRoute ? nextRoute : "/",
-    });
+    try {
+      const nextRoute = searchParams.get("next");
+      await signIn(provider, {
+        callbackUrl: nextRoute ? nextRoute : "/",
+      });
+    } catch(e) {
+      console.error(e instanceof Error ? e.message : 'Ошибка signIn')
+    }
+
+
 
     // try {
 
