@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { signIn } from "next-auth/react";
 import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
@@ -27,9 +26,45 @@ export async function GET(request: Request) {
 
   cookieStore.delete('yandex_oauth_state');
 
-  await signIn('credentials', {
-    redirect: false,
+  const params = new URLSearchParams({
+    code,
     provider: 'yandex',
-    code: code,
   });
+
+  return NextResponse.redirect(`http://localhost:3000/oauth?${params.toString()}`);
+
+  // try {
+  //   const response = await fetch('http://localhost:3000/api/auth/signin/credentials', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //     },
+  //     body: new URLSearchParams({
+  //       provider: 'yandex',
+  //       code: code,
+  //     }),
+  //   });
+
+  //   console.log('response:', response)
+
+  //   if (!response.ok) {
+      
+  //     throw new Error('Invalid credentials')
+  //   }
+
+  //   return NextResponse.json({ ok: true });
+  // } catch (e) {
+  //   console.log(e instanceof Error ? e.message : 'Ошибка в колбэке');
+  //   //return NextResponse.redirect('http://localhost:3000/signin?error=backend_error');
+  //   return new NextResponse(
+  //     JSON.stringify({ error: e instanceof Error ? e.message : String(e) }),
+  //     { status: 500, headers: { 'Content-Type': 'application/json' } }
+  //   );
+  // }
+
+  // await signIn('credentials', {
+  //   redirect: false,
+  //   provider: 'yandex',
+  //   code: code,
+  // });
 }

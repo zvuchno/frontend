@@ -11,14 +11,14 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
   const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
 
-    if (provider === 'yandex') {
-      window.location.href = '/api/auth/yandex/start';
-    }
+    // if (provider === 'yandex') {
+    //   window.location.href = '/api/auth/yandex/start';
+    // }
 
-    // const nextRoute = searchParams.get("next");
-    // await signIn(provider, {
-    //   callbackUrl: nextRoute ? nextRoute : "/",
-    // });
+    const nextRoute = searchParams.get("next");
+    await signIn(provider, {
+      callbackUrl: nextRoute ? nextRoute : "/",
+    });
 
     // try {
 
@@ -58,6 +58,7 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
         aria-label='Яндекс'
         disabled={disabled}
         className={s.socialButton}
+        //href="/api/auth/yandex/start"
       >
         Я
       </button>

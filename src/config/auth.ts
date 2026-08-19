@@ -1,10 +1,37 @@
 import { type AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import YandexProvider from "next-auth/providers/yandex";
+import VkProvider from "next-auth/providers/vk";
 
 import { authorize, OAuthorize } from "@/entities/user/server";
 
 export const authConfig: AuthOptions = {
   providers: [
+    YandexProvider({
+      clientId: process.env.YANDEX_CLIENT_ID as string,
+      clientSecret: process.env.YANDEX_SECRET as string,
+      authorization: {
+        url: "https://oauth.yandex.ru/authorize",
+        params: {
+          scope: "login:email",
+          response_type: "code",
+          access_type: "offline",
+          prompt: "select_account",
+        },
+      },
+    }),
+    VkProvider({
+      clientId: process.env.VK_CLIENT_ID as string,
+      clientSecret: process.env.VK_SECRET as string,
+      authorization: {
+        url: "https://id.vk.com/authorize",
+        params: {
+          scope: "email",
+          response_type: 'code',
+          //v: '5.131',
+        },
+      },
+    }),
     Credentials({
       name: "Credentials",
       credentials: {
@@ -28,12 +55,13 @@ export const authConfig: AuthOptions = {
           });
         }
 
-        // Логика для OAuth
-        if (credentials.provider === 'yandex') {
-          if (credentials.code) {
-            return await OAuthorize(credentials.code);
-          }
-        }
+        //Логика для OAuth
+        // if (credentials.provider === 'yandex') {
+          
+        //   if (credentials.code) {
+        //     return await OAuthorize({ code: credentials.code });
+        //   }
+        // }
 
         return null;
       },
@@ -44,6 +72,31 @@ export const authConfig: AuthOptions = {
   pages: { signIn: "/signin" },
 
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "vk" || account?.provider === "yandex") {
+        const userResponse = await OAuthorize({
+          provider: account.provider,
+          token: account.access_token ?? "",
+        });
+
+        if (userResponse) {
+          user.id = userResponse.id;
+          user.userName = userResponse.userName;
+          user.email = userResponse.email;
+          user.phone = userResponse.phone;
+          user.isPhoneVerified = userResponse.isPhoneVerified;
+          user.isEmailVerified = userResponse.isEmailVerified;
+          user.isArtist = userResponse.isArtist;
+          user.isListener = userResponse.isListener;
+          user.profileType = userResponse.profileType;
+          user.artistName = userResponse.artistName;
+          return true;
+        }
+
+        return false;
+      }
+      return true;
+    },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
