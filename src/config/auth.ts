@@ -31,6 +31,7 @@ export const authConfig: AuthOptions = {
           //v: '5.131',
         },
       },
+      checks: ['pkce', 'state'],
     }),
     Credentials({
       name: "Credentials",
