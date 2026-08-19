@@ -5,12 +5,20 @@ import { getCurrentUserServer } from "../api/api.serverCookie";
 
 const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
-export const OAuthorize = async (code: string): Promise<User | null> => {
+export const OAuthorize = async ({ 
+  token,
+  provider
+ }: {
+  //code: string,
+  token: string,
+  provider: 'vk' | 'yandex',
+ }
+): Promise<User | null> => {
   try {
-    const res = await fetch(`${BASE_URL}/v1/auth/social/yandex/`, {
+    const res = await fetch(`${BASE_URL}/v1/auth/social/${provider}/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ access_token: token }),
     });
 
     if (!res || !res.ok) {
@@ -27,9 +35,6 @@ export const OAuthorize = async (code: string): Promise<User | null> => {
     }
 
     const { accessToken } = cookiesData;
-
-    console.log('accessToken:', accessToken)
-    console.log('body:', body)
 
     if (!accessToken) {
       return null;
