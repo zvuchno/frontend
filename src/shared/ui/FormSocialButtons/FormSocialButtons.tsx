@@ -17,11 +17,16 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
 
     try {
       const nextRoute = searchParams.get("next");
-      await signIn(provider, {
+      const res = await signIn(provider, {
         callbackUrl: nextRoute ? nextRoute : "/",
       });
+
+      if (res?.error) {
+        // Покажите пользователю понятное сообщение
+        throw new Error(`Ошибка signIn: ${res.error}`);
+      }
     } catch(e) {
-      console.error(e instanceof Error ? e.message : 'Ошибка signIn')
+      console.error(e instanceof Error ? e.message : 'Ошибка авторизации')
     }
 
 
