@@ -126,7 +126,7 @@ export const authConfig: AuthOptions = {
 
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === "vk" || account?.provider === "yandex") {
+      if (account?.provider === "yandex") {
         const userResponse = await OAuthorize({
           provider: account.provider,
           token: account.access_token ?? "",
