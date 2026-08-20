@@ -11,23 +11,10 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
   const handleSocialAuth = async (e: React.MouseEvent<HTMLButtonElement>, provider: string) => {
     e.preventDefault();
 
-    // if (provider === 'yandex') {
-    //   window.location.href = '/api/auth/yandex/start';
-    // }
-
-    try {
-      const nextRoute = searchParams.get("next");
-      const res = await signIn(provider, {
-        callbackUrl: nextRoute ? nextRoute : "/",
-      });
-
-      if (res?.error) {
-        // Покажите пользователю понятное сообщение
-        throw new Error(`Ошибка signIn: ${res.error}`);
-      }
-    } catch(e) {
-      console.error(e instanceof Error ? e.message : 'Ошибка авторизации')
-    }
+    const nextRoute = searchParams.get("next");
+    const res = await signIn(provider, {
+      callbackUrl: nextRoute ? nextRoute : "/",
+    });
 
 
 
@@ -69,21 +56,21 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
         aria-label='Яндекс'
         disabled={disabled}
         className={s.socialButton}
-        //href="/api/auth/yandex/start"
       >
         Я
       </button>
-      <button
+      <a
         type='button'
-        onClick={(e) => {
-          handleSocialAuth(e, "vk").catch(console.error);
-        }}
+        // onClick={(e) => {
+        //   handleSocialAuth(e, "vk").catch(console.error);
+        // }}
         aria-label='VK'
-        disabled={disabled}
+        // disabled={disabled}
         className={s.socialButton}
+        href="/api/auth/vk/start"
       >
         VK
-      </button>
+      </a>
     </div>
   );
 };
