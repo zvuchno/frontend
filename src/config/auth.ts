@@ -20,111 +20,114 @@ export const authConfig: AuthOptions = {
         },
       },
     }),
-    VkProvider({
-      clientId: process.env.VK_CLIENT_ID as string,
-      clientSecret: process.env.VK_SECRET as string,
-      authorization: {
-        url: "https://id.vk.com/authorize",
-        params: {
-          scope: "email",
-          response_type: 'code',
-          //v: '5.131',
-        },
-      },
-      token: {
-        async request(context) {
-          const { provider, checks, params } = context;
-          const code_verifier = checks.code_verifier;
-          const code = params.code;
+    // VkProvider({
+    //   clientId: process.env.VK_CLIENT_ID as string,
+    //   clientSecret: process.env.VK_SECRET as string,
+    //   // clientId: '54728565',
+    //   // clientSecret: 'cFZMBw56HAtUNE48Nutg',
+    //   authorization: {
+    //     url: "https://id.vk.com/authorize",
+    //     params: {
+    //       scope: "email",
+    //       response_type: 'code',
+    //       //v: '5.131',
+    //     },
+    //   },
+    //   token: {
+    //     async request(context) {
+    //       console.log('Token request starting!!!')
+    //       const { provider, checks, params } = context;
+    //       const code_verifier = checks.code_verifier;
+    //       const code = params.code;
 
-          const rawParams: Record<string, string> = {
-            client_id: provider.clientId!,
-            client_secret: provider.clientSecret!,
-            grant_type: "authorization_code",
-            redirect_uri: provider.callbackUrl,
-            device_id: String(params.device_id),
-          };
+    //       const rawParams: Record<string, string> = {
+    //         client_id: provider.clientId!,
+    //         client_secret: provider.clientSecret!,
+    //         grant_type: "authorization_code",
+    //         redirect_uri: provider.callbackUrl,
+    //         device_id: String(params.device_id),
+    //       };
 
-          if (code) {
-            rawParams.code = code;
-          }
-          if (code_verifier) {
-            rawParams.code_verifier = code_verifier;
-          }
+    //       if (code) {
+    //         rawParams.code = code;
+    //       }
+    //       if (code_verifier) {
+    //         rawParams.code_verifier = code_verifier;
+    //       }
 
-          const formData = new URLSearchParams(rawParams);
+    //       const formData = new URLSearchParams(rawParams);
 
-          const res = await fetch("https://id.vk.com/oauth2/auth", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: formData,
-          });
+    //       const res = await fetch("https://id.vk.com/oauth2/auth", {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/x-www-form-urlencoded",
+    //         },
+    //         body: formData,
+    //       });
 
-          const data = await res.json();
+    //       const data = await res.json();
 
-          if (!res.ok || !data.access_token) {
-            throw new Error(
-              `VK token exchange failed: ${res.status} ${
-                res.statusText
-              }\nResponse: ${JSON.stringify(data)}`
-            );
-          }
+    //       if (!res.ok || !data.access_token) {
+    //         throw new Error(
+    //           `VK token exchange failed: ${res.status} ${
+    //             res.statusText
+    //           }\nResponse: ${JSON.stringify(data)}`
+    //         );
+    //       }
           
-          return { 
-            tokens: {
-              access_token: data.access_token,
-              refresh_token: data.refresh_token,
-              id_token: data.id_token,
-              expires_in: data.expires_in,
-              scope: data.scope,
-              token_type: "bearer",
-            },
-           }
-        },
-      },
-      userinfo: {
-        async request({ provider, tokens }) {
-          const res = await fetch("https://id.vk.com/oauth2/user_info", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-              access_token: tokens.access_token!,
-              client_id: provider.clientId!,
-            }),
-          });
+    //       return { 
+    //         tokens: {
+    //           access_token: data.access_token,
+    //           refresh_token: data.refresh_token,
+    //           id_token: data.id_token,
+    //           expires_in: data.expires_in,
+    //           scope: data.scope,
+    //           token_type: "bearer",
+    //         },
+    //        }
+    //     },
+    //   },
+    //   userinfo: {
+    //     async request({ provider, tokens }) {
+    //       const res = await fetch("https://id.vk.com/oauth2/user_info", {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/x-www-form-urlencoded",
+    //         },
+    //         body: new URLSearchParams({
+    //           access_token: tokens.access_token!,
+    //           client_id: provider.clientId!,
+    //         }),
+    //       });
 
-          const data = await res.json();
+    //       const data = await res.json();
 
-          if (!data.user || !data.user.user_id) {
-            throw new Error("Invalid VK user_info response");
-          }
+    //       if (!data.user || !data.user.user_id) {
+    //         throw new Error("Invalid VK user_info response");
+    //       }
 
-          return {
-            sub: data.user.user_id,
-            id: data.user.user_id,
-            name: `${data.user.first_name} ${data.user.last_name}`.trim(),
-            email: data.user.email ?? null,
-            image: data.user.avatar,
-          };
-        },
-      },
-      checks: ['pkce', 'state'],
+    //       return {
+    //         sub: data.user.user_id,
+    //         id: data.user.user_id,
+    //         name: `${data.user.first_name} ${data.user.last_name}`.trim(),
+    //         email: data.user.email ?? null,
+    //         image: data.user.avatar,
+    //       };
+    //     },
+    //   },
+    //   checks: ['pkce', 'state'],
 
-      profile(profile: any) {
-        return {
-          id: profile.id,
-          name: [profile.first_name, profile.last_name]
-            .filter(Boolean)
-            .join(" "),
-          email: profile.email ?? null,
-          image: profile.photo_100,
-        };
-      }
-    }),
+    //   profile(profile: any) {
+    //     return {
+    //       id: profile.id,
+    //       name: [profile.first_name, profile.last_name]
+    //         .filter(Boolean)
+    //         .join(" "),
+    //       email: profile.email ?? null,
+    //       image: profile.photo_100,
+    //     };
+    //   }
+    // }),
     Credentials({
       name: "Credentials",
       credentials: {
@@ -166,7 +169,7 @@ export const authConfig: AuthOptions = {
 
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === "vk" || account?.provider === "yandex") {
+      if (account?.provider === "yandex") {
         const userResponse = await OAuthorize({
           provider: account.provider,
           token: account.access_token ?? "",
