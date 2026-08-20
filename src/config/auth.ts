@@ -39,6 +39,7 @@ export const authConfig: AuthOptions = {
 
           const rawParams: Record<string, string> = {
             client_id: provider.clientId!,
+            client_secret: provider.clientSecret!,
             grant_type: "authorization_code",
             redirect_uri: provider.callbackUrl,
             device_id: String(params.device_id),
@@ -81,9 +82,48 @@ export const authConfig: AuthOptions = {
               token_type: "bearer",
             },
            }
-        }
+        },
+      },
+      userinfo: {
+        async request({ provider, tokens }) {
+          const res = await fetch("https://id.vk.com/oauth2/user_info", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              access_token: tokens.access_token!,
+              client_id: provider.clientId!,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (!data.user || !data.user.user_id) {
+            throw new Error("Invalid VK user_info response");
+          }
+
+          return {
+            sub: data.user.user_id,
+            id: data.user.user_id,
+            name: `${data.user.first_name} ${data.user.last_name}`.trim(),
+            email: data.user.email ?? null,
+            image: data.user.avatar,
+          };
+        },
       },
       checks: ['pkce', 'state'],
+
+      profile(profile: any) {
+        return {
+          id: profile.id,
+          name: [profile.first_name, profile.last_name]
+            .filter(Boolean)
+            .join(" "),
+          email: profile.email ?? null,
+          image: profile.photo_100,
+        };
+      }
     }),
     Credentials({
       name: "Credentials",
@@ -126,7 +166,7 @@ export const authConfig: AuthOptions = {
 
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === "yandex") {
+      if (account?.provider === "vk" || account?.provider === "yandex") {
         const userResponse = await OAuthorize({
           provider: account.provider,
           token: account.access_token ?? "",
