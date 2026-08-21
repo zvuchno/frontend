@@ -90,6 +90,8 @@ export async function GET(request: Request) {
       token: {
         sub: userFromServer.id,
         id: userFromServer.id,
+        name: userFromServer.userName,
+        picture: null,
         userName: userFromServer.userName,
         email: userFromServer.email,
         phone: userFromServer?.phone,
@@ -101,7 +103,7 @@ export async function GET(request: Request) {
         artistName: userFromServer.artistName,
       },
       secret: process.env.NEXTAUTH_SECRET!,
-      salt: cookieName,
+      //salt: cookieName,
     });
 
     const response = NextResponse.redirect(`${origin}/`);
