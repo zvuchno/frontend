@@ -14,6 +14,7 @@ export type MainNavRoute = MainNavRouteItem & {
   items?: readonly MainNavRouteItem[];
 };
 
+// ссылки в header
 export const mainNavRoutes = [
   {
     id: "home",
@@ -46,6 +47,30 @@ export const mainNavRoutes = [
     id: "artists-hub",
     href: "/for-artists",
     label: "артистам",
+  },
+] satisfies readonly MainNavRoute[];
+
+// ссылки в footer
+export const footerNavRoutes = [
+  {
+    id: "catalog",
+    href: "/catalog/all",
+    label: "Каталог",
+  },
+  {
+    id: "artists-hub",
+    href: "/for-artists",
+    label: "Для артистов",
+  },
+  {
+    id: "fans-hub",
+    href: "/",
+    label: "Для фанатов",
+  },
+  {
+    id: "legal",
+    href: "/legal",
+    label: "Условия использования",
   },
 ] satisfies readonly MainNavRoute[];
 
