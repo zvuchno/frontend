@@ -1,23 +1,5 @@
 import type { TCdekDeliveryTariff } from "@/entities/order";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export type TCdekTariffDetails = {
   tariff_code: number;
   tariff_name: string;

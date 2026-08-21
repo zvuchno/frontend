@@ -19,7 +19,7 @@ export async function getDeliveryOptions(): Promise<TDeliveryOption[]> {
 }
 
 export async function getCheckoutData(): Promise<TCheckoutData> {
-  const response = await authFetchClient<TCheckoutData>(`${baseUrl}/v1/store/orders/checkout/`, {
+  const response = await authFetchClient<TCheckoutData>(`${baseUrl}/v1/store/orders/checkout`, {
     method: "GET",
     credentials: "include",
   });
@@ -31,7 +31,7 @@ export async function getCheckoutData(): Promise<TCheckoutData> {
 }
 
 export async function placeOrder(orderData: TOrder): Promise<TOrderResponse> {
-  const response = await authFetchClient<TOrderResponse>(`${baseUrl}/v1/store/orders/checkout/`, {
+  const response = await authFetchClient<TOrderResponse>(`${baseUrl}/v1/store/orders/checkout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

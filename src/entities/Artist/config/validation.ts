@@ -1,14 +1,15 @@
 import { type FieldPath, type RegisterOptions } from "react-hook-form";
 
-import { type TProfileFormField } from "@/features/profile";
-
 import { errorsMessages } from "@/shared/constants/formErrorMessages";
 
-import { type TArtistSettingsFieldValues } from "../model/artistSettings.types";
+import {
+  type TArtistSettingsFieldValues,
+  type TArtistSettingsFormField,
+} from "../model/artistSettings.types";
 import { artistSettingsFieldsConfig } from "./config";
 
 export const registerRules = (
-  field: TProfileFormField<TArtistSettingsFieldValues>
+  field: TArtistSettingsFormField<TArtistSettingsFieldValues>
 ): RegisterOptions<TArtistSettingsFieldValues, FieldPath<TArtistSettingsFieldValues>> => {
   const rules: RegisterOptions<
     TArtistSettingsFieldValues,
@@ -36,11 +37,6 @@ export const registerRules = (
       rules.pattern = {
         value: fieldConfig.pattern,
         message: errorsMessages.patternMessage,
-      };
-    }
-    if (fieldConfig.validate) {
-      rules.validate = {
-        validate: fieldConfig.validate,
       };
     }
     return rules;

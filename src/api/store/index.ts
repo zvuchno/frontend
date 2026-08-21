@@ -71,7 +71,7 @@ const baseUrl = "/api/backend";
 export async function getFavoriteProducts(
   url?: string
 ): Promise<PaginatedStoreResponse<StoreFavorite>> {
-  const mainUrl = `${baseUrl}/v1/store/me/favorites/?limit=6`;
+  const mainUrl = `${baseUrl}/v1/store/me/favorites?limit=6`;
   const currentUrl = url ? url : mainUrl;
 
   try {

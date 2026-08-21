@@ -60,20 +60,72 @@ declare global {
   }
 }
 
+type TCdekOfficeDraft = {
+  address: string;
+  city: string;
+  city_code: string;
+  pvz_code: string;
+};
+
+type WidgetCdekProps = {
+  cityCode: number;
+  cityName: string;
+  senderMode: boolean;
+  onModalClose?: () => void;
+  onOfficeSelect?: (office: TCdekOfficeDraft) => void;
+};
+
+const addScript = (scriptId: string, onGetReady: () => void) => {
+  if (window.CDEKWidget) window.CDEKWidget = undefined;
+  const oldScript = document.getElementById(scriptId);
+  if (oldScript) oldScript.remove();
+
+  const script = document.createElement("script");
+  script.src = "https://cdn.jsdelivr.net/npm/@cdek-it/widget@3";
+  script.id = scriptId;
+  script.async = true;
+  script.onload = () => onGetReady();
+  document.body.appendChild(script);
+
+  return () => {
+    script.remove();
+
+    if (window.CDEKWidget) {
+      window.CDEKWidget = undefined;
+    }
+  };
+};
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const yandexKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
+
+const selectedOffice = (address: TCdekOfficeAddress) => {
+  return {
+    isSender: true,
+    city: address.city,
+    cdek_city_code: address.city_code.toString(),
+    address: address.address,
+    code: address.code,
+    isChosen: true,
+  };
+};
+
+const selectedOfficeDraft = (address: TCdekOfficeAddress) => {
+  return {
+    address: address?.address ?? "",
+    city: address?.city ?? "",
+    city_code: String(address?.city_code ?? ""),
+    pvz_code: address?.code ?? "",
+  };
+};
+
 export const WidgetCdek = ({
   cityCode,
   cityName,
   senderMode,
   onModalClose,
-}: {
-  cityCode: number;
-  cityName: string;
-  senderMode: boolean;
-  onModalClose?: () => void;
-}) => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
-  const yandexKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
-
+  onOfficeSelect,
+}: WidgetCdekProps) => {
   const { data } = useGetCheckoutData();
   const defaultCityName = data?.user_defaults.city;
 
@@ -93,24 +145,7 @@ export const WidgetCdek = ({
   const scriptId = `cdek-script-node`;
 
   useEffect(() => {
-    if (window.CDEKWidget) window.CDEKWidget = undefined;
-    const oldScript = document.getElementById(scriptId);
-    if (oldScript) oldScript.remove();
-
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/@cdek-it/widget@3";
-    script.id = scriptId;
-    script.async = true;
-    script.onload = () => setScriptReady(true);
-    document.body.appendChild(script);
-
-    return () => {
-      script.remove();
-
-      if (window.CDEKWidget) {
-        window.CDEKWidget = undefined;
-      }
-    };
+    addScript(scriptId, () => setScriptReady(true));
   }, [cityCode, scriptId]);
 
   useEffect(() => {
@@ -122,7 +157,7 @@ export const WidgetCdek = ({
     const container = document.getElementById(uniqueContainerId);
     if (container) container.innerHTML = "";
 
-    const currentServicePath = `${baseUrl}/v1/store/cdek/widget?city_code=${cityCode}`;
+    const currentServicePath = `${baseUrl}/v1/store/cdek/widget/?city_code=${cityCode}`;
 
     try {
       widgetRef.current = new WidgetConstructor({
@@ -161,16 +196,11 @@ export const WidgetCdek = ({
               );
             }
           } else {
-            console.log("Выбран склад отправки:", address);
-            setDeliverySelected({
-              isSender: true,
-              city: address?.city,
-              cdek_city_code: address?.city_code.toString(),
-              address: address?.address,
-              code: address?.code,
-              isChosen: true,
-            });
-            if (onModalClose) onModalClose();
+            if (!address) return;
+
+            onOfficeSelect?.(selectedOfficeDraft(address));
+            setDeliverySelected(selectedOffice(address));
+            onModalClose?.();
           }
         },
       });
@@ -187,14 +217,13 @@ export const WidgetCdek = ({
     scriptReady,
     cityCode,
     setDeliverySelected,
-    baseUrl,
-    yandexKey,
     uniqueContainerId,
     mutate,
     defaultCityName,
     cityName,
     senderMode,
     onModalClose,
+    onOfficeSelect,
   ]);
 
   return <div className={styles.cdekPickPointsWidget} id={uniqueContainerId} />;

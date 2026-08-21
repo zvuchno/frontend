@@ -1,95 +1,47 @@
-import { useState } from "react";
+import {
+  type FieldArrayWithId,
+  type UseFieldArrayAppend,
+  type UseFieldArrayRemove,
+} from "react-hook-form";
 
-import { useSelectDeliveryTariff } from "@/entities/order";
+import { type TArtistSettingsFieldValues, type TPVZOfficeMe } from "@/entities/Artist";
 
-import { ButtonUI, CheckboxUI } from "@/shared/ui";
-
-import { ArtistSettingsPickupPoint } from "../ArtistSettingsPickupPoint/ArtistSettingsPickupPoint";
+import { ArtistSettingsCdekDelivery } from "../ArtistSettingsCdekDelivery/ArtistSettingsCdekDelivery";
+import { ArtistSettingsPickupPointDelivery } from "../ArtistSettingsPickupPointDelivery/ArtistSettingsPickupPointDelivery";
 import styles from "./ArtistSettingsDelivery.module.scss";
 
 export type TArtistSettingsDelivery = {
+  disabled: boolean;
+  cdekOffice?: TPVZOfficeMe;
+  onAddPoint: UseFieldArrayAppend<TArtistSettingsFieldValues, "pickupPoints">;
+  onDeletePoint: UseFieldArrayRemove;
+  fields: FieldArrayWithId<TArtistSettingsFieldValues, "pickupPoints", "id">[];
   onChooseButtonClick: () => void;
 };
 
-export const ArtistSettingsDelivery = ({ onChooseButtonClick }: TArtistSettingsDelivery) => {
-  const { deliverySelected } = useSelectDeliveryTariff();
-  const [pickupPointsCount, setPickupPointsCount] = useState<number>(1);
+export const ArtistSettingsDelivery = ({
+  disabled,
+  fields,
+  cdekOffice,
+  onAddPoint,
+  onDeletePoint,
+  onChooseButtonClick,
+}: TArtistSettingsDelivery) => (
+  <section className={styles.artistSettingsDelivery}>
+    <h3 className={styles.artistSettingsTitle}>Настройки доставки</h3>
+    <div className={styles.artistSettingsDeliveryOptions}>
+      <ArtistSettingsCdekDelivery
+        disabled={disabled}
+        onSelect={onChooseButtonClick}
+        office={cdekOffice}
+      />
 
-  const addNewPickupPoint = () => {
-    setPickupPointsCount((prev) => prev + 1);
-  };
-
-  console.log(deliverySelected);
-
-  return (
-    <section className={styles.artistSettingsDelivery}>
-      <h3 className={styles.artistSettingsTitle}>Настройки доставки</h3>
-      <div className={styles.artistSettingsDeliveryOptions}>
-        <div key='cdek' className={styles.artistSettingsDeliveryOptionsContainer}>
-          <CheckboxUI
-            type={"radio"}
-            //isChecked={isCurrentSelected}
-            //{...register("delivery", fieldsConfig.delivery)}
-            //value={String(option.id)}
-          >
-            СДЭК
-          </CheckboxUI>
-          {!deliverySelected?.code || deliverySelected?.code.length === 0 ? (
-            <ButtonUI
-              variant={"primary"}
-              type='button'
-              className={styles.artistSettingsDeliveryOptionsButton}
-              onClick={() => onChooseButtonClick()}
-            >
-              Выбрать пункт выдачи
-            </ButtonUI>
-          ) : (
-            <div className={styles.artistSettingsDeliveryOffice}>
-              <div className={styles.artistSettingsDeliveryOfficeDetails}>
-                <span
-                  className={styles.artistSettingsDeliveryOfficeAddress}
-                >{`${deliverySelected.city}, ${deliverySelected.address}`}</span>
-                <span
-                  className={styles.artistSettingsDeliveryOfficeCode}
-                >{`ПВЗ - ${deliverySelected.code}`}</span>
-              </div>
-
-              <span
-                onClick={() => onChooseButtonClick()}
-                className={styles.artistSettingsDeliveryOfficeChange}
-              >
-                Изменить пункт
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div key='pickup' className={styles.artistSettingsDeliveryOptionsContainer}>
-          <CheckboxUI
-            type={"radio"}
-            //isChecked={isCurrentSelected}
-            //{...register("delivery", fieldsConfig.delivery)}
-            //value={String(option.id)}
-          >
-            Самовывоз
-          </CheckboxUI>
-
-          <form className={styles.pickupPointsForm} name='pickup-points'>
-            {Array.from({ length: pickupPointsCount }).map((_, index) => (
-              <ArtistSettingsPickupPoint key={index} />
-            ))}
-          </form>
-
-          <ButtonUI
-            variant={"primary"}
-            type='button'
-            className={styles.artistSettingsDeliveryOptionsButton}
-            onClick={() => addNewPickupPoint()}
-          >
-            + Добавить еще адрес
-          </ButtonUI>
-        </div>
-      </div>
-    </section>
-  );
-};
+      <ArtistSettingsPickupPointDelivery
+        disabled={disabled}
+        fields={fields}
+        onAddPoint={onAddPoint}
+        onDeletePoint={onDeletePoint}
+      />
+    </div>
+  </section>
+);

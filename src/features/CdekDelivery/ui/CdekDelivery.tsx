@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { type FieldValues } from "@/screens/order/model/types";
 import { fieldsConfig } from "@/screens/order/ui/components/OrderDetails/utils";
 
+import { type TPVZOfficeMe } from "@/entities/Artist";
 import { useGetCheckoutData, useSelectDeliveryTariff } from "@/entities/order";
 
 import { type TCdekCity } from "../api/cdek.api";
@@ -17,10 +18,12 @@ export const CdekDelivery = ({
   isSender,
   className,
   onModalClose,
+  onSelectOfficeDraft,
 }: {
   isSender: boolean;
   className?: string;
   onModalClose?: () => void;
+  onSelectOfficeDraft?: (office: TPVZOfficeMe) => void;
 }) => {
   const { data } = useGetCheckoutData();
   const defaultCity = data?.user_defaults.city || "";
@@ -81,6 +84,7 @@ export const CdekDelivery = ({
           cityName={typeof currentCity === "string" ? currentCity : currentCity.full_name}
           senderMode={isSender}
           onModalClose={isSender ? onModalClose : undefined}
+          onOfficeSelect={onSelectOfficeDraft}
         />
       )}
     </section>

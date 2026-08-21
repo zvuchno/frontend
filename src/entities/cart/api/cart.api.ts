@@ -6,7 +6,7 @@ const baseUrl = "/api/backend";
 const CART_PATH = "/v1/store/cart";
 
 export async function getCart(): Promise<TCart> {
-  const response = await authFetchClient<TCart>(`${baseUrl}${CART_PATH}/me/`, {
+  const response = await authFetchClient<TCart>(`${baseUrl}${CART_PATH}/me`, {
     method: "GET",
     credentials: "include",
   });
@@ -35,7 +35,7 @@ export async function addCartItem(payload: TCartItem): Promise<TCart> {
 }
 
 export async function updateCart(payload: UpdateCartPayload): Promise<TCart> {
-  const response = await authFetchClient<TCart>(`${baseUrl}${CART_PATH}/me/`, {
+  const response = await authFetchClient<TCart>(`${baseUrl}${CART_PATH}/me`, {
     method: "PATCH",
     body: JSON.stringify(payload),
     headers: {

@@ -29,7 +29,6 @@ export const OrderDeliveryOptions = ({
 
   useEffect(() => {
     if (currentDeliveryOption?.delivery_type === "courier") setValue("tariffs", "door");
-    console.log(currentDeliveryOption);
   }, [currentDeliveryValueId, options, setValue, currentDeliveryOption]);
 
   const deliveryDays = {
