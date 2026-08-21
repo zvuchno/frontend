@@ -4,6 +4,7 @@ export { questions } from "./mocks/mockQuestions";
 
 export {
   mainNavRoutes,
+  footerNavRoutes,
   fansProfileRoutes,
   artistsProfileRoutes,
   fansProfileArtistRoute,

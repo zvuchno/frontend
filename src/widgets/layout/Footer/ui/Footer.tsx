@@ -1,13 +1,13 @@
 import clsx from "clsx";
 
-import { mainNavRoutes } from "@/shared/constants";
+import { footerNavRoutes } from "@/shared/constants";
 import { Link, Text } from "@/shared/ui";
 
 import { type FooterProps } from "../model/Footer.type";
 import s from "./Footer.module.scss";
 
 export const Footer = ({
-  links = mainNavRoutes,
+  links = footerNavRoutes,
   telegramUrl = "https://t.me/zvuchno_space",
   copyright = "© 2026 «ЗВУЧНО»",
   className,
@@ -15,6 +15,9 @@ export const Footer = ({
   return (
     <footer className={clsx(s.footer, className)}>
       <nav className={s["footer__nav"]}>
+        <button type='button' className={clsx(s["footer__link"], s["contacts_button"])}>
+          Контакты
+        </button>
         {links.map((link) => (
           <Link key={link.id} href={link.href} variant='basic' className={s["footer__link"]}>
             {link.label}

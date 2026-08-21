@@ -6,11 +6,12 @@ import localFont from "next/font/local";
 import { Footer } from "@/widgets/layout/Footer";
 import { AppHeader } from "@/widgets/layout/Header";
 
+import { GlobalAudio } from "@/features/player";
+
 import { SessionProviders } from "@/entities/user/providers/providers";
 
 import "./globals.scss";
 import { QueryProvider } from "./providers/QueryClientProvider";
-import { GlobalAudio } from "@/features/player";
 
 const featureMono = localFont({
   src: [

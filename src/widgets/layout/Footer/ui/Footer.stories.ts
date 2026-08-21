@@ -1,25 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-
-
 import { Footer } from "./Footer";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const meta = {
   title: "Widgets/Footer",
