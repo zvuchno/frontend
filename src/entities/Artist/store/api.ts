@@ -3,7 +3,7 @@ import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import { type TArtistLegalData, type TArtistLegalDataForApi } from "./types";
 
 const baseUrl = "/api/backend";
-const ARTIST_LEGAL_PATH = `${baseUrl}/v1/artists/me/legal/`;
+const ARTIST_LEGAL_PATH = `${baseUrl}/v1/artists/me/legal`;
 
 export const getArtistLegalData = async (): Promise<Partial<TArtistLegalData>> => {
   const response = await authFetchClient<Partial<TArtistLegalData>>(ARTIST_LEGAL_PATH, {
@@ -33,7 +33,7 @@ export const updateArtistLegalData = async (
 };
 
 export const getRecipientTypes = async (): Promise<unknown> => {
-  const response = await authFetchClient<unknown>(`${ARTIST_LEGAL_PATH}recipient-types/`, {
+  const response = await authFetchClient<unknown>(`${ARTIST_LEGAL_PATH}/recipient-types/`, {
     method: "GET",
   });
 

@@ -9,7 +9,7 @@ import { formatDate } from "@/shared/utils/formatDate";
 
 import { CalendarPicker } from "../components/CalendarPicker/CalendarPicker";
 import { FinanceStatementList } from "../components/FinanceStatementList/FinanceStatementList";
-import { StatementConditions } from "../components/StatementConditions/StatementConditions";
+//import { StatementConditions } from "../components/StatementConditions/StatementConditions";
 import styles from "./ArtistFinance.module.scss";
 
 export const ArtistFinance = () => {
@@ -55,7 +55,7 @@ export const ArtistFinance = () => {
           )}
         </>
       )}
-      <StatementConditions />
+      {/*<StatementConditions />*/}
     </section>
   );
 };

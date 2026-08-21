@@ -21,7 +21,7 @@ export async function getFinanceReportsAll({
   const periodEndParams = periodEnd && `date_to=${periodEnd}`;
   const periodTypeParams = periodType && `period_type=${periodType}`;
 
-  const targetUrl = `${baseUrl}/v1/store/me/reports/?${periodStartParams}&${periodEndParams}&limit=${limit}&offset=${offset}&${periodTypeParams}`;
+  const targetUrl = `${baseUrl}/v1/store/me/reports?${periodStartParams}&${periodEndParams}&limit=${limit}&offset=${offset}&${periodTypeParams}`;
 
   const response = await authFetchClient<TFinanceReportsResponse>(targetUrl, {
     method: "GET",

@@ -58,3 +58,31 @@ export {
 export { useGetArtistLegalData } from "./model/useGetArtistLegalData";
 export { useGetRecipientTypes } from "./model/useGetRecipientTypes";
 export { useUpdateArtistLegalData } from "./model/useUpdateArtistLegalData";
+export { artistSettingsFieldsConfig } from "./config/config";
+export { registerRules } from "./config/validation";
+export type {
+  TArtistSettingsFieldValues,
+  TPVZOfficeMe,
+  TPickupPointMe,
+  TTelegramBotConnectResponse,
+  TSupportSettings,
+  TPickupPointForm,
+} from "./model/artistSettings.types";
+export { connectTelegramBot } from "./api/artistSettings.api";
+export { useConnetcTelegramBot } from "./model/useConnetcTelegramBot";
+export {
+  useAddArtistPickupPoint,
+  useChangeArtistPickupPoint,
+  useDeleteArtistPickupPoint,
+  useGetArtistPickupPoints,
+} from "./model/useArtistPickupPoints";
+export {
+  useCreateArtistPvzOffice,
+  useDeleteArtistPvzOffice,
+  useGetArtistPvzOffice,
+} from "./model/useArtistPvzOffice";
+
+export {
+  useGetArtistSupportContacts,
+  useManageArtistSupportContacts,
+} from "./model/useArtistSupportContacts";

@@ -6,13 +6,6 @@
   width: 100%;
   max-width: 810px;
   margin-inline: auto;
-
-  &Widget {
-    width: 90vw;
-    max-width: 1000px;
-    height: 90vh;
-    max-height: 800px;
-  }
 }
 
 .hint {
@@ -24,10 +17,24 @@
   line-height: 1.45;
   margin-block-start: 20px;
 
-  &Link {
+  &Button {
     color: var(--color-primary-blue);
     text-decoration: underline;
     text-underline-offset: 2.5px;
     text-decoration-skip-ink: none;
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    cursor: pointer;
+    transition: opacity ease 0.3s;
+
+    &:hover,
+    &:active {
+      opacity: 0.7;
+    }
   }
 }

@@ -16,11 +16,37 @@
   }
 
   &Address {
+    &Wrapper {
+      width: 100%;
+      position: relative;
+    }
+
     & label {
       letter-spacing: -0.06em;
+      pointer-events: none;
     }
+
     & input {
       height: 40px;
+    }
+
+    &DeleteButton {
+      position: absolute;
+      bottom: 10px;
+      right: 8px;
+      content: "";
+      z-index: 1;
+      width: 20px;
+      height: 20px;
+      border: none;
+      background-color: transparent;
+      background: url("/icons/x-circle.svg");
+      opacity: 0.5;
+      cursor: pointer;
+
+      &:disabled {
+        pointer-events: none;
+      }
     }
   }
 
@@ -51,6 +77,10 @@
       & * {
         font-size: 16px;
       }
+
+      &.dateError {
+        border-color: var(--color-primary-blue);
+      }
     }
 
     &Popper {
@@ -71,14 +101,18 @@
   height: 39px;
 }
 
-
 :global(#pickup-date) {
   font-family: var(--font-feat);
   font-size: 16px;
+  color: inherit !important;
   height: 100%;
   width: 100%;
   padding: 0 !important;
   border: none;
+
+  &:disabled {
+    cursor: default !important;
+  }
 
   &::placeholder {
     font-family: var(--font-feat) !important;
@@ -95,7 +129,7 @@
 }
 
 :global(.react-datepicker__input-container) {
- display: flex !important;
+  display: flex !important;
 }
 
 :global(#pickup-date) {
@@ -106,7 +140,6 @@
   box-sizing: border-box;
   font-size: 16px;
   cursor: pointer !important;
- 
 
   &:focus-visible {
     outline: none !important;
