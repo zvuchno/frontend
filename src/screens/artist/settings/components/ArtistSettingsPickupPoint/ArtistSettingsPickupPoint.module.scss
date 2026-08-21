@@ -95,6 +95,7 @@
 
 :global(.react-datepicker-wrapper:has(.react-datepicker__input-container)) {
   width: 100% !important;
+  height: 39px !important;
 }
 
 :global(.react-datepicker__input-container:has(#pickup-date)) {
