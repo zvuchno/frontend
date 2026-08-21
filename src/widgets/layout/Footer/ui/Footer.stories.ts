@@ -1,5 +1,25 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+
+
+
 import { Footer } from "./Footer";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const meta = {
   title: "Widgets/Footer",
@@ -40,7 +60,7 @@ export const Default: Story = {
       { id: "for-fans", label: "Для фанатов", href: "/for-fans" },
       { id: "terms", label: "Условия использования", href: "/terms" },
     ],
-    telegramUrl: "https://t.me/zvuchno",
+    telegramUrl: "https://t.me/zvuchno_space",
     copyright: "© 2025 «ЗВУЧНО»",
   },
 };
@@ -51,7 +71,7 @@ export const Minimal: Story = {
       { id: "contacts", label: "Контакты", href: "/contacts" },
       { id: "catalog", label: "Каталог", href: "/catalog/all" },
     ],
-    telegramUrl: "https://t.me/zvuchno",
+    telegramUrl: "https://t.me/zvuchno_space",
     copyright: "© 2025 «ЗВУЧНО»",
   },
 };
