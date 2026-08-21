@@ -73,7 +73,10 @@ async function proxy(
   // Корзина доступна гостю, но для уже залогиненного пользователя нельзя подменять его корзину гостевой
   const needsBackendAuth = requiresSession || (isCartPath && isFrontendAuthenticated);
   const isForwardedCookie = (name: string): boolean =>
-    name === "zvuchno_access" || name === "zvuchno_refresh" || name === "csrftoken";
+    name === "zvuchno_access" ||
+    name === "zvuchno_refresh" ||
+    name === "csrftoken" ||
+    (isCartPath && name === "sessionid");
 
   const backendCookies = new Map(
     cookieStore

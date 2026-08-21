@@ -18,7 +18,7 @@ export async function getCart(): Promise<TCart> {
 }
 
 export async function addCartItem(payload: TCartItem): Promise<TCart> {
-  const response = await authFetchClient<TCart>(`${baseUrl}${CART_PATH}/me/add/`, {
+  const response = await authFetchClient<TCart>(`${baseUrl}${CART_PATH}/me/add`, {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
