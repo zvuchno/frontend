@@ -47,7 +47,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (isAuth && pathname.startsWith("/fans") && !isListener) {
+  if (isAuth && pathname.startsWith("/fans") && !isListener && !isArtist) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
