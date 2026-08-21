@@ -85,7 +85,7 @@ export async function GET(request: Request) {
     }
 
     // Создание сессии NextAuth JWT
-    const cookieName = "__Secure-authjs.session-token";
+    const cookieName = "__Secure-next-auth.session-token";
     const token = await encode({
       token: {
         sub: userFromServer.id,
@@ -113,7 +113,7 @@ export async function GET(request: Request) {
       secure: true, 
       sameSite: "lax", 
       path: "/", 
-      maxAge: 30 * 24 * 60 * 60 
+      //maxAge: 30 * 24 * 60 * 60 
     });
 
     return response;
