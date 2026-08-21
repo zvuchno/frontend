@@ -103,6 +103,7 @@ export async function GET(request: Request) {
         artistName: userFromServer.artistName,
       },
       secret: process.env.NEXTAUTH_SECRET!,
+      maxAge: 30 * 24 * 60 * 60 
       //salt: cookieName,
     });
 
