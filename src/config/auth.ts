@@ -1,9 +1,10 @@
 import { type AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import YandexProvider from "next-auth/providers/yandex";
 import VkProvider from "next-auth/providers/vk";
+import YandexProvider from "next-auth/providers/yandex";
+import { cookies } from "next/headers";
 
-import { authorize, OAuthorize } from "@/entities/user/server";
+import { OAuthorize, authorize } from "@/entities/user/server";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -27,19 +28,25 @@ export const authConfig: AuthOptions = {
         password: { label: "Password", type: "password" },
         rememberme: { label: "Remember Me", type: "boolean" },
         sessionId: { type: "text" },
-        provider: { type: 'text' },
-        code: { type: 'text' },
+        provider: { type: "text" },
+        code: { type: "text" },
       },
 
       async authorize(credentials) {
         if (!credentials) return null;
 
         if (credentials.identifier && credentials.password) {
-          return await authorize({
-            email: credentials.identifier.trim(),
-            password: credentials.password,
-            rememberme: credentials.rememberme === "true",
-          });
+          const cookieStore = await cookies();
+          const sessionId = cookieStore.get("sessionid")?.value;
+
+          return await authorize(
+            {
+              email: credentials.identifier.trim(),
+              password: credentials.password,
+              rememberme: credentials.rememberme === "true",
+            },
+            sessionId
+          );
         }
 
         return null;

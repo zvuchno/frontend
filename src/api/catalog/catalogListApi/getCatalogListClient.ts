@@ -53,7 +53,7 @@ export async function getCatalogListClient({
     params.append("ordering", "-created_at");
   }
 
-  const url = `${baseUrl}/v1/store/catalog/?${params.toString()}`;
+  const url = `${baseUrl}/v1/store/catalog?${params.toString()}`;
 
   try {
     const data = await authFetchClient<TCatalogListResponse>(url, {

@@ -1,13 +1,14 @@
 import { type User } from "next-auth";
+import { cookies } from "next/headers";
 
 import { getCurrentUserServer, logInUserServerCookie } from "../api/api.serverCookie";
 import { type TLoginData } from "../model/types";
 import { type AuthResponse } from "../model/types.serverCookie";
 import { applyCookiesFromResponse } from "./applyCookiesFromResponse";
 
-export const authorize = async (dataReq: TLoginData): Promise<User | null> => {
+export const authorize = async (dataReq: TLoginData, sessionId?: string): Promise<User | null> => {
   try {
-    const res = await logInUserServerCookie(dataReq);
+    const res = await logInUserServerCookie(dataReq, sessionId);
 
     if (!res || !res.ok) {
       return null;
@@ -25,6 +26,11 @@ export const authorize = async (dataReq: TLoginData): Promise<User | null> => {
 
     if (!userFromServer) {
       return null;
+    }
+
+    if (sessionId) {
+      const cookieStore = await cookies();
+      cookieStore.delete("sessionid");
     }
 
     return {
