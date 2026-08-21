@@ -12,38 +12,9 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
     e.preventDefault();
 
     const nextRoute = searchParams.get("next");
-    const res = await signIn(provider, {
+    await signIn(provider, {
       callbackUrl: nextRoute ? nextRoute : "/",
     });
-
-
-
-    // try {
-
-    //   VKID.Config.init({
-    //     app: 54522267,
-    //     redirectUrl: 'https://dev.zvuchno.space/api/auth/callback/customVk',
-    //   });
-
-    //   const result = await VKID.Auth.login();
-    //   console.log('result:', result);
-
-    //   const { code, device_id } = result as { code: string; device_id: string };
-
-    //   // Отправляем code и device_id на стандартный signin-эндпоинт NextAuth v4
-    //   const res = await fetch('/api/auth/signin/customVk', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ code, device_id }),
-    //   });
-
-    //   if (!res.ok) {
-    //     throw new Error(`Sign-in failed: ${res.statusText}`);
-    //   }
-    // } catch(error) {
-    //   console.error('Ошибка входа через VK:',error);
-    //   toast.error('Ошибка входа через VK')
-    // }
   };
 
   return (
@@ -61,11 +32,7 @@ export const FormSocialButtons = ({ disabled }: { disabled: boolean }) => {
       </button>
       <a
         type='button'
-        // onClick={(e) => {
-        //   handleSocialAuth(e, "vk").catch(console.error);
-        // }}
         aria-label='VK'
-        // disabled={disabled}
         className={s.socialButton}
         href="/api/auth/vk/start"
       >

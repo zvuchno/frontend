@@ -104,7 +104,6 @@ export async function GET(request: Request) {
       },
       secret: process.env.NEXTAUTH_SECRET!,
       maxAge: 30 * 24 * 60 * 60 
-      //salt: cookieName,
     });
 
     const response = NextResponse.redirect(`${origin}/`);
@@ -112,8 +111,7 @@ export async function GET(request: Request) {
       httpOnly: true, 
       secure: true, 
       sameSite: "lax", 
-      path: "/", 
-      //maxAge: 30 * 24 * 60 * 60 
+      path: "/",
     });
 
     return response;
