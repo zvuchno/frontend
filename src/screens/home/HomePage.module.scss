@@ -9,6 +9,24 @@
   display: flex;
   flex-direction: column;
   gap: 200px;
+
+  &CardLink {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+    
+
+    @media(max-width: 1026px){
+      //max-width: 408px;
+      //flex-grow: 0;
+    }
+
+    @media(max-width: 907px){
+      //flex-basis: 370px;
+      
+    }
+  }
 }
 
 .loadingMessage {

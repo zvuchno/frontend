@@ -3,4 +3,5 @@ export interface CardArtistProps {
   description?: string;
   hasButton?: boolean;
   isLiked?: boolean;
+  className?: string;
 }
