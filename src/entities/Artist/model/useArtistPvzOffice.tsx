@@ -4,7 +4,7 @@ import { createPVZMe, deletePVZMe, receivePVZMe } from "../api/artistSettings.ap
 import { type TPVZOfficeMe } from "./artistSettings.types";
 
 export function useGetArtistPvzOffice() {
-  return useQuery<TPVZOfficeMe>({
+  return useQuery<TPVZOfficeMe | null>({
     queryKey: ["artist-pvz"],
     queryFn: () => receivePVZMe(),
     refetchOnWindowFocus: false,

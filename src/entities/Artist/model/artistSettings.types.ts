@@ -29,7 +29,7 @@ export type TPVZOfficeMe = {
   city_code?: string;
   city?: string;
   address?: string;
-};
+} | null;
 
 export type TSupportSettings = {
   support_email?: string;
