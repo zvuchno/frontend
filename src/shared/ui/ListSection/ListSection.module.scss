@@ -12,7 +12,7 @@
 
   &__title {
     font-family: var(--font-better-vcr);
-    font-size: clamp(1.5rem, 0.9718rem + 2.2535vw, 3rem);//48px
+    font-size: clamp(1.5rem, 0.9718rem + 2.2535vw, 3rem); //48px
     font-weight: 400;
     line-height: 141%; //68px
     letter-spacing: -0.06em;
@@ -35,7 +35,10 @@
 }
 
 .content {
-  display: flex;
-  row-gap: 30px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  justify-content: space-between;
+  width: 100%;
+  column-gap: 72px;
+  row-gap: 7vw;
 }

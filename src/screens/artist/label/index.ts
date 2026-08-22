@@ -1,0 +1,1 @@
+export { LabelPage } from "./LabelPage";

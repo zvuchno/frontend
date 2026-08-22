@@ -23,11 +23,8 @@ export const RoleSelectBlockInModal: Story = {
     return (
       <RoleSelectBlock
         renderTitle={() => (
-          <Title
-            Tag='h5'
-            variant='title'
-          >
-            Войдите или зарегестрируйте новый аккаунт
+          <Title Tag='h5' variant='title'>
+            Войдите или зарегистрируйте новый аккаунт
           </Title>
         )}
         renderText={() => (

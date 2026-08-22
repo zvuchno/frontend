@@ -1,0 +1,44 @@
+.label {
+  &Content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+  &AddButton {
+    max-width: 463px;
+  }
+  &Gallery {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 916px;
+    justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 40px;
+    flex-basis: 408px;
+
+    &Item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 408px;
+      width: 100%;
+    }
+
+    &ArtistCard {
+      width: 100% !important;
+      max-width: 408px !important;
+
+      & :global(.card) {
+        width: 100% !important;
+        max-width: 408px !important;
+      }
+    }
+  }
+}
+
+:global(.labelGalleryArtistCard.card) {
+  width: 100% !important;
+  max-width: 408px !important;
+}

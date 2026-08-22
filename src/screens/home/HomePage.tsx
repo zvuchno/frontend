@@ -39,9 +39,13 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
       <HeroUI />
 
       <div className={styles.mainContent}>
-        <ListSection title='Артисты' link={`/catalog/artists`} gap='70px'>
+        <ListSection title='Артисты' link={`/catalog/artists`}>
           {artists.map((artist) => (
-            <Link key={artist.slug} href={`/catalog/artists/${artist.slug}/?kind=artists`}>
+            <Link
+              key={artist.slug}
+              href={`/catalog/artists/${artist.slug}/?kind=artists`}
+              className={styles.mainContentCardLink}
+            >
               <CardArtist
                 image={artist.cover ?? undefined}
                 description={artist.name}

@@ -12,7 +12,7 @@ export const RolePage = () => {
       <RoleSelectBlock
         renderTitle={() => (
           <Title Tag='h5' variant='title' className={s.title}>
-            Войдите или зарегестрируйте новый аккаунт
+            Войдите или зарегистрируйте новый аккаунт
           </Title>
         )}
         renderText={() => (
