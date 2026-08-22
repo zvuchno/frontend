@@ -125,10 +125,10 @@ async function setPVZOfficeMe<T>({
 }
 
 //получить информацию о выбраном ПВЗ для доставки товаров артистом
-export async function receivePVZMe() {
-  return await setPVZOfficeMe<TPVZOfficeMe>({
-    apiMethod: "GET",
-    errorMessage: "Ошибка получения информации о ПВЗ артиста",
+export async function receivePVZMe(): Promise<TPVZOfficeMe | null> {
+  return authFetchClient<TPVZOfficeMe>(`${baseUrl}/v1/artists/me/shipping-point`, {
+    method: "GET",
+    credentials: "include",
   });
 }
 
