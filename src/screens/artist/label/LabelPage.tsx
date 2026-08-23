@@ -1,31 +1,30 @@
+import Link from "next/link";
+
 import { CardArtist } from "@/entities/Artist";
-
-
 
 import { ButtonUI } from "@/shared/ui";
 
-
-
 import styles from "./LabelPage.module.scss";
-
-
-
-
-
-
-
-
-
-
+import { LabelArtistButtons } from "./components/LabelArtistButtons/LabelArtistButtons";
 
 type TLabelArtist = {
-  id: number;
-  name: string;
-  image?: string;
-  link: string;
-  about?: string;
+  id: number; //
+  name: string; //
+  image?: string; //
+  link: string; //
+  about?: string; //
   contacts?: string[];
   social?: string[];
+};
+
+// тип используется на гл странице в каталоге (сравнить)
+export type TArtistCard = {
+  name: string;
+  description: string;
+  cover: string | null;
+  city: string;
+  url: string;
+  slug: string;
 };
 
 export const LabelPage = () => {
@@ -75,12 +74,18 @@ export const LabelPage = () => {
         <div className={styles.labelGallery}>
           {artists.map((artist) => (
             <article key={artist.id} className={styles.labelGalleryItem}>
-              <CardArtist
-                image={artist.image}
-                description={artist.name}
-                hasButton
+              <Link
+                href={`/catalog/artists/${artist.id}/?kind=artists`}
                 className={styles.labelGalleryArtistCard}
-              />
+              >
+                <CardArtist
+                  image={artist.image}
+                  description={artist.name}
+                  hasButton
+                  className={styles.labelGalleryArtistCard}
+                />
+              </Link>
+              <LabelArtistButtons />
             </article>
           ))}
         </div>
