@@ -9,21 +9,29 @@
     max-width: 463px;
   }
   &Gallery {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 408px));
+    gap: 40px;
     width: 100%;
     max-width: 916px;
-    justify-content: space-between;
     column-gap: 20px;
     row-gap: 40px;
-    flex-basis: 408px;
+    justify-content: space-between;
+
+    @media (max-width: 1026px) {
+      grid-template-columns: repeat(1, minmax(260px, 408px));
+      justify-content: center;
+    }
 
     &Item {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      max-width: 408px;
+      gap: 40px;
       width: 100%;
+      max-width: 408px;
+      min-width: 260px;
     }
 
     &ArtistCard {
