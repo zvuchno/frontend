@@ -55,6 +55,12 @@ async function proxy(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
+  // Определяем тип сессии (нажимал ли пользователь "Запомнить меня")
+  const sessionTypeCookie = cookieStore
+    .getAll()
+    .find((c) => c.name === "zvuchno_session_type");
+  const isShortSession = sessionTypeCookie?.value === "short";
+
   //проверем есть ли токен
   const token = await getToken({
     req: request,
@@ -177,7 +183,46 @@ async function proxy(
     response.headers.set("content-type", responseContentType);
   }
 
-  for (const setCookie of [...refreshSetCookies, ...backendResponse.headers.getSetCookie()]) {
+  // --- нормализация zvuchno_refresh с учетом нажамал ли пользователь "Запомнить меня" ---
+  const rawCookies = [
+    ...refreshSetCookies,
+    ...backendResponse.headers.getSetCookie(),
+  ];
+  const finalSetCookies: string[] = [];
+
+  let refreshValue: string | undefined = undefined;
+  let hasRefreshCookieFromBackend = false;
+
+  // Сначала собираем все куки, кроме zvuchno_refresh
+  for (const setCookie of rawCookies) {
+    if (setCookie.startsWith("zvuchno_refresh=")) {
+      const match = setCookie.match(/zvuchno_refresh=([^;]+)/);
+      if (match) {
+        refreshValue = match[1];
+        hasRefreshCookieFromBackend = true;
+      }
+      continue;
+    }
+    finalSetCookies.push(setCookie);
+  }
+
+  // Подставляем zvuchno_refresh с нужными атрибутами
+  if (hasRefreshCookieFromBackend && refreshValue !== undefined) {
+    if (isShortSession) {
+      // Для short: всегда session cookie (без maxAge/Expires)
+      finalSetCookies.push(
+        `zvuchno_refresh=${refreshValue}; Path=/; HttpOnly; SameSite=Lax; Secure`
+      );
+    } else {
+      // Ищем оригинальный Set-Cookie и пробрасываем его
+      const original = rawCookies.find((c) => c.startsWith("zvuchno_refresh="));
+      if (original) {
+        finalSetCookies.push(original);
+      }
+    }
+  }
+
+  for (const setCookie of finalSetCookies) {
     response.headers.append("set-cookie", setCookie);
   }
   return response;

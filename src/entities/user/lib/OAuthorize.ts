@@ -27,7 +27,7 @@ export const OAuthorize = async ({
 
     const [body, cookiesData] = await Promise.all([
       res.json() as Promise<TServerAuthResponse>,
-      applyCookiesFromResponse(res.headers),
+      applyCookiesFromResponse(res.headers, true),
     ]);
 
     if (!body.authenticated) {

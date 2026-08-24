@@ -33,7 +33,12 @@ export async function POST(): Promise<NextResponse> {
     backendLogoutSucceeded,
   });
 
-  for (const cookie of authCookies) {
+  const cookiesToClear = [
+    ...authCookies,
+    cookieStore.getAll().find((c) => c.name === "zvuchno_session_type"),
+  ].filter(Boolean) as { name: string }[];
+
+  for (const cookie of cookiesToClear) {
     response.cookies.set({
       name: cookie.name,
       value: "",
