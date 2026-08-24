@@ -19,6 +19,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Определяем тип сессии (нажимал ли пользователь "Запомнить меня")
+  const sessionTypeCookie = cookieStore
+    .getAll()
+    .find((c) => c.name === "zvuchno_session_type");
+  const isShortSession = sessionTypeCookie?.value === "short";
+
   const clearAuthCookies = (status: number, error: string): NextResponse => {
     const response = NextResponse.json({ error }, { status });
 
@@ -58,10 +64,47 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return clearAuthCookies(401, "Session expired");
     }
 
+    // --- нормализация zvuchno_refresh с учетом нажамал ли пользователь "Запомнить меня" ---
+    const rawCookies = backendResponse.headers.getSetCookie();
+    const finalCookies: string[] = [];
+
+    let refreshValue: string | undefined = undefined;
+    let hasRefreshCookieFromBackend = false;
+
+    // Сначала собираем все куки, кроме zvuchno_refresh
+    for (const setCookie of rawCookies) {
+      if (setCookie.startsWith("zvuchno_refresh=")) {
+        const match = setCookie.match(/zvuchno_refresh=([^;]+)/);
+        if (match) {
+          refreshValue = match[1];
+          hasRefreshCookieFromBackend = true;
+        }
+        continue;
+      }
+      finalCookies.push(setCookie);
+    }
+
     const response = NextResponse.json({ ok: true });
 
-    for (const setCookie of backendResponse.headers.getSetCookie()) {
+    for (const setCookie of finalCookies) {
       response.headers.append("set-cookie", setCookie);
+    }
+
+    // подставляем zvuchno_refresh с нужными атрибутами
+    if (hasRefreshCookieFromBackend && refreshValue !== undefined) {
+      if (isShortSession) {
+        // Для short: всегда session cookie (без maxAge/Expires)
+        response.headers.append(
+          "set-cookie",
+          `zvuchno_refresh=${refreshValue}; Path=/; HttpOnly; SameSite=Lax; Secure`
+        );
+      } else {
+        // Ищем оригинальный Set-Cookie и пробрасываем его
+        const original = rawCookies.find((c) => c.startsWith("zvuchno_refresh="));
+        if (original) {
+          response.headers.append("set-cookie", original);
+        }
+      }
     }
 
     return response;

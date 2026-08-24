@@ -16,7 +16,7 @@ export const authorize = async (dataReq: TLoginData, sessionId?: string): Promis
 
     const [body, cookiesData] = await Promise.all([
       res.json() as Promise<AuthResponse>,
-      applyCookiesFromResponse(res.headers),
+      applyCookiesFromResponse(res.headers, dataReq.rememberme),
     ]);
 
     const { accessToken } = cookiesData;
