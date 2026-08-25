@@ -15,6 +15,7 @@ export interface ArtistDataSectionProps {
   deletingContactKey?: string | null;
   deletingSocialKey?: string | null;
   errorMessage?: string | null;
+  className?: string;
   onCoverChange?: (file: File) => Promise<void> | void;
   onEditCoverClick?: () => void;
   onAddContactClick?: (item: TArtistDataItem) => Promise<void> | void;

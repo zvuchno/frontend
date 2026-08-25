@@ -13,15 +13,15 @@ import {
   usePromocodesInfiniteQuery,
 } from "@/entities/Artist";
 import { useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
+import { useGetManagedProfiles } from "@/entities/Label";
 import { RoleSelectBlock } from "@/entities/RoleSelectBlock";
 
 import { Loader, RoleCard } from "@/shared/ui";
 
 import s from "./ShowcasePage.module.scss";
+import { AddPromocodeModal } from "./components/addPromocodeModal/AddPromocodeModal";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
-import { AddPromocodeModal } from "./components/addPromocodeModal/AddPromocodeModal";
-import { useManagedProfiles } from "@/entities/Label";
 
 export const ShowcasePage = () => {
   const { data, status } = useSession();
@@ -45,35 +45,34 @@ export const ShowcasePage = () => {
 
   const currentArtistSlug = useShowcaseArtistSlug();
 
-  const managedProfilesQuery = useManagedProfiles(profileType);
+  const managedProfilesQuery = useGetManagedProfiles(profileType);
 
   const artistsOptions = useMemo(() => {
     if (!managedProfilesQuery.data) return [];
-    return managedProfilesQuery.data
-      .map((artist) => ({
-        value: String(artist.id),
-        label: artist.name,
-      }));
+    return managedProfilesQuery.data.map((artist) => ({
+      value: String(artist.id),
+      label: artist.name,
+    }));
   }, [managedProfilesQuery.data]);
 
   const albumsQuery = useAlbumsInfiniteQuery({
     artistSlug: currentArtistSlug,
     artist_id: artistFilter,
-    itemType
+    itemType,
   });
 
   const merchQuery = useMerchInfiniteQuery({
     artistSlug: currentArtistSlug,
     in_stock: inStockFilter,
     artist_id: artistFilter,
-    itemType
+    itemType,
   });
 
   const promoQuery = usePromocodesInfiniteQuery({
     discount_type: typePromoFilter,
     is_available: availableFilter,
     artist_id: artistFilter,
-    itemType
+    itemType,
   });
 
   const promocodes = promoQuery.data?.pages.flatMap((page) => page.results) ?? [];
@@ -81,9 +80,9 @@ export const ShowcasePage = () => {
   const merch = merchQuery.data?.pages.flatMap((page) => page.results) ?? [];
   const allProducts = [...albums, ...merch];
 
-  const isLoadingData = 
-    albumsQuery.isLoading || 
-    merchQuery.isLoading || 
+  const isLoadingData =
+    albumsQuery.isLoading ||
+    merchQuery.isLoading ||
     promoQuery.isLoading ||
     managedProfilesQuery.isLoading;
 
@@ -102,27 +101,25 @@ export const ShowcasePage = () => {
             ? promocodes
             : allProducts;
 
-  const hasMorePromo = itemType === 'promo' && promoQuery.hasNextPage;
+  const hasMorePromo = itemType === "promo" && promoQuery.hasNextPage;
 
-  const hasMoreProducts = (itemType === 'products' || itemType === 'album' || itemType === 'merch')
-    && (albumsQuery.hasNextPage || merchQuery.hasNextPage);
+  const hasMoreProducts =
+    (itemType === "products" || itemType === "album" || itemType === "merch") &&
+    (albumsQuery.hasNextPage || merchQuery.hasNextPage);
 
   const loadMore = async () => {
-    if (itemType === 'promo') {
+    if (itemType === "promo") {
       await promoQuery.fetchNextPage();
     } else {
       // Подгружаем и альбомы, и мерч одновременно
-      await Promise.all([
-        albumsQuery.fetchNextPage(),
-        merchQuery.fetchNextPage(),
-      ]);
+      await Promise.all([albumsQuery.fetchNextPage(), merchQuery.fetchNextPage()]);
     }
   };
 
   const isLoadingMore =
-    (itemType === 'promo' && promoQuery.isFetchingNextPage) ||
-    ((itemType === 'products' || itemType === 'album' || itemType === 'merch') 
-      && (albumsQuery.isFetchingNextPage || merchQuery.isFetchingNextPage));
+    (itemType === "promo" && promoQuery.isFetchingNextPage) ||
+    ((itemType === "products" || itemType === "album" || itemType === "merch") &&
+      (albumsQuery.isFetchingNextPage || merchQuery.isFetchingNextPage));
 
   const handleEditPromo = (id: number) => {
     setPromoIdForModal(id);
@@ -182,12 +179,12 @@ export const ShowcasePage = () => {
         addPromo={() => setIsPromoModalOpen(true)}
       />
       {currentItems.length > 0 ? (
-        <ShowcaseItemsList 
+        <ShowcaseItemsList
           itemType={itemType}
           items={currentItems}
           profileType={profileType}
           onEditPromo={handleEditPromo}
-          hasMoreData={(itemType === 'promo' ? hasMorePromo : hasMoreProducts)}
+          hasMoreData={itemType === "promo" ? hasMorePromo : hasMoreProducts}
           onLoadMore={loadMore}
           isLoadingMore={isLoadingMore}
         />
@@ -195,13 +192,13 @@ export const ShowcasePage = () => {
         <div>{emptyText}</div>
       )}
 
-      <AddPromocodeModal 
-        isOpen={isPromoModalOpen} 
+      <AddPromocodeModal
+        isOpen={isPromoModalOpen}
         profileType={profileType}
         onClose={() => {
           setIsPromoModalOpen(false);
           setPromoIdForModal(undefined);
-          if (itemType !== 'promo') setItemType('promo');
+          if (itemType !== "promo") setItemType("promo");
         }}
         id={promoIdForModal}
       />

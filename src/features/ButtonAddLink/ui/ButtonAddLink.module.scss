@@ -17,29 +17,33 @@
 .list {
   --button-add-link-item-height: 5vw;
   --button-add-link-list-gap: clamp(12px, 2vw, 16px);
-
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--button-add-link-list-gap);
   max-height: calc(var(--button-add-link-item-height) * 3 + var(--button-add-link-list-gap) * 2);
   margin-bottom: 0.556vw;
-  padding-right: 0.278vw;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
+  //padding-right: 0.278vw;
+  //overflow-y: auto;
+  //scrollbar-gutter: stable;
 }
 
 .item {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(8px, 1.5vw, 12px);
+  display: flex;
+  gap: 16px;
   align-items: end;
   width: 100%;
-  min-height: var(--button-add-link-item-height);
+  //min-height: var(--button-add-link-item-height);
   transition: opacity 0.2s ease;
 }
 
 .itemWithDelete {
-  grid-template-columns: 1fr 3.056vw;
+  flex: 0;
+  width: calc(100% + 34px);
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 .itemDeleting {
@@ -50,6 +54,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.278vw;
+  flex: 1;
 }
 
 .itemLabel {
@@ -64,7 +69,7 @@
 .itemField {
   display: flex;
   align-items: center;
-  min-height: 3.333vw;
+  height: 40px;
   width: 100%;
   padding: 0.833vw clamp(16px, 3vw, 32px);
   border: 1px solid var(--color-text-primary);
@@ -111,9 +116,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: clamp(36px, 5vw, 44px);
-  height: clamp(36px, 5vw, 44px);
-  padding: 0.833vw;
+  height: 40px;
   border: none;
   background: transparent;
   color: var(--color-text-primary);

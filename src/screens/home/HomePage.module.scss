@@ -8,23 +8,20 @@
 .mainContent {
   display: flex;
   flex-direction: column;
-  gap: 200px;
+  gap: clamp(100px, 13.889vw, 200px);
 
   &CardLink {
     width: 100%;
     display: flex;
     justify-content: center;
-    
-    
 
-    @media(max-width: 1026px){
+    @media (max-width: 1026px) {
       //max-width: 408px;
       //flex-grow: 0;
     }
 
-    @media(max-width: 907px){
+    @media (max-width: 907px) {
       //flex-basis: 370px;
-      
     }
   }
 }

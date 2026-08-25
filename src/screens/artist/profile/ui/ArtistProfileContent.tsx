@@ -1,19 +1,23 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
 import { useSession } from "next-auth/react";
 
-import styles from "./ArtistProfileContent.module.scss";
-import { 
-  type UpdateCurrentArtistPayload, 
-  useCurrentArtist, 
-  useUpdateArtist 
-} from "@/entities/profile";
-import { Loader } from "@/shared/ui";
-import { useEffect, useState } from "react";
 import { type FieldValues, ProfileFormArtistUI, ProfileFormUI } from "@/features/profile";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+
+import {
+  type UpdateCurrentArtistPayload,
+  useCurrentArtist,
+  useUpdateArtist,
+} from "@/entities/profile";
+
+import { Loader } from "@/shared/ui";
+
 import { EMPTY_PROFILE_FORM_VALUES } from "../form.utils";
-import toast from "react-hot-toast";
+import styles from "./ArtistProfileContent.module.scss";
 
 export function ArtistProfileContent() {
   const { status } = useSession();
@@ -21,7 +25,7 @@ export function ArtistProfileContent() {
   const { data: artist, isLoading, error } = useCurrentArtist();
   const updateArtist = useUpdateArtist();
 
-  const isLoadingArtistProfile = status === 'loading' || isLoading;
+  const isLoadingArtistProfile = status === "loading" || isLoading;
   const [isEditMode, setIsEditMode] = useState(false);
 
   const methods = useForm<FieldValues>({
@@ -63,10 +67,10 @@ export function ArtistProfileContent() {
     try {
       await updateArtist.mutateAsync(payload);
       setIsEditMode(false);
-      toast.success('Профиль артиста успешно обновлён');
+      toast.success("Профиль артиста успешно обновлён");
     } catch (requestError) {
       console.error(requestError);
-      toast.error('Не удалось сохранить профиль артиста');
+      toast.error("Не удалось сохранить профиль артиста");
     }
   };
 
@@ -74,19 +78,19 @@ export function ArtistProfileContent() {
     if (artist) {
       methods.reset({
         name: artist.name,
-        description: artist.description ?? '',
-        city: artist.city ?? '',
-        url: artist.slug ?? '',
+        description: artist.description ?? "",
+        city: artist.city ?? "",
+        url: artist.slug ?? "",
       });
     }
   }, [artist, methods]);
 
   if (isLoadingArtistProfile) {
-    return <Loader />
+    return <Loader />;
   }
 
   if (error) {
-    return <div>{error.message}</div>
+    return <div>{error.message}</div>;
   }
 
   return (

@@ -15,7 +15,7 @@ export const CardArtist = ({
   className,
 }: CardArtistProps) => {
   return (
-    <div className={clsx(s.cardWrapper, className)}>
+    <div className={clsx(s.cardWrapper, className)} title={description}>
       <div className={s.cardCorner} />
       <div className={s.card}>
         {image && <img className={s.card__image} src={image} alt='Фото артиста' loading='lazy' />}

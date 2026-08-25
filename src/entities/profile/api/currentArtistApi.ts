@@ -10,7 +10,7 @@ import type {
 
 const baseURL = "/api/backend";
 const CURRENT_ARTIST_PATH = `${baseURL}/v1/artists/me`;
-const CURRENT_ARTIST_COVER_PATH = `${baseURL}/v1/artists/me/cover/`;
+const CURRENT_ARTIST_COVER_PATH = `${baseURL}/v1/artists/me/cover`;
 
 export async function getCurrentArtist(): Promise<CurrentArtistResponse> {
   const response = await authFetchClient<CurrentArtistResponse>(CURRENT_ARTIST_PATH, {

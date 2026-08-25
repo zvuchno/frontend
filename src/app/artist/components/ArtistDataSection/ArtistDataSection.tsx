@@ -1,6 +1,6 @@
 "use client";
 
-import { type ChangeEvent, useRef, useState } from "react";
+import { useState } from "react";
 
 import { ArtistDescription } from "@/widgets/ArtistDescription";
 import { ModalAddContact } from "@/widgets/profile";
@@ -8,10 +8,7 @@ import type { TFieldValues } from "@/widgets/profile";
 
 import { ButtonAddLink } from "@/features/ButtonAddLink";
 
-import { CardArtist } from "@/entities/Artist";
-
-import { ButtonUI } from "@/shared/ui";
-
+import { ArtistDataSectionMedia } from "../ArtistDataSectionMedia/ArtistDataSectionMedia";
 import s from "./ArtistDataSection.module.scss";
 import { type ArtistDataSectionProps, type TArtistDataItem } from "./ArtistDataSection.types";
 
@@ -26,6 +23,7 @@ const ArtistDataSection = ({
   deletingContactKey = null,
   deletingSocialKey = null,
   errorMessage = null,
+  className,
   onCoverChange,
   onEditCoverClick,
   onAddContactClick,
@@ -35,7 +33,6 @@ const ArtistDataSection = ({
 }: ArtistDataSectionProps) => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isSocialModalOpen, setIsSocialModalOpen] = useState(false);
-  const coverInputRef = useRef<HTMLInputElement | null>(null);
 
   const toContactItem = (data: TFieldValues): TArtistDataItem => ({
     label: data.name?.trim() || "Контакт",
@@ -57,53 +54,15 @@ const ArtistDataSection = ({
     setIsSocialModalOpen(false);
   };
 
-  const handleCoverButtonClick = () => {
-    if (onCoverChange) {
-      coverInputRef.current?.click();
-      return;
-    }
-
-    onEditCoverClick?.();
-  };
-
-  const handleCoverInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-
-    if (!file) {
-      return;
-    }
-
-    void onCoverChange?.(file);
-  };
-
   return (
     <section className={s.section}>
-      <div className={s.media}>
-        <div className={s.coverFrame}>
-          <CardArtist image={coverSrc} hasButton={false} />
-        </div>
-
-        <ButtonUI
-          variant='secondary'
-          size='standart'
-          onClick={handleCoverButtonClick}
-          disabled={isUploadingCover}
-          className={s.mediaButton}
-        >
-          {isUploadingCover ? "Загрузка..." : "Изменить обложку"}
-        </ButtonUI>
-
-        {onCoverChange ? (
-          <input
-            ref={coverInputRef}
-            className={s.fileInput}
-            type='file'
-            accept='image/*'
-            onChange={handleCoverInputChange}
-          />
-        ) : null}
-      </div>
+      <ArtistDataSectionMedia
+        className={className}
+        src={coverSrc}
+        disabled={isUploadingCover}
+        onChange={onCoverChange}
+        onEdit={onEditCoverClick}
+      />
 
       <div className={s.content}>
         <ArtistDescription
