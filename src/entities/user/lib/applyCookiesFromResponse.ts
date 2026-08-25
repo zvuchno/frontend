@@ -5,7 +5,7 @@ import { devError } from "@/shared/utils/dev-logger";
 import { parseBackendSetCookie } from "./parseBackendSetCookie";
 
 // Записывает куки из Set-Cookie заголовков в браузер и возвращает значения токенов для сессии
-export async function applyCookiesFromResponse(resHeaders: Headers): Promise<{
+export async function applyCookiesFromResponse(resHeaders: Headers, rememberMe: boolean): Promise<{
   accessToken: string | undefined;
   refreshToken: string | undefined;
   refreshTokenCookieName: string | undefined;
@@ -41,7 +41,25 @@ export async function applyCookiesFromResponse(resHeaders: Headers): Promise<{
   try {
     const cookieStore = await cookies();
 
+    if (!rememberMe) {
+      cookieStore.set({
+        name: "zvuchno_session_type",
+        value: "short",
+        path: "/",
+        httpOnly: true,
+        sameSite: "lax",
+      });
+    }
+
     for (const cookie of parsed) {
+      const isRefresh = cookie.name === refreshTokenCookieName;
+
+      // Если это refresh-кука и «Запомнить меня» НЕ выбрано — убираем время жизни
+      if (isRefresh && !rememberMe) {
+        delete cookie.maxAge;
+        delete cookie.expires;
+      }
+
       cookieStore.set(cookie.name, cookie.value, {
         httpOnly: cookie.httpOnly,
         secure: cookie.secure,
