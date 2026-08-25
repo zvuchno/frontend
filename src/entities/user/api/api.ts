@@ -140,6 +140,15 @@ export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
   });
 };
 
+// Верификация почты по коду из письма
+// export const verifyEmailCode = async (code: string): Promise<{ detail: string }> => {
+//   return await createFetchFunction<{ detail: string }>({
+//     url: "/auth/account/me/verify-email-code/",
+//     fetchData: code,
+//     defaultMessage: "Ошибка подтверждения почты.",
+//   });
+// };
+
 export const resendEmailForVerify = async (): Promise<void> => {
   await authFetchClient<void>("/api/backend/v1/auth/account/me/resend-email/", {
     method: "POST",
