@@ -1,0 +1,55 @@
+.media {
+  position: relative;
+  display: flex;
+  flex: 1 1 var(--artist-card-width);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(20px, 2.8vw, 28px);
+  min-width: min(100%, 320px);
+  max-width: var(--artist-card-width);
+}
+
+.mediaButton {
+  width: 100%;
+  max-width: var(--artist-card-width);
+}
+
+.coverFrame {
+  --card-artist-width: var(--artist-card-width);
+  --card-artist-background: var(--color-bg-secondary);
+
+  width: 100%;
+  max-width: var(--artist-card-width);
+}
+
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.profileInfoCoverFrame > * {
+  max-width: 100%;
+  aspect-ratio: 4 / 3.3482;
+
+  &::before {
+    mask-image: conic-gradient(from 90deg at 78% 35%, #000 221.7deg, #0000 222deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .media {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .coverFrame,
+  .mediaButton {
+    width: 100%;
+    max-width: none;
+  }
+}

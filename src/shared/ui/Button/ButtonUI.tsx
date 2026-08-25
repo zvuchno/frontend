@@ -13,8 +13,10 @@ export const ButtonUI = ({
   className,
   contentClassName,
   onClick,
+  ...rest
 }: TButtonUIProps) => (
   <button
+    {...rest}
     className={clsx(
       styles.button,
       styles[`${variant}Button`],

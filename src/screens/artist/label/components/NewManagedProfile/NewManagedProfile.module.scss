@@ -1,0 +1,61 @@
+.artistRegisterForm {
+  position: relative;
+  width: 36.12vw;
+  max-width: 520px;
+  max-height: 910px;
+  padding-inline: 40px;
+  padding-block: 0px;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  border-radius: 8px;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    max-width: auto;
+    padding: 0;
+    margin: 0 16px;
+  }
+}
+
+.submitButton {
+  width: 100%;
+  height: 44px;
+  border-radius: 36px;
+  background-color: var(--color-btn-accent-grey);
+  border: 1px solid var(--outline-color);
+  font-family: var(--font-feature-mono);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: -0.06em;
+  color: var(--color-text-primary);
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-btn-secondary);
+  }
+
+  &:active {
+    background-color: var(--foreground);
+    color: var(--background);
+  }
+
+  &:disabled {
+    border: transparent;
+    color: var(--background);
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,25 @@
+.profileInfo {
+  min-height: 897px;
+  margin-top: 28px;
+  padding-block: 80px 188px;
+  padding-inline: clamp(10px, 6.67vw, 95px);
+
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  gap: 67px;
+
+  &Button {
+    max-width: 810px;
+    align-self: center;
+  }
+
+  &CoverFrame > * {
+    max-width: 100%;
+    aspect-ratio: 4 / 3.3482;
+
+    &::before {
+      mask-image: conic-gradient(from 90deg at 78% 35%, #000 221.7deg, #0000 222deg);
+    }
+  }
+}

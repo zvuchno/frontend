@@ -3,6 +3,10 @@
   flex-direction: column;
   gap: 54px;
   width: 100%;
+
+  @media (max-width: 425px) {
+    padding-inline: 10px;
+  }
 }
 
 .header {
