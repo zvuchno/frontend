@@ -57,8 +57,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang='ru'>
@@ -67,6 +69,7 @@ export default function RootLayout({
           <QueryProvider>
             <GlobalAudio />
             <div className='global-noise' />
+
             <div className='app-shell'>
               <div className='app-container app-header-container'>
                 <AppHeader />
@@ -75,6 +78,7 @@ export default function RootLayout({
                 <div className='app-container'>{children}</div>
               </main>
               <Footer />
+              {modal}
             </div>
           </QueryProvider>
         </SessionProviders>

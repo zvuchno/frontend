@@ -53,6 +53,11 @@ export const mainNavRoutes = [
 // ссылки в footer
 export const footerNavRoutes = [
   {
+    id: "contacts",
+    href: "/contacts",
+    label: "Контакты",
+  },
+  {
     id: "catalog",
     href: "/catalog/all",
     label: "Каталог",

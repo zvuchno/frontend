@@ -4,7 +4,7 @@ export const getUnauthorizedSessionResponse = (
   requiresSession: boolean,
   isFrontendAuthenticated: boolean
 ): NextResponse | null => {
-  if (!requiresSession && isFrontendAuthenticated) return null;
+  if (!requiresSession || isFrontendAuthenticated) return null;
 
   return NextResponse.json(
     { error: "Session expired" },
