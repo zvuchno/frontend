@@ -1,0 +1,38 @@
+.legal {
+  display: flex;
+  flex-direction: column;
+  padding-block: 40px;
+  padding-inline-start: clamp(15px, 7vw, 100px);
+  padding-inline-end: 10px;
+  align-self: center;
+  gap: 20px;
+  list-style: none;
+  color: var(--color-primary-blue);
+  font-size: 20px;
+  letter-spacing: -0.06em;
+  width: 100%;
+  font-weight: 500;
+  line-height: 1;
+
+  &Document {
+    width: 100%;
+
+    &Name {
+      display: block;
+      width: fit-content;
+      border-bottom: 2px solid transparent;
+      transition: all ease 0.2s;
+
+      &:hover {
+        border-bottom-color: currentColor;
+        cursor: pointer;
+        opacity: 0.5;
+      }
+    }
+
+    &:active {
+      cursor: pointer;
+      color: var(--color-bg-secondary);
+    }
+  }
+}

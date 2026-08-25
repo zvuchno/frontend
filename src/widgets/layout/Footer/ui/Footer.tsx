@@ -15,9 +15,6 @@ export const Footer = ({
   return (
     <footer className={clsx(s.footer, className)}>
       <nav className={s["footer__nav"]}>
-        <button type='button' className={clsx(s["footer__link"], s["contacts_button"])}>
-          Контакты
-        </button>
         {links.map((link) => (
           <Link key={link.id} href={link.href} variant='basic' className={s["footer__link"]}>
             {link.label}

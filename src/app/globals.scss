@@ -74,6 +74,9 @@ body {
 
 .app-header-container {
   margin-block-start: 28px;
+  @media (max-width: 425px) {
+    margin-block-start: 0;
+  }
 }
 
 .app-header-container:empty {

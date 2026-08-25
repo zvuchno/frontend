@@ -1,10 +1,10 @@
 .hero__container {
   position: relative;
   width: 100%;
-  height: clamp(420px, 53.05vw, 764px); 
+  height: clamp(420px, 53.05vw, 764px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;
   padding-block-start: clamp(40px, 8.33vw, 120px);
   padding-block-end: clamp(30px, 5.34vw, 77px);
   padding-inline: 24px;
@@ -15,11 +15,12 @@
 
   & .hero__image {
     position: absolute;
-    width: clamp(320px, 51.8vw, 746px); 
+    width: clamp(320px, 51.8vw, 746px);
     height: auto;
-    left: 50%;
-    top: 13px; 
-    transform: translateX(-50%); 
+    //left: 50%;
+    //top: 13px;
+    inset: 0 50%;
+    transform: translateX(-50%);
     z-index: 0;
 
     & img {
@@ -35,7 +36,7 @@
   font-family: var(--font-feature-mono);
   font-weight: 700;
   font-size: clamp(20px, 2.77vw, 40px);
-  line-height: 1.1; 
+  line-height: 1.1;
   text-transform: uppercase;
   letter-spacing: -0.06em;
   z-index: 1;
@@ -60,15 +61,14 @@
     line-height: 100%;
     letter-spacing: -0.06em;
     text-transform: none;
-
   }
 }
 
 .hero__h1 {
   font-family: var(--font-vcr);
   font-weight: 400;
-  font-size: clamp(72px, 15.27vw, 220px);
-  line-height: 0.9; 
+  font-size: clamp(65px, 15.27vw, 220px);
+  line-height: 0.9;
   letter-spacing: -0.06em;
   text-transform: uppercase;
   color: var(--color-primary-blue);
@@ -76,4 +76,5 @@
   vertical-align: top;
   z-index: 1;
   padding-right: clamp(4px, 0.97vw, 14px);
+  text-align: center;
 }

@@ -32,7 +32,6 @@ const PROTECTED_PREFIXES = [
   "v1/artists/me/",
   "v1/listener/me/",
   "v1/invitations/",
-  "v1/compliance/",
   "v1/store/merch/",
   "v1/store/albums/",
   "v1/store/promocodes/",
@@ -56,9 +55,7 @@ async function proxy(
   }
 
   // Определяем тип сессии (нажимал ли пользователь "Запомнить меня")
-  const sessionTypeCookie = cookieStore
-    .getAll()
-    .find((c) => c.name === "zvuchno_session_type");
+  const sessionTypeCookie = cookieStore.getAll().find((c) => c.name === "zvuchno_session_type");
   const isShortSession = sessionTypeCookie?.value === "short";
 
   //проверем есть ли токен
@@ -184,10 +181,7 @@ async function proxy(
   }
 
   // --- нормализация zvuchno_refresh с учетом нажамал ли пользователь "Запомнить меня" ---
-  const rawCookies = [
-    ...refreshSetCookies,
-    ...backendResponse.headers.getSetCookie(),
-  ];
+  const rawCookies = [...refreshSetCookies, ...backendResponse.headers.getSetCookie()];
   const finalSetCookies: string[] = [];
 
   let refreshValue: string | undefined = undefined;

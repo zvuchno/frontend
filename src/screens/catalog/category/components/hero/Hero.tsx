@@ -1,6 +1,8 @@
-import { Title } from "@/shared/ui";
-import s from "./Hero.module.scss";
 import clsx from "clsx";
+
+import { Title } from "@/shared/ui";
+
+import s from "./Hero.module.scss";
 
 const Hero = () => {
   return (
@@ -8,17 +10,17 @@ const Hero = () => {
       <div className={s.back} />
       <img
         src={"/images/vinyl_player.png"}
-        alt="Виниловый проигрыватель"
+        alt='Виниловый проигрыватель'
         className={clsx(s.img, s.img_left)}
-        loading="lazy"
+        loading='lazy'
       />
       <img
         src={"/images/vinyl_player.png"}
-        alt="Виниловый проигрыватель"
+        alt='Виниловый проигрыватель'
         className={clsx(s.img, s.img_right)}
-        loading="lazy"
+        loading='lazy'
       />
-      <Title Tag="h1" className={s.title}>
+      <Title Tag='h1' className={s.title}>
         Каталог
       </Title>
     </div>

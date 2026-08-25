@@ -8,16 +8,27 @@
 
 .cardList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width, 320px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   row-gap: 40px;
   column-gap: 20px;
   justify-items: center;
   align-content: start;
   list-style: none;
+  width: 100%;
+
+  @media (max-width: 425px) {
+    padding-inline: 10px;
+  }
+
+  &.artistsList {
+    grid-template-columns: repeat(auto-fill, minmax(px, 408px));
+  }
 }
 
 .artistsGrid {
-  --card-min-width: 408px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .errorBlock {

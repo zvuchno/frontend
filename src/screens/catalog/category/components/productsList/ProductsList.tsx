@@ -69,10 +69,13 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
     return (
       <div className={s.container}>
         {artistsCards.length > 0 && (
-          <ul className={clsx(s.cardList, s.artistsGrid)}>
+          <ul className={clsx(s.cardList, s.artistsList)}>
             {artistsCards.map((artist) => (
-              <li key={artist.slug}>
-                <Link href={`/catalog/artists/${artist.slug}/?kind=artists`}>
+              <li key={artist.slug} className={s.artistsGrid}>
+                <Link
+                  href={`/catalog/artists/${artist.slug}/?kind=artists`}
+                  className={s.artistsGrid}
+                >
                   <CardArtist
                     image={artist.cover ?? undefined}
                     description={artist.name}
