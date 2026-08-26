@@ -1,38 +1,160 @@
-.legal {
+.sectionWrapper {
+  display: flex;
+  justify-content: center;
+  padding-block: 58px 106px;
+  padding-inline: 30px;
+  background-color: #e4f1ff;
+  margin-block-end: clamp(50px, 13.89vw, 200px);
+
+  @media (max-width: 475px) {
+    padding-block: 30px 60px;
+    padding-inline: 15px;
+  }
+}
+
+.mainSection {
+  width: 100%;
+  max-width: 1252px;
   display: flex;
   flex-direction: column;
-  padding-block: 40px;
-  padding-inline-start: clamp(15px, 7vw, 100px);
-  padding-inline-end: 10px;
-  align-self: center;
-  gap: 20px;
-  list-style: none;
-  color: var(--color-primary-blue);
-  font-size: 20px;
+  gap: 59px;
+  font-family: var(--font-better-vcr);
+  font-weight: 400;
   letter-spacing: -0.06em;
-  width: 100%;
-  font-weight: 500;
   line-height: 1;
+  color: var(--color-text-primary);
 
-  &Document {
+  @media (max-width: 475px) {
+    gap: 40px;
+  }
+
+  &Title {
+    font-size: 32px;
+    font-weight: 400;
+  }
+}
+
+.legalSection {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  justify-content: space-between;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    gap: 58px;
+  }
+
+  @media (max-width: 475px) {
+    gap: 40px;
+  }
+
+  &Cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 37.5vw;
+    max-width: 540px;
+    height: 35.49vw;
+    max-height: 511px;
+    background-image: url("/images/legal-documents-background.png");
+    background-position: center;
+    object-fit: cover;
+    flex-shrink: 0;
+
+    @media (max-width: 800px) {
+      align-self: center;
+      width: 100%;
+      height: 63.875vw;
+    }
+  }
+  &Text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 32.5px;
+    background-color: var(--color-text-primary);
+    font-size: clamp(16px, 1.67vw, 24px);
+    color: #fff;
+    height: 40.37%;
+    width: 95.37%;
+    max-width: 515px;
+    max-height: 218px;
+    text-align: center;
+
+    @media (max-width: 1024px) {
+      padding-inline: 20px;
+      font-size: clamp(14px, 1.6vw, 24px);
+    }
+
+    @media (max-width: 880px) {
+      padding-inline: 10px;
+      font-size: clamp(13px, 1.6vw, 24px);
+    }
+
+    @media (max-width: 800px) {
+      padding-inline: 32.5px;
+      font-size: clamp(16px, 3.1vw, 24px);
+    }
+
+    @media (max-width: 475px) {
+      padding-inline: 20px;
+      font-size: clamp(12.5px, 3.1vw, 24px);
+    }
+
+    @media (max-width: 375px) {
+      padding-inline: 10px;
+    }
+  }
+  &Content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 626px;
+  }
+  &List {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &Subtitle {
+    font-size: 32px;
+    font-weight: 400;
+  }
+
+  &Documents {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-feature-mono);
+    align-self: center;
+    gap: 12px;
+    list-style: none;
+    font-size: 20px;
+    font-weight: 500;
     width: 100%;
+    line-height: 1.06;
+  }
+}
 
-    &Name {
-      display: block;
-      width: fit-content;
-      border-bottom: 2px solid transparent;
-      transition: all ease 0.2s;
+.legalDocument {
+  width: 100%;
 
-      &:hover {
-        border-bottom-color: currentColor;
-        cursor: pointer;
-        opacity: 0.5;
-      }
-    }
+  &Name {
+    display: block;
+    width: fit-content;
+    border-bottom: 2px solid transparent;
+    transition: all ease 0.2s;
 
-    &:active {
+    &:hover {
       cursor: pointer;
-      color: var(--color-bg-secondary);
+      opacity: 0.5;
+      color: var(--color-primary-blue);
     }
+  }
+
+  &:active {
+    cursor: pointer;
+    color: var(--color-bg-secondary);
   }
 }

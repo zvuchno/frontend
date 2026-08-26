@@ -3,15 +3,13 @@
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
-  margin: 0 auto;
-  padding: 32px 16px;
-  overflow: hidden;
-  letter-spacing: -0.04em;
 
-  background-color: #f8fafc;
-  color: #1e293b;
-  line-height: 1.5;
-  
+  overflow: hidden;
+  letter-spacing: -0.06em;
+  font-size: 16px;
+  font-weight: 300;
+  color: #000;
+  line-height: 1;
 
   *,
   *::before,
@@ -23,6 +21,8 @@
   h2 {
     margin: 40px 10px 20px;
     overflow-wrap: anywhere;
+    font-size: 20px;
+    text-transform: uppercase;
   }
 
   p {
@@ -47,19 +47,17 @@
 
   th,
   td {
-    // min-width: 180px; удалить
     padding: 10px 14px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #000;
     text-align: left;
     vertical-align: top;
-    line-height: 1.5;
+    line-height: 1;
     overflow-wrap: anywhere;
     word-break: break-word;
   }
 
   th {
-    font-weight: 700;
-    background: #f8fafc;
+    font-weight: 300;
   }
 
   th:first-child,
@@ -80,7 +78,7 @@
     height: auto;
   }
 
-  ul{
+  ul {
     padding-inline-start: 20px;
   }
 

@@ -1,17 +1,17 @@
 const baseUrl = "/api/backend";
 const targetUrl = `${baseUrl}/v1/compliance/consent-documents`;
 
-export enum DOCUMENT_TYPE {
-  privacy_policy = "Политика обработки персональных данных",
-  artist_offer = " Артист: Договор-оферта",
-  artist_personal_data = "Артист: Согласие на обработку ПДН",
-  artist_distribution = "Артист: Согласие на распространение ПДН",
-  artist_newsletter = "Артист: Согласие на получение рассылки",
-  listener_offer = "Слушатель: Договор-оферта",
-  listener_personal_data = "Слушатель: Согласие на обработку ПДН",
-  listener_distribution = "Слушатель: Согласие на распространение ПДН",
-  listener_newsletter = "Слушатель: Согласие на получение рассылки",
-}
+export const DOCUMENT_TYPE = {
+  privacy_policy: "Политика обработки персональных данных",
+  artist_offer: "Договор-оферта",
+  artist_personal_data: "Согласие на обработку персональных данных",
+  artist_distribution: "Согласие на распространение персональных данных",
+  artist_newsletter: "Согласие на получение рассылки и рекламных материалов",
+  listener_offer: "Договор-оферта",
+  listener_personal_data: "Согласие на обработку персональных данных",
+  listener_distribution: "Согласие на распространение персональных данных",
+  listener_newsletter: "Согласие на получение рассылки и рекламных материалов",
+};
 
 export type TDocumentType = keyof typeof DOCUMENT_TYPE;
 
