@@ -20,6 +20,10 @@
 
   width: 100%;
   max-width: var(--artist-card-width);
+
+  & .withoutHover {
+    transform: none;
+  }
 }
 
 .fileInput {

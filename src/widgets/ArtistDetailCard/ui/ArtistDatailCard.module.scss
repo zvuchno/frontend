@@ -9,6 +9,10 @@
   gap: 62px;
   height: 100%;
   justify-content: flex-start;
+
+  & .withoutHover:hover {
+    transform: none;
+  }
 }
 
 .text {

@@ -14,7 +14,7 @@ export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
   return (
     <AccentContainerWithPlayer className={s.containerWrapper}>
       <div className={s.container}>
-        <CardArtist image={artist.cover ?? undefined} />
+        <CardArtist image={artist.cover ?? undefined} className={s.withoutHover} />
 
         <div className={s.info}>
           <div className={s.info__header}>
