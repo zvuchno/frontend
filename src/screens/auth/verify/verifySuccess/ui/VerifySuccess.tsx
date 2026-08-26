@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
@@ -8,9 +8,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { AuthModal } from "@/widgets/AuthModal";
 
-import { resendEmailForVerify, verifyEmail } from "@/entities/user";
+import { resendEmailForVerify, type TVerifyEmailRequest, verifyEmail } from "@/entities/user";
 
-import { ButtonUI, Text, Title } from "@/shared/ui";
+import { ButtonUI, Text, Title, VerifyLoader } from "@/shared/ui";
 
 import s from "./VerifySuccess.module.scss";
 
@@ -30,12 +30,27 @@ export const VerifySuccessPage = () => {
   const uidFromLink = searchParams.get("uid");
   const tokenFromLink = searchParams.get("token");
 
-  const data = {
-    uid: uidFromLink || "",
-    token: tokenFromLink || "",
+  const handleClick = () => {
+    const route = isAuthorized ? "/" : "/signin";
+    router.replace(route);
   };
 
-  const verifyAccount = async (data: { uid: string; token: string }) => {
+  if (!uidFromLink || !tokenFromLink) {
+    return (
+      <AuthModal>
+        <div className={s.container}>
+          <Title Tag="h2" className={s.text}>Ошибка</Title>
+          <Text Tag="p" className={s.text}>Некорректная ссылка подтверждения.</Text>
+          <ButtonUI variant="primary" onClick={handleClick}>
+            {isAuthorized ? "На главную" : "Войти"}
+          </ButtonUI>
+        </div>
+      </AuthModal>
+    );
+  }
+
+
+  const verifyAccount = async (data: TVerifyEmailRequest) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -51,7 +66,7 @@ export const VerifySuccessPage = () => {
     }
   };
 
-  const resendEmail = useCallback(async () => {
+  const resendEmail = async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -62,14 +77,17 @@ export const VerifySuccessPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [router]);
+  };
 
   useEffect(() => {
     if (!hasSentInitialRequest.current) {
       hasSentInitialRequest.current = true;
-      void verifyAccount(data);
+      void verifyAccount({
+        uid: uidFromLink,
+        token: tokenFromLink,
+      });
     }
-  });
+  }, [uidFromLink, tokenFromLink]);
 
   useEffect(() => {
     if (isVerified) {
@@ -89,74 +107,55 @@ export const VerifySuccessPage = () => {
     }
   }, [isVerified, isAuthorized, router]);
 
-  const handleClick = () => {
-    const route = isAuthorized ? "/" : "/signin";
-    router.replace(route);
-  };
 
   const handleRetry = () => {
-    void verifyAccount(data);
+    void verifyAccount({
+      uid: uidFromLink,
+      token: tokenFromLink,
+    });
   };
 
   const handleResend = () => {
     void resendEmail();
   };
 
-  const handleToLogin = () => {
-    router.replace("/signin");
-  };
+  const handleToLogin = () => router.replace("/signin");
 
-  const handleToMain = () => {
-    router.replace("/");
-  };
+  const handleToMain = () => router.replace("/");
 
   return (
     <AuthModal>
       {isLoading ? (
-        <div className={s.container}>
-          <Title Tag='h2' className={s.text}>
-            Обработка!
-          </Title>
-          <Text Tag='p' className={s.text}>
-            Пожалуйста, подождите...
-          </Text>
-          <div className={s.loader} />
-        </div>
+        <VerifyLoader title="Обработка!" text="Пожалуйста, подождите..."/>
       ) : error ? (
         <div className={s.container}>
-          <Title Tag='h2' className={s.text}>
-            Ошибка!
-          </Title>
-          <Text Tag='p' className={s.text}>
-            {error.includes("Ссылка не действительна")
-              ? isAuthorized
-                ? `${error}: запросите отправку нового письма.`
-                : `${error}: пройдите авторизацию и снова перейдите по ссылке из письма.`
-              : error.includes("Пользователь не найден")
-                ? error
-                : `${error}: попробуйте снова.`}
-          </Text>
+          <Title Tag='h2' className={s.text}>Ошибка!</Title>
+          <Text Tag='p' className={s.text}>{error}</Text>
+
           {error.includes("Ссылка не действительна") && isAuthorized && (
             <ButtonUI variant='primary' onClick={handleResend}>
               Отправить новое письмо
             </ButtonUI>
           )}
+
           {error.includes("Ссылка не действительна") && !isAuthorized && (
             <ButtonUI variant='primary' onClick={handleToLogin}>
               Перейти к авторизации
             </ButtonUI>
           )}
+
           {!error.includes("Ссылка не действительна") &&
             !error.includes("Пользователь не найден") && (
               <>
-                <ButtonUI variant='primary' onClick={handleToMain}>
+                <ButtonUI variant="primary" onClick={handleToMain}>
                   Перейти на главную
                 </ButtonUI>
-                <ButtonUI variant='primary' onClick={handleRetry}>
+                <ButtonUI variant="primary" onClick={handleRetry}>
                   Попробовать снова
                 </ButtonUI>
               </>
-            )}
+            )
+          }
         </div>
       ) : isVerified ? (
         <div className={s.container}>
@@ -164,13 +163,12 @@ export const VerifySuccessPage = () => {
             Email успешно подтверждён!
           </Title>
           <Text Tag='p' className={s.text}>
-            Ваш адрес электронной почты был успешно подтверждён. Теперь вы можете продолжить
-            покупки.
+            Ваш адрес электронной почты был успешно подтверждён.
           </Text>
-          <ButtonUI variant='primary' onClick={handleClick}>
+          <ButtonUI variant="primary" onClick={handleClick}>
             Перейти {isAuthorized ? "на главную" : "к авторизации"}
           </ButtonUI>
-          <Text Tag='p' className={clsx(s.text, s.leftText)}>
+          <Text Tag="p" className={clsx(s.text, s.leftText)}>
             Автоматический переход через {secondsLeft}{" "}
             {secondsLeft % 10 === 1 && secondsLeft % 100 !== 11
               ? "секунду"

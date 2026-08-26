@@ -4,10 +4,11 @@ export type {
   TNewListenerRequest,
   TNewArtistRequest,
   UserDataProps,
+  TRegisterRequest,
+  TProfileType,
+  TVerifyEmailRequest
 } from "./model/types";
 export {
-  registerNewListener,
-  registerNewArtist,
   verifyEmail,
   resendEmailForVerify,
   resetPassword,

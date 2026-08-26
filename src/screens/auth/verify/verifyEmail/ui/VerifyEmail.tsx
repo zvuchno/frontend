@@ -2,33 +2,37 @@
 
 import { ButtonUI, Text, Title } from "@/shared/ui";
 import { AuthModal } from "@/widgets/AuthModal";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import s from "./VeryfyEmail.module.scss";
 import clsx from "clsx";
-import { useUserStore } from "@/entities/user/store/useUserStore";
+import { useUserStore } from "@/entities/user";
 
 export const VerifyEmailPage = () => {
-
-  const email = useUserStore((store) => store.tempEmail);
-  const searchParams = useSearchParams();
+  const user = useUserStore((state) => state.user);
+  const email = user?.email;
+  //const searchParams = useSearchParams();
   const router = useRouter();
 
-  const handleLogin = () => {
-    let route: string;
-    const loginRoute = "/signin";
+  // const handleLogin = () => {
+  //   let route: string;
+  //   const loginRoute = "/signin";
 
-    const nextRoute = searchParams.get("next");
+  //   const nextRoute = searchParams.get("next");
 
-    if (nextRoute) {
-      const params = new URLSearchParams();
-      params.append('next', encodeURIComponent(nextRoute));
-      route = `${loginRoute}?${params.toString()}`;
+  //   if (nextRoute) {
+  //     const params = new URLSearchParams();
+  //     params.append('next', encodeURIComponent(nextRoute));
+  //     route = `${loginRoute}?${params.toString()}`;
 
-    } else {
-      route = loginRoute;
-    }
+  //   } else {
+  //     route = loginRoute;
+  //   }
 
-    router.replace(route);
+  //   router.replace(route);
+  // };
+
+  const handleToMainPage = () => {
+    router.replace("/");
   };
   
   return (
@@ -41,7 +45,7 @@ export const VerifyEmailPage = () => {
             {email || 'указанный адрес'}
           </span>. Пожалуйста, проверьте и следуйте инструкциям.
         </Text>
-        <ButtonUI variant="primary" onClick={handleLogin}>Перейти к авторизации</ButtonUI>
+        <ButtonUI variant="primary" onClick={handleToMainPage}>На главную</ButtonUI>
       </div>
     </AuthModal>
   )

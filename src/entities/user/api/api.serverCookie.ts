@@ -1,6 +1,6 @@
 import "server-only";
 
-import { type TCurrentUserResponse, type TLoginData } from "../model/types";
+import type { TNewArtistRequest, TNewListenerRequest, TCurrentUserResponse, TLoginData } from "../model/types";
 
 const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -79,5 +79,51 @@ export const refreshUserServerCookie = async (
   }
 
   devLog(`[ServerCookies] Status: ${response.status}`);*/
+  return response;
+};
+
+export const registerNewListenerServerCookie = async (
+  regData: TNewListenerRequest,
+  sessionId?: string
+): Promise<Response> => {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(sessionId ? { Cookie: `sessionid=${sessionId}` } : {}),
+  };
+
+  const response = await fetch(`${BASE_URL}/v1/auth/register/listener/`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(regData),
+  });
+
+  if (!response.ok) {
+    const res = await response.json();
+    throw new Error(res.phone || res.email || res.username || res.password || res.name || "Регистрация не удалась");
+  }
+
+  return response;
+};
+
+export const registerNewArtistServerCookie = async (
+  regData: TNewArtistRequest,
+  sessionId?: string
+): Promise<Response> => {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(sessionId ? { Cookie: `sessionid=${sessionId}` } : {}),
+  };
+
+  const response = await fetch(`${BASE_URL}/v1/auth/register/artist/`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(regData),
+  });
+
+  if (!response.ok) {
+    const res = await response.json();
+    throw new Error(res.phone || res.email || res.username || res.password || res.name || "Регистрация не удалась");
+  }
+
   return response;
 };

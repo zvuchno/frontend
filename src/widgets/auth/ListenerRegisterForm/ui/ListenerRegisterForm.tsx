@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { type TNewListenerRequest } from "@/entities/user";
-import { useUserStore } from "@/entities/user/store/useUserStore";
+import { useUserStore } from "@/entities/user";
 
 import { FormSocialButtons, LoadingButton } from "@/shared/ui";
 
@@ -19,6 +18,7 @@ import {
   type ListenerRegisterFormProps,
 } from "../model/ListenerRegisterForm.types";
 import s from "./ListenerRegisterForm.module.scss";
+import { signIn } from "next-auth/react";
 
 const initialFormState: ListenerRegisterFormData = {
   login: "",
@@ -28,8 +28,11 @@ const initialFormState: ListenerRegisterFormData = {
   confirmPassword: "",
 };
 
-export const ListenerRegisterForm = ({ onClose, onSubmit }: ListenerRegisterFormProps) => {
+export const ListenerRegisterForm = ({ onClose }: ListenerRegisterFormProps) => {
   const [formData, setFormData] = useState<ListenerRegisterFormData>(initialFormState);
+
+  const user = useUserStore((state) => state.user);
+  const isAuthorized = !!user?.id;
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [registerError, setRegisterError] = useState<string | undefined>(undefined);
@@ -38,7 +41,21 @@ export const ListenerRegisterForm = ({ onClose, onSubmit }: ListenerRegisterForm
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const setTempEmail = useUserStore((store) => store.setTempEmail);
+  useEffect(() => {
+    if (isAuthorized) {
+      const nextRoute = searchParams.get("next");
+      let route: string;
+      const verifyRoute = "/verify/verify-email";
+      if (nextRoute) {
+        const params = new URLSearchParams();
+        params.append("next", encodeURIComponent(nextRoute));
+        route = `${verifyRoute}?${params.toString()}`;
+      } else {
+        route = verifyRoute;
+      }
+      router.replace(route);
+    }
+  }, [isAuthorized, router, searchParams]);
 
   const handleChange =
     (field: keyof ListenerRegisterFormData) =>
@@ -67,34 +84,23 @@ export const ListenerRegisterForm = ({ onClose, onSubmit }: ListenerRegisterForm
     }
 
     try {
-      const userData: TNewListenerRequest = {
+      const res = await signIn("reg-auth", {
         username: formData.login,
-        email: formData.email,
+        email: formData.email.trim(),
         phone: formData.phone.replace(/\D/g, ""),
         password: formData.password,
-      };
+        regType: "listener",
+        redirect: false,
+      })
 
-      const data = await onSubmit?.(userData);
-
-      if (data) {
-        setTempEmail(data.email);
-
-        const nextRoute = searchParams.get("next");
-        let route: string;
-        const verifyRoute = "/verify/verify-email";
-        if (nextRoute) {
-          const params = new URLSearchParams();
-          params.append("next", encodeURIComponent(nextRoute));
-          route = `${verifyRoute}?${params.toString()}`;
-        } else {
-          route = verifyRoute;
-        }
-
-        setFormData(initialFormState);
-        router.replace(route);
+      if (!res?.ok) {
+        throw new Error(res?.error ? res.error: "Проверьте корректность введённых данных")
       }
+
+      setFormData(initialFormState);
+      
     } catch (error) {
-      if (error instanceof Error) setRegisterError(error.message);
+      setRegisterError(error instanceof Error ? error.message : "Проверьте корректность введённых данных");
     } finally {
       setIsLoading(false);
     }

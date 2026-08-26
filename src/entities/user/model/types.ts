@@ -5,17 +5,32 @@ export type TNewUserRequest = {
   password: string;
 };
 
+export type TProfileType = "artist" | "label";
+
 export type TNewArtistRequest = TNewUserRequest & {
+  profile_type: TProfileType;
   name: string;
 };
 export type TNewListenerRequest = TNewUserRequest;
 
-export type TNewUserResponse = {
+export type TRegisterRequest = {
+  regData: TNewListenerRequest | TNewArtistRequest;
+  regType: "listener" | "artist"
+}
+
+type TNewUser = {
   id: number;
   username: string;
   email: string;
   phone: string;
+}
+
+export type TNewListenerResponse = TNewUser & {
+  name: string;
+  profile_type: TProfileType;
 };
+
+export type TNewUserResponse = TNewUser | TNewListenerResponse;
 
 export type TCurrentUserResponse = {
   id: number;
@@ -26,7 +41,7 @@ export type TCurrentUserResponse = {
   is_email_verified: boolean;
   is_listener: boolean;
   is_artist: boolean;
-  profile_type?: "artist" | "label";
+  profile_type?: TProfileType;
   artist_name?: string
 };
 

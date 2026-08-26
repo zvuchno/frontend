@@ -1,4 +1,4 @@
-import { type TNewListenerRequest, type TNewUserResponse } from "@/entities/user";
+import type { TNewUserResponse, TRegisterRequest } from "@/entities/user";
 
 export interface ListenerRegisterFormData {
   login: string;
@@ -10,7 +10,7 @@ export interface ListenerRegisterFormData {
 
 export interface ListenerRegisterFormProps {
   onClose?: () => void;
-  onSubmit?: (data: TNewListenerRequest) => void | Promise<TNewUserResponse>;
+  onSubmit?: (data: TRegisterRequest) => Promise<TNewUserResponse>;
   onLoginClick?: () => void;
   onSocialLogin?: (provider: "yandex" | "vk" | "google") => void;
   // isLoading?: boolean;

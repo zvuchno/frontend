@@ -3,9 +3,6 @@ import { getErrorMessage } from "@/api/errors/getErrorMessage";
 
 import {
   type TFetchProps,
-  type TNewArtistRequest,
-  type TNewListenerRequest,
-  type TNewUserResponse,
   type TResetPasswordConfirmRequest,
   type TResetPasswordRequest,
   type TResetPasswordVerifyRequest,
@@ -35,23 +32,13 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
   return data as T;
 };
 
-export const registerNewArtist = async (regData: TNewArtistRequest): Promise<TNewUserResponse> => {
-  return await createFetchFunction<TNewUserResponse>({
-    url: "/auth/register/artist/",
-    fetchData: regData,
-    defaultMessage: "Регистрация не удалась. Попробуйте снова",
-  });
-};
-
-export const registerNewListener = async (
-  regData: TNewListenerRequest
-): Promise<TNewUserResponse> => {
-  return await createFetchFunction<TNewUserResponse>({
-    url: "/auth/register/listener/",
-    fetchData: regData,
-    defaultMessage: "Регистрация не удалась. Попробуйте снова",
-  });
-};
+// export const registerNewArtist = async (regData: TNewArtistRequest): Promise<TNewUserResponse> => {
+//   return await createFetchFunction<TNewUserResponse>({
+//     url: "/auth/register/artist/",
+//     fetchData: regData,
+//     defaultMessage: "Регистрация не удалась. Попробуйте снова",
+//   });
+// };
 
 // не используется после перехода на HTTP-Only cookie
 /*export const logInUser = async (
