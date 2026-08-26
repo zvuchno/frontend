@@ -93,7 +93,6 @@ export const ArtistSettingsForm = ({
             disabled={!isOnEdit}
             onChange={setIsOnEdit}
             onSubmit={handleButtonClick}
-            isValid={methods.formState.isValid}
           />
           <div className={styles.hint}>
             Для удобства обработки и отслеживания заказов{" "}

@@ -4,12 +4,10 @@ import styles from "./ArtistSettingsButons.module.scss";
 
 export const ArtistSettingsButtons = ({
   disabled,
-  isValid,
   onChange,
   onSubmit,
 }: {
   disabled: boolean;
-  isValid: boolean;
   onChange: (onEdit: boolean) => void;
   onSubmit: () => void;
 }) => (
@@ -17,7 +15,7 @@ export const ArtistSettingsButtons = ({
     <ButtonUI
       size='standart'
       variant='primary'
-      disabled={disabled || !isValid}
+      disabled={disabled}
       type='submit'
       onClick={() => {
         onSubmit();
