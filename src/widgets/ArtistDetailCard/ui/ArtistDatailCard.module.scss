@@ -9,6 +9,10 @@
   gap: 62px;
   height: 100%;
   justify-content: flex-start;
+
+  & .withoutHover:hover {
+    transform: none;
+  }
 }
 
 .text {
@@ -36,7 +40,7 @@
     text-align: center;
   }
 
-  &__subtitle{
+  &__subtitle {
     font-size: 20px;
     color: var(--color-bg-secondary);
   }
@@ -74,9 +78,7 @@
     width: 40px;
     height: 40px;
     background-position: center;
-    background-repeat: no-repeat ;
+    background-repeat: no-repeat;
     background-size: cover;
   }
-
-  
 }

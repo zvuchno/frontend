@@ -1,0 +1,25 @@
+.blogs {
+  &Card {
+    width: 100%;
+    height: 100%;
+  }
+
+  &CardWrapper {
+    display: flex;
+    width: 30.764vw;
+    max-width: 443px;
+    height: 37.57vw;
+    max-height: 541px;
+    justify-self: center;
+
+    @media (max-width: 1011px) {
+      width: 43.819vw;
+      height: 53.511vw;
+    }
+
+    @media (max-width: 659px) {
+      width: 67.224vw;
+      height: 82.095vw;
+    }
+  }
+}

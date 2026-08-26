@@ -1,10 +1,11 @@
 import clsx from "clsx";
 
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
+
 import { Title } from "@/shared/ui";
 
 import type { HeroUIProps } from "../model/Hero.types";
 import styles from "./Hero.module.scss";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 export const HeroUI = ({
   mainTitle = "ЗВУЧНО",

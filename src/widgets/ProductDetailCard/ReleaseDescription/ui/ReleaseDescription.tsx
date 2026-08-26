@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
+
 import { type TDataForModal } from "@/features/addToCartModal";
 
 import { ButtonUI, Text, Title } from "@/shared/ui";
@@ -14,7 +16,6 @@ import {
   type TReleaseVariant,
 } from "../model/ReleaseDescription.types";
 import s from "./ReleaseDescription.module.scss";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 // Компонент отображает карточку релиза и носителей. Вариант носителя "Диджитал" отображает информацию самого релиза
 export const ReleaseDescription = ({
@@ -110,7 +111,8 @@ export const ReleaseDescription = ({
             onClick={selectVariant}
           />
 
-          {(product?.stock !== null && product?.stock > 0) || product?.property_value === "Диджитал" ? (
+          {(product?.stock !== null && product?.stock > 0) ||
+          product?.property_value === "Диджитал" ? (
             <ButtonUI
               variant='primary'
               size='standart'

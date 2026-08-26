@@ -4,4 +4,5 @@ export interface BlogCardProps {
   description?: string;
   hasLink?: boolean;
   onClick?: () => void;
+  className?: string;
 }
