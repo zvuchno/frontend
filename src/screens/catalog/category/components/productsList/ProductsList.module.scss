@@ -15,13 +15,22 @@
   align-content: start;
   list-style: none;
   width: 100%;
+  justify-content: space-between;
 
   @media (max-width: 425px) {
     padding-inline: 10px;
   }
 
   &.artistsList {
-    grid-template-columns: repeat(auto-fill, minmax(px, 408px));
+    grid-template-columns: repeat(3, minmax(260px, 408px));
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, minmax(260px, 408px));
+    }
+    @media (max-width: 590px) {
+      grid-template-columns: repeat(1, minmax(260px, 408px));
+      justify-content: center;
+    }
   }
 }
 

@@ -13,7 +13,6 @@ import { ButtonLike } from "@/features/ButtonLike";
 
 import { CardArtist } from "@/entities/Artist";
 import { ProductCard } from "@/entities/ProductCard";
-import { BlogCard } from "@/entities/blog";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { mockBlogs, questions } from "@/shared/constants";
@@ -21,6 +20,7 @@ import { ListSection } from "@/shared/ui";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 import styles from "./HomePage.module.scss";
+import { Blog } from "./components/Blog/Blog";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -127,24 +127,12 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
           })}
         </ListSection>
 
-        {mockBlogs.length > 0 && (
-          <ListSection title='Блог' link=''>
-            {mockBlogs.map((blog) => (
-              <BlogCard
-                key={blog.id}
-                image={blog.image}
-                description={blog.description}
-                link={blog.link}
-                hasLink={blog.hasLink}
-              />
-            ))}
-          </ListSection>
-        )}
+        <Blog blogs={mockBlogs} />
 
         <SectionFAQ title='FAQ' items={questions} />
       </div>
 
-      <JoinSection link='' />
+      <JoinSection link='https://t.me/zvuchno_space' />
     </div>
   );
 }

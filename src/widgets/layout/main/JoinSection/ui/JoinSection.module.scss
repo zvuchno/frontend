@@ -4,24 +4,33 @@
   align-items: center;
   gap: 40px;
   width: 100%;
+  max-width: 799px;
   height: 681px;
-  padding: 120px;
+  padding-block: clamp(20px, 8.33vw, 120px);
   background-color: transparent;
   background-image: url("/images/Image_join_section.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: auto;
+  align-self: center;
+
+  @media (max-width: 475px) {
+    padding-inline: 15px;
+  }
 }
 
 .title {
   font-family: var(--font-better-vcr);
-  font-size: 48px;
+  font-size: clamp(22px, 3.333vw, 48px);
   font-weight: 400;
   line-height: 44px;
   letter-spacing: -0.04em;
   color: var(--color-text-primary);
   text-align: center;
   text-transform: none;
+  @media (max-width: 475px) {
+    padding-inline: 15px;
+  }
 }
 
 .link {
@@ -29,7 +38,7 @@
   gap: 17px;
   align-items: center;
   padding: 16px 20px;
-  min-width: 100%;
+  width: 100%;
   border-radius: 36px;
   font-family: var(--font-feature-mono);
   font-size: 28px;
@@ -37,11 +46,17 @@
   line-height: 100%;
   letter-spacing: -0.06em;
   text-transform: uppercase;
+  max-width: 440px;
+
+  @media (max-width: 475px) {
+    font-size: 24px;
+    padding: 10px;
+  }
 }
 
 .subtitle {
   font-family: var(--font-feature-mono);
-  font-size: 28px;
+  font-size: clamp(22px, 1.944vw, 28px);
   font-weight: 400;
   line-height: 28px;
   letter-spacing: -0.08em;

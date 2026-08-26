@@ -1,13 +1,18 @@
 .navPanel {
   display: flex;
-  flex-wrap: wrap;
+  //flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
+
+  @media (max-width: 1024px) {
+    gap: 10px;
+  }
 }
 
 .navLink {
-  @media (max-width: 800px) {
+  height: 36px;
+  @media (max-width: 1024px) {
     padding-inline: 10px;
   }
 }

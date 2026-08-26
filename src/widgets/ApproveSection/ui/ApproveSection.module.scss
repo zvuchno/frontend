@@ -4,13 +4,13 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  gap: clamp(24px, 4.53vw, 62px); 
+  gap: clamp(24px, 4.53vw, 62px);
 }
 
 .title {
   font-family: var(--font-better-vcr);
   font-weight: 400;
-  line-height: 1; 
+  line-height: 1;
   font-size: clamp(32px, 4.67vw, 64px);
   text-transform: uppercase;
   letter-spacing: -0.06em;
@@ -24,8 +24,12 @@
   gap: calc(100% * 72 / 1368);
   width: 100%;
 
+  @media (max-width: 425px) {
+    padding-inline: 15px;
+  }
+
   & > * {
-    flex: 1; 
+    flex: 1;
     min-width: 0;
   }
 
@@ -35,8 +39,8 @@
     gap: 40px;
 
     & > * {
-      width: 100%; 
-      max-width: var(--card-artist-width, 404px); 
+      width: 100%;
+      max-width: var(--card-artist-width, 404px);
     }
   }
 }
