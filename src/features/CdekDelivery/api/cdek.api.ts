@@ -32,7 +32,7 @@ export async function calculateCdekDelivery(
   cdekData: TCdekData
 ): Promise<TCdekPickupDetailsResponse> {
   const response = await authFetchClient<TCdekPickupDetailsResponse>(
-    `${baseUrl}/v1/store/cdek-calculate/`,
+    `${baseUrl}/v1/store/cdek-calculate`,
     {
       method: "POST",
       headers: {

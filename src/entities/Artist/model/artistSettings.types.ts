@@ -20,7 +20,7 @@ export type TTelegramBotConnectResponse = {
 export type TPickupPointMe = {
   id?: number;
   address?: string;
-  pickup_date?: string;
+  pickup_date?: string | null;
   is_active?: boolean;
 };
 

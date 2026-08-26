@@ -77,7 +77,8 @@ export const useArtistSettingsSubmit = ({
         addPickupPoint(
           {
             address: point.address,
-            pickup_date: point.pickup_date,
+            pickup_date:
+              point.pickup_date && point.pickup_date.length > 0 ? point.pickup_date : null,
             is_active: point.is_active,
           },
           {
@@ -97,7 +98,7 @@ export const useArtistSettingsSubmit = ({
         changePickupPoint({
           id: point.server_id,
           address: point.address,
-          pickup_date: point.pickup_date,
+          pickup_date: point.pickup_date && point.pickup_date.length > 0 ? point.pickup_date : null,
           is_active: point.is_active,
         });
       }

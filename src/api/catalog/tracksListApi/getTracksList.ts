@@ -5,7 +5,7 @@ import { type TrackListRequest, type TracksListResponse } from "./types";
 const baseUrl = "/api/backend";
 
 export async function getTracksList({ albumId }: TrackListRequest) {
-  const url = `${baseUrl}/v1/store/player/albums/${albumId}/`;
+  const url = `${baseUrl}/v1/store/player/albums/${albumId}`;
 
   try {
     const data = await authFetchClient<TracksListResponse>(url, {

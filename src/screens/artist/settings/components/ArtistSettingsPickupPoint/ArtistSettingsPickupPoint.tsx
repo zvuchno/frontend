@@ -19,7 +19,7 @@ export const ArtistSettingsPickupPoint = ({
   disabled: boolean;
   onRemove: () => void;
 }) => {
-  const { control, getValues, setValue } = useFormContext<TArtistSettingsFieldValues>();
+  const { control, setValue } = useFormContext<TArtistSettingsFieldValues>();
 
   const addressName = `pickupPoints.${index}.address` as const;
   const dateName = `pickupPoints.${index}.pickup_date` as const;
@@ -38,12 +38,6 @@ export const ArtistSettingsPickupPoint = ({
         control={control}
         shouldUnregister={false}
         name={dateName}
-        rules={{
-          validate: (value) => {
-            const hasAddress = Boolean(getValues(addressName)?.trim());
-            return !hasAddress || Boolean(value) || "Укажите дату самовывоза";
-          },
-        }}
         render={({ field: { value, onBlur }, fieldState }) => (
           <div className={styles.artistSettingsDeliveryDate}>
             <label className={styles.artistSettingsDeliveryDateLabel}>Дата</label>

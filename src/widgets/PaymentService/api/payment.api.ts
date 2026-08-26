@@ -7,7 +7,7 @@ const baseUrl = "/api/backend";
 export async function initiatePayment(payload: TPaymentRequest): Promise<TPaymentResponse> {
   try {
     const res = await authFetchClient<TPaymentResponse | null>(
-      `${baseUrl}/v1/store/payments/create/`,
+      `${baseUrl}/v1/store/payments/create`,
       {
         method: "POST",
         body: JSON.stringify(payload),
