@@ -47,6 +47,6 @@ export const authorize = async (dataReq: TLoginData, sessionId?: string): Promis
     };
   } catch (error) {
     console.error("Критическая ошибка в authorize:", error);
-    return null;
+    throw new Error(error instanceof Error ? error.message : "Ошибка авторизации");
   }
 };

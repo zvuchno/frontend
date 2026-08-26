@@ -15,14 +15,13 @@ export async function proxy(request: NextRequest) {
 
   const authAppUrl = "/signin";
 
-  const protectedRouts = ["/artist", "/fans", "/order"];
+  const protectedRouts = ["/artist", "/fans", "/order", "/verify/verify-email"];
 
   const serviceRoutes = [
     "/forgot-password",
     "/reset-password-confirm",
     "/signin",
     "/signup",
-    "/verify",
   ];
 
   const isProtectedRoute = protectedRouts.some((route) => pathname.startsWith(route));

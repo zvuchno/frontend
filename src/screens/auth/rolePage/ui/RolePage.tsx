@@ -31,13 +31,13 @@ export const RolePage = () => {
           description='Покупай мерч, слушай музыку, следи за новостями своих любимых артистов'
         />
         <RoleCard
-          path='/signup/artist'
+          path='/signup/artist/?profileType=artist'
           image='/images/cassette.png'
           title='Как исполнитель'
           description='Продавай мерч, делись новыми релизами и общайся со своими фанатами'
         />
         <RoleCard
-          path=''
+          path='/signup/artist/?profileType=label'
           image='/images/vinyl_player.png'
           title='Как лейбл'
           description='Продвигай своих артистов, следи за их популярностью, анонсируй релизы'

@@ -1,4 +1,4 @@
-import { type TNewArtistRequest, type TNewUserResponse } from "@/entities/user";
+import type { TProfileType, TRegisterRequest, TNewUserResponse } from "@/entities/user";
 
 export interface ArtistRegisterFormData {
   title: string;
@@ -10,8 +10,9 @@ export interface ArtistRegisterFormData {
 }
 
 export interface ArtistRegisterFormProps {
+  profileType: TProfileType;
   onClose?: () => void;
-  onSubmit?: (data: TNewArtistRequest) => void | Promise<TNewUserResponse>;
+  onSubmit?: (data: TRegisterRequest) => Promise<TNewUserResponse>;
   onLoginClick?: () => void;
   onSocialLogin?: (provider: "yandex" | "vk" | "google") => void;
 }

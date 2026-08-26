@@ -3,12 +3,12 @@
 import { AuthModal } from "@/widgets/AuthModal";
 import { ArtistRegisterForm } from "@/widgets/auth/ArtistRegisterForm";
 
-import { registerNewArtist } from "@/entities/user";
+import type { TProfileType } from "@/entities/user";
 
-export const ArtistSignup = () => {
+export const ArtistSignup = ({profileType}: {profileType: TProfileType}) => {
   return (
     <AuthModal>
-      <ArtistRegisterForm onSubmit={registerNewArtist} />
+      <ArtistRegisterForm profileType={profileType}/>
     </AuthModal>
   );
 };

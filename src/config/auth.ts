@@ -1,10 +1,9 @@
 import { type AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import VkProvider from "next-auth/providers/vk";
 import YandexProvider from "next-auth/providers/yandex";
 import { cookies } from "next/headers";
 
-import { OAuthorize, authorize } from "@/entities/user/server";
+import { OAuthorize, authAfterRegister, authorize } from "@/entities/user/server";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -28,8 +27,6 @@ export const authConfig: AuthOptions = {
         password: { label: "Password", type: "password" },
         rememberme: { label: "Remember Me", type: "boolean" },
         sessionId: { type: "text" },
-        provider: { type: "text" },
-        code: { type: "text" },
       },
 
       async authorize(credentials) {
@@ -52,6 +49,41 @@ export const authConfig: AuthOptions = {
         return null;
       },
     }),
+    ({
+      id: "reg-auth",
+      name: "reg-auth",
+      type: "credentials",
+      credentials: {
+        username: { type: "text " },
+        email: { type: "text" },
+        phone: { type: "text" },
+        password: { type: "text" },
+        name: { type: "text" },
+        profile_type: { type: "text" },
+        regType: { type: "text" },
+      },
+      async authorize(credentials) {
+        if (!credentials) return null;
+
+        const regData = {
+          username: credentials.username,
+          email: credentials.email,
+          phone: credentials.phone,
+          password: credentials.password,
+          name: credentials.name,
+          profile_type: credentials.profile_type,
+        }
+
+        const cookieStore = await cookies();
+        const sessionId = cookieStore.get("sessionid")?.value;
+
+        return await authAfterRegister({
+          regData,
+          regType: credentials.regType,
+          sessionId
+        })
+      }
+    })
   ],
   session: { strategy: "jwt" },
 
