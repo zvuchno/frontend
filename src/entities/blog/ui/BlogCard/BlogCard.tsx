@@ -7,9 +7,16 @@ import { Title } from "@/shared/ui";
 import s from "./BlogCard.module.scss";
 import { type BlogCardProps } from "./BlogCard.type";
 
-export const BlogCard = ({ image, link, description, hasLink = true, onClick }: BlogCardProps) => {
+export const BlogCard = ({
+  image,
+  link,
+  description,
+  hasLink = true,
+  onClick,
+  className,
+}: BlogCardProps) => {
   const CardContent = (
-    <>
+    <div className={className}>
       {image && (
         <img className={s.card__image} src={image} alt='Изображение статьи' loading='lazy' />
       )}
@@ -21,7 +28,7 @@ export const BlogCard = ({ image, link, description, hasLink = true, onClick }: 
           </Title>
         </div>
       )}
-    </>
+    </div>
   );
 
   const handleClick = (e: React.MouseEvent) => {

@@ -1,35 +1,38 @@
-"use client"
+"use client";
 
 import { useState } from "react";
+
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
+
+import { type TDataForModal } from "@/features/addToCartModal";
+
+import { ButtonUI, Text, Title } from "@/shared/ui";
+
+import Gallery from "../../components/Gallery/Gallery";
+import TabBar from "../../components/TabBar/TabBar";
+import VariantRange from "../../components/VariantRange/VariantRange";
 import { type MerchDescriptionProps } from "../model/MerchDescription.types";
 import s from "./MerchDescription.module.scss";
-import { ButtonUI, Text, Title } from "@/shared/ui";
-import Gallery from "../../components/Gallery/Gallery";
-import VariantRange from "../../components/VariantRange/VariantRange";
-import TabBar from "../../components/TabBar/TabBar";
-import { type TDataForModal } from "@/features/addToCartModal";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 // Компонент отображает карточку обычного мерча, не относящегося к носителям
 
 export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) => {
-
   const [sku, setSku] = useState<string>(product.variants[0].sku);
-  const [selectedVariant, setSelectedVariant] = useState<number>(product.variants[0].variant_id)
+  const [selectedVariant, setSelectedVariant] = useState<number>(product.variants[0].variant_id);
 
   const tabsData = [
     {
-      title: 'Описание',
-      description: product.description ? product.description : 'У этого товара нет описания'
+      title: "Описание",
+      description: product.description ? product.description : "У этого товара нет описания",
     },
     {
-      title: 'Доставка',
-      description: 'Доставка'
+      title: "Доставка",
+      description: "Доставка",
     },
     {
-      title: 'Возврат',
-      description: 'Возврат'
-    }
+      title: "Возврат",
+      description: "Возврат",
+    },
   ];
 
   const selectVariant = (_variant: string, sku: string, id: number) => {
@@ -43,15 +46,13 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
   });
 
   const handleAddToCart = () => {
-      
     const data: TDataForModal = {
       product_variant: selectedVariant,
       type: product.kind,
       name: product.name,
       image: imagesForGallery.length > 0 ? imagesForGallery[0].image : null,
       price: product.price.toString(),
-      allow_overpay: product.allow_overpay
-
+      allow_overpay: product.allow_overpay,
     };
 
     onClick(data);
@@ -60,7 +61,6 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
   return (
     <AccentContainerWithPlayer className={s.containerWrapper}>
       <div className={s.container}>
-
         <Gallery images={imagesForGallery} />
 
         <div className={s.card}>
@@ -68,40 +68,49 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
             <div className={s.card__artist__img}>
               <img src={product.artist_image} alt={product.artist_name} />
             </div>
-            <Title Tag="h4" className={s.card__artist__name}>{product.artist_name}</Title>
+            <Title Tag='h4' className={s.card__artist__name}>
+              {product.artist_name}
+            </Title>
           </div>
 
-          <Title Tag="h3" className={s.card__title}>
+          <Title Tag='h3' className={s.card__title}>
             {`${product.kind} "${product.name}"`}
           </Title>
 
-          <Text Tag="p" className={s.card__itemNumber}>
+          <Text Tag='p' className={s.card__itemNumber}>
             Артикул: {sku}
           </Text>
 
-          <Text Tag="p" className={s.card__price}>{product.price} ₽</Text>
+          <Text Tag='p' className={s.card__price}>
+            {product.price} ₽
+          </Text>
 
           {product.stock !== null && product.property_name && (
-            <VariantRange type={product.property_name} variants={product.variants} onClick={selectVariant}/>
+            <VariantRange
+              type={product.property_name}
+              variants={product.variants}
+              onClick={selectVariant}
+            />
           )}
 
-          { product.stock > 0 ? (
-            <ButtonUI 
-              variant="primary" 
-              size="standart" 
-              className={s.card__button} 
+          {product.stock > 0 ? (
+            <ButtonUI
+              variant='primary'
+              size='standart'
+              className={s.card__button}
               onClick={handleAddToCart}
             >
               В корзину
             </ButtonUI>
-          ) : <span style={{fontSize: '24px', textAlign: 'center'}}>Нет в наличии</span>}
+          ) : (
+            <span style={{ fontSize: "24px", textAlign: "center" }}>Нет в наличии</span>
+          )}
 
           <div className={s.card__tabBar}>
             <TabBar data={tabsData} />
           </div>
         </div>
-
       </div>
     </AccentContainerWithPlayer>
-  )
+  );
 };

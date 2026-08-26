@@ -1,5 +1,6 @@
 import clsx from "clsx";
 
+import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 import { ArtistDescription } from "@/widgets/ArtistDescription";
 
 import { CardArtist } from "@/entities/Artist";
@@ -8,7 +9,6 @@ import { Title } from "@/shared/ui";
 
 import { type IArtistDetailCardProps } from "../model/ArtistDetailCard.types";
 import s from "./ArtistDatailCard.module.scss";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
   return (
