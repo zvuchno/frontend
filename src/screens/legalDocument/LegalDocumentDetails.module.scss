@@ -1,0 +1,31 @@
+.legalDetails {
+  &Wrapper {
+    padding-block: 73px 90px;
+    padding-inline: 55px;
+    width: 100%;
+
+    margin-block-end: clamp(50px, 13.89vw, 200px);
+  }
+
+  &Content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    color: #000;
+    gap: 20px;
+  }
+
+  &Header {
+    width: 100%;
+    font-family: var(--font-feature-mono);
+    font-size: 16px;
+    font-weight: 400px;
+    letter-spacing: -0.06em;
+    line-height: 1;
+  }
+
+  &Title {
+    font-size: 20px;
+    font-weight: 700px;
+  }
+}
