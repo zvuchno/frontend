@@ -85,7 +85,7 @@ export const ListenerRegisterForm = ({ onClose }: ListenerRegisterFormProps) => 
 
     try {
       const res = await signIn("reg-auth", {
-        username: formData.login,
+        username: formData.login.trim(),
         email: formData.email.trim(),
         phone: formData.phone.replace(/\D/g, ""),
         password: formData.password,

@@ -51,6 +51,7 @@ export const ListenerRegisterFormContent = ({
         message={errors.email}
         inputSize='small'
         disabled={disabled}
+        maxLength={254}
       />
 
       <PhoneInput
@@ -70,7 +71,7 @@ export const ListenerRegisterFormContent = ({
         name='password'
         value={data.password}
         onChange={handleFieldChange("password")}
-        placeholder='Длина пароля не менее 8 символов.......'
+        //placeholder='Длина пароля не менее 8 символов.......'
         error={!!errors.password}
         message={errors.password}
         disabled={disabled}

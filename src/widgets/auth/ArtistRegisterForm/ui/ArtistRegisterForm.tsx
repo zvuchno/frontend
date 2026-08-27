@@ -85,8 +85,8 @@ export const ArtistRegisterForm = ({ profileType, onClose }: ArtistRegisterFormP
 
     try {
       const res = await signIn("reg-auth", {
-        name: formData.title,
-        username: formData.login,
+        name: formData.title.trim(),
+        username: formData.login.trim(),
         email: formData.email.trim(),
         phone: formData.phone,
         password: formData.password,

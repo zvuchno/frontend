@@ -33,6 +33,7 @@ export const ArtistRegisterFormContent = ({
         message={errors.title}
         inputSize='small'
         disabled={disabled}
+        maxLength={150}
       />
 
       <CustomInput
@@ -62,6 +63,7 @@ export const ArtistRegisterFormContent = ({
         message={errors.email}
         inputSize='small'
         disabled={disabled}
+        maxLength={254}
       />
 
       <PhoneInput
@@ -81,7 +83,7 @@ export const ArtistRegisterFormContent = ({
         name='password'
         value={data.password}
         onChange={handleFieldChange("password")}
-        placeholder='Длина пароля не менее 6 символов.......'
+        //placeholder='Длина пароля не менее 8 символов.......'
         error={!!errors.password}
         message={errors.password}
         disabled={disabled}

@@ -1,3 +1,5 @@
+const REG_EXP_FOR_EMAIL = /^(?=.{1,64}@)[a-zA-Z0-9](?:[a-zA-Z0-9_-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9_-]{0,61}[a-zA-Z0-9])?)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
+
 export const validateForm = <T>(
   formData: T,
 ): { isValid: boolean; errorMessage?: string } => {
@@ -31,7 +33,7 @@ export const validateForm = <T>(
         isValid: false,
         errorMessage: "Введите email",
       };
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    } else if (!REG_EXP_FOR_EMAIL.test(data.email)) {
       return {
         isValid: false,
         errorMessage: "Введите корректный email",
