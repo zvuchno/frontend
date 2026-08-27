@@ -17,9 +17,7 @@ import { PrimaryButton } from "../components/PrimaryButton";
 import { SecondaryButton } from "../components/SecondaryButton";
 import { type AuthFormData, type AuthFormProps } from "../model/AuthForm.types";
 import s from "./AuthForm.module.scss";
-
-// import * as VKID from '@vkid/sdk';
-// import toast from "react-hot-toast";
+import { validateForm } from "../../config/validateForm";
 
 const initialFormState: AuthFormData = {
   email: "",
@@ -55,6 +53,14 @@ export const AuthForm = ({
   const handleSubmit = async () => {
     setIsLoading(true);
     setAuthError(undefined);
+
+    const validation = validateForm<AuthFormData>(formData);
+    
+    if (!validation.isValid) {
+      setAuthError(validation.errorMessage);
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const res = await signIn("credentials", {
