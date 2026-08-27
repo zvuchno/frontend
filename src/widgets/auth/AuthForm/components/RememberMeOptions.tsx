@@ -30,6 +30,7 @@ export const RememberMeOptions = ({
           disabled={disabled}
           className={s.rememberMeInput}
         />
+        <span className={s.rememberMeCheckmark}></span>
         <span>Запомнить меня</span>
       </label>
       <button type='button' className={s.forgotButton} onClick={handleToForgotPassword}>
