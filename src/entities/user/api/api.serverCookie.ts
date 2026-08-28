@@ -99,7 +99,7 @@ export const registerNewListenerServerCookie = async (
 
   if (!response.ok) {
     const res = await response.json();
-    throw new Error(res.phone || res.email || res.username || res.password || res.name || "Регистрация не удалась");
+    throw new Error(res.phone || res.email || res.username || res.password || res.name || res.consents || "Регистрация не удалась");
   }
 
   return response;
@@ -122,7 +122,7 @@ export const registerNewArtistServerCookie = async (
 
   if (!response.ok) {
     const res = await response.json();
-    throw new Error(res.phone || res.email || res.username || res.password || res.name || "Регистрация не удалась");
+    throw new Error(res.phone || res.email || res.username || res.password || res.name || res.consents || "Регистрация не удалась");
   }
 
   return response;

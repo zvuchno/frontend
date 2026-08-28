@@ -3,6 +3,7 @@ import { PasswordInput } from "@/shared/ui/CustomInput";
 
 import { type ArtistRegisterFormData, type FormErrors } from "../../model/ArtistRegisterForm.types";
 import s from "./ArtistRegisterFormContent.module.scss";
+import { ArtistConsentsFields } from "../ArtistConsentsFields";
 
 export const ArtistRegisterFormContent = ({
   data,
@@ -102,6 +103,8 @@ export const ArtistRegisterFormContent = ({
         disabled={disabled}
         autoComplete='new-password'
       />
+
+      <ArtistConsentsFields disabled={disabled} data={data} handleFieldChange={handleFieldChange} />
 
       {registerError && (
         <Typography variant='normal' className={s.error}>

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { useUserStore } from "@/entities/user";
+import { TConsent, useUserStore } from "@/entities/user";
 
 import { FormSocialButtons, LoadingButton } from "@/shared/ui";
 
@@ -26,6 +26,10 @@ const initialFormState: ListenerRegisterFormData = {
   phone: "",
   password: "",
   confirmPassword: "",
+  listener_offer: false,
+  listener_personal_data: false,
+  listener_distribution: false,
+  listener_newsletter: false,
 };
 
 export const ListenerRegisterForm = ({ onClose }: ListenerRegisterFormProps) => {
@@ -60,12 +64,23 @@ export const ListenerRegisterForm = ({ onClose }: ListenerRegisterFormProps) => 
   const handleChange =
     (field: keyof ListenerRegisterFormData) =>
     (e: React.ChangeEvent<HTMLInputElement> | string) => {
-      const value = typeof e === "string" ? e : e.target.value;
+      let value: string | boolean;
+      if (typeof e === "string") {
+        value = e;
+      } else {
+        if (e.target.type === "checkbox") {
+          value = e.target.checked;
+        } else {
+          value = e.target.value;
+        }
+      }
 
       setFormData((prev) => ({ ...prev, [field]: value }));
 
-      const error = validateField<ListenerRegisterFormData>(field, value, formData.password);
-      setErrors((prev) => ({ ...prev, [field]: error || undefined }));
+      if (typeof value === "string") {
+        const error = validateField<ListenerRegisterFormData>(field, value, formData.password);
+        setErrors((prev) => ({ ...prev, [field]: error || undefined }));
+      }
 
       if (registerError) setRegisterError(undefined);
     };
@@ -84,11 +99,19 @@ export const ListenerRegisterForm = ({ onClose }: ListenerRegisterFormProps) => 
     }
 
     try {
+      // Преобразуем true-поля согласий  в массив строк
+      const agreedTerms: TConsent[] = [];
+      if (formData.listener_offer) agreedTerms.push("listener_offer");
+      if (formData.listener_personal_data) agreedTerms.push("listener_personal_data");
+      if (formData.listener_distribution) agreedTerms.push("listener_distribution");
+      if (formData.listener_newsletter) agreedTerms.push("listener_newsletter");
+
       const res = await signIn("reg-auth", {
         username: formData.login.trim(),
         email: formData.email.trim(),
         phone: formData.phone.replace(/\D/g, ""),
         password: formData.password,
+        consents: agreedTerms,
         regType: "listener",
         redirect: false,
       })

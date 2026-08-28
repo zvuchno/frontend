@@ -1,6 +1,6 @@
 const REG_EXP_FOR_EMAIL = /^(?=.{1,64}@)[a-zA-Z0-9](?:[a-zA-Z0-9_-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9_-]{0,61}[a-zA-Z0-9])?)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
 
-export const validateField = <T extends Record<keyof T, string>>(
+export const validateField = <T extends Record<keyof T, string | boolean>>(
   fieldName: keyof T,
   value: string,
   compareWith?: string,

@@ -1,3 +1,5 @@
+"use client";
+
 import { type ChangeEvent, forwardRef } from "react";
 
 import clsx from "clsx";
@@ -47,15 +49,15 @@ export const CheckboxUI = forwardRef<HTMLInputElement, TCheckboxUIProps>(
           name={name}
           value={value}
           ref={ref}
-          aria-hidden='true'
+          //aria-hidden='true'
         />
         <span className={styles.checkboxWrapper} aria-hidden='true'>
           <span
             className={styles.checkboxArea}
-            role={type === "checkbox" ? "checkbox" : "radio"}
-            aria-checked={isChecked}
+            //role={type === "checkbox" ? "checkbox" : "radio"}
+            //aria-checked={isChecked}
             aria-disabled={disabled}
-            aria-label={type}
+            //aria-label={type}
           >
             {type === "checkbox" && <CheckBoxIcon isChecked={!!isInputChecked} />}
             {type === "radio" && <RadioButtonIcon isSelected={!!isInputChecked} />}

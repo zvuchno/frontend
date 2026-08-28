@@ -1,5 +1,11 @@
 import type { User } from "next-auth";
-import { TNewArtistRequest, TNewListenerRequest, TNewListenerResponse, TNewUserResponse } from "../model/types";
+import type { 
+  TConsent, 
+  TNewArtistRequest, 
+  TNewListenerRequest, 
+  TNewListenerResponse, 
+  TNewUserResponse 
+} from "../model/types";
 import { 
   getCurrentUserServer, 
   registerNewArtistServerCookie, 
@@ -15,6 +21,7 @@ type TRegData = {
   password: string;
   name: string;
   profile_type: string;
+  consents: TConsent[];
 }
 
 export const authAfterRegister = async ({
@@ -35,7 +42,8 @@ export const authAfterRegister = async ({
         username: regData.username,
         email: regData.email,
         phone: regData.phone,
-        password: regData.password
+        password: regData.password,
+        consents: regData.consents,
       }
       res = await registerNewListenerServerCookie(payload, sessionId);
 
@@ -47,6 +55,7 @@ export const authAfterRegister = async ({
         password: regData.password,
         profile_type: regData.profile_type as "artist" | "label",
         name: regData.name,
+        consents: regData.consents,
       }
       res = await registerNewArtistServerCookie(payload, sessionId);
       
