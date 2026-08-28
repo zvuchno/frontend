@@ -147,13 +147,14 @@
     border-radius: 9999;
 
     &:hover {
-      //border: 2px solid #fff;
-      box-shadow: 3px 3px 10px 0.5px var(--color-text-primary);
+      transform: scale(0.95);
+      box-shadow: 0px 0px 3px 0.5px var(--color-text-primary);
     }
 
     &:active {
-      //border: 2px solid var(--color-primary-blue);
+      transform: scale(0.95);
       border: 2px solid #fff;
+      box-shadow: 0px 0px 3px 0.5px var(--color-text-primary);
     }
   }
 }
