@@ -29,7 +29,12 @@ export const ProfileFormUI = ({
   } = useFormContext<FieldValues>();
 
   return (
-    <form className={clsx(styles.form, className)} onSubmit={void handleSubmit(onSubmit, onError)}>
+    <form
+      className={clsx(styles.form, className)}
+      onSubmit={(event) => {
+        void handleSubmit(onSubmit, onError)(event);
+      }}
+    >
       <div className={styles.formContentWrapper}>
         <h3 className={styles.formTitle}>{title}</h3>
         <div className={styles.formContent}>{children}</div>
