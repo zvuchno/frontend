@@ -5,4 +5,5 @@ export interface CatalogListProps {
   filterByArtist?: string;
   orderingFilter?: '-created_at' | 'random';
   offset?: string;
+  search?: string;
 }

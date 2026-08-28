@@ -5,7 +5,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import SearchInput from "@/features/SearchInput/SearchInput";
 import LogoutButton from "@/features/logoutButton/LogoutButton";
@@ -26,11 +26,13 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`;
+  const router = useRouter();
 
   const [isSearchOpen, setSearchOpen] = useState(false);
 
   const handleSearchClose = () => {
     setSearchOpen(false);
+    router.push("/catalog/all");
   };
   const userType = user?.isArtist ? "artist" : "listener";
 

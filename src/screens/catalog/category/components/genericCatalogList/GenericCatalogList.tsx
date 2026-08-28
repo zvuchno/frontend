@@ -14,6 +14,7 @@ const GenericCatalogList = async ({
   filterByArtist,
   orderingFilter,
   offset,
+  search,
 }: CatalogListProps) => {
   try {
     let products;
@@ -38,6 +39,7 @@ const GenericCatalogList = async ({
         limit: "16",
         offset: offset,
         ordering: orderingFilter,
+        search: search,
       });
 
       products = data?.results ?? [];
