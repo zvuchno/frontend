@@ -23,9 +23,16 @@
   padding: 20px;
   background-color: #ffffff;
   box-shadow: 4px 4px 4px 0px color-mix(in srgb, #000000 25%, transparent);
-  max-height: 100vh;
+  //max-height: 100vh;
   //overflow-y: auto;
   z-index: 2;
+
+
+
+  
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
 
   &::-webkit-scrollbar {
     width: 0;
