@@ -1,3 +1,5 @@
+"use client";
+
 import { useCart } from "@/entities/cart";
 
 import { type THeaderAction } from "../config/headerActions";

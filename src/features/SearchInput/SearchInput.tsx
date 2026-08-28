@@ -1,4 +1,6 @@
-import { type ChangeEvent, useState } from "react";
+"use client";
+
+import { type ChangeEvent, useEffect, useState } from "react";
 
 import clsx from "clsx";
 
@@ -6,6 +8,20 @@ import { Text } from "@/shared/ui";
 
 import s from "./SearchInput.module.scss";
 import { type SearchInputProps } from "./SearchInput.type";
+import { type ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
+import { useDebouncedPush } from "@/shared/hooks/useDebouncedPush";
+
+const SEARCH_DELAY = 500;
+
+function getFirstQ(sp: ReadonlyURLSearchParams) {
+  const all = sp.getAll("search");
+  return all[0] ?? "";
+};
+
+function buildHref(nextQuery: string) {
+  const q = nextQuery.trim();
+  return q ? `/catalog/all?search=${encodeURIComponent(q)}` : "/catalog/all";
+};
 
 const SearchInput = ({
   placeholder = "Найти товары",
@@ -14,10 +30,23 @@ const SearchInput = ({
   className,
   disabled = false,
 }: SearchInputProps) => {
-  const [value, setValue] = useState("");
+  const sp = useSearchParams();
+  const debouncedPush = useDebouncedPush(SEARCH_DELAY);
+
+  const queryFromUrl = getFirstQ(sp);
+  const [value, setValue] = useState<string>(queryFromUrl);
+
+  useEffect(() => {
+    setValue(queryFromUrl);
+  }, [queryFromUrl]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    const newValue = e.target.value;
+    setValue(newValue);
+
+    if (disabled) return;
+
+    debouncedPush(buildHref(newValue));
   };
 
   const handleClose = () => {

@@ -27,6 +27,7 @@ async function Catalog ({
     artist?: string;
     ordering?: "-created_at" | "random";
     offset?: string;
+    search?: string;
   }>;
 }) {
   const { category } = await params;
@@ -37,6 +38,7 @@ async function Catalog ({
   const activeFilterByArtist = resolvedSearchParams.artist;
   const activeOrderingFilter = resolvedSearchParams.ordering;
   const offset = resolvedSearchParams.offset;
+  const search = resolvedSearchParams.search;
 
   return (
     <CategoryPage
@@ -46,6 +48,7 @@ async function Catalog ({
       artistFilter={activeFilterByArtist}
       ordering={activeOrderingFilter}
       offset={offset}
+      search={search}
     />
   )
 };

@@ -28,11 +28,12 @@ export type TCatalogListResponse = {
 
 export type TCatalogListRequest = {
   token?: string;
-  type?: 'album' | 'all' | 'merch',
-  genre?: string | string[],
-  kind?: string | string[],
+  type?: 'album' | 'all' | 'merch';
+  genre?: string | string[];
+  kind?: string | string[];
   artist?: string;
-  limit?: string, 
-  offset?: string,
-  ordering?: '-created_at' | 'random',
+  limit?: string;
+  offset?: string;
+  ordering?: '-created_at' | 'random';
+  search?: string;
 };

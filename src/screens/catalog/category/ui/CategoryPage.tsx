@@ -13,6 +13,7 @@ interface CategoryPageProps {
   artistFilter?: string;
   ordering?: '-created_at' | 'random';
   offset?: string;
+  search?: string;
 }
 
 export const CategoryPage = async ({
@@ -21,7 +22,8 @@ export const CategoryPage = async ({
   kind,
   artistFilter,
   ordering,
-  offset
+  offset,
+  search,
 }: CategoryPageProps) => {
 
   let merchKinds;
@@ -50,6 +52,7 @@ export const CategoryPage = async ({
           filterByArtist={artistFilter}
           orderingFilter={ordering}
           offset={offset}
+          search={search}
         />
       </Suspense>
     </>
