@@ -71,6 +71,85 @@ export const handleAddContact = async (
   }
 };
 
+export const handleDeleteContact = async (
+  item: TArtistDataItem,
+  setDeletingContactKey: Dispatch<SetStateAction<string | null>>,
+  onArtistUpdate: (payload: UpdateCurrentArtistPayload) => Promise<void>,
+  artist?: TEditableArtistProfile | null
+) => {
+  if (!artist) return;
+  const key = getArtistDataItemKey(item);
+  setDeletingContactKey(key);
+  try {
+    const payload = buildArtistUpdatePayload(artist, {
+      contacts: artist.contacts.filter((c) => getArtistDataItemKey(c) !== key),
+    });
+    await onArtistUpdate(payload);
+    toast.success("Контакт удалён");
+  } catch (err) {
+    console.error(err);
+    toast.error("Не удалось удалить контакт");
+  } finally {
+    setDeletingContactKey(null);
+  }
+};
+
+export const handleDeleteSocial = async (
+  item: TArtistDataItem,
+  setDeletingSocialKey: Dispatch<SetStateAction<string | null>>,
+  onArtistUpdate: (payload: UpdateCurrentArtistPayload) => Promise<void>,
+  artist?: TEditableArtistProfile | null
+) => {
+  if (!artist) return;
+  const key = getArtistDataItemKey(item);
+  setDeletingSocialKey(key);
+  try {
+    const payload = buildArtistUpdatePayload(artist, {
+      socials: artist.socials.filter((s) => getArtistDataItemKey(s) !== key),
+    });
+    await onArtistUpdate(payload);
+    toast.success("Соцсеть удалена");
+  } catch (err) {
+    console.error(err);
+    toast.error("Не удалось удалить соцсеть");
+  } finally {
+    setDeletingSocialKey(null);
+  }
+};
+
+export const handleCoverChange = async (
+  file: File,
+  setIsUploadingCover: Dispatch<SetStateAction<boolean>>,
+  onCoverUpdate: (file: File) => Promise<void>
+) => {
+  setIsUploadingCover(true);
+  try {
+    await onCoverUpdate(file);
+    toast.success("Обложка успешно обновлена");
+  } catch (err) {
+    console.error(err);
+    toast.error("Не удалось обновить обложку");
+  } finally {
+    setIsUploadingCover(false);
+  }
+};
+
+export const handleDescriptionChange = async (
+  value: string,
+  onArtistUpdate: (payload: UpdateCurrentArtistPayload) => Promise<void>,
+  setIsEdit: Dispatch<SetStateAction<boolean>>,
+  artist?: TEditableArtistProfile | null
+) => {
+  try {
+    await onArtistUpdate({ description: value });
+    toast.success(`Данные артиста ${artist?.name} успешно изменены`);
+    setIsEdit(false);
+  } catch (error) {
+    console.error(error);
+    toast.error(`Не удалось обновить данные артиста ${artist?.name}`);
+  }
+};
+
 export const getArtistSectionData = (artist?: TEditableArtistProfile | null) => ({
   coverSrc: artist?.cover ?? "",
   description: artist?.description ?? "",

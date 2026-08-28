@@ -81,7 +81,6 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
       });
       return;
     }
-
     await updateCover({ cover: file });
   };
 
