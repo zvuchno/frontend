@@ -1,5 +1,4 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
 
 import { useArtistProfileEditMode } from "@/entities/profile";
 
@@ -10,11 +9,13 @@ import { type TArtistDataItem } from "../ArtistDataSection/ArtistDataSection.typ
 import s from "./ArtistDataSectionLayout.module.scss";
 import { type TArtistDataSectionLayoutProps } from "./ArtistDataSectionLayout.types";
 import {
-  buildArtistUpdatePayload,
-  getArtistDataItemKey,
   getArtistSectionData,
   handleAddContact,
   handleAddSocial,
+  handleCoverChange,
+  handleDeleteContact,
+  handleDeleteSocial,
+  handleDescriptionChange,
 } from "./ArtistDataSectionLayout.utils";
 
 export const ArtistDataSectionLayout = ({
@@ -42,59 +43,16 @@ export const ArtistDataSectionLayout = ({
   const addContact = (item: TArtistDataItem) =>
     handleAddContact(item, onArtistUpdate, setIsAddingContact, artist);
 
-  const handleDeleteContact = async (item: TArtistDataItem) => {
-    if (!artist) return;
-    const key = getArtistDataItemKey(item);
-    setDeletingContactKey(key);
-    try {
-      const payload = buildArtistUpdatePayload(artist, {
-        contacts: artist.contacts.filter((c) => getArtistDataItemKey(c) !== key),
-      });
-      await onArtistUpdate(payload);
-      toast.success("Контакт удалён");
-    } catch (err) {
-      console.error(err);
-      toast.error("Не удалось удалить контакт");
-    } finally {
-      setDeletingContactKey(null);
-    }
-  };
+  const deleteContact = (item: TArtistDataItem) =>
+    handleDeleteContact(item, setDeletingContactKey, onArtistUpdate, artist);
 
-  const handleDeleteSocial = async (item: TArtistDataItem) => {
-    if (!artist) return;
-    const key = getArtistDataItemKey(item);
-    setDeletingSocialKey(key);
-    try {
-      const payload = buildArtistUpdatePayload(artist, {
-        socials: artist.socials.filter((s) => getArtistDataItemKey(s) !== key),
-      });
-      await onArtistUpdate(payload);
-      toast.success("Соцсеть удалена");
-    } catch (err) {
-      console.error(err);
-      toast.error("Не удалось удалить соцсеть");
-    } finally {
-      setDeletingSocialKey(null);
-    }
-  };
+  const deleteSocial = (item: TArtistDataItem) =>
+    handleDeleteSocial(item, setDeletingSocialKey, onArtistUpdate, artist);
 
-  const handleCoverChange = async (file: File) => {
-    setIsUploadingCover(true);
-    try {
-      await onCoverUpdate(file);
-      toast.success("Обложка успешно обновлена");
-    } catch (err) {
-      console.error(err);
-      toast.error("Не удалось обновить обложку");
-    } finally {
-      setIsUploadingCover(false);
-    }
-  };
+  const changeCover = (file: File) => handleCoverChange(file, setIsUploadingCover, onCoverUpdate);
 
-  const handleDescriptionChange = async (value: string) => {
-    await onArtistUpdate({ description: value });
-    setIsEdit(false);
-  };
+  const changeDescription = (value: string) =>
+    handleDescriptionChange(value, onArtistUpdate, setIsEdit, artist);
 
   if (isLoading || !artist) return <Loader />;
 
@@ -108,11 +66,11 @@ export const ArtistDataSectionLayout = ({
         deletingContactKey={deletingContactKey}
         deletingSocialKey={deletingSocialKey}
         errorMessage={error?.message}
-        onCoverChange={handleCoverChange}
+        onCoverChange={changeCover}
         onAddContactClick={addContact}
         onAddSocialClick={addSocial}
-        onDeleteContactClick={(item) => void handleDeleteContact(item)}
-        onDeleteSocialClick={(item) => void handleDeleteSocial(item)}
+        onDeleteContactClick={(item) => void deleteContact(item)}
+        onDeleteSocialClick={(item) => void deleteSocial(item)}
         className={s.profileInfoCoverFrame}
         onEditDescription={setIsEdit}
         isEdit={Boolean(withButton || isProfileEditMode)}
@@ -125,7 +83,7 @@ export const ArtistDataSectionLayout = ({
           variant='primary'
           className={s.profileInfoButton}
           disabled={!isEdit}
-          onClick={() => void handleDescriptionChange(tempDescription)}
+          onClick={() => void changeDescription(tempDescription)}
         >
           Сохранить
         </ButtonUI>
