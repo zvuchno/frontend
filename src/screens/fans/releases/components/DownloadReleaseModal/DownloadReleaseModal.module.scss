@@ -138,7 +138,7 @@
 @media (max-width: 480px) {
   .modalContent {
     max-height: calc(100vh - 32px);
-    overflow-y: auto;
+    //overflow-y: auto;
     padding-left: 16px;
     padding-right: 16px;
   }
