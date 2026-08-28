@@ -98,7 +98,7 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                   ? product.target.selected_variant_id
                   : undefined;
               return (
-                <li key={product.product_id}>
+                <li key={product.product_id} className={s.productCardLink}>
                   <ProductCard
                     image={product.image}
                     title={product.artist_name}

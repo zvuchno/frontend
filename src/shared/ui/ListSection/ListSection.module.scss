@@ -40,7 +40,7 @@
 
 .content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   justify-content: space-between;
   width: 100%;
   column-gap: 72px;
