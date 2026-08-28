@@ -21,6 +21,10 @@
     padding-inline: 10px;
   }
 
+  .productCardLink {
+    width: 100%;
+  }
+
   &.artistsList {
     grid-template-columns: repeat(3, minmax(260px, 408px));
 
