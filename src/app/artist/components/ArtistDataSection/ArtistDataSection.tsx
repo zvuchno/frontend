@@ -24,6 +24,9 @@ const ArtistDataSection = ({
   deletingSocialKey = null,
   errorMessage = null,
   className,
+  isEdit,
+  onEditDescription,
+  descriptionChanged,
   onCoverChange,
   onEditCoverClick,
   onAddContactClick,
@@ -64,38 +67,43 @@ const ArtistDataSection = ({
         onEdit={onEditCoverClick}
       />
 
-      <div className={s.content}>
+      <div className={s.description}>
         <ArtistDescription
           variant='profile'
           description={description}
           emptyText='Описание пока не заполнено'
           title='Об исполнителе'
+          isEdit={isEdit}
+          hasChanges={(value) => descriptionChanged?.(value)}
+          onEditMode={() => onEditDescription?.(true)}
+        />
+      </div>
+
+      <div className={s.details}>
+        <ButtonAddLink
+          items={contacts}
+          addButtonText='Добавить контакт'
+          deletingItemKey={deletingContactKey}
+          onAddClick={() => setIsContactModalOpen(true)}
+          onDeleteClick={onDeleteContactClick}
+          className={s.detailsComponent}
         />
 
-        <div className={s.details}>
-          <ButtonAddLink
-            items={contacts}
-            addButtonText='Добавить контакт'
-            deletingItemKey={deletingContactKey}
-            onAddClick={() => setIsContactModalOpen(true)}
-            onDeleteClick={onDeleteContactClick}
-          />
-
-          <ButtonAddLink
-            items={socials}
-            addButtonText='Добавить соцсеть'
-            deletingItemKey={deletingSocialKey}
-            onAddClick={() => setIsSocialModalOpen(true)}
-            onDeleteClick={onDeleteSocialClick}
-          />
-        </div>
-
-        {errorMessage ? (
-          <p className={s.error} role='alert'>
-            {errorMessage}
-          </p>
-        ) : null}
+        <ButtonAddLink
+          items={socials}
+          addButtonText='Добавить соцсеть'
+          deletingItemKey={deletingSocialKey}
+          onAddClick={() => setIsSocialModalOpen(true)}
+          onDeleteClick={onDeleteSocialClick}
+          className={s.detailsComponent}
+        />
       </div>
+
+      {errorMessage ? (
+        <p className={s.error} role='alert'>
+          {errorMessage}
+        </p>
+      ) : null}
 
       <ModalAddContact
         variant='contact'

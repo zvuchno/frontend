@@ -8,12 +8,19 @@
 
   &_inCatalog {
     border-width: 2px;
+
+    @media(max-width: 650px) {
+      width: 100%;
+    }
   }
 
   &_inProfile {
     min-height: 317px;
     border: 2px solid var(--color-bg-main);
+    grid-area: "description";
   }
+
+  
 }
 
 .header {
@@ -47,14 +54,14 @@
 .content {
   position: relative;
   width: 100%;
-  padding: 20px 30px 37px;
+  padding: 20px 20px 37px 30px;
 
   &_inCatalog {
     padding: 40px 30px 81px;
   }
 
   &_inProfile {
-    padding-block: 18px 37px;
+    padding: 20px 30px 37px 30px;
   }
 
   &__textWrapper {
@@ -73,19 +80,40 @@
     }
   }
 
+  &__descriptionInput {
+    border: none;
+    width: 100%;
+    padding: 0;
+    font-family: var(--font-feature-mono);
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    resize: none;
+
+    &:focus,
+    &:focus-visible,
+    &:active {
+      border: none;
+      outline: none;
+    }
+
+    &::placeholder {
+      font-family: var(--font-feature-mono);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 100%;
+      letter-spacing: -0.06em;
+      color: color-mix(in srgb, var(--color-text-primary) 45%, transparent);
+    }
+  }
+
   &__text {
     font-size: 20px;
     font-weight: 400;
     line-height: 100%;
     letter-spacing: -0.06em;
-  }
-
-  &__emptyText {
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 100%;
-    letter-spacing: -0.06em;
-    color: color-mix(in srgb, var(--color-text-primary) 45%, transparent);
   }
 
   &__button {

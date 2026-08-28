@@ -30,7 +30,9 @@ $text-color-accent: #ffffff;
   color: var(--color-text-primary);
   border: 1px solid var(--color-text-primary);
   border-radius: $borger-radius-standart;
-  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  transition:
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
   cursor: pointer;
 
   &Content {
@@ -46,17 +48,22 @@ $text-color-accent: #ffffff;
     transition: color 0.3s ease-in-out;
   }
 
-    /* светло-голубая кнопка */
+  /* светло-голубая кнопка */
   &.primaryButton {
     background-color: var(--color-accent-blue);
 
     &:hover:not(:disabled) {
-      background-color: #9ACAFF;
+      background-color: #9acaff;
     }
 
     &:active:not(:disabled) {
       background-color: var(--color-primary-blue);
       color: $text-color-accent;
+    }
+
+    &:disabled {
+      background-color: var(--color-bg-secondary);
+      color: #fff;
     }
   }
 
@@ -65,7 +72,7 @@ $text-color-accent: #ffffff;
     background-color: var(--color-bg-secondary);
 
     &:hover:not(:disabled) {
-      background-color: #D9D9D9;
+      background-color: #d9d9d9;
     }
 
     &:active:not(:disabled) {
@@ -79,15 +86,15 @@ $text-color-accent: #ffffff;
   }
 
   /* темная акцентная кнопка */
-  &.accentDarkButton { 
+  &.accentDarkButton {
     background-color: var(--color-text-primary);
     color: $text-color-accent;
 
-    &:hover:not(:disabled) { 
+    &:hover:not(:disabled) {
       border-color: var(--color-primary-blue);
     }
 
-    &:active:not(:disabled) { 
+    &:active:not(:disabled) {
       background-color: var(--color-primary-blue);
       border-color: var(--color-primary-blue);
     }
@@ -107,7 +114,7 @@ $text-color-accent: #ffffff;
   }
 
   /* кнопка height 48px - кнопка в ЛК Подробнее о заказе*/
-  &.mediumButton { 
+  &.mediumButton {
     min-height: $button-hight-medium;
     padding-inline: $padding-16;
   }
@@ -125,9 +132,9 @@ $text-color-accent: #ffffff;
     cursor: not-allowed;
   }
 
-    /* Мобильная версия */
+  /* Мобильная версия */
 
-    @media (width <= 375px) {
+  @media (width <= 375px) {
     min-height: $button-hight-standart-mobile;
     padding-inline: $padding-16;
 
@@ -147,5 +154,3 @@ $text-color-accent: #ffffff;
     }
   }
 }
-
-

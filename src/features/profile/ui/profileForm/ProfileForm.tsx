@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useFormContext } from "react-hook-form";
 
@@ -13,11 +13,11 @@ export const ProfileFormUI = ({
   children,
   className,
   title = "Профиль",
-  isChecked = false,
-  isOnChange = true,
-  isSubmitting = false,
+  isChecked,
+  isOnChange,
+  isSubmitting,
   errorMessage,
-  has_usable_password = false,
+  has_usable_password,
   onSubmit,
   onError,
   onEdit,
@@ -29,17 +29,14 @@ export const ProfileFormUI = ({
   } = useFormContext<FieldValues>();
 
   return (
-    <form
-      className={clsx(styles.form, className)}
-      onSubmit={handleSubmit(onSubmit, onError)}
-    >
+    <form className={clsx(styles.form, className)} onSubmit={void handleSubmit(onSubmit, onError)}>
       <div className={styles.formContentWrapper}>
         <h3 className={styles.formTitle}>{title}</h3>
         <div className={styles.formContent}>{children}</div>
         {onUpdatePassword && (
           <button type='button' className={styles.passwordButton} onClick={onUpdatePassword}>
             <span className={styles.passwordButton__text}>
-              {has_usable_password ? 'Изменить пароль' : 'Установить пароль'}
+              {has_usable_password ? "Изменить пароль" : "Установить пароль"}
             </span>
           </button>
         )}
@@ -51,7 +48,7 @@ export const ProfileFormUI = ({
         <ButtonUI
           size='standart'
           variant='primary'
-          disabled={isSubmitting || !isChecked || Object.keys(errors).length > 0}
+          disabled={!isOnChange || isSubmitting || !isChecked || Object.keys(errors).length > 0}
           type='submit'
         >
           {isSubmitting ? "Сохранение..." : "Сохранить"}

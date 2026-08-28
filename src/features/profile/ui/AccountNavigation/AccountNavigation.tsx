@@ -1,7 +1,3 @@
-"use client";
-
-import { useSession } from "next-auth/react";
-
 import {
   artistsProfileRoutes,
   fansProfileArtistRoute,
@@ -11,20 +7,17 @@ import {
 import { NavBar } from "../NavBar/NavBar";
 import style from "./AccountNavigation.module.scss";
 
-export const AccountNavigation = () => {
-  const { data, status } = useSession();
-  const isArtist = data?.user.isArtist ?? false;
-  const artistRole = data?.user.profileType;
+export const AccountNavigation = ({ type }: { type?: "label" | "artist" }) => {
+  const isArtist = !!type;
+  const artistRole = type;
 
-  const fanLinks = fansProfileRoutes;
   const artistLinks =
     !isArtist || !artistRole ? fansProfileArtistRoute : artistsProfileRoutes(artistRole);
 
-  if (status !== "loading")
-    return (
-      <div className={style.navigation}>
-        <NavBar links={fanLinks} title='Аккаунт' />
-        <NavBar links={artistLinks} title='Кабинет' />
-      </div>
-    );
+  return (
+    <div className={style.navigation}>
+      <NavBar links={fansProfileRoutes} title='Аккаунт' />
+      <NavBar links={artistLinks} title='Кабинет' />
+    </div>
+  );
 };

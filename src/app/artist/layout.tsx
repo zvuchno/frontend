@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
 import { useSession } from "next-auth/react";
 import { useParams, usePathname } from "next/navigation";
 
+import { EMPTY_PROFILE_FORM_VALUES } from "@/screens/artist/profile/form.utils";
+
 import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
-import { AccountNavigation } from "@/features/profile";
+import { AccountNavigation, type FieldValues } from "@/features/profile";
 
 import {
   useSetArtistId,
@@ -21,13 +24,14 @@ import {
   useGetManagedProfileDetails,
 } from "@/entities/Label";
 import {
+  ArtistProfileEditModeProvider,
   type UpdateCurrentArtistPayload,
   useCurrentArtist,
   useUpdateArtist,
   useUpdateArtistCover,
 } from "@/entities/profile";
 
-import { Title } from "@/shared/ui";
+import { Loader, Title } from "@/shared/ui";
 
 import { ArtistDataSectionLayout } from "./components/ArtistDataSectionLayout/ArtistDataSectionLayout";
 import s from "./layout.module.scss";
@@ -93,6 +97,11 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
 
   const artistError = managedArtistId ? managedProfileError : error;
 
+  const methods = useForm<FieldValues>({
+    mode: "onChange",
+    defaultValues: EMPTY_PROFILE_FORM_VALUES,
+  });
+
   useEffect(() => {
     if (!artist) return;
 
@@ -109,31 +118,46 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
   }, [artist?.slug, currentSlug, setArtistSlug, artist, currentArtistId, setArtistId]);
 
   return (
-    <div className={s.page}>
-      <AccentContainerWithPlayer className={s.container}>
-        <div className={s.body}>
-          <Title Tag='h2' className={s.title}>
-            Личный кабинет
-          </Title>
-          <section className={s.section}>
-            <AccountNavigation />
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className={s.page}>
+          <ArtistProfileEditModeProvider>
+            <FormProvider {...methods}>
+              <AccentContainerWithPlayer className={s.container}>
+                <div className={s.body}>
+                  <Title Tag='h2' className={s.title}>
+                    Личный кабинет
+                  </Title>
+                  <section className={s.section}>
+                    <AccountNavigation type={currentArtist?.profile_type} />
 
-            <div className={s.section__content}>{children}</div>
-          </section>
+                    <div className={s.section__content}>{children}</div>
+                  </section>
+                </div>
+              </AccentContainerWithPlayer>
+
+              {shouldShowArtistInfo && (isManagedProfileLoading || isLoading) ? (
+                <Loader />
+              ) : (
+                shouldShowArtistInfo && (
+                  <ArtistDataSectionLayout
+                    key={`${managedArtistId ? "managed" : "current"}-${artist?.id ?? "loading"}`}
+                    isLoading={isLoadingDataArtist}
+                    artist={artist}
+                    withButton={isManagedArtistPage}
+                    error={artistError}
+                    onArtistUpdate={handleArtistUpdate}
+                    onCoverUpdate={handleCoverUpdate}
+                  />
+                )
+              )}
+            </FormProvider>
+          </ArtistProfileEditModeProvider>
         </div>
-      </AccentContainerWithPlayer>
-
-      {shouldShowArtistInfo && (
-        <ArtistDataSectionLayout
-          isLoading={isLoadingDataArtist}
-          artist={artist}
-          withButton={isManagedArtistPage}
-          error={artistError}
-          onArtistUpdate={handleArtistUpdate}
-          onCoverUpdate={handleCoverUpdate}
-        />
       )}
-    </div>
+    </>
   );
 };
 

@@ -4,6 +4,14 @@
   padding-block: 80px 188px;
   padding-inline: clamp(10px, 6.67vw, 95px);
 
+  @media (max-width: 768px) {
+    padding-block: 50px 100px;
+  }
+
+  @media (max-width: 375px) {
+    padding-block: 30px 50px;
+  }
+
   background-color: var(--background);
   display: flex;
   flex-direction: column;

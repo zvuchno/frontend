@@ -39,6 +39,18 @@
     height: 100%;
     border: none;
 
+    @media (max-width: 950px) {
+      row-gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+      row-gap: 28px;
+    }
+
+    @media (max-width: 490px) {
+      row-gap: 15px;
+    }
+
     &.personalContent {
       grid-template-areas:
         "cell-1-1 cell-1-2"
@@ -70,6 +82,85 @@
         "cell-3-1 cell-3-1"
         "cell-4-1 cell-4-2"
         "cell-5-1 cell-5-2";
+    }
+
+    @media (max-width: 950px) {
+      grid-template-columns: 1fr;
+
+      &.personalContent {
+        grid-template-areas:
+          "cell-1-1"
+          "cell-1-2"
+          "cell-2-1"
+          "cell-2-2"
+          "cell-3-1";
+      }
+
+      &.passportlContent {
+        grid-template-areas:
+          "cell-1-1"
+          "cell-1-2"
+          "cell-2-1"
+          "cell-2-2";
+      }
+
+      &.paymentlContent {
+        grid-template-areas:
+          "cell-1-1"
+          "cell-1-2"
+          "cell-2-1 "
+          "cell-2-2"
+          "cell-3-1 "
+          "cell-3-2";
+      }
+
+      &.legalEntityContent {
+        grid-template-areas:
+          "cell-1-1"
+          "cell-2-1 "
+          "cell-2-2"
+          "cell-3-1"
+          "cell-4-1 "
+          "cell-4-2"
+          "cell-5-1"
+          " cell-5-2";
+      }
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+      &.personalContent {
+        grid-template-areas:
+          "cell-1-1 cell-1-2"
+          "cell-2-1 cell-2-2"
+          "cell-3-1 cell-3-1";
+        margin-block-end: 52px;
+      }
+
+      &.passportlContent {
+        grid-template-areas:
+          "cell-1-1 cell-1-2"
+          "cell-2-1 cell-2-2";
+        margin-block-end: 20px;
+      }
+
+      &.paymentlContent {
+        grid-template-areas:
+          "cell-1-1 cell-1-2"
+          "cell-2-1 cell-2-2"
+          "cell-3-1 cell-3-2";
+        margin-block-start: 32px;
+        margin-block-end: 20px;
+      }
+
+      &.legalEntityContent {
+        grid-template-areas:
+          "cell-1-1 cell-1-1"
+          "cell-2-1 cell-2-2"
+          "cell-3-1 cell-3-1"
+          "cell-4-1 cell-4-2"
+          "cell-5-1 cell-5-2";
+      }
     }
 
     @media (max-width: 490px) {

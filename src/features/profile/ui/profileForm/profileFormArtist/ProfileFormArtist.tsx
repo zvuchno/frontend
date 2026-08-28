@@ -25,7 +25,7 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
         const isFieldDisabled = Boolean(fieldsDisabled || disabledFields?.includes(field.name));
 
         return (
-          <div className={`cell-${field.row}-${field.column}`} key={field.name}>
+          <div className={styles[`cell-${field.row}-${field.column}`]} key={field.name}>
             {field.type === "tel" ? (
               <InputPhone field={field} disabled={isFieldDisabled} />
             ) : field.name === "url" ? (

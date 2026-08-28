@@ -57,7 +57,12 @@ export function useChangeManagedProfile() {
     mutationFn: ({ id, profile }: TManagedProfileChange) =>
       changeManagedProfileDetails(id, profile),
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(["managed-artist-profile", variables.id], data);
+      const detailQueryKey = ["managed-artist-profile", variables.id];
+
+      queryClient.setQueryData<TManagedProfileDetails>(detailQueryKey, (currentProfile) =>
+        currentProfile ? { ...currentProfile, ...data } : data
+      );
+      void queryClient.invalidateQueries({ queryKey: detailQueryKey });
       void queryClient.invalidateQueries({
         queryKey: ["label", "managedProfiles"],
       });
@@ -77,7 +82,12 @@ export function useChangeManagedProfileCover() {
     mutationFn: ({ id, payload }: TManagedProfileCoverChange) =>
       changeManagedProfileCover(id, payload),
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(["managed-artist-profile", variables.id], data);
+      const detailQueryKey = ["managed-artist-profile", variables.id];
+
+      queryClient.setQueryData<TManagedProfileDetails>(detailQueryKey, (currentProfile) =>
+        currentProfile ? { ...currentProfile, ...data } : currentProfile
+      );
+      void queryClient.invalidateQueries({ queryKey: detailQueryKey });
       void queryClient.invalidateQueries({
         queryKey: ["label", "managedProfiles"],
       });

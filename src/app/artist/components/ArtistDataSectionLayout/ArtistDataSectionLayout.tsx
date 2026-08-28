@@ -1,6 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
+import { useArtistProfileEditMode } from "@/entities/profile";
+
 import { ButtonUI, Loader } from "@/shared/ui";
 
 import ArtistDataSection from "../ArtistDataSection/ArtistDataSection";
@@ -23,11 +25,16 @@ export const ArtistDataSectionLayout = ({
   onArtistUpdate,
   onCoverUpdate,
 }: TArtistDataSectionLayoutProps) => {
+  const { isEditMode: isProfileEditMode } = useArtistProfileEditMode();
+  const artistSectionData = getArtistSectionData(artist);
+
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [isAddingSocial, setIsAddingSocial] = useState(false);
   const [deletingContactKey, setDeletingContactKey] = useState<string | null>(null);
   const [deletingSocialKey, setDeletingSocialKey] = useState<string | null>(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [tempDescription, setTempDescription] = useState(artistSectionData.description);
 
   const addSocial = (item: TArtistDataItem) =>
     handleAddSocial(item, onArtistUpdate, setIsAddingSocial, artist);
@@ -84,9 +91,12 @@ export const ArtistDataSectionLayout = ({
     }
   };
 
-  const artistSectionData = getArtistSectionData(artist);
+  const handleDescriptionChange = async (value: string) => {
+    await onArtistUpdate({ description: value });
+    setIsEdit(false);
+  };
 
-  if (isLoading) return <Loader />;
+  if (isLoading || !artist) return <Loader />;
 
   return (
     <div className={s.profileInfo}>
@@ -104,10 +114,19 @@ export const ArtistDataSectionLayout = ({
         onDeleteContactClick={(item) => void handleDeleteContact(item)}
         onDeleteSocialClick={(item) => void handleDeleteSocial(item)}
         className={s.profileInfoCoverFrame}
+        onEditDescription={setIsEdit}
+        isEdit={Boolean(withButton || isProfileEditMode)}
+        description={tempDescription}
+        descriptionChanged={(value) => setTempDescription(value)}
       />
 
       {withButton && (
-        <ButtonUI variant='primary' className={s.profileInfoButton}>
+        <ButtonUI
+          variant='primary'
+          className={s.profileInfoButton}
+          disabled={!isEdit}
+          onClick={() => void handleDescriptionChange(tempDescription)}
+        >
           Сохранить
         </ButtonUI>
       )}
