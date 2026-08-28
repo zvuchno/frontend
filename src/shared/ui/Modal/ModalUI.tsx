@@ -39,16 +39,25 @@ export const ModalUI = ({
       return;
     }
 
+    const root = document.documentElement;
+    const body = document.body;
     const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const previousRootOverflow = root.style.overflow;
+    const previousBodyStyles = {
+      overflow: body.style.overflow,
+      paddingRight: body.style.paddingRight,
+    };
 
-    document.body.style.overflow = "hidden";
+    root.style.overflow = "hidden";
+    body.style.overflow = "hidden";
     if (scrollBarWidth > 0) {
-      document.body.style.paddingRight = `${scrollBarWidth}px`;
+      body.style.paddingRight = `${scrollBarWidth}px`;
     }
 
     return () => {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
+      root.style.overflow = previousRootOverflow;
+      body.style.overflow = previousBodyStyles.overflow;
+      body.style.paddingRight = previousBodyStyles.paddingRight;
     };
   }, [isOpen]);
 
