@@ -3,7 +3,12 @@ import Credentials from "next-auth/providers/credentials";
 import YandexProvider from "next-auth/providers/yandex";
 import { cookies } from "next/headers";
 
-import { OAuthorize, authAfterRegister, authorize } from "@/entities/user/server";
+import {
+  OAuthorize,
+  authAfterRegister,
+  authorize,
+  getCurrentUserServer,
+} from "@/entities/user/server";
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -49,7 +54,7 @@ export const authConfig: AuthOptions = {
         return null;
       },
     }),
-    ({
+    {
       id: "reg-auth",
       name: "reg-auth",
       type: "credentials",
@@ -72,7 +77,7 @@ export const authConfig: AuthOptions = {
           password: credentials.password,
           name: credentials.name,
           profile_type: credentials.profile_type,
-        }
+        };
 
         const cookieStore = await cookies();
         const sessionId = cookieStore.get("sessionid")?.value;
@@ -80,10 +85,10 @@ export const authConfig: AuthOptions = {
         return await authAfterRegister({
           regData,
           regType: credentials.regType,
-          sessionId
-        })
-      }
-    })
+          sessionId,
+        });
+      },
+    },
   ],
   session: { strategy: "jwt" },
 
@@ -115,7 +120,7 @@ export const authConfig: AuthOptions = {
       }
       return true;
     },
-    jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id;
         token.userName = user.userName;
@@ -127,6 +132,21 @@ export const authConfig: AuthOptions = {
         token.isArtist = user.isArtist;
         token.profileType = user.profileType;
         token.artistName = user.artistName;
+      }
+
+      if (trigger === "update") {
+        const cookieStore = await cookies();
+        const accessToken = cookieStore.get("zvuchno_access")?.value;
+
+        if (accessToken) {
+          const currentUser = await getCurrentUserServer(accessToken);
+
+          if (currentUser) {
+            token.isArtist = currentUser.is_artist;
+            token.profileType = currentUser.profile_type;
+            token.artistName = currentUser.artist_name;
+          }
+        }
       }
 
       return token;

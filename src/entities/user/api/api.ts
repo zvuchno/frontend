@@ -181,7 +181,7 @@ export async function fanBecomeArtist(
   profile_type: "artist" | "label"
 ): Promise<{ name: string; profile_type: "artist" | "label" }> {
   const response = await authFetchClient<{ name: string; profile_type: "artist" | "label" }>(
-    "/api/backend/v1/auth/account/me/become_artist/",
+    "/api/backend/v1/auth/account/me/become_artist",
     {
       method: "POST",
       body: JSON.stringify({ name, profile_type }),

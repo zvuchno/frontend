@@ -46,9 +46,9 @@ function toUserStoreData(account: CurrentAccountResponse, accessToken?: string):
 }
 
 export function ListenerProfileFormSection() {
-  const { data: session, status, update: updateSession } = useSession();
+  const { status, update: updateSession } = useSession();
   const setUser = useUserStore((state) => state.setUser);
-  const sessionUser = session?.user;
+  //const sessionUser = session?.user;
 
   //const router = useRouter();
   const pathname = usePathname();

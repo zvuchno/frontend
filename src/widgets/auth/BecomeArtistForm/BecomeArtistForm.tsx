@@ -15,7 +15,7 @@ import { BecomeArtistFormContent } from "./components/BecomeArtistFormContent";
 import { type TBecomeArtistProps, type TBecomeArtistRequest } from "./model/types";
 
 export const BecomeArtistForm = ({ profileType }: TBecomeArtistProps) => {
-  const { mutate } = useBecomeArtist();
+  const { mutateAsync: changeProfileType } = useBecomeArtist();
   const { update: updateSession } = useSession();
 
   const [formData, setFormData] = useState<string>("");
@@ -30,7 +30,7 @@ export const BecomeArtistForm = ({ profileType }: TBecomeArtistProps) => {
     setFormData(value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (formData.trim().length === 0) return;
 
     setIsLoading(true);
@@ -39,29 +39,22 @@ export const BecomeArtistForm = ({ profileType }: TBecomeArtistProps) => {
       name: formData,
       profile_type: profileType,
     };
-    mutate(newArtist, {
-      onSuccess: (data) => {
-        if (!data) return;
-        if (data.profile_type === "artist" || data.profile_type === "label")
-          updateSession({ isArtist: true, profileType: data.profile_type })
-            .then(() => router.push("/artist/profile/"))
-            .catch((err) => console.log(err))
-            .finally(() => setIsLoading(false));
-      },
-      onError: (error) => {
-        setIsLoading(false);
-        console.log(error);
-      },
-    });
+
+    try {
+      await changeProfileType(newArtist);
+      await updateSession();
+      router.push("/artist/profile/");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <BaseForm
       title={`Зарегистрировать ${profileType === "artist" ? "артиста" : "лейбл"}`}
-      onSubmit={() => {
-        handleSubmit();
-      }}
-      //onClose={onClose}
+      onSubmit={() => void handleSubmit()}
       isLoading={isLoading}
       className={s.artistRegisterForm}
       renderFields={() => (

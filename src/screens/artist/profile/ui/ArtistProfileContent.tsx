@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { type SubmitHandler, useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
 
 import { useSession } from "next-auth/react";
@@ -10,13 +10,14 @@ import { type FieldValues, ProfileFormArtistUI, ProfileFormUI } from "@/features
 
 import {
   type UpdateCurrentArtistPayload,
+  useArtistProfileEditMode,
   useCurrentArtist,
   useUpdateArtist,
 } from "@/entities/profile";
 
 import { Loader } from "@/shared/ui";
 
-import { EMPTY_PROFILE_FORM_VALUES } from "../form.utils";
+//import { EMPTY_PROFILE_FORM_VALUES } from "../form.utils";
 import styles from "./ArtistProfileContent.module.scss";
 
 export function ArtistProfileContent() {
@@ -26,19 +27,25 @@ export function ArtistProfileContent() {
   const updateArtist = useUpdateArtist();
 
   const isLoadingArtistProfile = status === "loading" || isLoading;
-  const [isEditMode, setIsEditMode] = useState(false);
+  const { isEditMode, setIsEditMode } = useArtistProfileEditMode();
 
-  const methods = useForm<FieldValues>({
+  const { trigger, reset, formState } = useFormContext<FieldValues>();
+  /*const methods = useForm<FieldValues>({
     mode: "onChange",
     defaultValues: EMPTY_PROFILE_FORM_VALUES,
   });
-
-  const isFormValid = methods.formState.isValid;
+*/
+  const isFormValid = formState.isValid;
 
   const handleEdit = () => {
-    void methods.trigger();
     setIsEditMode(true);
   };
+
+  useEffect(() => {
+    if (isEditMode) {
+      void trigger();
+    }
+  }, [isEditMode, trigger]);
 
   const handleSubmit: SubmitHandler<FieldValues> = async (formData) => {
     if (!artist) {
@@ -76,14 +83,14 @@ export function ArtistProfileContent() {
 
   useEffect(() => {
     if (artist) {
-      methods.reset({
+      reset({
         name: artist.name,
         description: artist.description ?? "",
         city: artist.city ?? "",
         url: artist.slug ?? "",
       });
     }
-  }, [artist, methods]);
+  }, [artist, trigger, reset]);
 
   if (isLoadingArtistProfile) {
     return <Loader />;
@@ -96,24 +103,22 @@ export function ArtistProfileContent() {
   return (
     <div className={styles.page}>
       <div className={styles.content}>
-        <FormProvider {...methods}>
-          <ProfileFormUI
-            className={styles.profileForm}
-            title='Профиль'
-            isChecked={isEditMode && isFormValid}
-            isOnChange={isEditMode}
-            isSubmitting={updateArtist.isPending}
-            errorMessage={updateArtist.error?.message}
-            onSubmit={handleSubmit}
-            onEdit={handleEdit}
-          >
-            <ProfileFormArtistUI
-              fieldsDisabled={!isEditMode}
-              personalDataHref='/artist/data'
-              has_usable_password={false}
-            />
-          </ProfileFormUI>
-        </FormProvider>
+        <ProfileFormUI
+          className={styles.profileForm}
+          title='Профиль'
+          isChecked={isEditMode && isFormValid}
+          isOnChange={isEditMode}
+          isSubmitting={updateArtist.isPending}
+          errorMessage={updateArtist.error?.message}
+          onSubmit={handleSubmit}
+          onEdit={handleEdit}
+        >
+          <ProfileFormArtistUI
+            fieldsDisabled={!isEditMode}
+            personalDataHref='/artist/data'
+            has_usable_password={false}
+          />
+        </ProfileFormUI>
       </div>
     </div>
   );

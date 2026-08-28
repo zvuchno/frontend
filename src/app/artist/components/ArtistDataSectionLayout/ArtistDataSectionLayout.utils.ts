@@ -14,6 +14,7 @@ const toApiDataItem = (item: TArtistDataItem): ArtistApiDataItem => ({
   label: item.label,
   value: item.value,
 });
+
 export const buildArtistUpdatePayload = (
   artist: TEditableArtistProfile,
   overrides: Partial<Pick<TEditableArtistProfile, "contacts" | "socials">>

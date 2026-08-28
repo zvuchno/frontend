@@ -7,6 +7,7 @@
   gap: clamp(20px, 2.8vw, 28px);
   min-width: min(100%, 320px);
   max-width: var(--artist-card-width);
+  grid-area: media;
 }
 
 .mediaButton {
@@ -57,3 +58,17 @@
     max-width: none;
   }
 }
+
+& .wideWidth {
+    max-width: 632px;
+    aspect-ratio: 4 / 3.3482;
+
+    &:before {
+      mask-image: conic-gradient(from 90deg at 78% 35%, #000 221.7deg, #0000 222deg);
+    }
+
+    @media (max-width: 650px) {
+      width: 100%;
+      max-width: 100%;
+    }
+  }

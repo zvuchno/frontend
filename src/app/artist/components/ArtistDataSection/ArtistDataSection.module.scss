@@ -2,30 +2,69 @@
   --artist-card-width: clamp(360px, 46.199vw, 632px);
   --artist-card-top-offset: calc(var(--artist-card-width) * 65 / 632);
 
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: clamp(32px, 4.532vw, 62px);
+  display: grid;
+  grid-template-columns: minmax(0, 56.63fr) minmax(0, 43.37fr);
+  grid-template-rows: repeat(2, minmax(0, max-content));
+  column-gap: clamp(20px, 4.3vw, 62px);
+  row-gap: 40px;
   width: 100%;
+  grid-template-areas:
+    "media description"
+    "media details";
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, minmax(0, max-content));
+    grid-template-areas:
+      "media description"
+      "details details";
+      row-gap: 62px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(3, minmax(0, max-content));
+    grid-template-areas:
+      "media"
+      "description"
+      "details";
+  }
 }
 
-.content {
-  --artist-description-width: 100%;
-
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: clamp(24px, 4vw, 40px);
-  margin-top: var(--artist-card-top-offset);
+.description {
+  grid-area: description;
   min-width: 0;
-  width: auto;
-  max-width: min(100%, 483px);
+  margin-block-start: 35px;
+  width: 100%;
+  max-width: none;
+
+  & > * {
+    width: 100%;
+    max-width: none;
+  }
 }
 
 .details {
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: clamp(20px, 2.5vw, 24px);
+  grid-area: details;
+  
+
+  @media (max-width: 1024px) {
+    flex-direction: row;
+    gap: 64px;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  &Component{
+flex-basis: 50%;
+  }
 }
 
 .error {
@@ -37,11 +76,7 @@
   letter-spacing: -0.06em;
 }
 
-@media (max-width: 1024px) {
-  .section {
-    gap: 32px;
-  }
-}
+
 
 @media (max-width: 768px) {
   .section {

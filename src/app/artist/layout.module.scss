@@ -40,8 +40,6 @@
   }
 }
 
-
-
 @media (max-width: 1200px) {
   .body {
     padding-right: 48px;
@@ -76,8 +74,18 @@
     }
   }
 
+  .title {
+    margin-bottom: 1.3em;
+  }
+
   .profileInfo {
     min-height: auto;
     padding: 48px 16px 72px;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 28px;
   }
 }

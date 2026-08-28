@@ -11,6 +11,8 @@ export {
 } from "./model/useListenerProfile";
 
 export { useCurrentArtist, useUpdateArtist, useUpdateArtistCover } from "./model/useArtistProfile";
+export { useArtistProfileEditMode } from "./model/ArtistProfileEditModeContext";
+export { ArtistProfileEditModeProvider } from "./model/ArtistProfileEditModeProvider";
 
 export type {
   ListenerMe,

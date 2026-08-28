@@ -20,10 +20,10 @@ export const artistFormFields: TProfileFormField[] = [
     placeholder: "Текст",
     type: "text",
     required: true,
-    row: 1,
-    column: 2,
+    row: 2,
+    column: 1,
   },
-  {
+  /*{
     title: "Описание",
     name: "description",
     placeholder: "Текст",
@@ -31,7 +31,7 @@ export const artistFormFields: TProfileFormField[] = [
     required: true,
     row: 2,
     column: 1,
-  },
+  },*/
   // {
   //   title: "Email",
   //   name: "email",
@@ -180,8 +180,7 @@ export const fieldsConfig: Record<
   },
   url: {
     required: true,
-    pattern:
-      /^[-a-zA-Z0-9_]+$/,
+    pattern: /^[-a-zA-Z0-9_]+$/,
   },
   description: {
     required: false,
