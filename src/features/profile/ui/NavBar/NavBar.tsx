@@ -21,7 +21,6 @@ export const NavBar = ({ links, title }: NavBarProps) => {
 
     updateHash();
     window.addEventListener("hashchange", updateHash);
-
     return () => {
       window.removeEventListener("hashchange", updateHash);
     };
@@ -29,12 +28,15 @@ export const NavBar = ({ links, title }: NavBarProps) => {
 
   const isLinkActive = (href: string) => {
     const [linkPathname, linkHash] = href.split("#");
+    const normalizedLinkPathname = linkPathname.replace(/\/$/, "");
+    const isCurrentPath =
+      pathname === normalizedLinkPathname || pathname.startsWith(`${normalizedLinkPathname}/`);
 
     if (linkHash) {
-      return pathname === linkPathname && hash === `#${linkHash}`;
+      return isCurrentPath && hash === `#${linkHash}`;
     }
 
-    return pathname === href && hash === "";
+    return isCurrentPath && hash === "";
   };
 
   return (
