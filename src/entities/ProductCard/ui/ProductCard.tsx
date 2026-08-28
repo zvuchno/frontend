@@ -28,7 +28,12 @@ export const ProductCard = ({
   const mediaAction = actionButton ?? likeButton;
 
   return (
-    <Link href={link ?? "#"} onClick={onHandleClick} className={styles.productCardWrapper}>
+    <Link
+      href={link ?? "#"}
+      onClick={onHandleClick}
+      className={styles.productCardWrapper}
+      data-list-section-item='product'
+    >
       <article className={clsx(styles.productCard, className)} {...articleProps}>
         <div className={styles.media}>
           {image && (
