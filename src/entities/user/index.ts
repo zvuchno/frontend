@@ -6,7 +6,8 @@ export type {
   UserDataProps,
   TRegisterRequest,
   TProfileType,
-  TVerifyEmailRequest
+  TVerifyEmailRequest,
+  TConsent
 } from "./model/types";
 export {
   verifyEmail,

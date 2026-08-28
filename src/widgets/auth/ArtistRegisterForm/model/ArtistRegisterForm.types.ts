@@ -7,6 +7,10 @@ export interface ArtistRegisterFormData {
   phone: string;
   password: string;
   confirmPassword: string;
+  artist_offer: boolean;
+  artist_personal_data: boolean;
+  artist_distribution: boolean;
+  artist_newsletter: boolean;
 }
 
 export interface ArtistRegisterFormProps {

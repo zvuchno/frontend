@@ -6,6 +6,7 @@ import {
   type ListenerRegisterFormData,
 } from "../../model/ListenerRegisterForm.types";
 import s from "./ListenerRegisterFormContent.module.scss";
+import { ListenerConsentsFields } from "../ListenerConsentsFields";
 
 export const ListenerRegisterFormContent = ({
   data,
@@ -90,6 +91,8 @@ export const ListenerRegisterFormContent = ({
         disabled={disabled}
         autoComplete='new-password'
       />
+
+      <ListenerConsentsFields disabled={disabled} data={data} handleFieldChange={handleFieldChange} />
 
       {registerError && (
         <Typography variant='normal' className={s.error}>

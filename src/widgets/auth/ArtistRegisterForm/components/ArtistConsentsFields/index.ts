@@ -1,0 +1,1 @@
+export { ArtistConsentsFields } from "./ui/ArtistConsentsFields";

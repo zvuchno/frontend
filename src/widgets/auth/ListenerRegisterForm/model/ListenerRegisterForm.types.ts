@@ -6,6 +6,10 @@ export interface ListenerRegisterFormData {
   phone: string;
   password: string;
   confirmPassword: string;
+  listener_offer: boolean;
+  listener_personal_data: boolean;
+  listener_distribution: boolean;
+  listener_newsletter: boolean;
 }
 
 export interface ListenerRegisterFormProps {

@@ -67,8 +67,11 @@ export const authConfig: AuthOptions = {
         profile_type: { type: "text" },
         regType: { type: "text" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         if (!credentials) return null;
+
+        const bodyConsents = req.body?.consents;
+        const consents = bodyConsents.split(',');
 
         const regData = {
           username: credentials.username,
@@ -77,6 +80,7 @@ export const authConfig: AuthOptions = {
           password: credentials.password,
           name: credentials.name,
           profile_type: credentials.profile_type,
+          consents
         };
 
         const cookieStore = await cookies();

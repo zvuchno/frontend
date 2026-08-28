@@ -1,8 +1,20 @@
+export type TConsent = 
+  "privacy_policy" 
+  | "artist_offer" 
+  | "artist_personal_data" 
+  | "artist_distribution"
+  | "artist_newsletter" 
+  | "listener_offer" 
+  | "listener_personal_data" 
+  | "listener_distribution" 
+  | "listener_newsletter";
+
 export type TNewUserRequest = {
   username: string;
   email: string;
   phone: string;
   password: string;
+  consents: TConsent[];
 };
 
 export type TProfileType = "artist" | "label";
