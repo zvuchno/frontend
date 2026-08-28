@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
@@ -66,6 +68,7 @@ export function useChangeManagedProfile() {
       void queryClient.invalidateQueries({
         queryKey: ["label", "managedProfiles"],
       });
+      toast.success(`Данные артиста ${data.name} успешно изменены`);
     },
   });
 }
