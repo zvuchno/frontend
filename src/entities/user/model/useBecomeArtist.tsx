@@ -7,9 +7,9 @@ import { fanBecomeArtist } from "../api/api";
 export function useBecomeArtist() {
   const queryClient = useQueryClient();
 
-  return useMutation<TBecomeArtistRequest, Error, TBecomeArtistRequest>({
-    mutationFn: ({ name, profile_type }: TBecomeArtistRequest) =>
-      fanBecomeArtist(name, profile_type),
+  return useMutation<{ name: string; profile_type: "artist" | "label" }, Error, TBecomeArtistRequest>({
+    mutationFn: (data: TBecomeArtistRequest) =>
+      fanBecomeArtist(data),
 
     onSuccess: async () => {
       await queryClient.invalidateQueries({

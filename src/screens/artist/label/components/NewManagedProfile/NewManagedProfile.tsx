@@ -10,27 +10,31 @@ import { type TManagedProfile, useCreateManagedProfile } from "@/entities/Label"
 import { LoadingButton } from "@/shared/ui";
 
 import s from "./NewManagedProfile.module.scss";
+import type { TBecomeArtistFormData } from "@/widgets/auth/BecomeArtistForm/model/types";
 
 export const NewManagedProfile = ({ onClose }: { onClose: () => void }) => {
   const { mutate: createNewArtist } = useCreateManagedProfile();
 
-  const [formData, setFormData] = useState<string>("");
+  const [formData, setFormData] = useState<TBecomeArtistFormData>({
+    name: "",
+  });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | string) => {
+  const handleChange = 
+    (field: keyof TBecomeArtistFormData) => (e: React.ChangeEvent<HTMLInputElement> | string) => {
     const value = typeof e === "string" ? e : e.target.value;
 
-    setFormData(value);
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = () => {
-    if (formData.trim().length === 0) return;
+    if (formData.name.trim().length === 0) return;
 
     setIsLoading(true);
 
     const newManagedProfile: TManagedProfile = {
-      name: formData,
+      name: formData.name,
     };
 
     createNewArtist(newManagedProfile, {
@@ -56,7 +60,7 @@ export const NewManagedProfile = ({ onClose }: { onClose: () => void }) => {
       className={s.artistRegisterForm}
       renderFields={() => (
         <BecomeArtistFormContent
-          name={formData}
+          data={formData}
           disabled={isLoading}
           handleFieldChange={handleChange}
         />

@@ -93,7 +93,14 @@ export const validateForm = <T>(
     }
   }
 
-  if ("privacy_policy" in data && !data.privacy_policy) {
+  if ("artist_personal_data" in data && !data.artist_personal_data) {
+    return {
+      isValid: false,
+      errorMessage: "Подтвердите согласие на обработку персональных данных"
+    }
+  }
+
+  if ("listener_personal_data" in data && !data.listener_personal_data) {
     return {
       isValid: false,
       errorMessage: "Подтвердите согласие на обработку персональных данных"

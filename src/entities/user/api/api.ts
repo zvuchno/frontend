@@ -2,6 +2,7 @@ import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import { getErrorMessage } from "@/api/errors/getErrorMessage";
 
 import {
+  type TConsent,
   type TFetchProps,
   type TResetPasswordConfirmRequest,
   type TResetPasswordRequest,
@@ -176,15 +177,16 @@ export const socialAuth = async (data: TSocialAuthRequest): Promise<TSocialAuthR
   });
 };*/
 
-export async function fanBecomeArtist(
+export async function fanBecomeArtist( data: {
   name: string,
-  profile_type: "artist" | "label"
-): Promise<{ name: string; profile_type: "artist" | "label" }> {
+  profile_type: "artist" | "label",
+  consents?: TConsent[];
+}): Promise<{ name: string; profile_type: "artist" | "label" }> {
   const response = await authFetchClient<{ name: string; profile_type: "artist" | "label" }>(
     "/api/backend/v1/auth/account/me/become_artist",
     {
       method: "POST",
-      body: JSON.stringify({ name, profile_type }),
+      body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
