@@ -12,16 +12,16 @@ const CATEGORIES = [
     slug: 'all'
   },
   {
-    name: 'Мерч',
-    slug: 'merch'
-  },
-  {
     name: 'Музыка',
     slug: 'album'
   },
   {
     name: 'Артисты',
     slug: 'artists'
+  },
+  {
+    name: 'Мерч',
+    slug: 'merch'
   },
 ];
 
@@ -117,6 +117,7 @@ const FiltersBlock = ({ сategory, basePath, merchList }: FilterBlockProps) => {
           title="Категории" 
           items={CATEGORIES}
           isActiveFilter={isActiveCategory}
+          isCategory
         />
         {сategory === 'merch' && merchList && (
           <FiltersGroup 

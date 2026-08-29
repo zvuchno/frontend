@@ -16,6 +16,7 @@ import {
   type TReleaseVariant,
 } from "../model/ReleaseDescription.types";
 import s from "./ReleaseDescription.module.scss";
+import { useRouter } from "next/navigation";
 
 // Компонент отображает карточку релиза и носителей. Вариант носителя "Диджитал" отображает информацию самого релиза
 export const ReleaseDescription = ({
@@ -24,6 +25,7 @@ export const ReleaseDescription = ({
   onClick,
 }: ReleaseDescriptionProps) => {
   const [product, setProduct] = useState<TReleaseVariant>(release.variants[0]);
+  const router = useRouter();
 
   useEffect(() => {
     if (!selected_variant_id) {
@@ -74,13 +76,17 @@ export const ReleaseDescription = ({
     onClick(data);
   };
 
+  const handleArtistClick = () => {
+    router.push(`/catalog/artists/${release.artist_slug}/?kind=artists`)
+  };
+
   return (
     <AccentContainerWithPlayer className={s.containerWrapper}>
       <div className={s.container}>
         <Gallery images={imagesForGallery} />
 
         <div className={s.card}>
-          <div className={s.card__artist}>
+          <div className={s.card__artist} onClick={handleArtistClick}>
             <div className={s.card__artist__img}>
               <img src={release.artist_image} alt={release.artist_name} />
             </div>

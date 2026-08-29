@@ -19,6 +19,7 @@ export type TDetailMerch = {
   description: string;
   artist_name: string;
   artist_image: string;
+  artist_slug: string;
   price: number;
   allow_overpay: boolean;
   kind: string; // 'Футболка' , 'Кассета', 'CD', 'Винил LP'

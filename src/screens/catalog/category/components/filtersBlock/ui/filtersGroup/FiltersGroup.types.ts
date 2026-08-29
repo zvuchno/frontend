@@ -9,6 +9,7 @@ export interface FiltersGroupProps {
   title?: string;
   isSecondary?: boolean;
   isClearFilters?: boolean; 
+  isCategory?: boolean;
   isActiveFilter: (value: string) => boolean;
   buildLink?: (filter: string, value: string) => void;
   clearFilters?: () => void;

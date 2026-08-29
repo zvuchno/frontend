@@ -13,12 +13,15 @@ import TabBar from "../../components/TabBar/TabBar";
 import VariantRange from "../../components/VariantRange/VariantRange";
 import { type MerchDescriptionProps } from "../model/MerchDescription.types";
 import s from "./MerchDescription.module.scss";
+import { useRouter } from "next/navigation";
 
 // Компонент отображает карточку обычного мерча, не относящегося к носителям
 
 export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) => {
   const [sku, setSku] = useState<string>(product.variants[0].sku);
   const [selectedVariant, setSelectedVariant] = useState<number>(product.variants[0].variant_id);
+
+  const router = useRouter();
 
   const tabsData = [
     {
@@ -58,13 +61,17 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
     onClick(data);
   };
 
+  const handleArtistClick = () => {
+    router.push(`/catalog/artists/${product.artist_slug}/?kind=artists`)
+  };
+
   return (
     <AccentContainerWithPlayer className={s.containerWrapper}>
       <div className={s.container}>
         <Gallery images={imagesForGallery} />
 
         <div className={s.card}>
-          <div className={s.card__artist}>
+          <div className={s.card__artist} onClick={handleArtistClick}>
             <div className={s.card__artist__img}>
               <img src={product.artist_image} alt={product.artist_name} />
             </div>
