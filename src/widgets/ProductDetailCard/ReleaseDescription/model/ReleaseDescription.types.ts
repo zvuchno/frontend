@@ -22,6 +22,7 @@ export type TDetailRelease = {
   id: number;
   artist_name: string;
   artist_image: string;
+  artist_slug: string;
   is_single: boolean;
   variants: TReleaseVariant[];
 };

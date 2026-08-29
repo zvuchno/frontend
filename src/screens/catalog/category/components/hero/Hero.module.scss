@@ -24,20 +24,44 @@
 
 .img {
   position: absolute;
-  width: 350px;
-  height: 340px;
+  width: clamp(9.375rem, 5.8036rem + 17.8571vw, 21.875rem); //350px;
+  height: clamp(8.75rem, 5.1786rem + 17.8571vw, 21.25rem); //340px;
   z-index: 1;
 
   &_left {
-    top: 40px;
-    left: 35px;
+    top: 14%;//40px;
+    left: 2%;//35px;
     rotate: -30deg;
+
+    @media(max-width: 1024px) {
+      top: 30%;
+    }
+
+    @media(max-width: 720px) {
+      top: 45%;
+      left: 1%;
+    }
+
+    @media(max-width: 475px) {
+      top: 65%;
+      left: 0;
+    }
   }
 
   &_right {
-    bottom: 60px;
-    right: -20px;
+    bottom: 21%;//60px;
+    right: -1.4%;//-20px;
     rotate: 35deg;
+
+    @media(max-width: 720px) {
+      bottom: 42%;
+      right: -3%;
+    }
+
+    @media(max-width: 475px) {
+      bottom: 62%;
+      right: -4%;
+    }
   }
 }
 

@@ -11,6 +11,7 @@ const FiltersGroup = ({
   isActiveFilter,
   buildLink,
   clearFilters,
+  isCategory,
 }: FiltersGroupProps) => {
   const handleClickOnFilter = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -66,6 +67,7 @@ const FiltersGroup = ({
               title={item.name}
               isActive={isActiveFilter(item.slug)}
               isSecondary={isSecondary}
+              hasIcon={!isCategory}
             />
           </Link>
         ))}
