@@ -3,8 +3,15 @@ export type Option = {
   value: string;
 };
 
-export type SelectUIProps = {
+export type OptionGroup = {
+  label: string;
   options: Option[];
+};
+
+export type SelectOptionItem = Option | OptionGroup;
+
+export type SelectUIProps = {
+  options: SelectOptionItem[];
   value: string;
   onChange: (value: string) => void;
   label?: string;
