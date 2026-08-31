@@ -3,9 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
 import type { TTrack } from "@/api/catalog/tracksListApi/types";
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
 import {
@@ -15,7 +13,7 @@ import {
 import { RecomendationsList } from "@/widgets/RecomendationsList";
 
 import { AddToCartModal, type TDataForModal } from "@/features/addToCartModal";
-import { usePlayerStore } from "@/features/player";
+import { useGetPlayerTracks, usePlayerStore } from "@/features/player";
 
 import { Loader, Title } from "@/shared/ui";
 import { Track } from "@/shared/ui/Track";
@@ -35,18 +33,25 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const { status } = useSession();
   const isAuth = status === "authenticated";
 
-  const hasFetching = isAuth || status === "unauthenticated";
+  const { 
+    track: playTrack, 
+    isPlaying, 
+    togglePlay, 
+    setTrack, 
+    setPlaylist,
+    setPlayingAlbumId
+  } = usePlayerStore();
 
-  const { track: playTrack, isPlaying, togglePlay, setTrack } = usePlayerStore();
+  const tracksQuery = useGetPlayerTracks(release.id);
 
-  const tracksQuery = useQuery({
-    queryKey: ["tracks", release.id],
-    queryFn: () =>
-      getTracksList({
-        albumId: release.id,
-      }),
-    enabled: hasFetching,
-  });
+  // const tracksQuery = useQuery({
+  //   queryKey: ["tracks", release.id],
+  //   queryFn: () =>
+  //     getTracksList({
+  //       albumId: release.id,
+  //     }),
+  //   enabled: hasFetching,
+  // });
 
   const tracks = tracksQuery.data?.tracks;
 
@@ -57,6 +62,8 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const handlePlay = (track: TTrack) => {
     if (track.id !== playTrack?.id) {
       setTrack(track);
+      if(tracks) setPlaylist(tracks);
+      setPlayingAlbumId(release.id);
       return;
     }
 

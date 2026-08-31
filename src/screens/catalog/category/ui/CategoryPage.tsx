@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import GenericCatalogList from "../components/genericCatalogList/GenericCatalogList";
 import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
 import s from "./CategoryPage.module.scss";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
+import { AccentContainer } from "@/shared/ui";
 
 interface CategoryPageProps {
   category: 'album' | 'all' | 'merch' | 'artists';
@@ -34,14 +34,14 @@ export const CategoryPage = async ({
 
   return (
     <>
-      <AccentContainerWithPlayer>
+      <AccentContainer>
         <Hero />
         <FiltersBlock
           сategory={category}
           basePath={`/catalog/${category}/`}
           merchList={merchKinds}
         />
-      </AccentContainerWithPlayer>
+      </AccentContainer>
       <Suspense
         fallback={<div className={s.message}>Загрузка карточек...</div>}
       >

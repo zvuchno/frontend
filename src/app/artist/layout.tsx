@@ -8,8 +8,6 @@ import { useParams, usePathname } from "next/navigation";
 
 import { EMPTY_PROFILE_FORM_VALUES } from "@/screens/artist/profile/form.utils";
 
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
-
 import { AccountNavigation, type FieldValues } from "@/features/profile";
 
 import {
@@ -31,7 +29,7 @@ import {
   useUpdateArtistCover,
 } from "@/entities/profile";
 
-import { Loader, Title } from "@/shared/ui";
+import { AccentContainer, Loader, Title } from "@/shared/ui";
 
 import { ArtistDataSectionLayout } from "./components/ArtistDataSectionLayout/ArtistDataSectionLayout";
 import s from "./layout.module.scss";
@@ -124,7 +122,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
         <div className={s.page}>
           <ArtistProfileEditModeProvider>
             <FormProvider {...methods}>
-              <AccentContainerWithPlayer className={s.container}>
+              <AccentContainer className={s.container}>
                 <div className={s.body}>
                   <Title Tag='h2' className={s.title}>
                     Личный кабинет
@@ -135,7 +133,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
                     <div className={s.section__content}>{children}</div>
                   </section>
                 </div>
-              </AccentContainerWithPlayer>
+              </AccentContainer>
 
               {shouldShowArtistInfo && (isManagedProfileLoading || isLoading) ? (
                 <Loader />

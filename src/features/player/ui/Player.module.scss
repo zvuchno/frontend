@@ -1,13 +1,20 @@
+.playerWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 4px;
+}
+
 .container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 60px;
+  gap: 30px;
   width: calc(100% - 8px);
   //height: 80px;
   border: 2px solid var(--color-text-primary);
-  padding: 18px 38px 18px 18px;
+  padding: 18px;
   background-color: #e4f1ff;
   color: var(--color-text-primary);
   font-family: var(--font-feature-mono, 'Feature Mono', monospace);
@@ -15,10 +22,11 @@
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.04em;
+  box-shadow: 4px 4px 3px 1px rgb(0 0 0 / 74%);
 
   @media (max-width: 1024px) {
-    padding: 9px 19px 9px 9px;
-    gap: 10px;
+    padding: 9px;
+    gap: 15px;
   }
 }
 
@@ -36,7 +44,7 @@
   border-radius: 50%;
   background-position: center;
   background-repeat: no-repeat ;
-  background-size: cover;
+  background-color: var(--color-bg-secondary);
 }
 
 .info {
@@ -80,6 +88,28 @@
   gap: 24px;
 }
 
+.controlsButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+
+  @media (max-width: 600) {
+    margin-inline: auto;
+  }
+}
+
+.skipButton {
+  width: 20px;
+  height: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.prevButton {
+  transform: rotate(180deg);
+}
+
 .playButton {
   height: 28px;
   min-width: 28px;
@@ -95,6 +125,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+
+  @media (max-width: 600) {
+    display: none;
+  }
 }
 
 .progressBar {
@@ -155,4 +189,72 @@
 
 .iconLike {
   stroke-width: 3px !important;
+}
+
+.trackListBlock {
+  width: calc(100% - 8px);
+  padding: 15px;
+  background-color: var(--background);
+  border: 1px solid var(--color-text-primary);
+  box-shadow: 4px 4px 3px 1px rgb(0 0 0 / 74%);
+}
+
+.trackList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 480px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trackItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.trackItem:hover {
+  background: var(--color-bg-secondary);
+}
+
+.trackItem.current {
+  background: #e4f1ff;
+  color: #0056b3;
+}
+
+.toggleListBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-text-primary);
+  cursor: pointer;
+  padding: 8px 8px;
+  opacity: 0.7;
+  transition: opacity 0.2s, background 0.2s;
+
+  @media (max-width: 380) {
+    display: none;
+  }
+}
+.toggleListBtn:hover {
+  opacity: 1;
+  background: var(--color-bg-main);
+}
+.toggleListBtn.active {
+  background: var(--color-primary-blue);
+}
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  width: 20px;
+  height: 20px;
 }

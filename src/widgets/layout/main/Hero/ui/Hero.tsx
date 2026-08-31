@@ -1,8 +1,7 @@
 import clsx from "clsx";
 
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
-import { Title } from "@/shared/ui";
+import { AccentContainer, Title } from "@/shared/ui";
 
 import type { HeroUIProps } from "../model/Hero.types";
 import styles from "./Hero.module.scss";
@@ -27,7 +26,7 @@ export const HeroUI = ({
   };
 
   return (
-    <AccentContainerWithPlayer className={clsx(styles.hero__container, className)}>
+    <AccentContainer className={clsx(styles.hero__container, className)}>
       {centerText && (
         <Title
           Tag='h4'
@@ -74,6 +73,6 @@ export const HeroUI = ({
           <img src='/images/vinyl_player.png' />
         </div>
       )}
-    </AccentContainerWithPlayer>
+    </AccentContainer>
   );
 };

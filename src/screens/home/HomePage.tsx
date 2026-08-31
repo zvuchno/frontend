@@ -21,6 +21,9 @@ import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 import styles from "./HomePage.module.scss";
 import { Blog } from "./components/Blog/Blog";
+import { usePlayerStore } from "@/features/player";
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
+import toast from "react-hot-toast";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -33,6 +36,21 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
 
   const { status } = useSession();
   const isAuth = status === "authenticated";
+
+  const { playingAlbumId, playAlbum, setPlayingAlbumId } = usePlayerStore();
+
+  const handlePlayRelease = async (releaseId: number) => {
+    try {
+      const data = await getTracksList({ albumId: releaseId });
+      const tracks = data?.tracks;
+      if (!tracks?.length) return;
+      playAlbum(tracks, 0);
+      setPlayingAlbumId(releaseId);
+    } catch (err) {
+      console.error('Не удалось загрузить треки релиза', err);
+      toast.error("Не удалось загрузить треки релиза")
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -86,6 +104,9 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 }
                 link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
+                isRelease
+                isPlaying={playingAlbumId === item.target.id}
+                onPlay={() => handlePlayRelease(item.target.id)}
               />
             );
           })}

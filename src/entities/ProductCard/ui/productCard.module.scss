@@ -23,6 +23,18 @@
   }
 }
 
+.playButton {
+  position: absolute;
+  inset-block-start: 24px;
+  inset-inline-start: 24px;
+  z-index: 1;
+  height: 40px;
+  width: 40px;
+  background-position: center;
+  background-repeat: no-repeat ;
+  background-size: cover;
+}
+
 .actionButton {
   position: absolute;
   inset-block-start: 24px;
@@ -77,7 +89,8 @@
     gap: 0.625rem;
   }
 
-  .actionButton {
+  .actionButton,
+  .playButton {
     inset-block-start: 18px;
     inset-inline-end: 18px;
   }

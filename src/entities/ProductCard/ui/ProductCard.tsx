@@ -22,10 +22,19 @@ export const ProductCard = ({
   likeButton,
   className,
   link,
+  isRelease = false,
+  isPlaying,
   onHandleClick,
+  onPlay,
   ...articleProps
 }: TProductCardProps) => {
   const mediaAction = actionButton ?? likeButton;
+
+  const handlePlayAlbum = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onPlay) onPlay();
+  };
 
   return (
     <Link
@@ -44,6 +53,27 @@ export const ProductCard = ({
               width={327}
               height={327}
               sizes='327px'
+            />
+          )}
+          {isRelease && (
+            <div
+              onClick={onPlay ? handlePlayAlbum : undefined}
+              className={clsx(
+                styles.playButton,
+                // albumTracks.length === 0 && styles.playButtonDisabled
+              )}
+              style={{
+                backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')",
+                cursor:"pointer",
+              }}
+              aria-label="Воспроизвести альбом"
+              title="Воспроизвести альбом"
+              role='button'
+              onKeyDown={(e) => {
+                if ((e.key === 'Enter' || e.key === ' ') && onPlay) {
+                  handlePlayAlbum(e as any);
+                }
+              }}
             />
           )}
           {mediaAction ? <div className={styles.actionButton}>{mediaAction}</div> : null}

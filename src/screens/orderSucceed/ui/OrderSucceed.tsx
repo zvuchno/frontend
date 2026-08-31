@@ -4,14 +4,13 @@ import Link from "next/link";
 
 import { RecomendationsList } from "@/widgets/RecomendationsList";
 
-import { ButtonUI } from "@/shared/ui";
+import { AccentContainer, ButtonUI } from "@/shared/ui";
 
 import styles from "./OrderSucceed.module.scss";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 export const OrderSucceed = () => (
   <div className={styles.success}>
-    <AccentContainerWithPlayer className={styles.successMain}>
+    <AccentContainer className={styles.successMain}>
       <h1 className={styles.successTitle}>Заказ оплачен!</h1>
       <div className={styles.successImages}>
         <Image
@@ -35,7 +34,7 @@ export const OrderSucceed = () => (
           Назад к покупкам
         </Link>
       </ButtonUI>
-    </AccentContainerWithPlayer>
+    </AccentContainer>
     <RecomendationsList />
   </div>
 );

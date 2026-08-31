@@ -1,11 +1,10 @@
 import clsx from "clsx";
 
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 import { ArtistDescription } from "@/widgets/ArtistDescription";
 
 import { CardArtist } from "@/entities/Artist";
 
-import { Title } from "@/shared/ui";
+import { AccentContainer, Title } from "@/shared/ui";
 import { matchSocialNetwork } from "@/shared/utils/matchSocialNetwork";
 
 import { type IArtistDetailCardProps } from "../model/ArtistDetailCard.types";
@@ -14,7 +13,7 @@ import s from "./ArtistDatailCard.module.scss";
 export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
   console.log(artist.socials);
   return (
-    <AccentContainerWithPlayer className={s.containerWrapper}>
+    <AccentContainer className={s.containerWrapper}>
       <div className={s.container}>
         <CardArtist
           image={artist.cover ?? undefined}
@@ -76,6 +75,6 @@ export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
           )}
         </div>
       </div>
-    </AccentContainerWithPlayer>
+    </AccentContainer>
   );
 };
