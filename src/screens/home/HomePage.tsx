@@ -37,9 +37,14 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
   const { status } = useSession();
   const isAuth = status === "authenticated";
 
-  const { playingAlbumId, playAlbum, setPlayingAlbumId } = usePlayerStore();
+  const { playingAlbumId, togglePlay, playAlbum, setPlayingAlbumId } = usePlayerStore();
 
   const handlePlayRelease = async (releaseId: number) => {
+    if (playingAlbumId === releaseId) {
+      togglePlay();
+      return;
+    }
+
     try {
       const data = await getTracksList({ albumId: releaseId });
       const tracks = data?.tracks;

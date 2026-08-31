@@ -96,6 +96,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       if (isCurrentlyPlaying) {
         audioInstance.pause();
         set({ isPlaying: false });
+        set({ playingAlbumId: null });
       } else {
         await audioInstance.play();
         set({ isPlaying: true });

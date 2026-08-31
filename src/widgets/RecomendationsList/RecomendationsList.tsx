@@ -22,7 +22,7 @@ export const RecomendationsList = () => {
   const { status } = useSession();
   const isAuth = status === "authenticated";
 
-  const { playingAlbumId, playAlbum, setPlayingAlbumId } = usePlayerStore();
+  const { togglePlay, playingAlbumId, playAlbum, setPlayingAlbumId } = usePlayerStore();
 
   const hasFetching = isAuth || status === "unauthenticated";
 
@@ -52,6 +52,11 @@ export const RecomendationsList = () => {
   const hasMoreRecommendations = showRecentViewed ? false : !!recomQuery.data?.next;
 
   const handlePlayRelease = async (releaseId: number) => {
+    if (playingAlbumId === releaseId) {
+      togglePlay();
+      return;
+    }
+
     try {
       const data = await getTracksList({ albumId: releaseId });
       const tracks = data?.tracks;
