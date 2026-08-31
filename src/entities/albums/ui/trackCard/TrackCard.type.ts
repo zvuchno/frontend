@@ -4,6 +4,6 @@ export interface TrackCardProps {
   description: string;
   duration: number | null;
   price?: number;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }

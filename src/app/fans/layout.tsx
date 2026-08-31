@@ -1,10 +1,9 @@
 //"use client";
 import { AccountNavigation } from "@/features/profile";
 
-import { Title } from "@/shared/ui";
+import { AccentContainer, Title } from "@/shared/ui";
 
 import s from "./layout.module.scss";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
 
 const FansLayout = ({ children }: { children: React.ReactNode }) => {
   // const router = useRouter();
@@ -23,7 +22,7 @@ const FansLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className={s.page}>
-      <AccentContainerWithPlayer className={s.container}>
+      <AccentContainer className={s.container}>
         <div className={s.body}>
           <Title Tag='h2' className={s.title}>
             Личный кабинет
@@ -33,7 +32,7 @@ const FansLayout = ({ children }: { children: React.ReactNode }) => {
             <div className={s.section__content}>{children}</div>
           </section>
         </div>
-      </AccentContainerWithPlayer>
+      </AccentContainer>
     </div>
   );
 };

@@ -10,6 +10,7 @@ export const GlobalAudio = () => {
     setCurrentTime, 
     setAudioInstance,
     togglePlay,
+    nextTrack,
   } = usePlayerStore();
 
   useEffect(() => {
@@ -25,7 +26,8 @@ export const GlobalAudio = () => {
     };
 
     const onEnded = () => {
-      usePlayerStore.setState({ isPlaying: false });
+      nextTrack();
+      //usePlayerStore.setState({ isPlaying: false });
     };
 
     audio.addEventListener('timeupdate', onTimeUpdate);

@@ -24,12 +24,18 @@ import {
   isArtistCard,
   isProductCard,
 } from "./ProductsList.types";
+import { usePlayerStore } from "@/features/player";
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
+import toast from "react-hot-toast";
 
 const ProductsList = ({ products, link }: ProductsListProps) => {
   const [allProducts, setAllProducts] = useState<TCatalogCard[] | TArtistCard[] | []>(products);
   const [nextLink, setNextLink] = useState<string | null>(link);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { playingAlbumId, playAlbum, setPlayingAlbumId } = usePlayerStore();
 
   const { status } = useSession();
   const isAuth = status === "authenticated";
@@ -62,6 +68,19 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
 
   const artistsCards = allProducts.filter(isArtistCard);
   const productCards = allProducts.filter(isProductCard);
+
+  const handlePlayRelease = async (releaseId: number) => {
+    try {
+      const data = await getTracksList({ albumId: releaseId });
+      const tracks = data?.tracks;
+      if (!tracks?.length) return;
+      playAlbum(tracks, 0);
+      setPlayingAlbumId(releaseId);
+    } catch (err) {
+      console.error('Не удалось загрузить треки релиза', err);
+      toast.error("Не удалось загрузить треки релиза")
+    }
+  };
 
   if (products.length === 0) {
     return <div className={s.message}>Ничего не найдено</div>;
@@ -120,6 +139,9 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                       />
                     }
                     link={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}
+                    isRelease={product.target.type === "release"}
+                    isPlaying={playingAlbumId === product.target.id}
+                    onPlay={() => handlePlayRelease(product.target.id)}
                   />
                 </li>
               );

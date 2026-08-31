@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
-
 import { type TDataForModal } from "@/features/addToCartModal";
 
-import { ButtonUI, Text, Title } from "@/shared/ui";
+import { AccentContainer, ButtonUI, Text, Title } from "@/shared/ui";
 
 import Gallery from "../../components/Gallery/Gallery";
 import TabBar from "../../components/TabBar/TabBar";
@@ -81,7 +79,7 @@ export const ReleaseDescription = ({
   };
 
   return (
-    <AccentContainerWithPlayer className={s.containerWrapper}>
+    <AccentContainer className={s.containerWrapper}>
       <div className={s.container}>
         <Gallery images={imagesForGallery} />
 
@@ -136,6 +134,6 @@ export const ReleaseDescription = ({
           </div>
         </div>
       </div>
-    </AccentContainerWithPlayer>
+    </AccentContainer>
   );
 };

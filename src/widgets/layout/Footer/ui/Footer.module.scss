@@ -8,6 +8,7 @@
   width: 100%;
   min-height: 178px;
   background: var(--color-accent-blue, #c2dfff);
+  margin-block-end: 50px;
 
   &__nav {
     display: flex;
@@ -96,6 +97,7 @@
     width: 100%;
     gap: 32px;
     padding: 20px;
+    margin-block-end: 80px;
 
     &__nav {
       flex-direction: column;

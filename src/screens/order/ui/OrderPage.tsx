@@ -10,7 +10,7 @@ import { useGetCheckoutData } from "@/entities/order";
 import styles from "./OrderPage.module.scss";
 import { OrderDetails } from "./components/OrderDetails/OrderDetails";
 import { OrderSummary } from "./components/OrderSummary/OrderSummary";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
+import { AccentContainer } from "@/shared/ui";
 
 export const OrderPage = () => {
   const { data } = useGetCheckoutData();
@@ -40,7 +40,7 @@ export const OrderPage = () => {
   return (
     <DeliverySelectionProvider>
       <FormProvider {...methods}>
-        <AccentContainerWithPlayer className={styles.order}>
+        <AccentContainer className={styles.order}>
           <h1 className={styles.orderTitle}>Оформление заказа</h1>
           <form className={styles.orderWrapper}>
             <section className={styles.orderDetails}>
@@ -50,7 +50,7 @@ export const OrderPage = () => {
               <OrderSummary />
             </section>
           </form>
-        </AccentContainerWithPlayer>
+        </AccentContainer>
         <DevTool control={methods.control} />
       </FormProvider>
     </DeliverySelectionProvider>

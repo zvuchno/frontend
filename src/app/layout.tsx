@@ -6,7 +6,7 @@ import localFont from "next/font/local";
 import { Footer } from "@/widgets/layout/Footer";
 import { AppHeader } from "@/widgets/layout/Header";
 
-import { GlobalAudio } from "@/features/player";
+import { GlobalAudio, PlayerUI } from "@/features/player";
 
 import { SessionProviders } from "@/entities/user/providers/providers";
 
@@ -78,6 +78,7 @@ export default function RootLayout({
                 <div className='app-container'>{children}</div>
               </main>
               <Footer />
+              <PlayerUI className='player-fixed' />
               {modal}
             </div>
           </QueryProvider>

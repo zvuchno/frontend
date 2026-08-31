@@ -14,10 +14,15 @@ import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection, Loader } from "@/shared/ui";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
+import { usePlayerStore } from "@/features/player";
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
+import toast from "react-hot-toast";
 
 export const RecomendationsList = () => {
   const { status } = useSession();
   const isAuth = status === "authenticated";
+
+  const { playingAlbumId, playAlbum, setPlayingAlbumId } = usePlayerStore();
 
   const hasFetching = isAuth || status === "unauthenticated";
 
@@ -45,6 +50,19 @@ export const RecomendationsList = () => {
 
   const recommendations = showRecentViewed ? recentViewedToShow : recomQuery.data?.results;
   const hasMoreRecommendations = showRecentViewed ? false : !!recomQuery.data?.next;
+
+  const handlePlayRelease = async (releaseId: number) => {
+    try {
+      const data = await getTracksList({ albumId: releaseId });
+      const tracks = data?.tracks;
+      if (!tracks?.length) return;
+      playAlbum(tracks, 0);
+      setPlayingAlbumId(releaseId);
+    } catch (err) {
+      console.error('Не удалось загрузить треки релиза', err);
+      toast.error("Не удалось загрузить треки релиза")
+    }
+  };
 
   if (!recommendations) return;
 
@@ -87,6 +105,9 @@ export const RecomendationsList = () => {
               }
               link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
               onHandleClick={() => addProduct(item)}
+              isRelease={item.target.type === "release"}
+              isPlaying={playingAlbumId === item.target.id}
+              onPlay={() => handlePlayRelease(item.target.id)}
             />
           );
         })}

@@ -7,7 +7,7 @@ import { CartItemsList } from "../CartItemsList";
 import { CartSummary } from "../CartSummary";
 import { CartUnavailableItemsList } from "../CartUnavailableItemsList/CartUnavailableItemsList";
 import { RemoveFromCart } from "../RemoveFromCart/RemoveFromCart";
-import { AccentContainerWithPlayer } from "@/widgets/AccentContainerWithPlayer";
+import { AccentContainer } from "@/shared/ui";
 
 export const ProductsCart = ({ cartItems }: { cartItems: CartItemRespond[] }) => {
   const { mutate: removeItem } = useRemoveCartItem();
@@ -20,7 +20,7 @@ export const ProductsCart = ({ cartItems }: { cartItems: CartItemRespond[] }) =>
     unAvailableItems.forEach((item) => removeItem(item.product_variant));
   };
   return (
-    <AccentContainerWithPlayer className={styles.cartMain}>
+    <AccentContainer className={styles.cartMain}>
       <h1 className={styles.cartTitle}>Корзина</h1>
       <section className={styles.cartContent}>
         <div className={styles.cartContentList}>
@@ -41,6 +41,6 @@ export const ProductsCart = ({ cartItems }: { cartItems: CartItemRespond[] }) =>
         </div>
         <CartSummary />
       </section>
-    </AccentContainerWithPlayer>
+    </AccentContainer>
   );
 };

@@ -93,6 +93,15 @@ a {
   text-decoration: none;
 }
 
+.player-fixed {
+  position: fixed;
+  bottom: 3%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+}
+
 /*стили для темной темы*/
 @media (prefers-color-scheme: dark) {
   html {

@@ -68,12 +68,12 @@ const TrackCard = ({
         </div>
       </div>
 
-      <button className={s.editButton} onClick={onEdit} type='button'>
+      {onEdit && <button className={s.editButton} onClick={onEdit} type='button'>
         {editIcon}
-      </button>
-      <button className={s.deleteButton} onClick={onDelete} type='button'>
+      </button>}
+      {onDelete && <button className={s.deleteButton} onClick={onDelete} type='button'>
         {deleteIcon}
-      </button>
+      </button>}
     </div>
   );
 };
