@@ -35,7 +35,10 @@ export const SelectUI = forwardRef<HTMLSelectElement, SelectUIProps> (
     const [isOpen, setIsOpen] = useState(false);
     const id = useId();
 
-    const selectedLabel = options.find((opt) => opt.value === value)?.label;
+    //const selectedLabel = options.find((opt) => opt.value === value)?.label;
+    const selectedLabel = options
+      .flatMap((opt) => ('options' in opt ? opt.options : [opt]))
+      .find((opt) => opt.value === value)?.label;
 
     const closeOnOutsideClick = () => setIsOpen(false);
     const selectRef = useClickOutside(closeOnOutsideClick);
@@ -101,20 +104,46 @@ export const SelectUI = forwardRef<HTMLSelectElement, SelectUIProps> (
           {isOpen && !disabled && (
             <div className={clsx(styles.select__content, contentClassName)}>
               <ul role="listbox" className={styles.select__list}>
-                {options.map((opt) => (
-                  <li
-                    key={opt.value}
-                    role="option"
-                    aria-selected={value === opt.value}
-                    className={clsx(
-                      styles.select__option, optionClassName,
-                      { [styles.select__option_selected]: value === opt.value }
-                    )}
-                    onClick={() => handleOptionClick(opt.value)}
-                  >
-                    {opt.label}
-                  </li>
-                ))}
+                {options.map((item, groupIdx) => 
+                  'options' in item ? (
+                    // Группа
+                    <React.Fragment key={groupIdx}>
+                      <li className={styles.select__groupHeader} aria-hidden="true">
+                        {item.label}
+                      </li>
+                      {item.options.map((opt) => (
+                        <li
+                          key={opt.value}
+                          role="option"
+                          aria-selected={value === opt.value}
+                          className={clsx(
+                            styles.select__option,
+                            optionClassName,
+                            { [styles.select__option_selected]: value === opt.value }
+                          )}
+                          onClick={() => handleOptionClick(opt.value)}
+                        >
+                          {opt.label}
+                        </li>
+                      ))}
+                    </React.Fragment>
+                  ) : (
+                    // Одиночный пункт
+                    <li
+                      key={item.value}
+                      role="option"
+                      aria-selected={value === item.value}
+                      className={clsx(
+                        styles.select__option,
+                        optionClassName,
+                        { [styles.select__option_selected]: value === item.value }
+                      )}
+                      onClick={() => handleOptionClick(item.value)}
+                    >
+                      {item.label}
+                    </li>
+                  )
+                )}
               </ul>
             </div>
           )}

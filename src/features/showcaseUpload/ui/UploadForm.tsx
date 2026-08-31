@@ -14,6 +14,7 @@ import { CheckboxUI, CustomInput, Loader, SelectUI } from "@/shared/ui";
 import { AddImageBlock } from "../components/addImageBlock/AddImageBlock";
 import type { UploadFormValues } from "../model/types";
 import s from "./UploadForm.module.scss";
+import { Option, SelectOptionItem } from "@/shared/ui/Select/Select.types";
 
 type TImage = {
   image: string;
@@ -94,10 +95,40 @@ export const UploadForm = ({
 
   const merchKindsOptions = useMemo(() => {
     if (!merchKindsQuery.data) return [];
-    return merchKindsQuery.data.map((genre) => ({
-      value: String(genre.id),
-      label: genre.name,
-    }));
+    const merchItems: Option[] = [];
+  const carrierItems: Option[] = [];
+
+  merchKindsQuery.data.forEach((merch) => {
+    const option = {
+      value: String(merch.id),
+      label: merch.name,
+    };
+
+    if (merch.is_carrier) {
+      carrierItems.push(option);
+    } else {
+      merchItems.push(option);
+    }
+  });
+
+  // Формируем массив с группами
+  const result: SelectOptionItem[] = [];
+
+  if (merchItems.length > 0) {
+    result.push({
+      label: 'Мерч',
+      options: merchItems,
+    });
+  }
+
+  if (carrierItems.length > 0) {
+    result.push({
+      label: 'Носители',
+      options: carrierItems,
+    });
+  }
+
+  return result;
   }, [merchKindsQuery.data]);
 
   const isLoadingMerchKinds = merchKindsQuery.isFetching || merchKindsQuery.isPending;
@@ -166,7 +197,7 @@ export const UploadForm = ({
             render={({ field }) => (
               <SelectUI
                 name='kind'
-                label='Тип мерча'
+                label='Тип товара'
                 options={merchKindsOptions}
                 value={field.value ?? ""}
                 onChange={field.onChange}
