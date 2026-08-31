@@ -74,7 +74,7 @@ body {
 
 .app-header-container {
   margin-block-start: 28px;
-  @media (max-width: 425px) {
+  @media (max-width: 768px) {
     margin-block-start: 0;
   }
 }

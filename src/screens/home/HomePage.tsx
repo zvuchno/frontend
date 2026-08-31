@@ -1,7 +1,10 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
 import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
@@ -10,6 +13,7 @@ import { HeroUI } from "@/widgets/layout/main/Hero";
 import { JoinSection } from "@/widgets/layout/main/JoinSection";
 
 import { ButtonLike } from "@/features/ButtonLike";
+import { usePlayerStore } from "@/features/player";
 
 import { CardArtist } from "@/entities/Artist";
 import { ProductCard } from "@/entities/ProductCard";
@@ -21,9 +25,6 @@ import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 import styles from "./HomePage.module.scss";
 import { Blog } from "./components/Blog/Blog";
-import { usePlayerStore } from "@/features/player";
-import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
-import toast from "react-hot-toast";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -52,8 +53,8 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
       playAlbum(tracks, 0);
       setPlayingAlbumId(releaseId);
     } catch (err) {
-      console.error('Не удалось загрузить треки релиза', err);
-      toast.error("Не удалось загрузить треки релиза")
+      console.error("Не удалось загрузить треки релиза", err);
+      toast.error("Не удалось загрузить треки релиза");
     }
   };
 
@@ -152,8 +153,8 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
             );
           })}
         </ListSection>
-
-        <Blog blogs={mockBlogs} />
+        {/**скрываем секцию БЛОГ пока для нее нет данных */}
+        {/*<Blog blogs={mockBlogs} />*/}
 
         <SectionFAQ title='FAQ' items={questions} />
       </div>

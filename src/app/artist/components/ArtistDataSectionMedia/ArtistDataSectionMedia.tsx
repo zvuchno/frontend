@@ -46,7 +46,7 @@ export const ArtistDataSectionMedia = ({
   return (
     <div className={s.media}>
       <div className={clsx(s.coverFrame, className)}>
-        <CardArtist image={src} hasButton={false} className={clsx(s.withoutHover, s.wideWidth)}/>
+        <CardArtist image={src} hasButton={false} className={clsx(s.withoutHover, s.wideWidth)} />
       </div>
 
       <ButtonUI

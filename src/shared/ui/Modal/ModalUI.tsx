@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect } from "react";
 
+import clsx from "clsx";
+
 import { CloseButtonIconCircledX } from "../Icons/closeButtonIconCircledX";
 import { CloseButtonIconX } from "../Icons/closeButtonIconX";
 import styles from "./modal.module.scss";
@@ -13,6 +15,7 @@ export const ModalUI = ({
   isOpen = false,
   hasClickOnOverlay = true,
   onClose,
+  className,
 }: TModalUIProps) => {
   const handleEsc = useCallback(
     (e: KeyboardEvent) => {
@@ -67,7 +70,7 @@ export const ModalUI = ({
 
   return (
     <div className={styles.overlay} onClick={hasClickOnOverlay ? onClose : undefined}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={clsx(styles.modal, className)} onClick={(e) => e.stopPropagation()}>
         <button type='button' className={styles.modalCloseButton} onClick={onClose}>
           {closeButtonStyle === "circledX" ? <CloseButtonIconCircledX /> : <CloseButtonIconX />}
         </button>
