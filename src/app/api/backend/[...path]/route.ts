@@ -27,6 +27,7 @@ const ALLOWED_PREFIXES = [
 const PROTECTED_PREFIXES = [
   "v1/auth/account/me/",
   "v1/store/me/",
+  "v1/store/artists/me/",
   "v1/store/orders",
   "v1/store/payments/",
   "v1/artists/me/",
@@ -178,6 +179,12 @@ async function proxy(
 
   if (responseContentType) {
     response.headers.set("content-type", responseContentType);
+  }
+
+  const contentDisposition = backendResponse.headers.get("content-disposition");
+
+  if (contentDisposition) {
+    response.headers.set("content-disposition", contentDisposition);
   }
 
   // --- нормализация zvuchno_refresh с учетом нажамал ли пользователь "Запомнить меня" ---

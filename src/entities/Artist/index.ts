@@ -86,3 +86,5 @@ export {
   useGetArtistSupportContacts,
   useManageArtistSupportContacts,
 } from "./model/useArtistSupportContacts";
+
+export { useDownloadSalesStatement } from "./model/useDownloadSalesStatement";

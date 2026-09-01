@@ -10,6 +10,8 @@ type TDatePickerProps = {
   selectedDateType: "firstDate" | "lastDate";
   selectedDate: Date | null;
   otherDate?: Date;
+  maxDate?: Date;
+  minDate?: Date;
   firstDatePickerRef: RefObject<DatePicker | null>;
   lastDatePickerRef: RefObject<DatePicker | null>;
   setErrorMessage: (message: string) => void;
@@ -24,6 +26,8 @@ export const DatePickerInput = ({
   otherDate,
   firstDatePickerRef,
   lastDatePickerRef,
+  maxDate,
+  minDate,
   setErrorMessage,
   setMessage,
   setDate,
@@ -68,6 +72,8 @@ export const DatePickerInput = ({
       showPopperArrow={false}
       autoComplete='off'
       popperPlacement='bottom-start'
+      maxDate={maxDate}
+      minDate={minDate}
       popperModifiers={[
         {
           name: "flip",

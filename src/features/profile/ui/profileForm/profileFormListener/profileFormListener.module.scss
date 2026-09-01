@@ -1,13 +1,13 @@
 .listenerForm {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template:
-    'cell-1-1 cell-1-2'
-    'cell-2-1 cell-2-2';
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "cell-1-1 cell-1-2"
+    "cell-2-1 cell-2-2";
   column-gap: 20px;
   row-gap: 40px;
 
-  &  > [class*="cell-"] > * {
+  & > [class*="cell-"] > * {
     gap: 0px;
   }
 
@@ -21,14 +21,36 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 950px) {
   .listenerForm {
+    row-gap: 20px;
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      'cell-1-1'
-      'cell-1-2'
-      'cell-2-1'
-      'cell-2-2';
+      "cell-1-1"
+      "cell-1-2"
+      "cell-2-1"
+      "cell-2-2";
+  }
+}
+
+@media (max-width: 768px) {
+  .listenerForm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "cell-1-1 cell-1-2"
+      "cell-2-1 cell-2-2";
+  }
+}
+
+@media (max-width: 550px) {
+  .listenerForm {
+    row-gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "cell-1-1"
+      "cell-1-2"
+      "cell-2-1"
+      "cell-2-2";
   }
 }
 
@@ -38,7 +60,6 @@
 
 * > .cell-1-2 {
   grid-area: cell-1-2;
-  
 }
 
 * > .cell-2-1 {
