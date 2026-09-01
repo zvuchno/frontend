@@ -54,6 +54,8 @@ export const CalendarPicker = ({
     }
   };
 
+  const maxDate = new Date();
+
   return (
     <div className={styles.calendarPicker}>
       <p className={styles.calendarPickerTitle}>Период</p>
@@ -69,6 +71,7 @@ export const CalendarPicker = ({
             setMessage={setMessage}
             setDate={setFirstDate}
             otherDate={lastDate ?? undefined}
+            maxDate={maxDate}
           />
           <DatePickerInput
             id={"finance-period-last-day"}
@@ -80,12 +83,12 @@ export const CalendarPicker = ({
             setMessage={setMessage}
             setDate={setLastDate}
             otherDate={firstDate ?? undefined}
+            maxDate={maxDate}
           />
         </div>
         {message && <span className={styles.calendarPickerMessage}>{message}</span>}
+        {errorMessage && <span className={styles.calendarPickerError}>{errorMessage}</span>}
       </div>
-
-      {errorMessage && <span className={styles.calendarPickerError}>{errorMessage}</span>}
     </div>
   );
 };

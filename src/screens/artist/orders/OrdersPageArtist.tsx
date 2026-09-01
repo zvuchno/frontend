@@ -10,6 +10,8 @@ import { useSession } from "next-auth/react";
 
 import { CardOrderArtist } from "@/widgets/orders";
 
+import { useDownloadSalesStatement } from "@/entities/Artist";
+
 import { ORDER_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
 import { ButtonUI, Loader, Title } from "@/shared/ui";
 import { getRelativeDateLabel } from "@/shared/utils/getRelativeDateLabel";
@@ -36,6 +38,8 @@ export function OrdersPageArtist() {
       getNextPageParam: (lastPage) => lastPage?.next,
     });
 
+  const { mutateAsync: downloadSales } = useDownloadSalesStatement();
+
   const orders = data?.pages.flatMap((page) => page.results) ?? [];
   const grouped = groupOrdersByDate(orders);
 
@@ -58,7 +62,12 @@ export function OrdersPageArtist() {
     <div className={s.container}>
       <section className={s.selectSection}>
         <CalendarPicker onSelectFirstDay={setDateFrom} onSelectLastDay={setDateTo} />
-        <ButtonUI variant={"primary"} size='small' className={s.downloadButton} onClick={() => {}}>
+        <ButtonUI
+          variant={"primary"}
+          size='small'
+          className={s.downloadButton}
+          onClick={() => void downloadSales({ startDate: dateFrom, endDate: dateTo })}
+        >
           Скачать отчет
         </ButtonUI>
       </section>

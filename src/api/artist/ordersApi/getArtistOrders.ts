@@ -36,3 +36,32 @@ export async function getArtistOrderDetails(
 
   return data;
 }
+
+export async function downloadArtistSalesReport(
+  periodStart: string,
+  periodEnd: string
+): Promise<{ blob: Blob; filename: string }> {
+  const searchParams = new URLSearchParams({
+    period_end: periodEnd,
+    period_start: periodStart,
+  });
+  const url = `${baseUrl}/v1/store/artists/me/sales/export?${searchParams.toString()}`;
+  const data = await fetch(url, {
+    method: "GET",
+    headers: {},
+    credentials: "include",
+  });
+
+  if (!data.ok) {
+    throw new Error(`Ошибка при скачивании отчета`);
+  }
+
+  const disposition = data.headers.get("content-disposition");
+
+  const matches = disposition?.match(/filename="?([^"]+)"?/) ?? null;
+
+  const filename = matches !== null ? matches[1] : `sales-${periodStart}-${periodEnd}.csv`;
+
+  const blob = await data.blob();
+  return { blob, filename };
+}
