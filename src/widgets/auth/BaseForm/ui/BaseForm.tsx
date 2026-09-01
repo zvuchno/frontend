@@ -1,14 +1,11 @@
 import { type FormEvent } from "react";
 import { Typography } from "@/shared/ui";
-import { CloseButtonIconX } from "@/shared/ui/Icons";
-import clsx from "clsx";
 import s from "./BaseForm.module.scss";
 import { type BaseFormProps } from "../model/BaseForm.types";
 
 export const BaseForm = ({
   title,
   onSubmit,
-  onClose,
   renderFields,
   renderPrimaryButton,
   renderSecondaryButton,
@@ -23,27 +20,10 @@ export const BaseForm = ({
   };
 
   return (
-    <div className={clsx(s.baseForm, className)}>
-      <div className={s.baseForm__wrapper}>
-        {" "}
-        {onClose && (
-          <button
-            type="button"
-            className={s.baseForm__close}
-            onClick={onClose}
-            aria-label="Закрыть"
-          >
-            {CloseButtonIconX()}
-          </button>
-        )}
-      </div>
-      <header className={s.baseForm__header}>
+    <form className={s.baseForm__body} onSubmit={handleSubmit} autoComplete="off">
         <Typography Tag="h2" variant="title" className={s.baseForm__title}>
           {title}
         </Typography>
-      </header>
-
-      <form className={s.baseForm__body} onSubmit={handleSubmit} autoComplete="off">
         {renderFields && (
           <div className={s.baseForm__fields}>{renderFields()}</div>
         )}
@@ -71,7 +51,6 @@ export const BaseForm = ({
           </div>
         )}
       </form>
-    </div>
   );
 };
 

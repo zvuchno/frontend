@@ -3,7 +3,6 @@ import { type ReactNode } from "react";
 export interface BaseFormProps {
   title: string;
   onSubmit?: (data: { email?: string; password?: string }) => void;
-  onClose?: () => void;
   renderFields?: () => ReactNode;
   renderPrimaryButton?: (isLoading: boolean) => ReactNode;
   renderSecondaryButton?: (isLoading?: boolean) => ReactNode;

@@ -22,7 +22,7 @@
     cursor: pointer;
 
     &_size_small {
-      font-size: 20px;
+      font-size: clamp(1.125rem, 1.0893rem + 0.1786vw, 1.25rem);
       font-weight: 700;
       line-height: 100%;
       letter-spacing: 0.6;

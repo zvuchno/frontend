@@ -1,164 +1,41 @@
 .artistRegisterForm {
-  position: relative;
   width: 36.12vw;
   max-width: 520px;
-  max-height: 910px;
-  padding-inline: 40px;
-  padding-block: 0px;
+  padding: 40px;
   background: transparent;
   box-shadow: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  flex-shrink: 0;
-  flex-grow: 0;
   border-radius: 8px;
 
   @media (max-width: 1024px) {
     width: 100%;
-    max-width: auto;
-    padding: 0;
-    margin: 0 16px;
+    padding: 20px;
   }
 
-  .baseForm__title {
-    margin: 0;
-    margin-top: -10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: -0.04em;
-    font-family: "Better VCR", sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 28px;
-    color: #100f0d;
-    text-align: center;
-    width: 100%;
-    text-transform: uppercase;
-  }
-
-  .baseForm__close {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    color: #100f0d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    padding: 0;
-
-    &:hover {
-      background-color: rgba(16, 15, 13, 0.05);
-      transform: scale(1.1);
-    }
-
-    svg {
-      stroke: currentColor;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  .baseForm__fields {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .baseForm__primary {
-    width: 100%;
-  }
-
-  .baseForm__social {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  @media (max-width: 768px) {
+    padding-inline: 16px;
     gap: 16px;
-    padding-top: 8px;
-    border-top: 1px solid #e5e5e5;
   }
 
-  .baseForm__socialTitle {
-    font-size: 14px;
-    color: #666;
-    margin: 0;
-    font-family: "Better VCR", sans-serif;
-    letter-spacing: -0.04em;
-  }
+  
 
-  .socialButton {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 9px 16px;
-    gap: 10px;
-    width: 136px;
-    height: 60px;
-    background: #e4f1ff;
-    border: 1px solid #100f0d;
-    border-radius: 36px;
-    font-family: var(--font-better-vcr);
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 28px;
-    letter-spacing: -0.04em;
-    color: #100f0d;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-    margin-bottom: 70px;
+  // .error {
+  //   width: 100%;
+  //   padding: 12px 16px;
+  //   background: #fee2e2;
+  //   border: 1px solid #fecaca;
+  //   border-radius: 8px;
+  //   color: #dc2626;
+  //   text-align: center;
+  //   font-size: 14px;
+  //   font-family: "Better VCR", sans-serif;
+  //   letter-spacing: -0.04em;
+  // }
 
-    &:hover:not(:disabled) {
-      background: #d4e8ff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(16, 15, 13, 0.15);
-    }
-
-    &:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(16, 15, 13, 0.1);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-  }
-
-  .error {
-    width: 100%;
-    padding: 12px 16px;
-    background: #fee2e2;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    color: #dc2626;
-    text-align: center;
-    font-size: 14px;
-    font-family: "Better VCR", sans-serif;
-    letter-spacing: -0.04em;
-  }
-
-  .spinner {
-    width: 18px;
-    height: 18px;
-    animation: spin 0.8s linear infinite;
-  }
+  // .spinner {
+  //   width: 18px;
+  //   height: 18px;
+  //   animation: spin 0.8s linear infinite;
+  // }
 
   .submitButton {
     width: 100%;
@@ -200,13 +77,6 @@
   @keyframes spin {
     to {
       transform: rotate(360deg);
-    }
-  }
-
-  @media (max-width: 600px) {
-    .baseForm__title {
-      font-size: 18px;
-      line-height: 24px;
     }
   }
 }

@@ -2,19 +2,13 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
-  margin: 30px 20px;
+  padding: 30px 20px;
   width: 100%;
-  max-height: 80dvh;
-  overflow-y: auto;
-  overflow-x: hidden;
 
   @media (max-width: 768px) {
     gap: 20px;
-    //height: 100lvh;
-    
+    padding: 18px;
   }
-
-  
 }
 
 .text {
@@ -37,12 +31,6 @@
 .content {
   display: flex;
   gap: 20px;
-  width: 56.95vw;
-  max-width: 820px;
-
-  @media (max-width: 1024px) {
-    width: 80.08vw;
-  }
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -82,19 +70,25 @@
 }
 
 .noPhoto {
+  flex: 1;
+  flex-basis: 400px;
+  max-width: 100%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  width: 400;
-  height: 386;
   background-color: var(--color-bg-main);
   font-family: var(--font-feature-mono);
-  font-size: 2.5rem;
+  font-size: clamp(1.125rem, 1.0179rem + 0.5357vw, 1.5rem);
   font-weight: 400;
   line-height: 100%;
   letter-spacing: -0.04em;
+  text-align: center;
   color: var(--color-primary-blue);
+
+  @media (max-width: 768px) {
+    flex-basis: 88vw;
+  }
 }
 
 .popup {

@@ -32,7 +32,7 @@ const initialFormState: ListenerRegisterFormData = {
   listener_newsletter: false,
 };
 
-export const ListenerRegisterForm = ({ onClose }: ListenerRegisterFormProps) => {
+export const ListenerRegisterForm = () => {
   const [formData, setFormData] = useState<ListenerRegisterFormData>(initialFormState);
 
   const user = useUserStore((state) => state.user);
@@ -130,32 +130,33 @@ export const ListenerRegisterForm = ({ onClose }: ListenerRegisterFormProps) => 
   };
 
   return (
-    <BaseForm
-      title='Регистрация'
-      onSubmit={() => {
-        handleSubmit().catch(console.error);
-      }}
-      onClose={onClose}
-      isLoading={isLoading}
-      className={s.listenerRegisterForm}
-      renderFields={() => (
-        <ListenerRegisterFormContent
-          data={formData}
-          disabled={isLoading}
-          errors={errors}
-          registerError={registerError}
-          handleFieldChange={handleChange}
-        />
-      )}
-      renderPrimaryButton={(loading) => (
-        <button className={s.submitButton} type='submit' disabled={loading}>
-          {loading ? <LoadingButton /> : "Зарегистрироваться"}
-        </button>
-      )}
-      renderSocialLogin={() => {
-        return <FormSocialButtons disabled={isLoading} />;
-      }}
-    />
+    <div className={s.listenerRegisterForm}>
+      <BaseForm
+        title='Регистрация'
+        onSubmit={() => {
+          handleSubmit().catch(console.error);
+        }}
+        isLoading={isLoading}
+        
+        renderFields={() => (
+          <ListenerRegisterFormContent
+            data={formData}
+            disabled={isLoading}
+            errors={errors}
+            registerError={registerError}
+            handleFieldChange={handleChange}
+          />
+        )}
+        renderPrimaryButton={(loading) => (
+          <button className={s.submitButton} type='submit' disabled={loading}>
+            {loading ? <LoadingButton /> : "Зарегистрироваться"}
+          </button>
+        )}
+        renderSocialLogin={() => {
+          return <FormSocialButtons disabled={isLoading} />;
+        }}
+      />
+    </div>
   );
 };
 

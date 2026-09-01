@@ -28,7 +28,6 @@ const initialFormState: AuthFormData = {
 export const AuthForm = ({
   mode = "login",
   registerRoute,
-  onClose,
   onLoginClick,
 }: AuthFormProps) => {
   const [formData, setFormData] = useState<AuthFormData>(initialFormState);
@@ -94,42 +93,42 @@ export const AuthForm = ({
   };
 
   return (
-    <BaseForm
-      className={s.authForm}
-      title={mode === "login" ? "Вход в личный кабинет" : "Регистрация"}
-      onSubmit={() => {
-        handleSubmit().catch(console.error);
-      }}
-      onClose={onClose}
-      isLoading={isLoading}
-      renderFields={() => (
-        <AuthFormFields
-          data={formData}
-          disabled={isLoading}
-          error={authError}
-          onFieldChange={handleChange}
-          setData={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              rememberMe: e.target.checked,
-            }))
-          }
-        />
-      )}
-      renderPrimaryButton={(loading) => (
-        <PrimaryButton isLoading={loading} mode={mode} formData={formData} />
-      )}
-      renderSecondaryButton={(loading) => (
-        <SecondaryButton
-          isLoading={loading ? loading : false}
-          mode={mode}
-          registerRoute={registerRoute}
-          onLoginClick={onLoginClick}
-        />
-      )}
-      renderSocialLogin={() => {
-        return <FormSocialButtons disabled={isLoading} />;
-      }}
-    />
+    <div className={s.authForm}>
+      <BaseForm
+        title={mode === "login" ? "Вход в личный кабинет" : "Регистрация"}
+        onSubmit={() => {
+          handleSubmit().catch(console.error);
+        }}
+        isLoading={isLoading}
+        renderFields={() => (
+          <AuthFormFields
+            data={formData}
+            disabled={isLoading}
+            error={authError}
+            onFieldChange={handleChange}
+            setData={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                rememberMe: e.target.checked,
+              }))
+            }
+          />
+        )}
+        renderPrimaryButton={(loading) => (
+          <PrimaryButton isLoading={loading} mode={mode} formData={formData} />
+        )}
+        renderSecondaryButton={(loading) => (
+          <SecondaryButton
+            isLoading={loading ? loading : false}
+            mode={mode}
+            registerRoute={registerRoute}
+            onLoginClick={onLoginClick}
+          />
+        )}
+        renderSocialLogin={() => {
+          return <FormSocialButtons disabled={isLoading} />;
+        }}
+      />
+    </div>
   );
 };
