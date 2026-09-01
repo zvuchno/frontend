@@ -142,11 +142,13 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
     }
 
     const coverUrl = (productData as TShowcaseAlbumDetail).cover_image;
+    const releaseImageId = (productData as TShowcaseAlbumDetail).id;
     if (!coverUrl) return null;
 
     return {
       image: coverUrl,
       is_main: true,
+      id: releaseImageId,
     };
 
   }, [id, type, productData]);
@@ -234,24 +236,28 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           router.replace('/artist/showcase')
           break;
         case 'save':
-            if (deletedImageIds.length > 0) {
-              await deleteMerchImages(currentProductId!, deletedImageIds, deleteImageMutation.mutateAsync)
-            }
-
-            if (data.mainImage || data.additionalImages) {
-              await uploadMerchImages(currentProductId!, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
-            }
-
-            if (!isDirty) {
-              router.replace('/artist/showcase')
+            if (!isDirty && deletedImageIds.length === 0) {
+              router.replace('/artist/showcase');
               break;
             }
+
+            if (deletedImageIds.length > 0 && productType === "merch") {
+              await deleteMerchImages(currentProductId!, deletedImageIds, deleteImageMutation.mutateAsync);
+            }
+
+            if (productType === "merch" && (data.mainImage || data.additionalImages)) {
+              await uploadMerchImages(currentProductId!, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
+            }
+            
             const newData = mapDirtyFieldsToPayload(dirtyFields, data, hasProperty);
             if (productType === 'merch') {
-              await updateMerchMutation.mutateAsync({id: currentProductId!, payload: newData})
+              await updateMerchMutation.mutateAsync({id: currentProductId!, payload: newData});
               
             } else {
-              await updateAlbumMutation.mutateAsync({ id: currentProductId!, payload: newData })
+              await updateAlbumMutation.mutateAsync({ id: currentProductId!, payload: {
+                ...newData,
+                ...(deletedImageIds.length > 0 && { cover_image: data.mainImage }),
+              }});
             }
             
             router.replace('/artist/showcase')
