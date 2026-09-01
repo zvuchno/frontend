@@ -41,6 +41,8 @@ export async function applyCookiesFromResponse(resHeaders: Headers, rememberMe: 
   try {
     const cookieStore = await cookies();
 
+    cookieStore.delete("zvuchno_session_type");
+
     if (!rememberMe) {
       cookieStore.set({
         name: "zvuchno_session_type",
@@ -52,10 +54,11 @@ export async function applyCookiesFromResponse(resHeaders: Headers, rememberMe: 
     }
 
     for (const cookie of parsed) {
-      const isRefresh = cookie.name === refreshTokenCookieName;
+      const isBackendAuthCookie =
+        cookie.name === "zvuchno_access" || cookie.name === refreshTokenCookieName;
 
       // Если это refresh-кука и «Запомнить меня» НЕ выбрано — убираем время жизни
-      if (isRefresh && !rememberMe) {
+      if (isBackendAuthCookie && !rememberMe) {
         delete cookie.maxAge;
         delete cookie.expires;
       }

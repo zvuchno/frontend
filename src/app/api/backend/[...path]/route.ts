@@ -6,6 +6,7 @@ import {
   createBackendPath,
   getCookiePair,
   getUnauthorizedSessionResponse,
+  removeCookieLifetime,
   setBackendCookieHeader,
   setCsrfHeaders,
 } from "@/entities/user";
@@ -72,7 +73,14 @@ async function proxy(
   // проверка - это защищенный маршрут?
   const requiresSession = PROTECTED_PREFIXES.some((prefix) => pathForMatch.startsWith(prefix));
 
-  getUnauthorizedSessionResponse(requiresSession, isFrontendAuthenticated);
+  const unauthorizedSessionResponse = getUnauthorizedSessionResponse(
+    requiresSession,
+    isFrontendAuthenticated
+  );
+
+  if (unauthorizedSessionResponse) {
+    return unauthorizedSessionResponse;
+  }
 
   // Корзина доступна гостю, но для уже залогиненного пользователя нельзя подменять его корзину гостевой
   const needsBackendAuth = requiresSession || (isCartPath && isFrontendAuthenticated);
@@ -204,7 +212,11 @@ async function proxy(
       }
       continue;
     }
-    finalSetCookies.push(setCookie);
+    finalSetCookies.push(
+      isShortSession && setCookie.startsWith("zvuchno_access=")
+        ? removeCookieLifetime(setCookie)
+        : setCookie
+    );
   }
 
   // Подставляем zvuchno_refresh с нужными атрибутами

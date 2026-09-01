@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { logoutFromBackend } from "@/api/lib/handlers/logoutFromBackend";
 import { signOut } from "next-auth/react";
 
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
@@ -32,8 +31,6 @@ const LogoutButton = () => {
         clearProducts();
 
         void (async () => {
-          await logoutFromBackend();
-
           await signOut({
             redirect: true,
             callbackUrl: "/",

@@ -27,6 +27,7 @@ export { parseBackendSetCookie } from "./lib/parseBackendSetCookie";
 
 export { getCookiePair } from "./lib/getCookiePair";
 export { setBackendCookieHeader } from "./lib/setBackendCookieHeader";
+export { removeCookieLifetime } from "./lib/removeCookieLifetime";
 export { setCsrfHeaders } from "./lib/setCsrfHeaders";
 export { getUnauthorizedSessionResponse } from "./lib/getUnauthorizedSessionResponse";
 export { createBackendPath } from "./lib/createBackendPath";

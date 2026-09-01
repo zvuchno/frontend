@@ -2,6 +2,7 @@ import { getToken } from "next-auth/jwt";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
+import { removeCookieLifetime } from "@/entities/user";
 import { refreshUserServerCookie } from "@/entities/user/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -44,6 +45,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
     }
 
+    response.cookies.set({
+      name: "zvuchno_session_type",
+      value: "",
+      expires: new Date(0),
+      path: "/",
+    });
+
     return response;
   };
 
@@ -81,7 +89,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         }
         continue;
       }
-      finalCookies.push(setCookie);
+      finalCookies.push(
+        isShortSession && setCookie.startsWith("zvuchno_access=")
+          ? removeCookieLifetime(setCookie)
+          : setCookie
+      );
     }
 
     const response = NextResponse.json({ ok: true });

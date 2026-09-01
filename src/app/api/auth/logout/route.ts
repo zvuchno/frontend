@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+import { setBackendCookieHeader, setCsrfHeaders } from "@/entities/user";
+
 const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
 const isBackendAuthCookie = (name: string): boolean =>
@@ -10,15 +12,21 @@ export async function POST(): Promise<NextResponse> {
   const cookieStore = await cookies();
 
   const authCookies = cookieStore.getAll().filter((cookie) => isBackendAuthCookie(cookie.name));
+  const csrfCookie = cookieStore.get("csrftoken");
+  const backendCookies = new Map(
+    [...authCookies, ...(csrfCookie ? [csrfCookie] : [])].map(({ name, value }) => [name, value])
+  );
+  const backendHeaders = new Headers();
 
-  const cookieHeader = authCookies.map(({ name, value }) => `${name}=${value}`).join("; ");
+  setBackendCookieHeader(backendCookies, backendHeaders);
+  setCsrfHeaders(cookieStore, backendHeaders);
 
   let backendLogoutSucceeded = false;
 
   try {
     const backendResponse = await fetch(`${BASE_URL}/v1/auth/cookie/logout/`, {
       method: "POST",
-      headers: cookieHeader ? { cookie: cookieHeader } : undefined,
+      headers: backendHeaders,
       cache: "no-store",
     });
 
