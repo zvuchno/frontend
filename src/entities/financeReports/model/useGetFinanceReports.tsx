@@ -8,10 +8,10 @@ import {
 } from "./types";
 
 export function useGetFinanceReports(
-  dateFrom: string,
-  dateTo: string,
   periodType: TReportPeriodType,
-  page: number
+  page: number,
+  dateFrom?: string,
+  dateTo?: string
 ) {
   return useQuery<PaginatedStoreResponse<TFinanceReportPreview>, Error>({
     queryKey: ["finance-reports", dateFrom, dateTo, periodType, page],

@@ -3,12 +3,15 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  gap: 20px;
+  flex-wrap: wrap;
 
   &__buttons {
     position: relative;
     display: flex;
     align-items: center;
     gap: 20px;
+    justify-content: space-between;
   }
 
   &__select {
@@ -19,7 +22,7 @@
 }
 
 .button.button {
-  min-width: 212px;
+  min-width: clamp(130px, 16.042vw, 231px);
   padding: 12px;
   min-height: 40px;
 
@@ -84,7 +87,7 @@
   gap: 32px;
 
   & span {
-    color: var(--color-text-primary); 
+    color: var(--color-text-primary);
   }
 }
 
@@ -105,13 +108,14 @@
   padding-block: 7px;
   border-radius: 0;
   margin-bottom: 2px;
-  font-family: 'Feature Mono', monospace;
+  font-family: "Feature Mono", monospace;
   font-size: 16px;
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.04em;
 
-  &[aria-selected="true"], &:hover {
+  &[aria-selected="true"],
+  &:hover {
     background-color: var(--color-accent-blue);
   }
 }

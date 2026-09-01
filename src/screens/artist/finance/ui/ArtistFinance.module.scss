@@ -12,10 +12,11 @@
 
   &Empty {
     font-family: var(--font-feat);
-    font-size: 16px;
+    font-size: 20px;
+    letter-spacing: -0.06em;
   }
 
-  &Paginator{
+  &Paginator {
     align-self: flex-end;
   }
 }

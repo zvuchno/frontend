@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { type TArtistOrder, getArtistOrders } from "@/api/artist";
 import { type PaginatedStoreResponse } from "@/api/store/types";
 import type { InfiniteData } from "@tanstack/react-query";
@@ -9,9 +11,10 @@ import { useSession } from "next-auth/react";
 import { CardOrderArtist } from "@/widgets/orders";
 
 import { ORDER_STATUS_TRANSLATIONS } from "@/shared/constants/translations";
-import { Loader, Title } from "@/shared/ui";
+import { ButtonUI, Loader, Title } from "@/shared/ui";
 import { getRelativeDateLabel } from "@/shared/utils/getRelativeDateLabel";
 
+import { CalendarPicker } from "../finance/components/CalendarPicker/CalendarPicker";
 import s from "./OrdersPageArtist.module.scss";
 
 export function OrdersPageArtist() {
@@ -36,6 +39,9 @@ export function OrdersPageArtist() {
   const orders = data?.pages.flatMap((page) => page.results) ?? [];
   const grouped = groupOrdersByDate(orders);
 
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+
   if (status !== "authenticated" || isLoading) {
     return <Loader />;
   }
@@ -50,6 +56,12 @@ export function OrdersPageArtist() {
 
   return (
     <div className={s.container}>
+      <section className={s.selectSection}>
+        <CalendarPicker onSelectFirstDay={setDateFrom} onSelectLastDay={setDateTo} />
+        <ButtonUI variant={"primary"} size='small' className={s.downloadButton} onClick={() => {}}>
+          Скачать отчет
+        </ButtonUI>
+      </section>
       {grouped.map((group, index) => (
         <section key={index} className={s.section}>
           <Title Tag='h3' className={s.sectionHeader}>

@@ -58,3 +58,21 @@
     color: var(--color-text-accent-blue);
   }
 }
+
+.selectSection {
+  display: flex;
+  column-gap: 40px;
+  row-gap: 20px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.downloadButton {
+  height: 40px;
+  max-width: 212px;
+  min-width: fit-content;
+
+  & * {
+    font-size: 16px;
+  }
+}

@@ -1,5 +1,7 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
+import { formatDateToApi } from "@/shared/utils/formatDate";
+
 import {
   type TFinanceReportDetails,
   type TFinanceReportsRequest,
@@ -9,7 +11,7 @@ import {
 const baseUrl = "/api/backend";
 
 export async function getFinanceReportsAll({
-  periodStart,
+  periodStart = "1900-01-01",
   periodEnd,
   periodType = "month",
 
@@ -17,8 +19,11 @@ export async function getFinanceReportsAll({
 }: TFinanceReportsRequest): Promise<TFinanceReportsResponse> {
   const limit = 5;
   const offset = limit * (page - 1);
+
+  const endDate = formatDateToApi(new Date());
+  const currentEndDay = periodEnd ? periodEnd : endDate;
   const periodStartParams = periodStart && `date_from=${periodStart}`;
-  const periodEndParams = periodEnd && `date_to=${periodEnd}`;
+  const periodEndParams = currentEndDay && `date_to=${currentEndDay}`;
   const periodTypeParams = periodType && `period_type=${periodType}`;
 
   const targetUrl = `${baseUrl}/v1/store/me/reports?${periodStartParams}&${periodEndParams}&limit=${limit}&offset=${offset}&${periodTypeParams}`;
@@ -30,7 +35,7 @@ export async function getFinanceReportsAll({
 
   if (!response) {
     throw new Error(
-      `Ошибка получения финансовых отчетов за период с ${periodStart} по ${periodEnd}`
+      `Ошибка получения финансовых отчетов за период с ${periodStart} по ${currentEndDay}`
     );
   }
   return response;

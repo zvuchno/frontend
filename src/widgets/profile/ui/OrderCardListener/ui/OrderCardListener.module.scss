@@ -81,6 +81,7 @@
   gap: 1rem;
   align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
   cursor: pointer;
   text-align: left;
   padding-inline: 1.25rem;
@@ -93,18 +94,26 @@
     outline: 2px solid var(--color-primary-blue);
     outline-offset: -2px;
   }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 }
 
 .info {
-  flex: 1 1 20rem;
+  flex-grow: 0;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  min-inline-size: 0;
+  width: fit-content;
+  white-space: nowrap;
 
   dl {
     margin: 0;
     min-inline-size: 0;
+  }
+  @media (max-width: 500px) {
+    white-space: wrap;
   }
 }
 
@@ -116,30 +125,67 @@
   line-height: 1.5rem;
   letter-spacing: -0.04em;
   overflow-wrap: anywhere;
+
+  @media (max-width: 500px) {
+    font-size: 18px;
+    white-space: wrap;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 14px;
+  }
 }
 
 .summary {
   display: flex;
-  flex: 1 1 16rem;
+  flex: 1;
   flex-wrap: nowrap;
-  justify-content: flex-end;
-  align-items: flex-start;
-  gap: 6.25rem;
+  justify-self: end;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(20px, 1vw, 100px);
   min-inline-size: 0;
   font-weight: 500;
   font-size: 1.25rem;
   line-height: 1.25rem;
   letter-spacing: -0.04em;
   font-family: var(--font-feature-mono), monospace;
+  max-width: 421px;
+  width: 29.24vw;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    max-width: 100%;
+  }
+  @media (max-width: 500px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 14px;
+  }
 }
 
 .summaryPrice,
 .date {
   margin: 0;
   white-space: nowrap;
+  text-align: center;
+
+  @media (max-width: 1024px) {
+    text-align: left;
+  }
 }
 
-.contentInner>dl {
+.summaryPrice {
+  flex: 1;
+}
+
+.date {
+  flex: 1;
+}
+
+.contentInner > dl {
   margin: 0;
 }
 
@@ -203,7 +249,7 @@
   color: var(--color-bg-secondary);
 }
 
-.products>* {
+.products > * {
   flex: 1 1 8.1875rem;
   min-inline-size: min(100%, 8.1875rem);
 }
@@ -216,7 +262,7 @@
   align-self: flex-start;
 }
 
-.buttons>* {
+.buttons > * {
   flex: 0 0 13.125rem;
   min-inline-size: 0;
 }
@@ -267,7 +313,7 @@
     inline-size: 100%;
   }
 
-  .buttons>* {
+  .buttons > * {
     flex-basis: 100%;
   }
 }
@@ -299,7 +345,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .arrow,
   .content,
   .contentInner,

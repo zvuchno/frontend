@@ -28,6 +28,7 @@
   &Dates {
     position: relative;
     width: 300px;
+    max-width: 300px;
     height: 44px;
     padding: 12px 14px 12px 15px;
     border: 2px solid var(--color-text-primary);
@@ -41,7 +42,7 @@
     cursor: pointer;
     background-image: url("/icons/calendar.svg");
     background-repeat: no-repeat;
-    background-position: right 14px top 8px;
+    background-position: right 14px top 9px;
 
     &::after {
       content: "-";
@@ -58,8 +59,15 @@
       font-weight: 700;
     }
 
-    @media (max-width: 331px) {
-      width: 284px;
+    @media (max-width: 340px) {
+      width: 100%;
+      padding-inline: 5px;
+      flex-basis: 284px;
+      background-position: right 5px top 9px;
+
+      &::after {
+        left: 120px;
+      }
     }
   }
 
@@ -100,7 +108,7 @@
   width: fit-content !important;
 }
 
-:global(#finance-period-first-day){
+:global(#finance-period-first-day) {
   padding-inline: 0 !important;
 }
 
