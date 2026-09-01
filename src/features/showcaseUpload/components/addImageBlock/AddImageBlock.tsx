@@ -110,7 +110,7 @@ export const AddImageBlock = ({
     setFiles((prev) => ({ ...prev, mainImage: null }));
     setValue('mainImage', null); 
 
-    if (id && severalImages) {
+    if (id) {
       setDeletedImageIds((prev) => [...prev, id]);
     };
   };

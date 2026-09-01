@@ -293,8 +293,9 @@ export function useCreateAlbum() {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
       toast.success("Релиз создан");
     },
-    onError: () => {
-      toast.error("Не удалось создать релиз");
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : "Не удалось создать релиз";
+      toast.error(message);
     },
   });
 }
@@ -308,8 +309,9 @@ export function useCreateMerch() {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
       toast.success("Мерч создан");
     },
-    onError: () => {
-      toast.error("Не удалось создать мерч");
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : "Не удалось создать мерч";
+      toast.error(message);
     },
   });
 }

@@ -8,28 +8,28 @@ const normalizePrice = (val: number): string => {
 
 export const createProductPayload = (
   data: UploadFormValues,
-  productType: 'album' | 'merch' | 'single',
-  profileType: 'artist' | 'label' | undefined,
+  productType: "album" | "merch" | "single",
+  profileType: "artist" | "label" | undefined,
   currentArtistId: number | null,
-  action: 'uploadTrack' | 'publish' | 'draft' | 'save' | 'cancel',
+  action: "uploadTrack" | "publish" | "draft" | "save" | "cancel",
   hasProperty?: boolean,
 ): TCreateAlbumRequest | TCreateMerchRequest => {
   
-  const priceStr = data.price ? normalizePrice(data.price) : '';
-  const artist = profileType === 'artist'
+  const priceStr = data.price ? normalizePrice(data.price) : "";
+  const artist = profileType === "artist"
     ? currentArtistId!
     : data.artistId ? Number(data.artistId) : currentArtistId!;
 
-  if (productType === 'album') {
+  if (productType === "album" || productType === "single") {
 
     return {
       name: data.name,
       artist,
-      is_single: false,
+      is_single: productType === "single",
       release_date: data.releaseDate,
       genre: data.genre ? Number(data.genre) : null,
       price: priceStr,
-      description: data.description ?? '',
+      description: data.description ?? "",
       cover_image: data.mainImage ?? null,
       allow_overpay: data.allowHigherPrice,
       is_published: action === 'publish',
@@ -44,11 +44,11 @@ export const createProductPayload = (
     price: priceStr,
     album: data.album ? Number(data.album) : null,
     artist,
-    description: data.description ?? '',
+    description: data.description ?? "",
     allow_overpay: data.allowHigherPrice,
     visibility: data.privacy,
-    is_published: action === 'publish',
-    property_name: data.propertyName ?? '',
+    is_published: action === "publish",
+    property_name: data.propertyName ?? "",
     variants: hasProperty ? data.variants : [],
     stock: hasProperty ? undefined : data.quantity,
   };
