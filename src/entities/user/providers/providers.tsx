@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { logoutFromBackend } from "@/api/lib/handlers/logoutFromBackend";
 import { SessionProvider } from "next-auth/react";
@@ -12,6 +12,7 @@ const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession();
   const setUser = useUserStore((state) => state.setUser);
   const clearStore = useUserStore((state) => state.clearStore);
+  const checkedBackendSessionForUser = useRef<string | null>(null);
 
   useEffect(() => {
     if (session?.error === "RefreshAccessTokenError") {
@@ -41,7 +42,32 @@ const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
         isArtist: session.user.isArtist,
         artistName: session.user.artistName,
       });
+
+      const userId = String(session.user.id);
+
+      if (checkedBackendSessionForUser.current !== userId) {
+        checkedBackendSessionForUser.current = userId;
+
+        void fetch("/api/backend/v1/auth/account/me/", {
+          credentials: "same-origin",
+          cache: "no-store",
+        })
+          .then(async (response) => {
+            if (response.status !== 401) return;
+
+            clearStore();
+            await logoutFromBackend();
+            await signOut({
+              redirect: true,
+              callbackUrl: "/signin",
+            });
+          })
+          .catch((error: unknown) => {
+            console.error("Backend session check failed", error);
+          });
+      }
     } else if (status === "unauthenticated" || !session?.user) {
+      checkedBackendSessionForUser.current = null;
       clearStore();
     }
   }, [session, status, setUser, clearStore]);
