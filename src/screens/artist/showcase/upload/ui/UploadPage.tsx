@@ -45,7 +45,7 @@ const initialFormValues: UploadFormValues = {
   kind: '',
   genre: '',
   price: null,
-  privacy: undefined,
+  privacy: "public",
   allowHigherPrice: false,
   mainImage: null,
   additionalImages: [],

@@ -4,7 +4,7 @@ export const isRecord = (value: unknown): value is Record<string, unknown> =>
 export const getErrorMessage = (data: unknown, fallback: string): string => {
   if (!isRecord(data)) return fallback;
 
-  for (const key of ["message", "detail", "phone", "email", "token", "uid"]) {
+  for (const key of ["message", "detail", "phone", "email", "token", "uid", "is_published"]) {
     const value = data[key];
 
     if (typeof value === "string" && value) {

@@ -55,11 +55,11 @@ export const ShowcaseCard = ({
   onDeletePromocode,
   onEditPromo,
 }: ShowcaseCardProps) => {
-  const [columnsCount, setColumnsCount] = useState<number>();
+  //const [columnsCount, setColumnsCount] = useState<number>();
   const id = item.id;
-  const productCardClassName = clsx(s.card, {
-    [s[`columns-${columnsCount}`]]: columnsCount,
-  });
+  // const productCardClassName = clsx(s.card, {
+  //   [s[`columns-${columnsCount}`]]: columnsCount,
+  // });
 
   const handleToggleVisibility = async (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
     const isCheked = e.target.checked;
@@ -82,24 +82,24 @@ export const ShowcaseCard = ({
     onEditPromo(id);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width < 476) {
-        setColumnsCount(3);
-      } else if (width < 1025) {
-        setColumnsCount(4);
-      } else {
-        setColumnsCount(7);
-      }
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     const width = window.innerWidth;
+  //     if (width < 476) {
+  //       setColumnsCount(3);
+  //     } else if (width < 1025) {
+  //       setColumnsCount(4);
+  //     } else {
+  //       setColumnsCount(7);
+  //     }
+  //   };
 
-    handleResize();
+  //   handleResize();
 
-    window.addEventListener("resize", handleResize);
+  //   window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   const renderActions = (type: string, editType: string, isChecked?: boolean) => {
     const params = new URLSearchParams();
@@ -155,7 +155,7 @@ export const ShowcaseCard = ({
 
   if (isAlbum(item)) {
     return (
-      <div className={productCardClassName}>
+      <div className={s.card}>
         <div className={s.imgContainer}>
           {item.cover_image && <img src={item.cover_image} alt={item.name} loading='lazy' />}
         </div>
@@ -175,7 +175,7 @@ export const ShowcaseCard = ({
 
   if (isMerch(item)) {
     return (
-      <div className={productCardClassName}>
+      <div className={s.card}>
         <div className={s.imgContainer}>
           {item.main_image && <img src={item.main_image} alt={item.name} loading='lazy' />}
         </div>

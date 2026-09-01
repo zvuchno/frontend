@@ -49,7 +49,7 @@ export const ShowcaseItemsList = ({
   const deleteMerchMutation = useDeleteMerch();
   const deletePromocodeMutation = useDeletePromocode();
 
-  const [columnsCount, setColumnsCount] = useState<number>();
+  //const [columnsCount, setColumnsCount] = useState<number>();
 
   const isProduct = itemType === "products" || itemType === "album" || itemType === "merch";
   const isPromo = itemType === "promo";
@@ -87,24 +87,24 @@ export const ShowcaseItemsList = ({
     await deletePromocodeMutation.mutateAsync({ id });
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width < 476) {
-        setColumnsCount(3);
-      } else if (width < 1025) {
-        setColumnsCount(4);
-      } else {
-        setColumnsCount(7);
-      }
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     const width = window.innerWidth;
+  //     if (width < 476) {
+  //       setColumnsCount(3);
+  //     } else if (width < 1025) {
+  //       setColumnsCount(4);
+  //     } else {
+  //       setColumnsCount(7);
+  //     }
+  //   };
 
-    handleResize();
+  //   handleResize();
 
-    window.addEventListener("resize", handleResize);
+  //   window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   return (
     <div className={s.content}>
@@ -113,7 +113,7 @@ export const ShowcaseItemsList = ({
       </Title>
 
       <div
-        className={clsx(s.heading, { [s[`columns-${columnsCount}`]]: isProduct && columnsCount })}
+        className={clsx(s.heading)}
       >
         <Text className={clsx(s.heading__text)}>{isProduct ? "Фото" : "Промокод"}</Text>
         {profileType === "label" && <Text className={clsx(s.heading__text)}>Артист</Text>}

@@ -88,7 +88,7 @@ export const ShowcasePage = () => {
 
   const error = albumsQuery.error || merchQuery.error || promoQuery.error;
 
-  const emptyText = itemType === "promo" ? "нет промокодов" : "нет нет товаров";
+  const emptyText = itemType === "promo" ? "нет промокодов" : "нет товаров";
 
   const currentItems =
     itemType === "products"

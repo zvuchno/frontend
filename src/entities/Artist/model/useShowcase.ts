@@ -185,10 +185,10 @@ export function useUpdateAlbum() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      toast.success("Альбом обновлён");
+      toast.success("Релиз обновлён");
     },
     onError: () => {
-      toast.error("Ошибка обновления альбома");
+      toast.error("Ошибка обновления релиза");
     },
   });
 }
@@ -241,10 +241,10 @@ export function useDeleteAlbum() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      toast.success("Альбом удалён");
+      toast.success("Релиз удалён");
     },
     onError: () => {
-      toast.error("Не удалось удалить альбом");
+      toast.error("Не удалось удалить релиз");
     },
   });
 }
@@ -291,10 +291,10 @@ export function useCreateAlbum() {
     mutationFn: (payload: TCreateAlbumRequest) => createAlbum(payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      toast.success("Альбом создан создан");
+      toast.success("Релиз создан");
     },
     onError: () => {
-      toast.error("Не удалось создать альбом");
+      toast.error("Не удалось создать релиз");
     },
   });
 }
@@ -377,10 +377,11 @@ export function useAddImage() {
     mutationFn: ({ id, payload }) => addImage({ id, payload }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
-      //toast.success("Изображение добавлено")
+      toast.success("Изображение добавлено")
     },
-    onError: () => {
-      //toast.error('Не удалось добавить изображение')
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : 'Не удалось добавить изображение';
+      toast.error(message)
     },
   });
 }

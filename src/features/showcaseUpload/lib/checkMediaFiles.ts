@@ -3,7 +3,7 @@ export const checkMediaFiles = async (file: File) => {
   const MIN_RESOLUTION = 1000;
   const MAX_AUDIO_SIZE = 500 * 1024 * 1024; // 500 МБ
 
-  const allowedImageMime = ['image/jpeg', 'image/webp'];
+  const allowedImageMime = ["image/jpeg", "image/webp", "image/png"];
   const isImage = allowedImageMime.includes(file.type);
 
   const allowedAudioMime = ['audio/mpeg', 'audio/flac', 'audio/wav'];
