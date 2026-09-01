@@ -96,30 +96,31 @@ export const BecomeArtistForm = ({ profileType, currentUserType }: TBecomeArtist
   };
 
   return (
-    <BaseForm
-      title={`Зарегистрировать ${profileType === "artist" ? "артиста" : "лейбл"}`}
-      onSubmit={() => void handleSubmit()}
-      isLoading={isLoading}
-      className={s.artistRegisterForm}
-      renderFields={() => (
-        <BecomeArtistFormContent
-          data={formData}
-          disabled={isLoading}
-          handleFieldChange={handleChange}
-          registerError={formError}
-          currentUserType={currentUserType}
-        />
-      )}
-      renderPrimaryButton={(loading) => (
-        <button className={s.submitButton} type='submit' disabled={loading}>
-          {loading ? (
-            <LoadingButton />
-          ) : (
-            `Стать ${profileType === "artist" ? "артистом" : "лейблом"}`
-          )}
-        </button>
-      )}
-    />
+    <div className={s.artistRegisterForm}>
+      <BaseForm
+        title={`Зарегистрировать ${profileType === "artist" ? "артиста" : "лейбл"}`}
+        onSubmit={() => void handleSubmit()}
+        isLoading={isLoading}
+        renderFields={() => (
+          <BecomeArtistFormContent
+            data={formData}
+            disabled={isLoading}
+            handleFieldChange={handleChange}
+            registerError={formError}
+            currentUserType={currentUserType}
+          />
+        )}
+        renderPrimaryButton={(loading) => (
+          <button className={s.submitButton} type='submit' disabled={loading}>
+            {loading ? (
+              <LoadingButton />
+            ) : (
+              `Стать ${profileType === "artist" ? "артистом" : "лейблом"}`
+            )}
+          </button>
+        )}
+      />
+    </div>
   );
 };
 

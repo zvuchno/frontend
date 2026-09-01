@@ -138,15 +138,15 @@ export const ShowcasePage = () => {
     return (
       <RoleSelectBlock>
         <RoleCard
-          path='/artist/showcase/upload/single'
+          path='/artist/showcase/upload/album'
           image={"/images/cassette.png"}
-          title='Загрузить сингл'
+          title='Загрузить релиз'
         />
-        <RoleCard
+        {/* <RoleCard
           path='/artist/showcase/upload/album'
           image={"/images/record.png"}
           title='Загрузить альбом'
-        />
+        /> */}
         <RoleCard
           path='/artist/showcase/upload/merch'
           image={"/images/shirt.png"}

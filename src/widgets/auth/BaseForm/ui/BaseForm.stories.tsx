@@ -14,7 +14,6 @@ const meta: Meta<typeof BaseForm> = {
   },
   args: {
     onSubmit: fn(),
-    onClose: fn(),
   },
 };
 
@@ -143,7 +142,6 @@ export const WithButtons: Story = {
 export const WithClose: Story = {
   args: {
     title: "Модальное окно",
-    onClose: fn(),
   },
   render: (args) => (
     <div

@@ -13,7 +13,6 @@ export interface ListenerRegisterFormData {
 }
 
 export interface ListenerRegisterFormProps {
-  onClose?: () => void;
   onSubmit?: (data: TRegisterRequest) => Promise<TNewUserResponse>;
   onLoginClick?: () => void;
   onSocialLogin?: (provider: "yandex" | "vk" | "google") => void;

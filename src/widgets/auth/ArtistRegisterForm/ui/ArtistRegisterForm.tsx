@@ -33,7 +33,7 @@ const initialFormState: ArtistRegisterFormData = {
   artist_newsletter: false,
 };
 
-export const ArtistRegisterForm = ({ profileType, onClose }: ArtistRegisterFormProps) => {
+export const ArtistRegisterForm = ({ profileType }: ArtistRegisterFormProps) => {
   const [formData, setFormData] = useState<ArtistRegisterFormData>(initialFormState);
 
   const user = useUserStore((state) => state.user);
@@ -144,32 +144,33 @@ export const ArtistRegisterForm = ({ profileType, onClose }: ArtistRegisterFormP
   };
 
   return (
-    <BaseForm
-      title='Регистрация'
-      onSubmit={() => {
-        handleSubmit().catch(console.error);
-      }}
-      onClose={onClose}
-      isLoading={isLoading}
-      className={s.artistRegisterForm}
-      renderFields={() => (
-        <ArtistRegisterFormContent
-          data={formData}
-          disabled={isLoading}
-          errors={errors}
-          registerError={registerError}
-          handleFieldChange={handleChange}
-        />
-      )}
-      renderPrimaryButton={(loading) => (
-        <button className={s.submitButton} type='submit' disabled={loading}>
-          {loading ? <LoadingButton /> : "Зарегистрироваться"}
-        </button>
-      )}
-      renderSocialLogin={() => {
-        return <FormSocialButtons disabled={isLoading} />;
-      }}
-    />
+    <div className={s.artistRegisterForm}>
+      <BaseForm
+        title='Регистрация'
+        onSubmit={() => {
+          handleSubmit().catch(console.error);
+        }}
+        isLoading={isLoading}
+        
+        renderFields={() => (
+          <ArtistRegisterFormContent
+            data={formData}
+            disabled={isLoading}
+            errors={errors}
+            registerError={registerError}
+            handleFieldChange={handleChange}
+          />
+        )}
+        renderPrimaryButton={(loading) => (
+          <button className={s.submitButton} type='submit' disabled={loading}>
+            {loading ? <LoadingButton /> : "Зарегистрироваться"}
+          </button>
+        )}
+        renderSocialLogin={() => {
+          return <FormSocialButtons disabled={isLoading} />;
+        }}
+      />
+    </div>
   );
 };
 

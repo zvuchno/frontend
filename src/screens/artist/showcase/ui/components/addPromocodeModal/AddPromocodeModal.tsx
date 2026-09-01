@@ -209,7 +209,7 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
             inputClassName={s.input}
           />
 
-          <div className={s.fildsContainer}>
+          <div className={s.fieldsContainer}>
             <CustomInput
               id='start_at'
               label='Начало действия'

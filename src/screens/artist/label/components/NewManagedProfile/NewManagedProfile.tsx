@@ -51,26 +51,28 @@ export const NewManagedProfile = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <BaseForm
-      title={"Добавить нового артиста"}
-      onSubmit={() => {
-        handleSubmit();
-      }}
-      isLoading={isLoading}
-      className={s.artistRegisterForm}
-      renderFields={() => (
-        <BecomeArtistFormContent
-          data={formData}
-          disabled={isLoading}
-          handleFieldChange={handleChange}
-        />
-      )}
-      renderPrimaryButton={(loading) => (
-        <button className={s.submitButton} type='submit' disabled={loading}>
-          {loading ? <LoadingButton /> : "Добавить"}
-        </button>
-      )}
-    />
+    <div className={s.artistRegisterForm}>
+      <BaseForm
+        title={"Добавить нового артиста"}
+        onSubmit={() => {
+          handleSubmit();
+        }}
+        isLoading={isLoading}
+        
+        renderFields={() => (
+          <BecomeArtistFormContent
+            data={formData}
+            disabled={isLoading}
+            handleFieldChange={handleChange}
+          />
+        )}
+        renderPrimaryButton={(loading) => (
+          <button className={s.submitButton} type='submit' disabled={loading}>
+            {loading ? <LoadingButton /> : "Добавить"}
+          </button>
+        )}
+      />
+    </div>
   );
 };
 
