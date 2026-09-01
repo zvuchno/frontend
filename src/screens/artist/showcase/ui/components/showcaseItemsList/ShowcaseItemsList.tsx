@@ -1,40 +1,45 @@
 "use client";
 
-import s from "./showcaseItemsList.module.scss";
-import { 
-  ShowcaseCard, 
-  type TShowcaseItem, 
-  useDeleteAlbum, 
-  useDeleteMerch, 
+import { useEffect, useState } from "react";
+
+import clsx from "clsx";
+
+import {
+  ShowcaseCard,
+  type TShowcaseAlbum,
+  type TShowcaseItem,
+  type TShowcaseMerch,
+  type TShowcasePromocode,
+  useDeleteAlbum,
+  useDeleteMerch,
   useDeletePromocode,
   useUpdateAlbum,
   useUpdateMerch,
   useUpdatePromocode,
-  type TShowcaseAlbum, 
-  type TShowcaseMerch, 
-  type TShowcasePromocode 
 } from "@/entities/Artist";
+
 import { Text, Title } from "@/shared/ui";
-import clsx from "clsx";
+
+import s from "./showcaseItemsList.module.scss";
 
 interface ShowcaseItemsListProps {
   itemType: TShowcaseItem;
   items: TShowcasePromocode[] | (TShowcaseAlbum | TShowcaseMerch)[];
   profileType: "artist" | "label" | undefined;
   hasMoreData: boolean;
-  isLoadingMore : boolean;
+  isLoadingMore: boolean;
   onLoadMore: () => Promise<void>;
   onEditPromo: (id: number) => void;
-};
+}
 
-export const ShowcaseItemsList = ({ 
-  itemType, 
+export const ShowcaseItemsList = ({
+  itemType,
   items,
   profileType,
   hasMoreData,
   onLoadMore,
   isLoadingMore,
-  onEditPromo
+  onEditPromo,
 }: ShowcaseItemsListProps) => {
   const toggleAlbumMutation = useUpdateAlbum();
   const toggleMerchMutation = useUpdateMerch();
@@ -44,27 +49,29 @@ export const ShowcaseItemsList = ({
   const deleteMerchMutation = useDeleteMerch();
   const deletePromocodeMutation = useDeletePromocode();
 
+  const [columnsCount, setColumnsCount] = useState<number>();
+
   const isProduct = itemType === "products" || itemType === "album" || itemType === "merch";
   const isPromo = itemType === "promo";
 
   const handleToggleAlbumVisibility = async (isChecked: boolean, id: number) => {
-    await toggleAlbumMutation.mutateAsync({ 
-      id, 
-      payload: {is_published: isChecked}
+    await toggleAlbumMutation.mutateAsync({
+      id,
+      payload: { is_published: isChecked },
     });
   };
 
   const handleToggleMerchVisibility = async (isChecked: boolean, id: number) => {
-    await toggleMerchMutation.mutateAsync({ 
-      id, 
-      payload: {is_published: isChecked}
+    await toggleMerchMutation.mutateAsync({
+      id,
+      payload: { is_published: isChecked },
     });
   };
 
   const handleTogglePromoVisibility = async (isChecked: boolean, id: number) => {
-    await togglePromoMutation.mutateAsync({ 
-      id, 
-      payload: {is_enabled: isChecked} 
+    await togglePromoMutation.mutateAsync({
+      id,
+      payload: { is_enabled: isChecked },
     });
   };
 
@@ -76,43 +83,55 @@ export const ShowcaseItemsList = ({
     await deleteMerchMutation.mutateAsync({ id });
   };
 
-  const handleDeletePromocode = async(id: number) => {
+  const handleDeletePromocode = async (id: number) => {
     await deletePromocodeMutation.mutateAsync({ id });
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 476) {
+        setColumnsCount(3);
+      } else if (width < 1025) {
+        setColumnsCount(4);
+      } else {
+        setColumnsCount(7);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className={s.content}>
       <Title Tag='h4' className={s.title}>
-        {itemType === 'promo' ? 'Промокоды' : 'Товары'}
+        {itemType === "promo" ? "Промокоды" : "Товары"}
       </Title>
 
-      <div className={s.heading}>
-        <Text 
-          className={clsx(s.heading__text)}
-        >
-          {isProduct ? "Фото" : "Промокод"}
-        </Text>
-        {profileType === 'label' && (
-          <Text 
-            className={clsx(s.heading__text)}
-          >
-            Артист
-          </Text>
-        )}
+      <div
+        className={clsx(s.heading, { [s[`columns-${columnsCount}`]]: isProduct && columnsCount })}
+      >
+        <Text className={clsx(s.heading__text)}>{isProduct ? "Фото" : "Промокод"}</Text>
+        {profileType === "label" && <Text className={clsx(s.heading__text)}>Артист</Text>}
         <Text
           className={clsx(s.heading__text, {
-            [s.heading__text_wide]: isProduct && profileType === 'artist',
+            [s.heading__text_wide]: isProduct && profileType === "artist",
           })}
         >
           {isProduct ? "Наименование" : "Скидка"}
         </Text>
-        <Text className={clsx(s.heading__text, {[s.heading__text_wide]: isPromo})}>{isProduct ? "Артикул" : "Период"}</Text>
+        <Text className={clsx(s.heading__text, { [s.heading__text_wide]: isPromo })}>
+          {isProduct ? "Артикул" : "Период"}
+        </Text>
         <Text className={s.heading__text}>{isProduct ? "Цена" : "Количество"}</Text>
         <Text
-          className={clsx(
-            s.heading__text, { 
-              [s.heading__text_rightAligned]: isPromo && profileType === 'artist',
-              [s.heading__text_leftAligned]: isPromo && profileType === 'label'
+          className={clsx(s.heading__text, {
+            [s.heading__text_rightAligned]: isPromo && profileType === "artist",
+            [s.heading__text_leftAligned]: isPromo && profileType === "label",
           })}
         >
           {isProduct ? "Остаток" : "Видимость"}
@@ -144,10 +163,10 @@ export const ShowcaseItemsList = ({
         {hasMoreData && (
           <div className={s.buttonWrapper}>
             <button
-              type="button"
+              type='button'
               className={s.button}
               onClick={() => {
-                onLoadMore().catch(console.error)
+                onLoadMore().catch(console.error);
               }}
               disabled={isLoadingMore}
             >
@@ -157,5 +176,5 @@ export const ShowcaseItemsList = ({
         )}
       </ul>
     </div>
-  )
-}
+  );
+};
