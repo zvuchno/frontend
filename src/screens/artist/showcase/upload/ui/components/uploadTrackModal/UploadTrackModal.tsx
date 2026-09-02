@@ -185,7 +185,7 @@ export const UploadTrackModal = ({
   if (error) return <div>{`Не удалось загрузить данные: ${error.message}`}</div>
 
   return (
-    <ModalUI isOpen={isOpen} onClose={handleClose} closeButtonStyle="circledX">
+    <ModalUI isOpen={isOpen} onClose={handleClose} closeButtonStyle="circledX" hasClickOnOverlay={false}>
       <FormProvider {...methods}>
         <form 
           className={s.form} 
