@@ -18,6 +18,9 @@ import { DownloadIcon } from "@/shared/ui/Icons";
 
 import { DownloadReleaseModal } from "../components/DownloadReleaseModal/DownloadReleaseModal";
 import styles from "./releasesPageClient.module.scss";
+import { usePlayerStore } from "@/features/player";
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
+import toast from "react-hot-toast";
 
 export function ReleasesPageClient() {
   const { status } = useSession();
@@ -28,6 +31,8 @@ export function ReleasesPageClient() {
   const [downloadData, setDownloadData] = useState<PurchasedReleaseDownloadOptions | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorDownload, setErrorDownload] = useState<string | null>(null);
+
+  const { playingAlbumId, togglePlay, playAlbum, setPlayingAlbumId } = usePlayerStore();
 
   const { data, error, fetchNextPage, isLoading, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery<
@@ -43,6 +48,7 @@ export function ReleasesPageClient() {
       },
       initialPageParam: "",
       getNextPageParam: (lastPage) => lastPage?.next,
+      staleTime: 5 * 60 * 1000
     });
 
   const cards = data?.pages.flatMap((page) => page.results) ?? [];
@@ -64,6 +70,24 @@ export function ReleasesPageClient() {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePlayRelease = async (releaseId: number) => {
+    if (playingAlbumId === releaseId) {
+      togglePlay();
+      return;
+    }
+    
+    try {
+      const data = await getTracksList({ albumId: releaseId });
+      const tracks = data?.tracks;
+      if (!tracks?.length) return;
+      playAlbum(tracks, 0);
+      setPlayingAlbumId(releaseId);
+    } catch (err) {
+      console.error('Не удалось загрузить треки релиза', err);
+      toast.error("Не удалось загрузить треки релиза")
     }
   };
 
@@ -104,6 +128,9 @@ export function ReleasesPageClient() {
               </button>
             }
             link={`/catalog/release/${card.id}?kind=release`}
+            isRelease
+            isPlaying={playingAlbumId === card.id}
+            onPlay={() => handlePlayRelease(card.id)}
           />
         );
       })}

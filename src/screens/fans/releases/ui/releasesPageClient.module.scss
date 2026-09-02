@@ -1,6 +1,6 @@
 .container {
   display: grid;
-  grid-template-columns: repeat(3, 20.4375rem);
+  grid-template-columns: repeat(auto-fit, minmax(0, 19rem));
   gap: 1.25rem;
   align-items: start;
   justify-content: start;
@@ -8,6 +8,11 @@
   max-height: 981px;
   overflow-y: auto;
   //overflow: visible;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: thin;
+  }
 }
 
 .stateMessage {
@@ -72,16 +77,24 @@
   }
 }
 
-@media (max-width: 1024px) {
+// @media (max-width: 1024px) {
+//   .container {
+//     grid-template-columns: repeat(2, minmax(0, 20.4375rem));
+//   }
+// }
+
+@media (max-width: 768px) {
   .container {
-    grid-template-columns: repeat(2, minmax(0, 20.4375rem));
+    justify-content: center;
+    justify-items: center;
   }
 }
 
 @media (max-width: 480px) {
   .container {
-    grid-template-columns: minmax(0, 20.4375rem);
-    justify-content: center;
-    justify-items: center;
+    padding: 5px;
+    // grid-template-columns: minmax(0, 20.4375rem);
+    // justify-content: center;
+    // justify-items: center;
   }
 }

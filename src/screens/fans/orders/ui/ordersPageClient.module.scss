@@ -6,6 +6,12 @@
   margin-inline: auto;
   max-height: 981px;
   overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 5px;
+
+  &::-webkit-scrollbar {
+    width: thin;
+  }
 }
 
 .stateMessage {
