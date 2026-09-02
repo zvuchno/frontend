@@ -36,8 +36,9 @@ export const DownloadReleaseModal = ({
   const items = data?.items ?? [];
 
   const startDownload = async (item: PurchasedReleasesDownloadItem) => {
-    if (downloading[item.type]) return;
-    setDownloading((prev) => ({ ...prev, [item.type]: true }));
+    const key = item.download_action_url ?? item.title;
+    if (downloading[key]) return;
+    setDownloading((prev) => ({ ...prev, [key]: true }));
 
     try {
       const result = await getDownloadData(item.download_action_url!);
@@ -46,7 +47,11 @@ export const DownloadReleaseModal = ({
       console.error(err);
       toast.error("Не удалось получить ссылку для скачивания");
     } finally {
-      setDownloading((prev) => ({ ...prev, [item.type]: false }));
+      setDownloading((prev) => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
     }
   };
 
@@ -68,10 +73,10 @@ export const DownloadReleaseModal = ({
 
         {!loading && !error && items.length > 0 && (
           <ul className={s.list}>
-            {items.map((item, index) => {
-              const isDownloading = downloading[item.type];
+            {items.map((item) => {
+              const isDownloading = !!downloading[item.download_action_url ?? item.title];
               return (
-                <li key={index} className={s.item}>
+                <li key={item.download_action_url ?? item.title} className={s.item}>
                   <div className={s.item__info}>
                     <span className={s.item__title}>{item.title}</span>
                     <span className={s.item__type}>

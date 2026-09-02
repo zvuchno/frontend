@@ -111,7 +111,7 @@ export async function getOrderDetail(orderId: string | number): Promise<StoreOrd
   });
 
   if (!data) {
-    throw new Error("Пустой ответ от сервера");
+    throw new Error("Ошибка получения информации о заказе");
   }
 
   return data;
@@ -127,7 +127,7 @@ export async function getPurchasedReleases(
   });
 
   if (!data) {
-    throw new Error("Пустой ответ от сервера");
+    throw new Error("Ошибка получения релизов");
   }
 
   return data;
@@ -142,19 +142,20 @@ export async function getDownloadOptions(
   });
 
   if (!data) {
-    throw new Error("Пустой ответ от сервера");
+    throw new Error("Ошибка получения вариантов для скачивания");
   }
 
   return data;
 }
 
 export async function getDownloadData(url: string): Promise<PurchasedReleaseDownloadData> {
-  const data = await authFetchClient<PurchasedReleaseDownloadData>(url, {
+  const cleanUrl = url.replace(/^\/api/, "");
+  const data = await authFetchClient<PurchasedReleaseDownloadData>(`${baseUrl}${cleanUrl}`, {
     method: "POST",
   });
 
   if (!data) {
-    throw new Error("Пустой ответ от сервера");
+    throw new Error("Ошибка загрузки. Попробуйте позже");
   }
 
   return data;
