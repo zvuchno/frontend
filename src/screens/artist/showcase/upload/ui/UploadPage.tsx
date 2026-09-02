@@ -212,6 +212,10 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           if (isEditForm) {
             setIsTrackModalOpen(true);
           } else {
+            if (newAlbumId) {
+              setIsTrackModalOpen(true);
+              break;
+            }
             const albumResponse = await createAlbumMutation.mutateAsync(payload);
             if (albumResponse) {
               setNewAlbumId(albumResponse.id);

@@ -338,7 +338,7 @@ export async function getShowcaseTracksList({
   const params = new URLSearchParams();
   if (album) params.append("album", album.toString());
 
-  const mainUrl = `${baseUrl}/v1/store/tracks/?${params.toString()}`;
+  const mainUrl = `${baseUrl}/v1/store/tracks?${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseTrack>>(currentUrl, {
