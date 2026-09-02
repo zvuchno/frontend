@@ -1,7 +1,7 @@
 export type ArtistInfo = {
   image?: string;
   description: string;
-  content: string[];
+  content: string;
 };
 
 export type ApproveSectionProps = {

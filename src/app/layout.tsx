@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast";
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 
 import { Footer } from "@/widgets/layout/Footer";
@@ -12,6 +12,10 @@ import { SessionProviders } from "@/entities/user/providers/providers";
 
 import "./globals.scss";
 import { QueryProvider } from "./providers/QueryClientProvider";
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+};
 
 const featureMono = localFont({
   src: [

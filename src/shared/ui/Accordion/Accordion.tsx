@@ -1,31 +1,17 @@
 "use client";
 
+import { type ReactNode, useState } from "react";
+
 import clsx from "clsx";
-import { useState, type ReactNode } from "react";
-import type { AccordionProps } from "./Accordion.types";
+import { AnimatePresence, motion } from "framer-motion";
+
 import styles from "./Accordion.module.scss";
-import { motion, AnimatePresence } from "framer-motion";
+import type { AccordionProps } from "./Accordion.types";
 
 const defaultAccordionTrigger: ReactNode = (
-  <svg
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <circle
-      cx="20"
-      cy="20"
-      r="19.5"
-      transform="rotate(90 20 20)"
-      stroke="#100F0D"
-    />
-    <path
-      d="M28 16L19.5147 24.4853L11.0294 16"
-      stroke="#100F0D"
-      strokeLinecap="round"
-    />
+  <svg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <circle cx='20' cy='20' r='19.5' transform='rotate(90 20 20)' stroke='#100F0D' />
+    <path d='M28 16L19.5147 24.4853L11.0294 16' stroke='#100F0D' strokeLinecap='round' />
   </svg>
 );
 
@@ -43,27 +29,21 @@ export const Accordion = ({
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
-            key="accordion-content"
+            key='accordion-content'
             className={clsx(styles.content, contentClassName)}
             initial={{ opacity: 0, height: 0, overflow: "hidden" }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0, overflow: "hidden" }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            {content.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
+            <p>{content}</p>
           </motion.div>
         )}
       </AnimatePresence>
 
       <motion.div
         layout
-        className={clsx(
-          styles.trigger,
-          { [styles.trigger_rotated]: isOpen },
-          triggerClassName,
-        )}
+        className={clsx(styles.trigger, { [styles.trigger_rotated]: isOpen }, triggerClassName)}
         animate={{ rotate: isOpen ? 180 : 0 }}
         transition={{ duration: 0.3 }}
         onClick={() => setIsOpen(!isOpen)}

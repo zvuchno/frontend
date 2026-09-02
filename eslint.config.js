@@ -63,7 +63,13 @@ export default tseslint.config(
 
       ...reactHooks.configs.recommended.rules,
 
-      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+      "react-refresh/only-export-components": [
+        "warn",
+        {
+          allowConstantExport: true,
+          allowExportNames: ["metadata", "viewport", "generateMetadata", "generateViewport"],
+        },
+      ],
 
       "no-restricted-imports": [
         "error",
@@ -131,6 +137,14 @@ export default tseslint.config(
 
   {
     files: ["src/main.tsx", "src/app/main.tsx", "src/app/App.tsx", "src/App.tsx"],
+
+    rules: {
+      "no-restricted-imports": "off",
+    },
+  },
+
+  {
+    files: ["src/app/layout.tsx"],
 
     rules: {
       "no-restricted-imports": "off",
