@@ -148,7 +148,7 @@ export async function createAlbum(payload: TCreateAlbumRequest): Promise<TShowca
   const formData = new FormData();
   fillFormData(formData, payload);
 
-  const url = `${baseUrl}/v1/store/albums/`;
+  const url = `${baseUrl}/v1/store/albums`;
 
   const response = await authFetchClient<TShowcaseAlbumDetail>(url, {
     method: "POST",
@@ -161,7 +161,7 @@ export async function createAlbum(payload: TCreateAlbumRequest): Promise<TShowca
 }
 
 export async function createMerch(payload: TCreateMerchRequest): Promise<TShowcaseMerchDetail> {
-  const url = `${baseUrl}/v1/store/merch/`;
+  const url = `${baseUrl}/v1/store/merch`;
 
   const response = await authFetchClient<TShowcaseMerchDetail>(url, {
     method: "POST",
@@ -176,7 +176,7 @@ export async function createMerch(payload: TCreateMerchRequest): Promise<TShowca
 export async function createPromocode(
   payload: TCreatePromocodeRequest
 ): Promise<TShowcasePromocodeDetail> {
-  const url = `${baseUrl}/v1/store/promocodes/`;
+  const url = `${baseUrl}/v1/store/promocodes`;
 
   const response = await authFetchClient<TShowcasePromocodeDetail>(url, {
     method: "POST",
