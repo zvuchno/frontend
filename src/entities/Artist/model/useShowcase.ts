@@ -449,7 +449,7 @@ export function useTracksInfiniteQuery(type: string, album?: number) {
     },
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage?.next,
-    enabled: !!album && type === "album",
+    enabled: !!album && type === "album" || type === "single",
     staleTime: 10 * 10 * 1000,
     refetchOnWindowFocus: false,
   });
