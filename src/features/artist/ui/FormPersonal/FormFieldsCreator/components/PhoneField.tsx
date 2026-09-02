@@ -1,10 +1,26 @@
 import { type FieldError, type Noop, type RefCallBack } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 
+
+
 import clsx from "clsx";
+
+
 
 import styles from "../../artistFormPersonal.module.scss";
 import { type TArtistFormPersonalField } from "../../utils/types";
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const PhoneField = ({
   field,
@@ -42,6 +58,8 @@ export const PhoneField = ({
       fontFamily: "var(--font-feature-mono)",
       paddingInline: "32px",
       fontSize: "16px",
+      backgroundColor: "transparent",
+      color: "var(--color-text-primary)",
     }}
     id={`${field.row}.${field.column}`}
     disabled={field.disabled}
