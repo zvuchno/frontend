@@ -390,7 +390,7 @@ export async function updateTrackInfo(
 export async function directUploadTrack(file: File, data: TUploadTrackPayload) {
   const { album_id, ...payload } = data;
 
-  const url = `${baseUrl}/v1/store/albums/${album_id}/track-uploads/initiate/`;
+  const url = `${baseUrl}/v1/store/albums/${album_id}/track-uploads/initiate`;
 
   const response = await authFetchClient<TUploadTrackResponse>(url, {
     method: "POST",
@@ -420,14 +420,20 @@ export async function directUploadTrack(file: File, data: TUploadTrackPayload) {
     body: formData,
     headers,
   });
+
   if (!uploadRes.ok) throw new Error("Ошибка загрузки файла на транспорт");
-  const res = await authFetchClient<void>(response.upload.complete_url, {
+
+  const responseUrl = response.upload.complete_url;
+  const newUrl = new URL(responseUrl);
+  const pathAfterApi = newUrl.pathname.replace(/^\/api/, "");
+
+  const res = await authFetchClient<void>(`${baseUrl}${pathAfterApi}`, {
     method: "POST",
   });
 
   if (res)
     await authFetchClient<TUploadTrackResponse>(
-      `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete/`,
+      `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete`, 
       {
         method: "POST",
         body: JSON.stringify(payload),

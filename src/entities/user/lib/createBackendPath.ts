@@ -11,7 +11,7 @@ export const createBackendPath = (
     (prefix) => rawBackendPath === prefix || rawBackendPath.startsWith(`${prefix}/`)
   );
 
-  const backendPath = isCollectionPath && !rawBackendPath.includes('/track/')
+  const backendPath = isCollectionPath && !rawBackendPath.includes('/download-link/track/')
     ? rawBackendPath
     : rawBackendPath.endsWith('/') ? rawBackendPath : `${rawBackendPath}/`;
 
