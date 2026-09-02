@@ -3,11 +3,28 @@
 import { Controller, type FieldError, get, useFormContext } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 
+
+
 import clsx from "clsx";
+
+
 
 import { registerRules } from "../../../utils/validation";
 import { type FieldValues, type TProfileFormField } from "../types";
 import styles from "./InputPhone.module.scss";
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 type TIputPhoneProps = {
   field: TProfileFormField;
@@ -64,6 +81,8 @@ export const InputPhone = ({ field, disabled, className }: TIputPhoneProps) => {
               fontFamily: "var(--font-feature-mono)",
               fontSize: "16px",
               borderColor: fieldError ? "var(--color-primary-blue)" : "currentColor",
+              color: "var(--color-text-primary)",
+              backgroundColor: "transparent"
             }}
             id={`${field.row}.${field.column}`}
             disabled={disabled}

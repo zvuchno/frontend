@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { removeCookieLifetime } from "@/entities/user";
-import { refreshUserServerCookie } from "@/entities/user/server";
+import { coordinatedRefresh } from "@/entities/user/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const cookieStore = await cookies();
@@ -66,14 +66,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    const backendResponse = await refreshUserServerCookie(refreshCookie.name, refreshCookie.value);
+    const refreshResult = await coordinatedRefresh(refreshCookie.name, refreshCookie.value);
 
-    if (!backendResponse.ok) {
+    if (!refreshResult.ok) {
       return clearAuthCookies(401, "Session expired");
     }
 
     // --- нормализация zvuchno_refresh с учетом нажамал ли пользователь "Запомнить меня" ---
-    const rawCookies = backendResponse.headers.getSetCookie();
+    const rawCookies = refreshResult.setCookies;
     const finalCookies: string[] = [];
 
     let refreshValue: string | undefined = undefined;

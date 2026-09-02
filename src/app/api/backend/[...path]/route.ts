@@ -10,7 +10,7 @@ import {
   setBackendCookieHeader,
   setCsrfHeaders,
 } from "@/entities/user";
-import { refreshUserServerCookie } from "@/entities/user/server";
+import { coordinatedRefresh } from "@/entities/user/server";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -105,24 +105,19 @@ async function proxy(
 
     if (!refreshToken) return false;
 
-    try {
-      const refreshResponse = await refreshUserServerCookie("zvuchno_refresh", refreshToken);
+    const refreshResult = await coordinatedRefresh("zvuchno_refresh", refreshToken);
 
-      if (!refreshResponse.ok) return false;
+    if (!refreshResult.ok) return false;
 
-      for (const setCookie of refreshResponse.headers.getSetCookie()) {
-        refreshSetCookies.push(setCookie);
+    for (const setCookie of refreshResult.setCookies) {
+      refreshSetCookies.push(setCookie);
 
-        const pair = getCookiePair(setCookie);
-        if (pair) backendCookies.set(pair[0], pair[1]);
-      }
-
-      didRefreshInBff = true;
-      return backendCookies.has("zvuchno_access");
-    } catch (error) {
-      console.error("BFF refresh failed", error);
-      return false;
+      const pair = getCookiePair(setCookie);
+      if (pair) backendCookies.set(pair[0], pair[1]);
     }
+
+    didRefreshInBff = true;
+    return backendCookies.has("zvuchno_access");
   };
 
   if (

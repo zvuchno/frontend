@@ -1,9 +1,18 @@
+let refreshPromise: Promise<boolean> | null = null;
+
 // route handler для Next-приложения для вызова через него refreshUserServerCookie
-export async function refreshSession(): Promise<boolean> {
-  const response = await fetch("/api/auth/refresh", {
+export function refreshSession(): Promise<boolean> {
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = fetch("/api/auth/refresh", {
     method: "POST",
     credentials: "same-origin",
-  });
+  })
+    .then((response) => response.ok)
+    .catch(() => false)
+    .finally(() => {
+      refreshPromise = null;
+    });
 
-  return response.ok;
+  return refreshPromise;
 }

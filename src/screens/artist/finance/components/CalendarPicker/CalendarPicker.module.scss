@@ -154,6 +154,8 @@
   box-sizing: border-box;
   cursor: pointer !important;
   caret-color: transparent !important;
+  background-color: transparent;
+  color: var(--color-text-primary);
 
   &:focus-visible {
     outline: none !important;
