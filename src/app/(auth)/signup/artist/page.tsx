@@ -1,16 +1,18 @@
-import { TProfileType } from "@/entities/user";
-import { ArtistSignup } from "@/screens/auth";
 import { Suspense } from "react";
 
-export default async function ArtistSignupPage({ 
-  searchParams 
+import { ArtistSignup } from "@/screens/auth";
+
+import { type TProfileType } from "@/entities/user";
+
+export default async function ArtistSignupPage({
+  searchParams,
 }: {
-  searchParams: Promise<{profileType: TProfileType}>
+  searchParams: Promise<{ profileType: TProfileType }>;
 }) {
   const { profileType } = await searchParams;
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
-      <ArtistSignup profileType={profileType}/>
+      <ArtistSignup profileType={profileType} />
     </Suspense>
-  )
+  );
 }

@@ -22,6 +22,7 @@ export async function proxy(request: NextRequest) {
     "/reset-password-confirm",
     "/signin",
     "/signup",
+    "/role"
   ];
 
   const isProtectedRoute = protectedRouts.some((route) => pathname.startsWith(route));
