@@ -53,6 +53,10 @@
     width: 100%;
     max-height: calc(100dvh - 80px);
     overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: 0;
+    scrollbar-color: transparent transparent;
 
     &::-webkit-scrollbar {
       width: 0;

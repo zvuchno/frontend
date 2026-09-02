@@ -268,7 +268,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
       }
     } catch (e) {
       console.error(e);
-      toast.error(`Произошла ошибка: ${(e as Error)?.message ?? 'Неизвестная ошибка'}`);
+      //toast.error(`Произошла ошибка: ${(e as Error)?.message ?? 'Неизвестная ошибка'}`);
     }
   };
 

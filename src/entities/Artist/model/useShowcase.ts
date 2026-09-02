@@ -187,8 +187,11 @@ export function useUpdateAlbum() {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
       toast.success("Релиз обновлён");
     },
-    onError: () => {
-      toast.error("Ошибка обновления релиза");
+    onError: (error) => {
+      const errorMessage = error.message.includes("legal_profile_verification") 
+        ? "Ошибка: верифицируйте аккаунт" 
+        : "Не удалось обновить релиз";
+      toast.error(errorMessage);
     },
   });
 }
@@ -204,8 +207,11 @@ export function useUpdateMerch() {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
       toast.success("Мерч обновлён");
     },
-    onError: () => {
-      toast.error("Ошибка обновления мерча");
+    onError: (error) => {
+      const errorMessage = error.message.includes("legal_profile_verification") 
+        ? "Ошибка: верифицируйте аккаунт" 
+        : "Не удалось обновить мерч";
+      toast.error(errorMessage);
     },
   });
 }
@@ -294,8 +300,10 @@ export function useCreateAlbum() {
       toast.success("Релиз создан");
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : "Не удалось создать релиз";
-      toast.error(message);
+      const errorMessage = error.message.includes("legal_profile_verification") 
+        ? "Ошибка: верифицируйте аккаунт" 
+        : "Не удалось создать релиз";
+      toast.error(errorMessage);
     },
   });
 }
@@ -310,8 +318,10 @@ export function useCreateMerch() {
       toast.success("Мерч создан");
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : "Не удалось создать мерч";
-      toast.error(message);
+      const errorMessage = error.message.includes("legal_profile_verification") 
+        ? "Ошибка: верифицируйте аккаунт" 
+        : "Не удалось создать мерч";
+      toast.error(errorMessage);
     },
   });
 }
@@ -382,7 +392,7 @@ export function useAddImage() {
       toast.success("Изображение добавлено")
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : 'Не удалось добавить изображение';
+      const message = error.message ?? "Не удалось добавить изображение";
       toast.error(message)
     },
   });
@@ -397,6 +407,9 @@ export function useUpdateImage() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
     },
+    onError: () => {
+      toast.error("Ошибка обновления изображений")
+    }
   });
 }
 
@@ -409,6 +422,9 @@ export function useDeleteImage() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
     },
+    onError: () => {
+      toast.error("Не удалось удалить изображение")
+    }
   });
 }
 
