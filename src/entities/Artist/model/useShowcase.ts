@@ -349,6 +349,7 @@ export function useDetailInfo(type: string, id?: number) {
       return type === "merch" ? getDetailMerch({ id }) : getDetailAlbum({ id });
     },
     enabled: !!id,
+    staleTime: 0,
   });
 }
 

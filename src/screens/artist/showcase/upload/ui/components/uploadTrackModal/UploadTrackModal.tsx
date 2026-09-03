@@ -275,7 +275,7 @@ export const UploadTrackModal = ({
                 {...register('price', { 
                   required: false,
                   min: { value: 0, message: 'Цена не может быть отрицательной' },
-                  max: 99999999,
+                  max: { value: 99999999, message: 'Цена не может быть больше 99999999' },
                   validate: (val) => {
                     const str = String(val);
                     const parts = str.split('.');

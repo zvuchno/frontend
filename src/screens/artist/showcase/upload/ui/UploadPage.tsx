@@ -203,6 +203,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
     if (isSubmitting) return;
     const payload = createProductPayload(data, productType, profileType, currentArtistId, action, hasProperty);
     const hasImagesToUpload = !!data.mainImage || (Array.isArray(data.additionalImages) && data.additionalImages.length > 0);
+    const hasNewMainImage = deletedImageIds.length > 0 || (!initialValues.mainImage && data.mainImage);
 
     // при сохранении мерча: сначала создавать сам мерч, а потом изображения
 
@@ -240,7 +241,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           router.replace('/artist/showcase')
           break;
         case 'save':
-            if (!isDirty && deletedImageIds.length === 0) {
+            if (!isDirty && deletedImageIds.length === 0 && !hasImagesToUpload) {
               router.replace('/artist/showcase');
               break;
             }
@@ -252,17 +253,18 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
             if (productType === "merch" && (data.mainImage || data.additionalImages)) {
               await uploadMerchImages(currentProductId!, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
             }
-            
+
             const newData = mapDirtyFieldsToPayload(dirtyFields, data, hasProperty);
-            if (productType === 'merch') {
+            if (productType === 'merch' && isDirty) {
               await updateMerchMutation.mutateAsync({id: currentProductId!, payload: newData});
               
-            } else {
+            } else if (productType === "album" || productType === "single") {
               await updateAlbumMutation.mutateAsync({ id: currentProductId!, payload: {
                 ...newData,
-                ...(deletedImageIds.length > 0 && { cover_image: data.mainImage }),
+                ...(hasNewMainImage && { cover_image: data.mainImage }),
               }});
             }
+            
             
             router.replace('/artist/showcase')
           break;

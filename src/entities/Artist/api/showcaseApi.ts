@@ -285,7 +285,7 @@ export async function addImage(data: TAddImageRequest): Promise<TAddImageRespons
   formData.append("image", payload.image);
   formData.append("is_main", String(payload.is_main));
 
-  const url = `${baseUrl}/v1/store/merch/${id}/images/`;
+  const url = `${baseUrl}/v1/store/merch/${id}/images`;
 
   const response = await authFetchClient<TAddImageResponse>(url, {
     method: "POST",
@@ -304,7 +304,7 @@ export async function updateImage(data: TUpdateImageRequest): Promise<TAddImageR
   formData.append("image", payload.image);
   formData.append("is_main", String(payload.is_main));
 
-  const url = `${baseUrl}/v1/store/merch/${id}/images/${payload.image_id}/`;
+  const url = `${baseUrl}/v1/store/merch/${id}/images/${payload.image_id}`;
 
   const response = await authFetchClient<TAddImageResponse>(url, {
     method: "PATCH",
@@ -320,7 +320,7 @@ export async function updateImage(data: TUpdateImageRequest): Promise<TAddImageR
 export async function deleteImage(data: TDeleteImageRequest): Promise<void> {
   const { id, image_id } = data;
 
-  const url = `${baseUrl}/v1/store/merch/${id}/images/${image_id}/`;
+  const url = `${baseUrl}/v1/store/merch/${id}/images/${image_id}`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",
