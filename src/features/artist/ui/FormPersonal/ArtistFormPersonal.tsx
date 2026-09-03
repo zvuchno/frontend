@@ -19,6 +19,19 @@ import { PaymentFieldset } from "./components/PaymentFieldset/PaymentFieldset";
 import { PersonalFieldset } from "./components/PersonalFieldset/PersonalFieldset";
 import type { FieldValues, TArtistFormPersonalProps } from "./utils/types";
 
+const isValidRecipientType = (
+  value: FieldValues["legal_profile"]["recipient_type"] | undefined
+): boolean => Boolean(value && value !== "individual_temporary");
+
+const formatPhoneForApi = (phone: string | undefined): string => (phone ? `+${phone}` : "");
+
+const isLegalEntity = (
+  ...values: Array<FieldValues["legal_profile"]["recipient_type"] | undefined>
+): boolean => values.includes("legal_entity");
+
+const shouldDisableSubmit = (isValid: boolean, isOnChange: boolean, hasErrors: boolean): boolean =>
+  !isValid || !isOnChange || hasErrors;
+
 export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   const { mutate } = useUpdateArtistLegalData();
 
@@ -28,8 +41,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   const artistTypeFromStore = useArtistLegalDataStore((state) => state.artistLegalData)
     ?.legal_profile?.recipient_type;
 
-  const isCompany =
-    artistTypeFromServer === "legal_entity" || artistTypeFromStore === "legal_entity";
+  const isCompany = isLegalEntity(artistTypeFromServer, artistTypeFromStore);
 
   const methods = useFormContext<FieldValues>();
 
@@ -49,14 +61,18 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
     }
   }, [values, trigger]);
 
-  const recipienType = watch("legal_profile.recipient_type");
+  const recipientType = watch("legal_profile.recipient_type");
 
   useEffect(() => {
-    if (!recipienType)
+    if (!isValidRecipientType(recipientType)) {
       setError("legal_profile.recipient_type", {
+        type: "required",
         message: "Выберите из списка",
       });
-  }, [recipienType, setError, clearErrors]);
+    } else {
+      clearErrors("legal_profile.recipient_type");
+    }
+  }, [recipientType, setError, clearErrors]);
 
   const onHandleSubmit = (data: FieldValues) => {
     const currentRecipientType = methods.getValues("legal_profile.recipient_type") ?? null;
@@ -64,7 +80,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
       ...data,
       legal_profile: {
         ...data.legal_profile,
-        phone: `+${data.legal_profile?.phone}`,
+        phone: formatPhoneForApi(data.legal_profile?.phone),
         recipient_type: currentRecipientType,
       },
     };
@@ -98,7 +114,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
         <ButtonUI
           size='standart'
           variant='primary'
-          disabled={!isValid || !isOnChange || (errors && Object.keys(errors).length > 0)}
+          disabled={shouldDisableSubmit(isValid, isOnChange, Object.keys(errors).length > 0)}
           type='submit'
         >
           Сохранить

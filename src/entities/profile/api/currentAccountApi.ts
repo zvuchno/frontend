@@ -14,10 +14,10 @@ import type {
 
 const baseURL = "/api/backend";
 const CURRENT_ACCOUNT_PATH = "/v1/auth/account/me";
-const CURRENT_ACCOUNT_CHANGE_PASSWORD_PATH = `${CURRENT_ACCOUNT_PATH}/change-password/`;
-const CURRENT_ACCOUNT_CHANGE_PHONE_PATH = `${CURRENT_ACCOUNT_PATH}/change-phone/`;
-const CURRENT_ACCOUNT_CHANGE_USERNAME_PATH = `${CURRENT_ACCOUNT_PATH}/change-username/`;
-const CURRENT_ACCOUNT_SET_PASSWORD_PATH = `${CURRENT_ACCOUNT_PATH}/set-password/`;
+const CURRENT_ACCOUNT_CHANGE_PASSWORD_PATH = `${CURRENT_ACCOUNT_PATH}/change-password`;
+const CURRENT_ACCOUNT_CHANGE_PHONE_PATH = `${CURRENT_ACCOUNT_PATH}/change-phone`;
+const CURRENT_ACCOUNT_CHANGE_USERNAME_PATH = `${CURRENT_ACCOUNT_PATH}/change-username`;
+const CURRENT_ACCOUNT_SET_PASSWORD_PATH = `${CURRENT_ACCOUNT_PATH}/set-password`;
 
 export async function getCurrentAccount(): Promise<CurrentAccountResponse> {
   const response = await authFetchClient<CurrentAccountResponse>(

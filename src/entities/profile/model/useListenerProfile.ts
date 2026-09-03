@@ -126,7 +126,8 @@ export function useUpdateAccountPhone() {
 
   return useMutation({
     mutationFn: async (phone: string) => {
-      return await updateAccountPhone({ phone });
+      const phoneToApi = `+${phone}`;
+      return await updateAccountPhone({ phone: phoneToApi });
     },
     onSuccess: (phoneResponse) => {
       queryClient.setQueryData<TListenerProfile>(["listenerProfile"], (oldData) => {
