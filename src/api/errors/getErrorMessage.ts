@@ -12,7 +12,7 @@ export const getErrorMessage = (data: unknown, fallback: string): string => {
     "token", 
     "uid", 
     "is_published",
-
+    "price",
   ]) {
     const value = data[key];
 

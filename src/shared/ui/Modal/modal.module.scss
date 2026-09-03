@@ -55,7 +55,7 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    scrollbar-width: 0;
+    scrollbar-width: none;
     scrollbar-color: transparent transparent;
 
     &::-webkit-scrollbar {

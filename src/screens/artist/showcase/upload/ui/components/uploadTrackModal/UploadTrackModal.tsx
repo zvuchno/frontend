@@ -143,7 +143,7 @@ export const UploadTrackModal = ({
               content_type: data.track.type,
               name: data.name,
               description: data.description,
-              price: data.price?.toString(),
+              ...(data.price ? { price: data.price.toString() } : {}),
               allow_overpay: data.allowHigherPrice,
             }
             await uploadTrackMutation.mutateAsync({file: data.track, data: payload});
@@ -274,7 +274,6 @@ export const UploadTrackModal = ({
                 message={errors.price?.message}
                 {...register('price', { 
                   required: false,
-                  valueAsNumber: true,
                   min: { value: 0, message: 'Цена не может быть отрицательной' },
                   max: 99999999,
                   validate: (val) => {

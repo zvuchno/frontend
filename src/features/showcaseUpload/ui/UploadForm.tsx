@@ -182,13 +182,26 @@ export const UploadForm = ({
 
         {productType !== "merch" ? (
           <CustomInput
-            id='date'
+            id='releaseDate'
             type='date'
             label='Дата релиза'
             inputSize='large'
-            {...register("releaseDate")}
+            {...register("releaseDate", {
+              validate: {
+                notInFuture: (value) => {
+                  if (!value) return true; 
+                  const selectedDate = new Date(value);
+                  const todayStart = new Date();
+                  todayStart.setHours(0, 0, 0, 0);
+
+                  return selectedDate <= todayStart || "Дата не может быть в будущем";
+                },
+              },
+            })}
             labelClassName={s.label}
             inputClassName={s.input}
+            error={!!errors.releaseDate}
+            message={errors.releaseDate?.message}
           />
         ) : (
           <Controller
@@ -253,7 +266,6 @@ export const UploadForm = ({
           inputSize='large'
           {...register("price", {
             required: "Цена обязательна",
-            valueAsNumber: true,
             min: { value: 0, message: "Цена не может быть отрицательной" },
             max: 99999999,
             validate: (val) => {
