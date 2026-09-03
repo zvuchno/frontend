@@ -44,7 +44,7 @@ export type SetAccountPasswordPayload = {
 
 export type SetAccountPasswordResponse = void;
 
-export type UpdateAccountPasswordResponse = void;
+export type UpdateAccountPasswordResponse = { detail: string };
 
 export type UpdateAccountUsernamePayload = {
   username?: string;

@@ -1,6 +1,9 @@
+import toast from "react-hot-toast";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Session } from "next-auth";
 import { useSession } from "next-auth/react";
+import type Error from "next/error";
 
 import { type UserDataProps, useUserStore } from "@/entities/user";
 
@@ -17,6 +20,7 @@ import type {
   SetAccountPasswordPayload,
   TListenerProfile,
   UpdateAccountPasswordPayload,
+  UpdateAccountPasswordResponse,
   UpdateAccountUsernamePayload,
 } from "./types";
 
@@ -152,9 +156,14 @@ export function useUpdateAccountPhone() {
 
 // 4. Хук для обновления пароля
 export function useUpdateAccountPassword() {
-  return useMutation({
-    mutationFn: async (payload: UpdateAccountPasswordPayload) => {
+  return useMutation<UpdateAccountPasswordResponse | null, Error, UpdateAccountPasswordPayload>({
+    mutationFn: async (
+      payload: UpdateAccountPasswordPayload
+    ): Promise<UpdateAccountPasswordResponse | null> => {
       return await updateAccountPassword(payload);
+    },
+    onSuccess: (data) => {
+      if (data) toast.success(data.detail);
     },
   });
 }

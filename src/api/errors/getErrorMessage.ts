@@ -5,14 +5,15 @@ export const getErrorMessage = (data: unknown, fallback: string): string => {
   if (!isRecord(data)) return fallback;
 
   for (const key of [
-    "message", 
-    "detail", 
-    "phone", 
-    "email", 
-    "token", 
-    "uid", 
+    "message",
+    "detail",
+    "phone",
+    "email",
+    "token",
+    "uid",
     "is_published",
     "price",
+    "code",
   ]) {
     const value = data[key];
 
@@ -21,8 +22,8 @@ export const getErrorMessage = (data: unknown, fallback: string): string => {
     }
 
     if (Array.isArray(value) && value.length > 0) {
-      const firstItem = value[0];
-      if (typeof firstItem === 'string' && firstItem) {
+      const firstItem = value[0] as unknown;
+      if (typeof firstItem === "string" && firstItem) {
         return firstItem;
       }
     }
