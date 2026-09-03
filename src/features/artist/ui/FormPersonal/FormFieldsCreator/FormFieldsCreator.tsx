@@ -42,6 +42,8 @@ export const createFormField = (
             const showError = !disabled;
             const currentFieldError = get(errors, name) as FieldError | undefined;
             const dateValue = field.type === "date" ? parseServerDate(value) : null;
+            const phoneValue =
+              field.type === "tel" && typeof value === "string" ? value.replace(/\D/g, "") : "";
             return (
               <div
                 style={{ position: "relative" }}
@@ -78,7 +80,7 @@ export const createFormField = (
                   <PhoneField
                     field={field}
                     fieldError={fieldError}
-                    value={(value as string) || ""}
+                    value={phoneValue}
                     onChange={onChange}
                     ref={ref}
                     onBlur={onBlur}

@@ -16,6 +16,12 @@ import { Loader } from "@/shared/ui";
 
 import styles from "./ArtistData.module.scss";
 
+const recipientTypeRules = {
+  required: "Выберите из списка",
+  validate: (value: FieldValues["legal_profile"]["recipient_type"]) =>
+    value !== "individual_temporary" || "Выберите из списка",
+};
+
 export const ArtistData = () => {
   const { status } = useSession();
   const { data, isLoading } = useGetArtistLegalData();
@@ -45,7 +51,10 @@ export const ArtistData = () => {
               if (type) methods.setValue("legal_profile.recipient_type", type);
             }}
           />
-          <input type='hidden' {...methods.register("legal_profile.recipient_type")} />
+          <input
+            type='hidden'
+            {...methods.register("legal_profile.recipient_type", recipientTypeRules)}
+          />
         </FormProvider>
       </div>
     );
@@ -53,6 +62,10 @@ export const ArtistData = () => {
   return (
     <FormProvider {...methods}>
       <ArtistFormPersonal values={data} />
+      <input
+        type='hidden'
+        {...methods.register("legal_profile.recipient_type", recipientTypeRules)}
+      />
       <DevTool control={methods.control} />
     </FormProvider>
   );
