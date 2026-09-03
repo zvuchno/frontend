@@ -185,11 +185,11 @@ export function useUpdateAlbum() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      toast.success("Релиз обновлён");
+      //toast.success("Релиз обновлён");
     },
     onError: (error) => {
       const errorMessage = error.message.includes("legal_profile_verification") 
-        ? "Ошибка: верифицируйте аккаунт" 
+        ? "Ошибка: выполнены не все условия для начала продаж" 
         : "Не удалось обновить релиз";
       toast.error(errorMessage);
     },
@@ -209,7 +209,7 @@ export function useUpdateMerch() {
     },
     onError: (error) => {
       const errorMessage = error.message.includes("legal_profile_verification") 
-        ? "Ошибка: верифицируйте аккаунт" 
+        ? "Ошибка: выполнены не все условия для начала продаж" 
         : "Не удалось обновить мерч";
       toast.error(errorMessage);
     },
@@ -297,11 +297,11 @@ export function useCreateAlbum() {
     mutationFn: (payload: TCreateAlbumRequest) => createAlbum(payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      toast.success("Релиз создан");
+      //toast.success("Релиз создан");
     },
     onError: (error) => {
       const errorMessage = error.message.includes("legal_profile_verification") 
-        ? "Ошибка: верифицируйте аккаунт" 
+        ? "Ошибка: выполнены не все условия для начала продаж" 
         : "Не удалось создать релиз";
       toast.error(errorMessage);
     },
@@ -319,7 +319,7 @@ export function useCreateMerch() {
     },
     onError: (error) => {
       const errorMessage = error.message.includes("legal_profile_verification") 
-        ? "Ошибка: верифицируйте аккаунт" 
+        ? "Ошибка: выполнены не все условия для начала продаж" 
         : "Не удалось создать мерч";
       toast.error(errorMessage);
     },
@@ -449,8 +449,8 @@ export function useTracksInfiniteQuery(type: string, album?: number) {
     },
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage?.next,
-    enabled: !!album && type === "album" || type === "single",
-    staleTime: 10 * 10 * 1000,
+    enabled: !!album && type !== "merch",
+    staleTime: 0,
     refetchOnWindowFocus: false,
   });
 }
@@ -511,7 +511,7 @@ export function useUploadTrack(album: number) {
       toast.success("Трек загружен");
     },
     onError: (error) => {
-      toast.error(`Не удалось загрузить трек: ${error.message}`);
+      toast.error(error.message);
     },
   });
 }

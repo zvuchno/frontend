@@ -124,6 +124,8 @@
   list-style: none;
   max-height: 700px;
   overflow-y: auto;
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
 
   &::-webkit-scrollbar {
     width: 0;
