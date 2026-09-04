@@ -5,6 +5,7 @@ type TShowcaseItem = TShowcaseAlbum | TShowcaseMerch | TShowcasePromocode;
 export interface ShowcaseCardProps {
   item: TShowcaseItem;
   profileType: "artist" | "label" | undefined;
+  columnsCount?: number;
   onToggleAlbumVisibility: (isChecked: boolean, id: number) => Promise<void> | void;
   onToggleMerchVisibility: (isChecked: boolean, id: number) => Promise<void> | void;
   onTogglePromoVisibility: (isChecked: boolean, id: number) => Promise<void> | void;

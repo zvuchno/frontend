@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import clsx from "clsx";
 import Link from "next/link";
 
@@ -47,6 +45,7 @@ const formatDateRangeIntl = (startAt?: string | null, endAt?: string | null) => 
 export const ShowcaseCard = ({
   item,
   profileType,
+  columnsCount,
   onToggleAlbumVisibility,
   onToggleMerchVisibility,
   onTogglePromoVisibility,
@@ -55,11 +54,10 @@ export const ShowcaseCard = ({
   onDeletePromocode,
   onEditPromo,
 }: ShowcaseCardProps) => {
-  //const [columnsCount, setColumnsCount] = useState<number>();
   const id = item.id;
-  // const productCardClassName = clsx(s.card, {
-  //   [s[`columns-${columnsCount}`]]: columnsCount,
-  // });
+  /*const productCardClassName = clsx(s.card, {
+    [s[`columns-${columnsCount}`]]: columnsCount,
+  });*/
 
   const handleToggleVisibility = async (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
     const isCheked = e.target.checked;
@@ -81,25 +79,6 @@ export const ShowcaseCard = ({
   const handleEditPromoClick = () => {
     onEditPromo(id);
   };
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     const width = window.innerWidth;
-  //     if (width < 476) {
-  //       setColumnsCount(3);
-  //     } else if (width < 1025) {
-  //       setColumnsCount(4);
-  //     } else {
-  //       setColumnsCount(7);
-  //     }
-  //   };
-
-  //   handleResize();
-
-  //   window.addEventListener("resize", handleResize);
-
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
 
   const renderActions = (type: string, editType: string, isChecked?: boolean) => {
     const params = new URLSearchParams();
@@ -123,7 +102,7 @@ export const ShowcaseCard = ({
             checked={isChecked}
             onChange={(e) => void handleToggleVisibility(e, type)}
           />
-          <span className={s.checkboxMark}></span>
+          <span className={s.checkboxMark} title='Изменить видимость'></span>
         </label>
         <div className={s.buttons}>
           <Link
@@ -155,7 +134,11 @@ export const ShowcaseCard = ({
 
   if (isAlbum(item)) {
     return (
-      <div className={s.card}>
+      <div
+        className={clsx(s.card, {
+          [s[`columns-${columnsCount}`]]: columnsCount,
+        })}
+      >
         <div className={s.imgContainer}>
           {item.cover_image && <img src={item.cover_image} alt={item.name} loading='lazy' />}
         </div>
@@ -175,7 +158,11 @@ export const ShowcaseCard = ({
 
   if (isMerch(item)) {
     return (
-      <div className={s.card}>
+      <div
+        className={clsx(s.card, {
+          [s[`columns-${columnsCount}`]]: columnsCount,
+        })}
+      >
         <div className={s.imgContainer}>
           {item.main_image && <img src={item.main_image} alt={item.name} loading='lazy' />}
         </div>
@@ -208,7 +195,11 @@ export const ShowcaseCard = ({
 
     const period = formatDateRangeIntl(item?.start_at, item?.end_at);
     return (
-      <div className={s.card}>
+      <div
+        className={clsx(s.card, {
+          [s[`columns-${columnsCount}`]]: columnsCount,
+        })}
+      >
         <Text className={clsx(s.text, s.title)}>{item.code}</Text>
         {profileType === "label" && (
           <Text className={clsx(s.text, s.title)}>{item.artist_name}</Text>
