@@ -6,7 +6,7 @@ import {
   toProxyResponse,
 } from "../utils";
 
-const CURRENT_ACCOUNT_PATH = "/v1/auth/account/me/";
+const CURRENT_ACCOUNT_PATH = "/v1/auth/account/me";
 
 export async function GET(request: Request) {
   try {

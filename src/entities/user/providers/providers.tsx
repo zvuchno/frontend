@@ -48,7 +48,7 @@ const SessionWatcher = ({ children }: { children: React.ReactNode }) => {
       if (checkedBackendSessionForUser.current !== userId) {
         checkedBackendSessionForUser.current = userId;
 
-        void fetch("/api/backend/v1/auth/account/me/", {
+        void fetch("/api/backend/v1/auth/account/me", {
           credentials: "same-origin",
           cache: "no-store",
         })

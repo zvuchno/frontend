@@ -1,4 +1,4 @@
-import { authFetchServer } from "@/api/authFetchFromServer/authFetchServer";
+import { publicFetchServer } from "@/api/publicFetchFromServer/publicFetchServer";
 
 import { type TArtistsListRequest, type TArtistsListResponse } from "./types";
 
@@ -35,7 +35,7 @@ export async function getArtistsListServer({
   const url = `${baseUrl}/v1/artists/?${params.toString()}`;
 
   try {
-    const response = await authFetchServer<TArtistsListResponse>(url, {
+    const response = await publicFetchServer<TArtistsListResponse>(url, {
       method: "GET",
     });
 

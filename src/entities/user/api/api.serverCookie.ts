@@ -31,7 +31,7 @@ export const logInUserServerCookie = async (
 };
 
 export async function getCurrentUserServer(accessToken: string): Promise<TCurrentUserResponse> {
-  const response = await fetch(`${BASE_URL}/v1/auth/account/me/`, {
+  const response = await fetch(`${BASE_URL}/v1/auth/account/me`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

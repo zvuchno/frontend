@@ -1,4 +1,4 @@
-import { authFetchServer } from "@/api/authFetchFromServer/authFetchServer";
+import { publicFetchServer } from "@/api/publicFetchFromServer/publicFetchServer";
 
 import { type TCatalogListRequest, type TCatalogListResponse } from "./types";
 
@@ -61,7 +61,7 @@ export async function getCatalogListServer({
   const url = `${baseUrl}/v1/store/catalog/?${params.toString()}`;
 
   try {
-    const response = await authFetchServer<TCatalogListResponse>(url, {
+    const response = await publicFetchServer<TCatalogListResponse>(url, {
       method: "GET",
     });
     return response;

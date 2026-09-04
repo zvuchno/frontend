@@ -6,11 +6,16 @@ import { HomePage } from "@/screens/home";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [artistsRes, albumsRes, merchRes] = await Promise.all([
+  const [artistsResult, albumsResult, merchResult] = await Promise.allSettled([
     getArtistsListServer({ limit: "3" }),
     getCatalogListServer({ type: "album", limit: "4" }),
     getCatalogListServer({ type: "merch", limit: "4" }),
   ]);
+
+  const artistsRes = artistsResult.status === "fulfilled" ? artistsResult.value : null;
+  const albumsRes = albumsResult.status === "fulfilled" ? albumsResult.value : null;
+  const merchRes = merchResult.status === "fulfilled" ? merchResult.value : null;
+
   return (
     <HomePage
       artists={artistsRes?.results ?? []}
