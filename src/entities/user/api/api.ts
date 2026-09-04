@@ -10,7 +10,7 @@ import {
   type TVerifyEmailRequest,
 } from "../model/types";
 
-const BASE_URL = "/api/backend";
+const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => {
   const endPoint = BASE_URL + "/v1" + props.url;
@@ -27,7 +27,7 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
     : await res.text();
 
   if (!res.ok) {
-    throw new Error(getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`));
+    throw new Error(getErrorMessage(data, props.defaultMessage ?? `HTTP ${res.status} ${res.statusText}`));
   }
 
   return data as T;

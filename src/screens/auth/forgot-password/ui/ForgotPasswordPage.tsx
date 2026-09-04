@@ -1,28 +1,42 @@
 "use client";
 
-import { ButtonUI, CustomInput, Text, Title } from "@/shared/ui";
+import { ButtonUI, CustomInput, LoadingButton, Text, Title } from "@/shared/ui";
 import { AuthModal } from "@/widgets/AuthModal"
 import { useState } from "react";
 import s from "./ForgotPasswordPage.module.scss";
 import clsx from "clsx";
 import { resetPassword } from "@/entities/user";
 import { validateForm } from "@/widgets/auth/config/validateForm";
+import { validateField } from "@/widgets/auth/config/validateField";
 
 export const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | undefined>(undefined);
+  const [fieldError, setFieldError] = useState<string | undefined>(undefined);
+  const [formError, setFormError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<boolean>(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    setFieldError(undefined);
+
+    const error = validateField<{ email: string }>(
+      "email",
+      value,
+    );
+    setFieldError(error);
+  };
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(undefined);
+    setFormError(undefined);
 
     const validation = validateForm<{ email: string }>({ email: email });
     
     if (!validation.isValid) {
-      setError(validation.errorMessage);
+      setFormError(validation.errorMessage);
       setIsLoading(false);
       return;
     }
@@ -36,7 +50,7 @@ export const ForgotPasswordPage = () => {
 
     } catch (error) {
       setSuccess(false);
-      setError(error instanceof Error ? error.message : 'Неизвестная оибка');
+      setFormError(error instanceof Error ? error.message : 'Неизвестная оибка');
 
     } finally {
       setIsLoading(false);
@@ -47,7 +61,7 @@ export const ForgotPasswordPage = () => {
     return (
       <AuthModal>
         <div className={s.container}>
-          <Title Tag="h2" className={s.title}>Проверьте вашу почту!</Title>
+          <Title Tag="h2" className={clsx(s.text, s.title)}>Проверьте вашу почту!</Title>
           <Text Tag="p" className={s.text}>
             На ваш email{' '}
             <span className={clsx(s.text, s.accent)}>
@@ -62,7 +76,7 @@ export const ForgotPasswordPage = () => {
   return (
     <AuthModal>
       <div className={s.container}>
-        <Title className={s.title} Tag="h2">
+        <Title className={clsx(s.text, s.title)} Tag="h2">
           Восстановление пароля
         </Title>
         <form 
@@ -76,17 +90,19 @@ export const ForgotPasswordPage = () => {
             id="email" 
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleChange}
             label="Введите ваш email" 
             required 
             placeholder="Введите вашу почту"
+            error={!!fieldError}
+            message={fieldError}
           />
-          {error && (
+          {formError && (
             <Text
               variant="normal"
               style={{ color: "#dc2626", textAlign: "center" }}
             >
-              {error}
+              {formError}
             </Text>
           )}
           <ButtonUI 
@@ -94,7 +110,7 @@ export const ForgotPasswordPage = () => {
             variant="primary"
             disabled={isLoading}
           >
-            {isLoading ? 'Загрузка...' : 'Восстановить'}
+            {isLoading ? <LoadingButton /> : "Восстановить"}
           </ButtonUI>
         </form>
       </div>
