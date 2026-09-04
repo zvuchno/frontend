@@ -19,18 +19,14 @@ import { PaymentFieldset } from "./components/PaymentFieldset/PaymentFieldset";
 import { PersonalFieldset } from "./components/PersonalFieldset/PersonalFieldset";
 import type { FieldValues, TArtistFormPersonalProps } from "./utils/types";
 
-const isValidRecipientType = (
-  value: FieldValues["legal_profile"]["recipient_type"] | undefined
-): boolean => Boolean(value && value !== "individual_temporary");
-
 const formatPhoneForApi = (phone: string | undefined): string => (phone ? `+${phone}` : "");
 
 const isLegalEntity = (
   ...values: Array<FieldValues["legal_profile"]["recipient_type"] | undefined>
 ): boolean => values.includes("legal_entity");
 
-const shouldDisableSubmit = (isValid: boolean, isOnChange: boolean, hasErrors: boolean): boolean =>
-  !isValid || !isOnChange || hasErrors;
+const getEditButtonLabel = (isEditing: boolean): string =>
+  isEditing ? "Отменить (без сохранения)" : "Изменить";
 
 export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   const { mutate } = useUpdateArtistLegalData();
@@ -50,9 +46,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
     handleSubmit,
     reset,
     watch,
-    setError,
-    clearErrors,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = methods;
 
   useEffect(() => {
@@ -64,15 +58,13 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   const recipientType = watch("legal_profile.recipient_type");
 
   useEffect(() => {
-    if (!isValidRecipientType(recipientType)) {
-      setError("legal_profile.recipient_type", {
-        type: "required",
-        message: "Выберите из списка",
-      });
-    } else {
-      clearErrors("legal_profile.recipient_type");
-    }
-  }, [recipientType, setError, clearErrors]);
+    void trigger("legal_profile.recipient_type");
+  }, [recipientType, trigger]);
+
+  const handleStartEditing = () => {
+    setIsOnChange(true);
+    void trigger();
+  };
 
   const onHandleSubmit = (data: FieldValues) => {
     const currentRecipientType = methods.getValues("legal_profile.recipient_type") ?? null;
@@ -114,7 +106,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
         <ButtonUI
           size='standart'
           variant='primary'
-          disabled={shouldDisableSubmit(isValid, isOnChange, Object.keys(errors).length > 0)}
+          disabled={!isOnChange || !isValid}
           type='submit'
         >
           Сохранить
@@ -124,7 +116,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
           variant='secondary'
           onClick={
             !isOnChange
-              ? () => setIsOnChange(true)
+              ? handleStartEditing
               : () => {
                   setIsOnChange(false);
                   reset();
@@ -132,7 +124,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
           }
           type='button'
         >
-          {!isOnChange ? "Изменить" : "Отменить (без сохранения)"}
+          {getEditButtonLabel(isOnChange)}
         </ButtonUI>
       </div>
     </form>
