@@ -1,6 +1,6 @@
 "use client";
 
-import { ButtonUI, Text, Title, VerifyLoader } from "@/shared/ui";
+import { ButtonUI, LoadingButton, Text, Title, VerifyLoader } from "@/shared/ui";
 import { AuthModal } from "@/widgets/AuthModal";
 import s from "./ResetPasswordPage.module.scss";
 import { PasswordInput } from "@/shared/ui/CustomInput";
@@ -22,8 +22,8 @@ interface IResetPasswordFormData {
 };
 
 const initialFormState: IResetPasswordFormData = {
-  password: '',
-  confirmPassword: '',
+  password: "",
+  confirmPassword: "",
 };
 
 export const ResetPasswordPage = () => {
@@ -32,21 +32,28 @@ export const ResetPasswordPage = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [confirmError, setConfirmError] = useState<string | undefined>(undefined);
 
+  const [isLoadingVerify, setIsLoadingVerify] = useState<boolean>(true);
+  const [verifyError, setVeryfyError] = useState<string | null>(null);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const hasSentInitialRequest = useRef<boolean>(false);
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const uidFromLink = searchParams.get('uid');
   const tokenFromLink = searchParams.get('token');
 
-  const dataFromLink = {
-    uid: uidFromLink || '',
-    token: tokenFromLink || '',
-  };
-
-  const [isLoadingVerify, setIsLoadingVerify] = useState<boolean>(true);
-  const [verifyError, setVeryfyError] = useState<string | null>(null);
-  const [isVerified, setIsVerified] = useState<boolean>(false);
-  const hasSentInitialRequest = useRef<boolean>(false);
+  if (!uidFromLink || !tokenFromLink) {
+    return (
+      <AuthModal>
+        <div className={s.container}>
+          <Title className={clsx(s.text, s.title)} Tag="h2">
+            Неверная ссылка!
+          </Title>
+        </div>
+      </AuthModal>
+    )
+  }
 
   const verifyLink = useCallback(async () => {
     try {
@@ -54,8 +61,8 @@ export const ResetPasswordPage = () => {
       setVeryfyError(null);
 
       await resetPasswordVerify({
-        uid: dataFromLink.uid,
-        token: dataFromLink.token,
+        uid: uidFromLink,
+        token: tokenFromLink,
       });
 
       setIsVerified(true);
@@ -67,19 +74,20 @@ export const ResetPasswordPage = () => {
     } finally {
       setIsLoadingVerify(false);
     }
-  }, [dataFromLink.uid, dataFromLink.token]);
+  }, [uidFromLink, tokenFromLink]);
 
   useEffect(() => {
-    if (!hasSentInitialRequest.current && dataFromLink.uid && dataFromLink.token) {
+    if (!hasSentInitialRequest.current && uidFromLink && tokenFromLink) {
       hasSentInitialRequest.current = true;
       void verifyLink();
     }
-  }, [verifyLink, dataFromLink.uid, dataFromLink.token]);
+  }, [verifyLink, uidFromLink, tokenFromLink]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors({})
 
     const error = validateField<IResetPasswordFormData>(
       name as keyof IResetPasswordFormData,
@@ -108,16 +116,16 @@ export const ResetPasswordPage = () => {
 
     try {
       await resetPasswordConfirm({
-        uid: dataFromLink.uid,
-        token: dataFromLink.token,
+        uid: uidFromLink,
+        token: tokenFromLink,
         new_password: formData.password,
         retype_new_password: formData.confirmPassword,
       });
 
-      router.replace('/signin');
+      router.replace("/signin");
 
     } catch (error) {
-      setConfirmError(error instanceof Error ? error.message : 'Неизвестная оибка');
+      setConfirmError(error instanceof Error ? error.message : "Неизвестная оибка");
 
     } finally {
       setIsLoading(false);
@@ -126,69 +134,71 @@ export const ResetPasswordPage = () => {
 
   return (
     <AuthModal>
-      {isLoadingVerify ? (
-        <VerifyLoader title="Обработка!" text="Пожалуйста, подождите..."/>
-      ) : verifyError ? (
-        <div className={s.container}>
-          <Title className={clsx(s.text, s.title)} Tag="h2">
-            Ошибка проверки ссылки!
-          </Title>
-          <Text className={s.text}>
-            {verifyError}
-          </Text>
-        </div>
-      ) : isVerified ? (
-        <div className={s.container}>
-          <Title className={s.title} Tag="h2">
-            Установите новый пароль
-          </Title>
-          <form 
-            className={s.form} 
-            onSubmit={(e) => {
-              handleSubmit(e).catch(console.error)
-            }} 
-            autoComplete="off"
-          >
-            <PasswordInput 
-              label="Новый пароль" 
-              id="password" 
-              name="password"
-              value={formData.password}
-              error={!!errors.password}
-              message={errors.password}
-              onChange={handleChange}
-              required
-            />
-
-            <PasswordInput 
-              label="Подтвердите пароль" 
-              id="confirmPassword" 
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              error={!!errors.confirmPassword}
-              message={errors.confirmPassword}
-              required
-            />
-
-            {confirmError && (
-              <Text
-                variant="normal"
-                style={{ color: "#dc2626", textAlign: "center" }}
-              >
-                {confirmError}
-              </Text>
-            )}
-            <ButtonUI 
-              type="submit" 
-              variant="primary"
-              disabled={isLoading}
+      <div className={s.container}>
+        {isLoadingVerify ? (
+          <VerifyLoader title="Обработка!" text="Пожалуйста, подождите..."/>
+        ) : verifyError ? (
+          <>
+            <Title className={clsx(s.text, s.title)} Tag="h2">
+              Ошибка проверки ссылки!
+            </Title>
+            <Text className={s.text}>
+              {verifyError}
+            </Text>
+          </>
+        ) : isVerified ? (
+          <>
+            <Title className={clsx(s.text, s.title)} Tag="h2">
+              Установите новый пароль
+            </Title>
+            <form 
+              className={s.form} 
+              onSubmit={(e) => {
+                handleSubmit(e).catch(console.error)
+              }} 
+              autoComplete="off"
             >
-              {isLoading ? 'Сохранение...' : 'Сохранить новый пароль'}
-            </ButtonUI>
-          </form>
-        </div>
-      ) : null}
+              <PasswordInput 
+                label="Новый пароль" 
+                id="password" 
+                name="password"
+                value={formData.password}
+                error={!!errors.password}
+                message={errors.password}
+                onChange={handleChange}
+                required
+              />
+
+              <PasswordInput 
+                label="Подтвердите пароль" 
+                id="confirmPassword" 
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                error={!!errors.confirmPassword}
+                message={errors.confirmPassword}
+                required
+              />
+
+              {confirmError && (
+                <Text
+                  variant="normal"
+                  style={{ color: "#dc2626", textAlign: "center" }}
+                >
+                  {confirmError}
+                </Text>
+              )}
+              <ButtonUI 
+                type="submit" 
+                variant="primary"
+                disabled={isLoading}
+              >
+                {isLoading ? <LoadingButton /> : "Сохранить новый пароль"}
+              </ButtonUI>
+            </form>
+          </>
+        ) : null}
+      </div>
     </AuthModal>
   )
 };

@@ -13,7 +13,7 @@ export const FieldErrorMessage = ({
   hasError?: boolean;
 }) => {
   const path = usePathname();
-  const isSignInSignUpForm = path.includes("signin") || path.includes("signup");
+  const isSignInSignUpForm = path.includes("signin") || path.includes("signup") || path.includes("reset-password");
 
   return (
     <span
