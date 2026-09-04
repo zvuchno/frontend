@@ -19,6 +19,7 @@ interface PhoneInputProps {
   className?: string;
   required?: boolean;
   disabled?: boolean;
+  messageSize?: "small" | "large";
   onChange: (value: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
@@ -36,6 +37,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       autoFocus,
       required,
       disabled,
+      messageSize = "large",
       onChange,
       onFocus,
       onBlur,
@@ -86,7 +88,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
           aria-disabled={disabled}
         />
 
-        {errorMessage && <FieldErrorMessage message={errorMessage} hasError={hasError} />}
+        {errorMessage && <FieldErrorMessage message={errorMessage} hasError={hasError} size={messageSize}/>}
       </div>
     );
   }

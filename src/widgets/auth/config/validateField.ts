@@ -17,13 +17,19 @@ export const validateField = <T extends Record<keyof T, string | boolean>>(
     return "Введите корректный email";
   }
 
-  if (fieldName === "phone" && value.replace(/\D/g, "").length < 11) {
+  if (fieldName === "phone" && value.replace(/\D/g, "").length < 11) { 
     return "Введите полный номер телефона";
   }
 
   if (
     fieldName === "password" &&
-    !/^(?=\S{8,}$)[a-zA-Z0-9\W]*$/.test(value)
+    !/^[a-zA-Z0-9!@#$%^&*()_+\-={};':"\\|,.<>\/?`~]{8,}$/.test(value)
+  ) {
+    return "Минимум 8 символов: латинские буквы, цифры, спецсимволы (без пробелов)";
+  }
+
+  if (fieldName === "confirmPassword" && 
+    !/^[a-zA-Z0-9!@#$%^&*()_+\-={};':"\\|,.<>\/?`~]{8,}$/.test(value)
   ) {
     return "Минимум 8 символов: латинские буквы, цифры, спецсимволы (без пробелов)";
   }

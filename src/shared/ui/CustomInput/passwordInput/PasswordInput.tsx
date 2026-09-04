@@ -43,10 +43,11 @@ interface PasswordInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   message?: string;
   style?: React.CSSProperties;
+  messageSize?: "small" | "large";
 }
 
 export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
-  ({ id, label, error, message, style, ...otherProps }, ref) => {
+  ({ id, label, error, message, style, messageSize, ...otherProps }, ref) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const inputClassName = clsx(s.input, { [s.error]: error });
@@ -80,7 +81,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           </button>
         </div>
 
-        {message && <FieldErrorMessage message={message} hasError={error} />}
+        {message && <FieldErrorMessage message={message} hasError={error} size={messageSize}/>}
       </div>
     );
   }

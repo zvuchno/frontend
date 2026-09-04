@@ -61,7 +61,7 @@ export const validateForm = <T>(
         isValid: false,
         errorMessage: "Введите пароль",
       };
-    } else if (!/^(?=\S{8,}$)[a-zA-Z0-9\W]*$/.test(data.password as string)) {
+    } else if (!/^[a-zA-Z0-9!@#$%^&*()_+\-={};':"\\|,.<>\/?`~]{8,}$/.test(data.password as string)) {
       return {
         isValid: false,
         errorMessage:
