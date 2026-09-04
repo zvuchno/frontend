@@ -1,6 +1,11 @@
 import "server-only";
 
-import type { TNewArtistRequest, TNewListenerRequest, TCurrentUserResponse, TLoginData } from "../model/types";
+import type {
+  TCurrentUserResponse,
+  TLoginData,
+  TNewArtistRequest,
+  TNewListenerRequest,
+} from "../model/types";
 
 const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -98,8 +103,16 @@ export const registerNewListenerServerCookie = async (
   });
 
   if (!response.ok) {
-    const res = await response.json();
-    throw new Error(res.phone || res.email || res.username || res.password || res.name || res.consents || "Регистрация не удалась");
+    const res = (await response.json()) as unknown;
+    throw new Error(
+      res.phone ||
+        res.email ||
+        res.username ||
+        res.password ||
+        res.name ||
+        res.consents ||
+        "Регистрация не удалась"
+    );
   }
 
   return response;
@@ -121,8 +134,16 @@ export const registerNewArtistServerCookie = async (
   });
 
   if (!response.ok) {
-    const res = await response.json();
-    throw new Error(res.phone || res.email || res.username || res.password || res.name || res.consents || "Регистрация не удалась");
+    const res = (await response.json()) as unknown;
+    throw new Error(
+      res.phone ||
+        res.email ||
+        res.username ||
+        res.password ||
+        res.name ||
+        res.consents ||
+        "Регистрация не удалась"
+    );
   }
 
   return response;
