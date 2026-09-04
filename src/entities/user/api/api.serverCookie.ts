@@ -103,7 +103,7 @@ export const registerNewListenerServerCookie = async (
   });
 
   if (!response.ok) {
-    const res = (await response.json()) as unknown;
+    const res = await response.json();
     throw new Error(
       res.phone ||
         res.email ||
@@ -134,7 +134,7 @@ export const registerNewArtistServerCookie = async (
   });
 
   if (!response.ok) {
-    const res = (await response.json()) as unknown;
+    const res = await response.json();
     throw new Error(
       res.phone ||
         res.email ||
