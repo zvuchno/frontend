@@ -18,11 +18,12 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: boolean;
   message?: string;
-  inputSize?: 'small' | 'large';
+  inputSize?: "small" | "large";
   style?: React.CSSProperties;
   multiline?: boolean;
   rows?: number;
   className?: string;
-  labelClassName?: string
-  inputClassName?: string
+  labelClassName?: string;
+  inputClassName?: string;
+  messageSize?: "small" | "large";
 };

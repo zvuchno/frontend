@@ -247,11 +247,13 @@ export function ListenerProfileFormSection() {
           />
         </ProfileFormUI>
       </FormProvider>
-      <UpdatePasswordModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        has_usable_password={account?.has_usable_password}
-      />
+      {isModalOpen && (
+        <UpdatePasswordModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          has_usable_password={account?.has_usable_password}
+        />
+      )}
     </>
   );
 }

@@ -14,6 +14,10 @@ export const getErrorMessage = (data: unknown, fallback: string): string => {
     "is_published",
     "price",
     "code",
+    "old_password",
+    "password",
+    "new_password",
+    "confirm_password",
   ]) {
     const value = data[key];
 

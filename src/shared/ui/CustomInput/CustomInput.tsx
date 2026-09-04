@@ -20,6 +20,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
       className,
       labelClassName,
       inputClassName,
+      messageSize = "large",
       ...otherProps
     },
     ref
@@ -63,7 +64,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
           />
         )}
 
-        {message && <FieldErrorMessage message={message} hasError={error} />}
+        {message && <FieldErrorMessage message={message} hasError={error} size={messageSize} />}
       </div>
     );
   }
