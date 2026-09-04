@@ -37,7 +37,7 @@ export async function getCurrentAccount(): Promise<CurrentAccountResponse> {
 export async function updateAccountPassword(
   payload: UpdateAccountPasswordPayload
 ): Promise<UpdateAccountPasswordResponse | null> {
-  const response = await authFetchClient<void>(
+  const response = await authFetchClient<UpdateAccountPasswordResponse>(
     `${baseURL}${CURRENT_ACCOUNT_CHANGE_PASSWORD_PATH}`,
     {
       method: "POST",
