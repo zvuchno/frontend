@@ -75,14 +75,16 @@ export async function GET(request: Request) {
     const tokenData: TTokenData = await tokenRes.json();
 
     // Авторизация на своём бэкенде
-    const userFromServer = await OAuthorize({
+    const result = await OAuthorize({
       token: tokenData.access_token,
       provider: 'vk',
     });
 
-    if (!userFromServer) {
+    if (result.status !== "ok") {
       return NextResponse.redirect(`${origin}/signin?error=no_user_from_server`);
     }
+
+    const userFromServer = result.user;
 
     // Создание сессии NextAuth JWT
     const cookieName = "__Secure-next-auth.session-token";
@@ -117,6 +119,7 @@ export async function GET(request: Request) {
     return response;
 
   } catch (error) {
+    //если ошибка о регистрации то редирект на OAuthConsentsPage с токеном
     console.error('Critical error in VK callback:', error);
     return NextResponse.redirect(`${origin}/signin?error=internal_error`);
   }

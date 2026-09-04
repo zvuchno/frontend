@@ -1,0 +1,1 @@
+export { OAuthConsentsForm } from "./ui/OAuthConsentsForm";
