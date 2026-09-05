@@ -20,7 +20,7 @@
   border: 1px solid var(--outline-color);
   background-color: var(--background);
 
-  &.columns-4 {
+  &.columns-4.card-label.item-product {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
     align-items: start;
@@ -66,7 +66,7 @@
     }
   }
 
-  &.columns-3 {
+  &.columns-3.card-label.item-product {
     grid-template-columns: repeat(3, 1fr);
     align-items: start;
     & > * {
@@ -164,14 +164,14 @@
     }
   }
 
-  .columns-4 > & {
+  .columns-4.card-label.item-product > & {
     grid-column: span 1;
     grid-row: 1 / 4;
     align-self: center;
     flex-direction: column;
   }
 
-  .columns-3 > & {
+  .columns-3.card-label.item-product > & {
     grid-column: 1 / 4;
     grid-row: 3 /4;
     justify-content: flex-end;
@@ -266,4 +266,9 @@
   &:hover {
     background-color: var(--color-bg-secondary);
   }
+}
+
+
+.item-promo * {
+  color: red
 }
