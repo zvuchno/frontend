@@ -69,7 +69,7 @@ export const OAuthConsentsForm = ({ state }: {state: string}) => {
         throw new Error(errData.message || "Не удалось завершить регистрацию");
       }
 
-      router.replace('/');
+      window.location.href = '/';
     } catch (err) {
       console.error(err);
       setError(
