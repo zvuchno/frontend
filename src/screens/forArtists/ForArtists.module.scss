@@ -11,9 +11,21 @@
   display: flex;
   justify-content: space-between;
 
+  padding-block: 42px 68px !important;
+  padding-inline: 48px !important;
+
+  @media (max-width: 1024px) {
+    padding-block: 35px !important;
+  }
+
+  & .hero__text_left {
+    margin-block-end: 35px;
+  }
+
   &Button {
     width: 34.5%;
     min-width: 250px;
+    max-width: 436px;
     align-self: center;
     z-index: 1;
 
@@ -36,8 +48,38 @@
     width: max-content;
     height: 100%;
     left: 20.69%;
-    top: calc(50% + clamp(15px, 2.91vw, 42px));
+    top: calc(50.5% + clamp(15px, 2.91vw, 42px));
     transform: translateY(-50%);
+
+    @media (max-width: 1024px) {
+      max-width: 65%;
+      left: 18%;
+      top: calc(50% + clamp(15px, 2.91vw, 42px));
+    }
+
+    @media (max-width: 768px) {
+      max-width: 70%;
+      left: 15%;
+    }
+
+    @media (max-width: 768px) {
+      max-width: 75%;
+      left: 13%;
+    }
+
+    @media (max-width: 550px) {
+      max-width: 90%;
+      left: 6%;
+    }
+
+
+    @media (max-width: 469px) {
+      top: calc(48% + clamp(15px, 2.91vw, 42px));
+    }
+
+    @media (max-width: 375px) {
+      top: calc(45% + clamp(15px, 2.91vw, 42px));
+    }
 
     & img {
       margin-block-start: clamp(-152px, -10.55vw, -30px);
