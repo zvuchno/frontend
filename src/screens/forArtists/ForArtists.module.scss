@@ -329,6 +329,7 @@
   &.sixsSection {
     padding-inline-start: clamp(20px, 3.33vw, 48px);
     padding-inline-end: clamp(15px, 2.56vw, 37px);
+    margin-block-start: clamp(60px, 17vw, 170px);
 
     & .content {
       position: relative;
