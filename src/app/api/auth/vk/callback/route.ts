@@ -17,7 +17,7 @@ interface TTokenData {
 const BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export async function GET(request: Request) {
-  const origin = request.headers.get("origin");
+  const origin = request.headers.get("origin") || process.env.FRONTEND_ORIGIN;
   const { searchParams } = new URL(request.url);
   const error = searchParams.get("error");
   const deviceId = searchParams.get("device_id");
