@@ -7,7 +7,9 @@ import {
   OAuthorize,
   authAfterRegister,
   authorize,
+  generateState,
   getCurrentUserServer,
+  saveOAuthState,
 } from "@/entities/user/server";
 
 export const authConfig: AuthOptions = {
@@ -101,25 +103,36 @@ export const authConfig: AuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "yandex") {
-        const userResponse = await OAuthorize({
+        const result = await OAuthorize({
           provider: account.provider,
           token: account.access_token ?? "",
         });
 
-        if (userResponse) {
-          user.id = userResponse.id;
-          user.userName = userResponse.userName;
-          user.email = userResponse.email;
-          user.phone = userResponse.phone;
-          user.isPhoneVerified = userResponse.isPhoneVerified;
-          user.isEmailVerified = userResponse.isEmailVerified;
-          user.isArtist = userResponse.isArtist;
-          user.isListener = userResponse.isListener;
-          user.profileType = userResponse.profileType;
-          user.artistName = userResponse.artistName;
+        if (result.status === "ok") {
+          user.id = result.user.id;
+          user.userName = result.user.userName;
+          user.email = result.user.email;
+          user.phone = result.user.phone;
+          user.isPhoneVerified = result.user.isPhoneVerified;
+          user.isEmailVerified = result.user.isEmailVerified;
+          user.isArtist = result.user.isArtist;
+          user.isListener = result.user.isListener;
+          user.profileType = result.user.profileType;
+          user.artistName = result.user.artistName;
           return true;
         }
 
+        if (result.status === 'registration_required') {
+          // Пользователя нет — сохраняем токен от провайдера, редиректим на страницу согласий
+          const state = generateState();
+          saveOAuthState(state, {
+            provider: account.provider,
+            accessToken: account.access_token ?? '',
+          });
+          return `/OAuthConsents?state=${state}`;
+        }
+
+        // Любая другая ошибка — не пускаем
         return false;
       }
       return true;
