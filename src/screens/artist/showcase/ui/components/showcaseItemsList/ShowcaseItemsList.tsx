@@ -162,6 +162,7 @@ export const ShowcaseItemsList = ({
             key={item.id}
             item={item}
             profileType={profileType}
+            cardType={isProduct ? "product" : "promo"}
             onToggleAlbumVisibility={handleToggleAlbumVisibility}
             onToggleMerchVisibility={handleToggleMerchVisibility}
             onTogglePromoVisibility={handleTogglePromoVisibility}

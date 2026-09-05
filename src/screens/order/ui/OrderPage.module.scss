@@ -8,6 +8,14 @@
   padding: 54px 46px 123px;
   border-top: none;
 
+  @media(max-width: 768px) {
+    padding: 35px 24px 100px;
+  }
+
+  @media(max-width: 375px) {
+    padding: 20px 13px 100px;
+  }
+
   &Title {
     font-family: var(--font-better-vcr), monospace;
     font-size: 32px;

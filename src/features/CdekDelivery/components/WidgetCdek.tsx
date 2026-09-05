@@ -1,15 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 
-import {
-  type TCdekDeliveryTariff,
-  useGetCheckoutData,
-  useSelectDeliveryTariff,
-} from "@/entities/order";
+
+
+import { type TCdekDeliveryTariff, useGetCheckoutData, useSelectDeliveryTariff } from "@/entities/order";
+
+
 
 import { createDeliveryPriceViewer } from "../lib/createDeliveryPriceViewer";
 import type { TCdekOfficeAddress, TCdekTariffDetails } from "../model/types";
 import { useCdekCalculate } from "../model/useCdekDeliveryCalculate";
 import styles from "../ui/CdekDelivery.module.scss";
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 interface CDEKWidgetOptions {
   from?:
@@ -81,7 +94,7 @@ const addScript = (scriptId: string, onGetReady: () => void) => {
   if (oldScript) oldScript.remove();
 
   const script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/@cdek-it/widget@3";
+  script.src = "https://cdn.jsdelivr.net/npm/@cdek-it/widget@3.11.1";
   script.id = scriptId;
   script.async = true;
   script.onload = () => onGetReady();

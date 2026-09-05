@@ -3,12 +3,84 @@
 import clsx from "clsx";
 import Link from "next/link";
 
+
+
 import { DeleteIcon, Text } from "@/shared/ui";
 import { EditIcon } from "@/shared/ui/Icons";
+
+
 
 import { isAlbum, isMerch, isPromo } from "../../utils/typeGuarde";
 import s from "./ShowcaseCard.module.scss";
 import { type ShowcaseCardProps } from "./ShowcaseCard.type";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -46,6 +118,7 @@ export const ShowcaseCard = ({
   item,
   profileType,
   columnsCount,
+  cardType,
   onToggleAlbumVisibility,
   onToggleMerchVisibility,
   onTogglePromoVisibility,
@@ -137,6 +210,8 @@ export const ShowcaseCard = ({
       <div
         className={clsx(s.card, {
           [s[`columns-${columnsCount}`]]: columnsCount,
+          [s[`card-${profileType}`]]: profileType,
+          [s[`item-${cardType}`]]: cardType,
         })}
       >
         <div className={s.imgContainer}>
@@ -161,6 +236,8 @@ export const ShowcaseCard = ({
       <div
         className={clsx(s.card, {
           [s[`columns-${columnsCount}`]]: columnsCount,
+          [s[`card-${profileType}`]]: profileType,
+          [s[`item-${cardType}`]]: cardType,
         })}
       >
         <div className={s.imgContainer}>
@@ -198,6 +275,8 @@ export const ShowcaseCard = ({
       <div
         className={clsx(s.card, {
           [s[`columns-${columnsCount}`]]: columnsCount,
+          [s[`card-${profileType}`]]: profileType,
+          [s[`item-${cardType}`]]: cardType,
         })}
       >
         <Text className={clsx(s.text, s.title)}>{item.code}</Text>
