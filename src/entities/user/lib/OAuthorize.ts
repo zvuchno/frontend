@@ -28,8 +28,8 @@ export const OAuthorize = async ({
       access_token: token,
       create_account,
       ...(consents && { consents }),
-    }
-    console.log('PAYLOAD:', payload)
+    };
+    
     const res = await fetch(`${BASE_URL}/v1/auth/social/${provider}/`, {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
@@ -38,21 +38,24 @@ export const OAuthorize = async ({
 
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
-      console.log('DATA:', data)
       if (data.error_code === "registration_required") {
         return { status: "registration_required" };
       }
       return { status: "error" };
     }
 
-    const [body, cookiesData] = await Promise.all([
-      res.json() as Promise<TServerAuthResponse>,
-      applyCookiesFromResponse(res.headers, true),
-    ]);
+    // const [body, cookiesData] = await Promise.all([
+    //   res.json() as Promise<TServerAuthResponse>,
+    //   applyCookiesFromResponse(res.headers, true),
+    // ]);
+
+    const body = await res.json() as TServerAuthResponse;
 
     if (!body.authenticated) {
       return { status: "error" };
     }
+
+    const cookiesData = await applyCookiesFromResponse(res.headers, true);
 
     const { accessToken } = cookiesData;
 

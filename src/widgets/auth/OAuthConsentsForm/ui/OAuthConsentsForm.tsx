@@ -69,12 +69,14 @@ export const OAuthConsentsForm = ({ state }: {state: string}) => {
         throw new Error(errData.message || "Не удалось завершить регистрацию");
       }
 
-      // router.replace('/');
+      router.replace('/');
     } catch (err) {
       console.error(err);
       setError(
         err instanceof Error ? err.message : "Произошла ошибка при регистрации. Попробуйте войти заново."
       );
+
+    } finally {
       setIsLoading(false);
     }
     

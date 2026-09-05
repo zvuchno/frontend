@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     maxAge: 30 * 24 * 60 * 60 
   });
 
-  const response = NextResponse.redirect(`${origin}/`);
+  const response = NextResponse.json({ ok: true });
   response.cookies.set(cookieName, token, { 
     httpOnly: true, 
     secure: true, 
