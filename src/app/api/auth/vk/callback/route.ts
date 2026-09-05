@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { encode } from "next-auth/jwt";
-import { OAuthorize } from '@/entities/user/server';
+import { generateState, OAuthorize, saveOAuthState } from "@/entities/user/server";
 
 interface TTokenData {
   refresh_token: string;
@@ -17,12 +17,12 @@ interface TTokenData {
 const BASE_API_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export async function GET(request: Request) {
-  const origin = request.headers.get('origin') || 'https://dev.zvuchno.space';
+  const origin = request.headers.get("origin");
   const { searchParams } = new URL(request.url);
-  const error = searchParams.get('error');
+  const error = searchParams.get("error");
   const deviceId = searchParams.get("device_id");
-  const code = searchParams.get('code');
-  const returnedState = searchParams.get('state');
+  const code = searchParams.get("code");
+  const returnedState = searchParams.get("state");
 
   const clientId = process.env.VK_CLIENT_ID;
   const redirectUri = `${BASE_API_URL}/auth/vk/callback`;
@@ -37,18 +37,18 @@ export async function GET(request: Request) {
 
   // Валидация state и code_verifier
   const cookieStore = await cookies();
-  const storedState = cookieStore.get('vk_state')?.value;
+  const storedState = cookieStore.get("vk_state")?.value;
   const codeVerifier = cookieStore.get("vk_code_verifier")?.value;
 
   if (storedState !== returnedState || !codeVerifier) {
     console.error('State mismatch. Possible CSRF.');
-    cookieStore.delete('vk_state');
-    cookieStore.delete('vk_code_verifier');
+    cookieStore.delete("vk_state");
+    cookieStore.delete("vk_code_verifier");
     return NextResponse.redirect(`${origin}/signin?error=csrf_detected`);
   }
 
-  cookieStore.delete('vk_state');
-  cookieStore.delete('vk_code_verifier');
+  cookieStore.delete("vk_state");
+  cookieStore.delete("vk_code_verifier");
 
   try {
     // Обмен кода на токен
@@ -77,10 +77,21 @@ export async function GET(request: Request) {
     // Авторизация на своём бэкенде
     const result = await OAuthorize({
       token: tokenData.access_token,
-      provider: 'vk',
+      provider: "vk",
     });
 
-    if (result.status !== "ok") {
+    if (result.status === "registration_required") {
+      // Пользователя нет — сохраняем токен от провайдера, редиректим на страницу согласий
+      const state = generateState();
+      saveOAuthState(state, {
+        provider: "vk",
+        accessToken: tokenData.access_token ?? "",
+      });
+      //если ошибка о регистрации то редирект на OAuthConsentsPage
+      return NextResponse.redirect(`${origin}/OAuthConsents?state=${state}`);
+    }
+
+    if (result.status === "error") {
       return NextResponse.redirect(`${origin}/signin?error=no_user_from_server`);
     }
 
@@ -119,8 +130,7 @@ export async function GET(request: Request) {
     return response;
 
   } catch (error) {
-    //если ошибка о регистрации то редирект на OAuthConsentsPage с токеном
-    console.error('Critical error in VK callback:', error);
+    console.error("Critical error in VK callback:", error);
     return NextResponse.redirect(`${origin}/signin?error=internal_error`);
   }
   
