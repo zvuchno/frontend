@@ -8,7 +8,7 @@ import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-import { SectionFAQ } from "@/widgets/SectionFAQ";
+//import { SectionFAQ } from "@/widgets/SectionFAQ";
 import { HeroUI } from "@/widgets/layout/main/Hero";
 import { JoinSection } from "@/widgets/layout/main/JoinSection";
 
@@ -19,12 +19,13 @@ import { CardArtist } from "@/entities/Artist";
 import { ProductCard } from "@/entities/ProductCard";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
-import { mockBlogs, questions } from "@/shared/constants";
+//import { mockBlogs, questions } from "@/shared/constants";
 import { ListSection } from "@/shared/ui";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 import styles from "./HomePage.module.scss";
-import { Blog } from "./components/Blog/Blog";
+
+//import { Blog } from "./components/Blog/Blog";
 
 interface HomePageProps {
   artists: TArtistCard[];
@@ -153,10 +154,10 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
             );
           })}
         </ListSection>
-        {/**скрываем секцию БЛОГ пока для нее нет данных */}
-        {/*<Blog blogs={mockBlogs} />*/}
+        {/**скрываем секцию БЛОГ и FAQ пока нет данных */}
+        {/*<Blog blogs={mockBlogs} />
 
-        <SectionFAQ title='FAQ' items={questions} />
+        <SectionFAQ title='FAQ' items={questions} />*/}
       </div>
 
       <JoinSection link='https://t.me/zvuchno_space' />

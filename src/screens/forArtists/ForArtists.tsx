@@ -1,8 +1,8 @@
 import clsx from "clsx";
 
 import { ApproveSection } from "@/widgets/ApproveSection";
-import { Roadmap } from "@/widgets/Roadmap";
-import { roadmapItems } from "@/widgets/Roadmap";
+//import { Roadmap } from "@/widgets/Roadmap";
+//import { roadmapItems } from "@/widgets/Roadmap";
 import { SectionFAQ } from "@/widgets/SectionFAQ";
 
 import { FAQItemsForArtists } from "@/shared/constants";
@@ -13,7 +13,7 @@ import { ForArtistsCareSection } from "./components/ForArtistsCareSection/ForArt
 import { ForArtistsComissionSection } from "./components/ForArtistsComissionSection/ForArtistsComissionSection";
 import { ForArtistsHero } from "./components/ForArtistsHero/ForArtistsHero";
 import { ForArtistsJoinBeta } from "./components/ForArtistsJoinBeta/ForArtistsJoinBeta";
-import { ForArtistsLookForSection } from "./components/ForArtistsLookForSection/ForArtistsLookForSection";
+//import { ForArtistsLookForSection } from "./components/ForArtistsLookForSection/ForArtistsLookForSection";
 import { ForArtistsOptionsSection } from "./components/ForArtistsOptionsSection/ForArtistsOptionsSection";
 import { ForArtistsTeamSection } from "./components/ForArtistsTeamSection/ForArtistsTeamSection";
 
@@ -26,10 +26,10 @@ export const ForArtists = () => (
       <ForArtistsCareSection />
       <ForArtistsOptionsSection />
       <ForArtistsComissionSection />
-      <ForArtistsLookForSection />
-      <section className={clsx(styles.sectionArea, styles.fifthSection)}>
+      {/*<ForArtistsLookForSection />*/}
+      {/*<section className={clsx(styles.sectionArea, styles.fifthSection)}>
         <Roadmap title={"ты нам подойдешь, если:"} items={roadmapItems} />
-      </section>
+      </section>*/}
       <ForArtistsTeamSection />
       <section className={clsx(styles.sectionArea, styles.sevenSection)}>
         <ForArtistsJoinBeta />
