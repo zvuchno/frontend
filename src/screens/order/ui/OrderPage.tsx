@@ -7,10 +7,11 @@ import { DevTool } from "@hookform/devtools";
 import { DeliverySelectionProvider, type TOrder } from "@/entities/order";
 import { useGetCheckoutData } from "@/entities/order";
 
+import { AccentContainer } from "@/shared/ui";
+
 import styles from "./OrderPage.module.scss";
 import { OrderDetails } from "./components/OrderDetails/OrderDetails";
 import { OrderSummary } from "./components/OrderSummary/OrderSummary";
-import { AccentContainer } from "@/shared/ui";
 
 export const OrderPage = () => {
   const { data } = useGetCheckoutData();
@@ -32,6 +33,7 @@ export const OrderPage = () => {
       delivery_point: "",
       pickup_point: undefined,
       delivery: undefined,
+      delivery_point_address: "",
     },
     mode: "onChange",
     shouldUnregister: true,
