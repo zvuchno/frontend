@@ -153,4 +153,7 @@ export const fieldsConfig: {
   pickup_point: {
     required: true,
   },
+  delivery_point_address: {
+    required: true,
+  },
 };

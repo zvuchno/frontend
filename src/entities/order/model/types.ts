@@ -45,6 +45,7 @@ export type TOrder = {
   cdek_city_code?: string;
   tariffs?: TCdekDeliveryTariff;
   delivery_point?: string;
+  delivery_point_address?: string;
   pickup_point?: number;
   delivery?: number;
 };
