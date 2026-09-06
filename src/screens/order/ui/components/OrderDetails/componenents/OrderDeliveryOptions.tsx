@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { type FieldValues } from "@/screens/order/model/types";
@@ -21,15 +20,11 @@ export const OrderDeliveryOptions = ({
   optionChecked: string;
   onChooseOption: (option: TDeliveryOption) => void;
 }) => {
-  const { register, watch, setValue } = useFormContext<FieldValues>();
+  const { register, watch } = useFormContext<FieldValues>();
   const currentDeliveryValueId = watch("delivery");
   const currentDeliveryOption = options.find(
     (option) => String(option.id) === String(currentDeliveryValueId)
   );
-
-  useEffect(() => {
-    if (currentDeliveryOption?.delivery_type === "courier") setValue("tariffs", "door");
-  }, [currentDeliveryValueId, options, setValue, currentDeliveryOption]);
 
   const deliveryDays = {
     courier: "Доставка займёт 7–21 дней",
