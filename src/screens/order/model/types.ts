@@ -14,6 +14,7 @@ export interface FieldValues {
   delivery_point?: string;
   pickup_point?: number;
   delivery?: number;
+  delivery_point_address: string;
 }
 
 export type TOrderPersonalFormField = {
