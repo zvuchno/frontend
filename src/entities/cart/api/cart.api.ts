@@ -61,7 +61,7 @@ export async function removeCartItem(variantId: number): Promise<void> {
 }
 
 export async function applyCartPromoCode(promo: string): Promise<TCart> {
-  const response = await authFetchClient<TCart>(`${baseUrl}${CART_PATH}/apply-promocode/`, {
+  const response = await authFetchClient<TCart>(`${baseUrl}${CART_PATH}/apply-promocode`, {
     method: "POST",
     body: JSON.stringify({ code: promo }),
     headers: {
