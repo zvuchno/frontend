@@ -62,14 +62,18 @@ export const OrderAddressDetails = () => {
     register("street", fieldsConfig.street);
     register("house", fieldsConfig.house);
     register("cdek_city_code", fieldsConfig.cdek_city_code);
-    register("tariffs");
+    register("tariffs", fieldsConfig.tariffs);
+    setValue("tariffs", "door", {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
 
     return () => {
       unregister(["city", "cdek_city_code", "tariffs", "street", "house", "apartment"]);
       setDeliverySelected({ price: 0 });
       clearCurrentAddress();
     };
-  }, [clearCurrentAddress, register, setDeliverySelected, unregister]);
+  }, [clearCurrentAddress, register, setDeliverySelected, setValue, unregister]);
 
   useEffect(() => {
     setValue("city", cityValue, { shouldValidate: true });

@@ -1,5 +1,5 @@
 .order {
-  margin-block-end: clamp(40px, 13.89vw, 200px);;
+  margin-block-end: clamp(40px, 13.89vw, 200px);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -8,11 +8,11 @@
   padding: 54px 46px 123px;
   border-top: none;
 
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     padding: 35px 24px 100px;
   }
 
-  @media(max-width: 375px) {
+  @media (max-width: 375px) {
     padding: 20px 13px 100px;
   }
 
@@ -28,7 +28,7 @@
     justify-content: space-between;
     gap: clamp(25px, 4.72vw, 68px);
 
-    @media (max-width: 800px) {
+    @media (max-width: 768px) {
       flex-direction: column;
     }
   }
@@ -37,7 +37,7 @@
     width: clamp(280px, 28vw, 394px);
     flex-shrink: 0;
 
-    @media (max-width: 800px) {
+    @media (max-width: 768px) {
       width: 100%;
     }
   }

@@ -41,11 +41,15 @@ export const CdekDelivery = ({
       register("cdek_city_code", fieldsConfig.cdek_city_code);
       register("delivery_point", fieldsConfig.delivery_point);
       register("tariffs", fieldsConfig.tariffs);
+
+      register("street", fieldsConfig.street);
+      //register("house", fieldsConfig.house);
+      //register("apartment", fieldsConfig.apartment);
     }
 
     return () => {
       if (!isSender) {
-        unregister(["city", "cdek_city_code", "tariffs", "delivery_point"]);
+        unregister(["city", "cdek_city_code", "tariffs", "delivery_point", "street"]);
       }
     };
   }, [register, unregister, isSender]);
@@ -57,6 +61,7 @@ export const CdekDelivery = ({
         setValue("city", "", { shouldValidate: true });
         setValue("cdek_city_code", "", { shouldValidate: true });
         setValue("tariffs", "", { shouldValidate: true });
+        setValue("street", "", { shouldValidate: true });
         return;
       }
 
@@ -64,6 +69,7 @@ export const CdekDelivery = ({
       setValue("city", deliverySelected.city ?? "", { shouldValidate: true });
       setValue("cdek_city_code", deliverySelected.cdek_city_code ?? "", { shouldValidate: true });
       setValue("tariffs", deliverySelected.type ?? "", { shouldValidate: true });
+      setValue("street", deliverySelected.address ?? "", { shouldValidate: true });
     }
   }, [deliverySelected, setValue, isSender]);
 
