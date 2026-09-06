@@ -26,51 +26,54 @@ export const createDeliveryPriceViewer = (
     const warningMessage = targetElement?.querySelector(".cdek-2ew9g8");
     warningMessage?.classList.add(`${styles.warningMessage}`);
 
+    /*
     const tariffWarning = document.createElement("span");
     tariffWarning.textContent = "ВНИМАНИЕ! Необходимо выбрать тариф";
     tariffWarning.className = `${styles.paymentTariffWarning}`;
 
-    warningMessage?.appendChild(tariffWarning);
+    warningMessage?.appendChild(tariffWarning);*/
 
     const selectButton = deliveryOption[0].querySelector("button");
     selectButton?.classList.add(`${styles.hiddenButton}`);
-    tariffWarning.classList.add(`${styles.visible}`);
+    //tariffWarning.classList.add(`${styles.visible}`);
 
     const paymentDetails = document.createElement("div");
     paymentDetails.className = `${styles.payment}`;
     warningMessage?.appendChild(paymentDetails);
 
-    const paymentTitle = document.createElement("p");
+    /*const paymentTitle = document.createElement("p");
     paymentTitle.textContent = "Выберите тариф";
     paymentTitle.className = `${styles.paymentTitle}`;
-    paymentDetails.appendChild(paymentTitle);
+    paymentDetails.appendChild(paymentTitle);*/
 
     const paymentData = document.createElement("div");
     paymentData.className = `${styles.paymentData}`;
-    paymentData.dataset.chosen = "false";
+    paymentData.classList.add(styles.active);
+    paymentData.dataset.chosen = "true";
     paymentData.textContent = `Доставка в ПВЗ - ${address.code}`;
-    paymentData.onclick = () => {
-      const isCurrentlyChosen = paymentData.dataset.chosen === "true";
-      const nextChosenState = !isCurrentlyChosen;
-      paymentData.dataset.chosen = String(nextChosenState);
-      paymentData.classList.toggle(styles.active, nextChosenState);
-      tariffWarning.classList.toggle(`${styles.visible}`);
+    //paymentData.onclick = () => {
+    //const isCurrentlyChosen = paymentData.dataset.chosen === "true";
+    //const nextChosenState = !isCurrentlyChosen;
+    //paymentData.dataset.chosen = String(nextChosenState);
+    //paymentData.classList.toggle(styles.active, nextChosenState);
+    //tariffWarning.classList.toggle(`${styles.visible}`);
 
-      onDeliverySelect(
-        nextChosenState
-          ? {
-              isChosen: nextChosenState,
-              code: address.code,
-              price: Number(data.delivery_sum),
-              daysMin: data.period_min,
-              daysMax: data.period_max,
-              address: address.address,
-              city: address.city,
-              cdek_city_code: String(address.city_code),
-            }
-          : null
-      );
-    };
+    onDeliverySelect(
+      //nextChosenState
+      //  ?
+      {
+        isChosen: true,
+        code: address.code,
+        price: Number(data.delivery_sum),
+        daysMin: data.period_min,
+        daysMax: data.period_max,
+        address: address.address,
+        city: address.city,
+        cdek_city_code: String(address.city_code),
+      }
+      //   : null
+    );
+    //};
 
     paymentDetails.appendChild(paymentData);
 
@@ -109,7 +112,7 @@ export const createDeliveryPriceViewer = (
             el.addEventListener("click", () => {
               onDeliverySelect(null);
               paymentDetails.remove();
-              tariffWarning.remove();
+              //tariffWarning.remove();
             });
           });
         }
