@@ -32,33 +32,54 @@
   letter-spacing: -0.06em;
 }
 
+.warningMessage {
+  position: relative;
+}
+
+.paymentTariffWarning {
+  color: transparent;
+  position: absolute;
+  top: calc(100% + 30px);
+
+  &.visible {
+    position: absolute;
+    top: calc(100% + 20px);
+    font-weight: 700;
+    color: rgb(201, 19, 19);
+  }
+}
+
 // стили для элементов внутри виджета СДЕК
 .payment {
   position: absolute;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  top: 125px;
+  top: calc(100% + 80px);
   left: 0;
   width: 100%;
 
+  /*&:has(*:active) {
+    top: calc(100% + 32px);
+  }*/
+
   &Title {
-    color: #44403c;
     font-weight: 700;
   }
 
   &Data {
     position: relative;
     background-color: rgba(51, 85, 104, 0.05);
-    border: 1px solid transparent;
+    border: 1px solid rgb(201, 19, 19);
     color: #44403c;
     border-radius: 6px;
     padding: 12px;
     min-height: 100px;
-    width: 100%;
+    width: 95%;
     font-weight: 700;
 
     &:hover {
+      border: 1px solid rgb(26, 178, 72);
       background-color: rgba(26, 178, 72, 0.1);
       cursor: pointer;
     }

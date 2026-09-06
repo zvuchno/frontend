@@ -23,13 +23,22 @@ export const createDeliveryPriceViewer = (
   if (deliveryOption.length > 0) {
     const targetElement = deliveryOption[0].querySelector(".cdek-qmwuzg");
 
-    const selectButton = deliveryOption[0].querySelector("button");
+    const warningMessage = targetElement?.querySelector(".cdek-2ew9g8");
+    warningMessage?.classList.add(`${styles.warningMessage}`);
 
+    const tariffWarning = document.createElement("span");
+    tariffWarning.textContent = "ВНИМАНИЕ! Необходимо выбрать тариф";
+    tariffWarning.className = `${styles.paymentTariffWarning}`;
+
+    warningMessage?.appendChild(tariffWarning);
+
+    const selectButton = deliveryOption[0].querySelector("button");
     selectButton?.classList.add(`${styles.hiddenButton}`);
+    tariffWarning.classList.add(`${styles.visible}`);
 
     const paymentDetails = document.createElement("div");
     paymentDetails.className = `${styles.payment}`;
-    targetElement?.appendChild(paymentDetails);
+    warningMessage?.appendChild(paymentDetails);
 
     const paymentTitle = document.createElement("p");
     paymentTitle.textContent = "Выберите тариф";
@@ -45,6 +54,7 @@ export const createDeliveryPriceViewer = (
       const nextChosenState = !isCurrentlyChosen;
       paymentData.dataset.chosen = String(nextChosenState);
       paymentData.classList.toggle(styles.active, nextChosenState);
+      tariffWarning.classList.toggle(`${styles.visible}`);
 
       onDeliverySelect(
         nextChosenState
@@ -99,6 +109,7 @@ export const createDeliveryPriceViewer = (
             el.addEventListener("click", () => {
               onDeliverySelect(null);
               paymentDetails.remove();
+              tariffWarning.remove();
             });
           });
         }
