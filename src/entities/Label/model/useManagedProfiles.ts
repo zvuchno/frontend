@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
@@ -10,6 +12,7 @@ import {
   changeManagedProfileCover,
   changeManagedProfileDetails,
   createManagedProfile,
+  deleteManagedProfile,
   getManagedProfileDetails,
   getManagedProfiles,
 } from "../api/managed-profiles.api.ts";
@@ -35,8 +38,8 @@ export function useGetManagedProfileDetails(id: string) {
 export function useCreateManagedProfile() {
   const queryClient = useQueryClient();
 
-  return useMutation<TManagedProfile, Error, TManagedProfile>({
-    mutationFn: (profile: TManagedProfile) => createManagedProfile(profile),
+  return useMutation<TManagedProfile, Error, Omit<TManagedProfile, "id">>({
+    mutationFn: (profile: Omit<TManagedProfile, "id">) => createManagedProfile(profile),
     onSuccess: () => {
       void queryClient.invalidateQueries({
         queryKey: ["label", "managedProfiles"],
@@ -91,6 +94,23 @@ export function useChangeManagedProfileCover() {
       void queryClient.invalidateQueries({
         queryKey: ["label", "managedProfiles"],
       });
+    },
+  });
+}
+
+export function useDeleteManagedProfile() {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, number>({
+    mutationFn: (id: number) => deleteManagedProfile(id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["label", "managedProfiles"] });
+      toast.success("Профайл артиста удален");
+    },
+    onError: (err) => {
+      toast.error(
+        `Не удалось удалить профайл артиста. Ошибка: ${err.message || "профиль артиста не пустой"}`
+      );
     },
   });
 }
