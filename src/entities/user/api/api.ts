@@ -121,10 +121,9 @@ export const logOutUser = async (userData: TLogoutdata): Promise<void> => {
 };*/
 
 export const verifyEmail = async (data: TVerifyEmailRequest): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/account/verify-email/",
-    fetchData: data,
-    defaultMessage: "Ошибка подтверждения почты.",
+  await authFetchClient<void>("/api/backend/v1/auth/account/verify-email/", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
 };
 

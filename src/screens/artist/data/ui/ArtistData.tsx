@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, type UseFormRegister, useForm, useWatch } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
 import { useSession } from "next-auth/react";
@@ -22,6 +22,25 @@ const recipientTypeRules = {
     value !== "individual_temporary" || "Выберите из списка",
 };
 
+type RecipientType = FieldValues["legal_profile"]["recipient_type"];
+
+const LegalEntityRecipientTypeInput = ({
+  recipientType,
+  register,
+}: {
+  recipientType: RecipientType;
+  register: UseFormRegister<FieldValues>;
+}) => {
+  if (recipientType !== "legal_entity") return null;
+
+  return (
+    <input
+      type='hidden'
+      {...register("legal_profile.recipient_type", recipientTypeRules)}
+    />
+  );
+};
+
 export const ArtistData = () => {
   const { status } = useSession();
   const { data, isLoading } = useGetArtistLegalData();
@@ -30,6 +49,11 @@ export const ArtistData = () => {
     defaultValues: data,
     mode: "onChange",
     values: (data ?? {}) as FieldValues,
+  });
+
+  const recipientType = useWatch({
+    control: methods.control,
+    name: "legal_profile.recipient_type",
   });
 
   const artistType = data?.legal_profile?.recipient_type;
@@ -46,14 +70,13 @@ export const ArtistData = () => {
         <h3 className={styles.formTitle}>Данные профиля</h3>
         <FormProvider {...methods}>
           <LegalFormSelector
-            onSelect={(type?: "legal_entity") => {
+            onSelect={(type) => {
+              methods.setValue("legal_profile.recipient_type", type, {
+                shouldDirty: true,
+                shouldValidate: true,
+              });
               setIsManuallyOpened(true);
-              if (type) methods.setValue("legal_profile.recipient_type", type);
             }}
-          />
-          <input
-            type='hidden'
-            {...methods.register("legal_profile.recipient_type", recipientTypeRules)}
           />
         </FormProvider>
       </div>
@@ -62,9 +85,9 @@ export const ArtistData = () => {
   return (
     <FormProvider {...methods}>
       <ArtistFormPersonal values={data} />
-      <input
-        type='hidden'
-        {...methods.register("legal_profile.recipient_type", recipientTypeRules)}
+      <LegalEntityRecipientTypeInput
+        recipientType={recipientType}
+        register={methods.register}
       />
       <DevTool control={methods.control} />
     </FormProvider>
