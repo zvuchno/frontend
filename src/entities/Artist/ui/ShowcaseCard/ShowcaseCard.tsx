@@ -3,84 +3,12 @@
 import clsx from "clsx";
 import Link from "next/link";
 
-
-
 import { DeleteIcon, Text } from "@/shared/ui";
 import { EditIcon } from "@/shared/ui/Icons";
-
-
 
 import { isAlbum, isMerch, isPromo } from "../../utils/typeGuarde";
 import s from "./ShowcaseCard.module.scss";
 import { type ShowcaseCardProps } from "./ShowcaseCard.type";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
