@@ -57,28 +57,49 @@
     align-items: start;
     margin-bottom: 0;
     justify-items: center !important;
+    &.label-heading.product-heading {
+      //фото (span:nth-child(1))
 
-    & span:nth-child(2) {
-      grid-column: 2 / 3;
-      grid-row: 1 / 3;
-    }
-    & span:nth-child(3) {
-      grid-column: 2 / 3;
-      grid-row: 2 / 3;
-    }
+      & span:nth-child(1) {
+        //фото
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+      }
 
-    & span:nth-child(6) {
-      grid-column: 3 /4;
-      grid-row: 2 / 3;
-    }
+      & span:nth-child(2) {
+        //артист
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
+      }
 
-    & span:nth-child(5) {
-      grid-column: 3 /4;
-      grid-row: 1 / 2;
-    }
+      & span:nth-child(3) {
+        //наименование
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+      }
 
-    & span:nth-child(7) {
-      display: none;
+      & span:nth-child(4) {
+        //артикул
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+      }
+
+      & span:nth-child(6) {
+        //остаток
+        grid-column: 3 /4;
+        grid-row: 2 / 3;
+      }
+
+      & span:nth-child(5) {
+        //цена
+        grid-column: 3 /4;
+        grid-row: 1 / 2;
+      }
+
+      & span:nth-child(7) {
+        //видимость
+        display: none;
+      }
     }
   }
 
@@ -141,25 +162,34 @@
 
   // заголовок промокодов лейбла
   &.promo-heading {
-    grid-template-columns: 160px repeat(2, 1fr) 50px repeat(4, 1fr);
     justify-items: center !important;
-
-    & span:nth-of-type(2) {
-      //артист
-      grid-column: span 2;
-    }
-
-    & span:last-of-type {
-      //видимость
-      grid-column: span 2;
-      //min-width: 136px;
-    }
 
     @media (max-width: 1140px) {
       grid-template-columns: 110px repeat(3, 40px) repeat(4, 1fr);
 
       & * {
         font-size: 10px;
+      }
+    }
+
+    &.artist-heading {
+      grid-template-columns: 160px 80px repeat(4, 1fr);
+
+      & span:last-of-type {
+        grid-column: -1 /5;
+        justify-self: center !important;
+      }
+    }
+
+    &.label-heading {
+      grid-template-columns: 160px repeat(2, 1fr) 50px repeat(2, minmax(80px, 1fr)) repeat(2, 1fr);
+
+      & span:nth-child(2) {
+        grid-column: span 2;
+      }
+
+      @media (max-width: 1140px) {
+        grid-template-columns: 110px repeat(3, 40px) repeat(2, minmax(80px, 1fr)) repeat(2, 1fr);
       }
     }
 
@@ -195,52 +225,138 @@
           grid-column: 4/5;
         }
       }
+
+      &.artist-heading {
+        grid-template-columns: 160px repeat(3, 1fr);
+        justify-items: center !important;
+
+        @media (max-width: 850px) {
+          grid-template-columns: 130px repeat(3, 1fr);
+        }
+
+        & span:nth-of-type(1) {
+          //промокод
+          grid-column: 1/2;
+          grid-row: 1/2;
+        }
+
+        & span:nth-of-type(2) {
+          //скидка
+          grid-column: 1/2;
+          grid-row: 2/3;
+        }
+        & span:nth-of-type(3) {
+          //период
+          grid-column: 2/3;
+          grid-row: 1/3;
+        }
+        & span:nth-of-type(4) {
+          //количество
+          grid-column: 3/4;
+          grid-row: 1/3;
+        }
+
+        & span:nth-of-type(5) {
+          //видимость
+          grid-column: 4/5;
+          grid-row: 1/3;
+          justify-self: center;
+        }
+      }
     }
 
     &.columns-3 {
-      grid-template-columns: repeat(3, 1fr);
+      &.label-heading {
+        grid-template-columns: 110px 70px 1fr;
+        row-gap: 0;
 
-      & span:first-of-type {
-        // промокод
-        grid-column: 1 / 2;
-        grid-row: 1 / 2;
+        @media (max-width: 375px) {
+          column-gap: 3px;
+          padding-inline: 3px;
+        }
 
-        align-self: stretch;
+        & span:first-of-type {
+          // промокод
+          grid-column: 1 / 2;
+          grid-row: 1 / 2;
+
+          align-self: stretch;
+        }
+
+        & span:nth-of-type(2) {
+          //артист
+          grid-column: 1/2;
+          grid-row: 2/4;
+        }
+
+        & span:nth-child(3) {
+          //скидка
+          grid-column: 2 / 3;
+          grid-row: 1 / 2;
+        }
+
+        & span:nth-child(4) {
+          //период
+          grid-column: 2 / 3;
+          grid-row: 2 / 3;
+        }
+
+        & span:nth-child(5) {
+          //количество
+          grid-column: 2 / 3;
+          grid-row: 3 / 4;
+        }
+
+        & span:nth-child(6) {
+          //видимость
+          grid-column: 3 / 4;
+          grid-row: 1 / 4;
+        }
       }
 
-      & span:nth-of-type(2) {
-        //артист
-        grid-column: 1/2;
-        grid-row: 2/4;
-      }
+      &.artist-heading {
+        grid-template-columns: 130px repeat(2, 1fr);
+        justify-items: center !important;
 
-      & span:nth-child(3) {
-        //скидка
-        grid-column: 2 / 3;
-        grid-row: 1 / 2;
-      }
+        @media (max-width: 375px) {
+          column-gap: 3px;
+          padding-inline: 5px;
+        }
 
-      & span:nth-child(4) {
-        //период
-        grid-column: 2 / 3;
-        grid-row: 2 / 3;
-      }
+        & span:nth-of-type(1) {
+          //промокод
+          grid-column: 1/2;
+          grid-row: 1/2;
+        }
 
-      & span:nth-child(5) {
-        //количество
-        grid-column: 2 / 3;
-        grid-row: 3 / 4;
-      }
+        & span:nth-of-type(2) {
+          //скидка
+          grid-column: 1/2;
+          grid-row: 2/3;
+        }
+        & span:nth-of-type(3) {
+          //период
+          grid-column: 2/3;
+          grid-row: 1/2;
+        }
+        & span:nth-of-type(4) {
+          //количество
+          grid-column: 2/3;
+          grid-row: 2/3;
+        }
 
-      & span:nth-child(6) {
-        //видимость
-        grid-column: 3 / 4;
-        grid-row: 1 / 4;
+        & span:nth-of-type(5) {
+          //видимость
+          grid-column: 3/4;
+          grid-row: 1/3;
+          justify-self: center;
+        }
       }
     }
   }
 
   &.product-heading {
+    justify-items: center;
     &.columns-4 {
       justify-items: center !important;
       &.artist-heading {
@@ -281,6 +397,44 @@
           //видимость
           grid-column: 4/6;
         }
+      }
+    }
+
+    &.columns-3 {
+      & span:nth-child(1) {
+        //фото
+        grid-column: 1 / 2;
+        grid-row: 1/2;
+      }
+
+      & span:nth-child(2) {
+        //наименование
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+      }
+
+      span:nth-child(3) {
+        //артикул
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+      }
+
+      span:nth-child(4) {
+        //цена
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+      }
+
+      span:nth-child(5) {
+        //остаток
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+      }
+
+      & span:last-of-type {
+        //видимость
+        grid-column: 3/4;
+        grid-row: 1 / 2;
       }
     }
   }
