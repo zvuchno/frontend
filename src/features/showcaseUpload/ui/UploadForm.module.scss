@@ -6,18 +6,18 @@
 
 .fildsContainer {
   display: grid;
-  grid-template-columns: 368px 1fr 1fr;
+  grid-template-columns: 368px repeat(2, minmax(0, 1fr));
   align-items: center;
   column-gap: 49px;
   row-gap: 24px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1174px) {
     grid-template-columns: repeat(2, 1fr);
     column-gap: 32px;
     row-gap: 16px;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 850px) {
     grid-template-columns: 1fr;
     column-gap: 24px;
     row-gap: 16px;
@@ -66,7 +66,7 @@
   grid-column: span 2;
 
   @media (max-width: 1024px) {
-     grid-column: span 1;
+    grid-column: span 1;
   }
 }
 

@@ -4,8 +4,14 @@
   width: 100%;
   gap: 20px;
   align-items: center;
+ 
+
+  @media (max-width: 1000px) {
+     flex-wrap: wrap;
+  }
 
   @media (max-width: 768px) {
+    flex-wrap: nowrap;
     flex-direction: column;
   }
 }
@@ -117,7 +123,7 @@
   justify-content: center;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 810px) {
     flex-direction: row;
   }
 }
