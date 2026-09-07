@@ -15,6 +15,7 @@ import {
 } from "../model/ReleaseDescription.types";
 import s from "./ReleaseDescription.module.scss";
 import { useRouter } from "next/navigation";
+import { DeliveryInfo } from "../../components/DeliveryInfo/DeliveryInfo";
 
 // Компонент отображает карточку релиза и носителей. Вариант носителя "Диджитал" отображает информацию самого релиза
 export const ReleaseDescription = ({
@@ -38,16 +39,19 @@ export const ReleaseDescription = ({
 
   const tabsData = [
     {
+      id: "description",
       title: "Описание",
       description: product?.description || "Описание товара",
     },
     {
+      id: "delivery",
       title: "Доставка",
-      description: "Доставка",
+      description: <DeliveryInfo />,
     },
     {
+      id: "return",
       title: "Возврат",
-      description: "Возврат",
+      description: "Для оформления возврата обратитесь в службу поддержки. Цифровые товары не подлежат возврату и обмену.",
     },
   ];
 

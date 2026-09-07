@@ -1,6 +1,7 @@
 type TabData = {
+  id: string;
   title: string;
-  description: string;
+  description: React.ReactNode;
 };
 
 export interface TabBarProps {

@@ -49,6 +49,8 @@
   color: var(--color-text-primary);
   display: none;
   animation: fadeIn 0.5s ease-in-out;
+  max-height: 200px;
+  overflow-y: auto;
 
   &_active {
     display: block;
