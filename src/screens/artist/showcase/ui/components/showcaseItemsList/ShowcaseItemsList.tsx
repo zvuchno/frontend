@@ -125,7 +125,7 @@ export const ShowcaseItemsList = ({
         {itemType === "promo" ? "Промокоды" : "Товары"}
       </Title>
 
-      <div className={clsx(s.heading, { [s[`columns-${columnsCount}`]]: columnsCount })}>
+      <div className={clsx(s.heading, { [s[`columns-${columnsCount}`]]: columnsCount, [s['promo-heading']]: isPromo})}>
         <Text className={clsx(s.heading__text)}>{isProduct ? "Фото" : "Промокод"}</Text>
         {profileType === "label" && <Text className={clsx(s.heading__text)}>Артист</Text>}
         <Text

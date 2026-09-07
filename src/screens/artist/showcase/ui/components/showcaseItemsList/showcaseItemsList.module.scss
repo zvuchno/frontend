@@ -104,6 +104,10 @@
           grid-column: 2 / 3;
         }
       }
+
+      .promo-heading & {
+        grid-column: span 1;
+      }
     }
 
     &_leftAligned {
@@ -122,13 +126,115 @@
         justify-self: center;
       }
       @media (max-width: 476px) {
-        display: none;
-        width: 0;
+        &.item_product {
+          display: none;
+          width: 0;
+        }
       }
     }
 
     &_rightAligned {
       justify-self: end;
+    }
+  }
+
+  // заголовок промокодов лейбла
+  &.promo-heading {
+    grid-template-columns: 160px repeat(2, 1fr) 50px repeat(4, 1fr);
+    justify-items: center !important;
+
+    & span:nth-of-type(2) {
+      //артист
+      grid-column: span 2;
+    }
+
+    & span:last-of-type {
+      //видимость
+      grid-column: span 2;
+      //min-width: 136px;
+    }
+
+    @media (max-width: 1140px) {
+      grid-template-columns: 110px repeat(3, 40px) repeat(4, 1fr);
+
+      & * {
+        font-size: 10px;
+      }
+    }
+
+    &.columns-4 {
+      grid-template-columns: 1fr 120px 90px 1fr;
+      
+
+      & span:first-of-type {
+        // промокод
+        grid-column: span 1;
+        grid-row: 1/2;
+      }
+
+      & span:nth-of-type(2) {
+        //артист
+        grid-column: 1/2;
+      }
+
+      & span:nth-of-type(3) {
+        //скидка
+        grid-column: 2/3;
+        grid-row: 2/3;
+      }
+
+      & span:nth-of-type(4) {
+        //период
+        grid-column: 3/4;
+        grid-row: 2/3;
+      }
+
+      & span:last-of-type {
+        //видимость
+        grid-column: 4/5;
+      }
+    }
+
+    &.columns-3 {
+      grid-template-columns: repeat(3, 1fr);
+
+      & span:first-of-type {
+        // промокод
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+
+        align-self: stretch;
+      }
+
+      & span:nth-of-type(2) {
+        //артист
+        grid-column: 1/2;
+        grid-row: 2/4;
+      }
+
+      & span:nth-child(3) {
+        //скидка
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+      }
+
+      & span:nth-child(4) {
+        //период
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+      }
+
+      & span:nth-child(5) {
+        //количество
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+      }
+
+      & span:nth-child(6) {
+        //видимость
+        grid-column: 3 / 4;
+        grid-row: 1 / 4;
+      }
     }
   }
 }
