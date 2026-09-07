@@ -12,6 +12,7 @@ import VariantRange from "../../components/VariantRange/VariantRange";
 import { type MerchDescriptionProps } from "../model/MerchDescription.types";
 import s from "./MerchDescription.module.scss";
 import { useRouter } from "next/navigation";
+import { DeliveryInfo } from "../../components/DeliveryInfo/DeliveryInfo";
 
 // Компонент отображает карточку обычного мерча, не относящегося к носителям
 
@@ -23,16 +24,19 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
 
   const tabsData = [
     {
+      id: "description",
       title: "Описание",
-      description: product.description ? product.description : "У этого товара нет описания",
+      description: product.description ? product.description : "У этого товара нет описания.",
     },
     {
+      id: "delivery",
       title: "Доставка",
-      description: "Доставка",
+      description: <DeliveryInfo />,
     },
     {
+      id: "return",
       title: "Возврат",
-      description: "Возврат",
+      description: "Для оформления возврата обратитесь в службу поддержки.",
     },
   ];
 

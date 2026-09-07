@@ -1,0 +1,37 @@
+.content {
+  padding: 16px;
+}
+
+.heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 24px 0 12px;
+  color: var(--color-text-primary);
+}
+
+.text {
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  margin-bottom: 16px;
+}
+
+.list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 16px;
+}
+
+.item {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  color: var(--color-text-primary);;
+}
+
+.item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-text-primary);
+}
