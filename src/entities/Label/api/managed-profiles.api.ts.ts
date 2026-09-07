@@ -27,7 +27,9 @@ export async function getManagedProfiles(): Promise<TManagedProfileResponse> {
   return response;
 }
 
-export async function createManagedProfile(newProfile: TManagedProfile): Promise<TManagedProfile> {
+export async function createManagedProfile(
+  newProfile: Omit<TManagedProfile, "id">
+): Promise<TManagedProfile> {
   const response = await authFetchClient<TManagedProfile>(LABEL_MANAGED_ARTISTS_PATH, {
     method: "POST",
     body: JSON.stringify(newProfile),
@@ -102,4 +104,10 @@ export async function changeManagedProfileCover(
   }
 
   return response;
+}
+
+export async function deleteManagedProfile(id: number): Promise<void> {
+  await authFetchClient<void>(`${LABEL_MANAGED_ARTISTS_PATH}/${id}`, {
+    method: "DELETE",
+  });
 }

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { CardArtist } from "@/entities/Artist";
-import { useGetManagedProfiles } from "@/entities/Label";
+import { useDeleteManagedProfile, useGetManagedProfiles } from "@/entities/Label";
 
 import { ButtonUI, Loader, ModalUI } from "@/shared/ui";
 
@@ -20,6 +20,7 @@ export const LabelPage = () => {
   const profileType = session.data?.user.profileType;
 
   const { data: artists, status } = useGetManagedProfiles(profileType);
+  const { mutate: deleteManagedArtist } = useDeleteManagedProfile();
 
   const router = useRouter();
 
@@ -47,7 +48,6 @@ export const LabelPage = () => {
                   <CardArtist
                     image={artist.cover || ""}
                     description={artist.name}
-                    hasButton
                     className={styles.labelGalleryArtistCard}
                   />
                 </Link>
@@ -57,7 +57,7 @@ export const LabelPage = () => {
                       `/artist/label/${artist.id}/${encodeURIComponent(artist.slug ?? "")}`
                     )
                   }
-                  onDelete={() => {}} // нет ручки для удаления профиля артиста из лейбла
+                  onDelete={() => deleteManagedArtist(artist.id)}
                 />
               </article>
             ))}

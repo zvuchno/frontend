@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 
 import { BaseForm } from "@/widgets/auth/BaseForm";
+import type { TBecomeArtistFormData } from "@/widgets/auth/BecomeArtistForm";
 import { BecomeArtistFormContent } from "@/widgets/auth/BecomeArtistForm/components/BecomeArtistFormContent";
 
 import { type TManagedProfile, useCreateManagedProfile } from "@/entities/Label";
@@ -10,7 +11,6 @@ import { type TManagedProfile, useCreateManagedProfile } from "@/entities/Label"
 import { LoadingButton } from "@/shared/ui";
 
 import s from "./NewManagedProfile.module.scss";
-import type { TBecomeArtistFormData } from "@/widgets/auth/BecomeArtistForm/model/types";
 
 export const NewManagedProfile = ({ onClose }: { onClose: () => void }) => {
   const { mutate: createNewArtist } = useCreateManagedProfile();
@@ -21,19 +21,19 @@ export const NewManagedProfile = ({ onClose }: { onClose: () => void }) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleChange = 
+  const handleChange =
     (field: keyof TBecomeArtistFormData) => (e: React.ChangeEvent<HTMLInputElement> | string) => {
-    const value = typeof e === "string" ? e : e.target.value;
+      const value = typeof e === "string" ? e : e.target.value;
 
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    };
 
   const handleSubmit = () => {
     if (formData.name.trim().length === 0) return;
 
     setIsLoading(true);
 
-    const newManagedProfile: TManagedProfile = {
+    const newManagedProfile: Omit<TManagedProfile, "id"> = {
       name: formData.name,
     };
 
@@ -58,7 +58,6 @@ export const NewManagedProfile = ({ onClose }: { onClose: () => void }) => {
           handleSubmit();
         }}
         isLoading={isLoading}
-        
         renderFields={() => (
           <BecomeArtistFormContent
             data={formData}

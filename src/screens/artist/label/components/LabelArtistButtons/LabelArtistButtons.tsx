@@ -25,7 +25,6 @@ export const LabelArtistButtons = ({
       variant='secondary'
       className={styles.labelArtistButton}
       onClick={onDelete}
-      disabled
       title='Удалить'
       ariaLabel='Удалить профиль артиста'
       aria-disabled={true}

@@ -1,1 +1,1 @@
-export { type TBecomeArtistRequest } from "./model/types";
+export { type TBecomeArtistRequest, type TBecomeArtistFormData } from "./model/types";

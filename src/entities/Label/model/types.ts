@@ -1,7 +1,7 @@
 import { type ArtistApiDataItem } from "@/entities/profile";
 
 export type TManagedProfile = {
-  id?: number;
+  id: number;
   profile_type?: "artist" | "label";
   name: string;
   description?: string;

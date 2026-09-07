@@ -4,6 +4,7 @@ export {
   useCreateManagedProfile,
   useGetManagedProfileDetails,
   useGetManagedProfiles,
+  useDeleteManagedProfile,
 } from "./model/useManagedProfiles";
 export type { TManagedProfile, TManagedProfileDetails } from "./model/types";
 
