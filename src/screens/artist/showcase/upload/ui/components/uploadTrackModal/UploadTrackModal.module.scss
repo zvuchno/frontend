@@ -68,12 +68,12 @@
 .selectedFileBlock__info {
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
 }
 
 .selectedFileBlock__name {
   font-weight: 500;
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .selectedFileBlock__size {

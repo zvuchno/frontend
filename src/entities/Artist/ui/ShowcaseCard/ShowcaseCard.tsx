@@ -36,10 +36,16 @@ const formatter = new Intl.DateTimeFormat("ru-RU", {
 });
 
 const formatDateRangeIntl = (startAt?: string | null, endAt?: string | null) => {
-  if (!startAt || !endAt) return "неограничено";
-  const start = formatter.format(new Date(startAt));
-  const end = formatter.format(new Date(endAt));
-  return `${start} - ${end}`;
+  if (!endAt) return "неограничено";
+  if (startAt && endAt) {
+    const start = formatter.format(new Date(startAt));
+    const end = formatter.format(new Date(endAt));
+    return `${start} - ${end}`;
+  }
+  if (!startAt && endAt) {
+    const end = formatter.format(new Date(endAt));
+    return `до ${end}`;
+  }
 };
 
 export const ShowcaseCard = ({

@@ -430,7 +430,7 @@ export function useDeleteImage() {
 }
 
 //-------треки-------//
-export function useTracksInfiniteQuery(type: string, album?: number) {
+export function useTracksInfiniteQuery(type: string, album?: number | null) {
   return useInfiniteQuery<
     PaginatedStoreResponse<TShowcaseTrack>,
     Error,

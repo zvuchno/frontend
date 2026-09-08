@@ -6,13 +6,13 @@ export const checkMediaFiles = async (file: File) => {
   const allowedImageMime = ["image/jpeg", "image/webp", "image/png"];
   const isImage = allowedImageMime.includes(file.type);
 
-  const allowedAudioMime = ['audio/mpeg', 'audio/flac', 'audio/wav'];
+  const allowedAudioMime = ["audio/mpeg", "audio/flac", "audio/wav", "audio/x-wav"];
   const isAudio = allowedAudioMime.includes(file.type);
 
   if (!isImage && !isAudio) {
     return {
       validFile: null,
-      error: 'Разрешенные форматы для изображений: JPEG, WebP, PNG. Для аудиофайлов -  MP3, FLAC, WAV',
+      error: "Разрешенные форматы для изображений: JPEG, WebP, PNG. Для аудиофайлов -  MP3, FLAC, WAV",
     };
   }
 
@@ -20,7 +20,7 @@ export const checkMediaFiles = async (file: File) => {
     if (file.size > MAX_IMAGE_SIZE) {
       return {
         validFile: null,
-        error: 'Размер загружаемого изображения не должен превышать 35 МБ'
+        error: "Размер загружаемого изображения не должен превышать 35 МБ"
       }
     }
     const img = new Image();
@@ -50,10 +50,10 @@ export const checkMediaFiles = async (file: File) => {
     if (file.size > MAX_AUDIO_SIZE) {
       return {
         validFile: null,
-        error: 'Размер загружаемого файла не должен превышать 500 МБ'
+        error: "Размер загружаемого файла не должен превышать 500 МБ"
       }
     }
   }
 
-  return { validFiles: file, error: null };
+  return { validFile: file, error: null };
 };

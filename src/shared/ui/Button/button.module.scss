@@ -23,6 +23,7 @@ $text-color-accent: #ffffff;
 .button {
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
   min-height: $button-hight-standart;
   padding-inline: $padding-20;
