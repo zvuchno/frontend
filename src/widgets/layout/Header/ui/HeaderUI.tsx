@@ -34,8 +34,6 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
     setSearchOpen(false);
     router.push("/catalog/all");
   };
-  const userType = user?.isArtist ? "artist" : "listener";
-
   return (
     <header className={clsx(styles.header, isSearchOpen && styles.headerSearch, className)}>
       {isSearchOpen ? (
@@ -65,7 +63,6 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
                 actions={actions}
                 onSearchOpen={setSearchOpen}
                 isAuthorized={isAuthorized}
-                userType={userType}
               />
             </ul>
             {!isAuthorized && (
