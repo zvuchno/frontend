@@ -332,7 +332,7 @@ export async function getShowcaseTracksList({
   album,
   url,
 }: {
-  album?: number;
+  album?: number | null;
   url?: string;
 }): Promise<PaginatedStoreResponse<TShowcaseTrack>> {
   const params = new URLSearchParams();

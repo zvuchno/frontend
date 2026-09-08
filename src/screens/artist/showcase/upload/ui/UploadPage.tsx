@@ -79,6 +79,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
   // id товара, который необходимо отредактировать
   const currentProductId = id ? Number(id) : undefined;
   const isEditForm = !!currentProductId;
+  const releaseIdForTracks = currentProductId ?? newAlbumId;
 
   const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
 
@@ -105,7 +106,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
     isLoading: tracksLoading,
     isFetchingNextPage,
     hasNextPage, 
-  } = useTracksInfiniteQuery(productType, currentProductId);
+  } = useTracksInfiniteQuery(productType, releaseIdForTracks);
   const tracksList = tracks?.pages.flatMap((page) => page.results) ?? [];
 
   const deleteTrackMutation = useDeleteTrack(currentProductId);

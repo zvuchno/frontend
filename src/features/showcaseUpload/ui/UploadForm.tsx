@@ -67,12 +67,15 @@ export const UploadForm = ({
 
   const albumOptions = useMemo(() => {
     if (!albumsQuery.data) return [];
-    return albumsQuery.data.pages
+
+    const baseOptions = albumsQuery.data.pages
       .flatMap((page) => page.results || [])
       .map((album) => ({
         value: String(album.id),
         label: album.name,
       }));
+
+    return [...baseOptions, { value: "null", label: "——" }];
   }, [albumsQuery.data]);
 
   const isLoadingAlbums = albumsQuery.isFetching || albumsQuery.isPending;
@@ -187,16 +190,16 @@ export const UploadForm = ({
             label="Дата релиза"
             inputSize="large"
             {...register("releaseDate", {
-              validate: {
-                notInFuture: (value: string | undefined) => {
-                  if (!value) return true; 
-                  const [year, month, day] = value.split('-').map(Number);
-                  const selectedDate = new Date(year, month - 1, day, 0, 0, 0, 0);
-                  const now = new Date();
-                  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-                  return selectedDate <= today || "Дата не может быть в будущем";
-                },
-              },
+              // validate: {
+              //   notInFuture: (value: string | undefined) => {
+              //     if (!value) return true; 
+              //     const [year, month, day] = value.split('-').map(Number);
+              //     const selectedDate = new Date(year, month - 1, day, 0, 0, 0, 0);
+              //     const now = new Date();
+              //     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+              //     return selectedDate <= today || "Дата не может быть в будущем";
+              //   },
+              // },
             })}
             labelClassName={s.label}
             inputClassName={s.input}
