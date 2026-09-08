@@ -67,7 +67,7 @@ export const PlayerUI = ({ className }: PlayerUIProps) => {
   const handleClickOnTrackFromPlaylist = (newTrack: TTrack) => {
     if (newTrack.id !== track?.id) {
       setTrack(newTrack);
-      setIsListOpen(false);
+      //setIsListOpen(false);
       return;
     }
 
