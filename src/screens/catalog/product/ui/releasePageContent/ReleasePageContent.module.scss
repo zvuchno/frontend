@@ -1,10 +1,7 @@
 .tracksSection {
   display: flex;
   flex-direction: column;
-
-  > * + * {
-    margin-top: 28px;
-  }
+  gap: 28px;
 }
 
 .title {
@@ -20,8 +17,5 @@
 .tracksContainer {
   display: flex;
   flex-direction: column;
-
-  > * + * {
-    margin-top: 12px;
-  }
+  gap: 12px;
 }

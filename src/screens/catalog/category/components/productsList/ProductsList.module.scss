@@ -1,12 +1,9 @@
 .container {
   display: flex;
   flex-direction: column;
+  gap: 80px;
   margin-top: 100px;
   margin-bottom: 200px;
-
-  > * + * {
-    margin-top: 80px;
-  }
 }
 
 .cardList {
@@ -22,10 +19,6 @@
 
   @media (max-width: 425px) {
     padding-inline: 10px;
-  }
-
-  @media (max-width: 300px) {
-    grid-template-columns: minmax(0, 1fr);
   }
 
   .productCardLink {
@@ -44,9 +37,6 @@
       justify-content: center;
     }
 
-    @media (max-width: 300px) {
-      grid-template-columns: minmax(0, 1fr);
-    }
   }
 }
 
@@ -59,10 +49,7 @@
 .errorBlock {
   display: flex;
   flex-direction: column;
-
-  > * + * {
-    margin-top: 20px;
-  }
+  gap: 20px;
 }
 
 .retryButton {

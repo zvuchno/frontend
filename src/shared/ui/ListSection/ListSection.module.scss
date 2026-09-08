@@ -1,11 +1,8 @@
 .section {
   display: flex;
   flex-direction: column;
+  gap: 54px;
   width: 100%;
-
-  > * + * {
-    margin-top: 54px;
-  }
 
   @media (max-width: 425px) {
     padding-inline: 10px;
