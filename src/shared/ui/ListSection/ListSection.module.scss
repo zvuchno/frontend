@@ -39,8 +39,9 @@
 }
 
 .content {
+  container-type: inline-size;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   justify-content: space-between;
   width: 100%;
   column-gap: 72px;
@@ -51,8 +52,10 @@
     width: 100%;
     max-width: 327px;
   }
+}
 
-  @media (max-width: 300px) {
-    grid-template-columns: minmax(0, 1fr);
+@container (min-width: 820px) {
+  .content > [data-list-section-item="product"] {
+    max-width: 327px;
   }
 }
