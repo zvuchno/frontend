@@ -127,6 +127,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
                   <Title Tag='h2' className={s.title}>
                     Личный кабинет
                   </Title>
+
                   <section className={s.section}>
                     <AccountNavigation type={currentArtist?.profile_type} />
 

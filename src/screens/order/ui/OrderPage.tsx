@@ -23,7 +23,7 @@ export const OrderPage = () => {
       full_name: userDefault?.full_name || "",
       email: userDefault?.email || "",
       phone: userDefault?.phone || "",
-      personal_data_consent: undefined,
+      //personal_data_consent: undefined,
       city: userDefault?.city,
       street: "",
       house: "",

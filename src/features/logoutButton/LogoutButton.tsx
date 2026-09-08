@@ -11,7 +11,7 @@ import { ButtonUI, ModalUI } from "@/shared/ui";
 
 import s from "./LogoutButton.module.scss";
 
-const LogoutButton = () => {
+const LogoutButton = ({ className }: { className?: string }) => {
   const { clearProducts } = useRecentlyViewed();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -46,7 +46,12 @@ const LogoutButton = () => {
   };
   return (
     <>
-      <ButtonUI variant='secondary' onClick={handleConfirmModalOpen} size='small'>
+      <ButtonUI
+        variant='secondary'
+        onClick={handleConfirmModalOpen}
+        size='small'
+        className={className}
+      >
         Выйти
       </ButtonUI>
       <ModalUI
