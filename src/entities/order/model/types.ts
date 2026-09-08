@@ -37,7 +37,7 @@ export type TOrder = {
   full_name: string;
   email: string;
   phone: string;
-  personal_data_consent: boolean | undefined;
+  //personal_data_consent: boolean | undefined;
   city?: string;
   street?: string;
   house?: string;

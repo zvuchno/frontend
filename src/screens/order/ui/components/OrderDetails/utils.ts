@@ -5,7 +5,7 @@ import { type FieldValues } from "@/screens/order/model/types";
 import { type TProfileFormField } from "@/features/profile";
 
 import { validateDeliveryOption } from "@/shared/utils/validateDeliveryOption";
-import { validatePersonalConsent } from "@/shared/utils/validatePersonalConsent";
+//import { validatePersonalConsent } from "@/shared/utils/validatePersonalConsent";
 import { validatePhone } from "@/shared/utils/validatePhone";
 
 export const orderPersonalFormFields: TProfileFormField<FieldValues>[] = [
@@ -137,10 +137,10 @@ export const fieldsConfig: {
     required: true,
     validate: (value, fields) => validateDeliveryOption(String(value), fields),
   },
-  personal_data_consent: {
+  /*personal_data_consent: {
     required: true,
     validate: (value, fields) => validatePersonalConsent(value, fields),
-  },
+  },*/
   tariffs: {
     required: true,
   },

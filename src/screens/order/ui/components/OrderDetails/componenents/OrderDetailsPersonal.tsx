@@ -4,20 +4,20 @@ import { type FieldValues } from "@/screens/order/model/types";
 
 import { InputPhone } from "@/features/profile";
 
-import { CheckboxUI, CustomInput } from "@/shared/ui";
+import { CustomInput } from "@/shared/ui";
 
 import styles from "../OrderDetails.module.scss";
-import { fieldsConfig, orderPersonalFormFields } from "../utils";
+import { orderPersonalFormFields } from "../utils";
 import { orderPersonalFormRules } from "../validation";
 
 export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boolean }) => {
   const {
     register,
     formState: { errors },
-    watch,
+    //watch,
   } = useFormContext<FieldValues>();
 
-  const isConsentChecked = watch("personal_data_consent");
+ //const isConsentChecked = watch("personal_data_consent");
 
   return (
     <section className={styles.orderDetailsPersonal}>
@@ -53,7 +53,7 @@ export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boole
           );
         })}
       </div>
-      <div>
+      {/*<div>
         <CheckboxUI
           type='checkbox'
           isChecked={!!isConsentChecked}
@@ -62,7 +62,7 @@ export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boole
         >
           Дать согласие на обработку персональных данных в соответствии с политикой обработки{" "}
         </CheckboxUI>
-      </div>
+      </div>*/}
     </section>
   );
 };

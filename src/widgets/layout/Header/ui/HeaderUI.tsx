@@ -8,7 +8,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import SearchInput from "@/features/SearchInput/SearchInput";
-import LogoutButton from "@/features/logoutButton/LogoutButton";
+//import LogoutButton from "@/features/logoutButton/LogoutButton";
 import { NavPanel } from "@/features/nav-panel";
 
 import { useUserStore } from "@/entities/user/store/useUserStore";
@@ -73,7 +73,7 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
                 Войти
               </Link>
             )}
-            {isAuthorized && <LogoutButton />}
+            {/*{isAuthorized && <LogoutButton />}*/}
           </nav>
         </>
       )}

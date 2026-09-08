@@ -6,6 +6,24 @@
 .container {
   overflow: hidden;
   background-color: var(--color-bg-secondary);
+
+  &Header {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 1.75em;
+
+    & .logoutButton {
+      display: block;
+      flex-grow: 0;
+      height: 44px;
+      width: 120px;
+    }
+
+    @media(max-width: 500px) {
+      flex-wrap: wrap;
+    }
+  }
 }
 
 .body {
@@ -21,7 +39,8 @@
   line-height: 100%;
   letter-spacing: -0.06em;
   text-transform: none;
-  margin-bottom: 1.75em;
+  
+  flex-shrink: 0;
 }
 
 .section {
@@ -53,10 +72,6 @@
   .body {
     min-height: auto;
     padding: 2rem 1rem 6rem;
-  }
-
-  .title {
-    margin-bottom: 1.3em;
   }
 
   .section {
