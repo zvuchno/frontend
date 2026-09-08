@@ -75,7 +75,7 @@ export const UploadForm = ({
         label: album.name,
       }));
 
-    return [...baseOptions, { value: "null", label: "——" }];
+    return [...baseOptions, { value: "null", label: "—" }];
   }, [albumsQuery.data]);
 
   const isLoadingAlbums = albumsQuery.isFetching || albumsQuery.isPending;

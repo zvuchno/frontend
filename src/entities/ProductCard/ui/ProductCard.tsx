@@ -4,6 +4,8 @@ import Link from "next/link";
 
 import styles from "./productCard.module.scss";
 import type { TProductCardProps } from "./types";
+import { PauseIcon } from "@/shared/ui/Icons/PauseIcon";
+import { PlayIcon } from "@/shared/ui/Icons/playIcon";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -56,25 +58,26 @@ export const ProductCard = ({
             />
           )}
           {isRelease && (
-            <div
+            <button
               onClick={onPlay ? handlePlayAlbum : undefined}
               className={clsx(
                 styles.playButton,
                 // albumTracks.length === 0 && styles.playButtonDisabled
               )}
               style={{
-                backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')",
+                //backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')",
                 cursor:"pointer",
               }}
               aria-label="Воспроизвести альбом"
               title="Воспроизвести альбом"
-              role='button'
               onKeyDown={(e) => {
                 if ((e.key === 'Enter' || e.key === ' ') && onPlay) {
                   handlePlayAlbum(e as any);
                 }
               }}
-            />
+            >
+              {isPlaying ? <PauseIcon size={15} /> : <PlayIcon size={15} />}
+            </button>
           )}
           {mediaAction ? <div className={styles.actionButton}>{mediaAction}</div> : null}
         </div>
