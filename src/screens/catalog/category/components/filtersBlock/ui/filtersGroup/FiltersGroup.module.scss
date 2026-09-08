@@ -1,10 +1,7 @@
 .filterGroup {
   display: flex;
   flex-direction: column;
-
-  > * + * {
-    margin-top: 20px;
-  }
+  gap: 20px;
 
   &__title {
     font-family: var(--font-better-vcr);
@@ -18,11 +15,7 @@
   &__tags {
     display: flex;
     flex-direction: row;
+    gap: 20px;
     flex-wrap: wrap;
-    margin: -10px;
-
-    > * {
-      margin: 10px;
-    }
   }
 }
