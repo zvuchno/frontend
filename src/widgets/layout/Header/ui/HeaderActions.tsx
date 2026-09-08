@@ -8,12 +8,10 @@ import { HeaderActionLink } from "./HeaderActionLink";
 export const HeaderActions = ({
   actions,
   isAuthorized,
-  userType,
   onSearchOpen,
 }: {
   actions: THeaderAction[];
   isAuthorized: boolean;
-  userType: "artist" | "listener";
   onSearchOpen: (set: boolean) => void;
 }) => {
   const { data } = useCart();
@@ -31,12 +29,7 @@ export const HeaderActions = ({
           }
         };
 
-        const href =
-          action.title === "Профиль"
-            ? userType === "artist"
-              ? "/artist/profile"
-              : "/fans/profile"
-            : action.href;
+        const href = action.title === "Профиль" ? "/fans/profile" : action.href;
 
         if (action.title === "Профиль" && !isAuthorized) {
           return null;
