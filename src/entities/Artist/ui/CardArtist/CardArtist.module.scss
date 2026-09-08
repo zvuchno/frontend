@@ -85,3 +85,23 @@
     }
   }
 }
+
+@supports not (aspect-ratio: 4 / 3.5834) {
+  .cardWrapper {
+    height: auto;
+
+    &::after {
+      content: "";
+      display: block;
+      padding-bottom: 89.585%;
+    }
+  }
+
+  .cardCorner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
