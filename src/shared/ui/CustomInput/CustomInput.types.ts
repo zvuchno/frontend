@@ -26,4 +26,5 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   labelClassName?: string;
   inputClassName?: string;
   messageSize?: "small" | "large";
+  hintText?: string;
 };

@@ -9,6 +9,7 @@ import { type TArtistSettingsFieldValues } from "@/entities/Artist";
 
 import styles from "./ArtistSettingsPickupPoint.module.scss";
 import { PickupPointAddress } from "./components/PickupPointAddress";
+import { HintBlock } from "@/shared/ui/HintBlock";
 
 export const ArtistSettingsPickupPoint = ({
   index,
@@ -40,7 +41,10 @@ export const ArtistSettingsPickupPoint = ({
         name={dateName}
         render={({ field: { value, onBlur }, fieldState }) => (
           <div className={styles.artistSettingsDeliveryDate}>
-            <label className={styles.artistSettingsDeliveryDateLabel}>Дата</label>
+            <div className={styles.artistSettingsDeliveryDateContainer}>
+              <label className={styles.artistSettingsDeliveryDateLabel}>Дата</label>
+              <HintBlock text="укажите дату самовывоза или оставьте поле пустым"/>
+            </div>
             <div
               className={clsx(
                 styles.artistSettingsDeliveryDatePicker,

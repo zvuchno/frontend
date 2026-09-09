@@ -256,39 +256,29 @@ export const UploadTrackModal = ({
             inputClassName={s.input}
           />
           <div className={s.container}>
-            <div className={s.field}>
-              <div className={s.field__labelContainer}>
-                <label className={clsx(s.text, s.field__labelContainer__label)} htmlFor='price'>
-                  Индивидуальная цена
-                </label>
-                <span className={s.field__labelContainer__icon}>
-                  <span className={clsx(s.text, s.popup)}>
-                    если не выставить индивидуальную цену, то приобрести трек отдельно от всего альбома будет нельзя
-                  </span>
-                </span>
-              </div>
-              <CustomInput 
-                id={'price'}
-                type='number'
-                error={!!errors.price}
-                message={errors.price?.message}
-                {...register('price', { 
-                  required: false,
-                  min: { value: 0, message: 'Цена не может быть отрицательной' },
-                  max: { value: 99999999, message: 'Цена не может быть больше 99999999' },
-                  validate: (val) => {
-                    const str = String(val);
-                    const parts = str.split('.');
-                    if (parts.length > 1 && parts[1].length > 2) {
-                      return 'Допускается не более 2 знаков после запятой';
-                    }
-                    return true;
-                  },
-                })}
-                labelClassName={s.label}
-                inputClassName={s.input}
-              />
-            </div>
+            <CustomInput 
+              id={'price'}
+              type='number'
+              label="Индивидуальная цена"
+              error={!!errors.price}
+              message={errors.price?.message}
+              {...register('price', { 
+                required: false,
+                min: { value: 0, message: 'Цена не может быть отрицательной' },
+                max: { value: 99999999, message: 'Цена не может быть больше 99999999' },
+                validate: (val) => {
+                  const str = String(val);
+                  const parts = str.split('.');
+                  if (parts.length > 1 && parts[1].length > 2) {
+                    return 'Допускается не более 2 знаков после запятой';
+                  }
+                  return true;
+                },
+              })}
+              labelClassName={s.label}
+              inputClassName={s.input}
+              hintText="если не выставить индивидуальную цену, то приобрести трек отдельно от всего альбома будет нельзя"
+            />
 
             <CheckboxUI 
               type='checkbox'

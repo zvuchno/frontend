@@ -5,6 +5,7 @@ import clsx from "clsx";
 import s from "./CustomInput.module.scss";
 import { type InputProps } from "./CustomInput.types";
 import { FieldErrorMessage } from "./FieldErrorMessage/FieldErrorMessage";
+import { HintBlock } from "../HintBlock";
 
 export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -21,6 +22,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
       labelClassName,
       inputClassName,
       messageSize = "large",
+      hintText,
       ...otherProps
     },
     ref
@@ -37,9 +39,12 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <div className={s.labelContainer}>
             <label className={clsx(labelsClassName, labelClassName)} htmlFor={id}>
-              {label}
+              {label}{" "}
+              {otherProps.required && <span className={s.labelContainer__markRequired}>*</span>}
             </label>
-            {otherProps.required && <span className={s.labelContainer__markRequired}>*</span>}
+            {hintText && (
+              <HintBlock text={hintText} />
+            )}
           </div>
         )}
 
