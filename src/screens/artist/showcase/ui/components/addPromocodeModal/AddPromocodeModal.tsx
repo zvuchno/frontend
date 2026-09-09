@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 import clsx from "clsx";
+import { format, parseISO } from "date-fns";
+import { ru } from "date-fns/locale";
 
 import {
   type PromocodeFormValues,
@@ -22,9 +24,11 @@ import {
 import { useShowcaseArtistId } from "@/entities/Artist/store/useShowcaseStore";
 import { useGetManagedProfiles } from "@/entities/Label";
 
-import { ButtonUI, CheckboxUI, CustomInput, Loader, ModalUI, SelectUI, Title } from "@/shared/ui";
+import { ButtonUI, CheckboxUI, CustomInput, Loader, ModalUI, SelectUI, Text, Title } from "@/shared/ui";
 
 import s from "./AddPromocodeModal.module.scss";
+import DatePicker from "react-datepicker";
+import { HintBlock } from "@/shared/ui/HintBlock";
 
 interface AddPromocodeModalProps {
   isOpen: boolean;
@@ -48,6 +52,7 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
 
   // данные промокода, получаемые, если перешли для редактирования
   const { data, isLoading, error } = useDetailPromocode(id);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const isEditForm = !!id;
 
@@ -115,6 +120,17 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
 
   const onSubmit = async (data: PromocodeFormValues, action: "create" | "save") => {
     if (isSubmitting) return;
+    setFormError(null);
+
+    if (data.startAt && data.endAt) {
+      const start = new Date(data.startAt);
+      const end = new Date(data.endAt);
+      
+      if (end < start) {
+        setFormError("Дата окончания не может быть раньше даты начала");
+        return;
+      }
+    }
 
     try {
       switch (action) {
@@ -171,8 +187,8 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
           <Title className={clsx(s.text, s.title)}>Создание промокода</Title>
 
           <CustomInput
-            id='code'
-            label='Код промокода'
+            id="code"
+            label="Код промокода"
             error={!!errors.code}
             message={errors.code?.message}
             {...register("code", {
@@ -200,8 +216,8 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
           />
 
           <CustomInput
-            id='description'
-            label='Описание'
+            id="description"
+            label="Описание"
             error={!!errors.description}
             message={errors.description?.message}
             {...register("description")}
@@ -210,41 +226,93 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
           />
 
           <div className={s.fieldsContainer}>
-            <CustomInput
-              id='start_at'
-              label='Начало действия'
-              error={!!errors.startAt}
-              message={errors.startAt?.message}
-              {...register("startAt", {
-                //validate: (v) => !!v && new Date(v).getTime() > 0 || 'Некорректная дата',
-              })}
-              //type="date"
-              type='datetime-local'
-              labelClassName={s.label}
-              inputClassName={clsx(s.input, s.datetimeInput)}
+            <Controller
+              control={control}
+              shouldUnregister={false}
+              name="startAt"
+              render={({ field: { value }, fieldState }) => (
+                <div className={s.inputWrapper}>
+                  <label className={s.label}>Начало действия</label>
+                  <div
+                    className={clsx(
+                      s.datePicker,
+                      fieldState.error && s.dateError
+                    )}
+                  >
+                    <DatePicker
+                      selected={value ? parseISO(value) : null}
+                      onChange={(date: Date | null) => {
+                        setValue("startAt", date ? format(date, "yyyy-MM-dd") : "");
+                        setFormError(null);
+                      }}
+                      id="startAt"
+                      className={clsx("input_pickup_date input_size_small")}
+                      popperClassName={s.DatePopper}
+                      wrapperClassName={s.datePickerWrapper}
+                      dateFormat='dd.MM.yyyy'
+                      locale={ru}
+                      placeholderText='дд.мм.гггг'
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode='select'
+                      showPopperArrow={false}
+                      minDate={new Date()}
+                      autoComplete='off'
+                      onKeyDown={(event) => event.preventDefault()}
+                    />
+                  </div>
+                </div>
+              )}
             />
-            <CustomInput
-              id='end_at'
-              label='Окончание действия'
-              error={!!errors.endAt}
-              message={errors.endAt?.message}
-              {...register("endAt", {
-                // validate: (v) => {
-                //   if (!v) return false;
-                //   const start = new Date(watch('startAt') ?? '');
-                //   const end = new Date(v);
-                //   return end.getTime() >= start.getTime() || 'Дата окончания должна быть не раньше начала';
-                // },
-              })}
-              //type="date"
-              type='datetime-local'
-              labelClassName={s.label}
-              inputClassName={clsx(s.input, s.datetimeInput)}
+
+            <Controller
+              control={control}
+              shouldUnregister={false}
+              name="endAt"
+              render={({ field: { value }, fieldState }) => (
+                <div className={s.inputWrapper}>
+                  <div className={s.labelWrapper}>
+                    <label className={s.label}>Окончание действия</label>
+                    <HintBlock text="укажите дату, до которой действует промокод, или оставьте поле пустым для неограниченного использования"/>
+                  </div>
+                  <div
+                    className={clsx(
+                      s.datePicker,
+                      fieldState.error && s.dateError
+                    )}
+                  >
+                    <DatePicker
+                      selected={value ? parseISO(value) : null}
+                      onChange={(date: Date | null) => {
+                        setValue("endAt", date ? format(date, "yyyy-MM-dd") : "");
+                        setFormError(null);
+                      }}
+                      id="endAt"
+                      className={clsx("input_pickup_date input_size_small")}
+                      popperClassName={s.DatePopper}
+                      wrapperClassName={s.datePickerWrapper}
+                      dateFormat='dd.MM.yyyy'
+                      locale={ru}
+                      placeholderText='дд.мм.гггг'
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode='select'
+                      showPopperArrow={false}
+                      minDate={new Date()}
+                      autoComplete='off'
+                      onKeyDown={(event) => event.preventDefault()}
+                    />
+                  </div>
+                </div>
+              )}
             />
+            
             <CustomInput
-              id='discountValue'
-              type='number'
-              label='Размер скидки'
+              id="discountValue"
+              type="number"
+              label="Размер скидки"
               error={!!errors.discountValue}
               message={errors.discountValue?.message}
               {...register("discountValue", { required: "Укажите размер скидки" })}
@@ -253,8 +321,8 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
             />
             <div className={s.checkboxContainer}>
               <CheckboxUI
-                type='radio'
-                value='PERCENT'
+                type="radio"
+                value="PERCENT"
                 isChecked={currentDiscountType === "PERCENT"}
                 {...register("discountType", { required: "Выберите тип скидки" })}
                 className={s.checkboxContainer__radioButton}
@@ -262,8 +330,8 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
                 скидка в процентах
               </CheckboxUI>
               <CheckboxUI
-                type='radio'
-                value='FIXED'
+                type="radio"
+                value="FIXED"
                 isChecked={currentDiscountType === "FIXED"}
                 {...register("discountType", { required: "Выберите тип скидки" })}
                 className={s.checkboxContainer__radioButton}
@@ -275,9 +343,9 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
               </span>
             </div>
             <CustomInput
-              id='limit'
-              type='number'
-              label='Количество использований'
+              id="limit"
+              type="number"
+              label="Количество использований"
               error={!!errors.limit}
               message={errors.limit?.message}
               {...register("limit")}
@@ -286,41 +354,47 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
             />
             {profileType === "label" && (
               <Controller
-                name='artistId'
+                name="artistId"
                 control={control}
                 render={({ field }) => (
                   <SelectUI
-                    name='artistId'
-                    label='Артист'
+                    name="artistId"
+                    label="Артист"
                     options={artistsOptions}
                     value={field.value ?? ""}
                     onChange={field.onChange}
                     selectClassName={s.select}
                     labelClassName={s.label}
                     disabled={isLoadingArtists || isEditForm}
-                    placeholder='Выбрать артиста'
+                    placeholder="Выбрать артиста"
                   />
                 )}
               />
             )}
           </div>
 
+          {formError && (
+            <Text variant='normal' className={s.error}>
+              {formError}
+            </Text>
+          )}
+
           {isEditForm ? (
             <div className={s.buttonsContainer}>
               <ButtonUI
-                variant='secondary'
-                type='button'
+                variant="secondary"
+                type="button"
                 disabled={isSubmitting}
                 onClick={handleCancelClick}
               >
                 Отменить
               </ButtonUI>
-              <ButtonUI variant='primary' type='submit' disabled={isSubmitting}>
+              <ButtonUI variant="primary" type="submit" disabled={isSubmitting}>
                 Сохранить
               </ButtonUI>
             </div>
           ) : (
-            <ButtonUI variant='primary' type='submit' disabled={isSubmitting}>
+            <ButtonUI variant="primary" type="submit" disabled={isSubmitting}>
               Создать
             </ButtonUI>
           )}

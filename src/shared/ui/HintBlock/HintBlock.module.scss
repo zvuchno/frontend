@@ -1,0 +1,47 @@
+.popup {
+  position: absolute;
+  bottom: 28px;
+  left: -20%;
+  width: 308px;
+  margin-left: -151px;
+  padding: 10px 6px;
+  background-color: var(--color-bg-secondary);
+  font-size: 12px;
+  font-weight: 300;
+  font-family: var(--font-feature-mono);
+  line-height: 100%;
+  letter-spacing: -0.04em;
+  text-transform: none;
+  color: var(--color-text-primary);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    margin-left: -7px;
+    border-width: 14px;
+    border-style: solid;
+    border-color: var(--color-bg-secondary) transparent transparent transparent;
+  }
+}
+
+.icon {
+  display: block;
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background-image: url('/icons/info.svg');
+  background-position: center;
+  background-repeat: no-repeat ;
+  background-size: cover;
+
+  &:hover .popup {
+    visibility: visible;
+    opacity: 1;
+  }
+}
