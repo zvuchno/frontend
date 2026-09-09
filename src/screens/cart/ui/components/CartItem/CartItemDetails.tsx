@@ -64,6 +64,9 @@ export const CartItemDetails = ({
             />
           </div>
           {digitalItem && <span>цифровой товар</span>}
+          {item.comment && (
+            <p className={styles.cartItemDetailsComment}>Комментарий: {item.comment}</p>
+          )}
         </>
       )}
       {isInappropriate && (

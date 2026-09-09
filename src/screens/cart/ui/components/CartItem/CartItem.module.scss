@@ -1,7 +1,7 @@
 .cartItem {
   position: relative;
   display: flex;
-  gap: 40px;
+  gap: clamp(10px, 2.78vw, 40px);
   padding: 22px 20px;
   border: 1px solid var(--color-text-primary);
   width: 100%;
@@ -9,13 +9,22 @@
   max-width: 666px;
   min-height: 263px;
 
+  @media (max-width: 900px) {
+    flex-direction: column;
+    height: auto;
+  }
+
   @media (max-width: 800px) {
+    flex-direction: row;
+    height: 100%;
     max-width: none;
   }
 
   @media (max-width: 499px) {
-    flex-direction: column;
-    height: auto;
+    min-height: auto;
+    padding: 10px;
+    //flex-direction: column;
+    //height: auto;
   }
 
   &.outOfStock {
@@ -38,6 +47,10 @@
     letter-spacing: -0.08em;
     font-weight: 400;
     line-height: 1;
+
+    @media (max-width: 499px) {
+      font-size: 20px;
+    }
   }
 
   &Specification {
@@ -47,17 +60,43 @@
     gap: 20px;
     height: 100%;
     width: 100%;
+
+    @media (max-width: 499px) {
+      gap: 10px;
+    }
   }
 
   &Details {
     display: flex;
     flex-direction: column;
     gap: 4px;
+
+    @media (max-width: 499px) {
+      & * {
+        font-size: 14px;
+        line-height: 1;
+      }
+    }
+
+    &Comment {
+      margin-block-start: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-bg-secondary);
+
+      @media (max-width: 499px) {
+        font-weight: 500;
+      }
+    }
   }
 
   &Counter {
     display: flex;
     gap: 10px;
+
+    @media (max-width: 499px) {
+      gap: 5px;
+    }
   }
 
   &StockMessage {
@@ -72,6 +111,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
 
     &Content {
       width: 100%;
@@ -81,8 +121,12 @@
       object-fit: cover;
 
       @media (max-width: 499px) {
-        max-width: none;
+        max-width: 150px;
         max-height: none;
+      }
+
+      @media (max-width: 425px) {
+        max-width: 100px;
       }
     }
   }

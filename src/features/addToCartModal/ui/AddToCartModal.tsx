@@ -128,6 +128,7 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
                 id='comment'
                 placeholder='Текст'
                 onChange={handleChange}
+                maxLength={100}
               />
             </div>
 
