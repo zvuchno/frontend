@@ -1,8 +1,20 @@
 export const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
 
-export const getErrorMessage = (data: unknown, fallback: string): string => {
+export const getErrorMessage = (data: unknown, fallback: string): string | string[] => {
   if (!isRecord(data)) return fallback;
+
+  if ("detail" in data && "reasons" in data) {
+    const messages: string[] = [];
+    if (typeof data.detail === 'string') messages.push(data.detail);
+    if (Array.isArray(data.reasons)) {
+      data.reasons.forEach((reason) => {
+        messages.push(reason)
+      })
+    }
+
+    return messages;
+  }
 
   for (const key of [
     "message",
