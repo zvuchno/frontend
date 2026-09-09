@@ -34,6 +34,9 @@
   }
 
   &Summary {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     width: clamp(280px, 28vw, 394px);
     flex-shrink: 0;
 

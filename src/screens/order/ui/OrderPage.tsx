@@ -10,6 +10,7 @@ import { useGetCheckoutData } from "@/entities/order";
 import { AccentContainer } from "@/shared/ui";
 
 import styles from "./OrderPage.module.scss";
+import { OrderComment } from "./components/OrderComment/OrderComment";
 import { OrderDetails } from "./components/OrderDetails/OrderDetails";
 import { OrderSummary } from "./components/OrderSummary/OrderSummary";
 
@@ -50,6 +51,7 @@ export const OrderPage = () => {
             </section>
             <section className={styles.orderSummary}>
               <OrderSummary />
+              <OrderComment />
             </section>
           </form>
         </AccentContainer>
