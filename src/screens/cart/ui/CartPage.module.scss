@@ -43,6 +43,10 @@
     gap: clamp(40px, 8.75vw, 126px);
     justify-content: space-between;
 
+    @media (max-width: 1200px) {
+      gap: clamp(40px, 5vw, 126px);
+    }
+
     @media (max-width: 800px) {
       flex-direction: column;
     }

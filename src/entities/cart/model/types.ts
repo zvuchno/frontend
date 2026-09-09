@@ -10,7 +10,7 @@ export interface UpdateCartPayload {
   items: Partial<TCartItem>[];
 }
 
-export interface CartItemRespond extends Omit<TCartItem, "comment" | "price_with_donation"> {
+export interface CartItemRespond extends Omit<TCartItem, "price_with_donation"> {
   artist_name: string;
   name: string;
   kind: string;
