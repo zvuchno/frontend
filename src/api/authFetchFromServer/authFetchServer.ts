@@ -3,6 +3,7 @@ import "server-only";
 
 import { getErrorMessage } from "../errors/getErrorMessage";
 import { RateLimitError } from "../errors/rateLimitError";
+import { ApiError } from "../errors/apiError";
 
 // Парсинг Retry-After: число (секунды) или HTTP-дата
 const parseRetryAfter = (header: string | null): number => {
@@ -68,7 +69,13 @@ export const authFetchServer = async <T>(
     : await res.text();
 
   if (!res.ok) {
-    throw new Error(getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`));
+    const message = getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`);
+    
+    if (Array.isArray(message)) {
+      throw new ApiError(message[0], message.slice(1));
+    }
+
+    throw new Error(message);
   }
 
   return data as T;

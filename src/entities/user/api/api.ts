@@ -9,6 +9,7 @@ import {
   type TResetPasswordVerifyRequest,
   type TVerifyEmailRequest,
 } from "../model/types";
+import { ApiError } from "@/api/errors/apiError";
 
 const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -27,7 +28,13 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
     : await res.text();
 
   if (!res.ok) {
-    throw new Error(getErrorMessage(data, props.defaultMessage ?? `HTTP ${res.status} ${res.statusText}`));
+    const message = getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`);
+    
+    if (Array.isArray(message)) {
+      throw new ApiError(message[0], message.slice(1));
+    }
+
+    throw new Error(message);
   }
 
   return data as T;
