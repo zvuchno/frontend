@@ -58,7 +58,8 @@ const FiltersGroup = ({
         {items.map((item) => (
           <Link
             key={item.slug}
-            href={buildLink ? "" : `/catalog/${item.slug}`}
+            href={''}
+            //href={buildLink ? "" : `/catalog/${item.slug}`}
             onClick={(e) => handleClickOnFilter(e, item.slug)}
             scroll={false}
             passHref
