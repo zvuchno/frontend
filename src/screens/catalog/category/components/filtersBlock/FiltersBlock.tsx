@@ -8,35 +8,35 @@ import { useFilters } from "../../provider/useFilters";
 
 const CATEGORIES = [
   {
-    name: 'Все',
-    slug: 'all'
+    name: "Все",
+    slug: "all"
   },
   {
-    name: 'Музыка',
-    slug: 'album'
+    name: "Музыка",
+    slug: "album"
   },
   {
-    name: 'Артисты',
-    slug: 'artists'
+    name: "Артисты",
+    slug: "artists"
   },
   {
-    name: 'Мерч',
-    slug: 'merch'
+    name: "Мерч",
+    slug: "merch"
   },
 ];
 
 const ORDERING = [
   {
-    name: 'Новинки',
-    slug: '-created_at'
+    name: "Новинки",
+    slug: "-created_at"
   },
   {
-    name: 'Популярное',
-    slug: 'popular'
+    name: "Популярное",
+    slug: "popular"
   },
   {
-    name: 'Удиви меня',
-    slug: 'random'
+    name: "Удиви меня",
+    slug: "random"
   },
 ];
 
@@ -47,21 +47,33 @@ const FiltersBlock = ({ сategory, basePath, merchList }: FilterBlockProps) => {
   const { genresList } = useFilters();
 
   const searchParams = useSearchParams();
-  const currentFiltersByGenre = searchParams.getAll('genre');
-  const currentFiltersBySubcategory = searchParams.getAll('kind');
-  const currenOrderingFilter = searchParams.get('ordering');
+  const currentFiltersByGenre = searchParams.getAll("genre");
+  const currentFiltersBySubcategory = searchParams.getAll("kind");
+  const currenOrderingFilter = searchParams.get("ordering");
+
+  const buildCategoryLink = (filterType: string, selectedCategory?: string) => {
+    if (filterType !== "category") return;
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (selectedCategory === "all") {
+      params.delete("kind");
+    }
+
+    router.push(`/catalog/${selectedCategory}?${params.toString()}`, { scroll: false })
+  }
 
   const buildFiltersLink = (filter: string, filterKey: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (filter === 'ordering') {
+    if (filter === "ordering") {
       if (currenOrderingFilter === filterKey) {
         params.delete(filter);
       } else {
         params.set(filter, filterKey);
       }
 
-    } else if (filter === 'genre') {
+    } else if (filter === "genre") {
       if (currentFiltersByGenre.includes(filterKey)) {
         params.delete(filter);
         currentFiltersByGenre.filter((f)=> f !== filterKey).forEach((f) => params.append(filter, f));
@@ -69,7 +81,7 @@ const FiltersBlock = ({ сategory, basePath, merchList }: FilterBlockProps) => {
         params.append(filter, filterKey);
       }
 
-    } else if (filter === 'kind') {
+    } else if (filter === "kind") {
       if (currentFiltersBySubcategory.includes(filterKey)) {
         params.delete(filter);
         currentFiltersBySubcategory.filter((f)=> f !== filterKey).forEach((f) => params.append(filter, f));
@@ -84,7 +96,7 @@ const FiltersBlock = ({ сategory, basePath, merchList }: FilterBlockProps) => {
   const buildClearFiltersLink = () => {
     const params = new URLSearchParams(searchParams.toString());
 
-    params.delete('genre');
+    params.delete("genre");
 
     router.push(`${basePath}?${params.toString()}`, { scroll: false })
   };
@@ -117,6 +129,8 @@ const FiltersBlock = ({ сategory, basePath, merchList }: FilterBlockProps) => {
           title="Категории" 
           items={CATEGORIES}
           isActiveFilter={isActiveCategory}
+          filterType="category"
+          buildLink={buildCategoryLink}
           isCategory
         />
         {сategory === 'merch' && merchList && (
