@@ -65,10 +65,12 @@ export async function downloadFinanceReport({
 }: {
   downloadUrl: string;
 }): Promise<{ blob: Blob; filename: string }> {
-  const response = await fetch(downloadUrl, {
+  const backendUrl = new URL(downloadUrl);
+  const bffPath = backendUrl.pathname.replace(/^\/api\//, `${baseUrl}/`).replace(/\/$/, "");
+
+  const response = await fetch(`${bffPath}${backendUrl.search}`, {
     method: "GET",
-    headers: {},
-    credentials: "include",
+    credentials: "same-origin",
   });
 
   if (!response.ok) {

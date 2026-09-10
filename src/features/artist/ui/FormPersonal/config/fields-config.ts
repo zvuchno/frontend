@@ -17,22 +17,22 @@ export const fieldsConfig: Record<
   }
 > = {
   "company_data.company_name": {
-    required: true,
+    required: false,
     minLength: 2,
     maxLength: 250,
   },
   "company_data.company_address": {
-    required: true,
+    required: false,
     minLength: 2,
     maxLength: 250,
   },
   "identity_data.first_name": {
-    required: true,
+    required: false,
     minLength: 2,
     maxLength: 100,
   },
   "identity_data.last_name": {
-    required: true,
+    required: false,
     minLength: 2,
     maxLength: 100,
   },
@@ -42,70 +42,70 @@ export const fieldsConfig: Record<
     maxLength: 100,
   },
   "identity_data.birth_date": {
-    required: true,
+    required: false,
     validate: (value, fields) => validateDateInPast(value, fields),
   },
   "identity_data.registration_address": {
-    required: true,
+    required: false,
     minLength: 2,
     maxLength: 250,
   },
   "legal_profile.email": {
-    required: true,
+    required: false,
     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
   "legal_profile.phone": {
-    required: true,
+    required: false,
     validate: (value, fields) => validatePhone(value, fields),
   },
   "identity_data.passport_series": {
-    required: true,
+    required: false,
     pattern: /^(\d{4})$/,
   },
   "identity_data.passport_number": {
-    required: true,
+    required: false,
     pattern: /^(\d{6})$/,
   },
   "identity_data.passport_issued_by": {
-    required: true,
+    required: false,
     pattern: /^\d{3}-\d{3}$/,
   },
   "identity_data.passport_issue_date": {
-    required: true,
+    required: false,
     validate: (value, fields) => comparePassportDate(value, fields),
   },
   "identity_data.inn": {
-    required: true,
+    required: false,
     minLength: 12,
     maxLength: 12,
     pattern: /^(\d{12})$/,
   },
   "bank_data.bank_name": {
-    required: true,
+    required: false,
     minLength: 2,
     maxLength: 100,
   },
   "bank_data.bik": {
-    required: true,
+    required: false,
     pattern: /^(\d{9})$/,
   },
   "bank_data.correspondent_account": {
-    required: true,
+    required: false,
     pattern: /^(\d{20})$/,
   },
   "bank_data.checking_account": {
-    required: true,
+    required: false,
     pattern: /^(\d{20})$/,
   },
   "company_data.ogrn": {
-    required: true,
+    required: false,
     pattern: /^(\d{13})$/,
   },
   "legal_profile.recipient_type": {
-    required: true,
+    required: false,
   },
   "company_data.inn": {
-    required: true,
+    required: false,
     minLength: 10,
     maxLength: 10,
     pattern: /^(\d{10})$/,
