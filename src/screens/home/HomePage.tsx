@@ -64,7 +64,7 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
       <HeroUI />
 
       <div className={styles.mainContent}>
-        <ListSection title='Артисты' link={`/catalog/artists`}>
+        <ListSection title='Артисты' link={`/catalog/artists`} className={styles.artistsSection}>
           {artists.map((artist) => (
             <Link
               key={artist.slug}

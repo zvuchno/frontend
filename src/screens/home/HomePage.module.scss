@@ -5,6 +5,10 @@
   margin-bottom: 54px;
 }
 
+.artistsSection {
+  --list-section-columns: repeat(3, minmax(0, 1fr));
+}
+
 .mainContent {
   display: flex;
   flex-direction: column;
@@ -13,7 +17,7 @@
   &CardLink {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
 
     @media (max-width: 1026px) {
       //max-width: 408px;

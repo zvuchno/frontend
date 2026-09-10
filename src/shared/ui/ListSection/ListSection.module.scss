@@ -47,14 +47,14 @@
 
 .content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  justify-content: space-between;
+  grid-template-columns: var(--list-section-columns, repeat(auto-fill, minmax(260px, 1fr)));
+  justify-content: start;
   width: 100%;
   column-gap: 20px;
   row-gap: 7vw;
 
   > [data-list-section-item="product"] {
-    justify-self: center;
+    justify-self: start;
     width: 100%;
     max-width: 327px;
   }
