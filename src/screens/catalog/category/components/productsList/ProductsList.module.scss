@@ -14,7 +14,7 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   row-gap: 40px;
   column-gap: 20px;
-  justify-items: center;
+  justify-items: start;
   align-content: start;
   list-style: none;
   width: 100%;
@@ -37,6 +37,7 @@
   }
 
   .productCardLink {
+    display: flex;
     width: 100%;
     max-width: 327px;
   }
@@ -61,7 +62,7 @@
 .artistsGrid {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .errorBlock {
