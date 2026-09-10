@@ -20,12 +20,20 @@
   width: 100%;
   justify-content: space-between;
 
-  @media (max-width: 425px) {
-    padding-inline: 10px;
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
   }
 
-  @media (max-width: 300px) {
-    grid-template-columns: minmax(0, 1fr);
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+
+  @media (max-width: 580px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 425px) {
+    padding-inline: 10px;
   }
 
   .productCardLink {
@@ -37,15 +45,15 @@
     grid-template-columns: repeat(3, minmax(260px, 408px));
 
     @media (max-width: 1024px) {
-      grid-template-columns: repeat(2, minmax(260px, 408px));
-    }
-    @media (max-width: 590px) {
-      grid-template-columns: repeat(1, minmax(260px, 408px));
-      justify-content: center;
+      grid-template-columns: repeat(3, minmax(220px, 408px));
     }
 
-    @media (max-width: 300px) {
-      grid-template-columns: minmax(0, 1fr);
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(3, minmax(150px, 408px));
+    }
+
+    @media (max-width: 580px) {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 }

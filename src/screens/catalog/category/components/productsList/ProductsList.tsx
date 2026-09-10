@@ -1,15 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
 import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import { ButtonLike } from "@/features/ButtonLike";
+import { usePlayerStore } from "@/features/player";
 
 import { CardArtist } from "@/entities/Artist";
 import { ProductCard } from "@/entities/ProductCard";
@@ -24,9 +27,6 @@ import {
   isArtistCard,
   isProductCard,
 } from "./ProductsList.types";
-import { usePlayerStore } from "@/features/player";
-import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
-import toast from "react-hot-toast";
 
 const ProductsList = ({ products, link }: ProductsListProps) => {
   const [allProducts, setAllProducts] = useState<TCatalogCard[] | TArtistCard[] | []>(products);
@@ -74,7 +74,7 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
       togglePlay();
       return;
     }
-    
+
     try {
       const data = await getTracksList({ albumId: releaseId });
       const tracks = data?.tracks;
@@ -82,8 +82,8 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
       playAlbum(tracks, 0);
       setPlayingAlbumId(releaseId);
     } catch (err) {
-      console.error('Не удалось загрузить треки релиза', err);
-      toast.error("Не удалось загрузить треки релиза")
+      console.error("Не удалось загрузить треки релиза", err);
+      toast.error("Не удалось загрузить треки релиза");
     }
   };
 

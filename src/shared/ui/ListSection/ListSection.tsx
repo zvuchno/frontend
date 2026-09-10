@@ -1,21 +1,22 @@
+import clsx from "clsx";
+
 import { Link } from "../Link/Link";
 import { Title } from "../Typography/Typography";
-import { type ListSectionProps } from "./ListSection.type";
 import s from "./ListSection.module.scss";
-import clsx from "clsx";
+import { type ListSectionProps } from "./ListSection.type";
 
 export const ListSection = ({
   title,
   link,
   children,
   hasMore = true,
-  gap = '20px',
+  gap,
   className,
 }: ListSectionProps) => {
   return (
     <section className={clsx(s.section, className)}>
       <div className={s.header}>
-        <Title className={s.header__title} Tag="h2">
+        <Title className={s.header__title} Tag='h2'>
           {title}
         </Title>
         {hasMore && (
@@ -24,7 +25,9 @@ export const ListSection = ({
           </Link>
         )}
       </div>
-      <div className={s.content} style={{ columnGap: gap }}>{children}</div>
+      <div className={s.content} style={{ columnGap: gap }}>
+        {children}
+      </div>
     </section>
   );
 };
