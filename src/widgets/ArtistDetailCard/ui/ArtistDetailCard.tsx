@@ -52,20 +52,18 @@ export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
                   {artist.socials.map((social) => {
                     const socialIcon = matchSocialNetwork(social.value);
                     return (
-                      <>
-                        <a
-                          className={s.socials__link}
-                          key={social.id}
-                          href={social.value}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          title={social.label}
-                          style={{
-                            
-                            backgroundImage: socialIcon,
-                          }}
-                        />
-                      </>
+                      <a
+                        className={s.socials__link}
+                        key={social.id}
+                        href={social.value}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        title={social.label}
+                        style={{
+                          
+                          backgroundImage: socialIcon,
+                        }}
+                      />
                     );
                   })}
                 </div>
