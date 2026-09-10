@@ -118,9 +118,9 @@
 }
 
 .datePicker {
-  position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 40px;
   border: 1px solid var(--color-text-primary);
@@ -137,10 +137,6 @@
 }
 
 .clearIconBtn {
-  position: absolute;
-  top: 50%;
-  right: 8px;
-  transform: translateY(-50%);
   background: none;
   border: none;
   color: var(--text-secondary);
@@ -148,6 +144,7 @@
   font-size: 14px;
   padding: 0;
   line-height: 1;
+  margin-inline-end: 10px;
 }
 
 .clearIconBtn:hover {
