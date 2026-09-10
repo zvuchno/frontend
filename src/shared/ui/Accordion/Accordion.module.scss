@@ -4,8 +4,12 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  min-width: 200px;
+  //min-width: 200px;
   background-color: transparent;
+
+  @media (max-widht: 768px) {
+    //margin-inline-start: -5px;
+  }
 }
 
 .content {

@@ -1,14 +1,14 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: clamp(60px, 6.5vw, 100px);
   margin-bottom: 54px;
 }
 
 .mainContent {
   display: flex;
   flex-direction: column;
-  gap: clamp(100px, 13.889vw, 200px);
+  gap: clamp(40px, 13.889vw, 200px);
 
   &CardLink {
     width: 100%;
