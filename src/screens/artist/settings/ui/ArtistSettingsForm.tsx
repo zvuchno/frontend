@@ -14,7 +14,7 @@ import { DeliverySelectionProvider } from "@/entities/order";
 
 import { ArtistSettingsButtons } from "../components/ArtistSettingsButtons/ArtistSettingsButons";
 import { ArtistSettingsDelivery } from "../components/ArtistSettingsDelivery/ArtistSettingsDelivery";
-import { ArtistSettingsReturn } from "../components/ArtistSettingsReturn/ArtistSettingsReturn";
+//import { ArtistSettingsReturn } from "../components/ArtistSettingsReturn/ArtistSettingsReturn";
 import { CdekModal } from "../components/CdekModal/CdekModal";
 import { useArtistSettingsSubmit } from "../model/useArtistSettingsSubmit";
 import styles from "./ArtistSettingsForm.module.scss";
@@ -88,7 +88,7 @@ export const ArtistSettingsForm = ({
             onDeletePoint={remove}
             cdekOffice={initialCdek}
           />
-          <ArtistSettingsReturn disabled={!isOnEdit} />
+          {/*<ArtistSettingsReturn disabled={!isOnEdit} />*/}
           <ArtistSettingsButtons
             disabled={!isOnEdit}
             onChange={setIsOnEdit}
