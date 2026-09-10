@@ -11,7 +11,7 @@ export { mapDirtyFieldsToPayload } from "./utils/mapDirtyFieldsToPayload";
 export { uploadMerchImages } from "./utils/uploadMerchImages";
 export { deleteMerchImages } from "./utils/deleteMerchImages";
 export { mapPromoDirtyFieldsToPayload } from "./utils/mapPromoDirtyFildsToPayload";
-export { toLocalDatetimeString } from "./utils/toLocalDatetimeString";
+export { toDateOnlyString } from "./utils/toDateOnlyString";
 export { toIsoUtc } from "./utils/toIsoUtc";
 export { mapTrackDirtyFieldsToPayload } from "./utils/mapTrackDirtyFieldsToPayload";
 export { createProductPayload } from "./utils/createProductPayload";

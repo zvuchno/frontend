@@ -29,11 +29,11 @@ export function mapPromoDirtyFieldsToPayload(
         break;
 
       case 'startAt':
-        payload.start_at = value ?? '';
+        payload.start_at = value ? new Date(`${value}T00:00:00Z`).toISOString() : null;
         break;
 
       case 'endAt':
-        payload.end_at = value ?? '';
+        payload.end_at = value ? new Date(`${value}T00:00:00Z`).toISOString() : null;
         break;
         
       default:
