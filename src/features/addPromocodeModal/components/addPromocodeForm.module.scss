@@ -118,6 +118,7 @@
 }
 
 .datePicker {
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
@@ -135,6 +136,24 @@
   }
 }
 
+.clearIconBtn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+}
+
+.clearIconBtn:hover {
+  color: var(--text-danger);
+}
+
 .error {
   color: #dc2626;
   text-align: center;
@@ -145,7 +164,7 @@
   z-index: 99999 !important;
   transform: none !important;
   top: 80px !important;
-  left: 5px !important;
+  left: -10px !important;
 }
 
 :global(.react-datepicker-wrapper:has(.react-datepicker__input-container)) {

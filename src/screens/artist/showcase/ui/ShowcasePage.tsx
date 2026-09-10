@@ -19,9 +19,9 @@ import { RoleSelectBlock } from "@/entities/RoleSelectBlock";
 import { Loader, RoleCard } from "@/shared/ui";
 
 import s from "./ShowcasePage.module.scss";
-import { AddPromocodeModal } from "./components/addPromocodeModal/AddPromocodeModal";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
+import { AddPromocodeModal } from "@/features/addPromocodeModal";
 
 export const ShowcasePage = () => {
   const { data, status } = useSession();
