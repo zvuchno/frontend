@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -21,7 +20,6 @@ export const ArtistSettingsCdekDelivery = ({
   disabled,
   isAvaliable,
   onSelect,
-  office,
 }: {
   disabled: boolean;
   isAvaliable: boolean;
@@ -38,8 +36,6 @@ export const ArtistSettingsCdekDelivery = ({
   });
 
   const { deliverySelected, setDeliverySelected } = useSelectDeliveryTariff();
-
-  const [cdekDelivery, setCdekDelivery] = useState(!!office?.pvz_code || !!officeCode);
 
   const formSelectedOffice = {
     code: officeCode,
@@ -58,7 +54,6 @@ export const ArtistSettingsCdekDelivery = ({
       setValue("pvz_city", "", { shouldDirty: true });
       setValue("pvz_address", "", { shouldDirty: true });
       setDeliverySelected(null);
-      setCdekDelivery(false);
     } catch {
       toast.error("Не удалось удалить информацию о ПВЗ. Повторите попытку");
     }
@@ -94,11 +89,11 @@ export const ArtistSettingsCdekDelivery = ({
         >
           СДЭК
         </span>
-        <HintBlock text='при выключенной опции варианты доставки не будут доступны покупателям' />
+        <HintBlock text='при выключенной опции варианты доставки не доступны покупателям' />
       </div>
 
       <CdekSelectButton
-        disabled={disabled || !cdekDelivery}
+        disabled={disabled}
         onChange={onSelect}
         onDelete={() => void onHandleDelete()}
         deliverySelected={displayedOffice}

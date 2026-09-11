@@ -61,7 +61,7 @@ export const ArtistSettingsPickupPointDelivery = ({
         >
           Самовывоз
         </span>
-        <HintBlock text='при выключенной опции варианты доставки не будут доступны покупателям' />
+        <HintBlock text='при выключенной опции варианты доставки не доступны покупателям' />
       </div>
 
       <form className={styles.pickupPointsForm} name='pickup-points' aria-disabled={disabled}>
