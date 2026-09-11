@@ -12,6 +12,7 @@ import { ButtonUI, CheckboxUI, ModalUI, Title } from "@/shared/ui";
 
 import { type AddToCartModalProps } from "../model/types";
 import s from "./AddToCartModal.module.scss";
+import { HintBlock } from "@/shared/ui/HintBlock";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -88,12 +89,9 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
                   <label className={clsx(s.text, s.field__labelContainer__label)} htmlFor='price'>
                     Введите сумму
                   </label>
-                  <span className={s.field__labelContainer__icon}>
-                    <span className={clsx(s.text, s.popup)}>
-                      Вы можете выбрать любую сумму для оплаты товара, начиная с его номинальной
-                      стоимости, чтобы поддержать любимого артиста
-                    </span>
-                  </span>
+                  <HintBlock text={`Вы можете выбрать любую сумму для оплаты товара, начиная с его номинальной
+                      стоимости, чтобы поддержать любимого артиста`}
+                    />
                 </div>
                 <input
                   value={newPrice}
@@ -114,11 +112,7 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
                 <label className={clsx(s.text, s.field__labelContainer__label)} htmlFor='comment'>
                   Комментарий к заказу
                 </label>
-                <span className={s.field__labelContainer__icon}>
-                  <span className={clsx(s.text, s.popup)}>
-                    Оставьте комментарий вместе с заказом и артист сможет увидеть его и ответить вам
-                  </span>
-                </span>
+                <HintBlock text="Оставьте комментарий вместе с заказом и артист сможет увидеть его и ответить вам" />
               </div>
               <input
                 value={comment}

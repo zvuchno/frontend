@@ -1,9 +1,9 @@
 .popup {
   position: absolute;
   bottom: 28px;
-  left: -20%;
-  width: 308px;
-  margin-left: -151px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
   padding: 10px 6px;
   background-color: var(--color-bg-secondary);
   font-size: 12px;
@@ -23,10 +23,14 @@
     position: absolute;
     top: 95%;
     left: 50%;
-    margin-left: -7px;
+    transform: translateX(-50%);
     border-width: 14px;
     border-style: solid;
     border-color: var(--color-bg-secondary) transparent transparent transparent;
+  }
+
+  @media (max-width: 768px) {
+    width: 200px;
   }
 }
 
@@ -39,6 +43,7 @@
   background-position: center;
   background-repeat: no-repeat ;
   background-size: cover;
+  flex-shrink: 0;
 
   &:hover .popup {
     visibility: visible;

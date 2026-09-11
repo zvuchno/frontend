@@ -73,7 +73,7 @@ export const PlayerUI = ({ className }: PlayerUIProps) => {
 
     if (track.playback.status === "ready") {
       togglePlay();
-      setIsListOpen(false);
+      //setIsListOpen(false);
       return;
     }
 
