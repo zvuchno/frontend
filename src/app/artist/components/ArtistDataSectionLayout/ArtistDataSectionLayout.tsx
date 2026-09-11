@@ -37,11 +37,21 @@ export const ArtistDataSectionLayout = ({
   const [isEdit, setIsEdit] = useState(false);
   const [tempDescription, setTempDescription] = useState(artistSectionData.description);
 
-  const addSocial = (item: TArtistDataItem) =>
-    handleAddSocial(item, onArtistUpdate, setIsAddingSocial, artist);
+  const addSocial = (item: TArtistDataItem) => {
+    if (!artist) return;
+    handleAddSocial(item, onArtistUpdate, setIsAddingSocial, {
+      ...artist,
+      description: tempDescription
+    })
+  };
 
-  const addContact = (item: TArtistDataItem) =>
-    handleAddContact(item, onArtistUpdate, setIsAddingContact, artist);
+  const addContact = (item: TArtistDataItem) => {
+    if (!artist) return;
+    handleAddContact(item, onArtistUpdate, setIsAddingContact, {
+      ...artist,
+      description: tempDescription
+    })
+  };
 
   const deleteContact = (item: TArtistDataItem) =>
     handleDeleteContact(item, setDeletingContactKey, onArtistUpdate, artist);
