@@ -35,4 +35,10 @@ export const artistSettingsFieldsConfig: Record<
   pickupPoints: {
     required: false,
   },
+  pickup_enabled: {
+    required: false,
+  },
+  shipping_enabled: {
+    required: false,
+  },
 };

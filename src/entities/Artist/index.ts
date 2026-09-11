@@ -65,7 +65,7 @@ export type {
   TPVZOfficeMe,
   TPickupPointMe,
   TTelegramBotConnectResponse,
-  TSupportSettings,
+  TStoreSettings,
   TPickupPointForm,
 } from "./model/artistSettings.types";
 export { connectTelegramBot } from "./api/artistSettings.api";
@@ -83,8 +83,8 @@ export {
 } from "./model/useArtistPvzOffice";
 
 export {
-  useGetArtistSupportContacts,
-  useManageArtistSupportContacts,
-} from "./model/useArtistSupportContacts";
+  useGetArtistStoreSettings,
+  useManageArtistStoreSettings,
+} from "./model/useArtistStoreSettings";
 
 export { useDownloadSalesStatement } from "./model/useDownloadSalesStatement";

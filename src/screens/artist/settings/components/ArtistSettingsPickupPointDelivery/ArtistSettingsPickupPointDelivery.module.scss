@@ -13,7 +13,27 @@
 }
 
 .artistSettingsDeliveryOption {
-  transition: opacity ease 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  & span {
+    align-self: flex-start;
+    cursor: pointer;
+  }
+
+  &Title {
+    letter-spacing: -0.08em;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1;
+    justify-self: left;
+
+    &.notAvailable {
+      opacity: 0.6;
+    }
+  }
+  /*transition: opacity ease 0.3s;
   &:hover {
     opacity: 1;
     cursor: pointer;
@@ -21,11 +41,54 @@
 
   &:has(*:disabled) {
     pointer-events: none;
-  }
+  }*/
 }
 
 & .pickupPointsForm {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.visuallyHidden {
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.checkboxContainer {
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+
+.checkboxMark {
+  display: block;
+  width: 31px;
+  height: 18px;
+  border-radius: 127.27px;
+  background-color: rgba(22, 24, 21, 0.3);
+}
+
+.checkboxContainer input:checked + .checkboxMark {
+  background-color: #161815;
+}
+
+.checkboxMark::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 14px;
+  height: 14px;
+  background-color: var(--background);
+  border-radius: 50%;
+  box-shadow: 0px 2.55px 5.09px 0px rgba(39, 39, 39, 0.1);
+}
+
+.checkboxContainer input:checked + .checkboxMark::after {
+  left: calc(100% - 18px);
 }

@@ -3,7 +3,7 @@ import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 import {
   type TPVZOfficeMe,
   type TPickupPointMe,
-  type TSupportSettings,
+  type TStoreSettings,
   type TTelegramBotConnectResponse,
 } from "../model/artistSettings.types";
 
@@ -153,14 +153,14 @@ export async function deletePVZMe(): Promise<void> {
 }
 
 //---------------- настройка информации о контактах поддержки / для возвратов  --------------
-async function setSupportSettingsMe<T>({
+async function setStoreSettingsMe<T>({
   apiMethod,
   errorMessage,
   payload,
 }: {
   apiMethod: "GET" | "PUT";
   errorMessage: string;
-  payload?: TSupportSettings;
+  payload?: TStoreSettings;
 }): Promise<T> {
   const response = await authFetchClient<T>(`${baseUrl}/v1/artists/me/store-settings`, {
     method: apiMethod,
@@ -179,18 +179,18 @@ async function setSupportSettingsMe<T>({
 }
 
 //получить информацию о своих контактах поддержки покупателей
-export async function receiveSupportData() {
-  return await setSupportSettingsMe<TSupportSettings>({
+export async function receiveStoreSettings() {
+  return await setStoreSettingsMe<TStoreSettings>({
     apiMethod: "GET",
-    errorMessage: "Ошибка получения контактной информации",
+    errorMessage: "Ошибка получения настроек артиста",
   });
 }
 
 //изменить/добавить/удалить информацию о своих контактах поддержки покупателей
-export async function manageSupportData(contacts: TSupportSettings) {
-  return await setSupportSettingsMe<TSupportSettings>({
+export async function manageStoreSettings(contacts: TStoreSettings) {
+  return await setStoreSettingsMe<TStoreSettings>({
     apiMethod: "PUT",
-    errorMessage: "Ошибка настройки контактной информации артиста",
+    errorMessage: "Ошибка изменения настроек артиста",
     payload: contacts,
   });
 }

@@ -2,28 +2,34 @@ import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import toast from "react-hot-toast";
 
+import clsx from "clsx";
+
 import {
   type TArtistSettingsFieldValues,
   type TPVZOfficeMe,
   useDeleteArtistPvzOffice,
+  useManageArtistStoreSettings,
 } from "@/entities/Artist";
 import { useSelectDeliveryTariff } from "@/entities/order";
 
-import { CheckboxUI } from "@/shared/ui";
+import { HintBlock } from "@/shared/ui/HintBlock";
 
 import styles from "./ArtistSettingsCdekDelivery.module.scss";
 import { CdekSelectButton } from "./CdekSelectButton";
 
 export const ArtistSettingsCdekDelivery = ({
   disabled,
+  isAvaliable,
   onSelect,
   office,
 }: {
   disabled: boolean;
+  isAvaliable: boolean;
   office?: TPVZOfficeMe;
   onSelect: () => void;
 }) => {
   const { mutateAsync: handleOfficeDelete } = useDeleteArtistPvzOffice();
+  const { mutateAsync: toggleCdekAvailabel } = useManageArtistStoreSettings();
   const { register, control, setValue } = useFormContext<TArtistSettingsFieldValues>();
 
   const [officeCode, officeAddress, officeCity, officeCityCode] = useWatch({
@@ -43,8 +49,6 @@ export const ArtistSettingsCdekDelivery = ({
   };
 
   const displayedOffice = deliverySelected?.code ? deliverySelected : formSelectedOffice;
-
-  const hasCdekOffice = Boolean(displayedOffice.code);
 
   const onHandleDelete = async () => {
     try {
@@ -66,15 +70,32 @@ export const ArtistSettingsCdekDelivery = ({
       <input type='hidden' {...register("pvz_city")} />
       <input type='hidden' {...register("pvz_city_code")} />
       <input type='hidden' {...register("pvz_code")} />
-      <CheckboxUI
-        type={"radio"}
-        isChecked={hasCdekOffice || cdekDelivery}
-        onChange={() => setCdekDelivery(true)}
-        disabled={disabled}
-        className={styles.artistSettingsDeliveryOption}
-      >
-        СДЭК
-      </CheckboxUI>
+      <div className={styles.artistSettingsDeliveryOption}>
+        <label
+          className={styles.checkboxContainer}
+          aria-label={isAvaliable ? "Выключить" : "Включить"}
+          title={isAvaliable ? "Выключить" : "Включить"}
+        >
+          <input
+            {...register("shipping_enabled")}
+            disabled={disabled}
+            type='checkbox'
+            className={styles.visuallyHidden}
+            checked={isAvaliable}
+            onChange={() => void toggleCdekAvailabel({ shipping_enabled: !isAvaliable })}
+          />
+          <span className={styles.checkboxMark}></span>
+        </label>
+        <span
+          className={clsx(
+            styles.artistSettingsDeliveryOptionTitle,
+            !isAvaliable && styles.notAvailable
+          )}
+        >
+          СДЭК
+        </span>
+        <HintBlock text='при выключенной опции варианты доставки не будут доступны покупателям' />
+      </div>
 
       <CdekSelectButton
         disabled={disabled || !cdekDelivery}
