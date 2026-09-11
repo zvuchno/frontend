@@ -9,17 +9,17 @@ import {
   type TPVZOfficeMe,
   type TPickupPointForm,
   type TPickupPointMe,
-  type TSupportSettings,
+  type TStoreSettings,
   useAddArtistPickupPoint,
   useChangeArtistPickupPoint,
   useCreateArtistPvzOffice,
-  useManageArtistSupportContacts,
+  useManageArtistStoreSettings,
 } from "@/entities/Artist";
 
 interface UseArtistSettingsSubmitParams {
   initialCdek?: TPVZOfficeMe;
   initialPickup?: TPickupPointMe[];
-  initialContacts?: TSupportSettings;
+  initialContacts?: TStoreSettings;
   replacePickupPoints: UseFieldArrayReplace<TArtistSettingsFieldValues, "pickupPoints">;
   setValue: UseFormSetValue<TArtistSettingsFieldValues>;
 }
@@ -39,7 +39,7 @@ export const useArtistSettingsSubmit = ({
   const { mutate: addPickupPoint } = useAddArtistPickupPoint();
   const { mutate: changePickupPoint } = useChangeArtistPickupPoint();
   const { mutate: addCdekOffice } = useCreateArtistPvzOffice();
-  const { mutate: manageContacts } = useManageArtistSupportContacts();
+  const { mutate: manageContacts } = useManageArtistStoreSettings();
 
   return (values) => {
     const cdekChanged =

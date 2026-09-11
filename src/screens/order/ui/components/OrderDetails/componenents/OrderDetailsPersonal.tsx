@@ -57,7 +57,12 @@ export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boole
       </div>
       <div className={styles.orderConsent}>
         Нажимая ОФОРМИТЬ ЗАКАЗ, вы даете согласие на обработку персональных данных в соответствии с{" "}
-        <Link href={"/legal/privacy_policy"} className={styles.orderConsentLink}>
+        <Link
+          href={"/legal/privacy_policy"}
+          className={styles.orderConsentLink}
+          aria-label='Политика обработки персональных данных'
+          title='Политика обработки персональных данных'
+        >
           политикой обработки персональных данных
         </Link>
         {/*<CheckboxUI

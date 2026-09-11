@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 
-import { useGetArtistPickupPoints, useGetArtistSupportContacts } from "@/entities/Artist";
+import { useGetArtistPickupPoints, useGetArtistStoreSettings } from "@/entities/Artist";
 import { useGetArtistPvzOffice } from "@/entities/Artist";
 
 import { Loader } from "@/shared/ui";
@@ -13,7 +13,7 @@ export const ArtistSettingsPage = () => {
   const { data: session, status: sessionStatus } = useSession();
 
   const { data: cdek, status: cdekStatus } = useGetArtistPvzOffice();
-  const { data: contacts, status: contactsStatus } = useGetArtistSupportContacts();
+  const { data: settings, status: contactsStatus } = useGetArtistStoreSettings();
   const { data: pickupPoints, status: pickupPointsStatus } = useGetArtistPickupPoints();
 
   if (
@@ -28,8 +28,8 @@ export const ArtistSettingsPage = () => {
     <ArtistSettingsForm
       initialCdek={cdek}
       initialPickup={pickupPoints}
-      initialContacts={contacts}
       initialEmail={session?.user.email}
+      initialSettings={settings}
     />
   );
 };

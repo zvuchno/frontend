@@ -8,6 +8,8 @@ export type TArtistSettingsFieldValues = {
   pickupPoints?: TPickupPointForm[];
   support_email?: string;
   returns_email?: string;
+  shipping_enabled?: boolean;
+  pickup_enabled?: boolean;
 };
 
 //export type pickupPointsFields = `pickupPoints.${keyof TPickupPointMe}`;
@@ -31,10 +33,12 @@ export type TPVZOfficeMe = {
   address?: string;
 } | null;
 
-export type TSupportSettings = {
+export type TStoreSettings = {
   support_email?: string;
   returns_email?: string;
-};
+  shipping_enabled?: boolean;
+  pickup_enabled?: boolean;
+} | null;
 
 export type TArtistSettingsFormField<
   T extends TArtistSettingsFieldValues = TArtistSettingsFieldValues,
