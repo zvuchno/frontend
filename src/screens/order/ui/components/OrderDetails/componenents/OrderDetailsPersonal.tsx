@@ -1,5 +1,7 @@
 import { type FieldError, useFormContext } from "react-hook-form";
 
+import Link from "next/link";
+
 import { type FieldValues } from "@/screens/order/model/types";
 
 import { InputPhone } from "@/features/profile";
@@ -17,7 +19,7 @@ export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boole
     //watch,
   } = useFormContext<FieldValues>();
 
- //const isConsentChecked = watch("personal_data_consent");
+  //const isConsentChecked = watch("personal_data_consent");
 
   return (
     <section className={styles.orderDetailsPersonal}>
@@ -53,16 +55,20 @@ export const OrderDetailsPersonal = ({ fieldsDisabled }: { fieldsDisabled: boole
           );
         })}
       </div>
-      {/*<div>
-        <CheckboxUI
+      <div className={styles.orderConsent}>
+        Нажимая ОФОРМИТЬ ЗАКАЗ, вы даете согласие на обработку персональных данных в соответствии с{" "}
+        <Link href={"/legal/privacy_policy"} className={styles.orderConsentLink}>
+          политикой обработки персональных данных
+        </Link>
+        {/*<CheckboxUI
           type='checkbox'
           isChecked={!!isConsentChecked}
           {...register("personal_data_consent", fieldsConfig.personal_data_consent)}
           className={styles.confirmationMessagge}
         >
           Дать согласие на обработку персональных данных в соответствии с политикой обработки{" "}
-        </CheckboxUI>
-      </div>*/}
+        </CheckboxUI>*/}
+      </div>
     </section>
   );
 };
