@@ -1,12 +1,15 @@
+import { useEffect } from "react";
 import {
   type FieldArrayWithId,
   type UseFieldArrayAppend,
   type UseFieldArrayRemove,
+  useFormContext,
+  useWatch,
 } from "react-hook-form";
 
 import clsx from "clsx";
 
-import { type TArtistSettingsFieldValues, useManageArtistStoreSettings } from "@/entities/Artist";
+import { type TArtistSettingsFieldValues } from "@/entities/Artist";
 
 import { ButtonUI } from "@/shared/ui";
 import { HintBlock } from "@/shared/ui/HintBlock";
@@ -17,7 +20,6 @@ import styles from "./ArtistSettingsPickupPointDelivery.module.scss";
 export const ArtistSettingsPickupPointDelivery = ({
   fields,
   disabled,
-  isAvaliable,
   onAddPoint,
   onDeletePoint,
 }: {
@@ -27,41 +29,61 @@ export const ArtistSettingsPickupPointDelivery = ({
   onAddPoint: UseFieldArrayAppend<TArtistSettingsFieldValues, "pickupPoints">;
   onDeletePoint: UseFieldArrayRemove;
 }) => {
-  const { mutateAsync: toggleCdekAvailabel } = useManageArtistStoreSettings();
   const addNewPickupPoint = () => {
     onAddPoint({
       address: "",
-      pickup_date: "",
+      pickup_date: null,
       is_active: true,
     });
   };
+
+  const { register, control, setValue } = useFormContext<TArtistSettingsFieldValues>();
+
+  const [pickupEnabled, pickupPoints] = useWatch({
+    control,
+    name: ["pickup_enabled", "pickupPoints"],
+  });
+
+  useEffect(() => {
+    if (!pickupPoints?.length && pickupEnabled) {
+      setValue("pickup_enabled", false, { shouldDirty: true, shouldValidate: true });
+    }
+  }, [pickupPoints?.length, pickupEnabled, setValue]);
 
   return (
     <div key='pickup' className={styles.artistSettingsDeliveryOptionsContainer}>
       <div className={styles.artistSettingsDeliveryOption}>
         <label
           className={styles.checkboxContainer}
-          aria-label={isAvaliable ? "Выключить" : "Включить"}
-          title={isAvaliable ? "Выключить" : "Включить"}
+          aria-label={pickupEnabled ? "Выключить" : "Включить"}
+          title={
+            pickupEnabled
+              ? "Выключить"
+              : pickupPoints && pickupPoints?.length > 0
+                ? "Включить"
+                : "Добавьте хотя бы один адрес самовывоза"
+          }
         >
           <input
+            {...register("pickup_enabled")}
             type='checkbox'
             className={styles.visuallyHidden}
-            checked={isAvaliable}
+            checked={pickupEnabled}
             disabled={disabled}
-            onChange={() => void toggleCdekAvailabel({ pickup_enabled: !isAvaliable })}
+            onChange={() => setValue("pickup_enabled", !pickupEnabled, { shouldDirty: true })}
           />
           <span className={styles.checkboxMark}></span>
         </label>
         <span
           className={clsx(
             styles.artistSettingsDeliveryOptionTitle,
-            !isAvaliable && styles.notAvailable
+            !pickupEnabled && styles.notAvailable
           )}
         >
           Самовывоз
         </span>
-        <HintBlock text='при выключенной опции варианты доставки не доступны покупателям' />
+        <HintBlock text='при выключенной опции выбранные варианты доставки не доступны покупателям' />
+        <HintBlock text='добавьте хотя бы один адрес, чтобы включить опцию "Самовывоз"' />
       </div>
 
       <form className={styles.pickupPointsForm} name='pickup-points' aria-disabled={disabled}>

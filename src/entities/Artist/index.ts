@@ -65,26 +65,20 @@ export type {
   TPVZOfficeMe,
   TPickupPointMe,
   TTelegramBotConnectResponse,
-  TStoreSettings,
+  TPickupSettings,
+  TShippingSettings,
   TPickupPointForm,
 } from "./model/artistSettings.types";
 export { connectTelegramBot } from "./api/artistSettings.api";
 export { useConnetcTelegramBot } from "./model/useConnetcTelegramBot";
 export {
-  useAddArtistPickupPoint,
-  useChangeArtistPickupPoint,
-  useDeleteArtistPickupPoint,
+  useManageArtistPickupPoint,
   useGetArtistPickupPoints,
 } from "./model/useArtistPickupPoints";
 export {
-  useCreateArtistPvzOffice,
+  useManageArtistPvzOffice,
   useDeleteArtistPvzOffice,
   useGetArtistPvzOffice,
 } from "./model/useArtistPvzOffice";
-
-export {
-  useGetArtistStoreSettings,
-  useManageArtistStoreSettings,
-} from "./model/useArtistStoreSettings";
 
 export { useDownloadSalesStatement } from "./model/useDownloadSalesStatement";

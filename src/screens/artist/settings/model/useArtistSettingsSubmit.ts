@@ -1,107 +1,64 @@
-import {
-  type SubmitHandler,
-  type UseFieldArrayReplace,
-  type UseFormSetValue,
-} from "react-hook-form";
+import { type SubmitHandler, type UseFieldArrayReplace } from "react-hook-form";
 
 import {
   type TArtistSettingsFieldValues,
-  type TPVZOfficeMe,
-  type TPickupPointForm,
-  type TPickupPointMe,
-  type TStoreSettings,
-  useAddArtistPickupPoint,
-  useChangeArtistPickupPoint,
-  useCreateArtistPvzOffice,
-  useManageArtistStoreSettings,
+  type TPickupSettings,
+  useDeleteArtistPvzOffice,
+  useManageArtistPickupPoint,
+  useManageArtistPvzOffice,
 } from "@/entities/Artist";
 
-interface UseArtistSettingsSubmitParams {
-  initialCdek?: TPVZOfficeMe;
-  initialPickup?: TPickupPointMe[];
-  initialContacts?: TStoreSettings;
-  replacePickupPoints: UseFieldArrayReplace<TArtistSettingsFieldValues, "pickupPoints">;
-  setValue: UseFormSetValue<TArtistSettingsFieldValues>;
-}
-
-const isPointChanged = (point: TPickupPointForm, initial?: TPickupPointMe) =>
-  point.address !== initial?.address ||
-  point.pickup_date !== initial?.pickup_date ||
-  point.is_active !== initial?.is_active;
-
 export const useArtistSettingsSubmit = ({
-  initialCdek,
   initialPickup,
-  initialContacts,
   replacePickupPoints,
-  setValue,
-}: UseArtistSettingsSubmitParams): SubmitHandler<TArtistSettingsFieldValues> => {
-  const { mutate: addPickupPoint } = useAddArtistPickupPoint();
-  const { mutate: changePickupPoint } = useChangeArtistPickupPoint();
-  const { mutate: addCdekOffice } = useCreateArtistPvzOffice();
-  const { mutate: manageContacts } = useManageArtistStoreSettings();
+}: {
+  initialPickup?: TPickupSettings;
+  replacePickupPoints: UseFieldArrayReplace<TArtistSettingsFieldValues, "pickupPoints">;
+}): SubmitHandler<TArtistSettingsFieldValues> => {
+  const { mutate: managePickupPoint } = useManageArtistPickupPoint();
+  const { mutate: manageCdekOffice } = useManageArtistPvzOffice();
 
+  const { mutateAsync: handleOfficeDelete } = useDeleteArtistPvzOffice();
+
+  //  запрос на изменение shipping-point
   return (values) => {
-    const cdekChanged =
-      values.pvz_code && (!initialCdek || values.pvz_code !== initialCdek.pvz_code);
-
-    if (cdekChanged) {
-      addCdekOffice({
-        address: values.pvz_address,
-        city: values.pvz_city,
-        city_code: values.pvz_city_code,
-        pvz_code: values.pvz_code,
+    if (!values.shippingPoint?.pvz_code) {
+      void handleOfficeDelete();
+    } else {
+      manageCdekOffice({
+        enabled: values.shipping_enabled,
+        point: {
+          address: values.shippingPoint?.address,
+          city: values.shippingPoint?.city,
+          city_code: values.shippingPoint?.city_code,
+          pvz_code: values.shippingPoint?.pvz_code,
+        },
       });
     }
 
-    const contactsChanged =
-      values.returns_email !== initialContacts?.returns_email ||
-      values.support_email !== initialContacts?.support_email;
+    const points = (values.pickupPoints ?? []).map(({ server_id, ...point }) => ({
+      ...point,
+      id: server_id,
+    }));
+    const remainingIds = new Set(points.map((point) => point.id));
+    const deletedPoints = (initialPickup?.points ?? [])
+      .filter((point) => point.id !== undefined && !remainingIds.has(point.id))
+      .map((point) => ({ ...point, is_active: false }));
 
-    if (contactsChanged) {
-      manageContacts({
-        returns_email: values.returns_email,
-        support_email: values.support_email,
-      });
-    }
-
-    const allPoints = values.pickupPoints ?? [];
-    const pointsToSave = allPoints.filter((point) => Boolean(point.address?.trim()));
-
-    if (pointsToSave.length !== allPoints.length) {
-      replacePickupPoints(pointsToSave);
-    }
-
-    pointsToSave.forEach((point, index) => {
-      if (point.server_id === undefined) {
-        addPickupPoint(
-          {
-            address: point.address,
-            pickup_date:
-              point.pickup_date && point.pickup_date.length > 0 ? point.pickup_date : null,
-            is_active: point.is_active,
-          },
-          {
-            onSuccess: (created) => {
-              if (created.id !== undefined) {
-                setValue(`pickupPoints.${index}.server_id`, created.id);
-              }
-            },
+    //  запрос на изменение pickup-points
+    managePickupPoint(
+      { enabled: values.pickup_enabled, points: [...points, ...deletedPoints] },
+      {
+        onSuccess: (result) => {
+          if (result.points) {
+            replacePickupPoints(
+              result.points
+                .filter((point) => point.is_active !== false)
+                .map(({ id, ...point }) => ({ ...point, server_id: id }))
+            );
           }
-        );
-        return;
+        },
       }
-
-      const initial = initialPickup?.find(({ id }) => id === point.server_id);
-
-      if (isPointChanged(point, initial)) {
-        changePickupPoint({
-          id: point.server_id,
-          address: point.address,
-          pickup_date: point.pickup_date && point.pickup_date.length > 0 ? point.pickup_date : null,
-          is_active: point.is_active,
-        });
-      }
-    });
+    );
   };
 };

@@ -1,13 +1,9 @@
 import { type HTMLInputTypeAttribute } from "react";
+import { type FieldPath } from "react-hook-form";
 
 export type TArtistSettingsFieldValues = {
-  pvz_code?: string;
-  pvz_city_code?: string;
-  pvz_city?: string;
-  pvz_address?: string;
+  shippingPoint?: TPVZOfficeMe;
   pickupPoints?: TPickupPointForm[];
-  support_email?: string;
-  returns_email?: string;
   shipping_enabled?: boolean;
   pickup_enabled?: boolean;
 };
@@ -26,6 +22,11 @@ export type TPickupPointMe = {
   is_active?: boolean;
 };
 
+export type TPickupSettings = {
+  enabled?: boolean;
+  points?: TPickupPointMe[];
+};
+
 export type TPVZOfficeMe = {
   pvz_code?: string;
   city_code?: string;
@@ -33,18 +34,17 @@ export type TPVZOfficeMe = {
   address?: string;
 } | null;
 
-export type TStoreSettings = {
-  support_email?: string;
-  returns_email?: string;
-  shipping_enabled?: boolean;
-  pickup_enabled?: boolean;
-} | null;
+export type TShippingSettings = {
+  enabled?: boolean;
+  point?: TPVZOfficeMe;
+};
+
 
 export type TArtistSettingsFormField<
   T extends TArtistSettingsFieldValues = TArtistSettingsFieldValues,
 > = {
   title?: string;
-  name: keyof T;
+  name: FieldPath<T>;
   placeholder?: string;
   type: HTMLInputTypeAttribute;
   required: boolean;

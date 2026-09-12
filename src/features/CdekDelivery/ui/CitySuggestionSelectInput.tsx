@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useGetCheckoutData } from "@/entities/order";
-
 import { CustomInput } from "@/shared/ui";
 import type { InputProps } from "@/shared/ui/CustomInput/CustomInput.types";
 import { handleKeyDown } from "@/shared/utils/handleKeydown";
@@ -11,12 +9,12 @@ import { LocationSuggestionsList } from "../components/LocationSuggestionsList";
 import styles from "./CdekDelivery.module.scss";
 
 export interface TCitySuggestionsInput extends InputProps {
+  defaultCity?: string;
   onValueConfirm: (value: TCdekCity) => void;
 }
 
 export const CitySuggestionSelectInput = (props: TCitySuggestionsInput) => {
-  const { data } = useGetCheckoutData();
-  const defaultCity = data?.user_defaults.city || "";
+  const defaultCity = props.defaultCity ?? "";
   const [suggestions, setSuggestions] = useState<TCdekCity[]>([]);
 
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);

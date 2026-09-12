@@ -1,9 +1,8 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
 
 import {
-  type TPVZOfficeMe,
-  type TPickupPointMe,
-  type TStoreSettings,
+  type TPickupSettings,
+  type TShippingSettings,
   type TTelegramBotConnectResponse,
 } from "../model/artistSettings.types";
 
@@ -33,12 +32,12 @@ export async function connectTelegramBot(): Promise<TTelegramBotConnectResponse>
 async function setPickupPointsMe<T>({
   apiMethod,
   errorMessage,
-  pickupPoints,
+  pickupSettings,
   id,
 }: {
-  apiMethod: "GET" | "POST" | "PATCH" | "DELETE";
+  apiMethod: "GET" | "POST" | "DELETE";
   errorMessage: string;
-  pickupPoints?: TPickupPointMe | TPickupPointMe[];
+  pickupSettings?: Partial<TPickupSettings>;
   id?: number;
 }): Promise<T> {
   const url = id
@@ -46,7 +45,7 @@ async function setPickupPointsMe<T>({
     : `${baseUrl}/v1/artists/me/pickup-points`;
   const response = await authFetchClient<T>(url, {
     method: apiMethod,
-    body: pickupPoints && JSON.stringify(pickupPoints),
+    body: pickupSettings && JSON.stringify(pickupSettings),
     headers: {
       "Content-Type": "application/json",
     },
@@ -62,39 +61,18 @@ async function setPickupPointsMe<T>({
 
 // актуальные пункты самовывоза для артиста
 export async function receivePickupPointsMe() {
-  return await setPickupPointsMe<TPickupPointMe[]>({
+  return await setPickupPointsMe<Partial<TPickupSettings>>({
     apiMethod: "GET",
-    errorMessage: "Ошибка получения пунктов самовывоза",
+    errorMessage: "Ошибка получения информации о пунктах самовывоза",
   });
 }
 
-// добавить пункт самовывоза для артиста
-export async function addPickupPointMe(pickupPoint: TPickupPointMe) {
-  return await setPickupPointsMe<TPickupPointMe>({
+// добавить/изменить/удалить (is_active=false) информацию о пунктах самовывоза для артиста
+export async function managePickupPointMe(pickupSettings: Partial<TPickupSettings>) {
+  return await setPickupPointsMe<Partial<TPickupSettings>>({
     apiMethod: "POST",
-    errorMessage: "Ошибка добавления пункта самовывоза",
-    pickupPoints: pickupPoint,
-  });
-}
-
-//отредактировать существующий пункт самовывоза для артиста
-export async function changePickupPointMe(pickupPoint: TPickupPointMe) {
-  return await setPickupPointsMe<TPickupPointMe>({
-    apiMethod: "PATCH",
-    errorMessage: "Ошибка изменения пункта самовывоза",
-    pickupPoints: pickupPoint,
-    id: pickupPoint.id,
-  });
-}
-
-//удалить пункт самовывоза для артиста
-export async function deletePickupPointMe(id: number): Promise<void> {
-  await authFetchClient<void>(`${baseUrl}/v1/artists/me/pickup-points/${id}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
+    errorMessage: "Ошибка изменениния информации о пунктах самовывоза",
+    pickupSettings: pickupSettings,
   });
 }
 
@@ -106,7 +84,7 @@ async function setPVZOfficeMe<T>({
 }: {
   apiMethod: "GET" | "PUT" | "DELETE";
   errorMessage: string;
-  payload?: TPVZOfficeMe;
+  payload?: TShippingSettings;
 }): Promise<T> {
   const response = await authFetchClient<T>(`${baseUrl}/v1/artists/me/shipping-point`, {
     method: apiMethod,
@@ -125,19 +103,19 @@ async function setPVZOfficeMe<T>({
 }
 
 //получить информацию о выбраном ПВЗ для доставки товаров артистом
-export async function receivePVZMe(): Promise<TPVZOfficeMe | null> {
-  return authFetchClient<TPVZOfficeMe>(`${baseUrl}/v1/artists/me/shipping-point`, {
+export async function receivePVZMe(): Promise<Partial<TShippingSettings> | null> {
+  return authFetchClient<Partial<TShippingSettings>>(`${baseUrl}/v1/artists/me/shipping-point`, {
     method: "GET",
     credentials: "include",
   });
 }
 
 //изменить/добавить информацию о ПВЗ для доставки товаров артистом
-export async function createPVZMe(pvz: TPVZOfficeMe) {
-  return await setPVZOfficeMe<TPVZOfficeMe>({
+export async function managePVZMe(pvzSettings: Partial<TShippingSettings>) {
+  return await setPVZOfficeMe<Partial<TShippingSettings>>({
     apiMethod: "PUT",
     errorMessage: "Ошибка настройки информации о ПВЗ артиста",
-    payload: pvz,
+    payload: pvzSettings,
   });
 }
 
@@ -153,7 +131,7 @@ export async function deletePVZMe(): Promise<void> {
 }
 
 //---------------- настройка информации о контактах поддержки / для возвратов  --------------
-async function setStoreSettingsMe<T>({
+/*async function setStoreSettingsMe<T>({
   apiMethod,
   errorMessage,
   payload,
@@ -194,3 +172,4 @@ export async function manageStoreSettings(contacts: TStoreSettings) {
     payload: contacts,
   });
 }
+  */

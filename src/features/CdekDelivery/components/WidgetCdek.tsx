@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 
 
-import { type TCdekDeliveryTariff, useGetCheckoutData, useSelectDeliveryTariff } from "@/entities/order";
+import { type TCdekDeliveryTariff, useSelectDeliveryTariff } from "@/entities/order";
 
 
 
@@ -86,6 +86,7 @@ type WidgetCdekProps = {
   senderMode: boolean;
   onModalClose?: () => void;
   onOfficeSelect?: (office: TCdekOfficeDraft) => void;
+  onReady?: (cityCode: number) => void;
 };
 
 const addScript = (scriptId: string, onGetReady: () => void) => {
@@ -138,10 +139,8 @@ export const WidgetCdek = ({
   senderMode,
   onModalClose,
   onOfficeSelect,
+  onReady,
 }: WidgetCdekProps) => {
-  const { data } = useGetCheckoutData();
-  const defaultCityName = data?.user_defaults.city;
-
   const { mutate } = useCdekCalculate();
   const widgetRef = useRef<ICDEKWidgetInstance | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
@@ -187,6 +186,7 @@ export const WidgetCdek = ({
         lang: "rus",
         currency: "RUB",
         fixBounds: "locality",
+        onReady: () => onReady?.(cityCode),
         onChoose(deliveryType, tariff, address) {
           if (!senderMode) {
             if (address && address.city_code) {
@@ -232,11 +232,11 @@ export const WidgetCdek = ({
     setDeliverySelected,
     uniqueContainerId,
     mutate,
-    defaultCityName,
     cityName,
     senderMode,
     onModalClose,
     onOfficeSelect,
+    onReady,
   ]);
 
   return <div className={styles.cdekPickPointsWidget} id={uniqueContainerId} />;

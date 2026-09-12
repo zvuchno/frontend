@@ -1,8 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-
-import { useGetArtistPickupPoints, useGetArtistStoreSettings } from "@/entities/Artist";
+import { useGetArtistPickupPoints } from "@/entities/Artist";
 import { useGetArtistPvzOffice } from "@/entities/Artist";
 
 import { Loader } from "@/shared/ui";
@@ -10,26 +8,15 @@ import { Loader } from "@/shared/ui";
 import { ArtistSettingsForm } from "./ui/ArtistSettingsForm";
 
 export const ArtistSettingsPage = () => {
-  const { data: session, status: sessionStatus } = useSession();
+  const { data: cdekSettings, status: cdekStatus } = useGetArtistPvzOffice();
+  const { data: pickupSettings, status: pickupPointsStatus } = useGetArtistPickupPoints();
 
-  const { data: cdek, status: cdekStatus } = useGetArtistPvzOffice();
-  const { data: settings, status: contactsStatus } = useGetArtistStoreSettings();
-  const { data: pickupPoints, status: pickupPointsStatus } = useGetArtistPickupPoints();
-
-  if (
-    sessionStatus === "loading" ||
-    pickupPointsStatus === "pending" ||
-    cdekStatus === "pending" ||
-    contactsStatus === "pending"
-  )
-    return <Loader />;
+  if (pickupPointsStatus === "pending" || cdekStatus === "pending") return <Loader />;
 
   return (
     <ArtistSettingsForm
-      initialCdek={cdek}
-      initialPickup={pickupPoints}
-      initialEmail={session?.user.email}
-      initialSettings={settings}
+      initialCdek={cdekSettings ?? undefined}
+      initialPickup={pickupSettings ?? undefined}
     />
   );
 };
