@@ -1,4 +1,5 @@
 import { type SubmitHandler, type UseFieldArrayReplace } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import {
   type TArtistSettingsFieldValues,
@@ -15,50 +16,52 @@ export const useArtistSettingsSubmit = ({
   initialPickup?: TPickupSettings;
   replacePickupPoints: UseFieldArrayReplace<TArtistSettingsFieldValues, "pickupPoints">;
 }): SubmitHandler<TArtistSettingsFieldValues> => {
-  const { mutate: managePickupPoint } = useManageArtistPickupPoint();
-  const { mutate: manageCdekOffice } = useManageArtistPvzOffice();
+  const { mutateAsync: managePickupPoint } = useManageArtistPickupPoint();
+  const { mutateAsync: manageCdekOffice } = useManageArtistPvzOffice();
 
   const { mutateAsync: handleOfficeDelete } = useDeleteArtistPvzOffice();
 
-  //  запрос на изменение shipping-point
-  return (values) => {
-    if (!values.shippingPoint?.pvz_code) {
-      void handleOfficeDelete();
-    } else {
-      manageCdekOffice({
-        enabled: values.shipping_enabled,
-        point: {
-          address: values.shippingPoint?.address,
-          city: values.shippingPoint?.city,
-          city_code: values.shippingPoint?.city_code,
-          pvz_code: values.shippingPoint?.pvz_code,
-        },
-      });
-    }
+  return async (values) => {
+    try {
+      if (!values.shippingPoint?.pvz_code) {
+        await handleOfficeDelete();
+      } else {
+        //  запрос на изменение shipping-point
 
-    const points = (values.pickupPoints ?? []).map(({ server_id, ...point }) => ({
-      ...point,
-      id: server_id,
-    }));
-    const remainingIds = new Set(points.map((point) => point.id));
-    const deletedPoints = (initialPickup?.points ?? [])
-      .filter((point) => point.id !== undefined && !remainingIds.has(point.id))
-      .map((point) => ({ ...point, is_active: false }));
-
-    //  запрос на изменение pickup-points
-    managePickupPoint(
-      { enabled: values.pickup_enabled, points: [...points, ...deletedPoints] },
-      {
-        onSuccess: (result) => {
-          if (result.points) {
-            replacePickupPoints(
-              result.points
-                .filter((point) => point.is_active !== false)
-                .map(({ id, ...point }) => ({ ...point, server_id: id }))
-            );
-          }
-        },
+        await manageCdekOffice({
+          enabled: values.shipping_enabled,
+          point: values.shippingPoint,
+        });
       }
-    );
+
+      const points = (values.pickupPoints ?? []).map(({ server_id, ...point }) => ({
+        ...point,
+        id: server_id,
+      }));
+      const remainingIds = new Set(points.map((point) => point.id));
+      const deletedPoints = (initialPickup?.points ?? [])
+        .filter((point) => point.id !== undefined && !remainingIds.has(point.id))
+        .map((point) => ({ ...point, is_active: false }));
+
+      //  запрос на изменение pickup-points
+      await managePickupPoint(
+        { enabled: values.pickup_enabled, points: [...points, ...deletedPoints] },
+        {
+          onSuccess: (result) => {
+            if (result.points) {
+              replacePickupPoints(
+                result.points
+                  .filter((point) => point.is_active !== false)
+                  .map(({ id, ...point }) => ({ ...point, server_id: id }))
+              );
+            }
+          },
+        }
+      );
+
+      toast.success("Настройки доставки успешно обновлены");
+    } catch {
+      toast.error("Не удалось сохранить все настройки доставки. Повторите попытку");
+    }
   };
 };
