@@ -1,19 +1,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { createPVZMe, deletePVZMe, receivePVZMe } from "../api/artistSettings.api";
-import { type TPVZOfficeMe } from "./artistSettings.types";
+import { deletePVZMe, managePVZMe, receivePVZMe } from "../api/artistSettings.api";
+import { type TShippingSettings } from "./artistSettings.types";
 
 export function useGetArtistPvzOffice() {
-  return useQuery<TPVZOfficeMe | null>({
+  return useQuery<Partial<TShippingSettings> | null>({
     queryKey: ["artist-pvz"],
     queryFn: () => receivePVZMe(),
     refetchOnWindowFocus: false,
   });
 }
 
-export function useCreateArtistPvzOffice() {
-  return useMutation<TPVZOfficeMe, Error, TPVZOfficeMe>({
-    mutationFn: (pvz: TPVZOfficeMe) => createPVZMe(pvz),
+export function useManageArtistPvzOffice() {
+  return useMutation<Partial<TShippingSettings>, Error, Partial<TShippingSettings>>({
+    mutationFn: (pvzSettings: Partial<TShippingSettings>) => managePVZMe(pvzSettings),
   });
 }
 

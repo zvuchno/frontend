@@ -6,7 +6,7 @@ import {
 
 import clsx from "clsx";
 
-import { type TArtistSettingsFieldValues, type TPVZOfficeMe } from "@/entities/Artist";
+import { type TArtistSettingsFieldValues, type TShippingSettings } from "@/entities/Artist";
 
 import { ArtistSettingsCdekDelivery } from "../ArtistSettingsCdekDelivery/ArtistSettingsCdekDelivery";
 import { ArtistSettingsPickupPointDelivery } from "../ArtistSettingsPickupPointDelivery/ArtistSettingsPickupPointDelivery";
@@ -14,19 +14,20 @@ import styles from "./ArtistSettingsDelivery.module.scss";
 
 export type TArtistSettingsDelivery = {
   disabled: boolean;
-  cdekOffice?: TPVZOfficeMe;
-  initialSettings?: { shipping_enabled: boolean; pickup_enabled: boolean };
+  cdekSettings?: TShippingSettings;
   onAddPoint: UseFieldArrayAppend<TArtistSettingsFieldValues, "pickupPoints">;
   onDeletePoint: UseFieldArrayRemove;
+  pickupStatus?: boolean;
   fields: FieldArrayWithId<TArtistSettingsFieldValues, "pickupPoints", "id">[];
+
   onChooseButtonClick: () => void;
 };
 
 export const ArtistSettingsDelivery = ({
   disabled,
   fields,
-  cdekOffice,
-  initialSettings,
+  cdekSettings,
+  pickupStatus,
   onAddPoint,
   onDeletePoint,
   onChooseButtonClick,
@@ -37,8 +38,8 @@ export const ArtistSettingsDelivery = ({
       <ArtistSettingsCdekDelivery
         disabled={disabled}
         onSelect={onChooseButtonClick}
-        office={cdekOffice}
-        isAvaliable={initialSettings?.shipping_enabled || false}
+        office={cdekSettings?.point}
+        isAvaliable={cdekSettings?.enabled || false}
       />
 
       <ArtistSettingsPickupPointDelivery
@@ -46,7 +47,7 @@ export const ArtistSettingsDelivery = ({
         fields={fields}
         onAddPoint={onAddPoint}
         onDeletePoint={onDeletePoint}
-        isAvaliable={initialSettings?.pickup_enabled || false}
+        isAvaliable={pickupStatus || false}
       />
     </div>
   </section>

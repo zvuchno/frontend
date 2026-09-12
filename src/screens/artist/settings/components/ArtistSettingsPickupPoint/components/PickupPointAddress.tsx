@@ -1,7 +1,6 @@
-import { useFormContext, useWatch } from "react-hook-form";
-import toast from "react-hot-toast";
+import { useFormContext } from "react-hook-form";
 
-import { type TArtistSettingsFieldValues, useDeleteArtistPickupPoint } from "@/entities/Artist";
+import { type TArtistSettingsFieldValues } from "@/entities/Artist";
 
 import { CustomInput } from "@/shared/ui";
 
@@ -20,35 +19,13 @@ export const PickupPointAddress = ({
   dateName: `pickupPoints.${number}.pickup_date`;
   onRemove: () => void;
 }) => {
-  const { register, trigger, control } = useFormContext<TArtistSettingsFieldValues>();
-  const { mutateAsync: deletePickuppoint } = useDeleteArtistPickupPoint();
-
-  const serverIdName = `pickupPoints.${fieldIndex}.server_id` as const;
-
-  const serverId = useWatch({
-    control,
-    name: serverIdName,
-  });
+  const { register, trigger } = useFormContext<TArtistSettingsFieldValues>();
 
   const addressRegistration = register(addressName, {
     onChange: () => {
       void trigger(dateName);
     },
   });
-
-  const handleDelete = async () => {
-    if (serverId === undefined) {
-      onRemove();
-      return;
-    }
-
-    try {
-      await deletePickuppoint(serverId);
-      onRemove();
-    } catch {
-      toast.error("Не удалось удалить пункт самовывоза. Повторите попытку");
-    }
-  };
 
   return (
     <div className={styles.artistSettingsDeliveryAddressWrapper}>
@@ -65,7 +42,7 @@ export const PickupPointAddress = ({
         title='Удалить пункт самовывоза'
         type='button'
         aria-label='Удалить пункт самовывоза'
-        onClick={() => void handleDelete()}
+        onClick={onRemove}
       />
     </div>
   );

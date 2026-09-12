@@ -5,9 +5,8 @@ import { DevTool } from "@hookform/devtools";
 
 import {
   type TArtistSettingsFieldValues,
-  type TPVZOfficeMe,
-  type TPickupPointMe,
-  type TStoreSettings,
+  type TPickupSettings,
+  type TShippingSettings,
   useConnetcTelegramBot,
 } from "@/entities/Artist";
 import { DeliverySelectionProvider } from "@/entities/order";
@@ -19,35 +18,23 @@ import { useArtistSettingsSubmit } from "../model/useArtistSettingsSubmit";
 import styles from "./ArtistSettingsForm.module.scss";
 
 interface ArtistSettingsFormProps {
-  initialCdek?: TPVZOfficeMe;
-  initialPickup?: TPickupPointMe[];
-  initialEmail?: string | null;
-  initialSettings?: TStoreSettings;
+  initialCdek?: TShippingSettings;
+  initialPickup?: TPickupSettings;
 }
 
-const getCdekDefaultValues = (cdek?: TPVZOfficeMe) => ({
-  pvz_address: cdek?.address ?? "",
-  pvz_city: cdek?.city ?? "",
-  pvz_city_code: cdek?.city_code ?? "",
-  pvz_code: cdek?.pvz_code ?? "",
-});
-
-const getPickupPointsDefaultValues = (pickupPoints?: TPickupPointMe[]) =>
-  (pickupPoints ?? []).map(({ id, ...point }) => ({ ...point, server_id: id }));
-
-export const ArtistSettingsForm = ({
-  initialCdek,
-  initialPickup,
-  initialSettings,
-}: ArtistSettingsFormProps) => {
+export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSettingsFormProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
   const { mutate: connectTelegramBot } = useConnetcTelegramBot();
 
   const methods = useForm<TArtistSettingsFieldValues>({
     defaultValues: {
-      ...getCdekDefaultValues(initialCdek),
-      pickupPoints: getPickupPointsDefaultValues(initialPickup),
+      pickup_enabled: initialPickup?.enabled,
+      pickupPoints: (initialPickup?.points ?? [])
+        .filter((point) => point.is_active !== false)
+        .map(({ id, ...point }) => ({ ...point, server_id: id })),
+      shipping_enabled: initialCdek?.enabled,
+      shippingPoint: initialCdek?.point,
     },
   });
 
@@ -56,12 +43,7 @@ export const ArtistSettingsForm = ({
     name: "pickupPoints",
   });
 
-  const onSubmit = useArtistSettingsSubmit({
-    initialCdek,
-    initialPickup,
-    replacePickupPoints: replace,
-    setValue: methods.setValue,
-  });
+  const onSubmit = useArtistSettingsSubmit({ initialPickup, replacePickupPoints: replace });
 
   const handleButtonClick = () => {
     void methods.handleSubmit(onSubmit)();
@@ -77,11 +59,8 @@ export const ArtistSettingsForm = ({
             fields={fields}
             onAddPoint={append}
             onDeletePoint={remove}
-            cdekOffice={initialCdek}
-            initialSettings={{
-              shipping_enabled: initialSettings?.shipping_enabled || false,
-              pickup_enabled: initialSettings?.pickup_enabled || false,
-            }}
+            cdekSettings={initialCdek}
+            pickupStatus={initialPickup?.enabled}
           />
           <ArtistSettingsButtons
             disabled={!isOnEdit}

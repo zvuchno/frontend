@@ -1,9 +1,9 @@
-import { type Validate } from "react-hook-form";
+import { type FieldPath, type Validate } from "react-hook-form";
 
 import { type TArtistSettingsFieldValues } from "../model/artistSettings.types";
 
-export const artistSettingsFieldsConfig: Record<
-  keyof TArtistSettingsFieldValues,
+export const artistSettingsFieldsConfig: Partial<Record<
+  FieldPath<TArtistSettingsFieldValues>,
   {
     required?: boolean;
     minLength?: number;
@@ -11,26 +11,9 @@ export const artistSettingsFieldsConfig: Record<
     pattern?: RegExp;
     validate?: Validate<string | undefined, TArtistSettingsFieldValues>;
   }
-> = {
-  pvz_address: {
+>> = {
+  shippingPoint: {
     required: false,
-  },
-  pvz_city: {
-    required: false,
-  },
-  pvz_city_code: {
-    required: false,
-  },
-  pvz_code: {
-    required: false,
-  },
-  support_email: {
-    required: false,
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  },
-  returns_email: {
-    required: false,
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
   pickupPoints: {
     required: false,

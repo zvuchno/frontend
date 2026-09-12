@@ -1,4 +1,4 @@
-import { useFormContext } from "react-hook-form";
+/*import { useFormContext } from "react-hook-form";
 
 import { type TArtistSettingsFieldValues } from "@/entities/Artist";
 
@@ -31,3 +31,4 @@ export const ArtistSettingsReturn = ({ disabled }: { disabled: boolean }) => {
     </section>
   );
 };
+*/

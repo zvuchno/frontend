@@ -21,10 +21,7 @@ export const CdekModal = ({
 
   const handleOfficeSelect = (office: TPVZOfficeMe) => {
     if (office) {
-      setValue("pvz_address", office.address, { shouldDirty: true });
-      setValue("pvz_city", office.city, { shouldDirty: true });
-      setValue("pvz_city_code", office.city_code, { shouldDirty: true });
-      setValue("pvz_code", office.pvz_code, { shouldDirty: true });
+      setValue("shippingPoint", office, { shouldDirty: true });
     }
   };
   return (

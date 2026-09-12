@@ -2,17 +2,36 @@ import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import clsx from "clsx";
+import { useQuery } from "@tanstack/react-query";
 
 import { type FieldValues } from "@/screens/order/model/types";
 import { fieldsConfig } from "@/screens/order/ui/components/OrderDetails/utils";
 
 import { type TPVZOfficeMe } from "@/entities/Artist";
 import { useGetCheckoutData, useSelectDeliveryTariff } from "@/entities/order";
+import { Loader } from "@/shared/ui";
 
-import { type TCdekCity } from "../api/cdek.api";
+import { type TCdekCity, getCdekCities } from "../api/cdek.api";
 import { WidgetCdek } from "../components/WidgetCdek";
 import styles from "./CdekDelivery.module.scss";
 import { CitySuggestionSelectInput } from "./CitySuggestionSelectInput";
+
+const useDefaultCdekCity = (isSender: boolean) => {
+  const { data } = useGetCheckoutData(!isSender);
+  const { data: senderDefaults } = useQuery({
+    queryKey: ["cdek-sender-city", "Москва"],
+    queryFn: async () => {
+      const moscowCities = await getCdekCities("Москва");
+      return { city: "Москва", city_code: moscowCities[0]?.code };
+    },
+    enabled: isSender,
+  });
+  const checkoutDefaults = (isSender ? senderDefaults : data?.user_defaults) ?? { city: "", city_code: "" };
+  const defaultCity = isSender ? "Москва" : checkoutDefaults.city || "";
+  const defaultCityCode = Number(checkoutDefaults.city_code) || 0;
+
+  return { defaultCity, defaultCityCode };
+};
 
 export const CdekDelivery = ({
   isSender,
@@ -25,12 +44,12 @@ export const CdekDelivery = ({
   onModalClose?: () => void;
   onSelectOfficeDraft?: (office: TPVZOfficeMe) => void;
 }) => {
-  const { data } = useGetCheckoutData();
-  const defaultCity = data?.user_defaults.city || "";
-  const defaultCityCode = data?.user_defaults.city_code || "";
+  const { defaultCity, defaultCityCode } = useDefaultCdekCity(isSender);
 
   const [currentCity, setCurrentCity] = useState<TCdekCity | string>(defaultCity);
+  const [readyCityCode, setReadyCityCode] = useState<number | null>(null);
   const currentCityCode = currentCity instanceof Object ? currentCity.code : defaultCityCode;
+  const isMapLoading = isSender && readyCityCode !== currentCityCode;
 
   const { register, setValue, unregister } = useFormContext<FieldValues>();
   const { deliverySelected } = useSelectDeliveryTariff();
@@ -83,21 +102,32 @@ export const CdekDelivery = ({
       <h3 className={styles.title}>Выбор ПВЗ</h3>
 
       <CitySuggestionSelectInput
+        defaultCity={defaultCity}
         onValueConfirm={setCurrentCity}
         id={"cdek-city-input"}
         placeholder='Выберите город'
       />
 
-      {currentCityCode && (
+      <div className={styles.mapContainer} aria-busy={isMapLoading}>
+        {isMapLoading && (
+          <div className={styles.mapLoader}>
+            <Loader marginBlockStart={0} />
+          </div>
+        )}
+        <div style={{ visibility: isMapLoading ? "hidden" : "visible" }}>
+      {currentCityCode > 0 && (
         <WidgetCdek
           key={currentCityCode}
           cityCode={currentCityCode}
-          cityName={typeof currentCity === "string" ? currentCity : currentCity.full_name}
+          cityName={typeof currentCity === "string" ? defaultCity : currentCity.full_name}
           senderMode={isSender}
           onModalClose={isSender ? onModalClose : undefined}
           onOfficeSelect={onSelectOfficeDraft}
+          onReady={setReadyCityCode}
         />
       )}
+        </div>
+      </div>
     </section>
   );
 };
