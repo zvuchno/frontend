@@ -90,7 +90,7 @@ export const ReleaseDescription = ({
         <div className={s.card}>
           <div className={s.card__artist} onClick={handleArtistClick}>
             <div className={s.card__artist__img}>
-              <img src={release.artist_image} alt={release.artist_name} />
+              {release.artist_image && <img src={release.artist_image} alt={release.artist_name} />}
             </div>
             <Title Tag='h4' className={s.card__artist__name}>
               {release.artist_name}

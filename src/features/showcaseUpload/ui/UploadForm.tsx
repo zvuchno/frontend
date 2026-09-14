@@ -62,8 +62,13 @@ export const UploadForm = ({
 
   const isLoadingArtists = managedProfilesQuery.isFetching || managedProfilesQuery.isPending;
 
+  const selectedArtist = watch("artistId");
+
   // Список альбомов (для селекта)
-  const albumsQuery = useAlbumsInfiniteQuery({ artistSlug: currentArtistSlug });
+  const albumsQuery = useAlbumsInfiniteQuery({ 
+    artistSlug: profileType === "label" ? selectedArtist ? null : currentArtistSlug : currentArtistSlug, 
+    artist_id: selectedArtist,
+  });
 
   const albumOptions = useMemo(() => {
     if (!albumsQuery.data) return [];

@@ -75,7 +75,7 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
         <div className={s.card}>
           <div className={s.card__artist} onClick={handleArtistClick}>
             <div className={s.card__artist__img}>
-              <img src={product.artist_image} alt={product.artist_name} />
+              {product.artist_image && <img src={product.artist_image} alt={product.artist_name} />}
             </div>
             <Title Tag='h4' className={s.card__artist__name}>
               {product.artist_name}

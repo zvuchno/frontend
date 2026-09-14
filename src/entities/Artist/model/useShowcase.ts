@@ -387,7 +387,15 @@ export function useCreateMerch() {
         return;
       }
 
-      toast.error("Не удалось создать мерч");
+      let message = "Не удалось создать мерч";
+
+      if (error.message.includes("Введите правильное число")) {
+        message = "Укажите количество товара"
+      }
+
+      toast.error(message, {
+        duration: 8000,
+      });
     },
   });
 }

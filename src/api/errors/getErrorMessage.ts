@@ -30,6 +30,7 @@ export const getErrorMessage = (data: unknown, fallback: string): string | strin
     "password",
     "new_password",
     "confirm_password",
+    "stock",
   ]) {
     const value = data[key];
 
