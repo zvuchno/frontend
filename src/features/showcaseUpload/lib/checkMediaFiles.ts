@@ -1,5 +1,5 @@
 export const checkMediaFiles = async (file: File) => {
-  const MAX_IMAGE_SIZE = 35 * 1024 * 1024; // 35 МБ
+  const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 МБ
   const MIN_RESOLUTION = 1000;
   const MAX_AUDIO_SIZE = 500 * 1024 * 1024; // 500 МБ
 
@@ -20,7 +20,7 @@ export const checkMediaFiles = async (file: File) => {
     if (file.size > MAX_IMAGE_SIZE) {
       return {
         validFile: null,
-        error: "Размер загружаемого изображения не должен превышать 35 МБ"
+        error: "Размер загружаемого изображения не должен превышать 10 МБ"
       }
     }
     const img = new Image();

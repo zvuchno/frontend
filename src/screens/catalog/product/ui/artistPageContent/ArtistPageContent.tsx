@@ -14,6 +14,9 @@ import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
 import { ListSection, Loader } from "@/shared/ui";
 import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
+import { usePlayerStore } from "@/features/player";
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
+import toast from "react-hot-toast";
 
 interface IArtistPageContentProps {
   artist: TDetalArtist;
@@ -26,6 +29,8 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const isAuth = status === "authenticated";
 
   const hasFetching = isAuth || status === "unauthenticated";
+
+  const { togglePlay, playingAlbumId, playAlbum, setPlayingAlbumId } = usePlayerStore();
 
   const queryAlbums = useQuery({
     queryKey: ["recom", "album", artist.slug],
@@ -55,6 +60,24 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
   const hasMoreAlbums = !!queryAlbums.data?.next;
   const merchRecommend = queryMerch.data?.results;
   const hasMoreMerch = !!queryMerch.data?.next;
+
+  const handlePlayRelease = async (releaseId: number) => {
+    if (playingAlbumId === releaseId) {
+      togglePlay();
+      return;
+    }
+
+    try {
+      const data = await getTracksList({ albumId: releaseId });
+      const tracks = data?.tracks;
+      if (!tracks?.length) return;
+      playAlbum(tracks, 0);
+      setPlayingAlbumId(releaseId);
+    } catch (err) {
+      console.error('Не удалось загрузить треки релиза', err);
+      toast.error("Не удалось загрузить треки релиза")
+    }
+  };
 
   if (status === "loading") {
     return <Loader />;
@@ -99,6 +122,9 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                 }
                 link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
                 onHandleClick={() => addProduct(item)}
+                isRelease={item.target.type === "release"}
+                isPlaying={playingAlbumId === item.target.id}
+                onPlay={() => handlePlayRelease(item.target.id)}
               />
             );
           })}

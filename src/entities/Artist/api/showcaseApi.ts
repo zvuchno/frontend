@@ -45,7 +45,7 @@ export async function getShowcaseAlbumsList({
     params.append("artist_id", artist_id.toString());
   }
 
-  const mainUrl = `${baseUrl}/v1/store/albums?limit=15&${params.toString()}`;
+  const mainUrl = `${baseUrl}/v1/store/albums?${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseAlbum>>(currentUrl, {
@@ -75,7 +75,7 @@ export async function getShowcaseMerchList({
     params.append("artist_id", artist_id.toString());
   }
 
-  const mainUrl = `${baseUrl}/v1/store/merch?limit=15&${params.toString()}`;
+  const mainUrl = `${baseUrl}/v1/store/merch?${params.toString()}`;
   const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseMerch>>(currentUrl, {

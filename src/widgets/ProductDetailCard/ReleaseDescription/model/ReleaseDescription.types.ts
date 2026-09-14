@@ -21,7 +21,7 @@ export type TReleaseVariant = {
 export type TDetailRelease = {
   id: number;
   artist_name: string;
-  artist_image: string;
+  artist_image: string | null;
   artist_slug: string;
   is_single: boolean;
   variants: TReleaseVariant[];

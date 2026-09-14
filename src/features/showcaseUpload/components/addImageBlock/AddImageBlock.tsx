@@ -81,7 +81,9 @@ export const AddImageBlock = ({
 
     const result = await checkMediaFiles(file);
     if (result.error) {
-      toast.error(result.error);
+      toast.error(result.error, {
+        duration: 8000,
+      });
       event.target.value = '';
       return;
     }
@@ -150,7 +152,9 @@ export const AddImageBlock = ({
 
     const result = await checkMediaFiles(file);
     if (result.error) {
-      toast.error(result.error);
+      toast.error(result.error, {
+        duration: 8000,
+      });
       event.target.value = '';
       return;
     }
@@ -316,7 +320,7 @@ export const AddImageBlock = ({
           <p>Требования к загрузке обложки:</p>
           <p className={styles.addImage__markerPoint}>Формат файла: JPG, PNG, WebP</p>
           <p className={styles.addImage__markerPoint}>Размер: не менее 1000x1000 пикселей</p>
-          <p className={styles.addImage__markerPoint}>Размер файла: не более 35 МБ</p>
+          <p className={styles.addImage__markerPoint}>Размер файла: не более 10 МБ</p>
           {/* <p className={styles.addImage__markerPoint}>
             Цветовой режим: RGB (включая чёрно-белые изображения)
           </p>

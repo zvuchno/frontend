@@ -18,7 +18,7 @@ export type TDetailMerch = {
   name: string;
   description: string;
   artist_name: string;
-  artist_image: string;
+  artist_image: string | null;
   artist_slug: string;
   price: number;
   allow_overpay: boolean;
