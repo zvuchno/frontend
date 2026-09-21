@@ -1,14 +1,21 @@
 name: Frontend Zvuchno deploy
 
 concurrency:
-  group: deploy
+  group: deploy-frontend-${{ github.ref_name }}
   cancel-in-progress: true
 
 on:
   workflow_dispatch:
   push:
     branches:
+      - main
       - dev
+
+env:
+  IMAGE_TAG: ${{ github.ref_name == 'main' && 'latest' || 'dev' }}
+  SSH_HOST: ${{ github.ref_name == 'main' && secrets.SSH_HOST_PROD || secrets.SSH_HOST_DEV }}
+  NEXT_PUBLIC_BASE_API_URL: ${{ github.ref_name == 'main' && secrets.NEXT_PUBLIC_BASE_API_URL_PROD || secrets.NEXT_PUBLIC_BASE_API_URL_DEV }}
+  NEXTAUTH_URL: ${{ github.ref_name == 'main' && secrets.NEXTAUTH_URL_PROD || secrets.NEXTAUTH_URL_DEV }}
 
 jobs:
   build_and_push:
@@ -30,13 +37,13 @@ jobs:
           context: ./
           push: true
           build-args: |
-            NEXT_PUBLIC_BASE_API_URL=${{ secrets.NEXT_PUBLIC_BASE_API_URL }}
+            NEXT_PUBLIC_BASE_API_URL=${{ env.NEXT_PUBLIC_BASE_API_URL }}
             NEXT_PUBLIC_YANDEX_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_YANDEX_MAPS_API_KEY }}
             NEXT_PUBLIC_DADATA_API_KEY=${{ secrets.NEXT_PUBLIC_DADATA_API_KEY }}
-            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+            NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:${{ github.sha }}
-            ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:latest
+            ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:${{ env.IMAGE_TAG }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -46,7 +53,7 @@ jobs:
       - name: SSH deploy frontend
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: ${{ env.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
@@ -59,7 +66,7 @@ jobs:
 
             cd zvuchno
 
-            docker compose -f docker-compose.production.yml pull frontend
-            docker compose -f docker-compose.production.yml up -d frontend
+            docker compose pull frontend
+            docker compose up -d frontend
 
             docker image prune -f
