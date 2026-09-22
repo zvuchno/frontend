@@ -1,21 +1,14 @@
-name: Frontend Zvuchno deploy
+name: Frontend Zvuchno deploy (dev)
 
 concurrency:
-  group: deploy-frontend-${{ github.ref_name }}
+  group: deploy-frontend-dev
   cancel-in-progress: true
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - main
       - dev
-
-env:
-  IMAGE_TAG: ${{ github.ref_name == 'main' && 'latest' || 'dev' }}
-  SSH_HOST: ${{ github.ref_name == 'main' && secrets.SSH_HOST_PROD || secrets.SSH_HOST_DEV }}
-  NEXT_PUBLIC_BASE_API_URL: ${{ github.ref_name == 'main' && secrets.NEXT_PUBLIC_BASE_API_URL_PROD || secrets.NEXT_PUBLIC_BASE_API_URL_DEV }}
-  NEXTAUTH_URL: ${{ github.ref_name == 'main' && secrets.NEXTAUTH_URL_PROD || secrets.NEXTAUTH_URL_DEV }}
 
 jobs:
   build_and_push:
@@ -37,13 +30,13 @@ jobs:
           context: ./
           push: true
           build-args: |
-            NEXT_PUBLIC_BASE_API_URL=${{ env.NEXT_PUBLIC_BASE_API_URL }}
+            NEXT_PUBLIC_BASE_API_URL=${{ secrets.NEXT_PUBLIC_BASE_API_URL_DEV }}
             NEXT_PUBLIC_YANDEX_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_YANDEX_MAPS_API_KEY }}
             NEXT_PUBLIC_DADATA_API_KEY=${{ secrets.NEXT_PUBLIC_DADATA_API_KEY }}
-            NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL_DEV }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:${{ github.sha }}
-            ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:${{ env.IMAGE_TAG }}
+            ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:dev
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,7 +46,7 @@ jobs:
       - name: SSH deploy frontend
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.SSH_HOST }}
+          host: ${{ secrets.SSH_HOST_DEV }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
