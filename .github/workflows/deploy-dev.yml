@@ -1,7 +1,7 @@
-name: Frontend Zvuchno deploy
+name: Frontend Zvuchno deploy (dev)
 
 concurrency:
-  group: deploy
+  group: deploy-frontend-dev
   cancel-in-progress: true
 
 on:
@@ -30,13 +30,13 @@ jobs:
           context: ./
           push: true
           build-args: |
-            NEXT_PUBLIC_BASE_API_URL=${{ secrets.NEXT_PUBLIC_BASE_API_URL }}
+            NEXT_PUBLIC_BASE_API_URL=${{ secrets.NEXT_PUBLIC_BASE_API_URL_DEV }}
             NEXT_PUBLIC_YANDEX_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_YANDEX_MAPS_API_KEY }}
             NEXT_PUBLIC_DADATA_API_KEY=${{ secrets.NEXT_PUBLIC_DADATA_API_KEY }}
-            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL_DEV }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:${{ github.sha }}
-            ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:latest
+            ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:dev
 
   deploy:
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
       - name: SSH deploy frontend
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: ${{ secrets.SSH_HOST_DEV }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
@@ -59,7 +59,7 @@ jobs:
 
             cd zvuchno
 
-            docker compose -f docker-compose.production.yml pull frontend
-            docker compose -f docker-compose.production.yml up -d frontend
+            docker compose pull frontend
+            docker compose up -d frontend
 
             docker image prune -f
