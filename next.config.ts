@@ -49,6 +49,11 @@ const nextConfig: NextConfig = {
         hostname: "storage.yandexcloud.net",
         pathname: "/zvuchno-platform-private/**",
       },
+      {
+        protocol: "https",
+        hostname: "storage.yandexcloud.net",
+        pathname: "/zvuchno-prod-public/prod/media/**",
+      },
     ],
   },
 };
