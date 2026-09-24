@@ -8,6 +8,7 @@
   backdrop-filter: blur(4px);
   z-index: 10000;
   overscroll-behavior: contain;
+  margin: 0 !important;
 }
 
 .modal {
@@ -16,10 +17,7 @@
   width: fit-content;
   padding: 20px;
   background-color: #ffffff;
-  box-shadow: var(
-    --modal-box-shadow,
-    4px 4px 4px 0px color-mix(in srgb, #000000 25%, transparent)
-  );
+  box-shadow: var(--modal-box-shadow, 4px 4px 4px 0px color-mix(in srgb, #000000 25%, transparent));
   z-index: 2;
 
   @media (max-width: 768px) {
