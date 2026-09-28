@@ -67,11 +67,12 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
     <ModalUI isOpen={isOpen} onClose={onClose} closeButtonStyle='circledX'>
       <div className={s.contentWrapper}>
         <Title className={clsx(s.text, s.title)}>
-          {data.type === "Диджитал"
+          {data.name}
+          {/* {data.type === "Диджитал"
             ? data.is_single
               ? `Сингл "${data.name}"`
               : `Альбом "${data.name}"`
-            : `${data.type} "${data.name}"`}
+            : `${data.type} "${data.name}"`} */}
         </Title>
         <div className={s.content}>
           {data.image ? (

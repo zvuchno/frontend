@@ -128,8 +128,8 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
                     title={product.artist_name}
                     description={
                       product.year === null
-                        ? `${product.kind} ${product.name}`
-                        : `${product.kind} ${product.name} (${product.year.toString()})`
+                        ? `${product.name}`
+                        : `${product.name} (${product.year.toString()})`
                     }
                     price={product.price}
                     likeButton={

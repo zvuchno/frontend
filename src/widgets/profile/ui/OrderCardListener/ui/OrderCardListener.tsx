@@ -183,7 +183,7 @@ export const OrderCardListener = ({
                       </div>
                       <div className={styles.cardContent}>
                         <h4 className={styles.title}>
-                          {product.kind} {product.name}
+                          {product.name}
                         </h4>
                         {product.price_at_purchase !== undefined &&
                         product.price_at_purchase !== null ? (

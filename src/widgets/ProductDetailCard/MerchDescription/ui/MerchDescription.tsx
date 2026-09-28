@@ -83,7 +83,7 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
           </div>
 
           <Title Tag='h3' className={s.card__title}>
-            {`${product.kind} "${product.name}"`}
+            {product.name}
           </Title>
 
           <Text Tag='p' className={s.card__itemNumber}>
