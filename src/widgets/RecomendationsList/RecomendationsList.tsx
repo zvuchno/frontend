@@ -94,8 +94,8 @@ export const RecomendationsList = () => {
               title={item.artist_name}
               description={
                 item.year === null
-                  ? `${item.kind} ${item.name}`
-                  : `${item.kind} ${item.name} (${item.year.toString()})`
+                  ? `${item.name}`
+                  : `${item.name} (${item.year.toString()})`
               }
               image={item.image}
               price={item.price}

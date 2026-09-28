@@ -93,7 +93,7 @@ export function FavoritesPageClient() {
             key={card.product_variant}
             image={card.image}
             title={card.artist_name}
-            description={`${card.kind} ${card.name}`}
+            description={card.name}
             price={card.price}
             likeButton={
               <ButtonLike

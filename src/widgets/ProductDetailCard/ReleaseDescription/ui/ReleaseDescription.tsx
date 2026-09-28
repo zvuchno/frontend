@@ -102,11 +102,12 @@ export const ReleaseDescription = ({
           </div>
 
           <Title Tag='h3' className={s.card__title}>
-            {product?.property_value === "Диджитал"
+            {product?.name}
+            {/* {product?.property_value === "Диджитал"
               ? release.is_single
                 ? `Сингл "${product.name}"`
                 : `Альбом "${product.name}"`
-              : `${product.property_value} "${product?.name}"`}
+              : `${product.property_value} "${product?.name}"`} */}
           </Title>
 
           <Text Tag='p' className={s.card__itemNumber}>
