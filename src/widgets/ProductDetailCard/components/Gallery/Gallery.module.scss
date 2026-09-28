@@ -7,6 +7,14 @@
   height: 100%;
   justify-content: center;
 
+  @media(max-width: 800px) {
+    width: 80%;
+  }
+
+  @media(max-width: 400px) {
+    width: 100%;
+  }
+
   & img {
     display: block;
     width: 100%;
@@ -39,6 +47,10 @@
     width: 84%;
     aspect-ratio: 1/1;
     background-color: var(--color-bg-main);
+
+    @media(max-width: 900px) {
+      width: 70%;
+    }
 
     &__noPhoto {
       display: flex;
