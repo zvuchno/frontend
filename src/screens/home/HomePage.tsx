@@ -96,8 +96,8 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 image={item.image}
                 description={
                   item.year === null
-                    ? `${item.kind} ${item.name}`
-                    : `${item.kind} ${item.name} (${item.year.toString()})`
+                    ? `${item.name}`
+                    : `${item.name} (${item.year.toString()})`
                 }
                 price={item.price ?? undefined}
                 likeButton={
@@ -135,8 +135,8 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
                 image={item.image}
                 description={
                   item.year === null
-                    ? `${item.kind} ${item.name}`
-                    : `${item.kind} ${item.name} (${item.year.toString()})`
+                    ? `${item.name}`
+                    : `${item.name} (${item.year.toString()})`
                 }
                 price={item.price ?? undefined}
                 likeButton={

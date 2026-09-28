@@ -11,7 +11,6 @@ import { type IArtistDetailCardProps } from "../model/ArtistDetailCard.types";
 import s from "./ArtistDatailCard.module.scss";
 
 export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
-  console.log(artist.socials);
   return (
     <AccentContainer className={s.containerWrapper}>
       <div className={s.container}>

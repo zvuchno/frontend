@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { type TDataForModal } from "@/features/addToCartModal";
 
@@ -23,19 +23,20 @@ export const ReleaseDescription = ({
   selected_variant_id,
   onClick,
 }: ReleaseDescriptionProps) => {
-  const [product, setProduct] = useState<TReleaseVariant>(release.variants[0]);
+  const variants = useMemo(() => release.variants, [release]);
+  const [product, setProduct] = useState<TReleaseVariant>(variants[0]);
   const router = useRouter();
 
   useEffect(() => {
     if (!selected_variant_id) {
       return;
     } else {
-      const index = release.variants.findIndex(
+      const index = variants.findIndex(
         (variant) => variant.variant_id === Number(selected_variant_id)
       );
-      if (index !== -1) setProduct(release.variants[index]);
+      if (index !== -1) setProduct(variants[index]);
     }
-  }, [selected_variant_id, release.variants]);
+  }, [selected_variant_id, variants]);
 
   const tabsData = [
     {
@@ -60,10 +61,13 @@ export const ReleaseDescription = ({
     if (index !== -1) setProduct(release.variants[index]);
   };
 
-  const imagesForGallery = [...product.images].sort((a, b) => {
-    if (a.is_main === b.is_main) return 0;
-    return a.is_main ? -1 : 1;
-  });
+  const imagesForGallery = useMemo(() => {
+    if (!product?.images) return [];
+    return [...product.images].sort((a, b) => {
+      if (a.is_main === b.is_main) return 0;
+      return a.is_main ? -1 : 1;
+    });
+  }, [product?.images]);
 
   const handleAddToCart = () => {
     const data: TDataForModal = {
@@ -98,11 +102,12 @@ export const ReleaseDescription = ({
           </div>
 
           <Title Tag='h3' className={s.card__title}>
-            {product?.property_value === "Диджитал"
+            {product?.name}
+            {/* {product?.property_value === "Диджитал"
               ? release.is_single
                 ? `Сингл "${product.name}"`
                 : `Альбом "${product.name}"`
-              : `${product.property_value} "${product?.name}"`}
+              : `${product.property_value} "${product?.name}"`} */}
           </Title>
 
           <Text Tag='p' className={s.card__itemNumber}>
@@ -115,7 +120,7 @@ export const ReleaseDescription = ({
           <VariantRange
             type='Носители'
             selectadVariant={product.property_value}
-            variants={release.variants}
+            variants={variants}
             onClick={selectVariant}
           />
 
