@@ -29,7 +29,7 @@ const Gallery = ({ images }: GalleryProps) => {
                 src={image.image}
                 className={s.gallery__container__img}
                 onClick={() => handleImageClick(image.image)}
-                style={{ border: selectedImg === image.image ? "5px solid #0046d3" : "" }}
+                style={{ border: selectedImg === image.image ? "3px solid #0046d3" : "" }}
                 alt={`Миниатюра изображения ${index + 1}`}
               />
             );
