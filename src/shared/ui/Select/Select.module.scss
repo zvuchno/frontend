@@ -113,6 +113,9 @@
   letter-spacing: -0.04em;
   vertical-align: middle;
   margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   
   &[aria-selected="true"], &:hover {
     //background-color: var(--search-color-btn-primary);
