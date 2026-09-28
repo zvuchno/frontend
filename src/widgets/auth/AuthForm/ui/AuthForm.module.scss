@@ -13,6 +13,7 @@
   background-color: transparent;
   border: none;
   color: var(--color-primary-blue);
+  flex-shrink: 0;
   cursor: pointer;
 
   &__text {
@@ -38,66 +39,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
 
-.rememberMeLabel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #171717;
-
-  & span:not(.rememberMeCheckmark) {
-    color: inherit;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  &:hover span:not(.rememberMeCheckmark) {
-    color: var(--color-text-accent-blue);
-  }
-}
-
-.rememberMeInput {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
-  clip: rect(0 0 0 0);
-  overflow: hidden;
-}
-
-.rememberMeCheckmark {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  border: 2px solid var(--color-text-primary);
-  background-color: var(--background);
-  border-radius: 4px;
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &::after {
-    content: '';
-    display: none;
-    position: absolute;
-    width: 6px;
-    height: 10px;
-    top: 3px;
-    left: 3px;
-    border: 2px solid var(--color-text-primary);
-    border-top: none;
-    border-right: none;
-    transform: rotate(-45deg);
-  }
-
-  .rememberMeInput:checked + &::after {
-    display: block;
+  @media (max-width: 400px) {
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 10px;
   }
 }
 
