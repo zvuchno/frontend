@@ -2,11 +2,11 @@
   min-width: 36vw;
   padding: 20px 40px 60px;
 
-  @media(max-width: 480px) {
+  @media (max-width: 480px) {
     padding: 20px;
   }
 
-  @media(max-width: 480px) {
+  @media (max-width: 480px) {
     padding-block-start: 30px;
     padding-inline: 10px;
   }
@@ -26,8 +26,12 @@
     letter-spacing: -0.04em;
     text-transform: none;
 
-    @media(max-width: 480px) {
-    font-size: 18px;
+    @media (max-width: 480px) {
+      font-size: 18px;
+    }
   }
-  }
+}
+
+.modalButton {
+  margin-block-start: 25px;
 }

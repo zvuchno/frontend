@@ -6,11 +6,11 @@ export const getErrorMessage = (data: unknown, fallback: string): string | strin
 
   if ("detail" in data && "reasons" in data) {
     const messages: string[] = [];
-    if (typeof data.detail === 'string') messages.push(data.detail);
+    if (typeof data.detail === "string") messages.push(data.detail);
     if (Array.isArray(data.reasons)) {
       data.reasons.forEach((reason) => {
-        messages.push(reason)
-      })
+        messages.push(reason);
+      });
     }
 
     return messages;
@@ -25,6 +25,7 @@ export const getErrorMessage = (data: unknown, fallback: string): string | strin
     "uid",
     "is_published",
     "price",
+    "slug",
     "code",
     "old_password",
     "password",

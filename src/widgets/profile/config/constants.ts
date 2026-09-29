@@ -49,6 +49,10 @@ export const addLinkFormFields: TAddContactFormField[] = [
         value: 50,
         message: "Максимум 50 символов",
       },
+      pattern: {
+        value: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{2,50}$/,
+        message: "Введите корректное наименование",
+      },
     },
   },
   {
@@ -59,7 +63,7 @@ export const addLinkFormFields: TAddContactFormField[] = [
     required: false,
     validation: {
       pattern: {
-        value: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/,
+        value: /^(https?:\/\/)?([a-zA-Z0-9_-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/,
         message: "Введите корректный адрес ссылки",
       },
     },

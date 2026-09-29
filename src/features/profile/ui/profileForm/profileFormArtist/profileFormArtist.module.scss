@@ -54,13 +54,32 @@
 
 .hint {
   grid-column: 1 / -1;
-  margin-top: -8px;
+  margin-top: 15px;
   font-family: var(--font-feature-mono);
   font-weight: 700;
   letter-spacing: -0.06em;
   font-size: 1.25rem;
   line-height: 106%;
   color: var(--color-text-primary);
+
+  @media (max-width: 1200px) {
+    margin-top: 35px;
+  }
+  @media (max-width: 1070px) {
+    margin-top: 55px;
+  }
+
+  @media (max-width: 825px) {
+    margin-top: 80px;
+  }
+
+  @media (max-width: 775px) {
+    margin-top: 100px;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 80px;
+  }
 }
 
 .link {
@@ -124,20 +143,12 @@
     //grid-template-columns: 1fr;
     gap: 6px;
   }
-
-  .hint {
-    margin-block-start: 40px;
-  }
 }
 
 @media (max-width: 425px) {
-  
-
   .urlField__body {
     grid-template-columns: 1fr;
     gap: 0;
     padding-block-start: 7px;
   }
-
-  
 }

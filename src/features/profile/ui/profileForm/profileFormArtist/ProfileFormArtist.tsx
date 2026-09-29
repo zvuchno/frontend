@@ -4,7 +4,7 @@ import { type FieldError, get, useFormContext } from "react-hook-form";
 
 import { CustomInput } from "@/shared/ui";
 
-import { artistFormFields } from "../../../utils/constants";
+import { artistFormFields, fieldsConfig } from "../../../utils/constants";
 import { registerRules } from "../../../utils/validation";
 import { InputPhone } from "../inputPhone";
 import type { FieldValues, TProfileFormFieldsProps } from "../types";
@@ -17,6 +17,7 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
     formState: { errors },
   } = useFormContext<FieldValues>();
   const fields = artistFormFields;
+  const config = fieldsConfig;
 
   return (
     <div className={styles.artistForm}>
@@ -65,6 +66,7 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
                 type={field.type}
                 label={field.title}
                 placeholder={field.placeholder}
+                maxLength={config[field.name]?.maxLength}
                 style={
                   field.name !== "description"
                     ? {

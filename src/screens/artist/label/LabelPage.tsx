@@ -36,11 +36,11 @@ export const LabelPage = () => {
         </ButtonUI>
       </div>
       {artists && artists.length > 0 && (
-        <div className={styles.labelGallery}>
+        <ul className={styles.labelGallery}>
           {artists
             .filter((artist) => artist.is_self === false)
             .map((artist) => (
-              <article key={artist.id} className={styles.labelGalleryItem}>
+              <li key={artist.id} className={styles.labelGalleryItem}>
                 <Link
                   href={`/catalog/artists/${artist.slug}/?kind=artists`}
                   className={styles.labelGalleryArtistCard}
@@ -59,9 +59,9 @@ export const LabelPage = () => {
                   }
                   onDelete={() => deleteManagedArtist(artist.id)}
                 />
-              </article>
+              </li>
             ))}
-        </div>
+        </ul>
       )}
       {isModalOpen && (
         <ModalUI closeButtonStyle={"x"} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
