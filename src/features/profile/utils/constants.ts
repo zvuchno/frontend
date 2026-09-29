@@ -142,10 +142,12 @@ export const fieldsConfig: Record<
     required: true,
     minLength: 2,
     maxLength: 100,
+    pattern: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{2,100}$/,
   },
   userName: {
     required: true,
-    pattern: /^[а-яА-Яa-zA-Z0-9@./\-_+]+$/,
+    pattern: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{1,100}$/,
+    maxLength: 100,
   },
   email: {
     required: true,
@@ -176,11 +178,14 @@ export const fieldsConfig: Record<
   city: {
     required: true,
     minLength: 2,
-    maxLength: 250,
+    maxLength: 254,
+    pattern: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{2,250}$/,
   },
   url: {
     required: true,
-    pattern: /^[-a-zA-Z0-9_]+$/,
+    pattern: /^[a-zA-Z0-9_-]+$/,
+    minLength: 2,
+    maxLength: 254,
   },
   description: {
     required: false,

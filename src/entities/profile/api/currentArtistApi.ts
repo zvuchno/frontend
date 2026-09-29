@@ -31,6 +31,7 @@ export async function updateCurrentArtist(
     method: "PATCH",
     body: JSON.stringify(payload),
   });
+  
   if (!response) {
     throw new Error("Не удалось обновить профиль артиста");
   }

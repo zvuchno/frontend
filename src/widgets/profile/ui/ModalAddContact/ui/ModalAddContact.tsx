@@ -32,9 +32,15 @@ export const ModalAddContact = ({
   const fields = fieldSet[variant];
 
   const onSave = async (data: TFieldValues) => {
+    const payload: TFieldValues = {};
+
+    payload.email = data.email?.trim();
+    payload.name = data.name?.trim();
+    payload.url = data.url?.trim();
+
     if (onSubmit && typeof onSubmit === "function") {
       try {
-        await onSubmit(data);
+        await onSubmit(payload);
       } catch {
         return;
       }
@@ -46,10 +52,7 @@ export const ModalAddContact = ({
   return (
     <ModalUI onClose={onClose} isOpen={isOpen} closeButtonStyle='circledX'>
       <div className={s.container}>
-        <form
-          className={s.form}
-          onSubmit={handleSubmit(onSave)}
-        >
+        <form className={s.form} onSubmit={handleSubmit(onSave)}>
           <Title className={s.form__title} Tag='h5' variant='title'>
             {variant === "contact" ? "Добавление контакта" : "Добавление ссылки"}
           </Title>
@@ -78,6 +81,7 @@ export const ModalAddContact = ({
             variant='primary'
             type='submit'
             disabled={!isValid || isSubmitting}
+            className={s.modalButton}
           >
             {isSubmitting ? "Добавление..." : "Сохранить"}
           </ButtonUI>
