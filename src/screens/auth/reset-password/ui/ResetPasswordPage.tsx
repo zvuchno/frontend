@@ -167,6 +167,7 @@ export const ResetPasswordPage = () => {
                 message={errors.password}
                 onChange={handleChange}
                 required
+                autoComplete="new-password"
               />
 
               <PasswordInput 
@@ -178,6 +179,7 @@ export const ResetPasswordPage = () => {
                 error={!!errors.confirmPassword}
                 message={errors.confirmPassword}
                 required
+                autoComplete="new-password"
               />
 
               {confirmError && (
