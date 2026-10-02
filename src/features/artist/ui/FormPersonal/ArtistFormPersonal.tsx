@@ -67,13 +67,14 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   };
 
   const onHandleSubmit = (data: FieldValues) => {
-    const currentRecipientType = methods.getValues("legal_profile.recipient_type") ?? null;
+    const currentRecipientType = methods.getValues("legal_profile.recipient_type") ?? "";
+    const currentRecipientTypeForServer = currentRecipientType === "individual_temporary" ? "" : currentRecipientType;
     const formattedData = {
       ...data,
       legal_profile: {
         ...data.legal_profile,
         phone: formatPhoneForApi(data.legal_profile?.phone),
-        recipient_type: currentRecipientType,
+        recipient_type: currentRecipientTypeForServer,
       },
     };
     mutate(formattedData, { onSuccess: () => setIsOnChange(false) });
