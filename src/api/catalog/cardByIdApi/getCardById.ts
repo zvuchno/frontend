@@ -14,11 +14,10 @@ export const getCardById = async (
     url = `${baseUrl}/v1/store/catalog/${kind}/${id}`;
   }
 
-  const response = await fetch(url, {
-    next: { revalidate: 60 },
-  });
+  const errorMessage = kind === "artists" ? "Не удалось получить данные артиста." : "Не удалось получить данные о товаре."
+  const response = await fetch(url);
 
-  if (!response.ok) throw new Error(`Ошибка получения данных продукта типа: ${kind}`);
+  if (!response.ok) throw new Error(errorMessage);
 
   return (await response.json()) as TDetailCardResponse;
 };
