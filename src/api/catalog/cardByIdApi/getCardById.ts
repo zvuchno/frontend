@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { type TDetailCardResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
@@ -16,6 +17,10 @@ export const getCardById = async (
 
   const errorMessage = kind === "artists" ? "Не удалось получить данные артиста." : "Не удалось получить данные о товаре."
   const response = await fetch(url);
+
+  if (response.status === 404) {
+    notFound();
+  }
 
   if (!response.ok) throw new Error(errorMessage);
 
