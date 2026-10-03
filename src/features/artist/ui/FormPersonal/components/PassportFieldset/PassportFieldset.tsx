@@ -16,6 +16,8 @@ export const PassportFieldset = ({
 }) => (
   <fieldset className={clsx(styles.formContent, styles.passportlContent)}>
     <legend className={styles.visuallyHidden}>Паспортные данные</legend>
-    {artistPasportFields.map((field, index) => createFormField(field, index, methods, disabled))}
+    {artistPasportFields.map((field, index) =>
+      createFormField(field, index, methods, disabled, index)
+    )}
   </fieldset>
 );

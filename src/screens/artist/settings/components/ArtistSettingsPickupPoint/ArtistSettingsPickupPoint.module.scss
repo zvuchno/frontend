@@ -54,11 +54,10 @@
   &Date {
     position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: block;
 
     &Container {
+      margin-block-end: 4px;
       display: flex;
       align-items: center;
       gap: 11px;
@@ -77,9 +76,7 @@
       align-items: center;
       width: 100%;
       height: 40px;
-      border: 1px solid var(--color-text-primary);
-      padding-block: 12px;
-      padding-inline-start: 32px;
+      border: 1px solid var(--color-text-primary) !important;
 
       & * {
         font-size: 16px;
@@ -115,8 +112,8 @@
   color: inherit !important;
   height: 100%;
   width: 100%;
-  padding: 0 !important;
-  border: none;
+  //padding: 0 !important;
+  //border: none;
 
   &:disabled {
     cursor: default !important;
@@ -141,7 +138,7 @@
 }
 
 :global(#pickup-date) {
-  border: none;
+  //border: none;
   width: 100%;
   height: 36px;
   margin-block: auto;
@@ -157,6 +154,7 @@
 :global(.react-datepicker__tab-loop__start) {
   display: none !important;
 }
+
 /*
 :global(.calendar) {
   display: block !important;
