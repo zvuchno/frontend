@@ -1,15 +1,15 @@
-import DatePicker from "react-datepicker";
 import { Controller, useFormContext } from "react-hook-form";
 
 import clsx from "clsx";
 import { format, parseISO } from "date-fns";
-import { ru } from "date-fns/locale";
 
 import { type TArtistSettingsFieldValues } from "@/entities/Artist";
 
+import { CalendarField } from "@/shared/ui/CalendarField/CalendarField";
+import { HintBlock } from "@/shared/ui/HintBlock";
+
 import styles from "./ArtistSettingsPickupPoint.module.scss";
 import { PickupPointAddress } from "./components/PickupPointAddress";
-import { HintBlock } from "@/shared/ui/HintBlock";
 
 export const ArtistSettingsPickupPoint = ({
   index,
@@ -43,42 +43,25 @@ export const ArtistSettingsPickupPoint = ({
           <div className={styles.artistSettingsDeliveryDate}>
             <div className={styles.artistSettingsDeliveryDateContainer}>
               <label className={styles.artistSettingsDeliveryDateLabel}>Дата</label>
-              <HintBlock text="укажите дату самовывоза или оставьте поле пустым"/>
+              <HintBlock text='укажите дату самовывоза или оставьте поле пустым' />
             </div>
-            <div
-              className={clsx(
-                styles.artistSettingsDeliveryDatePicker,
-                fieldState.error && styles.dateError
-              )}
-            >
-              <DatePicker
-                selected={value ? parseISO(value) : null}
-                onChange={(date: Date | null) => {
-                  setValue(dateName, date ? format(date, "yyyy-MM-dd") : "", {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                    shouldValidate: true,
-                  });
-                }}
-                onBlur={onBlur}
-                id='pickup-date'
-                className={clsx("input_pickup_date input_size_small")}
-                popperClassName={styles.artistSettingsDeliveryDatePopper}
-                wrapperClassName={styles.datePickerWrapper}
-                dateFormat='dd.MM.yyyy'
-                locale={ru}
-                placeholderText='дд.мм.гггг'
-                peekNextMonth
-                showMonthDropdown
-                showYearDropdown
-                dropdownMode='select'
-                showPopperArrow={false}
-                disabled={disabled}
-                minDate={new Date()}
-                autoComplete='off'
-                onKeyDown={(event) => event.preventDefault()}
-              />
-            </div>
+
+            <CalendarField
+              fieldError={fieldState.error}
+              value={value ? parseISO(value) : null}
+              onBlur={onBlur}
+              id='pickup-date'
+              index={0}
+              onChange={(date: Date | null) => {
+                setValue(dateName, date ? format(date, "yyyy-MM-dd") : "", {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                  shouldValidate: true,
+                });
+              }}
+              popperClassName={styles.artistSettingsDeliveryDatePopper}
+              wrapperClassName={styles.datePickerWrapper}
+            />
           </div>
         )}
       />

@@ -1,13 +1,22 @@
-import { useShowcaseArtistId } from "@/entities/Artist/store/useShowcaseStore";
-import { AddPromocodeForm } from "../components/addPromocodeForm";
-import type { PromocodeFormValues, AddPromocodeModalProps } from "../model/types";
-import { TCreatePromocodeRequest, useCreatePromocode, useDetailPromocode, useUpdatePromocode } from "@/entities/Artist";
 import { useEffect, useMemo, useState } from "react";
-import { mapPromoDirtyFieldsToPayload, toDateOnlyString } from "@/features/showcaseUpload";
 import { FormProvider, useForm } from "react-hook-form";
-import { useGetManagedProfiles } from "@/entities/Label";
 import toast from "react-hot-toast";
+
+import { mapPromoDirtyFieldsToPayload, toDateOnlyString } from "@/features/showcaseUpload";
+
+import {
+  type TCreatePromocodeRequest,
+  useCreatePromocode,
+  useDetailPromocode,
+  useUpdatePromocode,
+} from "@/entities/Artist";
+import { useShowcaseArtistId } from "@/entities/Artist/store/useShowcaseStore";
+import { useGetManagedProfiles } from "@/entities/Label";
+
 import { ModalUI } from "@/shared/ui";
+
+import { AddPromocodeForm } from "../components/addPromocodeForm";
+import type { AddPromocodeModalProps, PromocodeFormValues } from "../model/types";
 
 const initialFormValues: PromocodeFormValues = {
   code: "",
@@ -90,7 +99,7 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
     if (data.startAt && data.endAt) {
       const start = new Date(data.startAt);
       const end = new Date(data.endAt);
-      
+
       if (end < start) {
         setFormError("Дата окончания не может быть раньше даты начала");
         return;
@@ -104,12 +113,8 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
             code: data.code,
             discount_value: data.discountValue ? String(data.discountValue) : "",
             discount_type: data.discountType ?? "FIXED",
-            start_at: data.startAt 
-              ? new Date(`${data.startAt}T00:00:00Z`).toISOString()
-              : null,
-            end_at: data.endAt 
-              ? new Date(`${data.endAt}T00:00:00Z`).toISOString() 
-              : null,
+            start_at: data.startAt ? new Date(`${data.startAt}T00:00:00Z`).toISOString() : null,
+            end_at: data.endAt ? new Date(`${data.endAt}T00:00:00Z`).toISOString() : null,
             usage_limit: data.limit ? Number(data.limit) : null,
             is_enabled: true,
             description: data.description ?? "",
@@ -148,11 +153,11 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
   return (
     <ModalUI isOpen={isOpen} onClose={handleClose} closeButtonStyle='circledX'>
       <FormProvider {...methods}>
-        <AddPromocodeForm 
-          isEditForm={isEditForm} 
-          profileType={profileType} 
-          artistsOptions={artistsOptions} 
-          isLoadingArtists={isLoadingArtists} 
+        <AddPromocodeForm
+          isEditForm={isEditForm}
+          profileType={profileType}
+          artistsOptions={artistsOptions}
+          isLoadingArtists={isLoadingArtists}
           formError={formError}
           isLoadingEditData={isLoading}
           errorEditData={error}
@@ -162,5 +167,5 @@ export const AddPromocodeModal = ({ isOpen, profileType, id, onClose }: AddPromo
         />
       </FormProvider>
     </ModalUI>
-  )
-}
+  );
+};

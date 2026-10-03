@@ -1,36 +1,8 @@
 import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
 
-
-
 import { ButtonUI } from "@/shared/ui";
 
-
-
 import styles from "./LegalFormSelector.module.scss";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 type LegalFormType = "legal_entity" | "individual_temporary";
 
@@ -66,7 +38,7 @@ export const LegalFormSelector = ({ onSelect }: { onSelect: (type: LegalFormType
         <span className={styles.formSelectorDetails}>
           {"Индивидуальный предприниматель /"}
           <br />
-           {" Самозанятый (плательщик НПД)"}
+          {" Самозанятый (плательщик НПД)"}
         </span>
       </ButtonUI>
     </div>

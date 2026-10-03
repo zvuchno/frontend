@@ -85,9 +85,9 @@ export const DatePickerInput = ({
           },
         },
       ]}
-      onKeyDown={(e) => e.preventDefault()}
+      //onKeyDown={(e) => e.preventDefault()}
       onInputClick={() => {
-        setErrorMessage("");
+        setErrorMessage(""); 
 
         setMessage(choosePeriodMessage[selectedDateType]);
 
