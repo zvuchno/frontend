@@ -1,6 +1,8 @@
+"use client";
+
 import { type ChangeEvent } from "react";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { type AuthFormData } from "../model/AuthForm.types";
 import s from "../ui/AuthForm.module.scss";
@@ -16,8 +18,12 @@ export const RememberMeOptions = ({
   setData: (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => void;
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`;
+
   const handleToForgotPassword = () => {
-    router.replace("/forgot-password");
+    router.replace(`/forgot-password?next=${encodeURIComponent(currentUrl)}`);
   };
 
   return (
