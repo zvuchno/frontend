@@ -13,6 +13,11 @@
   padding-block-start: 1px;
   transition: 0.03ms background-color ease;
 
+  @media (max-width: 768px) {
+    padding-inline-start: 15px;
+    padding-inline-end: 15px !important;
+  }
+
   @media (max-width: 425px) {
     gap: 10px;
   }
@@ -40,6 +45,21 @@
       width: 51.61%;
       max-width: 706px;
       padding-block-start: 1px;
+
+      @media (max-width: 1024px) {
+        width: 68%;
+      }
+
+      @media (max-width: 768px) {
+        width: 80%;
+      }
+
+      @media (max-width: 600px) {
+        width: 90%;
+      }
+      @media (max-width: 475px) {
+        width: 100%;
+      }
     }
 
     &Input {
@@ -140,8 +160,5 @@
 @media (max-width: 375px) {
   .headerActionsMenu {
     gap: 15px;
-  }
-  .headerActionsMenu > *:first-child {
-    display: none;
   }
 }
