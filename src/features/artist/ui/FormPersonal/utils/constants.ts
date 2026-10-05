@@ -1,11 +1,5 @@
 import { type TArtistFormPersonalField } from "./types";
 
-
-
-
-
-
-
 export const artistPersonalFields: TArtistFormPersonalField[] = [
   {
     title: "Фамилия",
@@ -188,6 +182,8 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     column: 1,
     maxLength: 20,
     minLength: 20,
+    hasHint: true,
+    hintText: "Р/счет артиста-получателя средств",
   },
   {
     title: "Организационная форма",
@@ -234,7 +230,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
     minLength: 13,
   },
   {
-    title: "ИНН",
+    title: "ИНН организации",
     name: "company_data.inn",
     placeholder: "0123456789",
     type: "text",
@@ -302,5 +298,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
     column: 2,
     maxLength: 20,
     minLength: 20,
+    hasHint: true,
+    hintText: "Р/счет организации-получателя средств",
   },
 ];
