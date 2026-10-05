@@ -134,6 +134,8 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     column: 2,
     maxLength: 12,
     minLength: 12,
+    hasHint: true,
+    hintText: "ИНН артиста (владельца р/счета), а НЕ банка",
   },
   {
     title: "Название банка",
@@ -180,6 +182,8 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     column: 1,
     maxLength: 20,
     minLength: 20,
+    hasHint: true,
+    hintText: "Р/счет артиста-получателя средств",
   },
   {
     title: "Организационная форма",
@@ -226,7 +230,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
     minLength: 13,
   },
   {
-    title: "ИНН",
+    title: "ИНН организации",
     name: "company_data.inn",
     placeholder: "0123456789",
     type: "text",
@@ -294,5 +298,7 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
     column: 2,
     maxLength: 20,
     minLength: 20,
+    hasHint: true,
+    hintText: "Р/счет организации-получателя средств",
   },
 ];

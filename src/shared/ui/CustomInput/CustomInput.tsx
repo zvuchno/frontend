@@ -2,10 +2,10 @@ import { type TextareaHTMLAttributes, forwardRef } from "react";
 
 import clsx from "clsx";
 
+import { HintBlock } from "../HintBlock";
 import s from "./CustomInput.module.scss";
 import { type InputProps } from "./CustomInput.types";
 import { FieldErrorMessage } from "./FieldErrorMessage/FieldErrorMessage";
-import { HintBlock } from "../HintBlock";
 
 export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -42,9 +42,7 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
               {label}{" "}
               {otherProps.required && <span className={s.labelContainer__markRequired}>*</span>}
             </label>
-            {hintText && (
-              <HintBlock text={hintText} />
-            )}
+            {hintText && <HintBlock text={hintText} />}
           </div>
         )}
 
@@ -68,7 +66,6 @@ export const CustomInput = forwardRef<HTMLInputElement, InputProps>(
             {...otherProps}
           />
         )}
-
         {message && <FieldErrorMessage message={message} hasError={error} size={messageSize} />}
       </div>
     );

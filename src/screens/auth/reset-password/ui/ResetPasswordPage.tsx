@@ -1,10 +1,10 @@
 "use client";
 
-import { ButtonUI, LoadingButton, Text, Title, VerifyLoader } from "@/shared/ui";
+import { ButtonUI, Loader, LoadingButton, Text, Title, VerifyLoader } from "@/shared/ui";
 import { AuthModal } from "@/widgets/AuthModal";
 import s from "./ResetPasswordPage.module.scss";
 import { PasswordInput } from "@/shared/ui/CustomInput";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { validateField } from "@/widgets/auth/config/validateField";
 import { validateForm } from "@/widgets/auth/config/validateForm";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -45,13 +45,15 @@ export const ResetPasswordPage = () => {
 
   if (!uidFromLink || !tokenFromLink) {
     return (
-      <AuthModal>
-        <div className={s.container}>
-          <Title className={clsx(s.text, s.title)} Tag="h2">
-            Неверная ссылка!
-          </Title>
-        </div>
-      </AuthModal>
+      <Suspense fallback={<Loader />}>
+        <AuthModal>
+          <div className={s.container}>
+            <Title className={clsx(s.text, s.title)} Tag="h2">
+              Неверная ссылка!
+            </Title>
+          </div>
+        </AuthModal>
+      </Suspense>
     )
   }
 
@@ -133,74 +135,76 @@ export const ResetPasswordPage = () => {
   };
 
   return (
-    <AuthModal>
-      <div className={s.container}>
-        {isLoadingVerify ? (
-          <VerifyLoader title="Обработка!" text="Пожалуйста, подождите..."/>
-        ) : verifyError ? (
-          <>
-            <Title className={clsx(s.text, s.title)} Tag="h2">
-              Ошибка проверки ссылки!
-            </Title>
-            <Text className={s.text}>
-              {verifyError}
-            </Text>
-          </>
-        ) : isVerified ? (
-          <>
-            <Title className={clsx(s.text, s.title)} Tag="h2">
-              Установите новый пароль
-            </Title>
-            <form 
-              className={s.form} 
-              onSubmit={(e) => {
-                handleSubmit(e).catch(console.error)
-              }} 
-              autoComplete="off"
-            >
-              <PasswordInput 
-                label="Новый пароль" 
-                id="password" 
-                name="password"
-                value={formData.password}
-                error={!!errors.password}
-                message={errors.password}
-                onChange={handleChange}
-                required
-                autoComplete="new-password"
-              />
-
-              <PasswordInput 
-                label="Подтвердите пароль" 
-                id="confirmPassword" 
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                error={!!errors.confirmPassword}
-                message={errors.confirmPassword}
-                required
-                autoComplete="new-password"
-              />
-
-              {confirmError && (
-                <Text
-                  variant="normal"
-                  style={{ color: "#dc2626", textAlign: "center" }}
-                >
-                  {confirmError}
-                </Text>
-              )}
-              <ButtonUI 
-                type="submit" 
-                variant="primary"
-                disabled={isLoading}
+    <Suspense fallback={<Loader />}>
+      <AuthModal>
+        <div className={s.container}>
+          {isLoadingVerify ? (
+            <VerifyLoader title="Обработка!" text="Пожалуйста, подождите..."/>
+          ) : verifyError ? (
+            <>
+              <Title className={clsx(s.text, s.title)} Tag="h2">
+                Ошибка проверки ссылки!
+              </Title>
+              <Text className={s.text}>
+                {verifyError}
+              </Text>
+            </>
+          ) : isVerified ? (
+            <>
+              <Title className={clsx(s.text, s.title)} Tag="h2">
+                Установите новый пароль
+              </Title>
+              <form 
+                className={s.form} 
+                onSubmit={(e) => {
+                  handleSubmit(e).catch(console.error)
+                }} 
+                autoComplete="off"
               >
-                {isLoading ? <LoadingButton /> : "Сохранить новый пароль"}
-              </ButtonUI>
-            </form>
-          </>
-        ) : null}
-      </div>
-    </AuthModal>
+                <PasswordInput 
+                  label="Новый пароль" 
+                  id="password" 
+                  name="password"
+                  value={formData.password}
+                  error={!!errors.password}
+                  message={errors.password}
+                  onChange={handleChange}
+                  required
+                  autoComplete="new-password"
+                />
+
+                <PasswordInput 
+                  label="Подтвердите пароль" 
+                  id="confirmPassword" 
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  error={!!errors.confirmPassword}
+                  message={errors.confirmPassword}
+                  required
+                  autoComplete="new-password"
+                />
+
+                {confirmError && (
+                  <Text
+                    variant="normal"
+                    style={{ color: "#dc2626", textAlign: "center" }}
+                  >
+                    {confirmError}
+                  </Text>
+                )}
+                <ButtonUI 
+                  type="submit" 
+                  variant="primary"
+                  disabled={isLoading}
+                >
+                  {isLoading ? <LoadingButton /> : "Сохранить новый пароль"}
+                </ButtonUI>
+              </form>
+            </>
+          ) : null}
+        </div>
+      </AuthModal>
+    </Suspense>
   )
 };

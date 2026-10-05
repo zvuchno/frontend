@@ -1,25 +1,15 @@
 "use client";
 
 import { ModalUI } from "@/shared/ui";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const AuthModal = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const [isHistoryAvailable, setIsHistoryAvailable] = useState(false);
-
-  useEffect(() => {
-    setIsHistoryAvailable(
-      typeof window !== 'undefined' && 'history' in window
-    );
-  }, []);
+  const searchParams = useSearchParams();
 
   const handleCloseModal = () => {
-    if (isHistoryAvailable && window.history.length > 1) {
-      router.back();
-    } else {
-      router.push('/');
-    }
+    const nextRoute = searchParams.get("next");
+    router.replace(nextRoute ? nextRoute : "/");
   };
 
   return (
