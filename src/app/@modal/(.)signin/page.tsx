@@ -8,10 +8,10 @@ import { Loader } from "@/shared/ui";
 
 export default function SigninModalPage() {
   return (
-    <AuthModal>
-      <Suspense fallback={<Loader />}>
+    <Suspense fallback={<Loader />}>
+      <AuthModal>
         <AuthFormClient />
-      </Suspense>
-    </AuthModal>
+      </AuthModal>
+    </Suspense>
   );
 }

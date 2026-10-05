@@ -5,11 +5,11 @@ import { Suspense } from "react";
 
 const SigninPage = () => {
   return (
-    <AuthModal>
-      <Suspense fallback={<Loader />}>
+    <Suspense fallback={<Loader />}>
+      <AuthModal>
         <AuthFormClient />
-      </Suspense>
-    </AuthModal>
+      </AuthModal>
+    </Suspense>
   );
 };
 
