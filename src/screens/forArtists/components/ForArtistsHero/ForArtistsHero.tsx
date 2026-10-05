@@ -8,12 +8,19 @@ import { ButtonUI } from "@/shared/ui";
 
 import styles from "../../ForArtists.module.scss";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useUserStore } from "@/entities/user";
 
 export const ForArtistsHero = () => {
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`;
+
+  const user = useUserStore((state) => state.user);
+  const isAuthorized = !!user?.id;
+  const isArtist = user?.isArtist;
+  const publicPath = `/role?next=${encodeURIComponent(currentUrl)}`;
+  const authPath = isArtist ? "/artist/profile" : "/fans/profile";
 
   return (
     <HeroUI
@@ -31,8 +38,8 @@ export const ForArtistsHero = () => {
       <>
         <div className={styles.headerSectionButton}>
           <ButtonUI variant={"primary"} size='large'>
-            <Link href={`/role?next=${encodeURIComponent(currentUrl)}`} prefetch={false}>
-              присоединиться к бете
+            <Link href={isAuthorized ? authPath : publicPath} prefetch={false}>
+              зарегистрироваться
             </Link>
           </ButtonUI>
         </div>

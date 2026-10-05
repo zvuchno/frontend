@@ -34,9 +34,9 @@ export const ForArtists = () => (
       <section className={clsx(styles.sectionArea, styles.sevenSection)}>
         <ForArtistsJoinBeta />
       </section>
-      <section className={clsx(styles.sectionArea, styles.eightSection)}>
+      {/* <section className={clsx(styles.sectionArea, styles.eightSection)}>
         <ApproveSection artistInfo={artistInfo} />
-      </section>
+      </section> */}
       <section>
         <SectionFAQ title={"FAQ"} items={FAQItemsForArtists} />
       </section>
