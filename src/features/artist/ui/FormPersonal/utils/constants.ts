@@ -1,5 +1,11 @@
 import { type TArtistFormPersonalField } from "./types";
 
+
+
+
+
+
+
 export const artistPersonalFields: TArtistFormPersonalField[] = [
   {
     title: "Фамилия",
@@ -134,6 +140,8 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     column: 2,
     maxLength: 12,
     minLength: 12,
+    hasHint: true,
+    hintText: "ИНН артиста (владельца р/счета), а НЕ банка",
   },
   {
     title: "Название банка",

@@ -42,6 +42,7 @@ export const RegularField = ({
       maxLength={field.maxLength}
       minLength={field.minLength}
       className={className}
+      hintText={field.hintText}
     />
   );
 };
