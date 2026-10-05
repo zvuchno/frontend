@@ -44,4 +44,6 @@ export type TArtistFormPersonalField = {
   maxLength?: number;
   minLength?: number;
   options?: { label: string; value: string }[];
+  hasHint?: boolean;
+  hintText?: string
 };
