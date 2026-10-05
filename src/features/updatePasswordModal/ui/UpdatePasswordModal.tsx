@@ -107,12 +107,13 @@ export const UpdatePasswordModal = ({
             />
           )}
           <PasswordInput 
-            id='newPassword'
+            id="newPassword"
             label={has_usable_password ? "Новый пароль" : "Пароль"}
             error={!!errors.newPassword}
             message={errors.newPassword?.message}
             messageSize="small"
             aria-required
+            autoComplete="new-password"
             style={{
               height: "40px",
             }}
@@ -144,6 +145,7 @@ export const UpdatePasswordModal = ({
             error={!!errors.confirmPassword}
             message={errors.confirmPassword?.message}
             messageSize="small"
+            autoComplete="new-password"
             aria-required
             style={{
               height: "40px",
