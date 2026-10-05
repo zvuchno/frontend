@@ -1,4 +1,8 @@
 .errorContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
   padding: 2rem;
   text-align: center;
   background: #fff3f3;
@@ -8,6 +12,15 @@
 
   &__title {
     color: #ff4d4d;
-    margin-bottom: 1rem;
+    font-weight: 500;
+    font-family: var(--font-feature-mono);
+  }
+
+  &__text {
+    font-size: 18px;
+  }
+
+  &__button {
+    max-width: 350px;
   }
 }

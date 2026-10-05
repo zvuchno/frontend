@@ -17,7 +17,7 @@ export const LegalEntityFieldset = ({
   <fieldset className={clsx(styles.formContent, styles.legalEntityContent)}>
     <legend className={styles.visuallyHidden}>Информация о юридическом лице</legend>
     {artistEntityPaymentFields.map((field, index) =>
-      createFormField(field, index, methods, disabled)
+      createFormField(field, index, methods, disabled, index)
     )}
   </fieldset>
 );

@@ -16,6 +16,8 @@ export const PersonalFieldset = ({
 }) => (
   <fieldset className={clsx(styles.formContent, styles.personalContent)}>
     <legend className={styles.visuallyHidden}>Персональная информация</legend>
-    {artistPersonalFields.map((field, index) => createFormField(field, index, methods, disabled))}
+    {artistPersonalFields.map((field, index) =>
+      createFormField(field, index, methods, disabled, index)
+    )}
   </fieldset>
 );

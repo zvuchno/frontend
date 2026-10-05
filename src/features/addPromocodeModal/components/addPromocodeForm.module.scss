@@ -23,6 +23,9 @@
 }
 
 .label {
+  display: flex;
+  gap: 10px;
+  margin-block-end: 4px;
   font-family: var(--font-feature-mono);
   font-size: 14px;
   font-weight: 500;
@@ -65,9 +68,9 @@
 }
 
 .inputWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: block;
+  //flex-direction: column;
+  // gap: 4px;
   width: 100%;
 }
 
@@ -178,13 +181,13 @@
 }
 
 :global(#startAt) {
-  font-family: var(--font-feat);
+  /*font-family: var(--font-feat);
   font-size: 16px;
   color: inherit !important;
   height: 100%;
   width: 100%;
   padding: 0 !important;
-  border: none;
+  border: none;*/
 
   &:disabled {
     cursor: default !important;
@@ -197,13 +200,13 @@
 }
 
 :global(#endAt) {
-  font-family: var(--font-feat);
+  /*font-family: var(--font-feat);
   font-size: 16px;
   color: inherit !important;
   height: 100%;
   width: 100%;
   padding: 0 !important;
-  border: none;
+  border: none;*/
 
   &:disabled {
     cursor: default !important;
@@ -228,13 +231,13 @@
 }
 
 :global(#startAt) {
-  border: none;
+  /*border: none;
   width: 100%;
   height: 36px;
   margin-block: auto;
   box-sizing: border-box;
   font-size: 16px;
-  cursor: pointer !important;
+  cursor: pointer !important;*/
 
   &:focus-visible {
     outline: none !important;
@@ -242,14 +245,14 @@
 }
 
 :global(#endAt) {
-  border: none;
+ /*border: none;
   width: 100%;
   height: 36px;
   margin-block: auto;
   box-sizing: border-box;
   font-size: 16px;
   cursor: pointer !important;
-
+*/
   &:focus-visible {
     outline: none !important;
   }
@@ -265,4 +268,8 @@
 
 :global(.react-datepicker__header) {
   background-color: rgba(194, 223, 252, 0.5);
+}
+
+.dateWithHint label {
+  position: relative;
 }

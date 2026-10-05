@@ -18,7 +18,7 @@ export const PaymentFieldset = ({
     <fieldset className={clsx(styles.formContent, styles.paymentlContent)}>
       <legend className={styles.visuallyHidden}>Платежная информация</legend>
       {artistIndividualPaymentFields.map((field, index) =>
-        createFormField(field, index, methods, disabled)
+        createFormField(field, index, methods, disabled, index)
       )}
     </fieldset>
   );

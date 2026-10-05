@@ -2,13 +2,13 @@ import { Controller, type FieldError, get, type useFormContext } from "react-hoo
 
 import clsx from "clsx";
 
+import { CalendarField } from "@/shared/ui/CalendarField/CalendarField";
+import { FieldLabel } from "@/shared/ui/FieldLabel/FieldLabel";
 import { parseServerDate } from "@/shared/utils/formatDate";
 
 import styles from "../artistFormPersonal.module.scss";
 import { type FieldValues, type TArtistFormPersonalField } from "../utils/types";
 import { artistFormPersonalRules } from "../utils/validation";
-import { CalendarField } from "./components/CalendarField";
-import { FieldLabel } from "./components/FieldLabel/FieldLabel";
 import { FieldWithOptions } from "./components/FieldWithOptions";
 import { PhoneField } from "./components/PhoneField";
 import { RegularField } from "./components/RegularField";
@@ -17,7 +17,8 @@ export const createFormField = (
   field: TArtistFormPersonalField,
   fieldSet: number,
   methods: ReturnType<typeof useFormContext<FieldValues>>,
-  disabled: boolean
+  disabled: boolean,
+  index: number
 ) => {
   const {
     control,
@@ -36,9 +37,6 @@ export const createFormField = (
           name={field.name}
           rules={artistFormPersonalRules(field) as Record<string, undefined>}
           render={({ field: { onChange, value, name, ref, onBlur } }) => {
-            //const isFieldDirty = Boolean(get(dirtyFields, name));
-            //const isFieldTouched = Boolean(get(touchedFields, name));
-
             const showError = !disabled;
             const currentFieldError = get(errors, name) as FieldError | undefined;
             const dateValue = field.type === "date" ? parseServerDate(value) : null;
@@ -73,6 +71,7 @@ export const createFormField = (
                           void trigger("identity_data.passport_issue_date");
                       }}
                       onBlur={onBlur}
+                      index={index}
                     />
                   </>
                 )}

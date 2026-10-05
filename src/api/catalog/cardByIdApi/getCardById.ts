@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { type TDetailCardResponse } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
@@ -14,11 +15,14 @@ export const getCardById = async (
     url = `${baseUrl}/v1/store/catalog/${kind}/${id}`;
   }
 
-  const response = await fetch(url, {
-    next: { revalidate: 60 },
-  });
+  const errorMessage = kind === "artists" ? "Не удалось получить данные артиста." : "Не удалось получить данные о товаре."
+  const response = await fetch(url);
 
-  if (!response.ok) throw new Error(`Ошибка получения данных продукта типа: ${kind}`);
+  if (response.status === 404) {
+    notFound();
+  }
+
+  if (!response.ok) throw new Error(errorMessage);
 
   return (await response.json()) as TDetailCardResponse;
 };

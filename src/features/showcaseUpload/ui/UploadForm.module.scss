@@ -11,9 +11,13 @@
   column-gap: 49px;
   row-gap: 24px;
 
+  @media (max-width: 1250px) {
+    column-gap: 20px;
+  }
+
   @media (max-width: 1174px) {
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 32px;
+
     row-gap: 16px;
   }
 
@@ -24,13 +28,25 @@
   }
 }
 
+.releaseDate {
+  display: block;
+
+  & label {
+    margin-block-end: 4px;
+  }
+
+  &:last-child {
+    height: 40px !important;
+  }
+}
+
 .label {
   font-family: var(--font-feature-mono);
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 100%;
-  letter-spacing: -0.04em;
-  text-transform: none;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  line-height: 100% !important;
+  letter-spacing: -0.04em !important;
+  text-transform: none !important;
 }
 
 .select {
