@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Image from "next/image";
 
 import { DescriptionArea, Title } from "@/shared/ui";
 
@@ -27,7 +28,13 @@ export const ForArtistsCareSection = () => (
         </div>
       </DescriptionArea>
       <div className={styles.sectionImage}>
-        <img src='/images/for-artists_main-bg-1.png' loading='lazy' />
+        <Image
+          src={"/images/for-artists_main-bg-1.png"}
+          alt={"Фоновое изображение наушников"}
+          width={591.73}
+          height={656.79}
+          priority
+        />
       </div>
     </div>
   </section>
