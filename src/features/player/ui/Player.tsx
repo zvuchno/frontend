@@ -11,6 +11,7 @@ import TrackCard from "@/entities/albums/ui/trackCard/TrackCard";
 import { motion, AnimatePresence } from 'framer-motion';
 import type { TTrack } from "@/api/catalog/tracksListApi/types";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 export const PlayerUI = ({ className }: PlayerUIProps) => {
   const { 
@@ -36,14 +37,15 @@ export const PlayerUI = ({ className }: PlayerUIProps) => {
   //const isAuth = !!user?.id;
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLSpanElement>(null);
-  const nameRef = useRef<HTMLSpanElement>(null);
+  const titleRef = useRef<HTMLAnchorElement | null>(null);
+  const nameRef = useRef<HTMLAnchorElement | null>(null);
 
   const [isTitleOverflowing, setIsTitleOverflowing] = useState(false);
   const [isNameOverflowing, setIsNameOverflowing] = useState(false);
 
   const title = track?.name ?? "Выбери релиз";
   const artistName = track?.artist_name ?? "Нажми ▶ на карточке релиза";
+  const hasTrack = !!track;
   //const variantId = track?.favorite_variant_id;
 
   const playback = track?.playback;
@@ -106,18 +108,28 @@ export const PlayerUI = ({ className }: PlayerUIProps) => {
             }} 
           />
           <div className={styles.info} ref={containerRef}>
-            <span
+            <Link
               className={clsx(styles.title, { [styles.animatedText]: isTitleOverflowing })}
               ref={titleRef}
+              href={hasTrack ? `/catalog/release/${track?.album}/?kind=release` : ""}
+              style={{
+                cursor: hasTrack ? "pointer" : "auto"
+              }}
+              title={hasTrack ? title : ""}
             >
               {title}
-            </span>
-            <span
+            </Link>
+            <Link
               className={clsx(styles.name, { [styles.animatedText]: isNameOverflowing })}
               ref={nameRef}
+              href={hasTrack ? `/catalog/artists/${track.artist_slug}/?kind=artists` : ""}
+              style={{
+                cursor: hasTrack ? "pointer" : "auto"
+              }}
+              title={hasTrack ? artistName : ""}
             >
               {artistName}
-            </span>
+            </Link>
           </div>
         </div>
 
@@ -195,12 +207,12 @@ export const PlayerUI = ({ className }: PlayerUIProps) => {
           <button
               type="button"
               onClick={handleToggleList}
-              className={clsx(styles.toggleListBtn, isListOpen && styles.active)}
+              className={clsx(styles.toggleListBtn, isListOpen && styles.toggleListBtn_active)}
               aria-expanded={isListOpen}
               aria-label={isListOpen ? 'Свернуть список треков' : 'Показать список треков'}
               disabled={!hasPlaylist}
             >
-              <span className={styles.arrow}>{isListOpen ? '▲' : '▼'}</span>
+              <span className={clsx(styles.arrow, !hasPlaylist && styles.arrow__empty)}>{isListOpen ? '▲' : '▼'}</span>
             </button>
         </div>
       </div>
