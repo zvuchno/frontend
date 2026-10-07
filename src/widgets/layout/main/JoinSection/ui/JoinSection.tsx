@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Link, Text, Title } from "@/shared/ui";
 
 import { type JoinSectionProps } from "../model/JoinSection.type";
@@ -40,6 +42,13 @@ export const JoinSection = ({ link, title, subtitle, linkText }: JoinSectionProp
           </>
         )}
       </Text>
+      <div className={s.sectionImage}>
+        <Image
+          src={"/images/Image_join_section.png"}
+          alt={"Фоновое изображение прозрачной пленки"}
+          fill
+        />
+      </div>
     </section>
   );
 };

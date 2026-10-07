@@ -2,6 +2,9 @@
   position: relative;
   background-image: none;
 
+  width: 100%;
+  height: 100%;
+
   padding-block-start: clamp(20px, 2.91vw, 42px);
   padding-block-end: clamp(32px, 4.72vw, 68px);
   padding-inline-start: clamp(24px, 3.33vw, 48px);
@@ -16,6 +19,10 @@
 
   @media (max-width: 1024px) {
     padding-block: 35px !important;
+  }
+
+  @media (max-width: 475px) {
+    padding: 20px !important;
   }
 
   & .hero__text_left {
@@ -44,46 +51,38 @@
     position: absolute;
     display: flex;
     align-items: center;
-    max-width: 58.63%;
-    width: max-content;
-    height: 100%;
-    left: 20.69%;
-    top: calc(50.5% + clamp(15px, 2.91vw, 42px));
-    transform: translateY(-50%);
+    width: 58.62%;
+    height: auto;
+    max-width: 802px;
+    max-height: 683px;
+    top: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    & * {
+      width: 100%;
+      height: 100%;
+    }
 
     @media (max-width: 1024px) {
-      max-width: 65%;
-      left: 18%;
-      top: calc(50% + clamp(15px, 2.91vw, 42px));
+      width: 65%;
+      top: -2%;
     }
 
     @media (max-width: 768px) {
-      max-width: 70%;
-      left: 15%;
+      width: 70%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      margin-block-start: -15px;
     }
 
-    @media (max-width: 768px) {
-      max-width: 75%;
-      left: 13%;
+    @media (max-width: 650px) {
+      width: 80%;
     }
 
-    @media (max-width: 550px) {
-      max-width: 90%;
-      left: 6%;
-    }
-
-
-    @media (max-width: 469px) {
-      top: calc(48% + clamp(15px, 2.91vw, 42px));
-    }
-
-    @media (max-width: 375px) {
-      top: calc(45% + clamp(15px, 2.91vw, 42px));
-    }
-
-    & img {
-      margin-block-start: clamp(-152px, -10.55vw, -30px);
-      width: 100%;
+    @media (max-width: 475px) {
+      width: 90%;
+      margin-block-start: -20px;
     }
   }
 }
@@ -100,7 +99,7 @@
   &Title {
     margin-bottom: clamp(24px, 2.71vw, 39px);
     font-family: var(--font-better-vcr), monospace;
-    font-size: clamp(36px, 4.45vw, 64px);
+    font-size: clamp(24px, 4.45vw, 64px);
     font-weight: 400;
     line-height: 1;
     letter-spacing: -0.06em;
@@ -113,6 +112,10 @@
     &.textRight {
       text-align: end;
     }
+  }
+
+  @media (max-width: 425px) {
+    padding-inline: 10px;
   }
 }
 
@@ -132,18 +135,28 @@
   @media (max-width: 425px) {
     width: 85%;
   }
+
+  @media (max-width: 375px) {
+    margin-inline-start: 0;
+    width: 100%;
+  }
 }
 
 .sectionArea {
   width: 100%;
+  height: auto;
   font-family: "FeatureMono", monospace;
   letter-spacing: -0.06em;
 
+  // секция ForArtistsCareSection.tsx
   &.firstSection {
     position: relative;
+    width: 100%;
+    height: auto;
+
     display: flex;
     flex-direction: column;
-    gap: clamp(30px, 5.9vw, 85px);
+    gap: clamp(20px, 5.9vw, 85px);
 
     & .content {
       padding: clamp(30px, 4.86vw, 70px) clamp(24px, 4.02vw, 58px) clamp(40px, 6.59vw, 95px);
@@ -164,19 +177,47 @@
       }
     }
 
+    @media (max-width: 425px) {
+      gap: 0;
+    }
+
     & .sectionImage {
       position: absolute;
+      max-width: 839px;
+      max-height: 863px;
       right: -2.5%;
       top: -2%;
       width: 61%;
+      height: auto;
       z-index: -1;
 
-      & img {
+      @media (max-width: 1024px) {
+        width: 65%;
+        right: -8%;
+        top: 5%;
+      }
+
+      @media (max-width: 768px) {
+        width: 75%;
+        right: -8%;
+        top: -3%;
+      }
+
+      @media (max-width: 425px) {
+        width: 50%;
+        right: -3%;
+        top: -5%;
+        opacity: 0.7;
+      }
+
+      & * {
         width: 100%;
+        height: 100%;
       }
     }
   }
 
+  // секция ForArtistsOptionsSection.tsx
   &.secondSection {
     position: relative;
     display: flex;
@@ -184,9 +225,17 @@
     gap: 15px;
     padding-inline-end: clamp(15px, 2.98vw, 43px);
 
+    @media (max-width: 425px) {
+      gap: 0;
+    }
+
+    @media (max-width: 375px) {
+      padding-inline-end: 0;
+    }
+
     & .content {
       background-color: #e4f1ff;
-      padding: clamp(24px, 3.47vw, 50px) 0px clamp(40px, 5.62vw, 81px) clamp(30px, 8.26vw, 119px);
+      padding: clamp(24px, 3.47vw, 50px) 10px clamp(40px, 5.62vw, 81px) clamp(30px, 8.26vw, 119px);
       width: 71.62%;
       max-width: 949px;
       align-self: end;
@@ -194,10 +243,11 @@
 
       @media (max-width: 768px) {
         width: 80%;
+        margin-block-end: 12%;
       }
 
       @media (max-width: 425px) {
-        width: 85%;
+        width: 100%;
       }
 
       & .contentList {
@@ -211,7 +261,7 @@
             position: relative;
             font-weight: 700;
             font-style: Bold;
-            font-size: clamp(32px, 4.44vw, 64px);
+            font-size: clamp(20px, 4.44vw, 64px);
             line-height: 1;
             text-transform: uppercase;
             color: black;
@@ -231,7 +281,7 @@
           }
 
           & p {
-            font-size: clamp(18px, 2.22vw, 32px);
+            font-size: clamp(16px, 2.22vw, 32px);
             line-height: 1.15;
             letter-spacing: -0.08em;
           }
@@ -245,17 +295,42 @@
       bottom: 0;
       width: 84.84%;
       max-width: 1153px;
+      max-height: 878px;
       z-index: -1;
 
-      & img {
+      & * {
         width: 100%;
+        height: 100%;
+      }
+
+      @media (max-width: 650px) {
+        width: 95%;
+        left: -3%;
+      }
+
+      @media (max-width: 425px) {
+        bottom: -7%;
+        left: 50%;
+        transform: translateX(-50%);
       }
     }
   }
 
+  // секция ForArtistsComissionSection.tsx
   &.thirdSection {
     padding-inline-start: clamp(24px, 5.41vw, 78px);
     padding-inline-end: clamp(24px, 4.79vw, 69px);
+
+    @media (max-width: 600px) {
+      padding-inline-start: 0;
+      padding-inline-end: 0 !important;
+
+      &Text {
+        & .highlightedText {
+          font-size: 14px;
+        }
+      }
+    }
 
     & .content {
       position: relative;
@@ -274,6 +349,8 @@
         letter-spacing: -0.06em;
 
         @media (max-width: 375px) {
+          top: 27%;
+          left: 12%;
           font-size: 12px !important;
         }
 
@@ -293,19 +370,23 @@
       & .sectionContentImage {
         position: relative;
         width: 72.54%;
+        height: auto;
+        max-width: 864.45px;
+        max-height: 668.74px;
         max-width: 864px;
         z-index: 0;
 
         @media (max-width: 768px) {
-          width: 82%;
+          width: 72%;
         }
 
         @media (max-width: 425px) {
-          width: 90%;
+          width: 80%;
         }
 
-        & img {
+        & > * {
           width: 100%;
+          height: 100%;
         }
       }
 
@@ -314,19 +395,23 @@
         right: clamp(20px, 4.16vw, 60px);
         bottom: 0;
         width: 54.74%;
+        height: auto;
         max-width: 652px;
+        max-height: 617px;
         z-index: -1;
 
-        & img {
+        & > * {
           width: 100%;
+          height: 100%;
         }
-      }
 
-      @media (max-width: 600px) {
-        &Text {
-          & .highlightedText {
-            font-size: 14px;
-          }
+        @media (max-width: 768px) {
+          width: 65%;
+          bottom: -10%;
+        }
+
+        @media (max-width: 425px) {
+          bottom: -3%;
         }
       }
     }
@@ -334,7 +419,7 @@
     & .sectionText {
       display: inline-block;
       font-family: var(--font-better-vcr), monospace;
-      font-size: clamp(20px, 2.77vw, 40px);
+      font-size: clamp(12px, 2.77vw, 40px);
       line-height: 1.2;
       text-transform: uppercase;
       color: var(--color-primary-blue);
@@ -342,9 +427,26 @@
       margin-inline-end: clamp(15px, 2.63vw, 38px);
       margin-inline-start: 8px;
       letter-spacing: -0.06em;
+
+      @media (max-width: 768px) {
+        margin-block-start: 35px;
+        line-height: 1.4;
+      }
+
+      @media (max-width: 600px) {
+        display: flex;
+        justify-content: center;
+        margin-inline-end: 0;
+        margin-inline-start: 0 !important;
+      }
+
+      @media (max-width: 425px) {
+        margin-block-start: 10px;
+      }
     }
   }
 
+  //неактивная секция - ForArtistsLookForSection.tsx
   &.forthSection {
     font-size: clamp(18px, 2.5vw, 36px);
     line-height: 1.15;
@@ -364,14 +466,21 @@
     }
   }
 
+  //неактивная сессия - c <Roadmap>
   &.fifthSection {
     margin-block-end: min(8vw, 100px);
   }
 
+  //секция ForArtistsTeamSection.tsx
   &.sixsSection {
     padding-inline-start: clamp(20px, 3.33vw, 48px);
     padding-inline-end: clamp(15px, 2.56vw, 37px);
     margin-block-start: clamp(60px, 17vw, 170px);
+
+    @media (max-width: 375px) {
+      width: 100%;
+      padding-inline: 0 !important;
+    }
 
     & .content {
       position: relative;
@@ -406,7 +515,7 @@
         }
 
         & p {
-          font-size: 18px;
+          font-size: 16px;
           line-height: 1.25;
         }
       }
@@ -417,23 +526,40 @@
       top: clamp(-350px, -24.3vw, -120px);
       left: 3px;
       width: 49%;
+      max-width: 633.4px;
+      aspect-ratio: 1;
       z-index: -1;
 
-      & img {
+      & > * {
         width: 100%;
+        height: 100%;
       }
 
-      @media (max-width: 600px) {
-        top: -85px;
-        width: 44%;
+      @media (max-width: 768px) {
+        width: 55%;
+        top: clamp(-350px, -26.3vw, -120px);
+      }
+
+      @media (max-width: 425px) {
+        width: 70%;
+        top: -135px;
+      }
+
+      @media (max-width: 375px) {
+        top: max(-120px, (min(20vw, -120px)));
       }
     }
   }
 
+  // секция ForArtistsJoinBeta.tsx
   &.sevenSection {
     margin-block-end: clamp(40px, 6.94vw, 100px);
     width: 94.96%;
     margin-inline: auto;
+
+    @media (max-width: 768px) {
+      margin-block-end: 10px;
+    }
 
     & .content {
       display: flex;
@@ -446,13 +572,13 @@
       letter-spacing: -0.08em;
 
       & span {
-        font-size: clamp(24px, 3.33vw, 48px);
+        font-size: clamp(20px, 3.33vw, 48px);
         line-height: 1.1;
       }
 
       & button {
         width: 38.46%;
-        min-width: 280px;
+        min-width: clamp(200px, 19.44vw, 280px);
         text-transform: uppercase;
         color: #fff;
         text-align: center;

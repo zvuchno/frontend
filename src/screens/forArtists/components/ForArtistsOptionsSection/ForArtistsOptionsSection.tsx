@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Image from "next/image";
 
 import { AccentContainer, Title } from "@/shared/ui";
 
@@ -38,7 +39,12 @@ export const ForArtistsOptionsSection = () => (
       </ul>
     </AccentContainer>
     <div className={styles.sectionImage}>
-      <img src='/images/for-artists_main-bg-2.png' loading='lazy' />
+      <Image
+        src='/images/for-artists_main-bg-2.png'
+        alt={"Фоновое изображение нескольких касет"}
+        width={1153}
+        height={878}
+      />
     </div>
   </section>
 );

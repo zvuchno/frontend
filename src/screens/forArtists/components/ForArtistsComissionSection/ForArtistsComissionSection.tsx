@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Image from "next/image";
 
 import styles from "../../ForArtists.module.scss";
 
@@ -6,7 +7,12 @@ export const ForArtistsComissionSection = () => (
   <section className={clsx(styles.sectionArea, styles.thirdSection)}>
     <div className={styles.content}>
       <div className={styles.sectionContentImage}>
-        <img src='/images/for-artists_white-page.png' loading='lazy' />
+        <Image
+          src='/images/for-artists_white-page.png'
+          alt='Фрагмент белого листа'
+          width={864.45}
+          height={668.74}
+        />
         <div className={clsx(styles.contentText)}>
           <p className={clsx(styles.textBold, styles.highlightedText)}>
             Без принудительных скидок,
@@ -29,7 +35,12 @@ export const ForArtistsComissionSection = () => (
       </div>
 
       <div className={styles.sectionImage}>
-        <img src='/images/for-artists_main-bg-3.png' loading='lazy' />
+        <Image
+          src='/images/for-artists_main-bg-3.png'
+          alt='Фоновое изображение cd-диска'
+          width={652}
+          height={617}
+        />
       </div>
     </div>
     <span className={styles.sectionText}>

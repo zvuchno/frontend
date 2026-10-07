@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Image from "next/image";
 
 import { ButtonLike } from "@/features/ButtonLike";
 
@@ -18,7 +19,16 @@ export const CardArtist = ({
     <div className={clsx(s.cardWrapper, className)} title={description}>
       <div className={s.cardCorner} />
       <div className={s.card}>
-        {image && <img className={s.card__image} src={image} alt='Фото артиста' loading='lazy' />}
+        {image && (
+          <Image
+            className={s.card__image}
+            src={image}
+            alt='Фото артиста'
+            width={408}
+            height={330}
+            priority
+          />
+        )}
 
         {hasButton && <ButtonLike isLiked={isLiked || false} className={s.card__button} isAuth />}
         {description && (

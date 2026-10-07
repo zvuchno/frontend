@@ -4,9 +4,21 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 284px;
+  height: clamp(220px, 19.73vw, 284px);
   background-color: var(--color-accent-blue);
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    height: clamp(150px, 28vw, 220px);
+  }
+
+  @media (max-width: 600px) {
+    height: clamp(150px, 30vw, 180px);
+  }
+
+  @media (max-width: 475px) {
+    height: clamp(200px, 60vw, 284px);
+  }
 }
 
 .back {
@@ -14,10 +26,6 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background-image: url("/images/image_catalog_hero.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: auto;
   background-color: transparent;
   z-index: 2;
 }
@@ -28,39 +36,44 @@
   height: clamp(8.75rem, 5.1786rem + 17.8571vw, 21.25rem); //340px;
   z-index: 1;
 
+  @media (max-width: 1024px) {
+    width: clamp(9.375rem, 8.8036rem + 17.8571vw, 21.875rem);
+    height: clamp(8.75rem, 8.1786rem + 17.8571vw, 21.25rem);
+  }
+
+  @media (max-width: 720px) {
+    width: clamp(9.375rem, 10.8036rem + 17.8571vw, 21.875rem);
+    height: clamp(8.75rem, 10.1786rem + 17.8571vw, 21.25rem);
+  }
+
+  @media (max-width: 425px) {
+    width: clamp(9.375rem, 8.8036rem + 17.8571vw, 21.875rem);
+    height: clamp(8.75rem, 8.1786rem + 17.8571vw, 21.25rem);
+  }
+
   &_left {
-    top: 14%;//40px;
-    left: 2%;//35px;
+    top: 14%; //40px;
+    left: 2%; //35px;
     rotate: -30deg;
 
-    @media(max-width: 1024px) {
+    @media (max-width: 1024px) {
       top: 30%;
     }
 
-    @media(max-width: 720px) {
+    @media (max-width: 720px) {
       top: 45%;
       left: 1%;
-    }
-
-    @media(max-width: 475px) {
-      top: 65%;
-      left: 0;
     }
   }
 
   &_right {
-    bottom: 21%;//60px;
-    right: -1.4%;//-20px;
+    bottom: 21%; //60px;
+    right: -1.4%; //-20px;
     rotate: 35deg;
 
-    @media(max-width: 720px) {
+    @media (max-width: 720px) {
       bottom: 42%;
       right: -3%;
-    }
-
-    @media(max-width: 475px) {
-      bottom: 62%;
-      right: -4%;
     }
   }
 }
