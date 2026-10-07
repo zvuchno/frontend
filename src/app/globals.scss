@@ -52,6 +52,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
+  align-items: center;
 }
 
 .app-container {
@@ -74,9 +75,18 @@ body {
 }
 
 .app-header-container {
-  margin-block-start: 28px;
+  padding-block-start: 28px;
+  position: fixed;
+  z-index: 1000;
+  background-color: var(--color-bg-main);
+  width: calc(100% + 6px);
+  margin-inline-start: 0;
+
   @media (max-width: 768px) {
-    margin-block-start: 0;
+    padding-block-start: 0;
+  }
+  @media (max-width: 425px) {
+    width: 100%;
   }
 }
 
@@ -87,6 +97,11 @@ body {
 .app-main {
   flex: 1 0 auto;
   width: 100%;
+  margin-block-start: 102px;
+
+  @media (max-width: 768px) {
+    margin-block-start: 72px;
+  }
 }
 
 a {
