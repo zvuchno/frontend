@@ -48,8 +48,7 @@
   border-color: var(--color-accent-blue);
 }
 
-.linkWithItems:hover .linkDropdown,
-.linkWithItems:focus-within .linkDropdown {
+.linkWithItems:hover .linkDropdown {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
