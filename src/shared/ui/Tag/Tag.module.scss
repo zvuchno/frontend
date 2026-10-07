@@ -20,6 +20,10 @@
   &_secondary {
     background-color: #e4f1ff;
   }
+
+  &:hover {
+    border-color: var(--color-accent-blue);
+  }
 }
 
 .title {
