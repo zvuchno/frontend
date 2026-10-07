@@ -2,10 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 import { type TDataForModal } from "@/features/addToCartModal";
 
 import { AccentContainer, ButtonUI, Text, Title } from "@/shared/ui";
 
+import { DeliveryInfo } from "../../components/DeliveryInfo/DeliveryInfo";
 import Gallery from "../../components/Gallery/Gallery";
 import TabBar from "../../components/TabBar/TabBar";
 import VariantRange from "../../components/VariantRange/VariantRange";
@@ -14,8 +18,6 @@ import {
   type TReleaseVariant,
 } from "../model/ReleaseDescription.types";
 import s from "./ReleaseDescription.module.scss";
-import { useRouter } from "next/navigation";
-import { DeliveryInfo } from "../../components/DeliveryInfo/DeliveryInfo";
 
 // Компонент отображает карточку релиза и носителей. Вариант носителя "Диджитал" отображает информацию самого релиза
 export const ReleaseDescription = ({
@@ -52,7 +54,8 @@ export const ReleaseDescription = ({
     {
       id: "return",
       title: "Возврат",
-      description: "Для оформления возврата обратитесь в службу поддержки. Цифровые товары не подлежат возврату и обмену.",
+      description:
+        "Для оформления возврата обратитесь в службу поддержки. Цифровые товары не подлежат возврату и обмену.",
     },
   ];
 
@@ -83,7 +86,7 @@ export const ReleaseDescription = ({
   };
 
   const handleArtistClick = () => {
-    router.push(`/catalog/artists/${release.artist_slug}/?kind=artists`)
+    router.push(`/catalog/artists/${release.artist_slug}/?kind=artists`);
   };
 
   return (
@@ -94,7 +97,14 @@ export const ReleaseDescription = ({
         <div className={s.card}>
           <div className={s.card__artist} onClick={handleArtistClick}>
             <div className={s.card__artist__img}>
-              {release.artist_image && <img src={release.artist_image} alt={release.artist_name} />}
+              {release.artist_image && (
+                <Image
+                  src={release.artist_image}
+                  alt={release.artist_name}
+                  width={40}
+                  height={40}
+                />
+              )}
             </div>
             <Title Tag='h4' className={s.card__artist__name}>
               {release.artist_name}

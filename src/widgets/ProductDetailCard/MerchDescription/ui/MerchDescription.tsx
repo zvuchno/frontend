@@ -2,17 +2,19 @@
 
 import { useState } from "react";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 import { type TDataForModal } from "@/features/addToCartModal";
 
 import { AccentContainer, ButtonUI, Text, Title } from "@/shared/ui";
 
+import { DeliveryInfo } from "../../components/DeliveryInfo/DeliveryInfo";
 import Gallery from "../../components/Gallery/Gallery";
 import TabBar from "../../components/TabBar/TabBar";
 import VariantRange from "../../components/VariantRange/VariantRange";
 import { type MerchDescriptionProps } from "../model/MerchDescription.types";
 import s from "./MerchDescription.module.scss";
-import { useRouter } from "next/navigation";
-import { DeliveryInfo } from "../../components/DeliveryInfo/DeliveryInfo";
 
 // Компонент отображает карточку обычного мерча, не относящегося к носителям
 
@@ -64,7 +66,7 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
   };
 
   const handleArtistClick = () => {
-    router.push(`/catalog/artists/${product.artist_slug}/?kind=artists`)
+    router.push(`/catalog/artists/${product.artist_slug}/?kind=artists`);
   };
 
   return (
@@ -75,7 +77,14 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
         <div className={s.card}>
           <div className={s.card__artist} onClick={handleArtistClick}>
             <div className={s.card__artist__img}>
-              {product.artist_image && <img src={product.artist_image} alt={product.artist_name} />}
+              {product.artist_image && (
+                <Image
+                  src={product.artist_image}
+                  alt={product.artist_name}
+                  width={40}
+                  height={40}
+                />
+              )}
             </div>
             <Title Tag='h4' className={s.card__artist__name}>
               {product.artist_name}
