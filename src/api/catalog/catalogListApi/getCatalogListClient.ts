@@ -12,7 +12,8 @@ export async function getCatalogListClient({
   limit,
   offset,
   ordering,
-}: TCatalogListRequest): Promise<TCatalogListResponse | null> {
+  url,
+}: TCatalogListRequest): Promise<TCatalogListResponse> {
   const params = new URLSearchParams();
 
   if (type !== undefined) {
@@ -53,12 +54,15 @@ export async function getCatalogListClient({
     params.append("ordering", "-created_at");
   }
 
-  const url = `${baseUrl}/v1/store/catalog?${params.toString()}`;
+  const mainUrl = `${baseUrl}/v1/store/catalog?${params.toString()}`;
+  const currentUrl = url ? url : mainUrl;
 
   try {
-    const data = await authFetchClient<TCatalogListResponse>(url, {
+    const data = await authFetchClient<TCatalogListResponse>(currentUrl, {
       method: "GET",
     });
+
+    if (!data) throw new Error("Ошибка получения списка каталога");
 
     return data;
   } catch (error) {

@@ -36,4 +36,5 @@ export type TCatalogListRequest = {
   offset?: string;
   ordering?: '-created_at' | 'random';
   search?: string;
+  url?: string
 };
