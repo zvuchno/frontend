@@ -1,13 +1,13 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { RoleSelectBlock } from "@/entities/RoleSelectBlock";
 
 import { RoleCard } from "@/shared/ui";
 
 import styles from "./ChangeRole.module.scss";
-import { usePathname, useSearchParams } from "next/navigation";
 
 export const ChangeRole = () => {
   const { data } = useSession();

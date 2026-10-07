@@ -1,17 +1,18 @@
-"use client"
+"use client";
 
+import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { HeroUI } from "@/widgets/layout/main/Hero";
+
+import { useUserStore } from "@/entities/user";
 
 import { ButtonUI } from "@/shared/ui";
 
 import styles from "../../ForArtists.module.scss";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useUserStore } from "@/entities/user";
 
 export const ForArtistsHero = () => {
-
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`;
@@ -44,8 +45,15 @@ export const ForArtistsHero = () => {
           </ButtonUI>
         </div>
         <div className={styles.sectionImage}>
-          <img src='/images/image_for-artists_header_bg.png' loading='lazy' />
+          <Image
+            src={"/images/image_for-artists_header_bg.png"}
+            alt={"Баннер с зображением касеты"}
+            width={802}
+            height={683}
+            priority
+          />
         </div>
       </>
     </HeroUI>
-)};
+  );
+};

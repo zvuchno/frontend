@@ -31,6 +31,9 @@ export const matchSocialNetwork = (url: string): string => {
       case /(^|\.)(instagram\.com|instagr\.am)$/.test(hostname):
         return 'url("/icons/ig-icon.svg")';
 
+      case /(^|\.)(band\.link|bandlink\.com)$/.test(hostname):
+        return 'url("/icons/bandlink-icon.svg")';
+
       default:
         return 'url("/icons/social-default-icon.svg")';
     }

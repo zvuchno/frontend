@@ -14,6 +14,7 @@ export const ForArtistsTeamSection = () => (
         сделана с ИИ.
       </p>
       <div className={styles.sectionImage}>
+        {/* компонент ForArtistsTeamSection не используется. Заменить на <Image />*/}
         <img src='/images/for-artists_record-type.png' loading='lazy' />
       </div>
     </AccentContainer>

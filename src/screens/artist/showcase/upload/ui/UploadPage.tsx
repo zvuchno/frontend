@@ -1,63 +1,67 @@
 "use client";
 
-import s from "./UploadPage.module.scss";
-import { ButtonUI, Loader, SelectUI, Text } from "@/shared/ui";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useShowcaseArtistId } from "@/entities/Artist/store/useShowcaseStore";
-import { AddPropertises } from "./components/addProperties/AddProperties";
-import { 
+
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+import {
+  UploadForm,
+  type UploadFormValues,
   createProductPayload,
   deleteMerchImages,
-  mapApiToForm, 
-  mapDirtyFieldsToPayload, 
-  UploadForm, 
-  uploadMerchImages, 
-  type UploadFormValues 
+  mapApiToForm,
+  mapDirtyFieldsToPayload,
+  uploadMerchImages,
 } from "@/features/showcaseUpload";
-import { 
+
+import {
   type TShowcaseAlbumDetail,
   type TShowcaseMerchDetail,
-  useAddImage, 
-  useCreateAlbum, 
-  useCreateMerch, 
-  useDeleteImage, 
-  useDeleteTrack, 
-  useDetailInfo, 
-  useTracksInfiniteQuery, 
-  useUpdateAlbum, 
-  useUpdateMerch 
+  useAddImage,
+  useCreateAlbum,
+  useCreateMerch,
+  useDeleteImage,
+  useDeleteTrack,
+  useDetailInfo,
+  useTracksInfiniteQuery,
+  useUpdateAlbum,
+  useUpdateMerch,
 } from "@/entities/Artist";
-import { UploadTrackModal } from "./components/uploadTrackModal/UploadTrackModal";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useShowcaseArtistId } from "@/entities/Artist/store/useShowcaseStore";
 import TrackCard from "@/entities/albums/ui/trackCard/TrackCard";
 
+import { ButtonUI, Loader, SelectUI, Text } from "@/shared/ui";
+
+import s from "./UploadPage.module.scss";
+import { AddPropertises } from "./components/addProperties/AddProperties";
+import { UploadTrackModal } from "./components/uploadTrackModal/UploadTrackModal";
+
 interface UploadPageProps {
-  type: 'album' | 'single' | 'merch';
+  type: "album" | "single" | "merch";
   id: string | undefined;
-};
+}
 
 const initialFormValues: UploadFormValues = {
-  name: '',
-  releaseDate: '',
-  kind: '',
-  genre: '',
+  name: "",
+  releaseDate: "",
+  kind: "",
+  genre: "",
   price: null,
   privacy: "public",
   allowHigherPrice: false,
   mainImage: null,
   additionalImages: [],
   quantity: undefined,
-  album: '',
+  album: "",
   variants: [
     {
-      value: '',
-      sku: '',
+      value: "",
+      sku: "",
       stock: undefined,
-    }
-  ]
+    },
+  ],
 };
 
 // Страница формы создания/редактирования товара
@@ -65,7 +69,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
   const { data } = useSession();
   const profileType = data?.user.profileType;
   // тип товара на форме
-  const [productType, setProductType] = useState<'album' | 'single' | 'merch'>(type);
+  const [productType, setProductType] = useState<"album" | "single" | "merch">(type);
   const [isTrackModalOpen, setIsTrackModalOpen] = useState<boolean>(false);
   const [trackId, setTrackId] = useState<number | undefined>(undefined);
 
@@ -84,11 +88,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
   const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
 
   // данные товра, получаемые, если перешли на эту страницу для редактирования
-  const { 
-    data: productData, 
-    isLoading, 
-    error 
-  } = useDetailInfo(type, currentProductId);
+  const { data: productData, isLoading, error } = useDetailInfo(type, currentProductId);
 
   const createAlbumMutation = useCreateAlbum();
   const updateAlbumMutation = useUpdateAlbum();
@@ -99,13 +99,13 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
   const addImageMutation = useAddImage();
   const deleteImageMutation = useDeleteImage();
 
-  const { 
-    data: tracks, 
+  const {
+    data: tracks,
     error: tracksError,
     fetchNextPage,
     isLoading: tracksLoading,
     isFetchingNextPage,
-    hasNextPage, 
+    hasNextPage,
   } = useTracksInfiniteQuery(productType, releaseIdForTracks);
   const tracksList = tracks?.pages.flatMap((page) => page.results) ?? [];
 
@@ -131,9 +131,8 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
     if (!id || !productData) {
       return null;
     }
-    if (type === 'merch') {
-      const main = (productData as TShowcaseMerchDetail).images_merch
-        .find((i) => i.is_main);
+    if (type === "merch") {
+      const main = (productData as TShowcaseMerchDetail).images_merch.find((i) => i.is_main);
       if (!main) return null;
       return {
         image: main.image,
@@ -151,66 +150,76 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
       is_main: true,
       id: releaseImageId,
     };
-
   }, [id, type, productData]);
 
   const additionalImagesPreviews = useMemo(() => {
     if (!id || !productData) {
       return undefined;
     }
-    return type === 'merch'
-      ? (productData as TShowcaseMerchDetail).images_merch
-        .filter((img) => !img.is_main)
+    return type === "merch"
+      ? (productData as TShowcaseMerchDetail).images_merch.filter((img) => !img.is_main)
       : undefined;
-
   }, [id, type, productData]);
 
   const methods = useForm<UploadFormValues>({
     mode: "onChange",
-    defaultValues: initialValues
+    defaultValues: initialValues,
   });
 
-  const { 
-    reset, 
+  const {
+    reset,
     handleSubmit,
     setValue,
     watch,
-    formState: { isSubmitting, dirtyFields, isDirty } 
+    formState: { isSubmitting, dirtyFields, isDirty },
   } = methods;
 
-  const hasProperty = watch('hasProperty');
+  const hasProperty = watch("hasProperty");
 
   useEffect(() => {
     reset(initialValues);
   }, [initialValues, reset]);
 
   const handleChangeProductType = (value: string) => {
-    setProductType(value as 'album' | 'single' | 'merch');
+    setProductType(value as "album" | "single" | "merch");
     // Сброс полей, специфичных для другого типа, чтобы не было мусора
-    if (value === 'merch') {
-      setValue('releaseDate', '');
-      setValue('genre', '');
+    if (value === "merch") {
+      setValue("releaseDate", "");
+      setValue("genre", "");
     } else {
-      setValue('kind', '');
-      setValue('quantity', undefined);
-      setValue('album', '');
-      setValue('propertyName', '');
-      setValue('variants', []);
-      setValue('hasProperty', false);
+      setValue("kind", "");
+      setValue("quantity", undefined);
+      setValue("album", "");
+      setValue("propertyName", "");
+      setValue("variants", []);
+      setValue("hasProperty", false);
     }
   };
 
-  const onSubmit = async (data: UploadFormValues, action: 'uploadTrack' | 'publish' | 'draft' | 'save' | 'cancel') => {
+  const onSubmit = async (
+    data: UploadFormValues,
+    action: "uploadTrack" | "publish" | "draft" | "save" | "cancel"
+  ) => {
     if (isSubmitting) return;
-    const payload = createProductPayload(data, productType, profileType, currentArtistId, action, hasProperty);
-    const hasImagesToUpload = !!data.mainImage || (Array.isArray(data.additionalImages) && data.additionalImages.length > 0);
-    const hasNewMainImage = deletedImageIds.length > 0 || (!initialValues.mainImage && data.mainImage);
+    const payload = createProductPayload(
+      data,
+      productType,
+      profileType,
+      currentArtistId,
+      action,
+      hasProperty
+    );
+    const hasImagesToUpload =
+      !!data.mainImage ||
+      (Array.isArray(data.additionalImages) && data.additionalImages.length > 0);
+    const hasNewMainImage =
+      deletedImageIds.length > 0 || (!initialValues.mainImage && data.mainImage);
 
     // при сохранении мерча: сначала создавать сам мерч, а потом изображения
 
     try {
       switch (action) {
-        case 'uploadTrack':
+        case "uploadTrack":
           if (isEditForm) {
             setIsTrackModalOpen(true);
           } else {
@@ -225,12 +234,17 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
             }
           }
           break;
-        case 'publish':
-        case 'draft':
-          if (productType === 'merch') {
+        case "publish":
+        case "draft":
+          if (productType === "merch") {
             const createdMerch = await createMerchMutation.mutateAsync(payload);
             if (hasImagesToUpload && createdMerch.id) {
-              await uploadMerchImages(createdMerch.id, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
+              await uploadMerchImages(
+                createdMerch.id,
+                addImageMutation.mutateAsync,
+                data.mainImage,
+                data.additionalImages
+              );
             }
           } else {
             if (newAlbumId) {
@@ -239,38 +253,48 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               await createAlbumMutation.mutateAsync(payload);
             }
           }
-          router.replace('/artist/showcase')
+          router.replace("/artist/showcase");
           break;
-        case 'save':
-            if (!isDirty && deletedImageIds.length === 0 && !hasImagesToUpload) {
-              router.replace('/artist/showcase');
-              break;
-            }
+        case "save":
+          if (!isDirty && deletedImageIds.length === 0 && !hasImagesToUpload) {
+            router.replace("/artist/showcase");
+            break;
+          }
 
-            if (deletedImageIds.length > 0 && productType === "merch") {
-              await deleteMerchImages(currentProductId!, deletedImageIds, deleteImageMutation.mutateAsync);
-            }
+          if (deletedImageIds.length > 0 && productType === "merch") {
+            await deleteMerchImages(
+              currentProductId!,
+              deletedImageIds,
+              deleteImageMutation.mutateAsync
+            );
+          }
 
-            if (productType === "merch" && (data.mainImage || data.additionalImages)) {
-              await uploadMerchImages(currentProductId!, addImageMutation.mutateAsync, data.mainImage, data.additionalImages);
-            }
+          if (productType === "merch" && (data.mainImage || data.additionalImages)) {
+            await uploadMerchImages(
+              currentProductId!,
+              addImageMutation.mutateAsync,
+              data.mainImage,
+              data.additionalImages
+            );
+          }
 
-            const newData = mapDirtyFieldsToPayload(dirtyFields, data, hasProperty);
-            if (productType === 'merch' && isDirty) {
-              await updateMerchMutation.mutateAsync({id: currentProductId!, payload: newData});
-              
-            } else if (productType === "album" || productType === "single") {
-              await updateAlbumMutation.mutateAsync({ id: currentProductId!, payload: {
+          const newData = mapDirtyFieldsToPayload(dirtyFields, data, hasProperty);
+          if (productType === "merch" && isDirty) {
+            await updateMerchMutation.mutateAsync({ id: currentProductId!, payload: newData });
+          } else if (productType === "album" || productType === "single") {
+            await updateAlbumMutation.mutateAsync({
+              id: currentProductId!,
+              payload: {
                 ...newData,
                 ...(hasNewMainImage && { cover_image: data.mainImage }),
-              }});
-            }
-            
-            
-            router.replace('/artist/showcase')
+              },
+            });
+          }
+
+          router.replace("/artist/showcase");
           break;
-        case 'cancel':
-          router.replace('/artist/showcase')
+        case "cancel":
+          router.replace("/artist/showcase");
           break;
       }
     } catch (e) {
@@ -279,17 +303,17 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
     }
   };
 
-  if (isLoading) return <Loader />
-  if (error) return <div>{`Не удалось загрузить данные: ${error.message}`}</div>
+  if (isLoading) return <Loader />;
+  if (error) return <div>{`Не удалось загрузить данные: ${error.message}`}</div>;
 
   return (
     <>
       <FormProvider {...methods}>
-        <form 
+        <form
           className={s.form}
-          onSubmit={handleSubmit((data) => onSubmit(data, isEditForm ? 'save' : 'publish'))}
+          onSubmit={handleSubmit((data) => onSubmit(data, isEditForm ? "save" : "publish"))}
         >
-          <SelectUI 
+          <SelectUI
             value={productType}
             onChange={handleChangeProductType}
             options={[
@@ -297,7 +321,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               { value: "single", label: "Сингл" },
               { value: "merch", label: "Мерч" },
             ]}
-            label="Категория"
+            label='Категория'
             placeholder='тип товара'
             containerClassName={s.typeSelect}
             selectClassName={s.typeSelect__select}
@@ -305,12 +329,12 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
             disabled={!!productData}
           />
 
-          <UploadForm 
-            productType={productType} 
+          <UploadForm
+            productType={productType}
             profileType={profileType}
             isEditForm={isEditForm}
-            mainPreview={mainImagePreview} 
-            additionalPreviews={additionalImagesPreviews} 
+            mainPreview={mainImagePreview}
+            additionalPreviews={additionalImagesPreviews}
             onDeleteImage={(imageId) => setDeletedImageIds(imageId)}
           />
 
@@ -321,11 +345,11 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           ) : tracksList && tracksList.length > 0 ? (
             <div className={s.tracksList}>
               {tracksList.map((track) => (
-                <TrackCard 
+                <TrackCard
                   key={track.id}
-                  image={track.image} 
-                  title={track.artist_name} 
-                  description={track.name} 
+                  image={track.image}
+                  title={track.artist_name}
+                  description={track.name}
                   duration={track.duration}
                   onDelete={() => void handleDeleteTrack(track.id)}
                   onEdit={() => handleEditTrack(track.id)}
@@ -334,10 +358,10 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               {hasNextPage && (
                 <div className={s.buttonWrapper}>
                   <button
-                    type="button"
+                    type='button'
                     className={s.button}
                     onClick={() => {
-                      fetchNextPage().catch(console.error)
+                      fetchNextPage().catch(console.error);
                     }}
                     disabled={isFetchingNextPage}
                   >
@@ -347,14 +371,14 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               )}
             </div>
           ) : null}
-          
+
           <div className={s.buttonsContainer}>
-            {productType !== 'merch' ? (
+            {productType !== "merch" ? (
               <div className={s.uploadContainer}>
-                <ButtonUI 
-                  variant="primary"
-                  type="button"
-                  onClick={() => handleSubmit((d) => onSubmit(d, 'uploadTrack'))()}
+                <ButtonUI
+                  variant='primary'
+                  type='button'
+                  onClick={() => handleSubmit((d) => onSubmit(d, "uploadTrack"))()}
                   disabled={isSubmitting}
                   className={s.uploadContainer__uploadButton}
                 >
@@ -368,10 +392,10 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               <>
                 {!hasProperty ? (
                   <div className={s.uploadContainer}>
-                    <ButtonUI 
-                      variant="primary" 
-                      type="button" 
-                      onClick={() => setValue('hasProperty', true)}
+                    <ButtonUI
+                      variant='primary'
+                      type='button'
+                      onClick={() => setValue("hasProperty", true)}
                       className={s.uploadContainer__addButton}
                     >
                       + Добавить свойство
@@ -384,33 +408,29 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
               </>
             )}
 
-            <ButtonUI 
-              variant="primary"
-              type='submit'
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Загрузка...' : isEditForm ? 'Сохранить' : 'Опубликовать'}
+            <ButtonUI variant='primary' type='submit' disabled={isSubmitting}>
+              {isSubmitting ? "Загрузка..." : isEditForm ? "Сохранить" : "Опубликовать"}
             </ButtonUI>
-            <ButtonUI 
+            <ButtonUI
               variant='secondary'
               type='button'
-              onClick={() => handleSubmit((d) => onSubmit(d, isEditForm ? 'cancel' : 'draft'))()}
+              onClick={() => handleSubmit((d) => onSubmit(d, isEditForm ? "cancel" : "draft"))()}
               disabled={isSubmitting}
             >
-              {isEditForm ? 'Отмена' :'В черновик'}
+              {isEditForm ? "Отмена" : "В черновик"}
             </ButtonUI>
           </div>
         </form>
       </FormProvider>
-      <UploadTrackModal 
-        isOpen={isTrackModalOpen} 
+      <UploadTrackModal
+        isOpen={isTrackModalOpen}
         albumId={newAlbumId ? newAlbumId : currentProductId!}
         onClose={() => {
-          setIsTrackModalOpen(false)
+          setIsTrackModalOpen(false);
           setTrackId(undefined);
         }}
         trackId={trackId}
       />
     </>
-  )
-}
+  );
+};

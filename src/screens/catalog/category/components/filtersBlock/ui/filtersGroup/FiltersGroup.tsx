@@ -1,4 +1,4 @@
-import { TagUI, Title, Link } from "@/shared/ui";
+import { TagUI, Title } from "@/shared/ui";
 import s from "./FiltersGroup.module.scss";
 import { type FiltersGroupProps } from "./FiltersGroup.types";
 
@@ -14,7 +14,7 @@ const FiltersGroup = ({
   isCategory,
 }: FiltersGroupProps) => {
   const handleClickOnFilter = (
-    e: React.MouseEvent<HTMLAnchorElement>,
+    e: React.MouseEvent<HTMLButtonElement>,
     value: string,
   ) => {
     if (filterType && buildLink && typeof buildLink === "function") {
@@ -23,7 +23,7 @@ const FiltersGroup = ({
     }
   };
 
-  const handleClearFilters = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClearFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (clearFilters && typeof clearFilters === "function") {
       e.preventDefault();
       clearFilters();
@@ -40,29 +40,25 @@ const FiltersGroup = ({
 
       <div className={s.filterGroup__tags}>
         {clearFilters && (
-          <Link
-            href={""}
+          <button
             onClick={handleClearFilters}
-            scroll={false}
-            passHref
-            prefetch={false}
+            type="button"
+            className={s.filterGroup__button}
           >
             <TagUI
               title="Все"
               isActive={isClearFilters ? isClearFilters : false}
               hasIcon={false}
             />
-          </Link>
+          </button>
         )}
 
         {items.map((item) => (
-          <Link
+          <button
             key={item.slug}
-            href={''}
-            //href={buildLink ? "" : `/catalog/${item.slug}`}
             onClick={(e) => handleClickOnFilter(e, item.slug)}
-            scroll={false}
-            passHref
+            type="button"
+            className={s.filterGroup__button}
           >
             <TagUI
               title={item.name}
@@ -70,7 +66,7 @@ const FiltersGroup = ({
               isSecondary={isSecondary}
               hasIcon={!isCategory}
             />
-          </Link>
+          </button>
         ))}
       </div>
     </div>

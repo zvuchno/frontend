@@ -1,5 +1,5 @@
 import clsx from "clsx";
-
+import Image from "next/image";
 
 import { AccentContainer, Title } from "@/shared/ui";
 
@@ -70,7 +70,12 @@ export const HeroUI = ({
       )}
       {mainTitle === "ЗВУЧНО" && (
         <div className={styles.hero__image}>
-          <img src='/images/vinyl_player.png' />
+          <Image
+            src='/images/vinyl_player.png'
+            alt={"Баннер с изображением проигрывателя"}
+            fill
+            priority
+          />
         </div>
       )}
     </AccentContainer>

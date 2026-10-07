@@ -1,6 +1,7 @@
-import { type DescriptionAreaProps } from "./types";
-import styles from './DescriptionArea.module.scss'
 import clsx from "clsx";
+
+import styles from "./DescriptionArea.module.scss";
+import { type DescriptionAreaProps } from "./types";
 
 export const DescriptionArea = ({
   colorOption = "blue",

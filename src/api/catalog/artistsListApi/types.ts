@@ -20,4 +20,5 @@ export type TArtistsListRequest = {
   limit?: string;
   offset?: string;
   ordering?: "-created_at" | "random";
+  url?: string;
 };

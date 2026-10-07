@@ -1,19 +1,14 @@
 import clsx from "clsx";
 
-import { ApproveSection } from "@/widgets/ApproveSection";
-//import { Roadmap } from "@/widgets/Roadmap";
-//import { roadmapItems } from "@/widgets/Roadmap";
 import { SectionFAQ } from "@/widgets/SectionFAQ";
 
 import { FAQItemsForArtists } from "@/shared/constants";
-import { artistInfo } from "@/shared/constants/mocks/mockArtistsInfo";
 
 import styles from "./ForArtists.module.scss";
 import { ForArtistsCareSection } from "./components/ForArtistsCareSection/ForArtistsCareSection";
 import { ForArtistsComissionSection } from "./components/ForArtistsComissionSection/ForArtistsComissionSection";
 import { ForArtistsHero } from "./components/ForArtistsHero/ForArtistsHero";
 import { ForArtistsJoinBeta } from "./components/ForArtistsJoinBeta/ForArtistsJoinBeta";
-//import { ForArtistsLookForSection } from "./components/ForArtistsLookForSection/ForArtistsLookForSection";
 import { ForArtistsOptionsSection } from "./components/ForArtistsOptionsSection/ForArtistsOptionsSection";
 import { ForArtistsTeamSection } from "./components/ForArtistsTeamSection/ForArtistsTeamSection";
 

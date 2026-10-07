@@ -18,6 +18,7 @@ export const BlogCard = ({
   const CardContent = (
     <div className={className}>
       {image && (
+        // компонент Blog не используется. Заменить на <Image/>
         <img className={s.card__image} src={image} alt='Изображение статьи' loading='lazy' />
       )}
 

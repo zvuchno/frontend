@@ -24,10 +24,18 @@
 .cardFAQ__label {
   background-color: inherit;
   height: 100%;
-  font-family: 'Feature Mono', monospace;
+  font-family: "Feature Mono", monospace;
   font-weight: 700;
   font-size: 20px;
-  line-height: 20px;
+  line-height: 1;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 475px) {
+    font-size: 16px;
+  }
 }
 
 .cardFAQ__trigger {
@@ -49,11 +57,9 @@
   background-color: inherit;
   border: none;
   pointer-events: auto;
-  font-family: 'Feature Mono', monospace;
+  font-family: "Feature Mono", monospace;
   font-weight: 400;
   font-size: 16px;
   line-height: 16px;
   vertical-align: middle;
 }
-
-

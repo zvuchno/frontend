@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+import clsx from "clsx";
+import Image from "next/image";
+
 import s from "./Gallery.module.scss";
 import { type GalleryProps } from "./Gallery.types";
 
@@ -24,13 +27,17 @@ const Gallery = ({ images }: GalleryProps) => {
         <div className={s.gallery__container}>
           {images.map((image, index) => {
             return (
-              <img
+              <Image
                 key={image.id ? image.id : index}
                 src={image.image}
-                className={s.gallery__container__img}
+                className={clsx(
+                  s.gallery__container__img,
+                  selectedImg === image.image && s.isSelected
+                )}
                 onClick={() => handleImageClick(image.image)}
-                style={{ border: selectedImg === image.image ? "3px solid #0046d3" : "" }}
                 alt={`Миниатюра изображения ${index + 1}`}
+                width={100}
+                height={100}
               />
             );
           })}
@@ -38,7 +45,13 @@ const Gallery = ({ images }: GalleryProps) => {
       )}
       <div className={s.gallery__selected}>
         {selectedImg ? (
-          <img src={selectedImg} alt='Крупное фото выбранного изображения' />
+          <Image
+            src={selectedImg}
+            alt='Крупное фото выбранного изображения'
+            width={600}
+            height={625}
+            priority
+          />
         ) : (
           <div className={s.gallery__selected__noPhoto}>Нет изображения</div>
         )}
