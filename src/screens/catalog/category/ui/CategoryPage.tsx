@@ -1,10 +1,10 @@
 import Hero from "../components/hero/Hero";
 import FiltersBlock from "../components/filtersBlock/FiltersBlock";
 import { Suspense } from "react";
-import GenericCatalogList from "../components/genericCatalogList/GenericCatalogList";
 import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
 import s from "./CategoryPage.module.scss";
 import { AccentContainer } from "@/shared/ui";
+import ProductsList from "../components/productsList/ProductsList";
 
 interface CategoryPageProps {
   category: 'album' | 'all' | 'merch' | 'artists';
@@ -45,7 +45,7 @@ export const CategoryPage = async ({
       <Suspense
         fallback={<div className={s.message}>Загрузка карточек...</div>}
       >
-        <GenericCatalogList
+        <ProductsList
           category={category}
           filterByGenre={genre}
           filterBySubcategory={kind}

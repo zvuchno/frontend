@@ -2,8 +2,13 @@ import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
 import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 
 export interface ProductsListProps {
-  products: TCatalogCard[] | TArtistCard[];
-  link: string | null;
+  category: 'album' | 'all' | 'merch' | 'artists';
+  filterByGenre?: string | string[];
+  filterBySubcategory?: string | string[];
+  filterByArtist?: string;
+  orderingFilter?: '-created_at' | 'random';
+  offset?: string;
+  search?: string;
 }
 
 export interface ProductsListResponse {
