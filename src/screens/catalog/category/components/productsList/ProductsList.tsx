@@ -27,6 +27,7 @@ import {
   isArtistCard,
   isProductCard,
 } from "./ProductsList.types";
+import { useSearchParams } from "next/navigation";
 
 const ProductsList = ({ products, link }: ProductsListProps) => {
   const [allProducts, setAllProducts] = useState<TCatalogCard[] | TArtistCard[] | []>(products);
@@ -39,6 +40,23 @@ const ProductsList = ({ products, link }: ProductsListProps) => {
 
   const { status } = useSession();
   const isAuth = status === "authenticated";
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      sessionStorage.setItem("lastCatalogScroll", String(window.scrollY));
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const lastScroll = sessionStorage.getItem("lastCatalogScroll");
+    if (lastScroll && window.scrollY === 0) {
+      window.scrollTo({ top: Number(lastScroll), behavior: "smooth" });
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     setAllProducts(products);
