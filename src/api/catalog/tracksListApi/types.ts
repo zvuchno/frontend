@@ -14,6 +14,7 @@ type TPurchase = {
 export type TTrack = {
   id: number;
   artist_name: string | null;
+  artist_slug: string | null;
   name: string;
   album: number;
   duration: number | null;
