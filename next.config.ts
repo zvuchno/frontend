@@ -24,6 +24,14 @@ const dynamicRemotePatterns = getApiImageRemotePattern();
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  outputFileTracingIncludes: {
+    "/*": [
+      "./node_modules/sharp/**/*",
+      "./node_modules/@img/**/*",
+      "./node_modules/detect-libc/**/*",
+      "./node_modules/semver/**/*",
+    ],
+  },
 
   turbopack: {
     rules: {
@@ -35,10 +43,10 @@ const nextConfig: NextConfig = {
   },
 
   images: {
+    formats: ["image/avif", "image/webp"],
     unoptimized: process.env.NODE_ENV === "development",
     remotePatterns: [
       ...(dynamicRemotePatterns ? [dynamicRemotePatterns] : []),
-
       {
         protocol: "https",
         hostname: "storage.yandexcloud.net",
