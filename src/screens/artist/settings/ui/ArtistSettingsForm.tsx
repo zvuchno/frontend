@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
@@ -11,6 +11,8 @@ import {
 } from "@/entities/Artist";
 import { DeliverySelectionProvider } from "@/entities/order";
 
+import { Loader } from "@/shared/ui";
+
 import { ArtistSettingsButtons } from "../components/ArtistSettingsButtons/ArtistSettingsButons";
 import { ArtistSettingsDelivery } from "../components/ArtistSettingsDelivery/ArtistSettingsDelivery";
 import { CdekModal } from "../components/CdekModal/CdekModal";
@@ -18,36 +20,50 @@ import { useArtistSettingsSubmit } from "../model/useArtistSettingsSubmit";
 import styles from "./ArtistSettingsForm.module.scss";
 
 interface ArtistSettingsFormProps {
-  initialCdek?: TShippingSettings;
-  initialPickup?: TPickupSettings;
+  initialCdek: TShippingSettings;
+  initialPickup: TPickupSettings;
 }
+
+const getFormValues = (
+  initialCdek: TShippingSettings,
+  initialPickup: TPickupSettings
+): TArtistSettingsFieldValues => ({
+  pickup_enabled: initialPickup.enabled,
+  pickupPoints: (initialPickup.points ?? [])
+    .filter((point) => point.is_active !== false)
+    .map(({ id, ...point }) => ({ ...point, server_id: id })),
+  shipping_enabled: initialCdek.enabled,
+  shippingPoint: initialCdek.point,
+});
 
 export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSettingsFormProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
   const { mutate: connectTelegramBot } = useConnetcTelegramBot();
+  const formValues = useMemo(
+    () => getFormValues(initialCdek, initialPickup),
+    [initialCdek, initialPickup]
+  );
 
   const methods = useForm<TArtistSettingsFieldValues>({
-    defaultValues: {
-      pickup_enabled: initialPickup?.enabled,
-      pickupPoints: (initialPickup?.points ?? [])
-        .filter((point) => point.is_active !== false)
-        .map(({ id, ...point }) => ({ ...point, server_id: id })),
-      shipping_enabled: initialCdek?.enabled,
-      shippingPoint: initialCdek?.point,
-    },
+    values: formValues,
   });
 
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: methods.control,
     name: "pickupPoints",
   });
 
-  const onSubmit = useArtistSettingsSubmit({ initialPickup, replacePickupPoints: replace });
+  const onSubmit = useArtistSettingsSubmit({
+    initialPickup,
+    onSuccess: () => setIsOnEdit(false),
+  });
 
   const handleButtonClick = () => {
     void methods.handleSubmit(onSubmit)();
   };
+
+  if (!initialCdek || !initialPickup) return <Loader />;
 
   return (
     <DeliverySelectionProvider>
@@ -60,7 +76,7 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
             onAddPoint={append}
             onDeletePoint={remove}
             cdekSettings={initialCdek}
-            pickupStatus={initialPickup?.enabled}
+            pickupStatus={initialPickup.enabled}
           />
           <ArtistSettingsButtons
             disabled={!isOnEdit}

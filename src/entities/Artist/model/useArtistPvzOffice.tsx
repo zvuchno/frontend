@@ -4,7 +4,7 @@ import { deletePVZMe, managePVZMe, receivePVZMe } from "../api/artistSettings.ap
 import { type TShippingSettings } from "./artistSettings.types";
 
 export function useGetArtistPvzOffice() {
-  return useQuery<Partial<TShippingSettings> | null>({
+  return useQuery<TShippingSettings | null>({
     queryKey: ["artist-pvz"],
     queryFn: () => receivePVZMe(),
     refetchOnWindowFocus: false,
@@ -12,8 +12,8 @@ export function useGetArtistPvzOffice() {
 }
 
 export function useManageArtistPvzOffice() {
-  return useMutation<Partial<TShippingSettings>, Error, Partial<TShippingSettings>>({
-    mutationFn: (pvzSettings: Partial<TShippingSettings>) => managePVZMe(pvzSettings),
+  return useMutation<TShippingSettings, Error, TShippingSettings>({
+    mutationFn: (pvzSettings: TShippingSettings) => managePVZMe(pvzSettings),
   });
 }
 

@@ -17,7 +17,7 @@ export type TArtistSettingsDelivery = {
   cdekSettings?: TShippingSettings;
   onAddPoint: UseFieldArrayAppend<TArtistSettingsFieldValues, "pickupPoints">;
   onDeletePoint: UseFieldArrayRemove;
-  pickupStatus?: boolean;
+  pickupStatus: boolean;
   fields: FieldArrayWithId<TArtistSettingsFieldValues, "pickupPoints", "id">[];
 
   onChooseButtonClick: () => void;
