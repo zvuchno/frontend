@@ -65,18 +65,24 @@
   }
 
   &__textWrapper {
-    max-height: 60px;
+    height: var(--collapsed-height, 60px);
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     line-clamp: 3;
-    transition: max-height 0.5s linear;
+    transition: height 0.5s linear;
 
     &_expended {
-      max-height: 500px;
-      -webkit-line-clamp: none;
-      line-clamp: none;
+      height: var(--full-height, none);
+      //  Сбрасываем обрезку для Safari
+      -webkit-line-clamp: unset !important;
+      line-clamp: unset !important;
+      scrollbar-width: thin;
+
+      &::-webkit-scrollbar {
+        width: thin;
+      }
     }
   }
 
