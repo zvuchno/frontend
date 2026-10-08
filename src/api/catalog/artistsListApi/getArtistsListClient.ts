@@ -8,9 +8,14 @@ export async function getArtistsListClient({
   limit,
   offset,
   ordering,
+  search,
   url,
 }: TArtistsListRequest): Promise<TArtistsListResponse> {
   const params = new URLSearchParams();
+
+  if (search !== undefined) {
+    params.append("search", search.toString());
+  }
 
   if (limit !== undefined) {
     params.append("limit", limit.toString());

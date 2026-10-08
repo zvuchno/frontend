@@ -62,6 +62,7 @@ const ProductsList = ({
           limit: '15',
           offset,
           ordering: orderingFilter,
+          search,
           ...(url && { url: url }),
         });
         return res;
