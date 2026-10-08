@@ -12,9 +12,14 @@ export async function getCatalogListClient({
   limit,
   offset,
   ordering,
+  search,
   url,
 }: TCatalogListRequest): Promise<TCatalogListResponse> {
   const params = new URLSearchParams();
+
+  if (search !== undefined) {
+    params.append("search", search.toString());
+  }
 
   if (type !== undefined) {
     params.append("type", type.toString());
