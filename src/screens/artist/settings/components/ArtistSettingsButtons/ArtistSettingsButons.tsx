@@ -19,7 +19,6 @@ export const ArtistSettingsButtons = ({
       type='submit'
       onClick={() => {
         onSubmit();
-        onChange(false);
       }}
     >
       Сохранить

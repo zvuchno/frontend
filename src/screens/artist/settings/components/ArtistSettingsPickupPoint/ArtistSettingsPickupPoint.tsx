@@ -61,6 +61,8 @@ export const ArtistSettingsPickupPoint = ({
               }}
               popperClassName={styles.artistSettingsDeliveryDatePopper}
               wrapperClassName={styles.datePickerWrapper}
+              allowFuture={true}
+              allowPast={false}
             />
           </div>
         )}

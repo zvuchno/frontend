@@ -8,15 +8,26 @@ import { Loader } from "@/shared/ui";
 import { ArtistSettingsForm } from "./ui/ArtistSettingsForm";
 
 export const ArtistSettingsPage = () => {
-  const { data: cdekSettings, status: cdekStatus } = useGetArtistPvzOffice();
-  const { data: pickupSettings, status: pickupPointsStatus } = useGetArtistPickupPoints();
+  const {
+    data: cdekSettings,
+    isPending: isCdekPending,
+    error: cdekError,
+  } = useGetArtistPvzOffice();
+  const {
+    data: pickupSettings,
+    isPending: isPickupPending,
+    error: pickupError,
+  } = useGetArtistPickupPoints();
 
-  if (pickupPointsStatus === "pending" || cdekStatus === "pending") return <Loader />;
+  if (isCdekPending || isPickupPending) return <Loader />;
+  if (cdekError) throw cdekError;
+  if (pickupError) throw pickupError;
+  if (!pickupSettings) throw new Error("Не удалось загрузить настройки самовывоза");
 
   return (
     <ArtistSettingsForm
-      initialCdek={cdekSettings ?? undefined}
-      initialPickup={pickupSettings ?? undefined}
+      initialCdek={cdekSettings ?? { enabled: false, point: null }}
+      initialPickup={pickupSettings}
     />
   );
 };

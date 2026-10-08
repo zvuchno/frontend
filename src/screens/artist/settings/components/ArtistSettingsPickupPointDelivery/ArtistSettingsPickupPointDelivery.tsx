@@ -45,10 +45,10 @@ export const ArtistSettingsPickupPointDelivery = ({
   });
 
   useEffect(() => {
-    if (!pickupPoints?.length && pickupEnabled) {
+    if (!disabled && !pickupPoints?.length && pickupEnabled) {
       setValue("pickup_enabled", false, { shouldDirty: true, shouldValidate: true });
     }
-  }, [pickupPoints?.length, pickupEnabled, setValue]);
+  }, [disabled, pickupPoints?.length, pickupEnabled, setValue]);
 
   return (
     <div key='pickup' className={styles.artistSettingsDeliveryOptionsContainer}>

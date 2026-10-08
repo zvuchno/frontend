@@ -14,7 +14,6 @@ import { CdekSelectButton } from "./CdekSelectButton";
 
 export const ArtistSettingsCdekDelivery = ({
   disabled,
-
   onSelect,
 }: {
   disabled: boolean;
@@ -34,7 +33,6 @@ export const ArtistSettingsCdekDelivery = ({
       "shippingPoint.city_code",
     ],
   });
-
   const { deliverySelected, setDeliverySelected } = useSelectDeliveryTariff();
 
   const formSelectedOffice = {

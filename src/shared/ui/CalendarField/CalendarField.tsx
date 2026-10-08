@@ -14,6 +14,7 @@ type CalendarFieldProps = {
   index: number;
   id?: string;
   allowFuture?: boolean;
+  allowPast?: boolean;
   formatRawInput?: boolean;
   className?: string;
   wrapperClassName?: string;
@@ -29,6 +30,7 @@ export const CalendarField = ({
   index,
   id,
   allowFuture = false,
+  allowPast = true,
   formatRawInput = true,
   className,
   wrapperClassName,
@@ -63,6 +65,7 @@ export const CalendarField = ({
       showYearDropdown
       dropdownMode='select'
       showIcon
+      minDate={allowPast ? new Date("1930-01-02") : new Date()}
       maxDate={allowFuture ? undefined : new Date()}
       isClearable
       autoComplete='nope'
