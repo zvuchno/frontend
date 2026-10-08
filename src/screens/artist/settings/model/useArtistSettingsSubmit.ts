@@ -1,9 +1,12 @@
-import { type SubmitHandler, type UseFieldArrayReplace } from "react-hook-form";
+import { type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
+
+import { useQueryClient } from "@tanstack/react-query";
 
 import {
   type TArtistSettingsFieldValues,
   type TPickupSettings,
+  type TShippingSettings,
   useDeleteArtistPvzOffice,
   useManageArtistPickupPoint,
   useManageArtistPvzOffice,
@@ -11,11 +14,12 @@ import {
 
 export const useArtistSettingsSubmit = ({
   initialPickup,
-  replacePickupPoints,
+  onSuccess,
 }: {
-  initialPickup?: TPickupSettings;
-  replacePickupPoints: UseFieldArrayReplace<TArtistSettingsFieldValues, "pickupPoints">;
+  initialPickup: TPickupSettings;
+  onSuccess: () => void;
 }): SubmitHandler<TArtistSettingsFieldValues> => {
+  const queryClient = useQueryClient();
   const { mutateAsync: managePickupPoint } = useManageArtistPickupPoint();
   const { mutateAsync: manageCdekOffice } = useManageArtistPvzOffice();
 
@@ -23,12 +27,13 @@ export const useArtistSettingsSubmit = ({
 
   return async (values) => {
     try {
+      let savedShippingSettings: TShippingSettings;
+
       if (!values.shippingPoint?.pvz_code) {
         await handleOfficeDelete();
+        savedShippingSettings = { enabled: false, point: null };
       } else {
-        //  запрос на изменение shipping-point
-
-        await manageCdekOffice({
+        savedShippingSettings = await manageCdekOffice({
           enabled: values.shipping_enabled,
           point: values.shippingPoint,
         });
@@ -44,22 +49,16 @@ export const useArtistSettingsSubmit = ({
         .map((point) => ({ ...point, is_active: false }));
 
       //  запрос на изменение pickup-points
-      await managePickupPoint(
-        { enabled: values.pickup_enabled, points: [...points, ...deletedPoints] },
-        {
-          onSuccess: (result) => {
-            if (result.points) {
-              replacePickupPoints(
-                result.points
-                  .filter((point) => point.is_active !== false)
-                  .map(({ id, ...point }) => ({ ...point, server_id: id }))
-              );
-            }
-          },
-        }
-      );
+      const savedPickup = await managePickupPoint({
+        enabled: values.pickup_enabled,
+        points: [...points, ...deletedPoints],
+      });
+
+      queryClient.setQueryData<TShippingSettings | null>(["artist-pvz"], savedShippingSettings);
+      queryClient.setQueryData<TPickupSettings>(["artist-pickup-points"], savedPickup);
 
       toast.success("Настройки доставки успешно обновлены");
+      onSuccess();
     } catch {
       toast.error("Не удалось сохранить все настройки доставки. Повторите попытку");
     }

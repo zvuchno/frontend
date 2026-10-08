@@ -2,10 +2,10 @@ import { type HTMLInputTypeAttribute } from "react";
 import { type FieldPath } from "react-hook-form";
 
 export type TArtistSettingsFieldValues = {
-  shippingPoint?: TPVZOfficeMe;
-  pickupPoints?: TPickupPointForm[];
-  shipping_enabled?: boolean;
-  pickup_enabled?: boolean;
+  shippingPoint: TPVZOfficeMe;
+  pickupPoints: TPickupPointForm[];
+  shipping_enabled: boolean;
+  pickup_enabled: boolean;
 };
 
 //export type pickupPointsFields = `pickupPoints.${keyof TPickupPointMe}`;
@@ -23,8 +23,8 @@ export type TPickupPointMe = {
 };
 
 export type TPickupSettings = {
-  enabled?: boolean;
-  points?: TPickupPointMe[];
+  enabled: boolean;
+  points: TPickupPointMe[] | [];
 };
 
 export type TPVZOfficeMe = {
@@ -35,10 +35,9 @@ export type TPVZOfficeMe = {
 } | null;
 
 export type TShippingSettings = {
-  enabled?: boolean;
-  point?: TPVZOfficeMe;
+  enabled: boolean;
+  point: TPVZOfficeMe;
 };
-
 
 export type TArtistSettingsFormField<
   T extends TArtistSettingsFieldValues = TArtistSettingsFieldValues,

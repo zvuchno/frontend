@@ -61,15 +61,15 @@ async function setPickupPointsMe<T>({
 
 // актуальные пункты самовывоза для артиста
 export async function receivePickupPointsMe() {
-  return await setPickupPointsMe<Partial<TPickupSettings>>({
+  return await setPickupPointsMe<TPickupSettings>({
     apiMethod: "GET",
     errorMessage: "Ошибка получения информации о пунктах самовывоза",
   });
 }
 
 // добавить/изменить/удалить (is_active=false) информацию о пунктах самовывоза для артиста
-export async function managePickupPointMe(pickupSettings: Partial<TPickupSettings>) {
-  return await setPickupPointsMe<Partial<TPickupSettings>>({
+export async function managePickupPointMe(pickupSettings: TPickupSettings) {
+  return await setPickupPointsMe<TPickupSettings>({
     apiMethod: "POST",
     errorMessage: "Ошибка изменениния информации о пунктах самовывоза",
     pickupSettings: pickupSettings,
@@ -103,16 +103,16 @@ async function setPVZOfficeMe<T>({
 }
 
 //получить информацию о выбраном ПВЗ для доставки товаров артистом
-export async function receivePVZMe(): Promise<Partial<TShippingSettings> | null> {
-  return authFetchClient<Partial<TShippingSettings>>(`${baseUrl}/v1/artists/me/shipping-point`, {
+export async function receivePVZMe(): Promise<TShippingSettings | null> {
+  return authFetchClient<TShippingSettings>(`${baseUrl}/v1/artists/me/shipping-point`, {
     method: "GET",
     credentials: "include",
   });
 }
 
 //изменить/добавить информацию о ПВЗ для доставки товаров артистом
-export async function managePVZMe(pvzSettings: Partial<TShippingSettings>) {
-  return await setPVZOfficeMe<Partial<TShippingSettings>>({
+export async function managePVZMe(pvzSettings: TShippingSettings) {
+  return await setPVZOfficeMe<TShippingSettings>({
     apiMethod: "PUT",
     errorMessage: "Ошибка настройки информации о ПВЗ артиста",
     payload: pvzSettings,
