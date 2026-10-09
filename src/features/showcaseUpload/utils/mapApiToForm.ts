@@ -20,7 +20,8 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
       kind: undefined,
       album: undefined,
       quantity: undefined,
-      artistId: String(album.artist_id)
+      artistId: String(album.artist_id),
+      tracksOrder: null,
       
     };
   }

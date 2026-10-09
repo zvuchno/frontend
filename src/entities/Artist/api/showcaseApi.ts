@@ -485,4 +485,15 @@ export async function directUpdateTrack(file: File, data: TUpdateTrackPayload) {
   //     method: "POST",
   //     body: JSON.stringify(payload)
   //   }, token);
-}
+};
+
+export async function changeTracksOrder(data: { album: number, track_ids: number[] }): Promise<TShowcaseTrack[]> {
+  const response = await authFetchClient<TShowcaseTrack[]>(`${baseUrl}/v1/store/tracks/reorder`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+
+  if (!response) throw new Error("Не удалось обновить очередь треков.");
+
+  return response;
+};

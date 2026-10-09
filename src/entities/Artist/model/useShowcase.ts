@@ -8,6 +8,7 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 
 import {
   addImage,
+  changeTracksOrder,
   createAlbum,
   createMerch,
   createPromocode,
@@ -199,7 +200,10 @@ export function useUpdateAlbum() {
         return;
       }
 
-      toast.error("Не удалось обновить релиз");
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось обновить релиз" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -226,7 +230,10 @@ export function useUpdateMerch() {
         return;
       }
 
-      toast.error("Не удалось обновить мерч");
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось обновить мерч" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -597,7 +604,10 @@ export function useDeleteTrack(album?: number) {
         });
         return;
       }
-      toast.error("Не удалось удалить трек");
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось удалить трек" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -676,6 +686,33 @@ export function useUpdateTrack(album: number) {
         return;
       }
       toast.error(`Не удалось обновить файл трека: ${error.message}`);
+    },
+  });
+}
+
+export function useChangeTracksOrder(albumId?: number | null) {
+  const queryClient = useQueryClient();
+
+  return useMutation<TShowcaseTrack[], Error, { album: number, track_ids: number[] }>({
+    mutationFn: async (data: { album: number, track_ids: number[] }) => {
+      return changeTracksOrder(data);
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["showcase", "tracks", albumId] });
+      toast.success("Порядок треков обновлён");
+    },
+    onError: (error) => {
+      if (error instanceof ApiError) {
+        toast.error(error.message, {
+          duration: 8000,
+        })
+        toast.error(error.details.join("\n"), {
+          duration: 8000,
+        });
+        return;
+      }
+      console.error(error.message);
+      toast.error("Не удалось обновить порядок треков");
     },
   });
 }

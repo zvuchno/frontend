@@ -53,7 +53,7 @@ const ProductsList = ({
       Error,
       InfiniteData<TArtistsListResponse | TCatalogListResponse>
   >({
-    queryKey: ["catalog", category, filterByGenre, filterBySubcategory, orderingFilter],
+    queryKey: ["catalog", category, filterByGenre, filterBySubcategory, orderingFilter, filterByArtist, search],
     queryFn: async ({ pageParam }) => {
       const url = pageParam as string | undefined;
       if (category === 'artists') {
@@ -62,6 +62,7 @@ const ProductsList = ({
           limit: '15',
           offset,
           ordering: orderingFilter,
+          search,
           ...(url && { url: url }),
         });
         return res;
@@ -82,7 +83,6 @@ const ProductsList = ({
     },
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage?.next,
-    staleTime: 1 * 60 * 1000,
   });
 
   const artistsCards = data?.pages.flatMap((page) => page?.results.filter(isArtistCard)) ?? [];

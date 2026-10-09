@@ -86,27 +86,47 @@ export const ArtistDescription = ({
   const isProfileEmptyState = variant === "profile" && !hasDescription;
 
   useEffect(() => {
-    const frameId = window.requestAnimationFrame(() => {
-      if (variant === "profile") {
-        setShouldShowButton(false);
-        return;
-      }
+    if (!textRef.current) return;
+    if (variant === "catalog") {
+      setShouldShowButton(textRef.current.scrollHeight > 60);
+    }
+  }, [description]);
 
-      const el = textRef.current;
+  useEffect(() => {
+    if (textRef.current) {
+      const fullHeight = textRef.current.scrollHeight + 'px';
+      const maxHeight = textRef.current.scrollHeight > 300 ? "300px" : fullHeight;
+      textRef.current.style.setProperty('--full-height', maxHeight);
+      
+      const lines = 3;
+      const lineHeight = parseFloat(getComputedStyle(textRef.current).lineHeight) || 20;
+      const collapsedHeight = lines * lineHeight + 'px';
+      textRef.current.style.setProperty('--collapsed-height', collapsedHeight);
+    }
+  }, [isExpanded]);
 
-      if (!el) {
-        return;
-      }
+  // useEffect(() => {
+  //   const frameId = window.requestAnimationFrame(() => {
+  //     if (variant === "profile") {
+  //       setShouldShowButton(false);
+  //       return;
+  //     }
 
-      const scrollHeight = el.scrollHeight;
-      //el.style.height = `${scrollHeight}px`;
-      setShouldShowButton(scrollHeight > 60);
-    });
+  //     const el = textRef.current;
 
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [description, emptyText, variant]);
+  //     if (!el) {
+  //       return;
+  //     }
+
+  //     const scrollHeight = el.scrollHeight;
+  //     //el.style.height = `${scrollHeight}px`;
+  //     setShouldShowButton(scrollHeight > 60);
+  //   });
+
+  //   return () => {
+  //     window.cancelAnimationFrame(frameId);
+  //   };
+  // }, [description, emptyText, variant]);
 
   useEffect(() => {
     const el = textRef.current;
@@ -116,7 +136,7 @@ export const ArtistDescription = ({
     if (isExpanded) {
       const scrollHeight = el.scrollHeight;
 
-      if (scrollHeight > 500) {
+      if (scrollHeight > 300) {
         el.style.overflowY = "scroll";
       }
     } else {
