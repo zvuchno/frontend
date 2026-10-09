@@ -1,0 +1,94 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tracksList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: thin;
+  }
+
+  &__card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    height: 74px;
+
+    @media (max-width: 768px) {
+      height: 54px;
+    }
+
+    & button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      border: 1px solid var(--outline-color);
+      cursor: pointer;
+    }
+  }
+
+  &__dragCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+}
+
+.editButton {
+  background-color: #E4F1FF;
+
+  &:hover {
+    background-color: var(--color-accent-blue);
+  }
+}
+
+.deleteButton {
+  background-color: var(--color-btn-secondary);
+
+  &:hover {
+    background-color: var(--color-bg-secondary);
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / -1;
+}
+
+.button {
+  background-color: var(--color-bg-secondary);
+  border-radius: 36px;
+  border: none;
+  padding: 10px 16px;
+  font-family: var(--font-feature-mono);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -0.06em;
+  color: var(--color-text-inverse);
+  padding: 10px 20px;
+  background-color: var(--color-bg-secondary);
+  border-radius: 36px;
+  align-self: center;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-text-accent-blue);
+  }
+}
