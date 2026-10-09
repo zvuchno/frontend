@@ -58,6 +58,15 @@ export const TracksList = ({
 }: TracksListProps) => {
 
   const [sortedTracks, setSortedTracks] = useState(tracksList);
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [isDragging]);
 
   useEffect(() => {
     setSortedTracks(tracksList);
@@ -71,7 +80,10 @@ export const TracksList = ({
     }),
   );
 
+  const handleDragStart = () => setIsDragging(true);
+
   const handleDragEnd = (event: any) => {
+    setIsDragging(false);
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
@@ -135,6 +147,7 @@ export const TracksList = ({
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={sortedTracks.map((t) => t.id)}>
