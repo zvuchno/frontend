@@ -53,6 +53,7 @@ export {
   useUpdateTrackInfo,
   useUploadTrack,
   useUpdateTrack,
+  useChangeTracksOrder,
 } from "./model/useShowcase";
 
 export { useGetArtistLegalData } from "./model/useGetArtistLegalData";

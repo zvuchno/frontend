@@ -21,6 +21,7 @@ export type UploadFormValues = {
   variants?: VariantForm[]; // для мерча
   hasProperty?: boolean; 
   artistId?: string;
+  tracksOrder?: number[] | null;
 };
 
 export type PromocodeFormValues = {
