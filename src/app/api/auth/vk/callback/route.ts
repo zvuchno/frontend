@@ -74,10 +74,14 @@ export async function GET(request: Request) {
 
     const tokenData: TTokenData = await tokenRes.json();
 
+    const cookieStore = await cookies();
+    const sessionId = cookieStore.get("sessionid")?.value;
+
     // Авторизация на своём бэкенде
     const result = await OAuthorize({
       token: tokenData.access_token,
       provider: "vk",
+      sessionId
     });
 
     if (result.status === "registration_required") {

@@ -211,6 +211,7 @@ export const UploadForm = ({
                     index={0}
                     id='releaseDate'
                     onBlur={field.onBlur}
+                    allowFuture
                     wrapperClassName={s.dateInput}
                     onChange={(selectedDate: Date | null) => {
                       if (selectedDate instanceof Date && !isNaN(selectedDate.getTime())) {
