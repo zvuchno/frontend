@@ -423,15 +423,17 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           </div>
         </form>
       </FormProvider>
-      <UploadTrackModal
-        isOpen={isTrackModalOpen}
-        albumId={newAlbumId ? newAlbumId : currentProductId!}
-        onClose={() => {
-          setIsTrackModalOpen(false);
-          setTrackId(undefined);
-        }}
-        trackId={trackId}
-      />
+      {isTrackModalOpen && (
+        <UploadTrackModal
+          isOpen={isTrackModalOpen}
+          albumId={newAlbumId ? newAlbumId : currentProductId!}
+          onClose={() => {
+            setIsTrackModalOpen(false);
+            setTrackId(undefined);
+          }}
+          trackId={trackId}
+        />
+      )}
     </>
   );
 };
