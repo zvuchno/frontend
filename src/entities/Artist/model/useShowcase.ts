@@ -608,7 +608,6 @@ export function useDetailTrack(id?: number) {
     queryKey: ["showcase", "detail", "track", id],
     queryFn: async () => getDetailTrack({ id }),
     enabled: !!id,
-    staleTime: 10 * 10 * 1000,
     refetchOnWindowFocus: false,
   });
 }
