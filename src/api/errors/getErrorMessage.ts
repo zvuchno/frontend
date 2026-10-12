@@ -1,51 +1,25 @@
 export const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null;
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const collectMessages = (value: unknown, allMessages: string[]): void => {
+  if (typeof value === "string") {
+    allMessages.push(value);
+  } else if (Array.isArray(value)) {
+    value.forEach((item) => collectMessages(item, allMessages));
+  } else if (isRecord(value)) {
+    for (const key in value) {
+      collectMessages(value[key], allMessages);
+    }
+  }
+};
 
 export const getErrorMessage = (data: unknown, fallback: string): string | string[] => {
-  if (!isRecord(data)) return fallback;
+  const allMessages: string[] = [];
 
-  if ("detail" in data && "reasons" in data) {
-    const messages: string[] = [];
-    if (typeof data.detail === "string") messages.push(data.detail);
-    if (Array.isArray(data.reasons)) {
-      data.reasons.forEach((reason) => {
-        messages.push(reason);
-      });
-    }
+  collectMessages(data, allMessages);
 
-    return messages;
-  }
+  const serverMessage = allMessages.join("\n");
 
-  for (const key of [
-    "message",
-    "detail",
-    "phone",
-    "email",
-    "token",
-    "uid",
-    "is_published",
-    "price",
-    "slug",
-    "code",
-    "old_password",
-    "password",
-    "new_password",
-    "confirm_password",
-    "stock",
-  ]) {
-    const value = data[key];
-
-    if (typeof value === "string" && value) {
-      return value;
-    }
-
-    if (Array.isArray(value) && value.length > 0) {
-      const firstItem = value[0] as unknown;
-      if (typeof firstItem === "string" && firstItem) {
-        return firstItem;
-      }
-    }
-  }
-
-  return fallback;
+  console.log(serverMessage);
+  return serverMessage.length > 0 ? serverMessage : fallback;
 };

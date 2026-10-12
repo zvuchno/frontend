@@ -39,6 +39,8 @@ const getFormValues = (
 export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSettingsFormProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
+  const [serverErrorMessage, setServerErrorMessage] = useState("");
+
   const { mutate: connectTelegramBot } = useConnetcTelegramBot();
   const formValues = useMemo(
     () => getFormValues(initialCdek, initialPickup),
@@ -57,6 +59,10 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
   const onSubmit = useArtistSettingsSubmit({
     initialPickup,
     onSuccess: () => setIsOnEdit(false),
+    onError: (error) => {
+      const message = error?.message ?? "Произошла ошибка";
+      setServerErrorMessage(message);
+    },
   });
 
   const handleButtonClick = () => {
@@ -78,6 +84,11 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
             cdekSettings={initialCdek}
             pickupStatus={initialPickup.enabled}
           />
+
+          {serverErrorMessage.length > 0 && (
+            <p className={styles.formError}>{serverErrorMessage}</p>
+          )}
+
           <ArtistSettingsButtons
             disabled={!isOnEdit}
             onChange={setIsOnEdit}
