@@ -8,10 +8,10 @@ import {
   DndContext,
   closestCorners,
   KeyboardSensor,
-  PointerSensor,
   useSensor,
   useSensors,
   TouchSensor,
+  MouseSensor
 } from "@dnd-kit/core";
 
 import {
@@ -73,8 +73,22 @@ export const TracksList = ({
   }, [tracksList]);
 
   const sensors = useSensors(
-    useSensor(TouchSensor),
-    useSensor(PointerSensor),
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 300,
+        tolerance: 8,
+      },
+    }),
+    // useSensor(PointerSensor, {
+    //   activationConstraint: {
+    //     distance: 8,
+    //   }
+    // }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -113,6 +127,7 @@ export const TracksList = ({
         : undefined,
       cursor: "grab",
       userSelect: "none",
+      //touchAction: 'none',
     };
 
     return (
