@@ -26,7 +26,6 @@ export const authFetchClient = async <T>(
   init?: RequestInit
 ): Promise<T | null> => {
   //первоначальный запрос
-
   const headers = new Headers(init?.headers);
 
   if (typeof init?.body === "string" && !headers.has("content-type")) {
@@ -40,14 +39,6 @@ export const authFetchClient = async <T>(
   };
 
   let res = await fetch(input, requestInit);
-
-  //const hasFormData = init?.body instanceof FormData;
-
-  /*if (!hasFormData && !headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
-  }*/
-
-  //const res = await fetch(input, { ...init, headers });
 
   // проверка срок локальной NextAuth-сессии. Если BFF вернул x-session-expired: 1, не пытаемся обновлять backend access-token -> делаем backend logout, затем NextAuth logout
   if (res.status === 401 && res.headers.get("x-session-expired") === "1") {
@@ -107,11 +98,14 @@ export const authFetchClient = async <T>(
       `Ошибка в данных при выполнении запроса. Повторите попытку`
     );
 
-    if (Array.isArray(message)) {
-      throw new ApiError(message[0], message.slice(1));
+    if (typeof message === "string") {
+      throw new Error(message);
     }
+    const errorMessages: string[] = [];
+    for (const key in message) errorMessages.push(message[key]);
+    const messageToShow = errorMessages.join("\n");
 
-    throw new Error(message);
+    throw new ApiError(messageToShow, message);
   }
 
   return data as T;

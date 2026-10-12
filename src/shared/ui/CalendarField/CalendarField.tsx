@@ -23,6 +23,14 @@ type CalendarFieldProps = {
   onBlur?: () => void;
 };
 
+const idFormatter = (field: unknown, index: number, id?: string) => {
+  return typeof field === "object" && field !== null && "row" in field && "column" in field
+    ? `${String(field.row)}.${String(field.column)}`
+    : id !== undefined
+      ? id
+      : `date-input-${index}`;
+};
+
 export const CalendarField = ({
   field,
   fieldError,
@@ -40,13 +48,7 @@ export const CalendarField = ({
 }: CalendarFieldProps) => {
   return (
     <DatePicker
-      id={
-        typeof field === "object" && field !== null && "row" in field && "column" in field
-          ? `${String(field.row)}.${String(field.column)}`
-          : id !== undefined
-            ? id
-            : `date-input-${index}`
-      }
+      id={idFormatter(field, index, id)}
       className={clsx("input-calendar input_size_small", {
         ["error"]: !!fieldError,
         className,

@@ -25,6 +25,8 @@ import {
 } from "@/entities/profile";
 import { type UserDataProps, useUserStore } from "@/entities/user";
 
+import { setServerErrors } from "@/shared/utils/serverErrorsHandler";
+
 import styles from "./ListenerProfileFormSection.module.scss";
 
 function normalizePhone(value?: string | null): string {
@@ -76,8 +78,8 @@ export function ListenerProfileFormSection() {
   const methods = useForm<FieldValues>({
     mode: "onChange",
     defaultValues: {
-      name: "",
-      userName: "",
+      full_name: "",
+      username: "",
       email: "",
       phone: "",
       password: "",
@@ -88,14 +90,15 @@ export function ListenerProfileFormSection() {
   const {
     reset,
     formState: { isDirty, isValid, dirtyFields },
+    setError,
   } = methods;
 
   // Сброс формы при загрузке данных
   useEffect(() => {
     if (profileData && listener) {
       reset({
-        name: listener.full_name,
-        userName: account?.username,
+        full_name: listener.full_name,
+        username: account?.username,
         email: account?.email || "",
         phone: normalizePhone(account?.phone || ""),
         password: "",
@@ -107,7 +110,7 @@ export function ListenerProfileFormSection() {
   // Обработка статуса авторизации
   useEffect(() => {
     if (status === "unauthenticated") {
-      reset({ name: "", userName: "", email: "", phone: "", password: "", oldPassword: "" });
+      reset({ full_name: "", username: "", email: "", phone: "", password: "", oldPassword: "" });
       // router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
       return;
     }
@@ -136,7 +139,7 @@ export function ListenerProfileFormSection() {
       const nextPhone = normalizePhone(data.phone);
       const shouldUpdatePhone = nextPhone !== normalizePhone(account.phone);
 
-      const nextUserName = data.userName?.trim() ?? "";
+      const nextUserName = data.username?.trim() ?? "";
       const shouldUpdateUserName = nextUserName !== account.username;
 
       let nextAccount = account;
@@ -164,7 +167,7 @@ export function ListenerProfileFormSection() {
       }
 
       // 3. Обновление имени пользователя
-      if (dirtyFields.userName && shouldUpdateUserName) {
+      if (dirtyFields.username && shouldUpdateUserName) {
         const userNameResponse = await updateUserNameMutation.mutateAsync({
           username: nextUserName,
         });
@@ -216,6 +219,9 @@ export function ListenerProfileFormSection() {
 
       setIsEditMode(false);
     } catch (requestError) {
+      if (requestError instanceof Error) {
+        setServerErrors([], requestError, setError);
+      }
       setFormError(
         requestError instanceof Error ? requestError.message : "Не удалось сохранить профиль"
       );

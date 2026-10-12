@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
+import { ApiError } from "@/api/errors/apiError";
 import clsx from "clsx";
 
 import { useUpdateArtistLegalData } from "@/entities/Artist";
 import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
 
 import { ButtonUI } from "@/shared/ui";
+import { setServerErrors } from "@/shared/utils/serverErrorsHandler";
 
 //import { parseDateFromApi } from "@/shared/utils/formatDate";
 
@@ -17,7 +19,13 @@ import { LegalEntityFieldset } from "./components/LegalEntityFieldset/LegalEntit
 import { PassportFieldset } from "./components/PassportFieldset/PassportFieldset";
 import { PaymentFieldset } from "./components/PaymentFieldset/PaymentFieldset";
 import { PersonalFieldset } from "./components/PersonalFieldset/PersonalFieldset";
-import type { FieldValues, TArtistFormPersonalProps } from "./utils/types";
+import {
+  artistEntityPaymentFields,
+  artistIndividualPaymentFields,
+  artistPasportFields,
+  artistPersonalFields,
+} from "./utils/constants";
+import type { FieldName, FieldValues, TArtistFormPersonalProps } from "./utils/types";
 
 const formatPhoneForApi = (phone: string | undefined): string => (phone ? `+${phone}` : "");
 
@@ -27,6 +35,17 @@ const isLegalEntity = (
 
 const getEditButtonLabel = (isEditing: boolean): string =>
   isEditing ? "Отменить (без сохранения)" : "Изменить";
+
+/*const artistFormFields = new Set<string>(
+  [
+    ...artistPasportFields,
+    ...artistPersonalFields,
+    ...artistIndividualPaymentFields,
+    ...artistEntityPaymentFields,
+  ].map((field) => field.name)
+);
+
+const isArtistField = (key: string): key is FieldName => artistFormFields.has(key);*/
 
 export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   const { mutate } = useUpdateArtistLegalData();
@@ -46,6 +65,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
     handleSubmit,
     reset,
     watch,
+    setError,
     formState: { isValid },
   } = methods;
 
@@ -62,6 +82,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   }, [recipientType, trigger]);
 
   const handleStartEditing = () => {
+    setServerErrorMessage("");
     setIsOnChange(true);
     void trigger();
   };
@@ -80,10 +101,33 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
     };
 
     mutate(formattedData, {
-      onSuccess: () => setIsOnChange(false),
+      onSuccess: () => {
+        setIsOnChange(false);
+        setServerErrorMessage("");
+      },
+
       onError: (error) => {
-        const message = error?.message ?? "Произошла ошибка";
+        setServerErrors(
+          [
+            ...artistPasportFields,
+            ...artistPersonalFields,
+            ...artistIndividualPaymentFields,
+            ...artistEntityPaymentFields,
+          ],
+          error,
+          setError,
+          setServerErrorMessage
+        );
+        /*const message = error?.message ?? "Произошла ошибка";
         setServerErrorMessage(message);
+
+        if (error instanceof ApiError) {
+          for (const [key, message] of Object.entries(error.details)) {
+            if (isArtistField(key)) {
+              setError(key, { type: "server", message });
+            }
+          }
+        }*/
       },
     });
   };

@@ -24,6 +24,7 @@ export const createFormField = (
     control,
     formState: { errors },
     trigger,
+    clearErrors,
   } = methods;
 
   const fieldError = get(errors, field.name) as FieldError;
@@ -63,6 +64,7 @@ export const createFormField = (
                           const year = selectedDate.getFullYear();
                           const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
                           const day = String(selectedDate.getDate()).padStart(2, "0");
+                          clearErrors(name);
                           onChange(`${year}-${month}-${day}`);
                         } else {
                           onChange(null);
@@ -80,7 +82,10 @@ export const createFormField = (
                     field={field}
                     fieldError={fieldError}
                     value={phoneValue}
-                    onChange={onChange}
+                    onChange={() => {
+                      clearErrors(field.name);
+                      onChange();
+                    }}
                     ref={ref}
                     onBlur={onBlur}
                   />

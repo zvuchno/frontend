@@ -1,7 +1,7 @@
 import "server-only";
 
-import { getErrorMessage } from "../errors/getErrorMessage";
 import { ApiError } from "../errors/apiError";
+import { getErrorMessage } from "../errors/getErrorMessage";
 
 export async function publicFetchServer<T>(
   input: RequestInfo,
@@ -18,12 +18,13 @@ export async function publicFetchServer<T>(
 
   if (!response.ok) {
     const message = getErrorMessage(data, `HTTP ${response.status} ${response.statusText}`);
-    
-    if (Array.isArray(message)) {
-      throw new ApiError(message[0], message.slice(1));
+
+    if (typeof message === "string") {
+      throw new Error(message);
     }
 
-    throw new Error(message);
+    const messageToShow = Object.values(message).join("\n");
+    throw new ApiError(messageToShow, message);
   }
 
   return data as T;

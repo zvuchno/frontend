@@ -29,7 +29,7 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
           <div className={styles[`cell-${field.row}-${field.column}`]} key={field.name}>
             {field.type === "tel" ? (
               <InputPhone field={field} disabled={isFieldDisabled} />
-            ) : field.name === "url" ? (
+            ) : field.name === "slug" ? (
               <div className={styles.urlField}>
                 <div className={styles.labelContainer}>
                   <label

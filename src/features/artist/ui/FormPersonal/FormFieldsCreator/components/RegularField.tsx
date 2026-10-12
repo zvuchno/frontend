@@ -36,6 +36,7 @@ export const RegularField = ({
       required={field.required}
       aria-required={field.required}
       onChange={(e) => {
+        methods.clearErrors(field.name);
         void methods.register(field.name).onChange(e);
         issuerCodeFormatter(field, e);
       }}

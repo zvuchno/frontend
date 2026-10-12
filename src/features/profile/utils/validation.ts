@@ -113,7 +113,7 @@ export const registerRules = (
       rules.pattern = {
         value: fieldConfig.pattern,
         message:
-          field.name === "url"
+          field.name === "slug"
             ? "Допустимы только латинские буквы, цифры, дефис и нижнее подчёркивание"
             : errorsMessages.patternMessage,
       };

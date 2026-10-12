@@ -10,14 +10,14 @@ type ArtistProfileFormValueSource = {
   name?: string | null;
   description?: string | null;
   city?: string | null;
-  url?: string | null;
+  slug?: string | null;
 };
 
 export const EMPTY_PROFILE_FORM_VALUES: FieldValues = {
   name: "",
   description: "",
   city: "",
-  url: "",
+  slug: "",
 };
 
 export function normalizePhone(value?: string | null): string {
@@ -28,14 +28,14 @@ export function getArtistProfileFormValues({
   name,
   description,
   city,
-  url,
+  slug,
 }: ArtistProfileFormValueSource): FieldValues {
   return {
     name: name ?? "",
     description: description ?? "",
     password: "",
     city: city ?? "",
-    url: url ?? "",
+    slug: slug ?? "",
   };
 }
 
@@ -47,7 +47,7 @@ export function hasArtistProfileChanges(
     (formData.name ?? "") !== (artist.name ?? "") ||
     (formData.description ?? "") !== (artist.description ?? "") ||
     (formData.city ?? "") !== (artist.city ?? "") ||
-    (formData.url ?? "") !== (artist.slug ?? "")
+    (formData.slug ?? "") !== (artist.slug ?? "")
   );
 }
 
@@ -63,7 +63,7 @@ export function buildArtistProfileUpdatePayload(
     name: formData.name ?? "",
     description: artist.description ?? "",
     city: formData.city ?? "",
-    slug: formData.url ?? "",
+    slug: formData.slug ?? "",
     contacts: artist.contacts,
     socials: artist.socials,
   };

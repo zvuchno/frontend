@@ -68,3 +68,19 @@
 :global(.react-datepicker-popper *) {
   font-family: var(--font-feature-mono) !important;
 }
+
+:global(input.input-calendar) {
+  background-color: transparent !important;
+}
+
+:global(input.input-calendar.error) {
+  border-color: var(--color-primary-blue);
+  background-color: transparent;
+}
+
+:global(input.input-calendar:-webkit-autofill),
+:global(input.input-calendar:-webkit-autofill:hover),
+:global(input.input-calendar:-webkit-autofill:focus) {
+  -webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
+  //-webkit-text-fill-color: var(--color-text-primary) !important;
+}

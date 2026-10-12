@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
 import "server-only";
 
+import { ApiError } from "../errors/apiError";
 import { getErrorMessage } from "../errors/getErrorMessage";
 import { RateLimitError } from "../errors/rateLimitError";
-import { ApiError } from "../errors/apiError";
 
 // Парсинг Retry-After: число (секунды) или HTTP-дата
 const parseRetryAfter = (header: string | null): number => {
@@ -26,8 +26,8 @@ export const authFetchServer = async <T>(
 ): Promise<T | null> => {
   const headers = new Headers(init?.headers);
 
-  if (!headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
+  if (typeof init?.body === "string" && !headers.has("content-type")) {
+    headers.set("content-type", "application/json");
   }
 
   const cookieStore = await cookies();
@@ -70,12 +70,13 @@ export const authFetchServer = async <T>(
 
   if (!res.ok) {
     const message = getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`);
-    
-    if (Array.isArray(message)) {
-      throw new ApiError(message[0], message.slice(1));
+
+    if (typeof message === "string") {
+      throw new Error(message);
     }
 
-    throw new Error(message);
+    const messageToShow = Object.values(message).join("\n");
+    throw new ApiError(messageToShow, message);
   }
 
   return data as T;
