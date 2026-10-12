@@ -44,7 +44,7 @@ export const ReleaseDescription = ({
     {
       id: "description",
       title: "Описание",
-      description: product?.description || "Описание товара",
+      description: product?.description || "У этого товара нет описания.",
     },
     {
       id: "delivery",

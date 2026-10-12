@@ -1,5 +1,6 @@
 import { deleteOAuthState, getOAuthState, OAuthorize } from '@/entities/user/server';
 import { encode } from 'next-auth/jwt';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
@@ -13,12 +14,16 @@ export async function POST(request: Request) {
     );
   }
 
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get("sessionid")?.value;
+
   // используем accessToken провайдера из временного хранилища
   const result = await OAuthorize({
     provider: entry.provider,
     token: entry.accessToken,
     create_account: true,
     consents,
+    sessionId
   });
 
   deleteOAuthState(state); // сразу удаляем наш временный state после использования

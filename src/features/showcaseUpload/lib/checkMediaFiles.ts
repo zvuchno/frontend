@@ -6,7 +6,7 @@ export const checkMediaFiles = async (file: File) => {
   const allowedImageMime = ["image/jpeg", "image/webp", "image/png"];
   const isImage = allowedImageMime.includes(file.type);
 
-  const allowedAudioMime = ["audio/mpeg", "audio/flac", "audio/wav", "audio/x-wav"];
+  const allowedAudioMime = ["audio/mpeg", "audio/flac", "audio/wav", "audio/x-wav", "audio/vnd.wave"];
   const isAudio = allowedAudioMime.includes(file.type);
 
   if (!isImage && !isAudio) {

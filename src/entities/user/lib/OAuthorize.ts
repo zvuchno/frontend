@@ -15,12 +15,14 @@ export const OAuthorize = async ({
   token,
   provider,
   create_account = false,
-  consents
+  consents,
+  sessionId
  }: {
   token: string,
   provider: "vk" | "yandex",
   create_account?: boolean,
-  consents?: TConsent[]
+  consents?: TConsent[],
+  sessionId?: string
  }
 ): Promise<OAuthResult> => {
   try {
@@ -29,10 +31,14 @@ export const OAuthorize = async ({
       create_account,
       ...(consents && { consents }),
     };
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...(sessionId ? { Cookie: `sessionid=${sessionId}` } : {}),
+    };
     
     const res = await fetch(`${BASE_URL}/v1/auth/social/${provider}/`, {
       method: 'POST',
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
       body: JSON.stringify(payload),
     });
 

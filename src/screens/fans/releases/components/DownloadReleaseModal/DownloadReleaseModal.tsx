@@ -42,10 +42,22 @@ export const DownloadReleaseModal = ({
 
     try {
       const result = await getDownloadData(item.download_action_url!);
-      window.open(result.url, "_blank");
+      const url = result.url;
+      if (!url) {
+        throw new Error("Не удалось получить ссылку для скачивания.");
+      }
+      const fileName = item.title;
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success(`Скачивание ${item.type === "archive" ? "архива" : fileName}.`);
+      //window.open(result.url, "_blank");
     } catch (err) {
-      console.error(err);
-      toast.error("Не удалось получить ссылку для скачивания");
+      const errorMessage = err instanceof Error ? err.message : "Ошибка получения данных."
+      toast.error(errorMessage);
     } finally {
       setDownloading((prev) => {
         const next = { ...prev };

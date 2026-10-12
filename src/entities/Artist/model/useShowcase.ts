@@ -197,7 +197,7 @@ export function useUpdateAlbum() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      //toast.success("Релиз обновлён");
+      toast.success("Релиз обновлён");
     },
     onError: (error) => {
       showErrorMessage(error);
@@ -254,7 +254,12 @@ export function useUpdatePromocode() {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Ошибка обновления промокода");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось обновить промокод"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -274,7 +279,12 @@ export function useDeleteAlbum() {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Не удалось удалить релиз");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось удалить релиз"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -293,7 +303,12 @@ export function useDeleteMerch() {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Не удалось удалить мерч");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось удалить мерч"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -312,7 +327,12 @@ export function useDeletePromocode() {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Не удалось удалить промокод");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось удалить промокод"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -323,14 +343,20 @@ export function useCreateAlbum() {
 
   return useMutation({
     mutationFn: (payload: TCreateAlbumRequest) => createAlbum(payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      //toast.success("Релиз создан");
+      const successMessage = data.is_published ? "Релиз создан" : "Релиз добавлен в черновик";
+      toast.success(successMessage);
     },
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Не удалось создать релиз");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось создать релиз"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -340,9 +366,10 @@ export function useCreateMerch() {
 
   return useMutation({
     mutationFn: (payload: TCreateMerchRequest) => createMerch(payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
-      toast.success("Мерч создан");
+      const successMessage = data.is_published ? "Мерч создан" : "Мерч добавлен в черновик";
+      toast.success(successMessage);
     },
     onError: (error) => {
       showErrorMessage(error);
@@ -372,7 +399,12 @@ export function useCreatePromocode() {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Не удалось создать промокод");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось создать промокод"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -449,7 +481,12 @@ export function useUpdateImage() {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Ошибка обновления изображений");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Ошибка обновления изображений"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -466,7 +503,12 @@ export function useDeleteImage() {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Не удалось удалить изображение");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось удалить изображение"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -503,7 +545,6 @@ export function useDetailTrack(id?: number) {
     queryKey: ["showcase", "detail", "track", id],
     queryFn: async () => getDetailTrack({ id }),
     enabled: !!id,
-    staleTime: 10 * 10 * 1000,
     refetchOnWindowFocus: false,
   });
 }
@@ -546,7 +587,12 @@ export function useUpdateTrackInfo(album: number) {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error("Ошибка обновления информации о треке");
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось обновить информацию о треке"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -565,7 +611,12 @@ export function useUploadTrack(album: number) {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error(error.message);
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось загрузить трек"
+        : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -584,7 +635,9 @@ export function useUpdateTrack(album: number) {
     onError: (error) => {
       showErrorMessage(error);
 
-      toast.error(`Не удалось обновить файл трека: ${error.message}`);
+      toast.error(`Не удалось обновить файл трека: ${error.message}`, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -603,8 +656,9 @@ export function useChangeTracksOrder(albumId?: number | null) {
     onError: (error) => {
       showErrorMessage(error);
 
-      console.error(error.message);
-      toast.error("Не удалось обновить порядок треков");
+      toast.error(`Не удалось обновить порядок треков: ${error.message}`, {
+        duration: 8000,
+      });
     },
   });
 }
