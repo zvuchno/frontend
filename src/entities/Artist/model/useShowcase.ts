@@ -187,7 +187,7 @@ export function useUpdateAlbum() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      //toast.success("Релиз обновлён");
+      toast.success("Релиз обновлён");
     },
     onError: (error) => {
       if (error instanceof ApiError) {
@@ -264,7 +264,10 @@ export function useUpdatePromocode() {
         return;
       }
 
-      toast.error("Ошибка обновления промокода");
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось обновить промокод" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -291,7 +294,11 @@ export function useDeleteAlbum() {
         });
         return;
       }
-      toast.error("Не удалось удалить релиз");
+
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось удалить релиз" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -317,7 +324,11 @@ export function useDeleteMerch() {
         });
         return;
       }
-      toast.error("Не удалось удалить мерч");
+
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось удалить мерч" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -343,7 +354,11 @@ export function useDeletePromocode() {
         });
         return;
       }
-      toast.error("Не удалось удалить промокод");
+
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось удалить промокод" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -354,9 +369,10 @@ export function useCreateAlbum() {
 
   return useMutation({
     mutationFn: (payload: TCreateAlbumRequest) => createAlbum(payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "albums"] });
-      //toast.success("Релиз создан");
+      const successMessage = data.is_published ? "Релиз создан" : "Релиз добавлен в черновик"
+      toast.success(successMessage);
     },
     onError: (error) => {
       if (error instanceof ApiError) {
@@ -369,7 +385,10 @@ export function useCreateAlbum() {
         return;
       }
 
-      toast.error("Не удалось создать релиз");
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось создать релиз" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -379,9 +398,10 @@ export function useCreateMerch() {
 
   return useMutation({
     mutationFn: (payload: TCreateMerchRequest) => createMerch(payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
-      toast.success("Мерч создан");
+      const successMessage = data.is_published ? "Мерч создан" : "Мерч добавлен в черновик"
+      toast.success(successMessage);
     },
     onError: (error) => {
       if (error instanceof ApiError) {
@@ -426,7 +446,11 @@ export function useCreatePromocode() {
         });
         return;
       }
-      toast.error("Не удалось создать промокод");
+
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось создать промокод" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -517,7 +541,10 @@ export function useUpdateImage() {
         });
         return;
       }
-      toast.error("Ошибка обновления изображений")
+      const errorMessage = error.message.includes("HTTP") ? "Ошибка обновления изображений" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     }
   });
 }
@@ -541,7 +568,10 @@ export function useDeleteImage() {
         });
         return;
       }
-      toast.error("Не удалось удалить изображение")
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось удалить изображение" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     }
   });
 }
@@ -633,7 +663,11 @@ export function useUpdateTrackInfo(album: number) {
         });
         return;
       }
-      toast.error("Ошибка обновления информации о треке");
+
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось обновить информацию о треке" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -659,7 +693,10 @@ export function useUploadTrack(album: number) {
         });
         return;
       }
-      toast.error(error.message);
+      const errorMessage = error.message.includes("HTTP") ? "Не удалось загрузить трек" : error.message;
+      toast.error(errorMessage, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -685,7 +722,9 @@ export function useUpdateTrack(album: number) {
         });
         return;
       }
-      toast.error(`Не удалось обновить файл трека: ${error.message}`);
+      toast.error(`Не удалось обновить файл трека: ${error.message}`, {
+        duration: 8000,
+      });
     },
   });
 }
@@ -711,8 +750,9 @@ export function useChangeTracksOrder(albumId?: number | null) {
         });
         return;
       }
-      console.error(error.message);
-      toast.error("Не удалось обновить порядок треков");
+      toast.error(`Не удалось обновить порядок треков: ${error.message}`, {
+        duration: 8000,
+      });
     },
   });
 }

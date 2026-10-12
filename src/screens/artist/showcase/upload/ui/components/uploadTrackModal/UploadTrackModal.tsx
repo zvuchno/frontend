@@ -212,7 +212,7 @@ export const UploadTrackModal = ({
                 ref={trackInputRef}
                 className={s.uploadContainer__fileInput}
                 type='file'
-                accept="audio/mpeg,audio/wav,audio/flac"
+                accept="audio/mpeg,audio/wav,audio/vnd.wave,audio/x-wav,audio/flac,audio/*"
                 onChange={(e) => {
                   handleFileChange(e).catch(console.error)
                 }}
