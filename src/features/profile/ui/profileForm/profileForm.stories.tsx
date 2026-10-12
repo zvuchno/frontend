@@ -44,7 +44,7 @@ const meta: Meta<typeof ProfileFormUI> = {
           phone: "71111111111",
           password: "11111111",
           city: "Moscow",
-          url: "http://ivanov-ivan.ru",
+          slug: "http://ivanov-ivan.ru",
         },
       });
 
@@ -98,7 +98,7 @@ export const ProfileFormNew: Story = {
       phone: "",
       password: "",
       city: "",
-      url: "",
+      slug: "",
     },
   },
 };
@@ -143,7 +143,7 @@ export const ProfileFormWithErrors: Story = {
       phone: "",
       password: "bkjb",
       city: "lbkjjjjbhgbjhmbhhhkhkjhkjhikjhkjhkjhjkbjkbjkbkjbmkk",
-      url: "nkl@l",
+      slug: "nkl@l",
     },
   },
 };
@@ -182,7 +182,7 @@ export const ProfileFormWithoutHint: Story = {
       phone: "",
       password: "",
       city: "",
-      url: "",
+      slug: "",
     },
   },
 };

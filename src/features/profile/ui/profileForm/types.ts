@@ -7,13 +7,14 @@ import {
 } from "react-hook-form";
 
 export interface FieldValues {
+  full_name?: string;
   name?: string;
   email?: string;
   phone?: string;
   password?: string;
   city?: string;
-  url?: string;
-  userName?: string;
+  slug?: string;
+  username?: string;
   oldPassword?: string;
   description?: string;
   repeatPassword?: string;

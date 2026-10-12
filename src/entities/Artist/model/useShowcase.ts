@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 
 import { getGenresKinds } from "@/api/catalog/genresKindApi/getGenresKinds";
 import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
+import { ApiError } from "@/api/errors/apiError";
 import type { PaginatedStoreResponse } from "@/api/store/types";
 import type { InfiniteData } from "@tanstack/react-query";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -58,7 +59,16 @@ import type {
   TUpdateTrackPayload,
   TUploadTrackPayload,
 } from "./types";
-import { ApiError } from "@/api/errors/apiError";
+
+const showErrorMessage = (error: unknown) => {
+  if (error instanceof ApiError) {
+    toast.error(error.message, {
+      duration: 8000,
+    });
+    return;
+  }
+  return;
+};
 
 //-------получение списка для витрины-------//
 export function useAlbumsInfiniteQuery({
@@ -190,17 +200,11 @@ export function useUpdateAlbum() {
       //toast.success("Релиз обновлён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
 
-      const errorMessage = error.message.includes("HTTP") ? "Не удалось обновить релиз" : error.message;
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось обновить релиз"
+        : error.message;
       toast.error(errorMessage, {
         duration: 8000,
       });
@@ -220,17 +224,11 @@ export function useUpdateMerch() {
       toast.success("Мерч обновлён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
 
-      const errorMessage = error.message.includes("HTTP") ? "Не удалось обновить мерч" : error.message;
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось обновить мерч"
+        : error.message;
       toast.error(errorMessage, {
         duration: 8000,
       });
@@ -254,15 +252,7 @@ export function useUpdatePromocode() {
       toast.success("Промокод обновлён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
 
       toast.error("Ошибка обновления промокода");
     },
@@ -282,15 +272,8 @@ export function useDeleteAlbum() {
       toast.success("Релиз удалён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       toast.error("Не удалось удалить релиз");
     },
   });
@@ -308,15 +291,8 @@ export function useDeleteMerch() {
       toast.success("Мерч удалён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       toast.error("Не удалось удалить мерч");
     },
   });
@@ -334,15 +310,8 @@ export function useDeletePromocode() {
       toast.success("Промокод удалён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       toast.error("Не удалось удалить промокод");
     },
   });
@@ -359,15 +328,7 @@ export function useCreateAlbum() {
       //toast.success("Релиз создан");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
 
       toast.error("Не удалось создать релиз");
     },
@@ -384,20 +345,12 @@ export function useCreateMerch() {
       toast.success("Мерч создан");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
 
       let message = "Не удалось создать мерч";
 
       if (error.message.includes("Введите правильное число")) {
-        message = "Укажите количество товара"
+        message = "Укажите количество товара";
       }
 
       toast.error(message, {
@@ -417,15 +370,8 @@ export function useCreatePromocode() {
       toast.success("Промокод создан");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       toast.error("Не удалось создать промокод");
     },
   });
@@ -480,20 +426,13 @@ export function useAddImage() {
     mutationFn: ({ id, payload }) => addImage({ id, payload }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
-      toast.success("Изображение добавлено")
+      toast.success("Изображение добавлено");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       const message = error.message ?? "Не удалось добавить изображение";
-      toast.error(message)
+      toast.error(message);
     },
   });
 }
@@ -508,17 +447,10 @@ export function useUpdateImage() {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
-      toast.error("Ошибка обновления изображений")
-    }
+      showErrorMessage(error);
+
+      toast.error("Ошибка обновления изображений");
+    },
   });
 }
 
@@ -532,17 +464,10 @@ export function useDeleteImage() {
       void queryClient.invalidateQueries({ queryKey: ["artist", "showcase", "merch"] });
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
-      toast.error("Не удалось удалить изображение")
-    }
+      showErrorMessage(error);
+
+      toast.error("Не удалось удалить изображение");
+    },
   });
 }
 
@@ -595,16 +520,11 @@ export function useDeleteTrack(album?: number) {
       toast.success("Трек удалён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
-      const errorMessage = error.message.includes("HTTP") ? "Не удалось удалить трек" : error.message;
+      showErrorMessage(error);
+
+      const errorMessage = error.message.includes("HTTP")
+        ? "Не удалось удалить трек"
+        : error.message;
       toast.error(errorMessage, {
         duration: 8000,
       });
@@ -624,15 +544,8 @@ export function useUpdateTrackInfo(album: number) {
       toast.success("Информация о треке обновлена");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       toast.error("Ошибка обновления информации о треке");
     },
   });
@@ -650,15 +563,8 @@ export function useUploadTrack(album: number) {
       toast.success("Трек загружен");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       toast.error(error.message);
     },
   });
@@ -676,15 +582,8 @@ export function useUpdateTrack(album: number) {
       toast.success("Файл трека обновлён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       toast.error(`Не удалось обновить файл трека: ${error.message}`);
     },
   });
@@ -693,8 +592,8 @@ export function useUpdateTrack(album: number) {
 export function useChangeTracksOrder(albumId?: number | null) {
   const queryClient = useQueryClient();
 
-  return useMutation<TShowcaseTrack[], Error, { album: number, track_ids: number[] }>({
-    mutationFn: async (data: { album: number, track_ids: number[] }) => {
+  return useMutation<TShowcaseTrack[], Error, { album: number; track_ids: number[] }>({
+    mutationFn: async (data: { album: number; track_ids: number[] }) => {
       return changeTracksOrder(data);
     },
     onSuccess: () => {
@@ -702,15 +601,8 @@ export function useChangeTracksOrder(albumId?: number | null) {
       toast.success("Порядок треков обновлён");
     },
     onError: (error) => {
-      if (error instanceof ApiError) {
-        toast.error(error.message, {
-          duration: 8000,
-        })
-        toast.error(error.details.join("\n"), {
-          duration: 8000,
-        });
-        return;
-      }
+      showErrorMessage(error);
+
       console.error(error.message);
       toast.error("Не удалось обновить порядок треков");
     },

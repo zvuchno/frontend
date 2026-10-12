@@ -62,6 +62,7 @@ export const FieldWithOptions = ({
         required={field.required}
         aria-required={field.required}
         onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+          methods.clearErrors(field.name);
           void onChange(e);
           issuerCodeFormatter(field, e);
         }}

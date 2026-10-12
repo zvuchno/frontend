@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 
 import { type FieldValues, ProfileFormArtistUI, ProfileFormUI } from "@/features/profile";
+import { artistFormFields } from "@/features/profile/utils/constants";
 
 import {
   type UpdateCurrentArtistPayload,
@@ -16,6 +17,7 @@ import {
 } from "@/entities/profile";
 
 import { Loader } from "@/shared/ui";
+import { setServerErrors } from "@/shared/utils/serverErrorsHandler";
 
 //import { EMPTY_PROFILE_FORM_VALUES } from "../form.utils";
 import styles from "./ArtistProfileContent.module.scss";
@@ -29,7 +31,7 @@ export function ArtistProfileContent() {
   const isLoadingArtistProfile = status === "loading" || isLoading;
   const { isEditMode, setIsEditMode } = useArtistProfileEditMode();
 
-  const { trigger, reset, formState } = useFormContext<FieldValues>();
+  const { trigger, reset, formState, setError } = useFormContext<FieldValues>();
   /*const methods = useForm<FieldValues>({
     mode: "onChange",
     defaultValues: EMPTY_PROFILE_FORM_VALUES,
@@ -56,7 +58,7 @@ export function ArtistProfileContent() {
       name: formData.name,
       description: formData.description,
       city: formData.city,
-      slug: formData.url,
+      slug: formData.slug,
     };
 
     // Отправляем только если есть изменения
@@ -76,6 +78,9 @@ export function ArtistProfileContent() {
       setIsEditMode(false);
       toast.success("Профиль артиста успешно обновлён");
     } catch (requestError) {
+      if (requestError instanceof Error) {
+        setServerErrors(artistFormFields, requestError, setError);
+      }
       console.error(requestError);
       toast.error("Не удалось сохранить профиль артиста");
     }
@@ -87,10 +92,10 @@ export function ArtistProfileContent() {
         name: artist.name,
         description: artist.description ?? "",
         city: artist.city ?? "",
-        url: artist.slug ?? "",
+        slug: artist.slug ?? "",
       });
     }
-  }, [artist, trigger, reset]);
+  }, [artist, reset]);
 
   if (isLoadingArtistProfile) {
     return <Loader />;

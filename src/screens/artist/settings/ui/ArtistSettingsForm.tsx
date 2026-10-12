@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { FormProvider, useFieldArray, useForm, useWatch } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
 
@@ -51,6 +51,16 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
     values: formValues,
   });
 
+  const [pickupEnabled, pickupPoints] = useWatch({
+    control: methods.control,
+    name: ["pickup_enabled", "pickupPoints"],
+  });
+  const hasIncompletePickupPoint = Boolean(
+    pickupEnabled &&
+      (!pickupPoints?.length ||
+        pickupPoints.some((point) => !point.address?.trim() || !point.pickup_date))
+  );
+
   const { fields, append, remove } = useFieldArray({
     control: methods.control,
     name: "pickupPoints",
@@ -58,7 +68,10 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
 
   const onSubmit = useArtistSettingsSubmit({
     initialPickup,
-    onSuccess: () => setIsOnEdit(false),
+    onSuccess: () => {
+      setIsOnEdit(false);
+      setServerErrorMessage("");
+    },
     onError: (error) => {
       const message = error?.message ?? "Произошла ошибка";
       setServerErrorMessage(message);
@@ -91,6 +104,7 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
 
           <ArtistSettingsButtons
             disabled={!isOnEdit}
+            saveDisabled={hasIncompletePickupPoint}
             onChange={setIsOnEdit}
             onSubmit={handleButtonClick}
           />
