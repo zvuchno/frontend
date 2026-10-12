@@ -405,3 +405,11 @@ select:invalid {
   -webkit-text-fill-color: #000 !important;
   transition: background-color 5000s ease-in-out 0s; /* Чтобы цвет не возвращался */
 }
+
+.formError {
+  margin: 0;
+  font-family: var(--font-feature-mono, monospace);
+  font-size: clamp(0.75rem, 0.4643rem + 0.5952vw, 1rem);
+  line-height: 1.2;
+  color: #c53535;
+}

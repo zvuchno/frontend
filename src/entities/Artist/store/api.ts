@@ -26,7 +26,7 @@ export const updateArtistLegalData = async (
   });
 
   if (!response) {
-    throw new Error("Не удалось получить данные");
+    throw new Error("Не удалось обновить данные");
   }
 
   return response;

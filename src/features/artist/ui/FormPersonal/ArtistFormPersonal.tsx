@@ -32,7 +32,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   const { mutate } = useUpdateArtistLegalData();
 
   const [isOnChange, setIsOnChange] = useState(false);
-
+  const [serverErrorMessage, setServerErrorMessage] = useState("");
   const artistTypeFromServer = values?.legal_profile?.recipient_type;
   const artistTypeFromStore = useArtistLegalDataStore((state) => state.artistLegalData)
     ?.legal_profile?.recipient_type;
@@ -68,7 +68,8 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
 
   const onHandleSubmit = (data: FieldValues) => {
     const currentRecipientType = methods.getValues("legal_profile.recipient_type") ?? "";
-    const currentRecipientTypeForServer = currentRecipientType === "individual_temporary" ? "" : currentRecipientType;
+    const currentRecipientTypeForServer =
+      currentRecipientType === "individual_temporary" ? "" : currentRecipientType;
     const formattedData = {
       ...data,
       legal_profile: {
@@ -77,7 +78,14 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
         recipient_type: currentRecipientTypeForServer,
       },
     };
-    mutate(formattedData, { onSuccess: () => setIsOnChange(false) });
+
+    mutate(formattedData, {
+      onSuccess: () => setIsOnChange(false),
+      onError: (error) => {
+        const message = error?.message ?? "Произошла ошибка";
+        setServerErrorMessage(message);
+      },
+    });
   };
 
   return (
@@ -102,6 +110,8 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
           {!isCompany && <PaymentFieldset methods={methods} disabled={!isOnChange} />}
         </div>
       </fieldset>
+
+      {serverErrorMessage.length > 0 && <p className={styles.formError}>{serverErrorMessage}</p>}
 
       <div className={styles.formButtons}>
         <ButtonUI

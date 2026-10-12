@@ -21,6 +21,7 @@ export type TArtistFormPersonalProps = {
   errors?: Partial<FieldErrors<FieldValues>>;
   onSubmit?: SubmitHandler<TArtistLegalDataForApi>;
   onError?: SubmitErrorHandler<FieldValues>;
+  serverErrorMessage?: string;
 };
 
 export type FieldValues = TArtistLegalData;
@@ -45,5 +46,5 @@ export type TArtistFormPersonalField = {
   minLength?: number;
   options?: { label: string; value: string }[];
   hasHint?: boolean;
-  hintText?: string
+  hintText?: string;
 };

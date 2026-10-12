@@ -1,10 +1,10 @@
 import { signOut } from "next-auth/react";
 
+import { ApiError } from "../errors/apiError";
 import { getErrorMessage } from "../errors/getErrorMessage";
 import { RateLimitError } from "../errors/rateLimitError";
 import { logoutFromBackend } from "../lib/handlers/logoutFromBackend";
 import { refreshSession } from "../lib/handlers/refreshSession";
-import { ApiError } from "../errors/apiError";
 
 // Парсинг Retry-After: число (секунды) или HTTP-дата
 const parseRetryAfter = (header: string | null): number => {
@@ -102,7 +102,10 @@ export const authFetchClient = async <T>(
     : await res.text();
 
   if (!res.ok) {
-    const message = getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`);
+    const message = getErrorMessage(
+      data,
+      `Ошибка в данных при выполнении запроса. Повторите попытку`
+    );
 
     if (Array.isArray(message)) {
       throw new ApiError(message[0], message.slice(1));

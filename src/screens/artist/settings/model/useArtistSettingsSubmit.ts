@@ -15,9 +15,11 @@ import {
 export const useArtistSettingsSubmit = ({
   initialPickup,
   onSuccess,
+  onError,
 }: {
   initialPickup: TPickupSettings;
   onSuccess: () => void;
+  onError: (error: Error) => void;
 }): SubmitHandler<TArtistSettingsFieldValues> => {
   const queryClient = useQueryClient();
   const { mutateAsync: managePickupPoint } = useManageArtistPickupPoint();
@@ -59,8 +61,11 @@ export const useArtistSettingsSubmit = ({
 
       toast.success("Настройки доставки успешно обновлены");
       onSuccess();
-    } catch {
+    } catch (err) {
       toast.error("Не удалось сохранить все настройки доставки. Повторите попытку");
+      if (err instanceof Error) {
+        onError(err);
+      }
     }
   };
 };
