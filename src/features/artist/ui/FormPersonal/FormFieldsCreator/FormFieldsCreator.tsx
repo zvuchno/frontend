@@ -82,9 +82,9 @@ export const createFormField = (
                     field={field}
                     fieldError={fieldError}
                     value={phoneValue}
-                    onChange={() => {
+                    onChange={(phone) => {
                       clearErrors(field.name);
-                      onChange();
+                      onChange(phone);
                     }}
                     ref={ref}
                     onBlur={onBlur}

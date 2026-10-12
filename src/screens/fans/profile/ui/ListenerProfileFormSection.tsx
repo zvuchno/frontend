@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { ProfileFormUI } from "@/features/profile";
 import { ProfileFormListenerUI } from "@/features/profile";
 import { type FieldValues } from "@/features/profile";
+import { listenerFormFields } from "@/features/profile/utils/constants";
 import { UpdatePasswordModal } from "@/features/updatePasswordModal";
 
 import {
@@ -220,7 +221,7 @@ export function ListenerProfileFormSection() {
       setIsEditMode(false);
     } catch (requestError) {
       if (requestError instanceof Error) {
-        setServerErrors([], requestError, setError);
+        setServerErrors(listenerFormFields, requestError, setError, setFormError);
       }
       setFormError(
         requestError instanceof Error ? requestError.message : "Не удалось сохранить профиль"
