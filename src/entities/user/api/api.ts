@@ -151,27 +151,39 @@ export const resendEmailForVerify = async (): Promise<void> => {
 };
 
 export const resetPassword = async (data: TResetPasswordRequest): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/account/reset-password/",
-    fetchData: data,
-    defaultMessage: "Ошибка запроса смены пароля.",
+  await authFetchClient<void>("/api/backend/v1/auth/account/reset-password/", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
+  // return await createFetchFunction<void>({
+  //   url: "/auth/account/reset-password/",
+  //   fetchData: data,
+  //   defaultMessage: "Ошибка запроса смены пароля.",
+  // });
 };
 
 export const resetPasswordVerify = async (data: TResetPasswordVerifyRequest): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/account/reset-password-verify/",
-    fetchData: data,
-    defaultMessage: "Ссылка для смены пароля не действительна.",
+  await authFetchClient<void>("/api/backend/v1/auth/account/reset-password-verify/", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
+  // return await createFetchFunction<void>({
+  //   url: "/auth/account/reset-password-verify/",
+  //   fetchData: data,
+  //   defaultMessage: "Ссылка для смены пароля не действительна.",
+  // });
 };
 
 export const resetPasswordConfirm = async (data: TResetPasswordConfirmRequest): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/account/reset-password-confirm/",
-    fetchData: data,
-    defaultMessage: "Ошибка восстановления пароля.",
+  await authFetchClient<void>("/api/backend/v1/auth/account/reset-password-confirm/", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
+  // return await createFetchFunction<void>({
+  //   url: "/auth/account/reset-password-confirm/",
+  //   fetchData: data,
+  //   defaultMessage: "Ошибка восстановления пароля.",
+  // });
 };
 
 // не используется после перехода на HTTP-Only cookie

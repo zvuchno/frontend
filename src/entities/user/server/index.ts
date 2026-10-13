@@ -4,6 +4,7 @@ export { authorize } from "../lib/authorize";
 export { OAuthorize } from "../lib/OAuthorize";
 export { authAfterRegister } from "../lib/authAfterRegister";
 export { coordinatedRefresh } from "../api/coordinatedRefresh.server";
+export { setClientInfoHeaders } from "../lib/setClientInfoHeaders";
 export {
   getCurrentUserServer,
   logInUserServerCookie,

@@ -1,5 +1,5 @@
 import { getToken } from "next-auth/jwt";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
 import {
@@ -10,7 +10,7 @@ import {
   setBackendCookieHeader,
   setCsrfHeaders,
 } from "@/entities/user";
-import { coordinatedRefresh } from "@/entities/user/server";
+import { coordinatedRefresh, setClientInfoHeaders } from "@/entities/user/server";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -50,6 +50,7 @@ async function proxy(
   const backendPath = transformedPath["backendPath"];
 
   const cookieStore = await cookies();
+  const headersFromNext = await headers();
 
   // проверка что маршрут разрешен для данного proxy
   if (!ALLOWED_PREFIXES.some((prefix) => pathForMatch.startsWith(prefix))) {
@@ -151,6 +152,9 @@ async function proxy(
   }
 
   const body = hasBody ? await request.arrayBuffer() : undefined;
+
+  // Копируем IP и User-Agent из входящих заголовков в исходящие
+  setClientInfoHeaders(headersFromNext, backendHeaders);
 
   const sendToBackend = (): Promise<Response> =>
     fetch(`${BASE_URL}/${backendPath}${request.nextUrl.search}`, {
