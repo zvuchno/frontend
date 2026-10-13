@@ -1,18 +1,6 @@
-import { type SetStateAction } from "react";
 import { type FieldPath, type FieldValues, type UseFormSetError } from "react-hook-form";
 
-
-
 import { ApiError } from "@/api/errors/apiError";
-
-
-
-
-
-
-
-
-
 
 type NamedField<TFormValues extends FieldValues> = {
   name: FieldPath<TFormValues>;
@@ -22,7 +10,7 @@ export const setServerErrors = <TFormValues extends FieldValues>(
   fields: readonly NamedField<TFormValues>[],
   error: Error,
   setError: UseFormSetError<TFormValues>,
-  setServerErrorMessage?: (value: SetStateAction<string>) => void
+  setServerErrorMessage?: (value: string) => void
 ): void => {
   console.error("[setServerErrors] Ошибка сервера:", error);
 
