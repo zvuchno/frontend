@@ -4,6 +4,9 @@ import { applyCookiesFromResponse } from "./applyCookiesFromResponse";
 import { getCurrentUserServer } from "../api/api.serverCookie";
 import { TConsent } from "../model/types";
 
+import { headers } from "next/headers";
+import { setClientInfoHeaders } from "./setClientInfoHeaders";
+
 const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export type OAuthResult =
@@ -31,14 +34,19 @@ export const OAuthorize = async ({
       create_account,
       ...(consents && { consents }),
     };
-    const headers: Record<string, string> = {
+    const headersFromNext = await headers();
+    
+    const targetHeaders = new Headers({
       "Content-Type": "application/json",
       ...(sessionId ? { Cookie: `sessionid=${sessionId}` } : {}),
-    };
+    });
+  
+    // Копируем IP и User-Agent из входящих заголовков в исходящие
+    setClientInfoHeaders(headersFromNext, targetHeaders);
     
     const res = await fetch(`${BASE_URL}/v1/auth/social/${provider}/`, {
       method: 'POST',
-      headers: headers,
+      headers: targetHeaders,
       body: JSON.stringify(payload),
     });
 
