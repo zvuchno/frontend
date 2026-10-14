@@ -132,22 +132,15 @@ export const TracksList = ({
 
     return (
       <li ref={setNodeRef} style={style} {...attributes} className={s.tracksList__card}>
-        <div className={s.tracksList__dragCard} {...listeners}>
-          <span className={s.tracksList__index} >{index}</span>
-          <TrackCard
-            image={track.image}
-            title={track.artist_name}
-            description={track.name}
-            duration={track.duration}
-          />
-        </div>
-        
-        <button className={s.editButton} onClick={() => onEditTrack(track.id)} type="button">
-          {EditIcon()}
-        </button>
-        <button className={s.deleteButton} onClick={() => void onDeleteTrack(track.id)} type="button">
-          {DeleteIcon()}
-        </button>
+        <div className={s.tracksList__dnd} {...listeners} />
+        <TrackCard
+          image={track.image}
+          title={track.artist_name}
+          description={track.name}
+          duration={track.duration}
+          onDelete={() => void onDeleteTrack(track.id)}
+          onEdit={() => onEditTrack(track.id)}
+        />
       </li>
     );
   }
