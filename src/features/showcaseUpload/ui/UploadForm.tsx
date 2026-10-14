@@ -292,7 +292,7 @@ export const UploadForm = ({
           {...register("price", {
             required: "Цена обязательна",
             min: { value: 0, message: "Цена не может быть отрицательной" },
-            max: 99999999,
+            max: { value: 99999999, message: "Цена не может превышать 99999999" },
             validate: (val) => {
               // Проверяем, что дробная часть не больше 2 знаков
               const str = String(val);

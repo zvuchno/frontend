@@ -38,7 +38,6 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
       getCatalogListClient({
         type: "album",
         artist: artist.slug,
-        ordering: "random",
         limit: "4",
       }),
     enabled: hasFetching,
@@ -50,7 +49,6 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
       getCatalogListClient({
         type: "merch",
         artist: artist.slug,
-        ordering: "random",
         limit: "4",
       }),
     enabled: hasFetching,

@@ -32,7 +32,6 @@ export const HeaderUI = ({ actions, className }: THeaderUIProps) => {
 
   const handleSearchClose = () => {
     setSearchOpen(false);
-    router.push("/catalog/all");
   };
   return (
     <header className={clsx(styles.header, isSearchOpen && styles.headerSearch, className)}>
