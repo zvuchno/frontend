@@ -30,6 +30,7 @@ jobs:
           context: ./
           push: true
           build-args: |
+            BASE_API_URL=${{ secrets.NEXT_PUBLIC_BASE_API_URL_DEV }}
             NEXT_PUBLIC_BASE_API_URL=${{ secrets.NEXT_PUBLIC_BASE_API_URL_DEV }}
             NEXT_PUBLIC_YANDEX_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_YANDEX_MAPS_API_KEY }}
             NEXT_PUBLIC_DADATA_API_KEY=${{ secrets.NEXT_PUBLIC_DADATA_API_KEY }}
