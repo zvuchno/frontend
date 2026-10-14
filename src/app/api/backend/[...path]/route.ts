@@ -12,7 +12,10 @@ import {
 } from "@/entities/user";
 import { coordinatedRefresh, setClientInfoHeaders } from "@/entities/user/server";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
+const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.BASE_API_URL_DEV
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 const ALLOWED_PREFIXES = [
   "v1/store/",

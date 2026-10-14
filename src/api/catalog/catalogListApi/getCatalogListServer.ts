@@ -2,7 +2,10 @@ import { publicFetchServer } from "@/api/publicFetchFromServer/publicFetchServer
 
 import { type TCatalogListRequest, type TCatalogListResponse } from "./types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl =
+  process.env.NODE_ENV === "development"
+    ? process.env.BASE_API_URL_DEV
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 export async function getCatalogListServer({
   type,
@@ -12,7 +15,7 @@ export async function getCatalogListServer({
   limit,
   offset,
   ordering,
-  search
+  search,
 }: TCatalogListRequest): Promise<TCatalogListResponse | null> {
   const params = new URLSearchParams();
 

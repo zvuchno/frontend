@@ -1,6 +1,5 @@
-import "server-only";
-
 import { headers } from "next/headers";
+import "server-only";
 
 import type {
   TCurrentUserResponse,
@@ -10,10 +9,13 @@ import type {
 } from "../model/types";
 import { setClientInfoHeaders } from "../server";
 
-const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
+const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.BASE_API_URL_DEV
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 if (!BASE_URL) {
-  throw new Error("BACKEND_API_URL is not configured");
+  throw new Error("BASE_URL is not configured");
 }
 
 export const logInUserServerCookie = async (

@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 
 function getArtistApiBaseUrl(): string {
   const apiBaseUrl =
-    process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
+    process.env.NODE_ENV === "development"
+      ? process.env.BASE_API_URL_DEV
+      : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
   if (!apiBaseUrl) {
     throw new Error("Artist API base URL is not configured");
@@ -15,24 +17,17 @@ export function buildArtistApiUrl(path: string): string {
   return `${getArtistApiBaseUrl()}${path}`;
 }
 
-export function getAuthorizationHeader(
-  request: Request,
-): string | NextResponse {
+export function getAuthorizationHeader(request: Request): string | NextResponse {
   const authorizationHeader = request.headers.get("Authorization");
 
   if (!authorizationHeader) {
-    return NextResponse.json(
-      { detail: "Authorization header is required" },
-      { status: 401 },
-    );
+    return NextResponse.json({ detail: "Authorization header is required" }, { status: 401 });
   }
 
   return authorizationHeader;
 }
 
-export async function toProxyResponse(
-  response: Response,
-): Promise<NextResponse> {
+export async function toProxyResponse(response: Response): Promise<NextResponse> {
   const headers = new Headers();
   const contentType = response.headers.get("content-type");
   const responseBody = await response.text();

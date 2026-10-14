@@ -1,6 +1,6 @@
 import { type ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
-const frontendOrigin = process.env.FRONTEND_ORIGIN || "https://dev.zvuchno.space";
+const frontendOrigin = process.env.FRONTEND_ORIGIN || "https://zvuchno.space";
 
 export const setCsrfHeaders = (
   cookieStore: ReadonlyRequestCookies,
