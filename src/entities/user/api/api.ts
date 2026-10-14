@@ -31,7 +31,7 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
     const message = getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`);
 
     if (typeof message === "string") {
-      throw new Error(message);
+      throw new Error(message);   
     }
 
     const messageToShow = Object.values(message).join("\n");

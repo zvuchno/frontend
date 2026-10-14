@@ -2,7 +2,10 @@ import { publicFetchServer } from "@/api/publicFetchFromServer/publicFetchServer
 
 import { type TArtistsListRequest, type TArtistsListResponse } from "./types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl =
+  process.env.NODE_ENV === "development"
+    ? process.env.BASE_API_URL_DEV
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 export async function getArtistsListServer({
   genre,

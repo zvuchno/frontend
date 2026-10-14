@@ -3,7 +3,10 @@ import { NextResponse } from "next/server";
 
 import { setBackendCookieHeader, setCsrfHeaders } from "@/entities/user";
 
-const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
+const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.BASE_API_URL_DEV
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 const isBackendAuthCookie = (name: string): boolean =>
   name === "zvuchno_access" || name.startsWith("zvuchno_refresh");

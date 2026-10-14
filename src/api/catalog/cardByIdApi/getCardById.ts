@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation";
+
 import { type TDetailCardResponse } from "./types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl =
+  process.env.NODE_ENV === "development"
+    ? process.env.BASE_API_URL_DEV
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 export const getCardById = async (
   kind: "merch" | "release" | "artists",
@@ -15,7 +19,10 @@ export const getCardById = async (
     url = `${baseUrl}/v1/store/catalog/${kind}/${id}`;
   }
 
-  const errorMessage = kind === "artists" ? "Не удалось получить данные артиста." : "Не удалось получить данные о товаре."
+  const errorMessage =
+    kind === "artists"
+      ? "Не удалось получить данные артиста."
+      : "Не удалось получить данные о товаре.";
   const response = await fetch(url);
 
   if (response.status === 404) {
