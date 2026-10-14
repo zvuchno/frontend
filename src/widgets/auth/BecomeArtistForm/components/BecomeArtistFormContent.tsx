@@ -1,8 +1,8 @@
 import { CustomInput, Typography } from "@/shared/ui";
 
-import s from "./BecomeArtistFormContent.module.scss";
 import type { TBecomeArtistFormData } from "../model/types";
 import { BecomeArtistConsents } from "./BecomeArtistConstans/BecomeArtistConstans";
+import s from "./BecomeArtistFormContent.module.scss";
 
 export const BecomeArtistFormContent = ({
   data,
@@ -18,8 +18,8 @@ export const BecomeArtistFormContent = ({
   registerError?: string;
   currentUserType?: "artist" | "listener";
   handleFieldChange: (
-      field: keyof TBecomeArtistFormData
-    ) => (e: React.ChangeEvent<HTMLInputElement> | string) => void;
+    field: keyof TBecomeArtistFormData
+  ) => (e: React.ChangeEvent<HTMLInputElement> | string) => void;
 }) => {
   return (
     <div className={s.artistRegisterFormContent}>
@@ -35,10 +35,15 @@ export const BecomeArtistFormContent = ({
         //message={errors.title}
         inputSize='small'
         disabled={disabled}
+        maxLength={50}
       />
 
       {currentUserType && currentUserType === "listener" && (
-        <BecomeArtistConsents data={data} disabled={disabled} handleFieldChange={handleFieldChange} />
+        <BecomeArtistConsents
+          data={data}
+          disabled={disabled}
+          handleFieldChange={handleFieldChange}
+        />
       )}
 
       {registerError && (

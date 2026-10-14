@@ -66,7 +66,7 @@ export const NewManagedProfile = ({ onClose }: { onClose: () => void }) => {
           />
         )}
         renderPrimaryButton={(loading) => (
-          <button className={s.submitButton} type='submit' disabled={loading}>
+          <button className={s.submitButton} type='submit' disabled={loading || !formData.name}>
             {loading ? <LoadingButton /> : "Добавить"}
           </button>
         )}

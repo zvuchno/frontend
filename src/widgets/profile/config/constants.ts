@@ -10,11 +10,11 @@ export const addContactFormFields: TAddContactFormField[] = [
     validation: {
       minLength: {
         value: 2,
-        message: "Минимум 2 символа",
+        message: "Min 2, max 20 символов",
       },
       maxLength: {
-        value: 50,
-        message: "Максимум 50 символов",
+        value: 20,
+        message: "Максимум 20 символов",
       },
     },
   },
@@ -43,11 +43,11 @@ export const addLinkFormFields: TAddContactFormField[] = [
     validation: {
       minLength: {
         value: 2,
-        message: "Минимум 2 символа",
+        message: "Min 2, max 20 символов",
       },
       maxLength: {
-        value: 50,
-        message: "Максимум 50 символов",
+        value: 20,
+        message: "Максимум 20 символов",
       },
       pattern: {
         value: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{2,50}$/,

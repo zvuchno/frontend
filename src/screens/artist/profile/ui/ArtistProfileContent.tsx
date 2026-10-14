@@ -5,6 +5,7 @@ import { type SubmitHandler, useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
 
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 import { type FieldValues, ProfileFormArtistUI, ProfileFormUI } from "@/features/profile";
 import { artistFormFields } from "@/features/profile/utils/constants";
@@ -23,6 +24,8 @@ import { setServerErrors } from "@/shared/utils/serverErrorsHandler";
 import styles from "./ArtistProfileContent.module.scss";
 
 export function ArtistProfileContent() {
+  const path = usePathname();
+
   const { status } = useSession();
 
   const { data: artist, isLoading, error } = useCurrentArtist();
@@ -38,6 +41,13 @@ export function ArtistProfileContent() {
   });
 */
   const isFormValid = formState.isValid;
+
+  const role = artist?.profile_type;
+  const currentAccaunt = path.includes("label") ? "labelAccaunt" : "artistAccaunt";
+  const successMessage =
+    role === "artist" || (role === "label" && currentAccaunt === "labelAccaunt")
+      ? "Профиль артиста успешно обновлён"
+      : "Профиль лейбла успешно обновлён";
 
   const handleEdit = () => {
     setIsEditMode(true);
@@ -76,7 +86,7 @@ export function ArtistProfileContent() {
     try {
       await updateArtist.mutateAsync(payload);
       setIsEditMode(false);
-      toast.success("Профиль артиста успешно обновлён");
+      toast.success(successMessage);
     } catch (requestError) {
       if (requestError instanceof Error) {
         setServerErrors(artistFormFields, requestError, setError);
