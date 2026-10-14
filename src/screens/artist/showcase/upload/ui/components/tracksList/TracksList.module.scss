@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-x: auto;
 }
 
 .tracksList {
@@ -23,45 +24,19 @@
     gap: 16px;
     width: 100%;
     height: 74px;
-
-    @media (max-width: 768px) {
-      height: 54px;
-    }
-
-    & button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      border: 1px solid var(--outline-color);
-      cursor: pointer;
-    }
+    min-width: 400px;
   }
 
-  &__dragCard {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
+  &__dnd {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    background-image: url("/icons/dnd-icon.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
-}
 
-.editButton {
-  background-color: #E4F1FF;
-
-  &:hover {
-    background-color: var(--color-accent-blue);
-  }
-}
-
-.deleteButton {
-  background-color: var(--color-btn-secondary);
-
-  &:hover {
-    background-color: var(--color-bg-secondary);
-  }
 }
 
 .buttonWrapper {

@@ -254,6 +254,7 @@ export const UploadTrackModal = ({
             {...register('name', { required: "Название обязательно" })}
             labelClassName={s.label}
             inputClassName={s.input}
+            maxLength={255}
           />
           <div className={s.container}>
             <CustomInput 
