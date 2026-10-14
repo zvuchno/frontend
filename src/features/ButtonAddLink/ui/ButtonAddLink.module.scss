@@ -24,7 +24,7 @@
   //max-height: calc(var(--button-add-link-item-height) * 3 + var(--button-add-link-list-gap) * 2);
   margin-bottom: 0.556vw;
   //padding-right: 0.278vw;
-  //overflow-y: auto;
+  overflow: hidden;
   //scrollbar-gutter: stable;
 }
 
@@ -38,8 +38,10 @@
 }
 
 .itemWithDelete {
-  flex: 0;
-  width: calc(100% + 34px);
+  flex: 0 0 auto;
+  width: 100%;
+  //width: calc(100% + 34px);
+  overflow: hidden;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -55,6 +57,7 @@
   flex-direction: column;
   gap: 0.278vw;
   flex: 1;
+  overflow: hidden;
 }
 
 .itemLabel {
@@ -66,18 +69,11 @@
   letter-spacing: -0.06em;
 }
 
-.itemField {
-  display: flex;
-  align-items: center;
-  height: 40px;
-  width: 100%;
-  padding: 0.833vw clamp(16px, 3vw, 32px);
-  border: 1px solid var(--color-text-primary);
-  overflow: hidden;
-}
-
 .itemValue {
   width: 100%;
+  height: 40px;
+  border: 1px solid var(--color-text-primary);
+  padding: 0.833vw clamp(16px, 3vw, 32px);
   color: color-mix(in srgb, var(--color-text-primary) 40%, transparent);
   font-family: var(--font-feature-mono), monospace;
   font-size: clamp(14px, 1.6vw, 16px);
@@ -87,6 +83,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  outline: none;
+  cursor: text;
 }
 
 .actionButton {

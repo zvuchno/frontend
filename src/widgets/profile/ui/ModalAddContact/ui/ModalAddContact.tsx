@@ -50,7 +50,14 @@ export const ModalAddContact = ({
   };
 
   return (
-    <ModalUI onClose={onClose} isOpen={isOpen} closeButtonStyle='circledX'>
+    <ModalUI
+      onClose={() => {
+        onClose();
+        reset();
+      }}
+      isOpen={isOpen}
+      closeButtonStyle='circledX'
+    >
       <div className={s.container}>
         <form className={s.form} onSubmit={handleSubmit(onSave)}>
           <Title className={s.form__title} Tag='h5' variant='title'>
@@ -72,6 +79,7 @@ export const ModalAddContact = ({
                 style={{
                   height: "40px",
                 }}
+                maxLength={field.title === "Название" ? 20 : undefined}
               />
             );
           })}

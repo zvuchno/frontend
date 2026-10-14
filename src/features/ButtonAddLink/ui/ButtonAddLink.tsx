@@ -1,6 +1,7 @@
 import clsx from "clsx";
 
 import { DeleteIcon, PlusIcon } from "@/shared/ui/Icons";
+
 import s from "./ButtonAddLink.module.scss";
 import type { TButtonAddLinkItem, TButtonAddLinkProps } from "./types";
 
@@ -37,27 +38,26 @@ export const ButtonAddLink = ({
                 })}
               >
                 <div className={s.itemMain}>
-                  <span className={s.itemLabel}>{item.label}</span>
+                  <label className={s.itemLabel}>{item.label}</label>
 
-                  <div className={s.itemField}>
-                    <span className={s.itemValue}>{item.value}</span>
-                  </div>
+                  <input
+                    id={item.id?.toString() ?? item.value}
+                    readOnly
+                    className={s.itemValue}
+                    value={item.value}
+                  />
                 </div>
 
                 {canDeleteItems ? (
                   <button
-                    type="button"
+                    type='button'
                     className={s.deleteButton}
                     disabled={isDeleting}
                     onClick={() => onDeleteClick?.(item)}
-                    aria-label={
-                      isDeleting
-                        ? `Удаление ${item.label}`
-                        : `Удалить ${item.label}`
-                    }
+                    aria-label={isDeleting ? `Удаление ${item.label}` : `Удалить ${item.label}`}
                   >
                     {isDeleting ? (
-                      <span className={s.deleteSpinner} aria-hidden="true" />
+                      <span className={s.deleteSpinner} aria-hidden='true' />
                     ) : (
                       <DeleteIcon />
                     )}
@@ -69,7 +69,7 @@ export const ButtonAddLink = ({
         </div>
       ) : null}
 
-      <button type="button" className={s.actionButton} onClick={onAddClick}>
+      <button type='button' className={s.actionButton} onClick={onAddClick}>
         <PlusIcon />
         {addButtonText}
       </button>

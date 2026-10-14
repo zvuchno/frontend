@@ -64,7 +64,11 @@ export const LabelPage = () => {
         </ul>
       )}
       {isModalOpen && (
-        <ModalUI closeButtonStyle={"x"} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalUI
+          closeButtonStyle={"circledX"}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
           <NewManagedProfile onClose={() => setIsModalOpen(false)} />
         </ModalUI>
       )}
