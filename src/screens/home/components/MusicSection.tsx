@@ -10,7 +10,7 @@ import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 export const MusicSection = ({
   albums,
-  cartItems,
+  //cartItems,
   playingAlbumId,
   handlePlayRelease,
   addProduct,
@@ -30,9 +30,9 @@ export const MusicSection = ({
       const id = match ? match[1] : null;
       const selected =
         item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined;
-      const isInCart = cartItems?.find(
+      /*const isInCart = cartItems?.find(
         (cartItem) => cartItem.target.selected_variant_id === selected
-      );
+      );*/
       return (
         <ProductCard
           key={item.product_id}
@@ -56,7 +56,7 @@ export const MusicSection = ({
           isRelease
           isPlaying={playingAlbumId === item.target.id}
           onPlay={() => void handlePlayRelease(item.target.id)}
-          purchasedItems={isInCart ? isInCart?.quantity : undefined}
+          //purchasedItems={isInCart ? isInCart?.quantity : undefined}
         />
       );
     })}

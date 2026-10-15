@@ -10,7 +10,7 @@ import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 export const MerchSection = ({
   merch,
-  cartItems,
+  //cartItems,
   isAuth,
   addProduct,
 }: {
@@ -27,9 +27,9 @@ export const MerchSection = ({
         const id = match ? match[1] : null;
         const selected =
           item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined;
-        const isInCart = cartItems?.find(
+        /*const isInCart = cartItems?.find(
           (cartItem) => cartItem.product_variant === item.favorite_variant_id
-        );
+        );*/
         return (
           <ProductCard
             key={item.product_id}
@@ -50,7 +50,7 @@ export const MerchSection = ({
             }
             link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
             onHandleClick={() => addProduct(item)}
-            purchasedItems={isInCart ? isInCart.quantity : undefined}
+            /*purchasedItems={isInCart ? isInCart.quantity : undefined}*/
           />
         );
       })}
