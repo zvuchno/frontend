@@ -1,10 +1,6 @@
-import { TTrack } from "@/api/catalog/tracksListApi/types";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
-export type TProductCardProps = Omit<
-  ComponentPropsWithoutRef<"article">,
-  "children" | "title"
-> & {
+export type TProductCardProps = Omit<ComponentPropsWithoutRef<"article">, "children" | "title"> & {
   image: string | null;
   title: string;
   description: string;
@@ -14,6 +10,7 @@ export type TProductCardProps = Omit<
   likeButton?: ReactNode;
   isRelease?: boolean;
   isPlaying?: boolean;
+  //purchasedItems?: number;
   onHandleClick?: () => void;
   onPlay?: () => void;
 };

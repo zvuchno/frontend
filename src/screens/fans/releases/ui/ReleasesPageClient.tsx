@@ -44,8 +44,8 @@ export function ReleasesPageClient() {
       queryKey: ["listener", "releases"],
       queryFn: async ({ pageParam }) => {
         const url = pageParam as string | undefined;
-        if (url) return getPurchasedReleases(url);
-        return getPurchasedReleases();
+        if (url) return getPurchasedReleases({url});
+        return getPurchasedReleases({});
       },
       initialPageParam: "",
       getNextPageParam: (lastPage) => lastPage?.next,

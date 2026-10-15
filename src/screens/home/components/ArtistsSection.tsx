@@ -1,8 +1,9 @@
 import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
+import Link from "next/link";
 
 import { CardArtist } from "@/entities/Artist";
 
-import { Link, ListSection } from "@/shared/ui";
+import { ListSection } from "@/shared/ui";
 
 import styles from "./../HomePage.module.scss";
 
