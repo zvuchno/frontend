@@ -33,13 +33,13 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const { status } = useSession();
   const isAuth = status === "authenticated";
 
-  const { 
-    track: playTrack, 
-    isPlaying, 
-    togglePlay, 
-    setTrack, 
+  const {
+    track: playTrack,
+    isPlaying,
+    togglePlay,
+    setTrack,
     setPlaylist,
-    setPlayingAlbumId
+    setPlayingAlbumId,
   } = usePlayerStore();
 
   const tracksQuery = useGetPlayerTracks(release.id);
@@ -62,7 +62,7 @@ const ReleasePageContent = ({ release, selected }: ReleasePageContentProps) => {
   const handlePlay = (track: TTrack) => {
     if (track.id !== playTrack?.id) {
       setTrack(track);
-      if(tracks) setPlaylist(tracks);
+      if (tracks) setPlaylist(tracks);
       setPlayingAlbumId(release.id);
       return;
     }
