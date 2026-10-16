@@ -19,6 +19,7 @@ import { usePlayerStore } from "@/features/player";
 
 import { CardArtist } from "@/entities/Artist";
 import { ProductCard } from "@/entities/ProductCard";
+//import { useCart } from "@/entities/cart";
 
 import { TRANSLATIONS } from "@/shared/constants";
 import { Loader } from "@/shared/ui";
@@ -170,6 +171,14 @@ const ProductsList = ({
               product.target.selected_variant_id !== null
                 ? product.target.selected_variant_id
                 : undefined;
+
+            /*const isInCart =
+              product.target.type === "merch"
+                ? cartItems?.find(
+                    (cartItem) => cartItem.product_variant === product.favorite_variant_id
+                  )
+                : cartItems?.find((cartItem) => cartItem.target.selected_variant_id === selected);
+*/
             return (
               <li key={product.product_id} className={s.productCardLink}>
                 <ProductCard
@@ -195,7 +204,8 @@ const ProductsList = ({
                   link={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}
                   isRelease={product.target.type === "release"}
                   isPlaying={playingAlbumId === product.target.id}
-                  onPlay={() => handlePlayRelease(product.target.id)}
+                  onPlay={() => void handlePlayRelease(product.target.id)}
+                  //purchasedItems={isInCart ? isInCart.quantity : undefined}
                 />
               </li>
             );

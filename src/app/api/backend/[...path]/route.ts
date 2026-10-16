@@ -31,6 +31,7 @@ const ALLOWED_PREFIXES = [
 const PROTECTED_PREFIXES = [
   "v1/auth/account/me/",
   "v1/store/me/",
+  "v1/store/favorites/",
   "v1/store/artists/me/",
   "v1/store/orders",
   "v1/store/payments/",

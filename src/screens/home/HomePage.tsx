@@ -2,28 +2,69 @@
 
 import toast from "react-hot-toast";
 
+
+
 import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
 import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+
+
+
+import { useFavorites } from "@/app/favorites/useFavorites";
+
+
 
 //import { SectionFAQ } from "@/widgets/SectionFAQ";
 import { HeroUI } from "@/widgets/layout/main/Hero";
 import { JoinSection } from "@/widgets/layout/main/JoinSection";
 
-import { ButtonLike } from "@/features/ButtonLike";
+
+
 import { usePlayerStore } from "@/features/player";
 
-import { CardArtist } from "@/entities/Artist";
-import { ProductCard } from "@/entities/ProductCard";
+
+
+//import { useCart } from "@/entities/cart";
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 
+
+
 //import { mockBlogs, questions } from "@/shared/constants";
-import { ListSection } from "@/shared/ui";
-import { handleToggleFavorites } from "@/shared/utils/handleToggleFavorites";
 
 import styles from "./HomePage.module.scss";
+import { ArtistsSection } from "./components/ArtistsSection";
+import { MerchSection } from "./components/MerchSection";
+import { MusicSection } from "./components/MusicSection";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //import { Blog } from "./components/Blog/Blog";
 
@@ -41,9 +82,19 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
 
   const { playingAlbumId, togglePlay, playAlbum, setPlayingAlbumId } = usePlayerStore();
 
+  //const { data } = useCart();
+  const { data: favorites } = useFavorites();
+  const favoriteItems = favorites?.results;
+  const favoritesDigital = favoriteItems?.filter((item) => item.target.type === "release");
+  const favoritesMerch = favoriteItems?.filter((item) => item.target.type === "merch");
+
+  //const cartItems = data?.items;
+  //const digitalCartItems = cartItems?.filter((item) => item.target.type === "release");
+  //const merchCartItems = cartItems?.filter((item) => item.target.type === "merch");
+
   const handlePlayRelease = async (releaseId: number) => {
     if (playingAlbumId === releaseId) {
-      togglePlay();
+      await togglePlay();
       return;
     }
 
@@ -64,92 +115,25 @@ export function HomePage({ artists, albums, merch }: HomePageProps) {
       <HeroUI />
 
       <div className={styles.mainContent}>
-        <ListSection title='Артисты' link={`/catalog/artists`} className={styles.artistsSection}>
-          {artists.map((artist) => (
-            <Link
-              key={artist.slug}
-              href={`/catalog/artists/${artist.slug}/?kind=artists`}
-              className={styles.mainContentCardLink}
-            >
-              <CardArtist
-                image={artist.cover ?? undefined}
-                description={artist.name}
-                hasButton={false}
-              />
-            </Link>
-          ))}
-        </ListSection>
+        <ArtistsSection artists={artists} />
 
-        <ListSection title='Музыка' link={`/catalog/album`}>
-          {albums.map((item) => {
-            const url = item.target.url;
-            const match = url.match(/(\d+)\/$/);
-            const id = match ? match[1] : null;
-            const selected =
-              item.target.selected_variant_id !== null
-                ? item.target.selected_variant_id
-                : undefined;
-            return (
-              <ProductCard
-                key={item.product_id}
-                title={item.artist_name}
-                image={item.image}
-                description={
-                  item.year === null ? `${item.name}` : `${item.name} (${item.year.toString()})`
-                }
-                price={item.price ?? undefined}
-                likeButton={
-                  <ButtonLike
-                    isLiked={item.is_favorite}
-                    onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error);
-                    }}
-                    isAuth={isAuth}
-                  />
-                }
-                link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
-                onHandleClick={() => addProduct(item)}
-                isRelease
-                isPlaying={playingAlbumId === item.target.id}
-                onPlay={() => handlePlayRelease(item.target.id)}
-              />
-            );
-          })}
-        </ListSection>
+        <MusicSection
+          albums={albums}
+          //cartItems={digitalCartItems}
+          handlePlayRelease={handlePlayRelease}
+          playingAlbumId={playingAlbumId}
+          addProduct={addProduct}
+          isAuth={isAuth}
+          favorites={favoritesDigital}
+        />
 
-        <ListSection title='Мерч' link={`/catalog/merch`}>
-          {merch.map((item) => {
-            const url = item.target.url;
-            const match = url.match(/(\d+)\/$/);
-            const id = match ? match[1] : null;
-            const selected =
-              item.target.selected_variant_id !== null
-                ? item.target.selected_variant_id
-                : undefined;
-            return (
-              <ProductCard
-                key={item.product_id}
-                title={item.artist_name}
-                image={item.image}
-                description={
-                  item.year === null ? `${item.name}` : `${item.name} (${item.year.toString()})`
-                }
-                price={item.price ?? undefined}
-                likeButton={
-                  <ButtonLike
-                    isLiked={item.is_favorite}
-                    onToggle={(isLiked) => {
-                      handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error);
-                    }}
-                    isAuth={isAuth}
-                  />
-                }
-                link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
-                onHandleClick={() => addProduct(item)}
-              />
-            );
-          })}
-        </ListSection>
+        <MerchSection
+          merch={merch}
+          //cartItems={merchCartItems}
+          isAuth={isAuth}
+          addProduct={addProduct}
+          favorites={favoritesMerch}
+        />
         {/**скрываем секцию БЛОГ и FAQ пока нет данных */}
         {/*<Blog blogs={mockBlogs} />
 

@@ -21,6 +21,7 @@ export interface CartItemRespond extends Omit<TCartItem, "price_with_donation"> 
   target: {
     type: string;
     url: string;
+    id?: number;
     selected_variant_id: number;
   };
 }

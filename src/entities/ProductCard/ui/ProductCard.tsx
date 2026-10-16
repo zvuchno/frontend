@@ -27,12 +27,19 @@ export const ProductCard = ({
   link,
   isRelease = false,
   isPlaying,
+  //purchasedItems,
   onHandleClick,
   onPlay,
   ...articleProps
 }: TProductCardProps) => {
   const mediaAction = actionButton ?? likeButton;
-
+  /*const currentPurchase =
+    purchasedItems === 1 && isRelease
+      ? "Товар уже в корзине"
+      : !isRelease && purchasedItems && purchasedItems > 0
+        ? "Счетчик"
+        : formatTotalPrice(Number(price));
+*/
   const handlePlayAlbum = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
