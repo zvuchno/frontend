@@ -78,7 +78,17 @@ export async function getFavoriteProducts({
   const mainUrl = hasLimit
     ? `${baseUrl}/v1/store/me/favorites?limit=6`
     : `${baseUrl}/v1/store/me/favorites`;
-  const currentUrl = url ? url : mainUrl;
+
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath}${parsedUrl.search}`;
+      })()
+    : mainUrl;
 
   try {
     const data = await authFetchClient<PaginatedStoreResponse<StoreFavorite>>(currentUrl, {

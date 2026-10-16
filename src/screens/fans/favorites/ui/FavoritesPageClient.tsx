@@ -34,8 +34,7 @@ export function FavoritesPageClient() {
       queryKey: ["listener", "favorites"],
       queryFn: async ({ pageParam }) => {
         const url = pageParam as string | undefined;
-        if (url) return getFavoriteProducts({ url });
-        return getFavoriteProducts({});
+        return getFavoriteProducts({ url: url });
       },
       initialPageParam: "",
       getNextPageParam: (lastPage) => lastPage?.next,

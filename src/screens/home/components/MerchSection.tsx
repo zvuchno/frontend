@@ -1,4 +1,6 @@
 import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
+import { type StoreFavorite } from "@/api/store/types";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { ButtonLike } from "@/features/ButtonLike";
 
@@ -12,13 +14,17 @@ export const MerchSection = ({
   merch,
   //cartItems,
   isAuth,
+  favorites,
   addProduct,
 }: {
   merch: TCatalogCard[];
   cartItems?: CartItemRespond[];
   isAuth: boolean;
+  favorites?: StoreFavorite[];
   addProduct: (product: TCatalogCard) => void;
 }) => {
+  const queryClient = useQueryClient();
+
   return (
     <ListSection title='Мерч' link={`/catalog/merch`}>
       {merch.map((item) => {
@@ -30,6 +36,16 @@ export const MerchSection = ({
         /*const isInCart = cartItems?.find(
           (cartItem) => cartItem.product_variant === item.favorite_variant_id
         );*/
+        const isFavorite = favorites?.some(
+          (favorite) => favorite.product_variant === item.favorite_variant_id
+        );
+        const toggleFavorite = async (isLiked: boolean) => {
+          await handleToggleFavorites(isLiked, item.favorite_variant_id);
+          await Promise.all([
+            queryClient.invalidateQueries({ queryKey: ["favorites-catalog"] }),
+            queryClient.invalidateQueries({ queryKey: ["listener", "favorites"] }),
+          ]);
+        };
         return (
           <ProductCard
             key={item.product_id}
@@ -41,9 +57,9 @@ export const MerchSection = ({
             price={item.price ?? undefined}
             likeButton={
               <ButtonLike
-                isLiked={item.is_favorite}
+                isLiked={isFavorite ?? false}
                 onToggle={(isLiked) => {
-                  handleToggleFavorites(isLiked, item.favorite_variant_id).catch(console.error);
+                  void toggleFavorite(isLiked).catch(console.error);
                 }}
                 isAuth={isAuth}
               />
