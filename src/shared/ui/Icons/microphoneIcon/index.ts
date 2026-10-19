@@ -1,0 +1,1 @@
+export { MicrophoneIcon } from "./MicrophoneIcon";
