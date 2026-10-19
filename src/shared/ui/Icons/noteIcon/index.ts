@@ -1,0 +1,1 @@
+export { NoteIcon } from "./NoteIcon";
