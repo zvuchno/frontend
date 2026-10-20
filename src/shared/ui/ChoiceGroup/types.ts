@@ -10,5 +10,6 @@ export type TChoiseItem = {
 export type ChoiceItemProps = {
   items: TChoiseItem[];
   value: string;
+  containerClassName?: string;
   onChange: (value: string) => void;
 }

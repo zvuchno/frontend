@@ -3,13 +3,13 @@ import s from "./ChoiceGroup.module.scss";
 import clsx from "clsx";
 import { ChoiceItemProps } from "./types";
 
-export const ChoiceGroup = ({ items, value, onChange }: ChoiceItemProps) => {
+export const ChoiceGroup = ({ items, value, containerClassName, onChange }: ChoiceItemProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
   
   return (
-    <div className={s.radioGroup}>
+    <div className={clsx(s.radioGroup, containerClassName)}>
       {items.map((item) => (
         <label key={item.value} className={s.radioGroup__label}>
           <input

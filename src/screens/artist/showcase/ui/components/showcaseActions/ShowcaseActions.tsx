@@ -157,9 +157,15 @@ export const ShowcaseActions = ({
           >
             <Link 
               className={s.popup__item} 
-              href='/artist/showcase/upload/album'
+              href='/artist/showcase/upload/merch'
             >
-              добавить товар
+              добавить мерч
+            </Link>
+            <Link 
+              className={s.popup__item} 
+              href='/artist/showcase/upload/release'
+            >
+              добавить релиз
             </Link>
             <button 
               type='button' 

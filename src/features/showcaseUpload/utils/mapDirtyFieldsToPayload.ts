@@ -32,6 +32,14 @@ export function mapDirtyFieldsToPayload(
         payload.release_date = value || null;
         break;
 
+      case 'releaseType':
+        payload.release_type = value;
+        break;
+
+      case 'upc':
+        payload.upc = value || null;
+        break;
+
       case 'genre':
         payload.genre = toId(value);
         break;

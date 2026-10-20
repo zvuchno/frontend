@@ -20,6 +20,7 @@ export type {
   TUploadTrackPayload,
   TShowcaseUpdateTrackInfoPayload,
   TUpdateTrackPayload,
+  TReleaseType,
 } from "./model/types";
 export {
   getShowcaseAlbumsList,

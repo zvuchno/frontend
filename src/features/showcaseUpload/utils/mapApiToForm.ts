@@ -5,11 +5,13 @@ type TShowcaseItemDetail = TShowcaseAlbumDetail | TShowcaseMerchDetail;
 
 export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
   // Альбом
-  if ('is_single' in item) {
+  if ("release_type" in item) {
     const album = item as TShowcaseAlbumDetail;
     return {
       name: album.name,
       releaseDate: album.release_date ?? '',
+      releaseType: album.release_type,
+      upc: album.upc ? Number(album.upc) : null,
       genre: String(album.genre_id),
       price: Number(album.price) || 0,
       allowHigherPrice: album.allow_overpay ?? false,

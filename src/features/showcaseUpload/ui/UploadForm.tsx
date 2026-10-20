@@ -9,7 +9,7 @@ import { useAlbumsInfiniteQuery, useGenresList, useMerchKindsList } from "@/enti
 import { useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
 import { useGetManagedProfiles } from "@/entities/Label";
 
-import { CheckboxUI, CustomInput, Loader, SelectUI } from "@/shared/ui";
+import { CheckboxUI, CustomInput, Loader, SelectUI, Text } from "@/shared/ui";
 import { CalendarField } from "@/shared/ui/CalendarField/CalendarField";
 import { FieldLabel } from "@/shared/ui/FieldLabel/FieldLabel";
 import { type Option, type SelectOptionItem } from "@/shared/ui/Select/Select.types";
@@ -18,6 +18,10 @@ import { parseServerDate } from "@/shared/utils/formatDate";
 import { AddImageBlock } from "../components/addImageBlock/AddImageBlock";
 import type { UploadFormValues } from "../model/types";
 import s from "./UploadForm.module.scss";
+import { ChoiceGroup, TChoiseItem } from "@/shared/ui/ChoiceGroup";
+import { MicrophoneIcon } from "@/shared/ui/Icons/microphoneIcon";
+import { MusicIcon } from "@/shared/ui/Icons/musicIcon";
+import { NoteIcon } from "@/shared/ui/Icons/noteIcon";
 
 type TImage = {
   image: string;
@@ -33,7 +37,7 @@ export const UploadForm = ({
   additionalPreviews,
   onDeleteImage,
 }: {
-  productType: "album" | "single" | "merch";
+  productType: "release" | "merch";
   profileType: "artist" | "label" | undefined;
   isEditForm: boolean;
   onDeleteImage: (data: number[]) => void;
@@ -143,6 +147,12 @@ export const UploadForm = ({
     return result;
   }, [merchKindsQuery.data]);
 
+  const releseTypeControlItems: TChoiseItem[] = [
+    { label: "Сингл", value: "single", icon: MicrophoneIcon },
+    { label: "EP", value: "ep", icon: MusicIcon },
+    { label: "Альбом", value: "album", icon: NoteIcon },
+  ];
+
   const isLoadingMerchKinds = merchKindsQuery.isFetching || merchKindsQuery.isPending;
 
   if (!currentArtistSlug) {
@@ -150,236 +160,278 @@ export const UploadForm = ({
   }
 
   return (
-    <div className={s.container}>
-      <AddImageBlock
-        severalImages={productType === "merch"}
-        setValue={setValue}
-        initialMainPreview={mainPreview}
-        initialAdditionalPreviews={additionalPreviews}
-        onDelete={onDeleteImage}
-      />
-      {profileType === "label" && (
-        <Controller
-          name='artistId'
-          control={control}
-          render={({ field }) => (
-            <SelectUI
-              name='artistId'
-              label='Артист'
-              options={artistsOptions}
-              value={field.value ?? ""}
-              onChange={field.onChange}
-              containerClassName={s.select_short}
-              selectClassName={s.select}
-              labelClassName={s.label}
-              disabled={isLoadingArtists || isEditForm}
-              placeholder='Выбрать артиста'
+    <>
+      <div className={s.gridContainer}>
+
+        {productType === "release" && (
+          <div className={s.releaseTypeContainer}>
+            <Text className={s.releaseTypeContainer__label}>Тип релиза</Text>
+            <Controller
+              name="releaseType"
+              control={control}
+              render={({ field }) => (
+                <ChoiceGroup 
+                  value={field.value ?? "single"}
+                  onChange={field.onChange}
+                  items={releseTypeControlItems}
+                  containerClassName={s.releaseTypeContainer__control}
+                />
+              )}
             />
-          )}
-        />
-      )}
-      <div className={s.fildsContainer}>
-        <CustomInput
-          id='name'
-          type='text'
-          label='Название'
-          placeholder='Текст'
-          error={!!errors.name}
-          message={errors.name?.message}
-          inputSize='large'
-          {...register("name", { required: "Название обязательно" })}
-          labelClassName={s.label}
-          inputClassName={s.input}
-        />
+          </div>
+        )}
 
-        {productType !== "merch" ? (
+        <AddImageBlock
+          severalImages={productType === "merch"}
+          setValue={setValue}
+          initialMainPreview={mainPreview}
+          initialAdditionalPreviews={additionalPreviews}
+          onDelete={onDeleteImage}
+        />
+        {profileType === "label" && (
           <Controller
-            control={control}
-            name='releaseDate'
-            render={({ field }) => {
-              const dateValue = field.name === "releaseDate" ? parseServerDate(field.value) : null;
-              return (
-                <div className={s.releaseDate}>
-                  <FieldLabel
-                    forField='releaseDate'
-                    field={{ title: "Дата релиза" }}
-                    className={s.label}
-                  />
-                  <CalendarField
-                    {...register("releaseDate")}
-                    value={dateValue}
-                    index={0}
-                    id='releaseDate'
-                    onBlur={field.onBlur}
-                    allowFuture
-                    wrapperClassName={s.dateInput}
-                    onChange={(selectedDate: Date | null) => {
-                      if (selectedDate instanceof Date && !isNaN(selectedDate.getTime())) {
-                        const year = selectedDate.getFullYear();
-                        const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
-                        const day = String(selectedDate.getDate()).padStart(2, "0");
-                        field.onChange(`${year}-${month}-${day}`);
-                      } else {
-                        field.onChange(null);
-                      }
-                    }}
-                  />
-                </div>
-              );
-            }}
-          />
-        ) : (
-          <Controller
-            name='kind'
+            name='artistId'
             control={control}
             render={({ field }) => (
               <SelectUI
-                name='kind'
-                label='Тип товара'
-                options={merchKindsOptions}
+                name='artistId'
+                label='Артист'
+                options={artistsOptions}
                 value={field.value ?? ""}
                 onChange={field.onChange}
+                containerClassName={s.select_short}
                 selectClassName={s.select}
                 labelClassName={s.label}
-                disabled={isLoadingMerchKinds}
+                disabled={isLoadingArtists || isEditForm}
+                placeholder='Выбрать артиста'
               />
             )}
           />
         )}
-
-        {productType === "merch" ? (
-          <Controller
-            name='album'
-            control={control}
-            render={({ field }) => (
-              <SelectUI
-                name='album'
-                label='Альбом'
-                options={albumOptions}
-                value={field.value ?? ""}
-                onChange={field.onChange}
-                selectClassName={s.select}
-                labelClassName={s.label}
-                disabled={isLoadingAlbums}
-              />
-            )}
-          />
-        ) : (
-          <Controller
-            name='genre'
-            control={control}
-            render={({ field }) => (
-              <SelectUI
-                name='genre'
-                label='Жанр'
-                options={genresOptions}
-                value={field.value ?? ""}
-                onChange={field.onChange}
-                selectClassName={s.select}
-                labelClassName={s.label}
-                disabled={isLoadingGenres}
-              />
-            )}
-          />
-        )}
-        <CustomInput
-          id='price'
-          type='number'
-          label='Цена'
-          error={!!errors.price}
-          message={errors.price?.message}
-          inputSize='large'
-          {...register("price", {
-            required: "Цена обязательна",
-            min: { value: 0, message: "Цена не может быть отрицательной" },
-            max: { value: 99999999, message: "Цена не может превышать 99999999" },
-            validate: (val) => {
-              // Проверяем, что дробная часть не больше 2 знаков
-              const str = String(val);
-              const parts = str.split(".");
-              if (parts.length > 1 && parts[1].length > 2) {
-                return "Допускается не более 2 знаков после запятой";
-              }
-              return true;
-            },
-          })}
-          labelClassName={s.label}
-          inputClassName={s.input}
-        />
-        {productType === "merch" ? (
+        <div className={s.fildsContainer}>
           <CustomInput
-            id='quantity'
-            type='number'
-            label='Количество'
+            id='name'
+            type='text'
+            label='Название'
+            placeholder='Текст'
             error={!!errors.name}
             message={errors.name?.message}
             inputSize='large'
-            {...register("quantity", {
-              min: { value: 0, message: "Количество не может быть отрицательным" },
-            })}
+            {...register("name", { required: "Название обязательно" })}
             labelClassName={s.label}
-            inputClassName={clsx(s.input, s.quantityInput)}
-            disabled={hasProperty}
+            inputClassName={s.input}
           />
-        ) : (
-          <CheckboxUI
-            type='checkbox'
-            className={s.spanWide}
-            checked={!!watch("allowHigherPrice")}
-            {...register("allowHigherPrice")}
-          >
-            Разрешить фанатам платить больше если они хотят
-          </CheckboxUI>
-        )}
 
-        {productType === "merch" && (
-          <CheckboxUI
-            type='checkbox'
-            //onChange={(e) => setValue('allowHigherPrice', e.target.checked)}
-            checked={!!watch("allowHigherPrice")}
-            className={s.spanWide}
-            {...register("allowHigherPrice")}
-          >
-            Разрешить фанатам платить больше если они хотят
-          </CheckboxUI>
-        )}
-
-        <CustomInput
-          id='description'
-          label='Описание'
-          multiline
-          rows={5}
-          placeholder='Это описание будут видеть ваши слушатели'
-          style={{
-            resize: "none",
-          }}
-          {...register("description")}
-          labelClassName={s.label}
-          inputClassName={s.textarea}
-          className={s.spanFull}
-        />
-
-        <Controller
-          name='privacy'
-          control={control}
-          render={({ field }) => (
-            <SelectUI
-              name='privacy'
-              label='Приватность'
-              options={[
-                { value: "public", label: "Для всех" },
-                { value: "link_only", label: "Доступно по ссылке" },
-                { value: "hidden", label: "Скрыто" },
-              ]}
-              value={field.value ?? ""}
-              onChange={field.onChange}
-              selectClassName={s.select}
-              labelClassName={s.label}
-              containerClassName={s.spanWide}
+          {productType !== "merch" ? (
+            <Controller
+              control={control}
+              name='releaseDate'
+              render={({ field }) => {
+                const dateValue = field.name === "releaseDate" ? parseServerDate(field.value) : null;
+                return (
+                  <div className={s.releaseDate}>
+                    <FieldLabel
+                      forField='releaseDate'
+                      field={{ title: "Дата релиза" }}
+                      className={s.label}
+                    />
+                    <CalendarField
+                      {...register("releaseDate")}
+                      value={dateValue}
+                      index={0}
+                      id='releaseDate'
+                      onBlur={field.onBlur}
+                      allowFuture
+                      wrapperClassName={s.dateInput}
+                      onChange={(selectedDate: Date | null) => {
+                        if (selectedDate instanceof Date && !isNaN(selectedDate.getTime())) {
+                          const year = selectedDate.getFullYear();
+                          const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+                          const day = String(selectedDate.getDate()).padStart(2, "0");
+                          field.onChange(`${year}-${month}-${day}`);
+                        } else {
+                          field.onChange(null);
+                        }
+                      }}
+                    />
+                  </div>
+                );
+              }}
+            />
+          ) : (
+            <Controller
+              name='kind'
+              control={control}
+              render={({ field }) => (
+                <SelectUI
+                  name='kind'
+                  label='Тип товара'
+                  options={merchKindsOptions}
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  selectClassName={s.select}
+                  labelClassName={s.label}
+                  disabled={isLoadingMerchKinds}
+                />
+              )}
             />
           )}
-        />
+
+          {productType === "merch" ? (
+            <Controller
+              name='album'
+              control={control}
+              render={({ field }) => (
+                <SelectUI
+                  name='album'
+                  label='Альбом'
+                  options={albumOptions}
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  selectClassName={s.select}
+                  labelClassName={s.label}
+                  disabled={isLoadingAlbums}
+                />
+              )}
+            />
+          ) : (
+            <Controller
+              name='genre'
+              control={control}
+              render={({ field }) => (
+                <SelectUI
+                  name='genre'
+                  label='Жанр'
+                  options={genresOptions}
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  selectClassName={s.select}
+                  labelClassName={s.label}
+                  disabled={isLoadingGenres}
+                />
+              )}
+            />
+          )}
+          <CustomInput
+            id='price'
+            type='number'
+            label='Цена'
+            error={!!errors.price}
+            message={errors.price?.message}
+            inputSize='large'
+            {...register("price", {
+              required: "Цена обязательна",
+              min: { value: 0, message: "Цена не может быть отрицательной" },
+              max: { value: 99999999, message: "Цена не может превышать 99999999" },
+              validate: (val) => {
+                // Проверяем, что дробная часть не больше 2 знаков
+                const str = String(val);
+                const parts = str.split(".");
+                if (parts.length > 1 && parts[1].length > 2) {
+                  return "Допускается не более 2 знаков после запятой";
+                }
+                return true;
+              },
+            })}
+            labelClassName={s.label}
+            inputClassName={s.input}
+          />
+          {productType === "merch" ? (
+            <CustomInput
+              id='quantity'
+              type='number'
+              label='Количество'
+              error={!!errors.name}
+              message={errors.name?.message}
+              inputSize='large'
+              {...register("quantity", {
+                min: { value: 0, message: "Количество не может быть отрицательным" },
+              })}
+              labelClassName={s.label}
+              inputClassName={clsx(s.input, s.quantityInput)}
+              disabled={hasProperty}
+            />
+          ) : (
+            <CheckboxUI
+              type='checkbox'
+              className={s.spanWide}
+              checked={!!watch("allowHigherPrice")}
+              {...register("allowHigherPrice")}
+            >
+              Разрешить фанатам платить больше если они хотят
+            </CheckboxUI>
+          )}
+
+          {productType === "merch" && (
+            <CheckboxUI
+              type='checkbox'
+              //onChange={(e) => setValue('allowHigherPrice', e.target.checked)}
+              checked={!!watch("allowHigherPrice")}
+              className={s.spanWide}
+              {...register("allowHigherPrice")}
+            >
+              Разрешить фанатам платить больше если они хотят
+            </CheckboxUI>
+          )}
+
+          <CustomInput
+            id='description'
+            label='Описание'
+            multiline
+            rows={5}
+            placeholder='Это описание будут видеть ваши слушатели'
+            style={{
+              resize: "none",
+            }}
+            {...register("description")}
+            labelClassName={s.label}
+            inputClassName={s.textarea}
+            className={s.spanFull}
+          />
+
+          
       </div>
-    </div>
+      <div className={s.flexContainer}>
+        <Controller
+            name='privacy'
+            control={control}
+            render={({ field }) => (
+              <SelectUI
+                name='privacy'
+                label='Приватность'
+                options={[
+                  { value: "public", label: "Для всех" },
+                  { value: "link_only", label: "Доступно по ссылке" },
+                  { value: "hidden", label: "Скрыто" },
+                ]}
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                selectClassName={s.select}
+                labelClassName={s.label}
+              />
+            )}
+          />
+
+          {productType === "release" && (
+            <CustomInput
+              id="upc"
+              type="number"
+              label="UPC"
+              error={!!errors.upc}
+              message={errors.upc?.message ?? "Укажите, если код уже выдан дистрибьютором"}
+              placeholder="12-13 цифр"
+              inputSize="large"
+              {...register("upc", {
+                minLength: { value: 12, message: "Не менее 12 цифр" },
+                maxLength: { value: 13, message: "Не более 13 цифр" },
+              })}
+              labelClassName={s.label}
+              inputClassName={s.input}
+              //className={s.spanWide}
+            />
+          )}
+        </div>
+      </div>
+    </>
   );
 };

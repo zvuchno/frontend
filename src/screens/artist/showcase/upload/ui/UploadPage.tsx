@@ -32,7 +32,7 @@ import {
 } from "@/entities/Artist";
 import { useShowcaseArtistId } from "@/entities/Artist/store/useShowcaseStore";
 
-import { ButtonUI, Loader, SelectUI, Text } from "@/shared/ui";
+import { ButtonUI, Loader, Text } from "@/shared/ui";
 
 import s from "./UploadPage.module.scss";
 import { AddPropertises } from "./components/addProperties/AddProperties";
@@ -40,13 +40,15 @@ import { UploadTrackModal } from "./components/uploadTrackModal/UploadTrackModal
 import { TracksList } from "./components/tracksList/TracksList";
 
 interface UploadPageProps {
-  type: "album" | "single" | "merch";
+  productType: "release" | "merch"; // тип товара на форме
   id: string | undefined;
 }
 
 const initialFormValues: UploadFormValues = {
   name: "",
   releaseDate: "",
+  releaseType: "single",
+  upc: null,
   kind: "",
   genre: "",
   price: null,
@@ -67,13 +69,10 @@ const initialFormValues: UploadFormValues = {
 };
 
 // Страница формы создания/редактирования товара
-export const UploadPage = ({ type, id }: UploadPageProps) => {
+export const UploadPage = ({ productType, id }: UploadPageProps) => {
   const router = useRouter();
   const { data } = useSession();
   const profileType = data?.user.profileType;
-
-  // тип товара на форме
-  const [productType, setProductType] = useState<"album" | "single" | "merch">(type);
 
   const [isTrackModalOpen, setIsTrackModalOpen] = useState<boolean>(false);
   const [trackId, setTrackId] = useState<number | undefined>(undefined);
@@ -91,7 +90,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
   const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
 
   // данные товра, получаемые, если перешли на эту страницу для редактирования
-  const { data: productData, isLoading, error } = useDetailInfo(type, currentProductId);
+  const { data: productData, isLoading, error } = useDetailInfo(productType, currentProductId);
 
   const initialValues = useMemo(() => {
     if (!id || !productData) {
@@ -158,7 +157,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
     if (!id || !productData) {
       return null;
     }
-    if (type === "merch") {
+    if (productType === "merch") {
       const main = (productData as TShowcaseMerchDetail).images_merch.find((i) => i.is_main);
       if (!main) return null;
       return {
@@ -177,32 +176,16 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
       is_main: true,
       id: releaseImageId,
     };
-  }, [id, type, productData]);
+  }, [id, productType, productData]);
 
   const additionalImagesPreviews = useMemo(() => {
     if (!id || !productData) {
       return undefined;
     }
-    return type === "merch"
+    return productType === "merch"
       ? (productData as TShowcaseMerchDetail).images_merch.filter((img) => !img.is_main)
       : undefined;
-  }, [id, type, productData]);
-
-  const handleChangeProductType = (value: string) => {
-    setProductType(value as "album" | "single" | "merch");
-    // Сброс полей, специфичных для другого типа, чтобы не было мусора
-    if (value === "merch") {
-      setValue("releaseDate", "");
-      setValue("genre", "");
-    } else {
-      setValue("kind", "");
-      setValue("quantity", undefined);
-      setValue("album", "");
-      setValue("propertyName", "");
-      setValue("variants", []);
-      setValue("hasProperty", false);
-    }
-  };
+  }, [id, productType, productData]);
 
   const onSubmit = async (
     data: UploadFormValues,
@@ -304,7 +287,7 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           const newData = mapDirtyFieldsToPayload(dirtyFields, data, hasProperty);
           if (productType === "merch" && isDirty) {
             await updateMerchMutation.mutateAsync({ id: currentProductId!, payload: newData });
-          } else if (productType === "album" || productType === "single") {
+          } else if (productType === "release") {
             await updateAlbumMutation.mutateAsync({
               id: currentProductId!,
               payload: {
@@ -336,21 +319,6 @@ export const UploadPage = ({ type, id }: UploadPageProps) => {
           className={s.form}
           onSubmit={handleSubmit((data) => onSubmit(data, isEditForm ? "save" : "publish"))}
         >
-          <SelectUI
-            value={productType}
-            onChange={handleChangeProductType}
-            options={[
-              { value: "album", label: "Альбом" },
-              { value: "single", label: "Сингл" },
-              { value: "merch", label: "Мерч" },
-            ]}
-            label='Категория'
-            placeholder='тип товара'
-            containerClassName={s.typeSelect}
-            selectClassName={s.typeSelect__select}
-            labelClassName={s.label}
-            disabled={!!productData}
-          />
 
           <UploadForm
             productType={productType}

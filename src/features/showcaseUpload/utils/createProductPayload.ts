@@ -8,7 +8,7 @@ const normalizePrice = (val: number): string => {
 
 export const createProductPayload = (
   data: UploadFormValues,
-  productType: "album" | "merch" | "single",
+  productType: "release" | "merch",
   profileType: "artist" | "label" | undefined,
   currentArtistId: number | null,
   action: "uploadTrack" | "publish" | "draft" | "save" | "cancel",
@@ -20,12 +20,13 @@ export const createProductPayload = (
     ? currentArtistId!
     : data.artistId ? Number(data.artistId) : currentArtistId!;
 
-  if (productType === "album" || productType === "single") {
+  if (productType === "release") {
 
     return {
       name: data.name,
       artist,
-      is_single: productType === "single",
+      release_type: data.releaseType,
+      upc: data.upc ? (data.upc).toString() : null,
       release_date: data.releaseDate,
       genre: data.genre ? Number(data.genre) : null,
       price: priceStr,
