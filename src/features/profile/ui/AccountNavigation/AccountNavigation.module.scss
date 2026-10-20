@@ -1,12 +1,11 @@
 .navigation {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 16px;
   width: 188px;
   flex-shrink: 0;
 
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
     width: 100%;
-    
   }
 }
