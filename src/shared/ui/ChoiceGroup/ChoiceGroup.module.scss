@@ -8,12 +8,6 @@
 	border: 1px solid var(--foreground);
 	width: 100%;
 
-  @media (max-width: 400px) {
-    flex-direction: column;
-    row-gap: 10px;
-    width: fit-content;
-  }
-
 	&__label {
 		position: relative;
   	cursor: pointer;
@@ -36,7 +30,7 @@
 	&__button {
 		display: flex;
 		align-items: center;
-		padding: 12px 16px;
+		padding: 9px 14px;
 		gap: 8px;
     background-color: transparent; 
     transition: background-color 0.2s ease;
@@ -65,7 +59,7 @@
 	}
 }
 
-.radioGroup__input:focus-within + .radioGroup__button {
+.radioGroup__input:focus-visible + .radioGroup__button {
   outline: 2px solid var(--color-text-primary);
   outline-offset: 1px;
 }

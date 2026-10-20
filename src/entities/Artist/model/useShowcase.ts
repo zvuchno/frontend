@@ -104,7 +104,7 @@ export function useAlbumsInfiniteQuery({
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage?.next,
     enabled: !!artistSlug,
-    staleTime: 10 * 10 * 1000,
+    //staleTime: 10 * 10 * 1000,
   });
 }
 

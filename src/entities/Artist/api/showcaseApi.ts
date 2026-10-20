@@ -128,7 +128,7 @@ export async function deleteAlbum({ id }: { id: number }) {
 }
 
 export async function deleteMerch({ id }: { id: number }): Promise<void> {
-  const url = `${baseUrl}/v1/store/merch/${id}/`;
+  const url = `${baseUrl}/v1/store/merch/${id}`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",
