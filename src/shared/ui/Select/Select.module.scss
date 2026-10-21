@@ -62,6 +62,10 @@
     color: #9ca3af; 
     cursor: not-allowed;
   }
+
+  &_error {
+    border-color: var(--color-primary-blue);
+  }
 }
 
 .select__icon {

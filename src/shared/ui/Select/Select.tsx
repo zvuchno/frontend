@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import type { SelectUIProps } from './Select.types';
 import styles from './Select.module.scss';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { FieldErrorMessage } from '../CustomInput/FieldErrorMessage/FieldErrorMessage';
 
 
 
@@ -30,6 +31,8 @@ export const SelectUI = forwardRef<HTMLSelectElement, SelectUIProps> (
     optionClassName,
     name,
     value,
+    error,
+    messageSize = "large",
     onChange,
   }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +90,8 @@ export const SelectUI = forwardRef<HTMLSelectElement, SelectUIProps> (
             className={clsx(
               styles.select__select, 
               selectClassName, 
-              { [styles.select__select_disabled]: disabled }
+              { [styles.select__select_disabled]: disabled },
+              { [styles.select__select_error]: error }
             )}
             onClick={() => !disabled && setIsOpen((prev) => !prev)}
             tabIndex={disabled ? undefined : 0}
@@ -148,6 +152,7 @@ export const SelectUI = forwardRef<HTMLSelectElement, SelectUIProps> (
             </div>
           )}
         </div>
+        {error && <FieldErrorMessage message={error} hasError={!!error} size={messageSize} />}
       </div>
     );
   }

@@ -113,6 +113,7 @@ export const UploadPage = ({ productType, id }: UploadPageProps) => {
   } = methods;
 
   const hasProperty = watch("hasProperty");
+  const releaseType = watch("releaseType");
 
   useEffect(() => {
     reset(initialValues);
@@ -342,22 +343,7 @@ export const UploadPage = ({ productType, id }: UploadPageProps) => {
           />
 
           <div className={s.buttonsContainer}>
-            {productType !== "merch" ? (
-              <div className={s.uploadContainer}>
-                <ButtonUI
-                  variant='primary'
-                  type='button'
-                  onClick={() => handleSubmit((d) => onSubmit(d, "uploadTrack"))()}
-                  disabled={isSubmitting}
-                  className={s.uploadContainer__uploadButton}
-                >
-                  Загрузить трек
-                </ButtonUI>
-                <Text className={s.uploadContainer__hint}>
-                  Загрузите трек с вашего устройства (максимальный размер 500 MB; MP3, WAV, FLAC)
-                </Text>
-              </div>
-            ) : (
+            {productType === "merch" ? (
               <>
                 {!hasProperty ? (
                   <div className={s.uploadContainer}>
@@ -375,7 +361,22 @@ export const UploadPage = ({ productType, id }: UploadPageProps) => {
                   <AddPropertises />
                 )}
               </>
-            )}
+            ) : releaseType !== "single" || tracksList.length === 0 ? (
+              <div className={s.uploadContainer}>
+                <ButtonUI
+                  variant='primary'
+                  type='button'
+                  onClick={() => handleSubmit((d) => onSubmit(d, "uploadTrack"))()}
+                  disabled={isSubmitting}
+                  className={s.uploadContainer__uploadButton}
+                >
+                  Загрузить трек
+                </ButtonUI>
+                <Text className={s.uploadContainer__hint}>
+                  Загрузите трек с вашего устройства (максимальный размер 500 MB; MP3, WAV, FLAC)
+                </Text>
+              </div>
+            ) : null}
 
             <ButtonUI variant='primary' type='submit' disabled={isSubmitting}>
               {isSubmitting ? "Загрузка..." : isEditForm ? "Сохранить" : "Опубликовать"}
@@ -395,6 +396,7 @@ export const UploadPage = ({ productType, id }: UploadPageProps) => {
         <UploadTrackModal
           isOpen={isTrackModalOpen}
           albumId={newAlbumId ? newAlbumId : currentProductId!}
+          releaseType={releaseType}
           onClose={() => {
             setIsTrackModalOpen(false);
             setTrackId(undefined);

@@ -26,4 +26,6 @@ export type SelectUIProps = {
   labelClassName?: string;
   contentClassName?: string;
   optionClassName?: string;
+  error?: string;
+  messageSize?: "small" | "large";
 }
