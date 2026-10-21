@@ -296,19 +296,21 @@ export const UploadForm = ({
             />
           ) : (
             <Controller
-              name='genre'
+              name="genre"
               control={control}
-              render={({ field }) => (
-                <SelectUI
-                  name='genre'
-                  label='Жанр'
-                  options={genresOptions}
-                  value={field.value ?? ""}
-                  onChange={field.onChange}
-                  selectClassName={s.select}
-                  labelClassName={s.label}
-                  disabled={isLoadingGenres}
-                />
+              rules={{ required: "Выберите жанр" }}
+              render={({ field, fieldState: { error } }) => (
+                  <SelectUI
+                    name="genre"
+                    label="Жанр"
+                    options={genresOptions}
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    selectClassName={s.select}
+                    labelClassName={s.label}
+                    disabled={isLoadingGenres}
+                    error={error?.message}
+                  />
               )}
             />
           )}

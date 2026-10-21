@@ -61,8 +61,12 @@ import type {
 } from "./types";
 
 const showErrorMessage = (error: unknown) => {
-  if (error instanceof ApiError) {
-    toast.error(error.message, {
+  if (error instanceof ApiError || error instanceof Error) {
+    let messageToShow = error.message;
+    if (messageToShow.includes("Введите правильное число")) {
+      messageToShow = "Укажите количество товара";
+    }
+    toast.error(messageToShow, {
       duration: 8000,
     });
     return;
@@ -201,13 +205,6 @@ export function useUpdateAlbum() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось обновить релиз"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -225,13 +222,6 @@ export function useUpdateMerch() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось обновить мерч"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -253,13 +243,6 @@ export function useUpdatePromocode() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось обновить промокод"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -278,13 +261,6 @@ export function useDeleteAlbum() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось удалить релиз"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -302,13 +278,6 @@ export function useDeleteMerch() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось удалить мерч"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -326,13 +295,6 @@ export function useDeletePromocode() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось удалить промокод"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -350,13 +312,6 @@ export function useCreateAlbum() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось создать релиз"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -373,16 +328,6 @@ export function useCreateMerch() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      let message = "Не удалось создать мерч";
-
-      if (error.message.includes("Введите правильное число")) {
-        message = "Укажите количество товара";
-      }
-
-      toast.error(message, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -398,13 +343,6 @@ export function useCreatePromocode() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось создать промокод"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -462,9 +400,6 @@ export function useAddImage() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const message = error.message ?? "Не удалось добавить изображение";
-      toast.error(message);
     },
   });
 }
@@ -480,13 +415,6 @@ export function useUpdateImage() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Ошибка обновления изображений"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -502,13 +430,6 @@ export function useDeleteImage() {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось удалить изображение"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -562,13 +483,6 @@ export function useDeleteTrack(album?: number) {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось удалить трек"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -586,13 +500,6 @@ export function useUpdateTrackInfo(album: number) {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось обновить информацию о треке"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -610,13 +517,6 @@ export function useUploadTrack(album: number) {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      const errorMessage = error.message.includes("HTTP")
-        ? "Не удалось загрузить трек"
-        : error.message;
-      toast.error(errorMessage, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -634,10 +534,6 @@ export function useUpdateTrack(album: number) {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      toast.error(`Не удалось обновить файл трека: ${error.message}`, {
-        duration: 8000,
-      });
     },
   });
 }
@@ -655,10 +551,6 @@ export function useChangeTracksOrder(albumId?: number | null) {
     },
     onError: (error) => {
       showErrorMessage(error);
-
-      toast.error(`Не удалось обновить порядок треков: ${error.message}`, {
-        duration: 8000,
-      });
     },
   });
 }

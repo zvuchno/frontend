@@ -20,6 +20,7 @@ import {
   type TrackFormValues 
 } from "@/features/showcaseUpload";
 import { 
+  type TReleaseType,
   type TUpdateTrackPayload,
   type TUploadTrackPayload, 
   useDetailTrack, 
@@ -41,12 +42,14 @@ interface UploadTrackModalProps {
   albumId: number;
   onClose: () => void;
   trackId?: number;
+  releaseType?: TReleaseType;
 };
 
 export const UploadTrackModal = ({ 
   isOpen, 
   trackId,
   albumId,
+  releaseType,
   onClose,
 }: UploadTrackModalProps) => {
   const trackInputRef = useRef<HTMLInputElement | null>(null);
@@ -144,7 +147,8 @@ export const UploadTrackModal = ({
               name: data.name,
               description: data.description,
               ...(data.price ? { price: data.price.toString() } : {}),
-              allow_overpay: data.allowHigherPrice,
+              ...(releaseType !== "single" && { allow_overpay: data.allowHigherPrice })
+              //allow_overpay: data.allowHigherPrice,
             }
             await uploadTrackMutation.mutateAsync({file: data.track, data: payload});
             handleClose();
@@ -256,40 +260,42 @@ export const UploadTrackModal = ({
             inputClassName={s.input}
             maxLength={255}
           />
-          <div className={s.container}>
-            <CustomInput 
-              id={'price'}
-              type='number'
-              label="Индивидуальная цена"
-              error={!!errors.price}
-              message={errors.price?.message}
-              {...register('price', { 
-                required: false,
-                min: { value: 0, message: 'Цена не может быть отрицательной' },
-                max: { value: 99999999, message: 'Цена не может быть больше 99999999' },
-                validate: (val) => {
-                  const str = String(val);
-                  const parts = str.split('.');
-                  if (parts.length > 1 && parts[1].length > 2) {
-                    return 'Допускается не более 2 знаков после запятой';
-                  }
-                  return true;
-                },
-              })}
-              labelClassName={s.label}
-              inputClassName={s.input}
-              hintText="если не выставить индивидуальную цену, то приобрести трек отдельно от всего альбома будет нельзя"
-            />
+          {releaseType && releaseType !== "single" && (
+            <div className={s.container}>
+              <CustomInput 
+                id={'price'}
+                type='number'
+                label="Индивидуальная цена"
+                error={!!errors.price}
+                message={errors.price?.message}
+                {...register('price', { 
+                  required: false,
+                  min: { value: 0, message: 'Цена не может быть отрицательной' },
+                  max: { value: 99999999, message: 'Цена не может быть больше 99999999' },
+                  validate: (val) => {
+                    const str = String(val);
+                    const parts = str.split('.');
+                    if (parts.length > 1 && parts[1].length > 2) {
+                      return 'Допускается не более 2 знаков после запятой';
+                    }
+                    return true;
+                  },
+                })}
+                labelClassName={s.label}
+                inputClassName={s.input}
+                hintText="если не выставить индивидуальную цену, то приобрести трек отдельно от всего альбома будет нельзя"
+              />
 
-            <CheckboxUI 
-              type='checkbox'
-              checked={!!watch('allowHigherPrice')}
-              {...register('allowHigherPrice')}
-              className={s.checkbox}
-            >
-              Разрешить фанатам платить больше, если они хотят
-            </CheckboxUI>
-          </div>
+              <CheckboxUI 
+                type='checkbox'
+                checked={!!watch('allowHigherPrice')}
+                {...register('allowHigherPrice')}
+                className={s.checkbox}
+              >
+                Разрешить фанатам платить больше, если они хотят
+              </CheckboxUI>
+            </div>
+          )}
 
           <CustomInput 
             id="description"
