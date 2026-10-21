@@ -143,17 +143,19 @@
       border: none;
       background-color: transparent;
       opacity: 0.5;
-      transform: rotate(180deg);
+      transform: rotate(90deg);
       transition: all 0.03s linear;
       cursor: pointer;
 
       &.open {
-        transform: rotate(0deg);
+        transform: rotate(-90deg);
         transition: all 0.03s linear;
       }
 
       & svg {
         width: 100%;
+        color: currentColor;
+        stroke-color: currentColor;
       }
     }
   }
