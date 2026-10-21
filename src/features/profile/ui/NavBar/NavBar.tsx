@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 
 import clsx from "clsx";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { ArrowIcon } from "@/shared/ui";
 import { MenuIcon } from "@/shared/ui/MenuIcon/MenuIcon";
 
 import s from "./NavBar.module.scss";
@@ -15,7 +15,11 @@ import { type NavBarProps } from "./NavBar.type";
 export const NavBar = ({ links, title }: NavBarProps) => {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const initMenuState =
+    (pathname.includes("fans") && title === "Аккаунт") ||
+    (pathname.includes("artist") && title === "Кабинет артиста");
+  const [isMenuOpen, setIsMenuOpen] = useState(initMenuState);
 
   useEffect(() => {
     const updateHash = () => {
@@ -48,9 +52,15 @@ export const NavBar = ({ links, title }: NavBarProps) => {
         <h4 className={s.title}>{title}</h4>
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
+          title={isMenuOpen ? "Свернуть" : "Развернуть"}
           className={clsx(s.titleButton, { [s.open]: isMenuOpen })}
         >
-          <ArrowIcon />
+          <Image
+            src='/icons/arrow-right.svg'
+            alt={isMenuOpen ? "Свернуть" : "Развернуть"}
+            width={24}
+            height={24}
+          />
         </button>
       </div>
 
