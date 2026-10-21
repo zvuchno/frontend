@@ -1,0 +1,15 @@
+.container {
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+}
+
+.body {
+  display: flex;
+  width: 100%;
+  background-color: var(--background);
+
+  @media (max-width: 725px) {
+    flex-direction: column;
+    position: relative;
+  }
+}

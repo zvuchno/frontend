@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { MenuIcon } from "@/shared/ui/MenuIcon/MenuIcon";
+import { Menutag } from "@/shared/ui/MenuTag/MenuTag";
 
 import s from "./NavBar.module.scss";
 import { type NavBarProps } from "./NavBar.type";
@@ -70,7 +70,6 @@ export const NavBar = ({ links, title }: NavBarProps) => {
       >
         {links.map((link) => {
           const href = typeof link.href === "string" ? link.href : link.href.pathname;
-          const Icon = link.icon;
 
           return (
             <Link
@@ -80,12 +79,11 @@ export const NavBar = ({ links, title }: NavBarProps) => {
                 [s.link_active]: typeof href === "string" && isLinkActive(href),
               })}
             >
-              <div className={s.menuTag}>
-                <MenuIcon className={s.menuTagIconContainer}>
-                  {Icon && <Icon className={s.menuTagIcon} aria-hidden='true' />}
-                </MenuIcon>
-                <span className={s.menuTagName}>{link.label}</span>
-              </div>
+              <Menutag
+                title={link.label}
+                icon={link.icon}
+                isActive={typeof href === "string" && isLinkActive(href)}
+              />
             </Link>
           );
         })}
