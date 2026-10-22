@@ -1,5 +1,5 @@
 // showcase types
-export type TShowcaseItem = "products" | "album" | "merch" | "promo" | "release";
+export type TShowcaseItem = "merch" | "promo" | "release";
 export type TReleaseType = "single" | "ep" | "album";
 
 // для списка товаров/промокодов в витрине

@@ -6,12 +6,11 @@
   gap: 20px;
   flex-wrap: wrap;
 
-  &__buttons {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    justify-content: space-between;
+  &__choice {
+    @media(max-width: 598px) {
+      flex-direction: column;
+      row-gap: 10px;
+    }
   }
 
   &__select {
@@ -20,57 +19,6 @@
     gap: 12px;
     flex-wrap: wrap;
   }
-}
-
-.button.button {
-  min-width: clamp(130px, 16.042vw, 231px);
-  padding: 12px;
-  min-height: 40px;
-
-  & span {
-    font-family: var(--font-feature-mono);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 100%;
-    letter-spacing: -0.06em;
-  }
-}
-
-.popup {
-  position: absolute;
-  bottom: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 14px 22px;
-  background-color: var(--background);
-  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  z-index: 100;
-
-  &__item {
-    background: none;
-    border: none;
-    width: 100%;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: 400;
-    line-height: inherit;
-    letter-spacing: inherit;
-    color: var(--color-text-primary);
-    cursor: pointer;
-
-    &:hover {
-      color: var(--color-primary-blue);
-    }
-  }
-}
-
-.popup_product {
-  left: 16px;
-}
-
-.popup_promo {
-  right: 9px;
 }
 
 //продублированы названия селекторов, т.к стили перезатирались стилями из самого компонента SelectUI
