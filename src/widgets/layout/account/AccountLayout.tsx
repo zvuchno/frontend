@@ -1,6 +1,6 @@
 "use client";
 
-import { AccountNavigation } from "@/features/profile";
+import { AccountNavigation, ActiveLinkProvider, useActiveLink } from "@/features/profile";
 
 import { useCurrentArtist } from "@/entities/profile";
 
@@ -11,24 +11,25 @@ import { AccountContent } from "./components/AccountContent/AccountContent";
 import { type TDataStatus } from "./components/DataStatusBar/DataStatusBar";
 import { SideMenu } from "./components/SideMenu/SideMenu";
 
-export const AccountLayout = ({
-  subtitle,
-  children,
-  dataStatus,
-  primaryButtonTitle,
-  secondaryButtonTitle,
-  onClickPrimaryBtn,
-  onClickSecondaryBtn,
-}: {
-  subtitle: string;
+type AccountLayoutProps = {
   children: React.ReactNode;
   dataStatus?: TDataStatus;
   primaryButtonTitle?: string;
   secondaryButtonTitle?: string;
   onClickPrimaryBtn?: () => void;
   onClickSecondaryBtn?: () => void;
-}) => {
+};
+
+const AccountLayoutContent = ({
+  children,
+  dataStatus,
+  primaryButtonTitle,
+  secondaryButtonTitle,
+  onClickPrimaryBtn,
+  onClickSecondaryBtn,
+}: AccountLayoutProps) => {
   const { data: currentArtist } = useCurrentArtist();
+  const { activeLink } = useActiveLink();
 
   return (
     <AccentContainer className={s.container}>
@@ -37,7 +38,7 @@ export const AccountLayout = ({
           <AccountNavigation type={currentArtist?.profile_type} />
         </SideMenu>
         <AccountContent
-          title={subtitle}
+          title={activeLink?.label}
           dataStatus={dataStatus}
           primaryButtonTitle={primaryButtonTitle}
           secondaryButtonTitle={secondaryButtonTitle}
@@ -50,3 +51,9 @@ export const AccountLayout = ({
     </AccentContainer>
   );
 };
+
+export const AccountLayout = (props: AccountLayoutProps) => (
+  <ActiveLinkProvider>
+    <AccountLayoutContent {...props} />
+  </ActiveLinkProvider>
+);

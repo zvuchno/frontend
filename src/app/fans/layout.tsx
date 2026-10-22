@@ -5,7 +5,7 @@ import s from "./layout.module.scss";
 const FansLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={s.page}>
-      <AccountLayout subtitle={""}>{children}</AccountLayout>
+      <AccountLayout>{children}</AccountLayout>
     </div>
   );
 };

@@ -7,3 +7,5 @@ export { ProfileFormArtistUI } from "./ui/profileForm/profileFormArtist";
 export type { FieldValues } from "./ui/profileForm/types";
 export { ProfileFormListenerUI } from "./ui/profileForm/profileFormListener";
 export { AccountNavigation } from "./ui/AccountNavigation/AccountNavigation";
+export { ActiveLinkProvider } from "./context/ActiveLinkProvider";
+export { useActiveLink } from "./context/useActiveLink";

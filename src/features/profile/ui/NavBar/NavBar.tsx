@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 
 import { Menutag } from "@/shared/ui/MenuTag/MenuTag";
 
+import { useActiveLink } from "../../context/useActiveLink";
 import s from "./NavBar.module.scss";
 import { type NavBarProps } from "./NavBar.type";
 
@@ -20,6 +21,18 @@ export const NavBar = ({ links, title }: NavBarProps) => {
     (pathname.includes("fans") && title === "Аккаунт") ||
     (pathname.includes("artist") && title === "Кабинет артиста");
   const [isMenuOpen, setIsMenuOpen] = useState(initMenuState);
+
+  const { setActiveLink } = useActiveLink();
+
+  useEffect(() => {
+    const currentLink = links.find(
+      (link) =>
+        typeof link.href === "string" &&
+        (pathname === link.href || pathname.startsWith(`${link.href}/`))
+    );
+
+    if (currentLink) setActiveLink(currentLink);
+  }, [links, pathname, setActiveLink]);
 
   useEffect(() => {
     const updateHash = () => {
@@ -78,6 +91,9 @@ export const NavBar = ({ links, title }: NavBarProps) => {
               className={clsx(s.link, {
                 [s.link_active]: typeof href === "string" && isLinkActive(href),
               })}
+              onClick={() => {
+                setActiveLink(link);
+              }}
             >
               <Menutag
                 title={link.label}

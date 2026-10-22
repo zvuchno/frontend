@@ -120,7 +120,6 @@ export function ArtistProfileContent() {
       <div className={styles.content}>
         <ProfileFormUI
           className={styles.profileForm}
-          title='Профиль'
           isChecked={isEditMode && isFormValid}
           isOnChange={isEditMode}
           isSubmitting={updateArtist.isPending}
