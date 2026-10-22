@@ -1,13 +1,12 @@
 .page {
   width: 100%;
-  max-width: 810px;
-  padding-bottom: 170px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //max-width: 810px;
+  //padding-bottom: 170px;
   color: var(--color-text-primary, #100f0d);
-  margin-inline: auto;
-
-  @media (max-width: 768px) {
-    padding-bottom: 0;
-  }
+  //margin-inline: auto;
 }
 
 .title {

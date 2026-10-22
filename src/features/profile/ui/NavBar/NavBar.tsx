@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import clsx from "clsx";
 import Image from "next/image";
@@ -24,7 +24,7 @@ export const NavBar = ({ links, title }: NavBarProps) => {
 
   const { setActiveLink } = useActiveLink();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const currentLink = links.find(
       (link) =>
         typeof link.href === "string" &&
@@ -91,9 +91,6 @@ export const NavBar = ({ links, title }: NavBarProps) => {
               className={clsx(s.link, {
                 [s.link_active]: typeof href === "string" && isLinkActive(href),
               })}
-              onClick={() => {
-                setActiveLink(link);
-              }}
             >
               <Menutag
                 title={link.label}
