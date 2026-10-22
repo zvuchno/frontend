@@ -1,6 +1,6 @@
 .formSelector {
   height: 139px;
-  width: 83.46%;
+  //width: 83.46%;
   max-width: 676px;
   margin-block-start: 12px;
   display: flex;
@@ -37,7 +37,7 @@
 .formButtons {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   width: 100%;
   gap: 16px;
 

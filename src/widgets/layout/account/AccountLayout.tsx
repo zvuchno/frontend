@@ -36,7 +36,11 @@ const AccountLayoutContent = ({
   const { data: legalData, status } = useGetArtistLegalData(isArtistDataPage);
   const recipientType = legalData?.legal_profile?.recipient_type;
   const moderatedLabel =
-    recipientType === "legal_entity" ? "Данные юридического лица" : "Личные данные";
+    recipientType === "legal_entity"
+      ? "Данные юридического лица"
+      : !recipientType
+        ? activeLink?.label
+        : "Личные данные";
 
   if (isArtistDataPage && status === "pending") return <Loader />;
 

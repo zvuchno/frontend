@@ -28,7 +28,7 @@
     background-color: #9acaff;
   }
 
-  @media (max-width: 725px) {
+  @media (max-width: 768px) {
     gap: clamp(20px, 6vw, 38px);
   }
 
@@ -53,7 +53,7 @@
       height: 72.8px;
     }
 
-    @media (max-width: 725px) {
+    @media (max-width: 768px) {
       width: 139px;
       height: 130px;
     }
@@ -71,7 +71,7 @@
       line-height: 7 / 6;
       text-transform: none;
 
-      @media (max-width: 725px) {
+      @media (max-width: 768px) {
         font-size: clamp(18px, 4vw, 24px);
       }
     }

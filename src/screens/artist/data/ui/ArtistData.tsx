@@ -33,12 +33,7 @@ const LegalEntityRecipientTypeInput = ({
 }) => {
   if (recipientType !== "legal_entity") return null;
 
-  return (
-    <input
-      type='hidden'
-      {...register("legal_profile.recipient_type", recipientTypeRules)}
-    />
-  );
+  return <input type='hidden' {...register("legal_profile.recipient_type", recipientTypeRules)} />;
 };
 
 export const ArtistData = () => {
@@ -67,7 +62,6 @@ export const ArtistData = () => {
   if (!isLoading && !isFormOpen)
     return (
       <div className={styles.formContentWrapper}>
-        <h3 className={styles.formTitle}>Данные профиля</h3>
         <FormProvider {...methods}>
           <LegalFormSelector
             onSelect={(type) => {
@@ -85,10 +79,7 @@ export const ArtistData = () => {
   return (
     <FormProvider {...methods}>
       <ArtistFormPersonal values={data} />
-      <LegalEntityRecipientTypeInput
-        recipientType={recipientType}
-        register={methods.register}
-      />
+      <LegalEntityRecipientTypeInput recipientType={recipientType} register={methods.register} />
       <DevTool control={methods.control} />
     </FormProvider>
   );

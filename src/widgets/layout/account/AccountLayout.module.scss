@@ -8,7 +8,7 @@
   width: 100%;
   background-color: var(--background);
 
-  @media (max-width: 725px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     position: relative;
   }
