@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { getArtistLegalData } from "../store/api";
 import { type TArtistLegalData } from "../store/types";
 
-export function useGetArtistLegalData() {
+export function useGetArtistLegalData(enabled = true) {
   const { status } = useSession();
 
   const isSessionLoading = status === "loading";
@@ -12,7 +12,7 @@ export function useGetArtistLegalData() {
   return useQuery<Partial<TArtistLegalData>>({
     queryKey: ["artist-legal-data"],
     queryFn: () => getArtistLegalData(),
-    enabled: !isSessionLoading,
+    enabled: enabled && !isSessionLoading,
     refetchOnWindowFocus: false,
   });
 }
