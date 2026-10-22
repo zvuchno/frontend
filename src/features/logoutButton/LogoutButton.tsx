@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 
+import clsx from "clsx";
 import { signOut } from "next-auth/react";
 
 import { useRecentlyViewed } from "@/entities/recentlyViewed";
 import { useSignOut } from "@/entities/user";
 
 import { ButtonUI, ModalUI } from "@/shared/ui";
+import { Menutag } from "@/shared/ui/MenuTag/MenuTag";
 
+import IconExit from "../../../public/icons/IcoLogout.svg?react";
 import s from "./LogoutButton.module.scss";
 
 const LogoutButton = ({ className }: { className?: string }) => {
@@ -46,14 +49,13 @@ const LogoutButton = ({ className }: { className?: string }) => {
   };
   return (
     <>
-      <ButtonUI
-        variant='secondary'
+      <Menutag
+        title={"Выйти"}
         onClick={handleConfirmModalOpen}
-        size='small'
-        className={className}
-      >
-        Выйти
-      </ButtonUI>
+        icon={IconExit}
+        className={clsx(s.exitButton, className)}
+      />
+
       <ModalUI
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}

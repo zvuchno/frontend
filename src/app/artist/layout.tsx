@@ -8,7 +8,7 @@ import { useParams, usePathname } from "next/navigation";
 
 import { EMPTY_PROFILE_FORM_VALUES } from "@/screens/artist/profile/form.utils";
 
-import { AccountNavigation, type FieldValues } from "@/features/profile";
+import { type FieldValues } from "@/features/profile";
 
 import {
   useSetArtistId,
@@ -29,8 +29,9 @@ import {
   useUpdateArtistCover,
 } from "@/entities/profile";
 
-import { AccentContainer, Loader, Title } from "@/shared/ui";
+import { Loader } from "@/shared/ui";
 
+import { AccountLayout } from "@/widgets/layout/account/AccountLayout";
 import { ArtistDataSectionLayout } from "./components/ArtistDataSectionLayout/ArtistDataSectionLayout";
 import s from "./layout.module.scss";
 
@@ -122,19 +123,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
         <div className={s.page}>
           <ArtistProfileEditModeProvider>
             <FormProvider {...methods}>
-              <AccentContainer className={s.container}>
-                <div className={s.body}>
-                  <Title Tag='h2' className={s.title}>
-                    Личный кабинет
-                  </Title>
-
-                  <section className={s.section}>
-                    <AccountNavigation type={currentArtist?.profile_type} />
-
-                    <div className={s.section__content}>{children}</div>
-                  </section>
-                </div>
-              </AccentContainer>
+              <AccountLayout subtitle={""}>{children}</AccountLayout>
 
               {shouldShowArtistInfo && (isManagedProfileLoading || isLoading) ? (
                 <Loader />
