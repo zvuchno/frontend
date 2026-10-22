@@ -12,7 +12,6 @@ import { type FieldValues, type TProfileFormUIProps } from "./types";
 export const ProfileFormUI = ({
   children,
   className,
-  title = "Профиль",
   isChecked,
   isOnChange,
   isSubmitting,
@@ -36,7 +35,6 @@ export const ProfileFormUI = ({
       }}
     >
       <div className={styles.formContentWrapper}>
-        <h3 className={styles.formTitle}>{title}</h3>
         <div className={styles.formContent}>{children}</div>
         {onUpdatePassword && (
           <button type='button' className={styles.passwordButton} onClick={onUpdatePassword}>

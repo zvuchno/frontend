@@ -237,7 +237,6 @@ export function ListenerProfileFormSection() {
       <FormProvider {...methods}>
         <ProfileFormUI
           className={styles.profileForm}
-          title='Профиль'
           isChecked={isEditMode && isDirty && isValid && !isProfileBusy}
           isOnChange={isEditMode || isProfileBusy}
           isSubmitting={isProfileSaving}

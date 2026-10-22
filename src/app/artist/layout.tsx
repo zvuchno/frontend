@@ -8,6 +8,8 @@ import { useParams, usePathname } from "next/navigation";
 
 import { EMPTY_PROFILE_FORM_VALUES } from "@/screens/artist/profile/form.utils";
 
+import { AccountLayout } from "@/widgets/layout/account/AccountLayout";
+
 import { type FieldValues } from "@/features/profile";
 
 import {
@@ -31,7 +33,6 @@ import {
 
 import { Loader } from "@/shared/ui";
 
-import { AccountLayout } from "@/widgets/layout/account/AccountLayout";
 import { ArtistDataSectionLayout } from "./components/ArtistDataSectionLayout/ArtistDataSectionLayout";
 import s from "./layout.module.scss";
 
@@ -123,7 +124,7 @@ const ArtistLayout = ({ children }: { children: React.ReactNode }) => {
         <div className={s.page}>
           <ArtistProfileEditModeProvider>
             <FormProvider {...methods}>
-              <AccountLayout subtitle={""}>{children}</AccountLayout>
+              <AccountLayout>{children}</AccountLayout>
 
               {shouldShowArtistInfo && (isManagedProfileLoading || isLoading) ? (
                 <Loader />
