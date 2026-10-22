@@ -86,7 +86,7 @@ export async function getFavoriteProducts({
           return `${parsedUrl.pathname}${parsedUrl.search}`;
         }
         const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
-        return `${baseUrl}${backendPath}${parsedUrl.search}`;
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
       })()
     : mainUrl;
 
@@ -105,7 +105,17 @@ export async function getFavoriteProducts({
 
 export async function getOrders(url?: string): Promise<PaginatedStoreResponse<StoreOrder>> {
   const mainUrl = `${baseUrl}/v1/store/orders?limit=6`;
-  const currentUrl = url ? url : mainUrl;
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
 
   try {
     const data = await authFetchClient<PaginatedStoreResponse<StoreOrder>>(currentUrl, {
@@ -143,7 +153,18 @@ export async function getPurchasedReleases({
   const mainUrl = hasLimit
     ? `${baseUrl}/v1/store/me/purchased-music?limit=6`
     : `${baseUrl}/v1/store/me/purchased-music`;
-  const currentUrl = url ? url : mainUrl;
+
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
   const data = await authFetchClient<PaginatedStoreResponse<PurchasedReleases>>(currentUrl, {
     method: "GET",
   });

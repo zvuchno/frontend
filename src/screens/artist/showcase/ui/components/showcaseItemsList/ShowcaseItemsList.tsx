@@ -18,7 +18,7 @@ import {
   useUpdatePromocode,
 } from "@/entities/Artist";
 
-import { Text, Title } from "@/shared/ui";
+import { Text } from "@/shared/ui";
 
 import s from "./showcaseItemsList.module.scss";
 
@@ -51,7 +51,7 @@ export const ShowcaseItemsList = ({
 
   const [columnsCount, setColumnsCount] = useState<number>();
 
-  const isProduct = itemType === "products" || itemType === "album" || itemType === "merch";
+  const isProduct = itemType === "release" || itemType === "merch";
   const isPromo = itemType === "promo";
 
   const handleToggleAlbumVisibility = async (isChecked: boolean, id: number) => {
@@ -121,9 +121,6 @@ export const ShowcaseItemsList = ({
 
   return (
     <div className={s.content}>
-      <Title Tag='h4' className={s.title}>
-        {itemType === "promo" ? "Промокоды" : "Товары"}
-      </Title>
 
       <div
         className={clsx(

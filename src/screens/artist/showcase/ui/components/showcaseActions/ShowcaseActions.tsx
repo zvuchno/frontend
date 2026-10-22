@@ -1,25 +1,27 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import s from "./ShowcaseActions.module.scss";
-import { ButtonUI, SelectUI } from "@/shared/ui";
-import clsx from "clsx";
-import type { PromoTypeFilter, TShowcaseItem } from "@/entities/Artist";
-import Link from "next/link";
+import { SelectUI } from "@/shared/ui";
+import type { TShowcaseItem } from "@/entities/Artist";
+import { DropButton } from "@/shared/ui/DropButton/DropButton";
+import { ChoiceGroup } from "@/shared/ui/ChoiceGroup";
+import { MusicIcon } from "@/shared/ui/Icons/musicIcon";
+import { TShirtIcon } from "@/shared/ui/Icons/tshirtIcon/TShirtIcon";
+import { NoteIcon } from "@/shared/ui/Icons/noteIcon";
 
-type PopupType = 'promo' | 'product' | null;
 type TOption = {
   value: string;
   label: string;
-}
+};
 
 interface ShowcaseActionsProps {
   itemType: TShowcaseItem;
+  releaseCount: string;
+  merchCount: string;
+  promoCount: string;
   selectItemType: (item: TShowcaseItem) => void;
-  addPromo: () => void; // ссылка на форму
-  filterByStock: (value: 'true' | 'false' | 'none') => void;
-  filterByAvailability: (value: 'true' | 'false' | 'none') => void;
-  filterByPromoType: (value: PromoTypeFilter) => void;
+  addPromo: () => void;
   artistOptions?: TOption[];
   onChangeArtist?: (id: string) => void;
 };
@@ -27,183 +29,33 @@ interface ShowcaseActionsProps {
 export const ShowcaseActions = ({ 
   itemType,
   artistOptions,
+  releaseCount,
+  merchCount,
+  promoCount,
   selectItemType,
-  addPromo, 
-  filterByStock,
-  filterByAvailability,
-  filterByPromoType,
+  addPromo,
   onChangeArtist
 }: ShowcaseActionsProps) => {
-  const [activePopup, setActivePopup] = useState<PopupType>(null);
-  const promoPopupRef = useRef<HTMLDivElement | null>(null);
-  const productPopupRef = useRef<HTMLDivElement | null>(null);
-
-  // состояние для селекта выбора отображаемого товара: все, мерч, альбомы
-  const [productType, setProductType] = useState<string>("");
-  // состояние для селекта выбора фильтра для мерча по наличию
-  const [stockFilter, setStockFilter] = useState<string>("");
-  // состояние для селекта выбора типа скидки промокода
-  const [promoType, setPromoType] = useState<string>("");
-  // состояние для селекта выбора фильтра для промокода по доступности
-  const [availability, setAvailability] = useState<string>("");
-  // состояние для селекта фильтрации по артисту
   const [artist, setArtist] = useState<string>("");
-
-  const closeAll = () => setActivePopup(null);
-
-  const getPopupRef = (type: PopupType) => {
-    switch (type) {
-      case 'promo': return promoPopupRef;
-      case 'product': return productPopupRef;
-      default: return null;
-    }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-
-      const currentRef = getPopupRef(activePopup);
-
-      if (currentRef?.current) {
-        const isClickInside = currentRef.current.contains(target);
-        if (!isClickInside) {
-          closeAll();
-        }
-      }
-    };
-
-    if (activePopup) {
-      document.addEventListener('click', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [activePopup]);
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        closeAll();
-      }
-    };
-    
-    if (activePopup) {
-      document.addEventListener('keydown', handleEscape);
-    }
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [activePopup]);
-
-  const togglePromoPopup = () => {
-    setActivePopup((prev) => (prev === 'promo' ? null : 'promo'));
-  };
-
-  const toggleProductPopup = () => {
-    setActivePopup((prev) => (prev === 'product' ? null : 'product'));
-  };
 
   const handleChangeArtist = (id: string) => {
     setArtist(id);
     if (onChangeArtist) onChangeArtist(id);
   }
 
-  const handleChangeTypeProduct = (value: string) => {
-    setProductType(value);
-    selectItemType(value as TShowcaseItem);
-  };
-
-  const handleChangeTypePromo = (value: string) => {
-    setPromoType(value);
-    filterByPromoType(value as PromoTypeFilter)
-  };
-
-  const hamdleChangeStock = (value: string) => {
-    setStockFilter(value as 'true' | 'false' | 'none');
-    filterByStock(value as 'true' | 'false' | 'none');
-  };
-
-  const handleChangeAvailability = (value: string) => {
-    setAvailability(value as 'true' | 'false' | 'none');
-    filterByAvailability(value as 'true' | 'false' | 'none');
-  };
-
   return (
     <div className={s.actions}>
-      <div className={s.actions__buttons}>
-        <ButtonUI 
-          variant='primary' 
-          size='standart' 
-          className={s.button} 
-          onClick={toggleProductPopup}
-        >
-          Товары
-        </ButtonUI>
-        <ButtonUI
-          variant='primary'
-          size='standart'
-          className={s.button}
-          onClick={togglePromoPopup}
-        >
-          Промокоды
-        </ButtonUI>
 
-        {activePopup === 'product' && (
-          <div 
-            className={clsx(s.popup, s.popup_product)} 
-            ref={productPopupRef}
-          >
-            <Link 
-              className={s.popup__item} 
-              href='/artist/showcase/upload/merch'
-            >
-              добавить мерч
-            </Link>
-            <Link 
-              className={s.popup__item} 
-              href='/artist/showcase/upload/release'
-            >
-              добавить релиз
-            </Link>
-            <button 
-              type='button' 
-              className={s.popup__item}
-              onClick={() => { 
-                selectItemType('products');
-                closeAll();
-              }}
-            >
-              все товары
-            </button>
-          </div>
-        )}
-        {activePopup === 'promo' && (
-          <div 
-            className={clsx(s.popup, s.popup_promo)} 
-            ref={promoPopupRef}
-          >
-            <button 
-              type='button' 
-              className={s.popup__item} 
-              onClick={() => addPromo()}
-            >
-              создать промокод
-            </button>
-            <button 
-              type='button' 
-              className={s.popup__item} 
-              onClick={() => {
-                selectItemType('promo');
-                closeAll();
-              }}
-            >
-              все промокоды
-            </button>
-          </div>
-        )}
-      </div>
+      <ChoiceGroup 
+        value={itemType} 
+        onChange={(value) => selectItemType(value as TShowcaseItem)}
+        items={[
+          {label: "Музыка", value: "release", icon: MusicIcon, count: releaseCount},
+          {label: "Мерч", value: "merch", icon: TShirtIcon, count: merchCount},
+          {label: "Промо-коды", value: "promo", icon: NoteIcon, count: promoCount},
+        ]}
+        containerClassName={s.actions__choice}
+      />
 
       <div className={s.actions__select}>
         {artistOptions && artistOptions.length > 0 && (
@@ -219,73 +71,17 @@ export const ShowcaseActions = ({
             iconClassName={s.selectIcon}
           />
         )}
-        {itemType === 'promo' ? (
-          <SelectUI
-            value={promoType}
-            onChange={handleChangeTypePromo}
-            options={[
-              { value: "ALL", label: "все типы" },
-              { value: "PERCENT", label: "процент" },
-              { value: "FIXED", label: "фиксированная" },
-            ]}
-            placeholder='по типу скидки'
-            containerClassName={s.containerOnPersonalAccountPage}
-            selectClassName={s.selectOnPersonalAccountPage}
-            contentClassName={s.itemListOnPersonalAccountPage}
-            optionClassName={s.itemOnPersonalAccountPage}
-            iconClassName={s.selectIcon}
-          />
-        ) : (
-          <SelectUI
-            value={productType}
-            onChange={handleChangeTypeProduct}
-            options={[
-              { value: "products", label: "все товары" },
-              { value: "merch", label: "мерч" },
-              { value: "album", label: "музыка" },
-            ]}
-            placeholder='по типу товара'
-            containerClassName={s.containerOnPersonalAccountPage}
-            selectClassName={s.selectOnPersonalAccountPage}
-            contentClassName={s.itemListOnPersonalAccountPage}
-            optionClassName={s.itemOnPersonalAccountPage}
-            iconClassName={s.selectIcon}
-          />
-        )}
 
-        {itemType === 'promo' ? (
-          <SelectUI
-            value={availability}
-            onChange={handleChangeAvailability}
-            options={[
-              { value: "none", label: "все" },
-              { value: "true", label: "доступны" },
-              { value: "false", label: "не доступны" },
-            ]}
-            placeholder='по доступности'
-            containerClassName={s.containerOnPersonalAccountPage}
-            selectClassName={s.selectOnPersonalAccountPage}
-            contentClassName={s.itemListOnPersonalAccountPage}
-            optionClassName={s.itemOnPersonalAccountPage}
-            iconClassName={s.selectIcon}
-          />
-        ) : productType === 'merch' ? (
-          <SelectUI
-            value={stockFilter}
-            onChange={hamdleChangeStock}
-            options={[
-              { value: "none", label: "все" },
-              { value: "true", label: "в наличии" },
-              { value: "false", label: "закончились" },
-            ]}
-            placeholder='по наличию'
-            containerClassName={s.containerOnPersonalAccountPage}
-            selectClassName={s.selectOnPersonalAccountPage}
-            contentClassName={s.itemListOnPersonalAccountPage}
-            optionClassName={s.itemOnPersonalAccountPage}
-            iconClassName={s.selectIcon}
-          />
-        ) : null}
+        <DropButton 
+          title="Добавить" 
+          icon="/icons/plus-sign.svg"
+          options={[
+            {label: "Релиз", href: "/artist/showcase/upload/release"},
+            {label: "Мерч", href: "/artist/showcase/upload/merch"},
+            {label: "Промо-код", onClick: addPromo},
+          ]}
+        />
+
       </div>
     </div>
   )

@@ -6,7 +6,7 @@
 	padding: 4px;
 	background-color: var(--background);
 	border: 1px solid var(--foreground);
-	width: 100%;
+	width: fit-content;
 
 	&__label {
 		position: relative;
