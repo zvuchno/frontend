@@ -33,7 +33,6 @@ export const ArtistSettingsDelivery = ({
   onChooseButtonClick,
 }: TArtistSettingsDelivery) => (
   <section className={clsx(styles.artistSettingsDelivery, disabled && styles.disabled)}>
-    <h3 className={styles.artistSettingsTitle}>Настройки доставки</h3>
     <div className={styles.artistSettingsDeliveryOptions}>
       <ArtistSettingsCdekDelivery
         disabled={disabled}

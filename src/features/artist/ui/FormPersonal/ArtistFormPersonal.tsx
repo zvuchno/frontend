@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { ApiError } from "@/api/errors/apiError";
 import clsx from "clsx";
 
 import { useUpdateArtistLegalData } from "@/entities/Artist";
@@ -25,7 +24,7 @@ import {
   artistPasportFields,
   artistPersonalFields,
 } from "./utils/constants";
-import type { FieldName, FieldValues, TArtistFormPersonalProps } from "./utils/types";
+import type { FieldValues, TArtistFormPersonalProps } from "./utils/types";
 
 const formatPhoneForApi = (phone: string | undefined): string => (phone ? `+${phone}` : "");
 
@@ -35,17 +34,6 @@ const isLegalEntity = (
 
 const getEditButtonLabel = (isEditing: boolean): string =>
   isEditing ? "Отменить (без сохранения)" : "Изменить";
-
-/*const artistFormFields = new Set<string>(
-  [
-    ...artistPasportFields,
-    ...artistPersonalFields,
-    ...artistIndividualPaymentFields,
-    ...artistEntityPaymentFields,
-  ].map((field) => field.name)
-);
-
-const isArtistField = (key: string): key is FieldName => artistFormFields.has(key);*/
 
 export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
   const { mutate } = useUpdateArtistLegalData();
@@ -118,16 +106,6 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
           setError,
           setServerErrorMessage
         );
-        /*const message = error?.message ?? "Произошла ошибка";
-        setServerErrorMessage(message);
-
-        if (error instanceof ApiError) {
-          for (const [key, message] of Object.entries(error.details)) {
-            if (isArtistField(key)) {
-              setError(key, { type: "server", message });
-            }
-          }
-        }*/
       },
     });
   };
@@ -136,10 +114,6 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
     <form className={styles.form} onSubmit={(e) => void handleSubmit(onHandleSubmit)(e)}>
       <fieldset disabled={!isOnChange} className={styles.fieldsetWrapper}>
         <div className={styles.formContentWrapper}>
-          <h3 className={styles.formTitle}>
-            {isCompany ? "Данные юридического лица" : "Личные данные"}
-          </h3>
-
           {isCompany && (
             <>
               <LegalEntityFieldset methods={methods} disabled={!isOnChange} />

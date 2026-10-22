@@ -2,9 +2,10 @@
 
 import { AccountNavigation, ActiveLinkProvider, useActiveLink } from "@/features/profile";
 
+import { useGetArtistLegalData } from "@/entities/Artist";
 import { useCurrentArtist } from "@/entities/profile";
 
-import { AccentContainer } from "@/shared/ui";
+import { AccentContainer, Loader } from "@/shared/ui";
 
 import s from "./AccountLayout.module.scss";
 import { AccountContent } from "./components/AccountContent/AccountContent";
@@ -31,6 +32,14 @@ const AccountLayoutContent = ({
   const { data: currentArtist } = useCurrentArtist();
   const { activeLink } = useActiveLink();
 
+  const isArtistDataPage = activeLink?.id === "artist-data";
+  const { data: legalData, status } = useGetArtistLegalData(isArtistDataPage);
+  const recipientType = legalData?.legal_profile?.recipient_type;
+  const moderatedLabel =
+    recipientType === "legal_entity" ? "Данные юридического лица" : "Личные данные";
+
+  if (isArtistDataPage && status === "pending") return <Loader />;
+
   return (
     <AccentContainer className={s.container}>
       <div className={s.body}>
@@ -38,7 +47,7 @@ const AccountLayoutContent = ({
           <AccountNavigation type={currentArtist?.profile_type} />
         </SideMenu>
         <AccountContent
-          title={activeLink?.label}
+          title={!isArtistDataPage ? activeLink?.label : moderatedLabel}
           dataStatus={dataStatus}
           primaryButtonTitle={primaryButtonTitle}
           secondaryButtonTitle={secondaryButtonTitle}
