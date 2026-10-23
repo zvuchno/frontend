@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { FormProvider, type SubmitHandler, useForm, useWatch } from "react-hook-form";
 import toast from "react-hot-toast";
 
+import { DevTool } from "@hookform/devtools";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 
 import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 import { ProfileFormUI } from "@/features/profile";
@@ -36,6 +36,22 @@ function normalizePhone(value?: string | null): string {
   return value?.replace(/\D/g, "") ?? "";
 }
 
+function formatPhoneForInput(value?: string | null): string {
+  let digits = normalizePhone(value);
+  if (!digits) return "";
+
+  if (digits.startsWith("7") && digits.length > 10) {
+    digits = digits.slice(1);
+  }
+
+  const area = digits.slice(0, 3);
+  const first = digits.slice(3, 6);
+  const second = digits.slice(6, 8);
+  const third = digits.slice(8, 10);
+
+  return `+7(${area})${first}-${second}-${third}`;
+}
+
 function toUserStoreData(account: CurrentAccountResponse, accessToken?: string): UserDataProps {
   return {
     id: account.id,
@@ -51,10 +67,14 @@ function toUserStoreData(account: CurrentAccountResponse, accessToken?: string):
 }
 
 export function ListenerProfileFormSection() {
-  const { status, update: updateSession } = useSession();
+  const { status } = useSession();
   const setUser = useUserStore((state) => state.setUser);
 
-  const pathname = usePathname();
+  const { mutateAsync: updateName } = useUpdateListenerName();
+  const { mutateAsync: updatePhone } = useUpdateAccountPhone();
+  const { mutateAsync: updateUserName } = useUpdateAccountUsername();
+  const { mutateAsync: updatePassword } = useUpdateAccountPassword();
+  const { mutateAsync: setPassword } = useSetAccountPassword();
 
   const {
     data: profileData,
@@ -62,23 +82,13 @@ export function ListenerProfileFormSection() {
     error: profileError,
   } = useListenerProfile();
 
-  const updateNameMutation = useUpdateListenerName();
-  const updatePhoneMutation = useUpdateAccountPhone();
-  const updateUserNameMutation = useUpdateAccountUsername();
-  const updatePasswordMutation = useUpdateAccountPassword();
-  const setPasswordMutation = useSetAccountPassword();
-  const updateName = updateNameMutation.mutateAsync;
-  const updatePhone = updatePhoneMutation.mutateAsync;
-  const updateUserName = updateUserNameMutation.mutateAsync;
-  const updatePassword = updatePasswordMutation.mutateAsync;
-  const setPassword = setPasswordMutation.mutateAsync;
-
   const account = profileData?.account ?? null;
   const listener = profileData?.listener;
 
   const [isProfileSaving, setIsProfileSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const hasInitializedForm = useRef(false);
 
   const methods = useForm<FieldValues>({
     mode: "onChange",
@@ -94,39 +104,40 @@ export function ListenerProfileFormSection() {
 
   const {
     reset,
-    formState: { isDirty, isValid, dirtyFields, errors },
+    formState: { isValid, dirtyFields, errors },
     setError,
     handleSubmit: handleFormSubmit,
   } = methods;
+  const phoneValue = useWatch({ control: methods.control, name: "phone" });
 
-  const hasFormErrors = Object.keys(errors).length > 0;
-  const isNameDirty = Boolean(dirtyFields.name);
-  const isPhoneDirty = Boolean(dirtyFields.phone);
-  const isUserNameDirty = Boolean(dirtyFields.username);
-  const isPasswordDirty = Boolean(dirtyFields.password);
+  useLayoutEffect(() => {
+    if (!profileData || hasInitializedForm.current) return;
 
-  // Сброс формы при загрузке данных
-  useEffect(() => {
-    if (profileData && listener) {
-      reset({
-        full_name: listener.full_name,
-        username: account?.username,
-        email: account?.email || "",
-        phone: normalizePhone(account?.phone || ""),
-        password: "",
-        oldPassword: "",
-      });
-    }
+    hasInitializedForm.current = true;
+    reset({
+      full_name: listener?.full_name ?? "",
+      username: account?.username ?? "",
+      email: account?.email ?? "",
+      phone: formatPhoneForInput(account?.phone),
+      password: "",
+      oldPassword: "",
+    });
   }, [profileData, listener, account, reset]);
 
-  // Обработка статуса авторизации
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      reset({ full_name: "", username: "", email: "", phone: "", password: "", oldPassword: "" });
-      // router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
-      return;
-    }
-  }, [status, reset, pathname]);
+  const hasFormErrors = Object.keys(errors).length > 0;
+  const isNameChanged = Boolean(dirtyFields.full_name);
+  const isPhoneChanged =
+    hasInitializedForm.current &&
+    Boolean(dirtyFields.phone) &&
+    normalizePhone(phoneValue) !== normalizePhone(account?.phone);
+  const isUserNameChanged = Boolean(dirtyFields.username);
+  const isPasswordChanged = Boolean(dirtyFields.password);
+
+  const isChanged =
+    Boolean(dirtyFields.full_name) ||
+    isPhoneChanged ||
+    Boolean(dirtyFields.username) ||
+    Boolean(dirtyFields.password);
 
   const hasProfileUser = status === "authenticated";
   const isProfileBusy = isProfileLoading || isProfileSaving;
@@ -150,31 +161,26 @@ export function ListenerProfileFormSection() {
         const shouldUpdateUserName = nextUserName !== account.username;
 
         let nextAccount = account;
-        let savedName = data.name?.trim() ?? "";
+        let savedName = data.full_name?.trim() ?? "";
 
         // 1. Обновление имени
-        if (isNameDirty && savedName) {
+        if (isNameChanged && savedName) {
           const listener = await updateName(savedName);
           savedName = listener.full_name;
         }
 
         // 2. Обновление телефона
-        if (isPhoneDirty && shouldUpdatePhone) {
+        if (isPhoneChanged && shouldUpdatePhone) {
           const phoneResponse = await updatePhone(nextPhone);
           nextAccount = {
             ...nextAccount,
             phone: phoneResponse.phone,
             is_phone_verified: false,
           };
-
-          void updateSession({
-            phone: nextAccount.phone,
-            isPhoneVerified: nextAccount.is_phone_verified,
-          }).catch(() => undefined);
         }
 
         // 3. Обновление имени пользователя
-        if (isUserNameDirty && shouldUpdateUserName) {
+        if (isUserNameChanged && shouldUpdateUserName) {
           const userNameResponse = await updateUserName({
             username: nextUserName,
           });
@@ -182,14 +188,10 @@ export function ListenerProfileFormSection() {
             ...nextAccount,
             username: userNameResponse.username,
           };
-
-          void updateSession({
-            userName: nextAccount.username,
-          }).catch(() => undefined);
         }
 
         // 4. Обновление или установление пароля
-        if (isPasswordDirty && data.password) {
+        if (isPasswordChanged && data.password) {
           if (account.has_usable_password) {
             // меняем существующий пароль
             if (!data.oldPassword) {
@@ -217,9 +219,10 @@ export function ListenerProfileFormSection() {
         setUser({ ...useUserStore.getState(), ...toUserStoreData(nextAccount) });
 
         reset({
-          name: savedName,
+          full_name: savedName,
+          username: nextAccount.username,
           email: nextAccount.email,
-          phone: normalizePhone(nextAccount.phone),
+          phone: formatPhoneForInput(nextAccount.phone),
           password: "",
           oldPassword: "",
         });
@@ -237,10 +240,10 @@ export function ListenerProfileFormSection() {
     },
     [
       account,
-      isNameDirty,
-      isPasswordDirty,
-      isPhoneDirty,
-      isUserNameDirty,
+      isNameChanged,
+      isPasswordChanged,
+      isPhoneChanged,
+      isUserNameChanged,
       reset,
       setError,
       setFormError,
@@ -250,7 +253,6 @@ export function ListenerProfileFormSection() {
       updateName,
       updatePassword,
       updatePhone,
-      updateSession,
       updateUserName,
     ]
   );
@@ -266,17 +268,18 @@ export function ListenerProfileFormSection() {
     setAccountActions({
       onClickPrimaryBtn: onSubmit,
       primaryButtonTitle: "Сохранить",
-      primaryDisabled: !(isDirty && isValid && !isProfileBusy) || isProfileSaving || hasFormErrors,
+      primaryDisabled:
+        !(isChanged && isValid && !isProfileBusy) || isProfileSaving || hasFormErrors,
     });
     return () => setAccountActions(null);
   }, [
     setAccountActions,
     onSubmit,
-    isDirty,
     isValid,
     isProfileBusy,
     isProfileSaving,
     hasFormErrors,
+    isChanged,
   ]);
   //-------------------//
 
@@ -300,6 +303,7 @@ export function ListenerProfileFormSection() {
             has_usable_password={account?.has_usable_password || false}
           />
         </ProfileFormUI>
+        <DevTool control={methods.control} />
       </FormProvider>
       {isModalOpen && (
         <UpdatePasswordModal
