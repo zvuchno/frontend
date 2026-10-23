@@ -1,11 +1,8 @@
 import toast from "react-hot-toast";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import type Error from "next/error";
-
-import { type UserDataProps, useUserStore } from "@/entities/user";
 
 import {
   getCurrentAccount,
@@ -16,7 +13,7 @@ import {
 } from "../api/currentAccountApi";
 import { getCurrentListener, updateListener } from "../api/currentListenerApi";
 import type {
-  CurrentAccountResponse,
+  //CurrentAccountResponse,
   SetAccountPasswordPayload,
   TListenerProfile,
   UpdateAccountPasswordPayload,
@@ -24,7 +21,7 @@ import type {
   UpdateAccountUsernamePayload,
 } from "./types";
 
-function toUserStoreData(account: CurrentAccountResponse, accessToken?: string): UserDataProps {
+/*function toUserStoreData(account: CurrentAccountResponse, accessToken?: string): UserDataProps {
   return {
     id: account.id,
     userName: account.username,
@@ -36,9 +33,9 @@ function toUserStoreData(account: CurrentAccountResponse, accessToken?: string):
     isArtist: account.is_artist,
     accessToken,
   };
-}
+}*/
 
-function shouldSyncSessionAccount(
+/*function shouldSyncSessionAccount(
   sessionUser: Session["user"] | undefined,
   account: CurrentAccountResponse
 ) {
@@ -55,9 +52,9 @@ function shouldSyncSessionAccount(
     sessionUser.isListener !== account.is_listener ||
     sessionUser.isArtist !== account.is_artist
   );
-}
+}*/
 
-function getSessionAccountPatch(account: CurrentAccountResponse) {
+/*function getSessionAccountPatch(account: CurrentAccountResponse) {
   return {
     userName: account.username,
     email: account.email,
@@ -67,17 +64,17 @@ function getSessionAccountPatch(account: CurrentAccountResponse) {
     isListener: account.is_listener,
     isArtist: account.is_artist,
   };
-}
+}*/
 
 // 1. Хук для получения данных (загрузка профиля)
 export function useListenerProfile() {
-  const { data: session, update: updateSession } = useSession();
+  //const { data: session, update: updateSession } = useSession();
 
-  const setUser = useUserStore((state) => state.setUser);
-  const sessionUser = session?.user;
+  //const setUser = useUserStore((state) => state.setUser);
+  //const sessionUser = session?.user;
 
   return useQuery({
-    queryKey: ["listenerProfile", sessionUser?.id],
+    queryKey: ["listenerProfile"],
     queryFn: async () => {
       const [listener, accountResponse] = await Promise.all([
         getCurrentListener(),
@@ -85,23 +82,23 @@ export function useListenerProfile() {
       ]);
 
       // Обновляем стейт пользователя
-      setUser(toUserStoreData(accountResponse));
+      //setUser(toUserStoreData(accountResponse));
 
       // Пытаемся обновить сессию (если нужно)
-      if (shouldSyncSessionAccount(sessionUser, accountResponse)) {
+      /*if (shouldSyncSessionAccount(sessionUser, accountResponse)) {
         try {
           await updateSession(getSessionAccountPatch(accountResponse));
         } catch (e) {
           console.error("Failed to update session", e);
         }
-      }
+      }*/
 
       return {
         listener,
         account: accountResponse,
       };
     },
-    enabled: !!sessionUser, // Загружаем только если пользователь авторизован
+    //enabled: !!sessionUser, // Загружаем только если пользователь авторизован
   });
 }
 
@@ -171,7 +168,7 @@ export function useUpdateAccountPassword() {
 // 5. Хук для обновления имени пользователя
 export function useUpdateAccountUsername() {
   const queryClient = useQueryClient();
-  const { update: updateSession } = useSession();
+  //const { update: updateSession } = useSession();
 
   return useMutation({
     mutationFn: async (payload: UpdateAccountUsernamePayload) => {
@@ -189,9 +186,9 @@ export function useUpdateAccountUsername() {
         };
       });
 
-      void updateSession({
+      /*void updateSession({
         userName: userNameResponse.username,
-      });
+      });*/
     },
   });
 }

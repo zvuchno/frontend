@@ -38,12 +38,10 @@ export function ArtistProfileContent() {
 
   const {
     reset,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isDirty },
     setError,
     handleSubmit: handleFormSubmit,
   } = useFormContext<FieldValues>();
-
-  const isFormValid = isValid;
 
   const role = artist?.profile_type;
   const currentAccaunt = path.includes("label") ? "labelAccaunt" : "artistAccaunt";
@@ -106,6 +104,7 @@ export function ArtistProfileContent() {
     }
   }, [artist, reset]);
 
+  // установка кнопки в шапку страницы профиля через контекст общего layout//
   const { setAccountActions } = useAccountActions();
   const hasFormErrors = Object.keys(errors).length > 0;
 
@@ -113,10 +112,11 @@ export function ArtistProfileContent() {
     setAccountActions({
       onClickPrimaryBtn: onSubmit,
       primaryButtonTitle: "Сохранить",
-      primaryDisabled: !isFormValid || isSaving || hasFormErrors,
+      primaryDisabled: !isDirty || !isValid || isSaving || hasFormErrors,
     });
     return () => setAccountActions(null);
-  }, [isFormValid, setAccountActions, onSubmit, isSaving, hasFormErrors]);
+  }, [isValid, isDirty, setAccountActions, onSubmit, isSaving, hasFormErrors]);
+  //-------------------------------------------------------------------//
 
   if (isLoadingArtistProfile) {
     return <Loader />;
