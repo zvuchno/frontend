@@ -1,8 +1,9 @@
 .section {
-  --artist-card-width: clamp(200px, 27.78vw, 409px);
+  --artist-card-width: clamp(200px, 29vw, 409px);
   --artist-card-top-offset: calc(var(--artist-card-width) * 65 / 632);
 
   display: grid;
+  grid-template-columns: minmax(0, 409px) minmax(0, 487px);
   grid-template-rows: repeat(2, minmax(0, max-content));
   column-gap: clamp(20px, 4.3vw, 43px);
   row-gap: 32px;
