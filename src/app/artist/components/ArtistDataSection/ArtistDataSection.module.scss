@@ -1,27 +1,27 @@
 .section {
-  --artist-card-width: clamp(360px, 46.199vw, 632px);
+  --artist-card-width: clamp(200px, 27.78vw, 409px);
   --artist-card-top-offset: calc(var(--artist-card-width) * 65 / 632);
 
   display: grid;
-  grid-template-columns: minmax(0, 56.63fr) minmax(0, 43.37fr);
   grid-template-rows: repeat(2, minmax(0, max-content));
-  column-gap: clamp(20px, 4.3vw, 62px);
-  row-gap: 40px;
+  column-gap: clamp(20px, 4.3vw, 43px);
+  row-gap: 32px;
   width: 100%;
   grid-template-areas:
     "media description"
     "media details";
 
-  @media (max-width: 1024px) {
+  /*@media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, minmax(0, max-content));
     grid-template-areas:
       "media description"
       "details details";
       row-gap: 62px;
-  }
+  }*/
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
+    --artist-card-width: clamp(200px, 50vw, 400px);
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: repeat(3, minmax(0, max-content));
     grid-template-areas:
@@ -50,20 +50,19 @@
   flex-direction: column;
   gap: clamp(20px, 2.5vw, 24px);
   grid-area: details;
-  
 
-  @media (max-width: 1024px) {
+  /*@media (max-width: 1024px) {
     flex-direction: row;
     gap: 64px;
-  }
+  }*/
 
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 40px;
   }
 
-  &Component{
-flex-basis: 50%;
+  &Component {
+    flex-basis: 50%;
   }
 }
 
@@ -76,11 +75,9 @@ flex-basis: 50%;
   letter-spacing: -0.06em;
 }
 
-
-
 @media (max-width: 768px) {
   .section {
-    --artist-card-width: 100%;
+    --artist-card-width: clamp(200px, 70vw, 400px);
     --artist-card-top-offset: 0px;
 
     flex-direction: column;

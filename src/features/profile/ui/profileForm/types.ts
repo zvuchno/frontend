@@ -24,9 +24,7 @@ export interface TProfileFormUIProps {
   children: React.ReactNode;
   className?: string;
   role?: "artist" | "listener";
-  isChecked: boolean;
-  isOnChange: boolean;
-  isSubmitting?: boolean;
+
   errorMessage?: string | null;
   control?: Control<FieldValues>;
   values?: Partial<FieldValues>;
@@ -35,7 +33,6 @@ export interface TProfileFormUIProps {
   onUpdatePassword?: () => void;
   onSubmit: SubmitHandler<FieldValues>;
   onError?: SubmitErrorHandler<FieldValues>;
-  onEdit: () => void;
 }
 
 export type TProfileFormField<T extends FieldValues = FieldValues> = {
@@ -49,7 +46,7 @@ export type TProfileFormField<T extends FieldValues = FieldValues> = {
 };
 
 export type TProfileFormFieldsProps = {
-  fieldsDisabled: boolean;
+  fieldsDisabled?: boolean;
   has_usable_password: boolean;
   disabledFields?: ReadonlyArray<keyof FieldValues>;
   showPublishHint?: boolean;

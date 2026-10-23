@@ -1,16 +1,5 @@
 .profileInfo {
-  min-height: 897px;
-  margin-top: 28px;
-  padding-block: 80px 188px;
-  padding-inline: clamp(10px, 6.67vw, 95px);
-
-  @media (max-width: 768px) {
-    padding-block: 50px 100px;
-  }
-
-  @media (max-width: 375px) {
-    padding-block: 30px 50px;
-  }
+  padding-block-end: clamp(50px, 15.35vw, 221px);
 
   background-color: var(--background);
   display: flex;

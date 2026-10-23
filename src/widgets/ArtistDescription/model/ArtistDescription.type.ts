@@ -5,8 +5,7 @@ export interface ArtistDescriptionProps {
   description: string;
   title?: string;
   emptyText?: string;
-  isEdit?: boolean;
+
   className?: string;
   hasChanges?: (value: string) => void;
-  onEditMode?: () => void;
 }

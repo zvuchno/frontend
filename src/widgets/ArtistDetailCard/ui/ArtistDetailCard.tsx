@@ -32,7 +32,6 @@ export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
               variant='catalog'
               description={artist.description}
               hasChanges={() => {}}
-              onEditMode={() => {}}
               className={s.noEditedDescription}
             />
           )}
@@ -59,7 +58,6 @@ export const ArtistDetailCard = ({ artist }: IArtistDetailCardProps) => {
                         rel='noopener noreferrer'
                         title={social.label}
                         style={{
-                          
                           backgroundImage: socialIcon,
                         }}
                       />
