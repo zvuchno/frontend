@@ -6,12 +6,6 @@ import { useParams, usePathname } from "next/navigation";
 import { ArtistDataSectionLayout } from "@/app/artist/components/ArtistDataSectionLayout/ArtistDataSectionLayout";
 
 import {
-  useSetArtistId,
-  useSetArtistSlug,
-  useShowcaseArtistId,
-  useShowcaseArtistSlug,
-} from "@/entities/Artist/store/useShowcaseStore";
-import {
   useChangeManagedProfile,
   useChangeManagedProfileCover,
   useGetManagedProfileDetails,
@@ -46,26 +40,6 @@ export const ArtistProfileData = () => {
   const { data: managedArtist } = useGetManagedProfileDetails(managedArtistId);
 
   const artist = managedArtistId ? managedArtist : currentArtist;
-
-  const setArtistSlug = useSetArtistSlug();
-  const setArtistId = useSetArtistId();
-  const currentSlug = useShowcaseArtistSlug();
-  const currentArtistId = useShowcaseArtistId();
-
-  useEffect(() => {
-    if (!artist) return;
-
-    const newSlug = artist.slug;
-    const newArtistId = artist.id ?? null;
-
-    if (currentSlug !== newSlug) {
-      setArtistSlug(newSlug ?? null);
-    }
-
-    if (currentArtistId !== newArtistId) {
-      setArtistId(newArtistId);
-    }
-  }, [artist?.slug, currentSlug, setArtistSlug, artist, currentArtistId, setArtistId]);
 
   const { isLoading: isManagedProfileLoading, error: managedProfileError } =
     useGetManagedProfileDetails(managedArtistId);
