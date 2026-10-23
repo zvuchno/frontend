@@ -11,7 +11,7 @@ import type { FieldValues, TProfileFormFieldsProps } from "../types";
 import styles from "./profileFormArtist.module.scss";
 
 export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
-  const { fieldsDisabled = false, disabledFields } = props;
+  const { disabledFields } = props;
   const {
     register,
     formState: { errors },
@@ -23,7 +23,7 @@ export const ProfileFormArtistUI = (props: TProfileFormFieldsProps) => {
     <div className={styles.artistForm}>
       {fields.map((field) => {
         const fieldError = get(errors, field.name) as FieldError;
-        const isFieldDisabled = Boolean(fieldsDisabled || disabledFields?.includes(field.name));
+        const isFieldDisabled = Boolean(disabledFields?.includes(field.name));
 
         return (
           <div className={styles[`cell-${field.row}-${field.column}`]} key={field.name}>

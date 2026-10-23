@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
+import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 import { ProfileFormUI } from "@/features/profile";
 import { ProfileFormListenerUI } from "@/features/profile";
 import { type FieldValues } from "@/features/profile";
@@ -26,6 +27,7 @@ import {
 } from "@/entities/profile";
 import { type UserDataProps, useUserStore } from "@/entities/user";
 
+import { Loader } from "@/shared/ui";
 import { setServerErrors } from "@/shared/utils/serverErrorsHandler";
 
 import styles from "./ListenerProfileFormSection.module.scss";
@@ -51,9 +53,7 @@ function toUserStoreData(account: CurrentAccountResponse, accessToken?: string):
 export function ListenerProfileFormSection() {
   const { status, update: updateSession } = useSession();
   const setUser = useUserStore((state) => state.setUser);
-  //const sessionUser = session?.user;
 
-  //const router = useRouter();
   const pathname = usePathname();
 
   const {
@@ -67,11 +67,15 @@ export function ListenerProfileFormSection() {
   const updateUserNameMutation = useUpdateAccountUsername();
   const updatePasswordMutation = useUpdateAccountPassword();
   const setPasswordMutation = useSetAccountPassword();
+  const updateName = updateNameMutation.mutateAsync;
+  const updatePhone = updatePhoneMutation.mutateAsync;
+  const updateUserName = updateUserNameMutation.mutateAsync;
+  const updatePassword = updatePasswordMutation.mutateAsync;
+  const setPassword = setPasswordMutation.mutateAsync;
 
   const account = profileData?.account ?? null;
   const listener = profileData?.listener;
 
-  const [isEditMode, setIsEditMode] = useState(false);
   const [isProfileSaving, setIsProfileSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -90,9 +94,16 @@ export function ListenerProfileFormSection() {
 
   const {
     reset,
-    formState: { isDirty, isValid, dirtyFields },
+    formState: { isDirty, isValid, dirtyFields, errors },
     setError,
+    handleSubmit: handleFormSubmit,
   } = methods;
+
+  const hasFormErrors = Object.keys(errors).length > 0;
+  const isNameDirty = Boolean(dirtyFields.name);
+  const isPhoneDirty = Boolean(dirtyFields.phone);
+  const isUserNameDirty = Boolean(dirtyFields.username);
+  const isPasswordDirty = Boolean(dirtyFields.password);
 
   // Сброс формы при загрузке данных
   useEffect(() => {
@@ -121,133 +132,170 @@ export function ListenerProfileFormSection() {
   const isProfileBusy = isProfileLoading || isProfileSaving;
   const visibleProfileError = hasProfileUser ? profileError : null;
 
-  const handleEdit = () => {
-    void methods.trigger();
-    setFormError(null);
-    setIsEditMode(true);
-  };
-
-  const handleSubmitForm = async (data: FieldValues) => {
-    if (!account) {
-      setFormError("Не удалось подготовить данные профиля к сохранению");
-      return;
-    }
-
-    setIsProfileSaving(true);
-    setFormError(null);
-
-    try {
-      const nextPhone = normalizePhone(data.phone);
-      const shouldUpdatePhone = nextPhone !== normalizePhone(account.phone);
-
-      const nextUserName = data.username?.trim() ?? "";
-      const shouldUpdateUserName = nextUserName !== account.username;
-
-      let nextAccount = account;
-      let savedName = data.name?.trim() ?? "";
-
-      // 1. Обновление имени
-      if (dirtyFields.name && savedName) {
-        const listener = await updateNameMutation.mutateAsync(savedName);
-        savedName = listener.full_name;
+  const handleSubmit = useCallback<SubmitHandler<FieldValues>>(
+    async (data: FieldValues) => {
+      if (!account) {
+        setFormError("Не удалось подготовить данные профиля к сохранению");
+        return;
       }
 
-      // 2. Обновление телефона
-      if (dirtyFields.phone && shouldUpdatePhone) {
-        const phoneResponse = await updatePhoneMutation.mutateAsync(nextPhone);
-        nextAccount = {
-          ...nextAccount,
-          phone: phoneResponse.phone,
-          is_phone_verified: false,
-        };
+      setIsProfileSaving(true);
+      setFormError(null);
 
-        void updateSession({
-          phone: nextAccount.phone,
-          isPhoneVerified: nextAccount.is_phone_verified,
-        }).catch(() => undefined);
-      }
+      try {
+        const nextPhone = normalizePhone(data.phone);
+        const shouldUpdatePhone = nextPhone !== normalizePhone(account.phone);
 
-      // 3. Обновление имени пользователя
-      if (dirtyFields.username && shouldUpdateUserName) {
-        const userNameResponse = await updateUserNameMutation.mutateAsync({
-          username: nextUserName,
-        });
-        nextAccount = {
-          ...nextAccount,
-          username: userNameResponse.username,
-        };
+        const nextUserName = data.username?.trim() ?? "";
+        const shouldUpdateUserName = nextUserName !== account.username;
 
-        void updateSession({
-          userName: nextAccount.username,
-        }).catch(() => undefined);
-      }
+        let nextAccount = account;
+        let savedName = data.name?.trim() ?? "";
 
-      // 4. Обновление или установление пароля
-      if (dirtyFields.password && data.password) {
-        if (account.has_usable_password) {
-          // меняем существующий пароль
-          if (!data.oldPassword) {
-            setFormError("Для смены пароля требуется ввести текущий пароль");
-            return;
-          }
-
-          await updatePasswordMutation.mutateAsync({
-            old_password: data.oldPassword,
-            new_password: data.password,
-            retype_new_password: data.password,
-          });
-        } else {
-          // устанавливаем пароль впервые
-          await setPasswordMutation.mutateAsync({
-            new_password: data.password,
-            retype_new_password: data.password,
-          });
+        // 1. Обновление имени
+        if (isNameDirty && savedName) {
+          const listener = await updateName(savedName);
+          savedName = listener.full_name;
         }
+
+        // 2. Обновление телефона
+        if (isPhoneDirty && shouldUpdatePhone) {
+          const phoneResponse = await updatePhone(nextPhone);
+          nextAccount = {
+            ...nextAccount,
+            phone: phoneResponse.phone,
+            is_phone_verified: false,
+          };
+
+          void updateSession({
+            phone: nextAccount.phone,
+            isPhoneVerified: nextAccount.is_phone_verified,
+          }).catch(() => undefined);
+        }
+
+        // 3. Обновление имени пользователя
+        if (isUserNameDirty && shouldUpdateUserName) {
+          const userNameResponse = await updateUserName({
+            username: nextUserName,
+          });
+          nextAccount = {
+            ...nextAccount,
+            username: userNameResponse.username,
+          };
+
+          void updateSession({
+            userName: nextAccount.username,
+          }).catch(() => undefined);
+        }
+
+        // 4. Обновление или установление пароля
+        if (isPasswordDirty && data.password) {
+          if (account.has_usable_password) {
+            // меняем существующий пароль
+            if (!data.oldPassword) {
+              setFormError("Для смены пароля требуется ввести текущий пароль");
+              return;
+            }
+
+            await updatePassword({
+              old_password: data.oldPassword,
+              new_password: data.password,
+              retype_new_password: data.password,
+            });
+          } else {
+            // устанавливаем пароль впервые
+            await setPassword({
+              new_password: data.password,
+              retype_new_password: data.password,
+            });
+          }
+        }
+
+        toast.success("Профиль успешно обновлён");
+
+        // Обновляем локальный стейт и сбрасываем форму
+        setUser({ ...useUserStore.getState(), ...toUserStoreData(nextAccount) });
+
+        reset({
+          name: savedName,
+          email: nextAccount.email,
+          phone: normalizePhone(nextAccount.phone),
+          password: "",
+          oldPassword: "",
+        });
+      } catch (requestError) {
+        if (requestError instanceof Error) {
+          setServerErrors(listenerFormFields, requestError, setError, setFormError);
+        }
+        setFormError(
+          requestError instanceof Error ? requestError.message : "Не удалось сохранить профиль"
+        );
+        toast.error("Не удалось сохранить профиль. Проверьте данные.");
+      } finally {
+        setIsProfileSaving(false);
       }
+    },
+    [
+      account,
+      isNameDirty,
+      isPasswordDirty,
+      isPhoneDirty,
+      isUserNameDirty,
+      reset,
+      setError,
+      setFormError,
+      setIsProfileSaving,
+      setPassword,
+      setUser,
+      updateName,
+      updatePassword,
+      updatePhone,
+      updateSession,
+      updateUserName,
+    ]
+  );
 
-      toast.success("Профиль успешно обновлён");
+  const onSubmit = useCallback(() => {
+    void handleFormSubmit(handleSubmit)();
+  }, [handleFormSubmit, handleSubmit]);
 
-      // Обновляем локальный стейт и сбрасываем форму
-      setUser({ ...useUserStore.getState(), ...toUserStoreData(nextAccount) });
+  //установка кнопки сохранить в шапку страницы через общий контекст для лэйаута ЛК//
+  const { setAccountActions } = useAccountActions();
 
-      reset({
-        name: savedName,
-        email: nextAccount.email,
-        phone: normalizePhone(nextAccount.phone),
-        password: "",
-        oldPassword: "",
-      });
+  useLayoutEffect(() => {
+    setAccountActions({
+      onClickPrimaryBtn: onSubmit,
+      primaryButtonTitle: "Сохранить",
+      primaryDisabled: !(isDirty && isValid && !isProfileBusy) || isProfileSaving || hasFormErrors,
+    });
+    return () => setAccountActions(null);
+  }, [
+    setAccountActions,
+    onSubmit,
+    isDirty,
+    isValid,
+    isProfileBusy,
+    isProfileSaving,
+    hasFormErrors,
+  ]);
+  //-------------------//
 
-      setIsEditMode(false);
-    } catch (requestError) {
-      if (requestError instanceof Error) {
-        setServerErrors(listenerFormFields, requestError, setError, setFormError);
-      }
-      setFormError(
-        requestError instanceof Error ? requestError.message : "Не удалось сохранить профиль"
-      );
-      toast.error("Не удалось сохранить профиль. Проверьте данные.");
-    } finally {
-      setIsProfileSaving(false);
-    }
-  };
+  if (isProfileLoading || status === "loading") {
+    return <Loader />;
+  }
 
   return (
     <>
       <FormProvider {...methods}>
         <ProfileFormUI
           className={styles.profileForm}
-          isChecked={isEditMode && isDirty && isValid && !isProfileBusy}
-          isOnChange={isEditMode || isProfileBusy}
-          isSubmitting={isProfileSaving}
           errorMessage={formError ?? visibleProfileError?.message ?? null}
           has_usable_password={account?.has_usable_password}
-          onEdit={handleEdit}
-          onSubmit={handleSubmitForm}
+          onSubmit={handleSubmit}
           onUpdatePassword={() => setIsModalOpen(true)}
         >
           <ProfileFormListenerUI
-            fieldsDisabled={!isEditMode || isProfileBusy || !account}
+            fieldsDisabled={isProfileBusy || !account}
             disabledFields={["email"]}
             has_usable_password={account?.has_usable_password || false}
           />

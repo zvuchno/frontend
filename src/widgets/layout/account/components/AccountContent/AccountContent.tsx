@@ -1,29 +1,24 @@
 import { type ReactNode } from "react";
 
+import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
+
 import { ButtonUI, Title } from "@/shared/ui";
 
-import { DataStatusBar, type TDataStatus } from "../DataStatusBar/DataStatusBar";
+import { DataStatusBar } from "../DataStatusBar/DataStatusBar";
 import s from "./AccountContent.module.scss";
 
-export const AccountContent = ({
-  title,
-  children,
-  dataStatus,
-  primaryButtonTitle,
-  secondaryButtonTitle,
-  onClickPrimaryBtn,
-  onClickSecondaryBtn,
-}: {
-  title?: string;
-  children: ReactNode;
-  // dataStatus - для отображения статуса проверки данных формы (согласовать наисенования с бэкендом)
-  dataStatus?: TDataStatus;
-  primaryButtonTitle?: string;
-  secondaryButtonTitle?: string;
-  onClickPrimaryBtn?: () => void;
-  onClickSecondaryBtn?: () => void;
-}) => {
-  const hasButtons = primaryButtonTitle || secondaryButtonTitle;
+export const AccountContent = ({ title, children }: { title?: string; children: ReactNode }) => {
+  const { accountActions } = useAccountActions();
+
+  const dataStatus = accountActions?.dataStatus;
+  const primaryButtonTitle = accountActions?.primaryButtonTitle;
+  const secondaryButtonTitle = accountActions?.secondaryButtonTitle;
+  const primaryDisabled = accountActions?.primaryDisabled;
+  const secondaryDisabled = accountActions?.secondaryDisabled;
+  const onClickPrimaryBtn = accountActions?.onClickPrimaryBtn;
+  const onClickSecondaryBtn = accountActions?.onClickSecondaryBtn;
+
+  const hasButtons = accountActions?.primaryButtonTitle || accountActions?.secondaryButtonTitle;
 
   return (
     <section className={s.mainSection}>
@@ -43,7 +38,8 @@ export const AccountContent = ({
                   variant='primary'
                   size='small'
                   className={s.mainSectionButton}
-                  onClick={() => onClickPrimaryBtn}
+                  onClick={onClickPrimaryBtn}
+                  disabled={primaryDisabled}
                 >
                   {primaryButtonTitle}
                 </ButtonUI>
@@ -53,7 +49,8 @@ export const AccountContent = ({
                   variant='secondary'
                   size='small'
                   className={s.mainSectionButton}
-                  onClick={() => onClickSecondaryBtn}
+                  onClick={onClickSecondaryBtn}
+                  disabled={secondaryDisabled}
                 >
                   {secondaryButtonTitle}
                 </ButtonUI>

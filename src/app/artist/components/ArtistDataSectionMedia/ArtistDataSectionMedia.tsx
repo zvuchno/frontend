@@ -50,8 +50,8 @@ export const ArtistDataSectionMedia = ({
       </div>
 
       <ButtonUI
-        variant='secondary'
-        size='standart'
+        variant='primary'
+        size='small'
         onClick={handleCoverButtonClick}
         disabled={disabled}
         className={s.mediaButton}

@@ -1,5 +1,6 @@
 "use client";
 
+import { AccountActionsProvider } from "@/features/AccountActions/context/AccountActionsProvider";
 import { AccountNavigation, ActiveLinkProvider, useActiveLink } from "@/features/profile";
 
 import { useGetArtistLegalData } from "@/entities/Artist";
@@ -9,29 +10,13 @@ import { AccentContainer, Loader } from "@/shared/ui";
 
 import s from "./AccountLayout.module.scss";
 import { AccountContent } from "./components/AccountContent/AccountContent";
-import { type TDataStatus } from "./components/DataStatusBar/DataStatusBar";
 import { SideMenu } from "./components/SideMenu/SideMenu";
 
-type AccountLayoutProps = {
-  children: React.ReactNode;
-  dataStatus?: TDataStatus;
-  primaryButtonTitle?: string;
-  secondaryButtonTitle?: string;
-  onClickPrimaryBtn?: () => void;
-  onClickSecondaryBtn?: () => void;
-};
-
-const AccountLayoutContent = ({
-  children,
-  dataStatus,
-  primaryButtonTitle,
-  secondaryButtonTitle,
-  onClickPrimaryBtn,
-  onClickSecondaryBtn,
-}: AccountLayoutProps) => {
+const AccountLayoutContent = ({ children }: { children: React.ReactNode }) => {
   const { data: currentArtist } = useCurrentArtist();
   const { activeLink } = useActiveLink();
 
+  // для страницы ЛК-Данные определяем какой именно заголовок показывать //
   const isArtistDataPage = activeLink?.id === "artist-data";
   const { data: legalData, status } = useGetArtistLegalData(isArtistDataPage);
   const recipientType = legalData?.legal_profile?.recipient_type;
@@ -41,6 +26,7 @@ const AccountLayoutContent = ({
       : !recipientType
         ? activeLink?.label
         : "Личные данные";
+  //------------------------------------------------------------------//
 
   if (isArtistDataPage && status === "pending") return <Loader />;
 
@@ -50,14 +36,7 @@ const AccountLayoutContent = ({
         <SideMenu>
           <AccountNavigation type={currentArtist?.profile_type} />
         </SideMenu>
-        <AccountContent
-          title={!isArtistDataPage ? activeLink?.label : moderatedLabel}
-          dataStatus={dataStatus}
-          primaryButtonTitle={primaryButtonTitle}
-          secondaryButtonTitle={secondaryButtonTitle}
-          onClickPrimaryBtn={onClickPrimaryBtn}
-          onClickSecondaryBtn={onClickSecondaryBtn}
-        >
+        <AccountContent title={!isArtistDataPage ? activeLink?.label : moderatedLabel}>
           {children}
         </AccountContent>
       </div>
@@ -65,8 +44,10 @@ const AccountLayoutContent = ({
   );
 };
 
-export const AccountLayout = (props: AccountLayoutProps) => (
+export const AccountLayout = ({ children }: { children: React.ReactNode }) => (
   <ActiveLinkProvider>
-    <AccountLayoutContent {...props} />
+    <AccountActionsProvider>
+      <AccountLayoutContent>{children}</AccountLayoutContent>
+    </AccountActionsProvider>
   </ActiveLinkProvider>
 );
