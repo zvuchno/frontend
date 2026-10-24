@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 
 import { useSession } from "next-auth/react";
 
+import { AddPromocodeModal } from "@/features/addPromocodeModal";
+
 import {
   type TShowcaseItem,
   useAlbumsInfiniteQuery,
@@ -19,7 +21,6 @@ import { Loader, RoleCard } from "@/shared/ui";
 import s from "./ShowcasePage.module.scss";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
-import { AddPromocodeModal } from "@/features/addPromocodeModal";
 
 export const ShowcasePage = () => {
   const { data, status } = useSession();
@@ -82,12 +83,8 @@ export const ShowcasePage = () => {
 
   const error = albumsQuery.error || merchQuery.error || promoQuery.error;
 
-  const emptyText = 
-    itemType === "promo" 
-      ? "нет промокодов" 
-      : itemType === "release" 
-        ? "нет музыки"
-        : "нет мерча"
+  const emptyText =
+    itemType === "promo" ? "нет промокодов" : itemType === "release" ? "нет музыки" : "нет мерча";
 
   const currentItems =
     itemType === "release"
@@ -98,7 +95,7 @@ export const ShowcasePage = () => {
           ? promocodes
           : [];
 
-  const hasMore = 
+  const hasMore =
     itemType === "release" && albumsQuery.hasNextPage
       ? true
       : itemType === "merch" && merchQuery.hasNextPage
@@ -111,15 +108,15 @@ export const ShowcasePage = () => {
     if (itemType === "promo") {
       await promoQuery.fetchNextPage();
     } else if (itemType === "release") {
-      await albumsQuery.fetchNextPage()
+      await albumsQuery.fetchNextPage();
       // // Подгружаем и альбомы, и мерч одновременно
       // await Promise.all([albumsQuery.fetchNextPage(), merchQuery.fetchNextPage()]);
     } else {
-      await merchQuery.fetchNextPage()
+      await merchQuery.fetchNextPage();
     }
   };
 
-  const isLoadingMoreData = 
+  const isLoadingMoreData =
     itemType === "release" && albumsQuery.isFetchingNextPage
       ? true
       : itemType === "merch" && merchQuery.isFetchingNextPage

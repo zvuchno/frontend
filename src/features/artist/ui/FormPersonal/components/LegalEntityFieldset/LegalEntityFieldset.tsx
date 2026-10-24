@@ -4,20 +4,21 @@ import clsx from "clsx";
 
 import { createFormField } from "../../FormFieldsCreator/FormFieldsCreator";
 import styles from "../../artistFormPersonal.module.scss";
-import { artistEntityPaymentFields } from "../../utils/constants";
+import { artistLegalEntityFields } from "../../utils/constants";
 import { type FieldValues } from "../../utils/types";
+import s from "./LegalEntityFieldset.module.scss";
 
 export const LegalEntityFieldset = ({
-  disabled,
   methods,
+  disabled,
 }: {
-  disabled: boolean;
+  disabled?: boolean;
   methods: UseFormReturn<FieldValues, undefined, FieldValues>;
 }) => (
-  <fieldset className={clsx(styles.formContent, styles.legalEntityContent)}>
-    <legend className={styles.visuallyHidden}>Информация о юридическом лице</legend>
-    {artistEntityPaymentFields.map((field, index) =>
-      createFormField(field, index, methods, disabled, index)
+  <fieldset className={clsx(styles.formContent, s.legalEntityContent)}>
+    <legend className={styles.legend}>Данные организации</legend>
+    {artistLegalEntityFields.map((field, index) =>
+      createFormField(field, index, methods, index, disabled)
     )}
   </fieldset>
 );

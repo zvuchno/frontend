@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FormProvider, type UseFormRegister, useForm, useWatch } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
@@ -40,10 +40,22 @@ export const ArtistData = () => {
   const { status } = useSession();
   const { data, isLoading } = useGetArtistLegalData();
 
+  const formValues = useMemo(
+    () =>
+      ({
+        ...data,
+        legal_profile: {
+          ...data?.legal_profile,
+          phone: data?.legal_profile?.phone?.replace(/\D/g, "") ?? "",
+        },
+      }) as FieldValues,
+    [data]
+  );
+
   const methods = useForm<FieldValues>({
-    defaultValues: data,
+    defaultValues: formValues,
     mode: "onChange",
-    values: (data ?? {}) as FieldValues,
+    values: formValues,
   });
 
   const recipientType = useWatch({
@@ -78,7 +90,7 @@ export const ArtistData = () => {
 
   return (
     <FormProvider {...methods}>
-      <ArtistFormPersonal values={data} />
+      <ArtistFormPersonal values={formValues} />
       <LegalEntityRecipientTypeInput recipientType={recipientType} register={methods.register} />
       <DevTool control={methods.control} />
     </FormProvider>

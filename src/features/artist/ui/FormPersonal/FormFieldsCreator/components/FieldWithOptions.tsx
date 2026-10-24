@@ -66,7 +66,6 @@ export const FieldWithOptions = ({
           void onChange(e);
           issuerCodeFormatter(field, e);
         }}
-        defaultValue=''
       >
         <option className={styles.option} value='individual_temporary' disabled>
           {field.placeholder}

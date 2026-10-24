@@ -17,8 +17,8 @@ export const createFormField = (
   field: TArtistFormPersonalField,
   fieldSet: number,
   methods: ReturnType<typeof useFormContext<FieldValues>>,
-  disabled: boolean,
-  index: number
+  index: number,
+  disabled?: boolean
 ) => {
   const {
     control,
@@ -37,9 +37,14 @@ export const createFormField = (
           shouldUnregister={false}
           name={field.name}
           rules={artistFormPersonalRules(field) as Record<string, undefined>}
-          render={({ field: { onChange, value, name, ref, onBlur } }) => {
-            const showError = !disabled;
+          render={({ field: { onChange, value, name, ref, onBlur }, fieldState, formState }) => {
             const currentFieldError = get(errors, name) as FieldError | undefined;
+            const showError =
+              !disabled &&
+              (field.type === "tel"
+                ? Boolean(currentFieldError)
+                : fieldState.isTouched || formState.isSubmitted);
+            const visibleFieldError = showError ? currentFieldError : undefined;
             const dateValue = field.type === "date" ? parseServerDate(value) : null;
             const phoneValue =
               field.type === "tel" && typeof value === "string" ? value.replace(/\D/g, "") : "";
@@ -48,7 +53,7 @@ export const createFormField = (
                 style={{ position: "relative" }}
                 className={clsx(
                   "field",
-                  { ["error"]: showError && !!currentFieldError },
+                  { ["error"]: !!visibleFieldError },
                   { ["calendar"]: field.type === "date" }
                 )}
               >
@@ -57,7 +62,7 @@ export const createFormField = (
                   <>
                     <CalendarField
                       field={field}
-                      fieldError={showError ? currentFieldError : undefined}
+                      fieldError={visibleFieldError}
                       value={dateValue}
                       onChange={(selectedDate: Date | null) => {
                         if (selectedDate instanceof Date && !isNaN(selectedDate.getTime())) {
@@ -80,17 +85,14 @@ export const createFormField = (
                 {field.type === "tel" && (
                   <PhoneField
                     field={field}
-                    fieldError={fieldError}
+                    fieldError={visibleFieldError}
                     value={phoneValue}
-                    onChange={(phone) => {
-                      clearErrors(field.name);
-                      onChange(phone);
-                    }}
+                    onChange={onChange}
                     ref={ref}
                     onBlur={onBlur}
                   />
                 )}
-                {showError && currentFieldError && (
+                {visibleFieldError && (
                   <span
                     className='message error'
                     style={{
@@ -99,7 +101,7 @@ export const createFormField = (
                       color: "var(--color-primary-blue)",
                     }}
                   >
-                    {currentFieldError.message}
+                    {visibleFieldError.message}
                   </span>
                 )}
               </div>

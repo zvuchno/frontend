@@ -1,0 +1,43 @@
+.passportlContent {
+  grid-template-areas:
+    "cell-1-1 cell-1-2"
+    "cell-2-1 cell-2-2";
+
+  @media (max-width: 1024px) {
+    grid-template-areas:
+      "cell-1-1"
+      "cell-1-2"
+      "cell-2-1"
+      "cell-2-2";
+  }
+
+  @media (max-width: 768px) {
+    grid-template-areas:
+      "cell-1-1 cell-1-2"
+      "cell-2-1 cell-2-2";
+  }
+
+  @media (max-width: 490px) {
+    grid-template-areas:
+      "cell-1-1"
+      "cell-1-2"
+      "cell-2-1"
+      "cell-2-2";
+  }
+
+  &.company {
+    margin-block-start: -40px;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

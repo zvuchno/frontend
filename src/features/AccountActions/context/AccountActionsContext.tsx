@@ -12,6 +12,7 @@ export type TAccountPageActions = {
   secondaryDisabled?: boolean;
   onClickPrimaryBtn?: () => void;
   onClickSecondaryBtn?: () => void;
+  dataStatusComment?: string;
 };
 
 type TAccountActionsContextValue = {
