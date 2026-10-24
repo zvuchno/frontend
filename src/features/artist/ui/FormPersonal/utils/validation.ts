@@ -38,7 +38,17 @@ export const artistFormPersonalRules = <TFieldValues extends FieldValues>(
     };
   }
   if ("validate" in fieldConfig && fieldConfig.validate) {
-    rules.validate = fieldConfig.validate;
+    const validate = fieldConfig.validate;
+    rules.validate = (value, values) => {
+      const phoneDigits = typeof value === "string" ? value.replace(/\D/g, "") : "";
+      const isOptionalEmptyPhone =
+        field.name === "legal_profile.phone" &&
+        !field.required &&
+        (!phoneDigits || phoneDigits === "7");
+
+      if (isOptionalEmptyPhone) return true;
+      return validate(value, values);
+    };
   }
 
   return rules;

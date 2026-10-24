@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef, ComponentType, ReactNode, SVGProps } fro
 
 import type Link from "next/link";
 
-type NextLinkProps = ComponentPropsWithoutRef<typeof Link>;
+export type NextLinkProps = ComponentPropsWithoutRef<typeof Link>;
 
 export type LinkVariant = "basic" | "outlined";
 

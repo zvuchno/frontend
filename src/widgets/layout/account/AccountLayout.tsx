@@ -11,6 +11,7 @@ import { AccentContainer, Loader } from "@/shared/ui";
 import s from "./AccountLayout.module.scss";
 import { AccountContent } from "./components/AccountContent/AccountContent";
 import { SideMenu } from "./components/SideMenu/SideMenu";
+import { useIsNestedAccountRoute } from "./hooks/hooks";
 
 const AccountLayoutContent = ({ children }: { children: React.ReactNode }) => {
   const { data: currentArtist } = useCurrentArtist();
@@ -28,6 +29,8 @@ const AccountLayoutContent = ({ children }: { children: React.ReactNode }) => {
         : "Личные данные";
   //------------------------------------------------------------------//
 
+  const hasPathBack = useIsNestedAccountRoute();
+
   if (isArtistDataPage && status === "pending") return <Loader />;
 
   return (
@@ -36,7 +39,10 @@ const AccountLayoutContent = ({ children }: { children: React.ReactNode }) => {
         <SideMenu>
           <AccountNavigation type={currentArtist?.profile_type} />
         </SideMenu>
-        <AccountContent title={!isArtistDataPage ? activeLink?.label : moderatedLabel}>
+        <AccountContent
+          title={!isArtistDataPage ? activeLink?.label : moderatedLabel}
+          hasPathBack={hasPathBack}
+        >
           {children}
         </AccountContent>
       </div>

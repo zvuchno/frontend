@@ -5,8 +5,11 @@ export type TLegalProfile = {
     | "individual_entrepreneur"
     | "legal_entity"
     | "self_employed"
-    | "individual_temporary" | ""; // "individual_temporary" только для промежуточного использования при выборе типа артиста ЮЛ или ФЛ. Делится на "individual_entrepreneur" или  "self_employed" в форме данных артиста
-  is_veryfied: boolean;
+    | "individual_temporary"
+    | ""; // "individual_temporary" только для промежуточного использования при выборе типа артиста ЮЛ или ФЛ. Делится на "individual_entrepreneur" или  "self_employed" в форме данных артиста
+  is_verified?: boolean;
+  is_ready_for_verification: boolean;
+  verification_missing_fields: string[];
   comment: string;
 };
 

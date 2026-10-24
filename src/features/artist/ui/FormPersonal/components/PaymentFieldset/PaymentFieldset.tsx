@@ -4,22 +4,24 @@ import clsx from "clsx";
 
 import { createFormField } from "../../FormFieldsCreator/FormFieldsCreator";
 import styles from "../../artistFormPersonal.module.scss";
-import { artistIndividualPaymentFields } from "../../utils/constants";
+import { artistEntityPaymentFields, artistIndividualPaymentFields } from "../../utils/constants";
 import { type FieldValues } from "../../utils/types";
+import s from "./PaymentFieldset.module.scss";
 
 export const PaymentFieldset = ({
   disabled,
   methods,
+  isCompany,
 }: {
-  disabled: boolean;
+  disabled?: boolean;
+  isCompany: boolean;
   methods: UseFormReturn<FieldValues, undefined, FieldValues>;
 }) => {
+  const fields = isCompany ? artistEntityPaymentFields : artistIndividualPaymentFields;
   return (
-    <fieldset className={clsx(styles.formContent, styles.paymentlContent)}>
-      <legend className={styles.visuallyHidden}>Платежная информация</legend>
-      {artistIndividualPaymentFields.map((field, index) =>
-        createFormField(field, index, methods, disabled, index)
-      )}
+    <fieldset className={clsx(styles.formContent, s.paymentlContent)}>
+      <legend className={styles.legend}>Банковские данные</legend>
+      {fields.map((field, index) => createFormField(field, index, methods, index, disabled))}
     </fieldset>
   );
 };

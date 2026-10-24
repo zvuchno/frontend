@@ -28,8 +28,8 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
     type: "text",
     required: false,
     disabled: false,
-    row: 2,
-    column: 1,
+    row: 1,
+    column: 3,
   },
   {
     title: "Дата рождения",
@@ -39,7 +39,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
     required: false,
     disabled: false,
     row: 2,
-    column: 2,
+    column: 1,
   },
   {
     title: "Адрес регистрации",
@@ -48,8 +48,8 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
     type: "text",
     required: false,
     disabled: false,
-    row: 3,
-    column: 1,
+    row: 2,
+    column: 2,
   },
   {
     title: "Email",
@@ -58,7 +58,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
     type: "string",
     required: false,
     disabled: false,
-    row: 4,
+    row: 3,
     column: 1,
   },
   {
@@ -68,7 +68,7 @@ export const artistPersonalFields: TArtistFormPersonalField[] = [
     type: "tel",
     required: false,
     disabled: false,
-    row: 4,
+    row: 3,
     column: 2,
   },
 ];
@@ -130,7 +130,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     type: "text",
     required: false,
     disabled: false,
-    row: 2,
+    row: 1,
     column: 2,
     maxLength: 12,
     minLength: 12,
@@ -144,7 +144,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     type: "text",
     required: false,
     disabled: false,
-    row: 1,
+    row: 3,
     column: 2,
   },
   {
@@ -154,7 +154,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     type: "text",
     required: false,
     disabled: false,
-    row: 1,
+    row: 3,
     column: 1,
     maxLength: 9,
     minLength: 9,
@@ -166,7 +166,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     type: "text",
     required: false,
     disabled: false,
-    row: 2,
+    row: 1,
     column: 1,
     maxLength: 20,
     minLength: 20,
@@ -178,7 +178,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     type: "text",
     required: false,
     disabled: false,
-    row: 3,
+    row: 2,
     column: 1,
     maxLength: 20,
     minLength: 20,
@@ -192,7 +192,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
     type: "text",
     required: false,
     disabled: false,
-    row: 3,
+    row: 2,
     column: 2,
     options: [
       {
@@ -204,7 +204,7 @@ export const artistIndividualPaymentFields: TArtistFormPersonalField[] = [
   },
 ];
 
-export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
+export const artistLegalEntityFields: TArtistFormPersonalField[] = [
   {
     title: "Название организации",
     name: "company_data.company_name",
@@ -253,6 +253,9 @@ export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
     maxLength: 250,
     minLength: 2,
   },
+];
+
+export const artistEntityPaymentFields: TArtistFormPersonalField[] = [
   {
     title: "БИК",
     name: "bank_data.bik",

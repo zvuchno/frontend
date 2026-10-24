@@ -1,13 +1,25 @@
+"use client";
+
 import { type ReactNode } from "react";
+
+import { useRouter } from "next/navigation";
 
 import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 
-import { ButtonUI, Title } from "@/shared/ui";
-
-import { DataStatusBar } from "../DataStatusBar/DataStatusBar";
+import { MainSectionMenu } from "../MainSectionMenu/MainSectionMenu";
 import s from "./AccountContent.module.scss";
 
-export const AccountContent = ({ title, children }: { title?: string; children: ReactNode }) => {
+export const AccountContent = ({
+  title,
+  children,
+  hasPathBack,
+}: {
+  title?: string;
+  children: ReactNode;
+  hasPathBack?: boolean;
+}) => {
+  const router = useRouter();
+
   const { accountActions } = useAccountActions();
 
   const dataStatus = accountActions?.dataStatus;
@@ -17,47 +29,28 @@ export const AccountContent = ({ title, children }: { title?: string; children: 
   const secondaryDisabled = accountActions?.secondaryDisabled;
   const onClickPrimaryBtn = accountActions?.onClickPrimaryBtn;
   const onClickSecondaryBtn = accountActions?.onClickSecondaryBtn;
+  const statusMessage = accountActions?.dataStatusComment;
+  const shouldShowBackButton = hasPathBack;
 
-  const hasButtons = accountActions?.primaryButtonTitle || accountActions?.secondaryButtonTitle;
+  const hasButtons = Boolean(primaryButtonTitle || secondaryButtonTitle);
 
   return (
     <section className={s.mainSection}>
       {(hasButtons || title) && (
-        <div className={s.mainSectionMenu}>
-          <div className={s.mainSectionSubtitle}>
-            <Title Tag='h3' className={s.subtitle}>
-              {title}
-            </Title>
-            {dataStatus && <DataStatusBar dataStatus={dataStatus} />}
-          </div>
-
-          {hasButtons && (
-            <div className={s.mainSectionButtons}>
-              {primaryButtonTitle && (
-                <ButtonUI
-                  variant='primary'
-                  size='small'
-                  className={s.mainSectionButton}
-                  onClick={onClickPrimaryBtn}
-                  disabled={primaryDisabled}
-                >
-                  {primaryButtonTitle}
-                </ButtonUI>
-              )}
-              {secondaryButtonTitle && (
-                <ButtonUI
-                  variant='secondary'
-                  size='small'
-                  className={s.mainSectionButton}
-                  onClick={onClickSecondaryBtn}
-                  disabled={secondaryDisabled}
-                >
-                  {secondaryButtonTitle}
-                </ButtonUI>
-              )}
-            </div>
-          )}
-        </div>
+        <MainSectionMenu
+          dataStatus={dataStatus}
+          statusMessage={statusMessage}
+          hasPathBack={shouldShowBackButton}
+          onClickPrimaryBtn={onClickPrimaryBtn}
+          onClickSecondaryBtn={onClickSecondaryBtn}
+          primaryButtonTitle={primaryButtonTitle}
+          primaryDisabled={primaryDisabled}
+          secondaryButtonTitle={secondaryButtonTitle}
+          secondaryDisabled={secondaryDisabled}
+          title={title}
+          hasButtons={hasButtons}
+          router={router}
+        />
       )}
 
       <div className={s.mainSectionContent}>{children}</div>

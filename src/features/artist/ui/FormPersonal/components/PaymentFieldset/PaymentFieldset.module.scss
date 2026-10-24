@@ -1,0 +1,27 @@
+.paymentlContent {
+  grid-template-areas:
+    "cell-1-1 cell-1-2"
+    "cell-2-1 cell-2-2";
+
+  @media (max-width: 1024px) {
+    grid-template-areas:
+      "cell-1-1"
+      "cell-1-2"
+      "cell-2-1 "
+      "cell-2-2";
+  }
+
+  @media (max-width: 768px) {
+    grid-template-areas:
+      "cell-1-1 cell-1-2"
+      "cell-2-1 cell-2-2";
+  }
+
+  @media (max-width: 490px) {
+    grid-template-areas:
+      "cell-1-1"
+      "cell-1-2"
+      "cell-2-1 "
+      "cell-2-2";
+  }
+}
