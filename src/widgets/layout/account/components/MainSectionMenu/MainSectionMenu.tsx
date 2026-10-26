@@ -15,7 +15,7 @@ type TMainSectionMenuProps = {
   secondaryDisabled?: boolean;
   onClickPrimaryBtn?: () => void;
   onClickSecondaryBtn?: () => void;
-  hasPathBack?: boolean;
+  pathBack?: string;
   title?: string;
   hasButtons: boolean;
   router?: AppRouterInstance;
@@ -24,7 +24,7 @@ type TMainSectionMenuProps = {
 export const MainSectionMenu = ({
   dataStatus,
   statusMessage,
-  hasPathBack,
+  pathBack,
   onClickPrimaryBtn,
   onClickSecondaryBtn,
   primaryButtonTitle,
@@ -37,11 +37,11 @@ export const MainSectionMenu = ({
 }: TMainSectionMenuProps) => (
   <div className={s.mainSectionMenu}>
     <div className={s.mainSectionSubtitleActions}>
-      {hasPathBack && (
+      {pathBack && (
         <button
           className={s.mainSectionBackButton}
           title='Назад'
-          onClick={() => router?.back()}
+          onClick={() => pathBack && router?.replace(pathBack)}
           aria-label='Назад'
           aria-labelledby='artist-account-back-button'
         >
