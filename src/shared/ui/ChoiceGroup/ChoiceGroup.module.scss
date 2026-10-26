@@ -11,6 +11,10 @@
 	&__label {
 		position: relative;
   	cursor: pointer;
+
+    &_disabled {
+      cursor: not-allowed;
+    }
 	}
 
   &__input {
@@ -36,11 +40,11 @@
     transition: background-color 0.2s ease;
     border: none;
 
-    &:hover:not(.radioGroup__button_selected) {
+    &:hover:not(.radioGroup__button_selected, .radioGroup__button_disabled) {
       background-color: #dfe5f6;
     }
 
-    &:active:not(.radioGroup__button_selected) {
+    &:active:not(.radioGroup__button_selected, .radioGroup__button_disabled) {
       outline: 1px solid var(--color-primary-blue);
     }
 

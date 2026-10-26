@@ -7,4 +7,7 @@ export interface RoleCardProps {
   image: ImageSource;
   title: string;
   description?: string;
+  cardClassName?: string;
+  imageClassName?: string;
+  titleClassName?: string;
 };

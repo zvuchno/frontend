@@ -175,6 +175,7 @@ export const UploadForm = ({
                   onChange={field.onChange}
                   items={releseTypeControlItems}
                   containerClassName={s.releaseTypeContainer__control}
+                  disabled={isEditForm}
                 />
               )}
             />
