@@ -3,7 +3,7 @@ import s from "./ChoiceGroup.module.scss";
 import clsx from "clsx";
 import { ChoiceItemProps } from "./types";
 
-export const ChoiceGroup = ({ items, value, containerClassName, onChange }: ChoiceItemProps) => {
+export const ChoiceGroup = ({ items, value, containerClassName, disabled = false, onChange }: ChoiceItemProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
@@ -11,7 +11,7 @@ export const ChoiceGroup = ({ items, value, containerClassName, onChange }: Choi
   return (
     <div className={clsx(s.radioGroup, containerClassName)}>
       {items.map((item) => (
-        <label key={item.value} className={s.radioGroup__label}>
+        <label key={item.value} className={clsx(s.radioGroup__label, { [s.radioGroup__label_disabled]: disabled })}>
           <input
             type="radio"
             name="choice"
@@ -19,9 +19,15 @@ export const ChoiceGroup = ({ items, value, containerClassName, onChange }: Choi
             checked={value === item.value}
             onChange={handleChange}
             className={s.radioGroup__input}
+            disabled={disabled}
           />
           <div
-            className={clsx(s.radioGroup__button, { [s.radioGroup__button_selected]: value === item.value })}
+            className={clsx(
+              s.radioGroup__button, 
+              { [s.radioGroup__button_selected]: value === item.value }, 
+              { [s.radioGroup__button_disabled]: disabled }
+
+            )}
             style={{
               color: value === item.value ? "var(--color-text-primary)" : "var(--color-bg-secondary)",
             }}

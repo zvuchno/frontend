@@ -1,0 +1,114 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-block: 16px;
+  border-bottom: 1px solid #00000033;
+
+  @media (max-width: 390px) {
+    flex-direction: column;
+  }
+
+  &__withButton {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.labelWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-feat);
+  align-self: flex-start;
+}
+
+.number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-inverse);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 100%;
+  letter-spacing: 0%;
+  flex-shrink: 0;
+}
+
+.label {
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 130%;
+  letter-spacing: -0.06em;
+  color: var(--color-text-primary);
+
+  &_done {
+    color: var(--color-bg-secondary);
+    text-decoration: line-through;
+  }
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: transparent;
+  border: none;
+  color: var(--color-text-accent-blue);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &__text {
+    font-family: var(--font-feat);
+    text-decoration: underline;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.04em;
+    text-underline-offset: 2px;
+  }
+
+  & svg {
+    width: 15px;
+    height: 15px;
+    transform: rotate(270deg);
+  }
+}
+
+.selectedBlock {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    flex-wrap: wrap;
+  }
+}
+
+.selectedBlockCard {
+  min-height: 62px;
+  height: 62px;
+  justify-content: center;
+
+  @media (max-width: 686px) {
+    height: fit-content;
+  }
+}
+
+.selectedBlockImage {
+  width: 60px;
+  height: 60px;
+}
+
+.selectedBlockTitle {
+  font-size: 16px;
+}

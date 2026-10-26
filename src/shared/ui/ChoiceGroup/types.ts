@@ -11,5 +11,6 @@ export type ChoiceItemProps = {
   items: TChoiseItem[];
   value: string;
   containerClassName?: string;
+  disabled?: boolean;
   onChange: (value: string) => void;
 }

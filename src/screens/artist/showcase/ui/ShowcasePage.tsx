@@ -9,18 +9,19 @@ import { AddPromocodeModal } from "@/features/addPromocodeModal";
 import {
   type TShowcaseItem,
   useAlbumsInfiniteQuery,
+  useConnetcTelegramBot,
   useMerchInfiniteQuery,
   usePromocodesInfiniteQuery,
 } from "@/entities/Artist";
 import { useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
 import { useGetManagedProfiles } from "@/entities/Label";
-import { RoleSelectBlock } from "@/entities/RoleSelectBlock";
 
-import { Loader, RoleCard } from "@/shared/ui";
+import { Loader } from "@/shared/ui";
 
 import s from "./ShowcasePage.module.scss";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
+import { TCheckListActionMap, CheckList } from "@/widgets/CheckList";
 
 export const ShowcasePage = () => {
   const { data, status } = useSession();
@@ -37,6 +38,14 @@ export const ShowcasePage = () => {
   const currentArtistSlug = useShowcaseArtistSlug();
 
   const managedProfilesQuery = useGetManagedProfiles(profileType);
+  const { mutate: connectTelegramBot } = useConnetcTelegramBot();
+
+  const actionsForCheckList: TCheckListActionMap = useMemo(
+    () => ({
+      telegram_bot: connectTelegramBot,
+    }),
+    [connectTelegramBot]
+  );
 
   const artistsOptions = useMemo(() => {
     if (!managedProfilesQuery.data) return [];
@@ -138,59 +147,51 @@ export const ShowcasePage = () => {
     return <div>{`Ошибка загрузки данных: ${error.message}`}</div>;
   }
 
-  if (allProducts.length === 0) {
-    return (
-      <RoleSelectBlock>
-        <RoleCard
-          path='/artist/showcase/upload/album'
-          image={"/images/cassette.png"}
-          title='Загрузить релиз'
-        />
-        <RoleCard
-          path='/artist/showcase/upload/merch'
-          image={"/images/shirt.png"}
-          title='Загрузить мерч'
-        />
-      </RoleSelectBlock>
-    );
-  }
-
   return (
     <div className={s.container}>
-      <ShowcaseActions
-        itemType={itemType}
-        artistOptions={artistsOptions}
-        onChangeArtist={setArtistFilter}
-        selectItemType={setItemType}
-        releaseCount={releaseCount.toString()}
-        merchCount={merchCount.toString()}
-        promoCount={promoCount.toString()}
-        addPromo={() => setIsPromoModalOpen(true)}
+      <CheckList 
+        artistSlug={currentArtistSlug} 
+        hasProducts={allProducts.length !== 0} 
+        actions={actionsForCheckList}
       />
-      {currentItems.length > 0 ? (
-        <ShowcaseItemsList
-          itemType={itemType}
-          items={currentItems}
-          profileType={profileType}
-          onEditPromo={handleEditPromo}
-          hasMoreData={hasMore}
-          onLoadMore={loadMore}
-          isLoadingMore={isLoadingMoreData}
-        />
-      ) : (
-        <div>{emptyText}</div>
-      )}
+      {allProducts.length !== 0 && (
+        <>
+          <ShowcaseActions
+            itemType={itemType}
+            artistOptions={artistsOptions}
+            onChangeArtist={setArtistFilter}
+            selectItemType={setItemType}
+            releaseCount={releaseCount.toString()}
+            merchCount={merchCount.toString()}
+            promoCount={promoCount.toString()}
+            addPromo={() => setIsPromoModalOpen(true)}
+          />
+          {currentItems.length > 0 ? (
+            <ShowcaseItemsList
+              itemType={itemType}
+              items={currentItems}
+              profileType={profileType}
+              onEditPromo={handleEditPromo}
+              hasMoreData={hasMore}
+              onLoadMore={loadMore}
+              isLoadingMore={isLoadingMoreData}
+            />
+          ) : (
+            <div>{emptyText}</div>
+          )}
 
-      <AddPromocodeModal
-        isOpen={isPromoModalOpen}
-        profileType={profileType}
-        onClose={() => {
-          setIsPromoModalOpen(false);
-          setPromoIdForModal(undefined);
-          if (itemType !== "promo") setItemType("promo");
-        }}
-        id={promoIdForModal}
-      />
+          <AddPromocodeModal
+            isOpen={isPromoModalOpen}
+            profileType={profileType}
+            onClose={() => {
+              setIsPromoModalOpen(false);
+              setPromoIdForModal(undefined);
+              if (itemType !== "promo") setItemType("promo");
+            }}
+            id={promoIdForModal}
+          />
+        </>
+      )}
     </div>
   );
 };
