@@ -57,8 +57,8 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
   });
   const hasIncompletePickupPoint = Boolean(
     pickupEnabled &&
-      (!pickupPoints?.length ||
-        pickupPoints.some((point) => !point.address?.trim() || !point.pickup_date))
+    (!pickupPoints?.length ||
+      pickupPoints.some((point) => !point.address?.trim() || !point.pickup_date))
   );
 
   const { fields, append, remove } = useFieldArray({
@@ -99,7 +99,9 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
           />
 
           {serverErrorMessage.length > 0 && (
-            <p className={styles.formError}>{serverErrorMessage}</p>
+            <p className={styles.formError} data-testid='delivery-server-error'>
+              {serverErrorMessage}
+            </p>
           )}
 
           <ArtistSettingsButtons
@@ -110,7 +112,11 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
           />
           <div className={styles.hint}>
             Для удобства обработки и отслеживания заказов{" "}
-            <button className={styles.hintButton} onClick={() => connectTelegramBot()}>
+            <button
+              className={styles.hintButton}
+              onClick={() => connectTelegramBot()}
+              data-testid='delivery-connect-telegram-link'
+            >
               присоединитесь
             </button>{" "}
             к нашему телеграм-боту

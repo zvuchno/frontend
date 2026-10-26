@@ -67,6 +67,7 @@ export const NavBar = ({ links, title }: NavBarProps) => {
           onClick={() => setIsMenuOpen((prev) => !prev)}
           title={isMenuOpen ? "Свернуть" : "Развернуть"}
           className={clsx(s.titleButton, { [s.open]: isMenuOpen })}
+          data-testid='account-menu-open-btn'
         >
           <Image
             src='/icons/arrow-right.svg'
@@ -80,6 +81,7 @@ export const NavBar = ({ links, title }: NavBarProps) => {
       <nav
         className={clsx(s.container, { [s.isShown]: isMenuOpen })}
         aria-label='Навигация профиля'
+        data-testid='account-nav'
       >
         {links.map((link) => {
           const href = typeof link.href === "string" ? link.href : link.href.pathname;
@@ -91,6 +93,7 @@ export const NavBar = ({ links, title }: NavBarProps) => {
               className={clsx(s.link, {
                 [s.link_active]: typeof href === "string" && isLinkActive(href),
               })}
+              data-testid={`account-menu-link-${link.id}`}
             >
               <Menutag
                 title={link.label}

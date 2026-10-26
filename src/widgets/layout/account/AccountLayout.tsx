@@ -37,7 +37,7 @@ const AccountLayoutContent = ({ children }: { children: React.ReactNode }) => {
     <AccentContainer className={s.container}>
       <div className={s.body}>
         <SideMenu>
-          <AccountNavigation type={currentArtist?.profile_type} />
+          <AccountNavigation type={currentArtist?.profile_type} data-testid='account-menu' />
         </SideMenu>
         <AccountContent
           title={!isArtistDataPage ? activeLink?.label : moderatedLabel}

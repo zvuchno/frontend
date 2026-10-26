@@ -37,7 +37,7 @@ export const ButtonAddLink = ({
                   [s.itemDeleting]: isDeleting,
                 })}
               >
-                <div className={s.itemMain}>
+                <div className={s.itemMain} data-testid='artist-profile-social'>
                   <label className={s.itemLabel}>{item.label}</label>
 
                   <input
@@ -55,6 +55,7 @@ export const ButtonAddLink = ({
                     disabled={isDeleting}
                     onClick={() => onDeleteClick?.(item)}
                     aria-label={isDeleting ? `Удаление ${item.label}` : `Удалить ${item.label}`}
+                    data-testid='artist-profile-delete-social'
                   >
                     {isDeleting ? (
                       <span className={s.deleteSpinner} aria-hidden='true' />
@@ -69,7 +70,12 @@ export const ButtonAddLink = ({
         </div>
       ) : null}
 
-      <button type='button' className={s.actionButton} onClick={onAddClick}>
+      <button
+        type='button'
+        className={s.actionButton}
+        onClick={onAddClick}
+        data-testid='artist-profile-add-social-btn'
+      >
         <PlusIcon />
         {addButtonText}
       </button>

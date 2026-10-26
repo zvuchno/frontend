@@ -14,7 +14,7 @@ export const SideMenu = ({ children }: { children: ReactNode }) => {
       </Title>
       <div className={s.sideMenuContent}>{children}</div>
 
-      <LogoutButton className={s.logoutButton} />
+      <LogoutButton className={s.logoutButton} data-testid='account-signout-btn' />
     </section>
   );
 };
