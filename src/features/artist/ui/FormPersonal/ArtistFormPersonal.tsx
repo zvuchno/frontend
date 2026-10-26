@@ -201,7 +201,11 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
         </div>
       </fieldset>
 
-      {serverErrorMessage.length > 0 && <p className={styles.formError}>{serverErrorMessage}</p>}
+      {serverErrorMessage.length > 0 && (
+        <p className={styles.formError} data-testid='artist-data-server-error'>
+          {serverErrorMessage}
+        </p>
+      )}
     </form>
   );
 };

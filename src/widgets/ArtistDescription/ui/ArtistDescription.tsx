@@ -50,6 +50,7 @@ const ArtistDescriptionInput = ({
 
         hasChanges?.(value);
       }}
+      data-testid='artist-profile-description-input'
     />
   );
 };
@@ -59,6 +60,7 @@ const ExpandButton = ({ isExpanded, onClick }: { isExpanded: boolean; onClick: (
     type='button'
     className={clsx(s.content__button, { [s.content__button_rotate]: isExpanded })}
     onClick={onClick}
+    data-testid='artist-profile-description-expand-btn'
   >
     <svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' viewBox='0 0 10 6'>
       <path stroke='#100f0d' strokeLinecap='round' d='M8.984.5 4.742 4.743.499.5' />

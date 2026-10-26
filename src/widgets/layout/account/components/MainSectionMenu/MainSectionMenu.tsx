@@ -44,6 +44,7 @@ export const MainSectionMenu = ({
           onClick={() => pathBack && router?.replace(pathBack)}
           aria-label='Назад'
           aria-labelledby='artist-account-back-button'
+          data-testid='account-back-btn'
         >
           <Image src={"/icons/arrow-pixel-back.svg"} alt={"Назад"} width={10.67} height={18.67} />
         </button>
@@ -65,6 +66,7 @@ export const MainSectionMenu = ({
             className={s.mainSectionButton}
             onClick={onClickPrimaryBtn}
             disabled={primaryDisabled}
+            data-testid='account-primary-btn'
           >
             {primaryButtonTitle}
           </ButtonUI>
@@ -76,6 +78,7 @@ export const MainSectionMenu = ({
             className={s.mainSectionButton}
             onClick={onClickSecondaryBtn}
             disabled={secondaryDisabled}
+            data-testid='accountsecondary-btn'
           >
             {secondaryButtonTitle}
           </ButtonUI>

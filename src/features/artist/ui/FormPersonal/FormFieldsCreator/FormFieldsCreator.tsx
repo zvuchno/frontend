@@ -56,6 +56,7 @@ export const createFormField = (
                   { ["error"]: !!visibleFieldError },
                   { ["calendar"]: field.type === "date" }
                 )}
+                data-testid={`artist-data-form-${field.name}`}
               >
                 <FieldLabel field={field} forField={`${field.row}.${field.column}`} />
                 {field.type === "date" && (
@@ -109,13 +110,19 @@ export const createFormField = (
           }}
         />
       ) : field.options ? (
-        <FieldWithOptions field={field} hasError={!disabled && !!fieldError} methods={methods} />
+        <FieldWithOptions
+          field={field}
+          hasError={!disabled && !!fieldError}
+          methods={methods}
+          data-testid={`artist-data-form-${field.name}`}
+        />
       ) : (
         <RegularField
           field={field}
           fieldError={!disabled ? fieldError : undefined}
           methods={methods}
           className={styles.height_100}
+          data-testid={`artist-data-form-${field.name}`}
         />
       )}
     </div>
