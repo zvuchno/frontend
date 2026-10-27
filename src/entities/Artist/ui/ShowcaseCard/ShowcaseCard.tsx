@@ -1,5 +1,3 @@
-"use client";
-
 import { isAlbum, isMerch, isPromo } from "../../utils/typeGuarde";
 import { type ShowcaseCardProps } from "./ShowcaseCard.type";
 import { AlbumItem } from "./components/AlbumItem";
