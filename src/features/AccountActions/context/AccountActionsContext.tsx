@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext } from "react";
 
 import { type TDataStatus } from "@/widgets/layout/account/components/DataStatusBar/DataStatusBar";

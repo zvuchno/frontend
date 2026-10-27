@@ -1,5 +1,6 @@
 import { getArtistsListServer } from "@/api/catalog/artistsListApi/getArtistsListServer";
 import { getCatalogListServer } from "@/api/catalog/catalogListApi/getCatalogListServer";
+import { type Metadata } from "next";
 
 import { HomePage } from "@/screens/home";
 
@@ -20,6 +21,62 @@ async function measure<T>(name: string, request: () => Promise<T>): Promise<T> {
     throw error;
   }
 }
+
+export const metadata: Metadata = {
+  title: "ЗВУЧНО - маркетплейс независимой музыки, мерча и винила",
+  description:
+    "Маркетплейс цифровой музыки для СНГ артистов. Первый в России специализированный маркетплейс, предназначенный для прямой продажи музыкального контента и сопутствующих товаров. Покупайте цифровые релизы, эксклюзивный мерч, виниловые пластинки и CD напрямую у любимых авторов.",
+  keywords: [
+    "звучно платформа",
+    "маркетплейс локальной музыки",
+    "музыкальный маркетплейс",
+    "независимые артисты",
+    "купить винил",
+    "музыкальный мерч",
+    "поддержка музыкантов",
+    "инди",
+    "музыка рф",
+    "купить цифровой релиз",
+    "звучно маркетплейс",
+    "локальная сцена",
+    "zvuchno",
+    "zvuchno marketplace",
+    "zvuchno platform",
+    "музыкальный merch",
+    "купить cd",
+    "продать свою музыку",
+  ],
+  openGraph: {
+    title:
+      "ЗВУЧНО - цифровые релизы, эксклюзивный мерч, виниловые пластинки и CD от любимых авторов",
+    description:
+      "Первый в России специализированный маркетплейс, предназначенный для прямой продажи музыкального контента и сопутствующих товаров. Покупайте цифровые релизы, эксклюзивный мерч, виниловые пластинки и CD напрямую у любимых авторов.",
+    siteName: "ЗВУЧНО",
+    images: [
+      {
+        url: `${process.env.FRONTEND_ORIGIN || ""}/images/main-banner.png`,
+        width: 1200,
+        alt: "Платформа ЗВУЧНО",
+      },
+    ],
+    locale: "ru_RU",
+    type: "website",
+    url: process.env.FRONTEND_ORIGIN,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+};
 
 export default async function Home() {
   // eslint-disable-next-line react-hooks/purity
