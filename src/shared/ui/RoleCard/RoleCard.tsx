@@ -18,7 +18,7 @@ export const RoleCard = ({
   const imageSrc = typeof image === "string" ? image : image.src;
 
   return (
-    <Link href={path} aria-label={`Перейти к роли: ${title}`} className={s.link}>
+    <Link href={path} data-testid={`select-card-${title}`} className={s.link}>
       <div className={clsx(s.card, cardClassName)}>
         <div className={clsx(s.card__image, imageClassName)}>
           <Image

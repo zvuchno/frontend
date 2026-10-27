@@ -118,9 +118,11 @@ export const UploadTrackModal = ({
       return;
     }
   
-    const result = await checkMediaFiles(file);
+    const result = await checkMediaFiles(file, "music");
     if (result.error) {
-      toast.error(result.error);
+      toast.error(result.error, {
+        duration: 5000,
+      });
       setValue('track', null);
       return;
     }
@@ -208,6 +210,7 @@ export const UploadTrackModal = ({
                 onClick={handleTrackButtonClick}
                 disabled={isSubmitting}
                 className={s.uploadContainer__mediaButton}
+                data-testid="upload-track-upload-button"
               >
                 {isEditForm ? 'Заменить трек' : 'Выбрать трек'}
               </ButtonUI>
@@ -220,6 +223,7 @@ export const UploadTrackModal = ({
                 onChange={(e) => {
                   handleFileChange(e).catch(console.error)
                 }}
+                data-testid="upload-track-input"
               />
 
               <Text className={s.uploadContainer__hint}>
@@ -244,6 +248,7 @@ export const UploadTrackModal = ({
                   setValue('track', null);
                 }}
                 className={s.selectedFileBlock__removeBtn}
+                data-testid="upload-track-delete-button"
               >
                 Удалить
               </ButtonUI>
@@ -259,6 +264,7 @@ export const UploadTrackModal = ({
             labelClassName={s.label}
             inputClassName={s.input}
             maxLength={255}
+            data-testid="upload-track-input-name"
           />
           {releaseType && releaseType !== "single" && (
             <div className={s.container}>
@@ -284,6 +290,7 @@ export const UploadTrackModal = ({
                 labelClassName={s.label}
                 inputClassName={s.input}
                 hintText="если не выставить индивидуальную цену, то приобрести трек отдельно от всего альбома будет нельзя"
+                data-testid="upload-track-input-price"
               />
 
               <CheckboxUI 
@@ -311,9 +318,10 @@ export const UploadTrackModal = ({
             labelClassName={s.label}
             inputClassName={s.textarea}
             placeholder="Этот текст будут видеть ваши слушатели"
+            data-testid="upload-track-input-description"
           />
 
-          <ButtonUI variant="primary" type="submit" disabled={isSubmitting}>
+          <ButtonUI variant="primary" type="submit" disabled={isSubmitting} data-testid="upload-track-submit-button">
             {isSubmitting ? 'Загрузка...' : isEditForm ? 'Сохранить' : 'Добавить'}
           </ButtonUI>
         </form>

@@ -79,10 +79,10 @@ export const AddImageBlock = ({
       return;
     }
 
-    const result = await checkMediaFiles(file);
+    const result = await checkMediaFiles(file, "image");
     if (result.error) {
       toast.error(result.error, {
-        duration: 8000,
+        duration: 5000,
       });
       event.target.value = '';
       return;
@@ -150,10 +150,10 @@ export const AddImageBlock = ({
       return;
     }
 
-    const result = await checkMediaFiles(file);
+    const result = await checkMediaFiles(file, "image");
     if (result.error) {
       toast.error(result.error, {
-        duration: 8000,
+        duration: 5000,
       });
       event.target.value = '';
       return;
@@ -238,6 +238,7 @@ export const AddImageBlock = ({
             }}
             className={styles.addImage__removeButton}
             aria-label="Удалить изображение"
+            data-testid={`add-image-additional-delete-button-${index}`}
           >
             ✕
           </button>
@@ -251,6 +252,7 @@ export const AddImageBlock = ({
           onChange={(e) => void handleAdditionalFileChange(e, index)}
           accept='image/*'
           hidden
+          data-testid={`add-image-additional-input-${index}`}
         />
       </div>
     );
@@ -276,6 +278,7 @@ export const AddImageBlock = ({
             onClick={() => void clearMainImage(mainPreview.id)}
             className={styles.addImage__removeButton}
             aria-label="Удалить главное фото"
+            data-testid="add-image-main-delete-button"
           >
             ✕
           </button>
@@ -294,6 +297,7 @@ export const AddImageBlock = ({
             className={styles.addImage__button}
             contentClassName={styles.addImage__buttonText}
             onClick={handleButtonClick}
+            data-testid="add-image-main-select-button"
           >
             Выбрать фото
           </ButtonUI>
@@ -306,6 +310,7 @@ export const AddImageBlock = ({
           onChange={handleMainFileChange}
           accept='image/*'
           className={styles.addImage__input}
+          data-testid="add-image-main-input"
         />
       </div>
 
