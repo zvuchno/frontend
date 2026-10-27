@@ -40,7 +40,7 @@ export const CheckList = ({
 
       <div className={s.header}>
         <div className={s.titleContainer}>
-          <Title Tag="h3" className={s.titleContainer__title}>{title}</Title>
+          <Title Tag="h4" className={s.titleContainer__title}>{title}</Title>
           <Text Tag="span" className={s.titleContainer__count}>({completed}/{total})</Text>
         </div>
         <button 

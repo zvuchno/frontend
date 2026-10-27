@@ -62,14 +62,22 @@ export const CheckListItem = ({ index, itemKey, isDone, hasProduct, actions }: C
       {!isDone && !isFirstProductAdd && (
         <>
           {checklistConfig[itemKey].actionType === "button" && actions?.[itemKey] && (
-            <button onClick={() => actions[itemKey]?.()} className={s.action}>
-            <span className={s.action__text}>Подключить</span>
+            <button 
+              onClick={() => actions[itemKey]?.()} 
+              className={s.action} 
+              data-testid={`checklist-button-${itemKey}`}
+            >
+              <span className={s.action__text}>Подключить</span>
               
               {arrowIcon}
             </button>
           )}
           {checklistConfig[itemKey].actionType === "link" && (
-            <Link href={checklistConfig[itemKey].href ?? "#"} className={s.action}>
+            <Link 
+              href={checklistConfig[itemKey].href ?? "#"} 
+              className={s.action} 
+              data-testid={`checklist-link-${itemKey}`}
+            >
               <span className={s.action__text}>Перейти</span>
               {arrowIcon}
             </Link>

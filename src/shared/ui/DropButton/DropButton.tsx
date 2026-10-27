@@ -35,7 +35,13 @@ export const DropButton = ({ title, icon, options }: TDropButtonProps) => {
 
   return (
     <div className={s.container} ref={dropRef}>
-      <button className={s.dropButton} type="button" onClick={handleClick} onKeyDown={handleKeyDown}>
+      <button 
+        className={s.dropButton} 
+        type="button" 
+        onClick={handleClick} 
+        onKeyDown={handleKeyDown}
+        data-testid="drop-button"
+      >
         <Text Tag="span" className={s.dropButton__text}>{title}</Text>
         <span 
           className={s.dropButton__icon}
@@ -45,12 +51,13 @@ export const DropButton = ({ title, icon, options }: TDropButtonProps) => {
         />
       </button>
       <div className={clsx(s.dropContent, { [s.dropContent_show]: isOpen })}>
-        {options.map((opt) => (
+        {options.map((opt, index) => (
           <a 
             key={opt.label} 
             href={opt.href ?? "#"} 
             className={s.dropContent__item}
             onClick={opt.onClick}
+            data-testid={`drop-button-link-${index}`}
           >
             {opt.label}
           </a>

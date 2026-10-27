@@ -1,4 +1,4 @@
-export const checkMediaFiles = async (file: File) => {
+export const checkMediaFiles = async (file: File, variant: "image" | "music") => {
   const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 МБ
   const MIN_RESOLUTION = 1000;
   const MAX_AUDIO_SIZE = 500 * 1024 * 1024; // 500 МБ
@@ -6,13 +6,15 @@ export const checkMediaFiles = async (file: File) => {
   const allowedImageMime = ["image/jpeg", "image/webp", "image/png"];
   const isImage = allowedImageMime.includes(file.type);
 
-  const allowedAudioMime = ["audio/mpeg", "audio/flac", "audio/wav", "audio/x-wav", "audio/vnd.wave"];
+  const allowedAudioMime = ["audio/mpeg", "audio/flac", "audio/x-flac", "audio/wav", "audio/x-wav", "audio/vnd.wave"];
   const isAudio = allowedAudioMime.includes(file.type);
 
   if (!isImage && !isAudio) {
     return {
       validFile: null,
-      error: "Разрешенные форматы для изображений: JPEG, WebP, PNG. Для аудиофайлов -  MP3, FLAC, WAV",
+      error: variant === "image" 
+        ? "Разрешенные форматы для изображений: JPEG, WebP, PNG." 
+        : "Разрешенные форматы для аудиофайлов -  MP3, FLAC, WAV",
     };
   }
 

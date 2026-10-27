@@ -11,7 +11,11 @@ export const ChoiceGroup = ({ items, value, containerClassName, disabled = false
   return (
     <div className={clsx(s.radioGroup, containerClassName)}>
       {items.map((item) => (
-        <label key={item.value} className={clsx(s.radioGroup__label, { [s.radioGroup__label_disabled]: disabled })}>
+        <label 
+          key={item.value} 
+          className={clsx(s.radioGroup__label, { [s.radioGroup__label_disabled]: disabled })}
+          data-testid={`choice-label-${item.value}`}
+        >
           <input
             type="radio"
             name="choice"
@@ -20,6 +24,7 @@ export const ChoiceGroup = ({ items, value, containerClassName, disabled = false
             onChange={handleChange}
             className={s.radioGroup__input}
             disabled={disabled}
+            data-testid={`choice-input-${item.value}`}
           />
           <div
             className={clsx(
