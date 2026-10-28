@@ -55,7 +55,7 @@ export const metadata: Metadata = {
       {
         url: `${process.env.FRONTEND_ORIGIN || ""}/images/main-banner.png`,
         width: 1200,
-        alt: "Платформа ЗВУЧНО",
+        alt: "ЗВУЧНО — Маркетплейс цифровой музыки для СНГ артистов. Изображение винилового проигрывателя",
       },
     ],
     locale: "ru_RU",
