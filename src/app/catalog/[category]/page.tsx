@@ -5,7 +5,7 @@ import { CategoryPage } from "@/screens/catalog/category";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ category: 'album' | 'all' | 'merch' | 'artists' }>;
+  params: Promise<{ category: 'release' | 'all' | 'merch' | 'artists' }>;
 }): Promise<Metadata> {
   const { category } = await params;
   return {
@@ -20,7 +20,7 @@ async function Catalog ({
   params,
   searchParams,
 }: {
-  params: Promise<{ category: 'album' | 'all' | 'merch' | 'artists' }>;
+  params: Promise<{ category: 'release' | 'all' | 'merch' | 'artists' }>;
   searchParams: Promise<{
     genre?: string | string[];
     kind?: string | string[];

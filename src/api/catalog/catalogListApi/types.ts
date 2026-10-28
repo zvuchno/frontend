@@ -28,7 +28,7 @@ export type TCatalogListResponse = {
 
 export type TCatalogListRequest = {
   token?: string;
-  type?: 'album' | 'all' | 'merch';
+  type?: 'release' | 'all' | 'merch';
   genre?: string | string[];
   kind?: string | string[];
   artist?: string;

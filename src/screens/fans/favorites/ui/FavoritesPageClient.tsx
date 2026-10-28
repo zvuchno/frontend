@@ -87,6 +87,13 @@ export function FavoritesPageClient() {
         const id = match ? match[1] : null;
         const selected =
           card.target.selected_variant_id !== null ? card.target.selected_variant_id : undefined;
+
+        const basePath = `/catalog/${card.target.type}/${id}/`;
+
+        const href =
+          card.target.type === "merch" || !selected
+            ? basePath
+            : `${basePath}?selected=${encodeURIComponent(selected)}`;
         return (
           <ProductCard
             key={card.product_variant}
@@ -104,7 +111,7 @@ export function FavoritesPageClient() {
                 }}
               />
             }
-            link={`/catalog/release/${id}/?kind=${card.target.type}&selected=${selected}`}
+            link={href}
           />
         );
       })}

@@ -31,8 +31,8 @@ export const MerchSection = ({
         const url = item.target.url;
         const match = url.match(/(\d+)\/$/);
         const id = match ? match[1] : null;
-        const selected =
-          item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined;
+        // const selected =
+        //   item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined;
         /*const isInCart = cartItems?.find(
           (cartItem) => cartItem.product_variant === item.favorite_variant_id
         );*/
@@ -64,7 +64,7 @@ export const MerchSection = ({
                 isAuth={isAuth}
               />
             }
-            link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+            link={`/catalog/${item.target.type}/${id}`}
             onHandleClick={() => addProduct(item)}
             /*purchasedItems={isInCart ? isInCart.quantity : undefined}*/
           />

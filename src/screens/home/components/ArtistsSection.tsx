@@ -12,7 +12,7 @@ export const ArtistsSection = ({ artists }: { artists: TArtistCard[] }) => (
     {artists.map((artist) => (
       <Link
         key={artist.slug}
-        href={`/catalog/artists/${artist.slug}/?kind=artists`}
+        href={`/catalog/artists/${artist.slug}`}
         className={styles.mainContentCardLink}
       >
         <CardArtist image={artist.cover ?? undefined} description={artist.name} hasButton={false} />

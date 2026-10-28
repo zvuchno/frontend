@@ -94,7 +94,7 @@ export default async function Home() {
 
   const [artistsResult, albumsResult, merchResult] = await Promise.allSettled([
     measure("artists", () => getArtistsListServer({ limit: "3" })),
-    measure("albums", () => getCatalogListServer({ type: "album", limit: "4" })),
+    measure("albums", () => getCatalogListServer({ type: "release", limit: "4" })),
     measure("merch", () => getCatalogListServer({ type: "merch", limit: "4" })),
   ]);
 

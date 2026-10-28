@@ -11,20 +11,20 @@ export async function generateMetadata({
   params,
   searchParams
 }: {
-  params: Promise<{ id: string }>,
-  searchParams: Promise<{kind: 'merch' | 'release' | 'artists', selected?: string}>
+  params: Promise<{ id: string, category: 'release' | 'merch' | 'artists'  }>,
+  searchParams: Promise<{selected?: string}>
 }): Promise<Metadata> {
 
   try {
-    const { id } = await params;
-    const { kind, selected } = await searchParams;
-    const card = await getCardById(kind, id);
+    const { id, category } = await params;
+    const { selected } = await searchParams;
+    const card = await getCardById(category, id);
 
     let productName: string = 'Музыкальный товар магазина "Звучно';
     let productDescription: string = 'Приобретайте музыкальные товары любимых артистов';
     let productImage: string = '';
 
-    if (selected && kind === 'release') {
+    if (selected && category === 'release') {
       const release = card as TDetailRelease;
       const index = release.variants.findIndex(variant => variant.variant_id === Number(selected));
       if (index !== -1) 
@@ -38,28 +38,28 @@ export async function generateMetadata({
         productDescription = release.variants[index].description;
         productImage = release.variants[index].images[0].image;
       
-    } else if (!selected && kind === 'release') {
+    } else if (!selected && category === 'release') {
       const release = card as TDetailRelease;
       productName = `${release.is_single ? 'Сингл' : 'Альбом'} "${release.variants[0].name}"`;
       productDescription = release.variants[0].description;
       productImage = release.variants[0].images[0].image;
 
-    } else if (kind === 'merch') {
+    } else if (category === 'merch') {
       const merch = card as TDetailMerch;
       productName = `${merch.kind} "${merch.name}"`;
       productDescription = merch.description
       productImage = merch.images[0].image
     }
 
-    const name = kind === 'artists' 
+    const name = category === 'artists' 
       ? (card as TDetalArtist).name 
       : productName;
 
-    const description = kind === 'artists' 
+    const description = category === 'artists' 
       ? (card as TDetalArtist).description
       : productDescription;
 
-    const image = kind === 'artists' 
+    const image = category === 'artists' 
       ? (card as TDetalArtist).cover
       : productImage
 
@@ -74,9 +74,9 @@ export async function generateMetadata({
       },
     };
   } catch {
-    const { kind } = await searchParams;
+    const { category } = await params;
     return {
-      title: `${kind === 'artists' ? 'Артист маркетплейса "Звучно"' : 'Музыкальный товар маркетплейса "Звучно"'}`,
+      title: `${category === 'artists' ? 'Артист маркетплейса "Звучно"' : 'Музыкальный товар маркетплейса "Звучно"'}`,
       description: 'Приобретайте музыкальные товары любимых артистов'
     }
   }
@@ -86,18 +86,18 @@ async function Detail({
   params, 
   searchParams
 }: {
-  params: Promise<{ id: string }>,
-  searchParams: Promise<{kind: 'merch' | 'release' | 'artists', selected?: string}>
+  params: Promise<{ id: string, category: 'release' | 'merch' | 'artists' }>,
+  searchParams: Promise<{selected?: string}>
 }) {
 
-  const { id } = await params;
-  const { kind, selected } = await searchParams;
+  const { id, category } = await params;
+  const { selected } = await searchParams;
 
-  const card = await getCardById(kind, id);
+  const card = await getCardById(category, id);
 
   return (
     <Suspense fallback={<div className={s.message}>Загрузка...</div>}>
-      <DetailPage card={card} kind={kind} selected={selected}/>
+      <DetailPage card={card} kind={category} selected={selected}/>
     </Suspense>
   )
 };

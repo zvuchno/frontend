@@ -2,7 +2,7 @@ import { type TArtistCard } from "@/api/catalog/artistsListApi/types";
 import { type TCatalogCard } from "@/api/catalog/catalogListApi/types";
 
 export interface ProductsListProps {
-  category: 'album' | 'all' | 'merch' | 'artists';
+  category: 'release' | 'all' | 'merch' | 'artists';
   filterByGenre?: string | string[];
   filterBySubcategory?: string | string[];
   filterByArtist?: string;
