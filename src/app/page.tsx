@@ -4,7 +4,8 @@ import { type Metadata } from "next";
 
 import { HomePage } from "@/screens/home";
 
-export const dynamic = "force-dynamic";
+//export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 async function measure<T>(name: string, request: () => Promise<T>): Promise<T> {
   const started = performance.now();
@@ -46,6 +47,13 @@ export const metadata: Metadata = {
     "купить cd",
     "продать свою музыку",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-touch-icon-180x180.png", sizes: "180x180", type: "image/png" }],
+  },
   alternates: {
     canonical: "https://dev.zvuchno.space",
   },
