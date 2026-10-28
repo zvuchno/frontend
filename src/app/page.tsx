@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     "купить cd",
     "продать свою музыку",
   ],
+  alternates: {
+    canonical: "https://dev.zvuchno.space",
+  },
   openGraph: {
     title: "Цифровые релизы и эксклюзивный мерч от любимых авторов",
     description:
@@ -53,14 +56,14 @@ export const metadata: Metadata = {
     siteName: "ЗВУЧНО",
     images: [
       {
-        url: `${process.env.FRONTEND_ORIGIN || ""}/images/main-banner.png`,
+        url: "https://dev.zvuchno.space/images/main-banner.png",
         width: 1200,
         alt: "ЗВУЧНО — Маркетплейс цифровой музыки для СНГ артистов. Изображение винилового проигрывателя",
       },
     ],
     locale: "ru_RU",
     type: "website",
-    url: process.env.FRONTEND_ORIGIN,
+    url: "https://dev.zvuchno.space",
   },
   robots: {
     index: true,
