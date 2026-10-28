@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
-
 import { type TDetailCardResponse } from "./types";
+
+export class CardNotFoundError extends Error {}
 
 const baseUrl =
   process.env.NODE_ENV === "development"
@@ -26,7 +26,7 @@ export const getCardById = async (
   const response = await fetch(url);
 
   if (response.status === 404) {
-    notFound();
+    throw new CardNotFoundError();
   }
 
   if (!response.ok) throw new Error(errorMessage);
