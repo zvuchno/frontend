@@ -37,6 +37,13 @@ export const MusicSection = ({
         const id = match ? match[1] : null;
         const selected =
           item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined;
+
+        const basePath = `/catalog/${item.target.type}/${id}/`;
+
+        const href =
+          !selected
+            ? basePath
+            : `${basePath}?selected=${encodeURIComponent(selected)}`;
         /*const isInCart = cartItems?.find(
         (cartItem) => cartItem.target.selected_variant_id === selected
       );*/
@@ -68,7 +75,7 @@ export const MusicSection = ({
                 isAuth={isAuth}
               />
             }
-            link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
+            link={href}
             onHandleClick={() => addProduct(item)}
             isRelease
             isPlaying={playingAlbumId === item.target.id}

@@ -38,7 +38,7 @@ export const RecomendationsList = () => {
     queryKey: ["recom", "album", limitToShow],
     queryFn: () =>
       getCatalogListClient({
-        type: "album",
+        type: "release",
         ordering: "random",
         limit: limitToShow,
       }),
@@ -79,7 +79,7 @@ export const RecomendationsList = () => {
     <Suspense fallback={<div>Загрузка рекомендаций...</div>}>
       <ListSection
         title={showRecentViewed ? "Вы смотрели" : "Вам также может понравиться"}
-        link={viewedProducts ? "" : `/catalog/album`}
+        link={showRecentViewed ? "" : `/catalog/all`}
         hasMore={hasMoreRecommendations}
       >
         {recommendations.map((item) => {
@@ -88,6 +88,13 @@ export const RecomendationsList = () => {
           const id = match ? match[1] : null;
           const selected =
             item.target.selected_variant_id !== null ? item.target.selected_variant_id : undefined;
+
+          const basePath = `/catalog/${item.target.type}/${id}/`;
+
+          const href =
+            item.target.type === "merch" || !selected
+              ? basePath
+              : `${basePath}?selected=${encodeURIComponent(selected)}`;
           return (
             <ProductCard
               key={item.product_id}
@@ -108,7 +115,7 @@ export const RecomendationsList = () => {
                   }}
                 />
               }
-              link={`/catalog/release/${id}/?kind=${item.target.type}&selected=${selected}`}
+              link={href}
               onHandleClick={() => addProduct(item)}
               isRelease={item.target.type === "release"}
               isPlaying={playingAlbumId === item.target.id}

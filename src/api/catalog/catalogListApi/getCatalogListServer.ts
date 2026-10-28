@@ -24,7 +24,11 @@ export async function getCatalogListServer({
   }
 
   if (type !== undefined) {
-    params.append("type", type.toString());
+    if (type === "release") {
+      params.append("type", "album");
+    } else {
+      params.append("type", type.toString());
+    }
   }
 
   if (limit !== undefined) {

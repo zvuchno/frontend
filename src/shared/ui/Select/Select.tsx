@@ -80,7 +80,6 @@ export const SelectUI = forwardRef<HTMLSelectElement, SelectUIProps> (
             required={required}
             disabled={disabled}
             className={styles.select__select_visuallyHidden}
-            data-testid={`select-ui-${value}`}
           ></select>
 
           {/* Tо, что видит пользователь вместо нативного селекта */}

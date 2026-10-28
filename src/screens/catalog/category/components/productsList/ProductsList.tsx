@@ -147,7 +147,7 @@ const ProductsList = ({
           {artistsCards.map((artist) => (
             <li key={artist.slug} className={s.artistsGrid}>
               <Link
-                href={`/catalog/artists/${artist.slug}/?kind=artists`}
+                href={`/catalog/artists/${artist.slug}`}
                 className={s.artistsGrid}
               >
                 <CardArtist
@@ -171,6 +171,13 @@ const ProductsList = ({
               product.target.selected_variant_id !== null
                 ? product.target.selected_variant_id
                 : undefined;
+
+            const basePath = `/catalog/${product.target.type}/${id}/`;
+
+            const href =
+              product.target.type === "merch" || !selected
+                ? basePath
+                : `${basePath}?selected=${encodeURIComponent(selected)}`;
 
             /*const isInCart =
               product.target.type === "merch"
@@ -201,7 +208,7 @@ const ProductsList = ({
                       }}
                     />
                   }
-                  link={`/catalog/release/${id}/?kind=${product.target.type}&selected=${selected}`}
+                  link={href}
                   isRelease={product.target.type === "release"}
                   isPlaying={playingAlbumId === product.target.id}
                   onPlay={() => void handlePlayRelease(product.target.id)}

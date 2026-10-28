@@ -7,7 +7,7 @@ import { AccentContainer } from "@/shared/ui";
 import ProductsList from "../components/productsList/ProductsList";
 
 interface CategoryPageProps {
-  category: 'album' | 'all' | 'merch' | 'artists';
+  category: 'release' | 'all' | 'merch' | 'artists';
   genre?: string | string[];
   kind?: string | string[];
   artistFilter?: string;

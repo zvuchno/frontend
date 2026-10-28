@@ -128,7 +128,7 @@ export function ReleasesPageClient() {
                 <DownloadIcon />
               </button>
             }
-            link={`/catalog/release/${card.id}?kind=release`}
+            link={`/catalog/release/${card.id}/`}
             isRelease
             isPlaying={playingAlbumId === card.id}
             onPlay={() => handlePlayRelease(card.id)}
