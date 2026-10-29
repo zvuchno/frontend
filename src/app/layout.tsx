@@ -98,6 +98,7 @@ export const metadata: Metadata = {
       {
         url: "/images/main-banner.png",
         width: 1200,
+        height: 630,
         alt: "ЗВУЧНО — Маркетплейс цифровой музыки для СНГ артистов. Изображение винилового проигрывателя",
       },
     ],
