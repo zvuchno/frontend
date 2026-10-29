@@ -8,7 +8,7 @@ const baseApiUrl =
 const baseUrl = process.env.FRONTEND_ORIGIN ?? "https://zvuchno.space";
 
 type TSitemapItem = {
-  type: "release" | "merch" | "artist";
+  type: "release" | "merch" | "artists";
   id: number | null;
   slug: string | null;
   lastmod: string;
@@ -42,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const dynamicPagesSitemap: MetadataRoute.Sitemap = dynamicPages.map((page) => {
     const type = page.type;
-    const dynamicUrl = `catalog/${type}/${type === "artist" ? page.slug : page.id}`;
+    const dynamicUrl = `catalog/${type}/${type === "artists" ? page.slug : page.id}`;
     return {
       url: `${baseUrl}/${dynamicUrl}`,
       lastModified: page.lastmod,
