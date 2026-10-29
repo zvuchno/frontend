@@ -1,6 +1,6 @@
 import { type MetadataRoute } from "next";
 
-const baseUrl = process.env.FRONTEND_ORIGIN ?? "https://zvuchno.space/";
+const baseUrl = process.env.FRONTEND_ORIGIN ?? "https://zvuchno.space";
 
 export default function robots(): MetadataRoute.Robots {
   return {

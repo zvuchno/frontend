@@ -69,6 +69,7 @@ export async function generateMetadata({
         .filter(Boolean)
         .join(". ")}`;
       productImage = release.variants[0].images[0].image;
+      productArtist = release.artist_name;
     } else if (category === "merch") {
       const merch = card as TDetailMerch;
 
