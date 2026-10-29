@@ -34,6 +34,7 @@ jobs:
             NEXT_PUBLIC_YANDEX_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_YANDEX_MAPS_API_KEY }}
             NEXT_PUBLIC_DADATA_API_KEY=${{ secrets.NEXT_PUBLIC_DADATA_API_KEY }}
             NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL_PROD }}
+            FRONTEND_ORIGIN=${{ secrets.FRONTEND_ORIGIN_PROD }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:${{ github.sha }}
             ${{ secrets.DOCKER_USERNAME }}/zvuchno_frontend:latest
