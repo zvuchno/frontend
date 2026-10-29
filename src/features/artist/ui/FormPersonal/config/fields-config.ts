@@ -110,10 +110,16 @@ export const fieldsConfig: Record<
     maxLength: 10,
     pattern: /^(\d{10})$/,
   },
-  "legal_profile.is_veryfied": {
+  "legal_profile.is_verified": {
     required: false,
   },
   "legal_profile.comment": {
+    required: false,
+  },
+  "legal_profile.is_ready_for_verification": {
+    required: false,
+  },
+  "legal_profile.verification_missing_fields": {
     required: false,
   },
 };

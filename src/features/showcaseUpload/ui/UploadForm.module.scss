@@ -1,7 +1,34 @@
-.container {
+.gridContainer {
   display: flex;
   flex-direction: column;
   gap: 40px;
+}
+
+.releaseTypeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-content: flex-start;
+  max-width: 310px;
+
+  @media(max-width: 362px) {
+    width: fit-content;
+  }
+
+  &__label {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 120%;
+    letter-spacing: -0.04em;
+  }
+
+  &__control {
+    @media(max-width: 362px) {
+      flex-direction: column;
+      row-gap: 10px;
+      width: fit-content;
+    }
+  }
 }
 
 .fildsContainer {
@@ -52,6 +79,7 @@
 .select {
   border-radius: 0;
   border-width: 1px;
+  padding-block: 10px;
 
   &_short {
     max-width: 240px;
@@ -94,5 +122,15 @@
     font-weight: 400;
     line-height: 130%;
     letter-spacing: -0.06em;
+  }
+}
+
+.flexContainer {
+  display: flex;
+  gap: 24px;
+  margin-block-end: 15px;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
   }
 }

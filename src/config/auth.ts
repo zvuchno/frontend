@@ -103,9 +103,13 @@ export const authConfig: AuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "yandex") {
+        const cookieStore = await cookies();
+        const sessionId = cookieStore.get("sessionid")?.value;
+        
         const result = await OAuthorize({
           provider: account.provider,
           token: account.access_token ?? "",
+          sessionId
         });
 
         if (result.status === "ok") {

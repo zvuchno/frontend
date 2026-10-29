@@ -62,7 +62,7 @@ export const artistFormFields: TProfileFormField[] = [
 
   {
     title: "URL артиста",
-    name: "url",
+    name: "slug",
     placeholder: "Текст",
     type: "text",
     required: true,
@@ -74,7 +74,7 @@ export const artistFormFields: TProfileFormField[] = [
 export const listenerFormFields: TProfileFormField[] = [
   {
     title: "Имя и фамилия",
-    name: "name",
+    name: "full_name",
     placeholder: "Текст",
     type: "text",
     required: true,
@@ -101,7 +101,7 @@ export const listenerFormFields: TProfileFormField[] = [
   },
   {
     title: "Имя пользователя",
-    name: "userName",
+    name: "username",
     placeholder: "Текст",
     type: "text",
     required: true,
@@ -138,13 +138,19 @@ export const fieldsConfig: Record<
     validate?: Validate<string | undefined, FieldValues>;
   }
 > = {
+  full_name: {
+    required: true,
+    minLength: 2,
+    maxLength: 100,
+    pattern: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{2,100}$/,
+  },
   name: {
     required: true,
     minLength: 2,
     maxLength: 100,
     pattern: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{2,100}$/,
   },
-  userName: {
+  username: {
     required: true,
     pattern: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{1,100}$/,
     maxLength: 100,
@@ -181,7 +187,7 @@ export const fieldsConfig: Record<
     maxLength: 254,
     pattern: /^(?=.*\S)[а-яА-Яa-zA-Z0-9@./\-_+\s]{2,250}$/,
   },
-  url: {
+  slug: {
     required: true,
     pattern: /^[a-zA-Z0-9_-]+$/,
     minLength: 2,

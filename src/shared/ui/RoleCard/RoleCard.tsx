@@ -4,14 +4,23 @@ import Link from "next/link";
 import { Text, Title } from "../Typography/Typography";
 import s from "./RoleCard.module.scss";
 import { type RoleCardProps } from "./RoleCard.type";
+import clsx from "clsx";
 
-export const RoleCard = ({ path, title, description, image }: RoleCardProps) => {
+export const RoleCard = ({ 
+  path, 
+  title, 
+  description, 
+  image, 
+  cardClassName, 
+  imageClassName,
+  titleClassName,
+}: RoleCardProps) => {
   const imageSrc = typeof image === "string" ? image : image.src;
 
   return (
-    <Link href={path} aria-label={`Перейти к роли: ${title}`} className={s.link}>
-      <div className={s.card}>
-        <div className={s.card__image}>
+    <Link href={path} data-testid={`select-card-${title}`} className={s.link}>
+      <div className={clsx(s.card, cardClassName)}>
+        <div className={clsx(s.card__image, imageClassName)}>
           <Image
             src={imageSrc}
             alt='Роль пользователя'
@@ -22,7 +31,7 @@ export const RoleCard = ({ path, title, description, image }: RoleCardProps) => 
           />
         </div>
         <div className={s.card__description}>
-          <Title Tag='h6' variant='title' className={s.card__description__title}>
+          <Title Tag='h6' variant='title' className={clsx(s.card__description__title, titleClassName)}>
             {title}
           </Title>
           {description && (

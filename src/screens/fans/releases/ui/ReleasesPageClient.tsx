@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
+import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
 import { type PurchasedReleases, getDownloadOptions, getPurchasedReleases } from "@/api/store";
 import {
   type PaginatedStoreResponse,
@@ -11,6 +13,8 @@ import type { InfiniteData } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
+import { usePlayerStore } from "@/features/player";
+
 import { ProductCard } from "@/entities/ProductCard";
 
 import { Loader } from "@/shared/ui";
@@ -18,9 +22,6 @@ import { DownloadIcon } from "@/shared/ui/Icons";
 
 import { DownloadReleaseModal } from "../components/DownloadReleaseModal/DownloadReleaseModal";
 import styles from "./releasesPageClient.module.scss";
-import { usePlayerStore } from "@/features/player";
-import { getTracksList } from "@/api/catalog/tracksListApi/getTracksList";
-import toast from "react-hot-toast";
 
 export function ReleasesPageClient() {
   const { status } = useSession();
@@ -43,12 +44,12 @@ export function ReleasesPageClient() {
       queryKey: ["listener", "releases"],
       queryFn: async ({ pageParam }) => {
         const url = pageParam as string | undefined;
-        if (url) return getPurchasedReleases(url);
-        return getPurchasedReleases();
+        if (url) return getPurchasedReleases({url});
+        return getPurchasedReleases({});
       },
       initialPageParam: "",
       getNextPageParam: (lastPage) => lastPage?.next,
-      staleTime: 5 * 60 * 1000
+      staleTime: 5 * 60 * 1000,
     });
 
   const cards = data?.pages.flatMap((page) => page.results) ?? [];
@@ -78,7 +79,7 @@ export function ReleasesPageClient() {
       togglePlay();
       return;
     }
-    
+
     try {
       const data = await getTracksList({ albumId: releaseId });
       const tracks = data?.tracks;
@@ -86,8 +87,8 @@ export function ReleasesPageClient() {
       playAlbum(tracks, 0);
       setPlayingAlbumId(releaseId);
     } catch (err) {
-      console.error('Не удалось загрузить треки релиза', err);
-      toast.error("Не удалось загрузить треки релиза")
+      console.error("Не удалось загрузить треки релиза", err);
+      toast.error("Не удалось загрузить треки релиза");
     }
   };
 
@@ -127,7 +128,7 @@ export function ReleasesPageClient() {
                 <DownloadIcon />
               </button>
             }
-            link={`/catalog/release/${card.id}?kind=release`}
+            link={`/catalog/release/${card.id}/`}
             isRelease
             isPlaying={playingAlbumId === card.id}
             onPlay={() => handlePlayRelease(card.id)}

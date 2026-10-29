@@ -8,10 +8,10 @@ import {
   DndContext,
   closestCorners,
   KeyboardSensor,
-  PointerSensor,
   useSensor,
   useSensors,
   TouchSensor,
+  MouseSensor
 } from "@dnd-kit/core";
 
 import {
@@ -73,8 +73,22 @@ export const TracksList = ({
   }, [tracksList]);
 
   const sensors = useSensors(
-    useSensor(TouchSensor),
-    useSensor(PointerSensor),
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 300,
+        tolerance: 8,
+      },
+    }),
+    // useSensor(PointerSensor, {
+    //   activationConstraint: {
+    //     distance: 8,
+    //   }
+    // }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -113,26 +127,20 @@ export const TracksList = ({
         : undefined,
       cursor: "grab",
       userSelect: "none",
+      //touchAction: 'none',
     };
 
     return (
       <li ref={setNodeRef} style={style} {...attributes} className={s.tracksList__card}>
-        <div className={s.tracksList__dragCard} {...listeners}>
-          <span className={s.tracksList__index} >{index}</span>
-          <TrackCard
-            image={track.image}
-            title={track.artist_name}
-            description={track.name}
-            duration={track.duration}
-          />
-        </div>
-        
-        <button className={s.editButton} onClick={() => onEditTrack(track.id)} type="button">
-          {EditIcon()}
-        </button>
-        <button className={s.deleteButton} onClick={() => void onDeleteTrack(track.id)} type="button">
-          {DeleteIcon()}
-        </button>
+        <div className={s.tracksList__dnd} {...listeners} />
+        <TrackCard
+          image={track.image}
+          title={track.artist_name}
+          description={track.name}
+          duration={track.duration}
+          onDelete={() => void onDeleteTrack(track.id)}
+          onEdit={() => onEditTrack(track.id)}
+        />
       </li>
     );
   }

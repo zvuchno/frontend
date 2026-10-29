@@ -2,10 +2,11 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 
-import styles from "./productCard.module.scss";
-import type { TProductCardProps } from "./types";
 import { PauseIcon } from "@/shared/ui/Icons/PauseIcon";
 import { PlayIcon } from "@/shared/ui/Icons/playIcon";
+
+import styles from "./productCard.module.scss";
+import type { TProductCardProps } from "./types";
 
 const totalPriceFormatter = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -26,12 +27,19 @@ export const ProductCard = ({
   link,
   isRelease = false,
   isPlaying,
+  //purchasedItems,
   onHandleClick,
   onPlay,
   ...articleProps
 }: TProductCardProps) => {
   const mediaAction = actionButton ?? likeButton;
-
+  /*const currentPurchase =
+    purchasedItems === 1 && isRelease
+      ? "Товар уже в корзине"
+      : !isRelease && purchasedItems && purchasedItems > 0
+        ? "Счетчик"
+        : formatTotalPrice(Number(price));
+*/
   const handlePlayAlbum = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -61,17 +69,17 @@ export const ProductCard = ({
             <button
               onClick={onPlay ? handlePlayAlbum : undefined}
               className={clsx(
-                styles.playButton,
+                styles.playButton
                 // albumTracks.length === 0 && styles.playButtonDisabled
               )}
               style={{
                 //backgroundImage: isPlaying ? "url('/icons/pause.svg')" : "url('/icons/play.svg')",
-                cursor:"pointer",
+                cursor: "pointer",
               }}
-              aria-label="Воспроизвести альбом"
-              title="Воспроизвести альбом"
+              aria-label='Воспроизвести альбом'
+              title='Воспроизвести альбом'
               onKeyDown={(e) => {
-                if ((e.key === 'Enter' || e.key === ' ') && onPlay) {
+                if ((e.key === "Enter" || e.key === " ") && onPlay) {
                   handlePlayAlbum(e as any);
                 }
               }}

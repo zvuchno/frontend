@@ -36,6 +36,10 @@
     line-height: 0;
     z-index: 10;
 
+    &:hover {
+      background-color: var(--color-accent-blue);
+    }
+
     @media (max-width: 1024px) {
       top: 20px;
       right: 14px;

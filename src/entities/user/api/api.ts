@@ -1,4 +1,5 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
+import { ApiError } from "@/api/errors/apiError";
 import { getErrorMessage } from "@/api/errors/getErrorMessage";
 
 import {
@@ -9,7 +10,6 @@ import {
   type TResetPasswordVerifyRequest,
   type TVerifyEmailRequest,
 } from "../model/types";
-import { ApiError } from "@/api/errors/apiError";
 
 const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
 
@@ -29,12 +29,13 @@ export const createFetchFunction = async <T>(props: TFetchProps): Promise<T> => 
 
   if (!res.ok) {
     const message = getErrorMessage(data, `HTTP ${res.status} ${res.statusText}`);
-    
-    if (Array.isArray(message)) {
-      throw new ApiError(message[0], message.slice(1));
+
+    if (typeof message === "string") {
+      throw new Error(message);   
     }
 
-    throw new Error(message);
+    const messageToShow = Object.values(message).join("\n");
+    throw new ApiError(messageToShow, message);
   }
 
   return data as T;
@@ -150,27 +151,39 @@ export const resendEmailForVerify = async (): Promise<void> => {
 };
 
 export const resetPassword = async (data: TResetPasswordRequest): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/account/reset-password/",
-    fetchData: data,
-    defaultMessage: "Ошибка запроса смены пароля.",
+  await authFetchClient<void>("/api/backend/v1/auth/account/reset-password/", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
+  // return await createFetchFunction<void>({
+  //   url: "/auth/account/reset-password/",
+  //   fetchData: data,
+  //   defaultMessage: "Ошибка запроса смены пароля.",
+  // });
 };
 
 export const resetPasswordVerify = async (data: TResetPasswordVerifyRequest): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/account/reset-password-verify/",
-    fetchData: data,
-    defaultMessage: "Ссылка для смены пароля не действительна.",
+  await authFetchClient<void>("/api/backend/v1/auth/account/reset-password-verify/", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
+  // return await createFetchFunction<void>({
+  //   url: "/auth/account/reset-password-verify/",
+  //   fetchData: data,
+  //   defaultMessage: "Ссылка для смены пароля не действительна.",
+  // });
 };
 
 export const resetPasswordConfirm = async (data: TResetPasswordConfirmRequest): Promise<void> => {
-  return await createFetchFunction<void>({
-    url: "/auth/account/reset-password-confirm/",
-    fetchData: data,
-    defaultMessage: "Ошибка восстановления пароля.",
+  await authFetchClient<void>("/api/backend/v1/auth/account/reset-password-confirm/", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
+  // return await createFetchFunction<void>({
+  //   url: "/auth/account/reset-password-confirm/",
+  //   fetchData: data,
+  //   defaultMessage: "Ошибка восстановления пароля.",
+  // });
 };
 
 // не используется после перехода на HTTP-Only cookie
@@ -183,9 +196,9 @@ export const socialAuth = async (data: TSocialAuthRequest): Promise<TSocialAuthR
   });
 };*/
 
-export async function fanBecomeArtist( data: {
-  name: string,
-  profile_type: "artist" | "label",
+export async function fanBecomeArtist(data: {
+  name: string;
+  profile_type: "artist" | "label";
   consents?: TConsent[];
 }): Promise<{ name: string; profile_type: "artist" | "label" }> {
   const response = await authFetchClient<{ name: string; profile_type: "artist" | "label" }>(

@@ -11,8 +11,11 @@
 }
 
 .mediaButton {
-  width: 100%;
-  max-width: var(--artist-card-width);
+  width: 206px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
 }
 
 .coverFrame {
@@ -52,23 +55,22 @@
     width: 100%;
   }
 
-  .coverFrame,
-  .mediaButton {
+  .coverFrame {
     width: 100%;
     max-width: none;
   }
 }
 
 & .wideWidth {
-    max-width: 632px;
-    aspect-ratio: 4 / 3.3482;
+  max-width: 632px;
+  aspect-ratio: 4 / 3.2812;
 
-    &:before {
-      mask-image: conic-gradient(from 90deg at 78% 35%, #000 221.7deg, #0000 222deg);
-    }
-
-    @media (max-width: 650px) {
-      width: 100%;
-      max-width: 100%;
-    }
+  &:before {
+    mask-image: conic-gradient(from 90deg at 78% 35%, #000 221.7deg, #0000 222deg);
   }
+
+  @media (max-width: 650px) {
+    width: 100%;
+    max-width: 100%;
+  }
+}

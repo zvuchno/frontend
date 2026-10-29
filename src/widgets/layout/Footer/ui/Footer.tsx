@@ -16,7 +16,13 @@ export const Footer = ({
     <footer className={clsx(s.footer, className)}>
       <nav className={s["footer__nav"]}>
         {links.map((link) => (
-          <Link key={link.id} href={link.href} variant='basic' className={s["footer__link"]}>
+          <Link 
+            key={link.id} 
+            href={link.href} 
+            variant='basic' 
+            className={s["footer__link"]} 
+            data-testid={`footer-nav-link-${link.id}`}
+          >
             {link.label}
           </Link>
         ))}
@@ -29,6 +35,7 @@ export const Footer = ({
           target='_blank'
           rel='noopener noreferrer'
           aria-label='Telegram'
+          data-testid="footer-social-link-telegram"
         >
           <svg
             width='32'

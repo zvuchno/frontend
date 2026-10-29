@@ -1,22 +1,20 @@
 .link {
   display: block;
-  width: 53.33vw;
+  width: 100%;
   max-width: 578px;
 
   @media (max-width: 768px) {
-    width: 100%;
     max-width: auto;
   }
 }
 
 .card {
   display: flex;
-  gap: 38px;
+  gap: clamp(20px, 2vw, 38px);
   align-items: center;
   width: 100%;
-
   min-height: 165px;
-  padding: 17px 40px;
+  padding: 17px clamp(20px, 2vw, 40px);
   border: 1px solid var(--outline-color);
   background-color: var(--color-bg-main);
   color: var(--color-text-primary);
@@ -30,6 +28,10 @@
     background-color: #9acaff;
   }
 
+  @media (max-width: 768px) {
+    gap: clamp(20px, 6vw, 38px);
+  }
+
   @media (max-width: 550px) {
     flex-direction: column;
     gap: 15px;
@@ -41,14 +43,19 @@
     height: 130px;
     flex-shrink: 0;
 
-    @media (max-width: 550px) {
+    @media (max-width: 1024px) {
       width: 97.3px;
       height: 91px;
     }
 
-    @media (max-width: 374px) {
+    @media (max-width: 850px) {
       width: 77.84px;
       height: 72.8px;
+    }
+
+    @media (max-width: 768px) {
+      width: 139px;
+      height: 130px;
     }
   }
 
@@ -59,17 +66,13 @@
 
     &__title {
       font-family: var(--font-better-vcr);
-      font-size: 24px;
+      font-size: clamp(18px, 2vw, 24px);
       font-weight: 400;
-      line-height: 28px;
+      line-height: 7 / 6;
       text-transform: none;
 
-      @media (max-width: 800px) {
-        font-size: 3vw;
-      }
-
       @media (max-width: 768px) {
-        font-size: 3vw;
+        font-size: clamp(18px, 4vw, 24px);
       }
     }
 

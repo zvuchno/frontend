@@ -2,9 +2,9 @@
   &Option {
     display: flex;
     justify-content: space-between;
-    column-gap: 20px;
-    row-gap: 5px;
+    gap: 20px;
     width: 100%;
+    margin-block-end: 15px;
 
     &.pickupPoint {
       border: none;
@@ -18,7 +18,7 @@
   &Address {
     &Wrapper {
       width: 100%;
-      position: relative;
+      //position: relative;
     }
 
     & label {
@@ -67,8 +67,14 @@
       font-family: var(--font-feat);
       font-size: 20px;
       font-weight: 700;
-      line-height: 1;
+      line-height: 1.3;
       letter-spacing: -0.06em;
+    }
+
+    &Error {
+      display: block;
+      color: var(--color-primary-blue);
+      font-size: 16px;
     }
 
     &Picker {
@@ -170,4 +176,8 @@
 
 :global(.react-datepicker__header) {
   background-color: rgba(194, 223, 252, 0.5);
+}
+
+:global(input:-internal-autofill-selected) {
+  background-color: #fff !important;
 }

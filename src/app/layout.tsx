@@ -37,7 +37,8 @@ const featureMono = localFont({
   ],
   variable: "--font-feature-mono",
   display: "swap",
-  preload: false,
+  fallback: ["monospace"], // системный фоллбек
+  adjustFontFallback: "Arial", // автоматически подгоняет размеры системного шрифта, чтобы геометрия не прыгала
 });
 
 const betterVcr = localFont({
@@ -49,14 +50,76 @@ const betterVcr = localFont({
     },
   ],
   variable: "--font-better-vcr",
-  display: "swap",
-  preload: false,
+  display: "block",
+  preload: true,
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:3000"),
-  title: "Звучно",
-  description: "Маркетплейс цифровой музыки для СНГ артисов",
+  metadataBase: new URL(process.env.FRONTEND_ORIGIN || "http://localhost:3000"),
+  title: "ЗВУЧНО - маркетплейс независимой музыки, мерча и винила",
+  description:
+    "Маркетплейс цифровой музыки для СНГ артистов. Покупайте цифровые релизы, эксклюзивный мерч, виниловые пластинки и CD напрямую у любимых авторов.",
+  keywords: [
+    "звучно платформа",
+    "маркетплейс локальной музыки",
+    "музыкальный маркетплейс",
+    "независимые артисты",
+    "купить винил",
+    "музыкальный мерч",
+    "поддержка музыкантов",
+    "инди",
+    "музыка рф",
+    "купить цифровой релиз",
+    "звучно маркетплейс",
+    "локальная сцена",
+    "zvuchno",
+    "zvuchno marketplace",
+    "zvuchno platform",
+    "музыкальный merch",
+    "купить cd",
+    "продать свою музыку",
+  ],
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-touch-icon-180x180.png", sizes: "180x180", type: "image/png" }],
+  },
+  alternates: {
+    canonical: new URL(process.env.FRONTEND_ORIGIN || "http://localhost:3000"),
+  },
+  openGraph: {
+    title: "Цифровые релизы и эксклюзивный мерч от любимых авторов",
+    description:
+      "Первый в России маркетплейс, предназначенный для продажи музыкального контента и сопутствующих товаров напрямую от авторов",
+    siteName: "ЗВУЧНО",
+    images: [
+      {
+        url: "/images/main-banner.png",
+        width: 1200,
+        height: 630,
+        alt: "ЗВУЧНО — Маркетплейс цифровой музыки для СНГ артистов. Изображение винилового проигрывателя",
+      },
+    ],
+    locale: "ru_RU",
+    type: "website",
+    url: new URL(process.env.FRONTEND_ORIGIN || "http://localhost:3000"),
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({

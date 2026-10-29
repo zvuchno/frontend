@@ -1,0 +1,1 @@
+export { MusicIcon } from "./MusicIcon";

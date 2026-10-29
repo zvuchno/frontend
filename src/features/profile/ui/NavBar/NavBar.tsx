@@ -1,18 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Link } from "@/shared/ui";
+import { Menutag } from "@/shared/ui/MenuTag/MenuTag";
 
+import { useActiveLink } from "../../context/useActiveLink";
 import s from "./NavBar.module.scss";
 import { type NavBarProps } from "./NavBar.type";
 
 export const NavBar = ({ links, title }: NavBarProps) => {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
+
+  const initMenuState =
+    (pathname.includes("fans") && title === "Аккаунт") ||
+    (pathname.includes("artist") && title === "Кабинет артиста");
+  const [isMenuOpen, setIsMenuOpen] = useState(initMenuState);
+
+  const { setActiveLink } = useActiveLink();
+
+  useLayoutEffect(() => {
+    const currentLink = links.find(
+      (link) =>
+        typeof link.href === "string" &&
+        (pathname === link.href || pathname.startsWith(`${link.href}/`))
+    );
+
+    if (currentLink) setActiveLink(currentLink);
+  }, [links, pathname, setActiveLink]);
 
   useEffect(() => {
     const updateHash = () => {
@@ -41,9 +61,28 @@ export const NavBar = ({ links, title }: NavBarProps) => {
 
   return (
     <div className={s.wrapper}>
-      <h4 className={s.title}>{title}</h4>
+      <div className={s.titleWrapper}>
+        <h4 className={s.title}>{title}</h4>
+        <button
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+          title={isMenuOpen ? "Свернуть" : "Развернуть"}
+          className={clsx(s.titleButton, { [s.open]: isMenuOpen })}
+          data-testid='account-menu-open-btn'
+        >
+          <Image
+            src='/icons/arrow-right.svg'
+            alt={isMenuOpen ? "Свернуть" : "Развернуть"}
+            width={24}
+            height={24}
+          />
+        </button>
+      </div>
 
-      <nav className={s.container} aria-label='Навигация профиля'>
+      <nav
+        className={clsx(s.container, { [s.isShown]: isMenuOpen })}
+        aria-label='Навигация профиля'
+        data-testid='account-nav'
+      >
         {links.map((link) => {
           const href = typeof link.href === "string" ? link.href : link.href.pathname;
 
@@ -51,12 +90,16 @@ export const NavBar = ({ links, title }: NavBarProps) => {
             <Link
               key={link.id}
               href={link.href}
-              variant='outlined'
               className={clsx(s.link, {
                 [s.link_active]: typeof href === "string" && isLinkActive(href),
               })}
+              data-testid={`account-menu-link-${link.id}`}
             >
-              {link.label}
+              <Menutag
+                title={link.label}
+                icon={link.icon}
+                isActive={typeof href === "string" && isLinkActive(href)}
+              />
             </Link>
           );
         })}

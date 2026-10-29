@@ -2,7 +2,10 @@ import { publicFetchServer } from "@/api/publicFetchFromServer/publicFetchServer
 
 import { type TArtistsListRequest, type TArtistsListResponse } from "./types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl =
+  process.env.NODE_ENV === "development"
+    ? (process.env.BASE_API_URL_DEV ?? process.env.NEXT_PUBLIC_BASE_API_URL)
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 export async function getArtistsListServer({
   genre,
@@ -31,8 +34,13 @@ export async function getArtistsListServer({
   if (ordering !== undefined) {
     params.append("ordering", ordering.toString());
   }
+  if (!baseUrl) {
+    throw new Error("API base URL is not configured");
+  }
 
   const url = `${baseUrl}/v1/artists/?${params.toString()}`;
+
+  console.info("[getArtistsListServer] API origin:", new URL(baseUrl).origin);
 
   try {
     const response = await publicFetchServer<TArtistsListResponse>(url, {

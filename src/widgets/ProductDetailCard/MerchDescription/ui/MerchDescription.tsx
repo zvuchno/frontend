@@ -21,6 +21,7 @@ import s from "./MerchDescription.module.scss";
 export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) => {
   const [sku, setSku] = useState<string>(product.variants[0].sku);
   const [selectedVariant, setSelectedVariant] = useState<number>(product.variants[0].variant_id);
+  const [isPurchase, setIsPurchase] = useState<Boolean>(product.variants[0].is_available_for_purchase);
 
   const router = useRouter();
 
@@ -42,9 +43,10 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
     },
   ];
 
-  const selectVariant = (_variant: string, sku: string, id: number) => {
+  const selectVariant = (_variant: string, sku: string, id: number, is_purchase: boolean) => {
     setSku(sku);
     setSelectedVariant(id);
+    setIsPurchase(is_purchase);
   };
 
   const imagesForGallery = [...product.images].sort((a, b) => {
@@ -111,7 +113,7 @@ export const MerchDescription = ({ product, onClick }: MerchDescriptionProps) =>
             />
           )}
 
-          {product.stock > 0 ? (
+          {isPurchase ? (
             <ButtonUI
               variant='primary'
               size='standart'

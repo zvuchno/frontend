@@ -14,7 +14,7 @@ import s from "./ArtistDescription.module.scss";
 
 type ArtistDescriptionInputProps = Pick<
   ArtistDescriptionProps,
-  "description" | "emptyText" | "hasChanges" | "isEdit" | "onEditMode"
+  "description" | "emptyText" | "hasChanges"
 > & {
   isEmpty: boolean;
 };
@@ -22,9 +22,8 @@ type ArtistDescriptionInputProps = Pick<
 const ArtistDescriptionInput = ({
   emptyText,
   description,
-  isEdit,
   hasChanges,
-  onEditMode,
+
   isEmpty,
 }: ArtistDescriptionInputProps) => {
   const { register, setValue } = useFormContext<FieldValues>();
@@ -38,8 +37,6 @@ const ArtistDescriptionInput = ({
       inputClassName={s.content__descriptionInput}
       rows={10}
       maxLength={350}
-      readOnly={!isEdit}
-      aria-readonly={!isEdit}
       placeholder={emptyText}
       value={description}
       onChange={(event) => {
@@ -50,9 +47,10 @@ const ArtistDescriptionInput = ({
           shouldTouch: true,
           shouldValidate: true,
         });
-        onEditMode?.();
+
         hasChanges?.(value);
       }}
+      data-testid='artist-profile-description-input'
     />
   );
 };
@@ -62,6 +60,7 @@ const ExpandButton = ({ isExpanded, onClick }: { isExpanded: boolean; onClick: (
     type='button'
     className={clsx(s.content__button, { [s.content__button_rotate]: isExpanded })}
     onClick={onClick}
+    data-testid='artist-profile-description-expand-btn'
   >
     <svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' viewBox='0 0 10 6'>
       <path stroke='#100f0d' strokeLinecap='round' d='M8.984.5 4.742 4.743.499.5' />
@@ -75,9 +74,8 @@ export const ArtistDescription = ({
   title,
   emptyText,
   className,
-  isEdit,
+
   hasChanges,
-  onEditMode,
 }: ArtistDescriptionProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [shouldShowButton, setShouldShowButton] = useState<boolean>(false);
@@ -90,43 +88,20 @@ export const ArtistDescription = ({
     if (variant === "catalog") {
       setShouldShowButton(textRef.current.scrollHeight > 60);
     }
-  }, [description]);
+  }, [description, variant]);
 
   useEffect(() => {
     if (textRef.current) {
-      const fullHeight = textRef.current.scrollHeight + 'px';
+      const fullHeight = textRef.current.scrollHeight + "px";
       const maxHeight = textRef.current.scrollHeight > 300 ? "300px" : fullHeight;
-      textRef.current.style.setProperty('--full-height', maxHeight);
-      
+      textRef.current.style.setProperty("--full-height", maxHeight);
+
       const lines = 3;
       const lineHeight = parseFloat(getComputedStyle(textRef.current).lineHeight) || 20;
-      const collapsedHeight = lines * lineHeight + 'px';
-      textRef.current.style.setProperty('--collapsed-height', collapsedHeight);
+      const collapsedHeight = lines * lineHeight + "px";
+      textRef.current.style.setProperty("--collapsed-height", collapsedHeight);
     }
   }, [isExpanded]);
-
-  // useEffect(() => {
-  //   const frameId = window.requestAnimationFrame(() => {
-  //     if (variant === "profile") {
-  //       setShouldShowButton(false);
-  //       return;
-  //     }
-
-  //     const el = textRef.current;
-
-  //     if (!el) {
-  //       return;
-  //     }
-
-  //     const scrollHeight = el.scrollHeight;
-  //     //el.style.height = `${scrollHeight}px`;
-  //     setShouldShowButton(scrollHeight > 60);
-  //   });
-
-  //   return () => {
-  //     window.cancelAnimationFrame(frameId);
-  //   };
-  // }, [description, emptyText, variant]);
 
   useEffect(() => {
     const el = textRef.current;
@@ -187,10 +162,8 @@ export const ArtistDescription = ({
           ) : (
             <ArtistDescriptionInput
               description={description}
-              isEdit={isEdit}
               emptyText={emptyText}
               hasChanges={hasChanges}
-              onEditMode={onEditMode}
               isEmpty={isProfileEmptyState}
             />
           )}

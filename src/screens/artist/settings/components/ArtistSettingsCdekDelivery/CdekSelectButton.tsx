@@ -44,6 +44,7 @@ export const CdekSelectButton = ({
             className={clsx(styles.artistSettingsDeliveryOfficeChange, {
               [styles.disabled]: disabled,
             })}
+            data-testid='delivery-cdek-change-btn'
           >
             Изменить пункт
           </span>
@@ -52,6 +53,7 @@ export const CdekSelectButton = ({
             className={clsx(styles.artistSettingsDeliveryOfficeChange, styles.cdekDelete, {
               [styles.disabled]: disabled,
             })}
+            data-testid='delivery-cdek-delete-btn'
           >
             Удалить
           </span>

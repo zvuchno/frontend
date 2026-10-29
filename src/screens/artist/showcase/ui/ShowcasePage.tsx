@@ -4,48 +4,48 @@ import { useMemo, useState } from "react";
 
 import { useSession } from "next-auth/react";
 
+import { AddPromocodeModal } from "@/features/addPromocodeModal";
+
 import {
-  type PromoTypeFilter,
-  type StockFilter,
   type TShowcaseItem,
   useAlbumsInfiniteQuery,
+  useConnetcTelegramBot,
   useMerchInfiniteQuery,
   usePromocodesInfiniteQuery,
 } from "@/entities/Artist";
 import { useShowcaseArtistSlug } from "@/entities/Artist/store/useShowcaseStore";
 import { useGetManagedProfiles } from "@/entities/Label";
-import { RoleSelectBlock } from "@/entities/RoleSelectBlock";
 
-import { Loader, RoleCard } from "@/shared/ui";
+import { Loader } from "@/shared/ui";
 
 import s from "./ShowcasePage.module.scss";
 import { ShowcaseActions } from "./components/showcaseActions/ShowcaseActions";
 import { ShowcaseItemsList } from "./components/showcaseItemsList/ShowcaseItemsList";
-import { AddPromocodeModal } from "@/features/addPromocodeModal";
+import { TCheckListActionMap, CheckList } from "@/widgets/CheckList";
 
 export const ShowcasePage = () => {
   const { data, status } = useSession();
   const profileType = data?.user.profileType;
 
-  //const profileType = 'artist';
-
   const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false);
   const [promoIdForModal, setPromoIdForModal] = useState<number | undefined>(undefined);
 
-  // состояние для типа карточек отображемых на странице (промокоды или товары (все товары, альбомы, мерч))
-  const [itemType, setItemType] = useState<TShowcaseItem>("products");
-  // состояние для фильтрации мерча по наличию
-  const [inStockFilter, setInStockFilter] = useState<StockFilter>(null);
-  // состояние для фильтрации промокодов по доступности к использованию
-  const [availableFilter, setAvailableFilter] = useState<StockFilter>(null);
-  // состояние для фильтрации промокодов по типу скидки
-  const [typePromoFilter, setTypePromoFilter] = useState<PromoTypeFilter>("ALL");
+  // состояние для типа карточек отображемых на странице (релизы, мерч, промокоды)
+  const [itemType, setItemType] = useState<TShowcaseItem>("release");
   // состояние для фильтрации по артисту
   const [artistFilter, setArtistFilter] = useState<string>("");
 
   const currentArtistSlug = useShowcaseArtistSlug();
 
   const managedProfilesQuery = useGetManagedProfiles(profileType);
+  const { mutate: connectTelegramBot } = useConnetcTelegramBot();
+
+  const actionsForCheckList: TCheckListActionMap = useMemo(
+    () => ({
+      telegram_bot: connectTelegramBot,
+    }),
+    [connectTelegramBot]
+  );
 
   const artistsOptions = useMemo(() => {
     if (!managedProfilesQuery.data) return [];
@@ -63,14 +63,14 @@ export const ShowcasePage = () => {
 
   const merchQuery = useMerchInfiniteQuery({
     artistSlug: currentArtistSlug,
-    in_stock: inStockFilter,
+    //in_stock: inStockFilter,
     artist_id: artistFilter,
     itemType,
   });
 
   const promoQuery = usePromocodesInfiniteQuery({
-    discount_type: typePromoFilter,
-    is_available: availableFilter,
+    //discount_type: typePromoFilter,
+    //is_available: availableFilter,
     artist_id: artistFilter,
     itemType,
   });
@@ -80,6 +80,10 @@ export const ShowcasePage = () => {
   const merch = merchQuery.data?.pages.flatMap((page) => page.results) ?? [];
   const allProducts = [...albums, ...merch];
 
+  const releaseCount = albumsQuery.data?.pages[0].count ?? 0;
+  const merchCount = merchQuery.data?.pages[0].count ?? 0;
+  const promoCount = promoQuery.data?.pages[0].count ?? 0;
+
   const isLoadingData =
     albumsQuery.isLoading ||
     merchQuery.isLoading ||
@@ -88,38 +92,47 @@ export const ShowcasePage = () => {
 
   const error = albumsQuery.error || merchQuery.error || promoQuery.error;
 
-  const emptyText = itemType === "promo" ? "нет промокодов" : "нет товаров";
+  const emptyText =
+    itemType === "promo" ? "нет промокодов" : itemType === "release" ? "нет музыки" : "нет мерча";
 
   const currentItems =
-    itemType === "products"
-      ? allProducts
-      : itemType === "album"
-        ? albums
-        : itemType === "merch"
-          ? merch
-          : itemType === "promo"
-            ? promocodes
-            : allProducts;
+    itemType === "release"
+      ? albums
+      : itemType === "merch"
+        ? merch
+        : itemType === "promo"
+          ? promocodes
+          : [];
 
-  const hasMorePromo = itemType === "promo" && promoQuery.hasNextPage;
-
-  const hasMoreProducts =
-    (itemType === "products" || itemType === "album" || itemType === "merch") &&
-    (albumsQuery.hasNextPage || merchQuery.hasNextPage);
+  const hasMore =
+    itemType === "release" && albumsQuery.hasNextPage
+      ? true
+      : itemType === "merch" && merchQuery.hasNextPage
+        ? true
+        : itemType === "promo" && promoQuery.hasNextPage
+          ? true
+          : false;
 
   const loadMore = async () => {
     if (itemType === "promo") {
       await promoQuery.fetchNextPage();
+    } else if (itemType === "release") {
+      await albumsQuery.fetchNextPage();
+      // // Подгружаем и альбомы, и мерч одновременно
+      // await Promise.all([albumsQuery.fetchNextPage(), merchQuery.fetchNextPage()]);
     } else {
-      // Подгружаем и альбомы, и мерч одновременно
-      await Promise.all([albumsQuery.fetchNextPage(), merchQuery.fetchNextPage()]);
+      await merchQuery.fetchNextPage();
     }
   };
 
-  const isLoadingMore =
-    (itemType === "promo" && promoQuery.isFetchingNextPage) ||
-    ((itemType === "products" || itemType === "album" || itemType === "merch") &&
-      (albumsQuery.isFetchingNextPage || merchQuery.isFetchingNextPage));
+  const isLoadingMoreData =
+    itemType === "release" && albumsQuery.isFetchingNextPage
+      ? true
+      : itemType === "merch" && merchQuery.isFetchingNextPage
+        ? true
+        : itemType === "promo" && promoQuery.isFetchingNextPage
+          ? true
+          : false;
 
   const handleEditPromo = (id: number) => {
     setPromoIdForModal(id);
@@ -134,74 +147,51 @@ export const ShowcasePage = () => {
     return <div>{`Ошибка загрузки данных: ${error.message}`}</div>;
   }
 
-  if (allProducts.length === 0) {
-    return (
-      <RoleSelectBlock>
-        <RoleCard
-          path='/artist/showcase/upload/album'
-          image={"/images/cassette.png"}
-          title='Загрузить релиз'
-        />
-        {/* <RoleCard
-          path='/artist/showcase/upload/album'
-          image={"/images/record.png"}
-          title='Загрузить альбом'
-        /> */}
-        <RoleCard
-          path='/artist/showcase/upload/merch'
-          image={"/images/shirt.png"}
-          title='Загрузить мерч'
-        />
-      </RoleSelectBlock>
-    );
-  }
-
   return (
     <div className={s.container}>
-      <ShowcaseActions
-        itemType={itemType}
-        artistOptions={artistsOptions}
-        onChangeArtist={setArtistFilter}
-        selectItemType={setItemType}
-        filterByStock={(value: "true" | "false" | "none") => {
-          if (value === "true") setInStockFilter(true);
-          else if (value === "false") setInStockFilter(false);
-          else setInStockFilter(null);
-        }}
-        filterByAvailability={(value: "true" | "false" | "none") => {
-          if (value === "true") setAvailableFilter(true);
-          else if (value === "false") setAvailableFilter(false);
-          else setAvailableFilter(null);
-        }}
-        filterByPromoType={(value: PromoTypeFilter) => {
-          setTypePromoFilter(value);
-        }}
-        addPromo={() => setIsPromoModalOpen(true)}
+      <CheckList 
+        artistSlug={currentArtistSlug} 
+        hasProducts={allProducts.length !== 0} 
+        actions={actionsForCheckList}
       />
-      {currentItems.length > 0 ? (
-        <ShowcaseItemsList
-          itemType={itemType}
-          items={currentItems}
-          profileType={profileType}
-          onEditPromo={handleEditPromo}
-          hasMoreData={itemType === "promo" ? hasMorePromo : hasMoreProducts}
-          onLoadMore={loadMore}
-          isLoadingMore={isLoadingMore}
-        />
-      ) : (
-        <div>{emptyText}</div>
-      )}
+      {allProducts.length !== 0 && (
+        <>
+          <ShowcaseActions
+            itemType={itemType}
+            artistOptions={artistsOptions}
+            onChangeArtist={setArtistFilter}
+            selectItemType={setItemType}
+            releaseCount={releaseCount.toString()}
+            merchCount={merchCount.toString()}
+            promoCount={promoCount.toString()}
+            addPromo={() => setIsPromoModalOpen(true)}
+          />
+          {currentItems.length > 0 ? (
+            <ShowcaseItemsList
+              itemType={itemType}
+              items={currentItems}
+              profileType={profileType}
+              onEditPromo={handleEditPromo}
+              hasMoreData={hasMore}
+              onLoadMore={loadMore}
+              isLoadingMore={isLoadingMoreData}
+            />
+          ) : (
+            <div>{emptyText}</div>
+          )}
 
-      <AddPromocodeModal
-        isOpen={isPromoModalOpen}
-        profileType={profileType}
-        onClose={() => {
-          setIsPromoModalOpen(false);
-          setPromoIdForModal(undefined);
-          if (itemType !== "promo") setItemType("promo");
-        }}
-        id={promoIdForModal}
-      />
+          <AddPromocodeModal
+            isOpen={isPromoModalOpen}
+            profileType={profileType}
+            onClose={() => {
+              setIsPromoModalOpen(false);
+              setPromoIdForModal(undefined);
+              if (itemType !== "promo") setItemType("promo");
+            }}
+            id={promoIdForModal}
+          />
+        </>
+      )}
     </div>
   );
 };

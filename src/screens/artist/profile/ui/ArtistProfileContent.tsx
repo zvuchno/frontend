@@ -1,85 +1,97 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useLayoutEffect } from "react";
 import { type SubmitHandler, useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
 
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
+import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 import { type FieldValues, ProfileFormArtistUI, ProfileFormUI } from "@/features/profile";
+import { artistFormFields } from "@/features/profile/utils/constants";
 
 import {
   type UpdateCurrentArtistPayload,
-  useArtistProfileEditMode,
   useCurrentArtist,
   useUpdateArtist,
 } from "@/entities/profile";
 
 import { Loader } from "@/shared/ui";
+import { setServerErrors } from "@/shared/utils/serverErrorsHandler";
 
 //import { EMPTY_PROFILE_FORM_VALUES } from "../form.utils";
 import styles from "./ArtistProfileContent.module.scss";
+import { ArtistProfileData } from "./ArtistProfileData/ArtistProfileData";
 
 export function ArtistProfileContent() {
+  const path = usePathname();
+
   const { status } = useSession();
 
   const { data: artist, isLoading, error } = useCurrentArtist();
   const updateArtist = useUpdateArtist();
+  const { mutateAsync: updateArtistProfile } = updateArtist;
+  const isSaving = updateArtist.isPending;
 
   const isLoadingArtistProfile = status === "loading" || isLoading;
-  const { isEditMode, setIsEditMode } = useArtistProfileEditMode();
 
-  const { trigger, reset, formState } = useFormContext<FieldValues>();
-  /*const methods = useForm<FieldValues>({
-    mode: "onChange",
-    defaultValues: EMPTY_PROFILE_FORM_VALUES,
-  });
-*/
-  const isFormValid = formState.isValid;
+  const {
+    reset,
+    formState: { errors, isValid, isDirty },
+    setError,
+    handleSubmit: handleFormSubmit,
+  } = useFormContext<FieldValues>();
 
-  const handleEdit = () => {
-    setIsEditMode(true);
-  };
+  const role = artist?.profile_type;
+  const currentAccaunt = path.includes("label") ? "labelAccaunt" : "artistAccaunt";
+  const successMessage =
+    role === "artist" || (role === "label" && currentAccaunt === "labelAccaunt")
+      ? "Профиль артиста успешно обновлён"
+      : "Профиль лейбла успешно обновлён";
 
-  useEffect(() => {
-    if (isEditMode) {
-      void trigger();
-    }
-  }, [isEditMode, trigger]);
+  const handleSubmit = useCallback<SubmitHandler<FieldValues>>(
+    async (formData) => {
+      if (!artist) {
+        return;
+      }
 
-  const handleSubmit: SubmitHandler<FieldValues> = async (formData) => {
-    if (!artist) {
-      return;
-    }
+      const payload: UpdateCurrentArtistPayload = {
+        name: formData.name,
+        description: formData.description,
+        city: formData.city,
+        slug: formData.slug,
+      };
 
-    const payload: UpdateCurrentArtistPayload = {
-      name: formData.name,
-      description: formData.description,
-      city: formData.city,
-      slug: formData.url,
-    };
+      // Отправляем только если есть изменения
+      const hasChanges =
+        artist.name !== payload.name ||
+        artist.description !== payload.description ||
+        artist.city !== payload.city ||
+        artist.slug !== payload.slug;
 
-    // Отправляем только если есть изменения
-    const hasChanges =
-      artist.name !== payload.name ||
-      artist.description !== payload.description ||
-      artist.city !== payload.city ||
-      artist.slug !== payload.slug;
+      if (!hasChanges) {
+        return;
+      }
 
-    if (!hasChanges) {
-      setIsEditMode(false);
-      return;
-    }
+      try {
+        await updateArtistProfile(payload);
 
-    try {
-      await updateArtist.mutateAsync(payload);
-      setIsEditMode(false);
-      toast.success("Профиль артиста успешно обновлён");
-    } catch (requestError) {
-      console.error(requestError);
-      toast.error("Не удалось сохранить профиль артиста");
-    }
-  };
+        toast.success(successMessage);
+      } catch (requestError) {
+        if (requestError instanceof Error) {
+          setServerErrors(artistFormFields, requestError, setError);
+        }
+        console.error(requestError);
+        toast.error("Не удалось сохранить профиль артиста");
+      }
+    },
+    [artist, setError, successMessage, updateArtistProfile]
+  );
+
+  const onSubmit = useCallback(() => {
+    void handleFormSubmit(handleSubmit)();
+  }, [handleFormSubmit, handleSubmit]);
 
   useEffect(() => {
     if (artist) {
@@ -87,10 +99,24 @@ export function ArtistProfileContent() {
         name: artist.name,
         description: artist.description ?? "",
         city: artist.city ?? "",
-        url: artist.slug ?? "",
+        slug: artist.slug ?? "",
       });
     }
-  }, [artist, trigger, reset]);
+  }, [artist, reset]);
+
+  // установка кнопки в шапку страницы профиля через контекст общего layout//
+  const { setAccountActions } = useAccountActions();
+  const hasFormErrors = Object.keys(errors).length > 0;
+
+  useLayoutEffect(() => {
+    setAccountActions({
+      onClickPrimaryBtn: onSubmit,
+      primaryButtonTitle: "Сохранить",
+      primaryDisabled: !isDirty || !isValid || isSaving || hasFormErrors,
+    });
+    return () => setAccountActions(null);
+  }, [isValid, isDirty, setAccountActions, onSubmit, isSaving, hasFormErrors]);
+  //-------------------------------------------------------------------//
 
   if (isLoadingArtistProfile) {
     return <Loader />;
@@ -105,20 +131,13 @@ export function ArtistProfileContent() {
       <div className={styles.content}>
         <ProfileFormUI
           className={styles.profileForm}
-          title='Профиль'
-          isChecked={isEditMode && isFormValid}
-          isOnChange={isEditMode}
-          isSubmitting={updateArtist.isPending}
           errorMessage={updateArtist.error?.message}
           onSubmit={handleSubmit}
-          onEdit={handleEdit}
         >
-          <ProfileFormArtistUI
-            fieldsDisabled={!isEditMode}
-            personalDataHref='/artist/data'
-            has_usable_password={false}
-          />
+          <ProfileFormArtistUI personalDataHref='/artist/data' has_usable_password={false} />
         </ProfileFormUI>
+
+        <ArtistProfileData />
       </div>
     </div>
   );

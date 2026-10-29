@@ -4,6 +4,11 @@
   gap: 16px;
   width: 100%;
   height: 74px;
+  min-width: 0;
+
+  @media (max-width: 768px) {
+    height: 54px;
+  }
 
   & button {
     display: flex;
@@ -32,10 +37,11 @@
   padding: 11px 16px;
   border: 1px solid #000;
   height: 74px;
+  min-width: 0;
 
-    @media (max-width: 768px) {
-      height: 54px;
-    }
+  @media (max-width: 768px) {
+    height: 54px;
+  }
 
   &__img {
     width: 50px;
@@ -48,6 +54,7 @@
     flex-direction: column;
     gap: 4px;
     flex: 1;
+    min-width: 0;
   }
 }
 
@@ -60,6 +67,9 @@
   color: #1E1E1E;
   margin: 0;
   text-transform: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .description {

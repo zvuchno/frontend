@@ -1,0 +1,29 @@
+import { type MetadataRoute } from "next";
+
+const baseUrl = (
+  process.env.FRONTEND_ORIGIN ??
+  (process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://zvuchno.space")
+).replace(/\/+$/, "");
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: [
+        "/api/",
+        "/forgot-password",
+        "/reset-password-confirm",
+        "/signin",
+        "/signup/",
+        "/role",
+        "/artist/",
+        "/fans/",
+        "/order",
+        "/verify/",
+        "/cart",
+      ],
+    },
+    sitemap: `${baseUrl}/sitemap.xml`,
+  };
+}

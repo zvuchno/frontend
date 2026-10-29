@@ -62,10 +62,10 @@ export const FieldWithOptions = ({
         required={field.required}
         aria-required={field.required}
         onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+          methods.clearErrors(field.name);
           void onChange(e);
           issuerCodeFormatter(field, e);
         }}
-        defaultValue=''
       >
         <option className={styles.option} value='individual_temporary' disabled>
           {field.placeholder}

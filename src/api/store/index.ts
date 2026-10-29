@@ -68,11 +68,27 @@ const baseUrl = "/api/backend";
 //   );
 // }
 
-export async function getFavoriteProducts(
-  url?: string
-): Promise<PaginatedStoreResponse<StoreFavorite>> {
-  const mainUrl = `${baseUrl}/v1/store/me/favorites?limit=6`;
-  const currentUrl = url ? url : mainUrl;
+export async function getFavoriteProducts({
+  url,
+  hasLimit = true,
+}: {
+  url?: string;
+  hasLimit?: boolean;
+}): Promise<PaginatedStoreResponse<StoreFavorite>> {
+  const mainUrl = hasLimit
+    ? `${baseUrl}/v1/store/me/favorites?limit=6`
+    : `${baseUrl}/v1/store/me/favorites`;
+
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
 
   try {
     const data = await authFetchClient<PaginatedStoreResponse<StoreFavorite>>(currentUrl, {
@@ -89,7 +105,17 @@ export async function getFavoriteProducts(
 
 export async function getOrders(url?: string): Promise<PaginatedStoreResponse<StoreOrder>> {
   const mainUrl = `${baseUrl}/v1/store/orders?limit=6`;
-  const currentUrl = url ? url : mainUrl;
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
 
   try {
     const data = await authFetchClient<PaginatedStoreResponse<StoreOrder>>(currentUrl, {
@@ -117,11 +143,28 @@ export async function getOrderDetail(orderId: string | number): Promise<StoreOrd
   return data;
 }
 
-export async function getPurchasedReleases(
-  url?: string
-): Promise<PaginatedStoreResponse<PurchasedReleases>> {
-  const mainUrl = `${baseUrl}/v1/store/me/purchased-music?limit=6`;
-  const currentUrl = url ? url : mainUrl;
+export async function getPurchasedReleases({
+  url,
+  hasLimit = true,
+}: {
+  url?: string;
+  hasLimit?: boolean;
+}): Promise<PaginatedStoreResponse<PurchasedReleases>> {
+  const mainUrl = hasLimit
+    ? `${baseUrl}/v1/store/me/purchased-music?limit=6`
+    : `${baseUrl}/v1/store/me/purchased-music`;
+
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
   const data = await authFetchClient<PaginatedStoreResponse<PurchasedReleases>>(currentUrl, {
     method: "GET",
   });

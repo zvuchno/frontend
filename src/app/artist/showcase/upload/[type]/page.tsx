@@ -4,13 +4,13 @@ async function Upload({
   params,
   searchParams
 }: { 
-  params: Promise<{ type: 'album' | 'single' | 'merch' }>;
+  params: Promise<{ type: "release" | "merch" }>;
   searchParams: Promise<{id: string}>
 }) {
   const { type  } = await params;
   const { id } = await searchParams;
   return (
-    <UploadPage type={type} id={id}/>
+    <UploadPage productType={type} id={id}/>
   )
 };
 

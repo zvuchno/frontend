@@ -52,7 +52,7 @@ export const ArtistSettingsPickupPointDelivery = ({
 
   return (
     <div key='pickup' className={styles.artistSettingsDeliveryOptionsContainer}>
-      <div className={styles.artistSettingsDeliveryOption}>
+      <div className={styles.artistSettingsDeliveryOption} data-testid='delivery-pickup-toggler'>
         <label
           className={styles.checkboxContainer}
           aria-label={pickupEnabled ? "Выключить" : "Включить"}
@@ -93,6 +93,7 @@ export const ArtistSettingsPickupPointDelivery = ({
             index={index}
             disabled={disabled}
             onRemove={() => onDeletePoint(index)}
+            data-testid={`delivery-pickuppoint-${field.id}`}
           />
         ))}
       </form>
@@ -103,6 +104,7 @@ export const ArtistSettingsPickupPointDelivery = ({
         className={styles.artistSettingsDeliveryOptionsButton}
         onClick={addNewPickupPoint}
         disabled={disabled}
+        data-testid='delivery-pickuppoint-add-btn'
       >
         + Добавить еще адрес
       </ButtonUI>

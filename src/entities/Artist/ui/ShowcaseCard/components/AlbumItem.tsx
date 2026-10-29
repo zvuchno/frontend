@@ -56,7 +56,7 @@ export const AlbumItem = ({
       <Text className={s.text}>-</Text>
       {renderActions({
         type: "album",
-        editType: item.is_single ? "single" : "album",
+        editType: item.release_type ? "release" : "merch",
         isChecked: item.is_published,
         id: item.id,
         onDeleteAlbum: onDeleteAlbum,

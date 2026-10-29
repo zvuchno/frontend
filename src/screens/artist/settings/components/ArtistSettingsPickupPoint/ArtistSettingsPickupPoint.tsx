@@ -20,7 +20,7 @@ export const ArtistSettingsPickupPoint = ({
   disabled: boolean;
   onRemove: () => void;
 }) => {
-  const { control, setValue } = useFormContext<TArtistSettingsFieldValues>();
+  const { control, setValue, trigger } = useFormContext<TArtistSettingsFieldValues>();
 
   const addressName = `pickupPoints.${index}.address` as const;
   const dateName = `pickupPoints.${index}.pickup_date` as const;
@@ -32,18 +32,18 @@ export const ArtistSettingsPickupPoint = ({
         fieldIndex={index}
         onRemove={onRemove}
         addressName={addressName}
-        dateName={dateName}
       />
 
       <Controller
         control={control}
         shouldUnregister={false}
         name={dateName}
+        rules={{ required: "Укажите дату самовывоза" }}
         render={({ field: { value, onBlur }, fieldState }) => (
           <div className={styles.artistSettingsDeliveryDate}>
             <div className={styles.artistSettingsDeliveryDateContainer}>
               <label className={styles.artistSettingsDeliveryDateLabel}>Дата</label>
-              <HintBlock text='укажите дату самовывоза или оставьте поле пустым' />
+              <HintBlock text='укажите дату самовывоза (обязательное поле)' />
             </div>
 
             <CalendarField
@@ -58,12 +58,18 @@ export const ArtistSettingsPickupPoint = ({
                   shouldTouch: true,
                   shouldValidate: true,
                 });
+                if (date) void trigger(addressName);
               }}
               popperClassName={styles.artistSettingsDeliveryDatePopper}
               wrapperClassName={styles.datePickerWrapper}
               allowFuture={true}
               allowPast={false}
             />
+            {fieldState.error?.message && (
+              <span className={styles.artistSettingsDeliveryDateError} role='alert'>
+                {fieldState.error.message}
+              </span>
+            )}
           </div>
         )}
       />

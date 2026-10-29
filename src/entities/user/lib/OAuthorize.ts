@@ -1,38 +1,54 @@
 import { type User } from "next-auth";
-import { TServerAuthResponse } from "../model/types.serverCookie";
-import { applyCookiesFromResponse } from "./applyCookiesFromResponse";
-import { getCurrentUserServer } from "../api/api.serverCookie";
-import { TConsent } from "../model/types";
+import { headers } from "next/headers";
 
-const BASE_URL = process.env.BACKEND_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL;
+import { getCurrentUserServer } from "../api/api.serverCookie";
+import { type TConsent } from "../model/types";
+import { type TServerAuthResponse } from "../model/types.serverCookie";
+import { applyCookiesFromResponse } from "./applyCookiesFromResponse";
+import { setClientInfoHeaders } from "./setClientInfoHeaders";
+
+const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.BASE_API_URL_DEV
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 export type OAuthResult =
   | { status: "ok"; user: User }
   | { status: "registration_required" }
   | { status: "error" };
 
-export const OAuthorize = async ({ 
+export const OAuthorize = async ({
   token,
   provider,
   create_account = false,
-  consents
- }: {
-  token: string,
-  provider: "vk" | "yandex",
-  create_account?: boolean,
-  consents?: TConsent[]
- }
-): Promise<OAuthResult> => {
+  consents,
+  sessionId,
+}: {
+  token: string;
+  provider: "vk" | "yandex";
+  create_account?: boolean;
+  consents?: TConsent[];
+  sessionId?: string;
+}): Promise<OAuthResult> => {
   try {
     const payload = {
       access_token: token,
       create_account,
       ...(consents && { consents }),
     };
-    
+    const headersFromNext = await headers();
+
+    const targetHeaders = new Headers({
+      "Content-Type": "application/json",
+      ...(sessionId ? { Cookie: `sessionid=${sessionId}` } : {}),
+    });
+
+    // Копируем IP и User-Agent из входящих заголовков в исходящие
+    setClientInfoHeaders(headersFromNext, targetHeaders);
+
     const res = await fetch(`${BASE_URL}/v1/auth/social/${provider}/`, {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      headers: targetHeaders,
       body: JSON.stringify(payload),
     });
 
@@ -49,7 +65,7 @@ export const OAuthorize = async ({
     //   applyCookiesFromResponse(res.headers, true),
     // ]);
 
-    const body = await res.json() as TServerAuthResponse;
+    const body = (await res.json()) as TServerAuthResponse;
 
     if (!body.authenticated) {
       return { status: "error" };

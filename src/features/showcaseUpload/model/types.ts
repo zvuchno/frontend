@@ -1,3 +1,5 @@
+import { TReleaseType } from "@/entities/Artist";
+
 export type VariantForm = {
   value: string;
   sku?: string;
@@ -7,6 +9,8 @@ export type VariantForm = {
 export type UploadFormValues = {
   name: string;
   releaseDate: string; // для альбома
+  releaseType?: TReleaseType; // для альбома
+  upc?: number | null; // для альбома
   kind?: string; // для мерча
   genre?: string; // для альбома
   album?: string; // для мерча

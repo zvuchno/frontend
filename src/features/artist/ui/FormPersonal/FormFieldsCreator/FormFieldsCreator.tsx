@@ -17,13 +17,14 @@ export const createFormField = (
   field: TArtistFormPersonalField,
   fieldSet: number,
   methods: ReturnType<typeof useFormContext<FieldValues>>,
-  disabled: boolean,
-  index: number
+  index: number,
+  disabled?: boolean
 ) => {
   const {
     control,
     formState: { errors },
     trigger,
+    clearErrors,
   } = methods;
 
   const fieldError = get(errors, field.name) as FieldError;
@@ -36,9 +37,14 @@ export const createFormField = (
           shouldUnregister={false}
           name={field.name}
           rules={artistFormPersonalRules(field) as Record<string, undefined>}
-          render={({ field: { onChange, value, name, ref, onBlur } }) => {
-            const showError = !disabled;
+          render={({ field: { onChange, value, name, ref, onBlur }, fieldState, formState }) => {
             const currentFieldError = get(errors, name) as FieldError | undefined;
+            const showError =
+              !disabled &&
+              (field.type === "tel"
+                ? Boolean(currentFieldError)
+                : fieldState.isTouched || formState.isSubmitted);
+            const visibleFieldError = showError ? currentFieldError : undefined;
             const dateValue = field.type === "date" ? parseServerDate(value) : null;
             const phoneValue =
               field.type === "tel" && typeof value === "string" ? value.replace(/\D/g, "") : "";
@@ -47,22 +53,24 @@ export const createFormField = (
                 style={{ position: "relative" }}
                 className={clsx(
                   "field",
-                  { ["error"]: showError && !!currentFieldError },
+                  { ["error"]: !!visibleFieldError },
                   { ["calendar"]: field.type === "date" }
                 )}
+                data-testid={`artist-data-form-${field.name}`}
               >
                 <FieldLabel field={field} forField={`${field.row}.${field.column}`} />
                 {field.type === "date" && (
                   <>
                     <CalendarField
                       field={field}
-                      fieldError={showError ? currentFieldError : undefined}
+                      fieldError={visibleFieldError}
                       value={dateValue}
                       onChange={(selectedDate: Date | null) => {
                         if (selectedDate instanceof Date && !isNaN(selectedDate.getTime())) {
                           const year = selectedDate.getFullYear();
                           const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
                           const day = String(selectedDate.getDate()).padStart(2, "0");
+                          clearErrors(name);
                           onChange(`${year}-${month}-${day}`);
                         } else {
                           onChange(null);
@@ -78,14 +86,14 @@ export const createFormField = (
                 {field.type === "tel" && (
                   <PhoneField
                     field={field}
-                    fieldError={fieldError}
+                    fieldError={visibleFieldError}
                     value={phoneValue}
                     onChange={onChange}
                     ref={ref}
                     onBlur={onBlur}
                   />
                 )}
-                {showError && currentFieldError && (
+                {visibleFieldError && (
                   <span
                     className='message error'
                     style={{
@@ -94,7 +102,7 @@ export const createFormField = (
                       color: "var(--color-primary-blue)",
                     }}
                   >
-                    {currentFieldError.message}
+                    {visibleFieldError.message}
                   </span>
                 )}
               </div>
@@ -102,13 +110,19 @@ export const createFormField = (
           }}
         />
       ) : field.options ? (
-        <FieldWithOptions field={field} hasError={!disabled && !!fieldError} methods={methods} />
+        <FieldWithOptions
+          field={field}
+          hasError={!disabled && !!fieldError}
+          methods={methods}
+          data-testid={`artist-data-form-${field.name}`}
+        />
       ) : (
         <RegularField
           field={field}
           fieldError={!disabled ? fieldError : undefined}
           methods={methods}
           className={styles.height_100}
+          data-testid={`artist-data-form-${field.name}`}
         />
       )}
     </div>

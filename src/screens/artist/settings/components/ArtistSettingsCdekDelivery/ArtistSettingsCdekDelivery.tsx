@@ -76,7 +76,7 @@ export const ArtistSettingsCdekDelivery = ({
       <input type='hidden' {...register("shippingPoint.city")} />
       <input type='hidden' {...register("shippingPoint.city_code")} />
       <input type='hidden' {...register("shippingPoint.pvz_code")} />
-      <div className={styles.artistSettingsDeliveryOption}>
+      <div className={styles.artistSettingsDeliveryOption} data-testid='delivery-cdek-toggler'>
         <label
           className={styles.checkboxContainer}
           aria-label={shippingEnabled ? "Выключить" : "Включить"}

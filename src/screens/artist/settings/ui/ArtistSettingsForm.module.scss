@@ -4,8 +4,7 @@
   gap: 80px;
   color: var(--color-text-primary);
   width: 100%;
-  max-width: 810px;
-  margin-inline: auto;
+  width: 100%;
 }
 
 .hint {
@@ -37,4 +36,12 @@
       opacity: 0.7;
     }
   }
+}
+
+.formError {
+  margin: 0;
+  font-family: var(--font-feature-mono, monospace);
+  font-size: clamp(0.75rem, 0.4643rem + 0.5952vw, 1rem);
+  line-height: 1.2;
+  color: #c53535;
 }

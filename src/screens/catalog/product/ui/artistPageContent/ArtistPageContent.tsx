@@ -36,9 +36,8 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
     queryKey: ["recom", "album", artist.slug],
     queryFn: () =>
       getCatalogListClient({
-        type: "album",
+        type: "release",
         artist: artist.slug,
-        ordering: "random",
         limit: "4",
       }),
     enabled: hasFetching,
@@ -50,7 +49,6 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
       getCatalogListClient({
         type: "merch",
         artist: artist.slug,
-        ordering: "random",
         limit: "4",
       }),
     enabled: hasFetching,
@@ -89,7 +87,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
       {albumsRecommend && albumsRecommend.length > 0 && (
         <ListSection
           title='Музыка'
-          link={`/catalog/album/?artist=${artist.slug}`}
+          link={`/catalog/release/?artist=${artist.slug}`}
           hasMore={hasMoreAlbums}
         >
           {albumsRecommend.map((item) => {
@@ -100,6 +98,13 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
               item.target.selected_variant_id !== null
                 ? item.target.selected_variant_id
                 : undefined;
+
+            const basePath = `/catalog/${item.target.type}/${id}/`;
+
+            const href =
+              !selected
+                ? basePath
+                : `${basePath}?selected=${encodeURIComponent(selected)}`;
             return (
               <ProductCard
                 key={item.product_id}
@@ -120,7 +125,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                     }}
                   />
                 }
-                link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+                link={href}
                 onHandleClick={() => addProduct(item)}
                 isRelease={item.target.type === "release"}
                 isPlaying={playingAlbumId === item.target.id}
@@ -144,6 +149,13 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
               item.target.selected_variant_id !== null
                 ? item.target.selected_variant_id
                 : undefined;
+
+            const basePath = `/catalog/${item.target.type}/${id}/`;
+
+            const href =
+              item.target.type === "merch" || !selected
+                ? basePath
+                : `${basePath}?selected=${encodeURIComponent(selected)}`;
             return (
               <ProductCard
                 key={item.product_id}
@@ -164,7 +176,7 @@ const ArtistPageContent = ({ artist }: IArtistPageContentProps) => {
                     }}
                   />
                 }
-                link={`/catalog/album/${id}/?kind=${item.target.type}&selected=${selected}`}
+                link={href}
                 onHandleClick={() => addProduct(item)}
               />
             );

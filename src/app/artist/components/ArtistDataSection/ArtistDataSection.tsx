@@ -24,8 +24,6 @@ const ArtistDataSection = ({
   deletingSocialKey = null,
   errorMessage = null,
   className,
-  isEdit,
-  onEditDescription,
   descriptionChanged,
   onCoverChange,
   onEditCoverClick,
@@ -73,9 +71,7 @@ const ArtistDataSection = ({
           description={description}
           emptyText='Описание пока не заполнено'
           title='Об исполнителе'
-          isEdit={isEdit}
           hasChanges={(value) => descriptionChanged?.(value)}
-          onEditMode={() => onEditDescription?.(true)}
         />
       </div>
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
@@ -30,7 +30,13 @@ const meta: Meta<typeof ProfileFormUI> = {
             has_usable_password={false}
           />
         ),
-        listener: <ProfileFormListenerUI fieldsDisabled={false} showPublishHint={false} has_usable_password={false} />,
+        listener: (
+          <ProfileFormListenerUI
+            fieldsDisabled={false}
+            showPublishHint={false}
+            has_usable_password={false}
+          />
+        ),
       },
     },
   },
@@ -44,7 +50,7 @@ const meta: Meta<typeof ProfileFormUI> = {
           phone: "71111111111",
           password: "11111111",
           city: "Moscow",
-          url: "http://ivanov-ivan.ru",
+          slug: "http://ivanov-ivan.ru",
         },
       });
 
@@ -53,12 +59,8 @@ const meta: Meta<typeof ProfileFormUI> = {
           Object.entries(args.values).forEach(([name, value]) => {
             methods.setValue(name as keyof FieldValues, value);
           });
-
-          if (args.isOnChange === true) {
-            void methods.trigger();
-          }
         }
-      }, [args.isOnChange, args.values, methods]);
+      }, [args.values, methods]);
 
       return (
         <FormProvider {...methods}>
@@ -98,25 +100,16 @@ export const ProfileFormNew: Story = {
       phone: "",
       password: "",
       city: "",
-      url: "",
+      slug: "",
     },
   },
 };
 
 export const ProfileFormCurrent: Story = {
-  args: {
-    isOnChange: false,
-  },
   render: (args) => {
-    const [isEditMode, setIsEditMode] = useState(args.isOnChange);
-    const handleChange = () => {
-      setIsEditMode(true);
-    };
-
     return (
-      <ProfileFormUI {...args} isOnChange={isEditMode} onEdit={handleChange}>
+      <ProfileFormUI {...args}>
         <ProfileFormArtistUI
-          fieldsDisabled={!isEditMode}
           disabledFields={ARTIST_DISABLED_FIELDS}
           personalDataHref='/'
           has_usable_password={false}
@@ -136,14 +129,14 @@ export const ProfileFormWithErrors: Story = {
         has_usable_password={false}
       />
     ),
-    isOnChange: true,
+
     values: {
       name: "И",
       email: "bjkb",
       phone: "",
       password: "bkjb",
       city: "lbkjjjjbhgbjhmbhhhkhkjhkjhikjhkjhkjhjkbjkbjkbkjbmkk",
-      url: "nkl@l",
+      slug: "nkl@l",
     },
   },
 };
@@ -158,7 +151,7 @@ export const ProfileFormWithoutErrors: Story = {
         has_usable_password={false}
       />
     ),
-    isChecked: true,
+
     onSubmit: (data) => {
       console.log(data);
       alert("Форма отправлена");
@@ -182,7 +175,7 @@ export const ProfileFormWithoutHint: Story = {
       phone: "",
       password: "",
       city: "",
-      url: "",
+      slug: "",
     },
   },
 };

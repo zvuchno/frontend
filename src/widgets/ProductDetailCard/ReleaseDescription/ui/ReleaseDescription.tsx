@@ -44,7 +44,7 @@ export const ReleaseDescription = ({
     {
       id: "description",
       title: "Описание",
-      description: product?.description || "Описание товара",
+      description: product?.description || "У этого товара нет описания.",
     },
     {
       id: "delivery",
@@ -80,7 +80,7 @@ export const ReleaseDescription = ({
       image: imagesForGallery.length > 0 ? imagesForGallery[0].image : null,
       price: product.price.toString(),
       allow_overpay: product.allow_overpay,
-      is_single: release.is_single,
+      release_type: release.release_type
     };
     onClick(data);
   };
@@ -113,11 +113,6 @@ export const ReleaseDescription = ({
 
           <Title Tag='h3' className={s.card__title}>
             {product?.name}
-            {/* {product?.property_value === "Диджитал"
-              ? release.is_single
-                ? `Сингл "${product.name}"`
-                : `Альбом "${product.name}"`
-              : `${product.property_value} "${product?.name}"`} */}
           </Title>
 
           <Text Tag='p' className={s.card__itemNumber}>
@@ -134,8 +129,7 @@ export const ReleaseDescription = ({
             onClick={selectVariant}
           />
 
-          {(product?.stock !== null && product?.stock > 0) ||
-          product?.property_value === "Диджитал" ? (
+          {product.is_available_for_purchase ? (
             <ButtonUI
               variant='primary'
               size='standart'

@@ -1,51 +1,52 @@
 export const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null;
+  typeof value === "object" && value !== null && !Array.isArray(value);
 
-export const getErrorMessage = (data: unknown, fallback: string): string | string[] => {
-  if (!isRecord(data)) return fallback;
-
-  if ("detail" in data && "reasons" in data) {
-    const messages: string[] = [];
-    if (typeof data.detail === "string") messages.push(data.detail);
-    if (Array.isArray(data.reasons)) {
-      data.reasons.forEach((reason) => {
-        messages.push(reason);
-      });
+const collectArrayMessages = (
+  items: unknown[],
+  allMessages: Record<string, string>,
+  parentPath: string
+): void => {
+  for (const item of items) {
+    if (typeof item === "string") {
+      if (parentPath) {
+        allMessages[parentPath] = item;
+      }
+    } else {
+      collectMessages(item, allMessages, parentPath);
     }
+  }
+};
 
-    return messages;
+const collectMessages = (
+  value: unknown,
+  allMessages: Record<string, string>,
+  parentKey = ""
+): void => {
+  if (Array.isArray(value)) {
+    collectArrayMessages(value, allMessages, parentKey);
+    return;
   }
 
-  for (const key of [
-    "message",
-    "detail",
-    "phone",
-    "email",
-    "token",
-    "uid",
-    "is_published",
-    "price",
-    "slug",
-    "code",
-    "old_password",
-    "password",
-    "new_password",
-    "confirm_password",
-    "stock",
-  ]) {
-    const value = data[key];
+  if (isRecord(value)) {
+    for (const [key, prop] of Object.entries(value)) {
+      const path = parentKey ? `${parentKey}.${key}` : key;
 
-    if (typeof value === "string" && value) {
-      return value;
-    }
-
-    if (Array.isArray(value) && value.length > 0) {
-      const firstItem = value[0] as unknown;
-      if (typeof firstItem === "string" && firstItem) {
-        return firstItem;
+      if (typeof prop === "string") {
+        allMessages[path] = prop;
+      } else {
+        collectMessages(prop, allMessages, path);
       }
     }
   }
+};
 
-  return fallback;
+export const getErrorMessage = (
+  data: unknown,
+  fallback: string
+): Record<string, string> | string => {
+  const allMessages: Record<string, string> = {};
+
+  collectMessages(data, allMessages);
+
+  return Object.keys(allMessages).length > 0 ? allMessages : fallback;
 };

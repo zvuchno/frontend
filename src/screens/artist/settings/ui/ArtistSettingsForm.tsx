@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { FormProvider, useFieldArray, useForm, useWatch } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
 
@@ -39,6 +39,8 @@ const getFormValues = (
 export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSettingsFormProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
+  const [serverErrorMessage, setServerErrorMessage] = useState("");
+
   const { mutate: connectTelegramBot } = useConnetcTelegramBot();
   const formValues = useMemo(
     () => getFormValues(initialCdek, initialPickup),
@@ -49,6 +51,16 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
     values: formValues,
   });
 
+  const [pickupEnabled, pickupPoints] = useWatch({
+    control: methods.control,
+    name: ["pickup_enabled", "pickupPoints"],
+  });
+  const hasIncompletePickupPoint = Boolean(
+    pickupEnabled &&
+    (!pickupPoints?.length ||
+      pickupPoints.some((point) => !point.address?.trim() || !point.pickup_date))
+  );
+
   const { fields, append, remove } = useFieldArray({
     control: methods.control,
     name: "pickupPoints",
@@ -56,7 +68,14 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
 
   const onSubmit = useArtistSettingsSubmit({
     initialPickup,
-    onSuccess: () => setIsOnEdit(false),
+    onSuccess: () => {
+      setIsOnEdit(false);
+      setServerErrorMessage("");
+    },
+    onError: (error) => {
+      const message = error?.message ?? "Произошла ошибка";
+      setServerErrorMessage(message);
+    },
   });
 
   const handleButtonClick = () => {
@@ -78,14 +97,26 @@ export const ArtistSettingsForm = ({ initialCdek, initialPickup }: ArtistSetting
             cdekSettings={initialCdek}
             pickupStatus={initialPickup.enabled}
           />
+
+          {serverErrorMessage.length > 0 && (
+            <p className={styles.formError} data-testid='delivery-server-error'>
+              {serverErrorMessage}
+            </p>
+          )}
+
           <ArtistSettingsButtons
             disabled={!isOnEdit}
+            saveDisabled={hasIncompletePickupPoint}
             onChange={setIsOnEdit}
             onSubmit={handleButtonClick}
           />
           <div className={styles.hint}>
             Для удобства обработки и отслеживания заказов{" "}
-            <button className={styles.hintButton} onClick={() => connectTelegramBot()}>
+            <button
+              className={styles.hintButton}
+              onClick={() => connectTelegramBot()}
+              data-testid='delivery-connect-telegram-link'
+            >
               присоединитесь
             </button>{" "}
             к нашему телеграм-боту

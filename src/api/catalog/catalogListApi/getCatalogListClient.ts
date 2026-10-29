@@ -22,7 +22,11 @@ export async function getCatalogListClient({
   }
 
   if (type !== undefined) {
-    params.append("type", type.toString());
+    if (type === "release") {
+      params.append("type", "album");
+    } else {
+      params.append("type", type.toString());
+    }
   }
 
   if (limit !== undefined) {
@@ -60,7 +64,17 @@ export async function getCatalogListClient({
   }
 
   const mainUrl = `${baseUrl}/v1/store/catalog?${params.toString()}`;
-  const currentUrl = url ? url : mainUrl;
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
 
   try {
     const data = await authFetchClient<TCatalogListResponse>(currentUrl, {

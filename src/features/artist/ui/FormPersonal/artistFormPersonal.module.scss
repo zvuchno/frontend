@@ -4,16 +4,20 @@
   align-items: stretch;
   width: 100%;
   gap: 80px;
-  padding: 12px;
+  padding-block-end: 87.5px;
   background-color: transparent;
   color: var(--color-text-primary);
+
+  @media (max-width: 768px) {
+    padding-block-end: 0;
+  }
 
   &ContentWrapper {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    gap: 28px;
+    gap: 64px;
   }
 
   &Title {
@@ -33,60 +37,27 @@
   &Content {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: 20px;
-    row-gap: 28px;
+    column-gap: 24px;
+    row-gap: 24px;
     width: 100%;
     min-width: 0;
     margin: 0;
     padding: 0;
     border: none;
 
-    @media (max-width: 950px) {
+    @media (max-width: 1024px) {
       row-gap: 15px;
     }
 
     @media (max-width: 768px) {
-      row-gap: 28px;
+      row-gap: 24px;
     }
 
-    @media (max-width: 490px) {
+    @media (max-width: 550px) {
       row-gap: 15px;
     }
 
-    &.personalContent {
-      grid-template-areas:
-        "cell-1-1 cell-1-2"
-        "cell-2-1 cell-2-2"
-        "cell-3-1 cell-3-1";
-      margin-block-end: 52px;
-    }
-
-    &.passportlContent {
-      grid-template-areas:
-        "cell-1-1 cell-1-2"
-        "cell-2-1 cell-2-2";
-      margin-block-end: 20px;
-    }
-
-    &.paymentlContent {
-      grid-template-areas:
-        "cell-1-1 cell-1-2"
-        "cell-2-1 cell-2-2"
-        "cell-3-1 cell-3-2";
-      margin-block-start: 32px;
-      margin-block-end: 20px;
-    }
-
-    &.legalEntityContent {
-      grid-template-areas:
-        "cell-1-1 cell-1-1"
-        "cell-2-1 cell-2-2"
-        "cell-3-1 cell-3-1"
-        "cell-4-1 cell-4-2"
-        "cell-5-1 cell-5-2";
-    }
-
-    @media (max-width: 950px) {
+    @media (max-width: 1024px) {
       grid-template-columns: 1fr;
 
       &.personalContent {
@@ -96,116 +67,15 @@
           "cell-2-1"
           "cell-2-2"
           "cell-3-1";
-      }
-
-      &.passportlContent {
-        grid-template-areas:
-          "cell-1-1"
-          "cell-1-2"
-          "cell-2-1"
-          "cell-2-2";
-      }
-
-      &.paymentlContent {
-        grid-template-areas:
-          "cell-1-1"
-          "cell-1-2"
-          "cell-2-1 "
-          "cell-2-2"
-          "cell-3-1 "
-          "cell-3-2";
-      }
-
-      &.legalEntityContent {
-        grid-template-areas:
-          "cell-1-1"
-          "cell-2-1 "
-          "cell-2-2"
-          "cell-3-1"
-          "cell-4-1 "
-          "cell-4-2"
-          "cell-5-1"
-          " cell-5-2";
       }
     }
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr 1fr;
-      &.personalContent {
-        grid-template-areas:
-          "cell-1-1 cell-1-2"
-          "cell-2-1 cell-2-2"
-          "cell-3-1 cell-3-1";
-        margin-block-end: 52px;
-      }
-
-      &.passportlContent {
-        grid-template-areas:
-          "cell-1-1 cell-1-2"
-          "cell-2-1 cell-2-2";
-        margin-block-end: 20px;
-      }
-
-      &.paymentlContent {
-        grid-template-areas:
-          "cell-1-1 cell-1-2"
-          "cell-2-1 cell-2-2"
-          "cell-3-1 cell-3-2";
-        margin-block-start: 32px;
-        margin-block-end: 20px;
-      }
-
-      &.legalEntityContent {
-        grid-template-areas:
-          "cell-1-1 cell-1-1"
-          "cell-2-1 cell-2-2"
-          "cell-3-1 cell-3-1"
-          "cell-4-1 cell-4-2"
-          "cell-5-1 cell-5-2";
-      }
     }
 
     @media (max-width: 490px) {
       grid-template-columns: 1fr;
-
-      &.personalContent {
-        grid-template-areas:
-          "cell-1-1"
-          "cell-1-2"
-          "cell-2-1"
-          "cell-2-2"
-          "cell-3-1";
-      }
-
-      &.passportlContent {
-        grid-template-areas:
-          "cell-1-1"
-          "cell-1-2"
-          "cell-2-1"
-          "cell-2-2";
-      }
-
-      &.paymentlContent {
-        grid-template-areas:
-          "cell-1-1"
-          "cell-1-2"
-          "cell-2-1 "
-          "cell-2-2"
-          "cell-3-1 "
-          "cell-3-2";
-      }
-
-      &.legalEntityContent {
-        grid-template-areas:
-          "cell-1-1"
-          "cell-2-1 "
-          "cell-2-2"
-          "cell-3-1"
-          "cell-4-1 "
-          "cell-4-2"
-          "cell-5-1"
-          " cell-5-2";
-      }
     }
   }
 
@@ -285,6 +155,9 @@ select.input-calendar {
 * > .cell-1-2 {
   grid-area: cell-1-2;
 }
+* > .cell-1-3 {
+  grid-area: cell-1-3;
+}
 
 * > .cell-2-1 {
   grid-area: cell-2-1;
@@ -325,16 +198,14 @@ select:invalid {
   color: var(--color-text-primary);
 }
 
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+.legend {
+  font-family: var(--font-feature-mono);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  vertical-align: middle;
+  margin-block-end: 24px;
 }
 
 #birthday {
@@ -404,4 +275,12 @@ select:invalid {
   box-shadow: 0 0 0 1000px white inset !important;
   -webkit-text-fill-color: #000 !important;
   transition: background-color 5000s ease-in-out 0s; /* Чтобы цвет не возвращался */
+}
+
+.formError {
+  margin: 0;
+  font-family: var(--font-feature-mono, monospace);
+  font-size: clamp(0.75rem, 0.4643rem + 0.5952vw, 1rem);
+  line-height: 1.2;
+  color: #c53535;
 }

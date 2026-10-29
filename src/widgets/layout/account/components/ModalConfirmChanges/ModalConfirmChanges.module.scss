@@ -1,0 +1,31 @@
+.moduleConfirm {
+  &Content {
+    max-width: 475px;
+    font-family: var(--font-feature-mono);
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-inline: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: stretch;
+    align-items: center;
+  }
+  &Title {
+    font-weight: 500;
+  }
+  &Text {
+    font-weight: 300;
+  }
+  &Buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  &Button {
+    width: max-content;
+    padding-inline: 12.5px !important;
+  }
+}

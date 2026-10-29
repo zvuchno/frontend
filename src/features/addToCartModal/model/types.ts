@@ -5,7 +5,7 @@ export type TDataForModal = {
   image: string | undefined | null; 
   price: string;
   allow_overpay: boolean;
-  is_single?: boolean;
+  release_type?: "album" | "ep" | "single";
 }
 
 export interface AddToCartModalProps {

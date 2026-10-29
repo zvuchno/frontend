@@ -50,11 +50,12 @@ export const ArtistDataSectionMedia = ({
       </div>
 
       <ButtonUI
-        variant='secondary'
-        size='standart'
+        variant='primary'
+        size='small'
         onClick={handleCoverButtonClick}
         disabled={disabled}
         className={s.mediaButton}
+        data-testid='account-change-cover-btn'
       >
         {disabled ? "Загрузка..." : "Изменить обложку"}
       </ButtonUI>
@@ -66,6 +67,7 @@ export const ArtistDataSectionMedia = ({
           type='file'
           accept='image/*'
           onChange={handleCoverInputChange}
+          data-testid='account-change-cover-input'
         />
       ) : null}
     </div>

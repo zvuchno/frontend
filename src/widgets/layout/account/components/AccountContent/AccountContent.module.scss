@@ -1,0 +1,27 @@
+.mainSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 48px 40px;
+  gap: 24px;
+
+  &Content {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    max-height: none;
+    overflow: visible;
+    margin-inline: 0;
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 24px;
+    padding-block-end: 144px;
+
+    &Content {
+      width: 100%;
+    }
+  }
+}

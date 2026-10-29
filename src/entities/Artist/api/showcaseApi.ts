@@ -41,12 +41,22 @@ export async function getShowcaseAlbumsList({
 }: TShowcaseListRequest): Promise<PaginatedStoreResponse<TShowcaseAlbum>> {
   const params = new URLSearchParams();
   if (artist) params.append("artist", artist.toString());
-  if ((itemType === "album" || itemType === "products") && artist_id) {
+  if (itemType === "release" && artist_id) {
     params.append("artist_id", artist_id.toString());
   }
 
   const mainUrl = `${baseUrl}/v1/store/albums?${params.toString()}`;
-  const currentUrl = url ? url : mainUrl;
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseAlbum>>(currentUrl, {
     method: "GET",
@@ -71,12 +81,22 @@ export async function getShowcaseMerchList({
     params.append("in_stock", String(in_stock));
   }
 
-  if ((itemType === "merch" || itemType === "products") && artist_id) {
+  if ((itemType === "merch" || itemType === "release") && artist_id) {
     params.append("artist_id", artist_id.toString());
   }
 
   const mainUrl = `${baseUrl}/v1/store/merch?${params.toString()}`;
-  const currentUrl = url ? url : mainUrl;
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseMerch>>(currentUrl, {
     method: "GET",
@@ -107,7 +127,17 @@ export async function getShowcasePromocodes({
   if (itemType === "promo" && artist_id) params.append("artist_id", artist_id.toString());
 
   const mainUrl = `${baseUrl}/v1/store/promocodes?limit=15&${params.toString()}`;
-  const currentUrl = url ? url : mainUrl;
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcasePromocode>>(currentUrl, {
     method: "GET",
@@ -128,7 +158,7 @@ export async function deleteAlbum({ id }: { id: number }) {
 }
 
 export async function deleteMerch({ id }: { id: number }): Promise<void> {
-  const url = `${baseUrl}/v1/store/merch/${id}/`;
+  const url = `${baseUrl}/v1/store/merch/${id}`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",

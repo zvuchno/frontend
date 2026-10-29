@@ -1,5 +1,6 @@
 // showcase types
-export type TShowcaseItem = "products" | "album" | "merch" | "promo";
+export type TShowcaseItem = "merch" | "promo" | "release";
+export type TReleaseType = "single" | "ep" | "album";
 
 // для списка товаров/промокодов в витрине
 export type TShowcaseAlbum = {
@@ -10,7 +11,8 @@ export type TShowcaseAlbum = {
   price: string;
   cover_image: string | null;
   is_published: boolean;
-  is_single: boolean;
+  release_type: TReleaseType;
+  upc: string | null;
 };
 
 export type TShowcaseMerch = {
@@ -47,7 +49,8 @@ export type TShowcaseAlbumDetail = {
   price: string;
   cover_image: string | null;
   artist_id: number;
-  is_single: boolean;
+  release_type: TReleaseType;
+  upc?: string | null;
   genre: string;
   genre_id: number;
   description: string;
@@ -119,7 +122,8 @@ export type StockFilter = true | false | null;
 export type TCreateAlbumRequest = {
   name: string;
   artist?: number;
-  is_single?: boolean;
+  release_type?: TReleaseType;
+  upc?: string | null;
   release_date?: string | null;
   genre?: number | null;
   price: string;

@@ -15,8 +15,8 @@
   align-items: center;
   gap: clamp(10px, 1vw, 20px);
   width: 100%;
-  min-height: 104px;
-  padding: 20px clamp(10px, 1vw, 48px) 20px clamp(10px, 1vw, 33px);
+  padding: clamp(10px, 1.39vw, 20px) clamp(10px, 1vw, 48px) clamp(10px, 1.39vw, 20px)
+    clamp(10px, 1vw, 33px);
   border: 1px solid var(--outline-color);
   background-color: var(--background);
 
@@ -42,7 +42,7 @@
           grid-column: 2 / 3;
           grid-row: 1 / 3;
           align-self: stretch;
-          padding-block-end: 10px;
+          padding-block: 10px;
         }
 
         & span:nth-child(3) {
@@ -62,7 +62,7 @@
           grid-row: 1 / 3;
           grid-column: 3 /4;
           align-self: stretch;
-          padding-block-end: 10px;
+          padding-block: 10px;
         }
         & span:nth-child(6) {
           grid-row: 2/4;
@@ -521,7 +521,7 @@
     grid-row: 3 /4;
     justify-content: flex-end;
 
-    padding-block-start: 20px;
+    padding-block-start: 30px;
     width: 100%;
 
     & .buttons {

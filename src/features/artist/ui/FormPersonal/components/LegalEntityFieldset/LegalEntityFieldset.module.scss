@@ -1,0 +1,29 @@
+.legalEntityContent {
+  grid-template-areas:
+    "cell-1-1 cell-1-1"
+    "cell-2-1 cell-2-2"
+    "cell-3-1 cell-3-1";
+
+  @media (max-width: 1024px) {
+    grid-template-areas:
+      "cell-1-1"
+      "cell-2-1 "
+      "cell-2-2"
+      "cell-3-1";
+  }
+
+  @media (max-width: 768px) {
+    grid-template-areas:
+      "cell-1-1 cell-1-1"
+      "cell-2-1 cell-2-2"
+      "cell-3-1 cell-3-1";
+  }
+
+  @media (max-width: 490px) {
+    grid-template-areas:
+      "cell-1-1"
+      "cell-2-1 "
+      "cell-2-2"
+      "cell-3-1";
+  }
+}

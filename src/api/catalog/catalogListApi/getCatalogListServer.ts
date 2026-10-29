@@ -2,7 +2,10 @@ import { publicFetchServer } from "@/api/publicFetchFromServer/publicFetchServer
 
 import { type TCatalogListRequest, type TCatalogListResponse } from "./types";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseUrl =
+  process.env.NODE_ENV === "development"
+    ? (process.env.BASE_API_URL_DEV ?? process.env.NEXT_PUBLIC_BASE_API_URL)
+    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
 export async function getCatalogListServer({
   type,
@@ -12,7 +15,7 @@ export async function getCatalogListServer({
   limit,
   offset,
   ordering,
-  search
+  search,
 }: TCatalogListRequest): Promise<TCatalogListResponse | null> {
   const params = new URLSearchParams();
 
@@ -21,7 +24,11 @@ export async function getCatalogListServer({
   }
 
   if (type !== undefined) {
-    params.append("type", type.toString());
+    if (type === "release") {
+      params.append("type", "album");
+    } else {
+      params.append("type", type.toString());
+    }
   }
 
   if (limit !== undefined) {
@@ -57,9 +64,11 @@ export async function getCatalogListServer({
   } else {
     params.append("ordering", "-created_at");
   }
-
+  if (!baseUrl) {
+    throw new Error("API base URL is not configured");
+  }
   const url = `${baseUrl}/v1/store/catalog/?${params.toString()}`;
-
+  console.info("[getArtistsListServer] API origin:", new URL(baseUrl).origin);
   try {
     const response = await publicFetchServer<TCatalogListResponse>(url, {
       method: "GET",

@@ -20,7 +20,7 @@ export const AccountNavigation = ({ type }: { type?: "label" | "artist" }) => {
   return (
     <div className={style.navigation}>
       <NavBar links={fansProfileRoutes} title='Аккаунт' />
-      <NavBar links={artistLinks} title='Кабинет' />
+      <NavBar links={artistLinks} title='Кабинет артиста' />
     </div>
   );
 };
