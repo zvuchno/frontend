@@ -20,7 +20,7 @@ type TSitemapItem = {
 const mainPages = [
   "",
   "catalog/all",
-  "catalog/album",
+  "catalog/release",
   "catalog/merch",
   "catalog/artists",
   "contacts",

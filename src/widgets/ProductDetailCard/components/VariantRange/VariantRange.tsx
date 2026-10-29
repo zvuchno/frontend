@@ -16,11 +16,11 @@ const VariantRange = ({ variants, selectadVariant, onClick }: VariantRangeProps)
     }
   }, [selectadVariant]);
 
-  const hanleClick = (value: string, sku: string, id: number) => {
+  const hanleClick = (value: string, sku: string, id: number, is_purchase: boolean) => {
     setIsSelected(value);
 
     if (onClick && typeof onClick === "function") {
-      onClick(value, sku, id);
+      onClick(value, sku, id, is_purchase);
     }
   };
 
@@ -34,7 +34,7 @@ const VariantRange = ({ variants, selectadVariant, onClick }: VariantRangeProps)
             className={clsx(s.button, {
               [s.button_selected]: variant.property_value === isSelected,
             })}
-            onClick={() => hanleClick(variant.property_value, variant.sku, variant.variant_id)}
+            onClick={() => hanleClick(variant.property_value, variant.sku, variant.variant_id, variant.is_available_for_purchase)}
             disabled={variant.property_value !== "Диджитал" && variant.stock === null}
           >
             {variant.property_value}

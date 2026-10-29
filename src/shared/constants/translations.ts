@@ -2,7 +2,7 @@ export const TRANSLATIONS: Record<string, string> = {
   all: "Каталог - Все",
   artists: "Каталог - Артисты",
   merch: "Каталог - Мерч",
-  album: "Каталог - Музыка",
+  release: "Каталог - Музыка",
 };
 
 export const ORDER_STATUS_TRANSLATIONS: Record<string, string> = {
@@ -19,4 +19,10 @@ export const RELEASE_STATUS_TRANSLATIONS: Record<string, string> = {
   building: "Собирается",
   ready: "Готов",
   failed: "Ошибка",
+};
+
+export const RELEASE_TYPE_TRANSLATIONS: Record<string, string> = {
+  album: "Альбом",
+  ep: "EP",
+  single: "Сингл",
 };

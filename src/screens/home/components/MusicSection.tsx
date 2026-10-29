@@ -30,7 +30,7 @@ export const MusicSection = ({
   const queryClient = useQueryClient();
 
   return (
-    <ListSection title='Музыка' link={`/catalog/album`}>
+    <ListSection title='Музыка' link={`/catalog/release`}>
       {albums.map((item) => {
         const url = item.target.url;
         const match = url.match(/(\d+)\/$/);

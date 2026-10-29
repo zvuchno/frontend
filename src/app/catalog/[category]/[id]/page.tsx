@@ -11,6 +11,7 @@ import { type TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription"
 import { type TDetailRelease } from "@/widgets/ProductDetailCard/ReleaseDescription";
 
 import s from "./page.module.scss";
+import { RELEASE_TYPE_TRANSLATIONS } from "@/shared/constants/translations";
 
 function hasDescription(value?: string) {
   return Boolean(value?.trim() && value.trim().toLowerCase() !== "description");
@@ -32,7 +33,7 @@ export async function generateMetadata({
 
     let productName: string = 'Музыкальный товар магазина "Звучно';
     let productDescription: string =
-      "Больше музыкальных товаром и авторского мерча на https://zvuchno.space/";
+      "Больше музыкальных товаров и авторского мерча на https://zvuchno.space/";
     let productImage: string = "";
     let productArtist: string = "";
     let productOptions: string = "";
@@ -46,9 +47,7 @@ export async function generateMetadata({
       if (index !== -1)
         productName =
           release.variants[index].property_value === "Диджитал"
-            ? release.is_single
-              ? `Сингл "${release.variants[index].name}"`
-              : `Альбом "${release.variants[index].name}"`
+            ? `${RELEASE_TYPE_TRANSLATIONS[release.release_type]} "${release.variants[index].name}"`
             : `${release.variants[index].property_value} "${release.variants[index].name}"`;
 
       productDescription = `${release.variants
@@ -61,7 +60,7 @@ export async function generateMetadata({
       productArtist = release.artist_name;
     } else if (!selected && category === "release") {
       const release = card as TDetailRelease;
-      productName = `${release.is_single ? "Сингл" : "Альбом"} "${release.variants[0].name}"`;
+      productName = `${RELEASE_TYPE_TRANSLATIONS[release.release_type]} "${release.variants[0].name}"`;
       productDescription = `${release.variants
         .map((variant) =>
           `${variant.property_value}: цена - ${variant.price}${variant.stock ? ", в наличии" : ""}`.trim()
@@ -118,7 +117,7 @@ export async function generateMetadata({
         type:
           category === "artists" || category === "merch"
             ? "article"
-            : (card as TDetailRelease).is_single
+            : (card as TDetailRelease).release_type === "single"
               ? "music.song"
               : "music.album",
       },

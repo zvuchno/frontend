@@ -11,6 +11,7 @@ export type TMerchVariant = {
    sku: string; // артикул
    stock: number | null;
    property_value: string; // значение размера: S, L, XL, или цвета
+   is_available_for_purchase: boolean;
 };
 
 export type TDetailMerch = {
