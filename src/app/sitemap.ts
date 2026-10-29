@@ -5,7 +5,8 @@ const baseApiUrl =
     ? (process.env.BASE_API_URL_DEV ?? process.env.NEXT_PUBLIC_BASE_API_URL)
     : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
 
-const baseUrl = new URL(process.env.FRONTEND_ORIGIN || "http://localhost:3000");
+const baseUrl =
+  process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.FRONTEND_ORIGIN;
 
 type TSitemapItem = {
   type: "release" | "merch" | "artists";
