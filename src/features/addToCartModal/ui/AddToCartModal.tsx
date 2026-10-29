@@ -68,11 +68,6 @@ export const AddToCartModal = ({ isOpen, data, onClose }: AddToCartModalProps) =
       <div className={s.contentWrapper}>
         <Title className={clsx(s.text, s.title)}>
           {data.name}
-          {/* {data.type === "Диджитал"
-            ? data.is_single
-              ? `Сингл "${data.name}"`
-              : `Альбом "${data.name}"`
-            : `${data.type} "${data.name}"`} */}
         </Title>
         <div className={s.content}>
           {data.image ? (

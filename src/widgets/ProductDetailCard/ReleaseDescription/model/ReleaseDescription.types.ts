@@ -16,6 +16,7 @@ export type TReleaseVariant = {
    price: number;
    allow_overpay: boolean;
    images: TReleaseImage[];
+   is_available_for_purchase: boolean;
 };
 
 export type TDetailRelease = {
@@ -23,7 +24,7 @@ export type TDetailRelease = {
   artist_name: string;
   artist_image: string | null;
   artist_slug: string;
-  is_single: boolean;
+  release_type: "album" | "ep" | "single";
   variants: TReleaseVariant[];
 };
 
