@@ -44,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const type = page.type;
     const dynamicUrl = `catalog/${type}/${type === "artists" ? page.slug : page.id}`;
     return {
-      url: `${baseUrl}/${dynamicUrl}`,
+      url: `${baseUrl}${dynamicUrl}`,
       lastModified: page.lastmod,
       changeFrequency: "weekly",
       priority: 0.9,
@@ -53,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const mainPagesSitemap: MetadataRoute.Sitemap = mainPages.map((page) => {
     return {
-      url: `${baseUrl}/${page}`,
+      url: `${baseUrl}${page}`,
       changeFrequency: "daily",
       priority: 1,
     };
