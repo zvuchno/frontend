@@ -1,6 +1,9 @@
 import { type MetadataRoute } from "next";
 
-const baseUrl = process.env.FRONTEND_ORIGIN ?? "https://zvuchno.space";
+const baseUrl = (
+  process.env.FRONTEND_ORIGIN ??
+  (process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://zvuchno.space")
+).replace(/\/+$/, "");
 
 export default function robots(): MetadataRoute.Robots {
   return {
