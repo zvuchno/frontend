@@ -1,5 +1,7 @@
 import { type MetadataRoute } from "next";
 
+export const revalidate = 3600;
+
 const baseApiUrl =
   process.env.NODE_ENV === "development"
     ? (process.env.BASE_API_URL_DEV ?? process.env.NEXT_PUBLIC_BASE_API_URL)
