@@ -32,7 +32,7 @@ export async function generateMetadata({
 
     let productName: string = 'Музыкальный товар магазина "Звучно';
     let productDescription: string =
-      "Приобретайте музыкальные релизы и мерч напрямую у любимых артистов";
+      "Больше музыкальных товаром и авторского мерча на https://zvuchno.space/";
     let productImage: string = "";
     let productArtist: string = "";
     let productOptions: string = "";
@@ -56,7 +56,7 @@ export async function generateMetadata({
           `${variant.property_value}: цена - ${variant.price}${variant.stock ? ", в наличии" : ""}`.trim()
         )
         .filter(Boolean)
-        .join(". ")}`;
+        .join(". ")}. Больше музыкальных товаров и авторского мерча на https://zvuchno.space/`;
       productImage = release.variants[index].images[0].image;
       productArtist = release.artist_name;
     } else if (!selected && category === "release") {
@@ -67,7 +67,7 @@ export async function generateMetadata({
           `${variant.property_value}: цена - ${variant.price}${variant.stock ? ", в наличии" : ""}`.trim()
         )
         .filter(Boolean)
-        .join(". ")}`;
+        .join(". ")}. Больше музыкальных товаров и авторского мерча на https://zvuchno.space/`;
       productImage = release.variants[0].images[0].image;
       productArtist = release.artist_name;
     } else if (category === "merch") {
@@ -78,7 +78,7 @@ export async function generateMetadata({
       ].join(", ");
 
       productName = `${merch.kind} "${merch.name}"`;
-      productDescription = `${merch.property_name && `${merch.property_name}: ${productOptions}. `}${merch.stock && "В наличии"}. Цена: ${merch.price}.`;
+      productDescription = `${merch.property_name && `${merch.property_name}: ${productOptions}. `}${merch.stock && "В наличии"}. Цена: ${merch.price}. Больше музыкальных товаров и авторского мерча на https://zvuchno.space/`;
       productImage = merch.images[0].image;
       productArtist = merch.artist_name;
     }
@@ -90,7 +90,8 @@ export async function generateMetadata({
 
     const description =
       category === "artists" && hasDescription((card as TDetalArtist).description)
-        ? (card as TDetalArtist).description
+        ? (card as TDetalArtist).description +
+          " Больше музыкальных товаров и авторского мерча на https://zvuchno.space/"
         : productDescription;
 
     const image = category === "artists" ? (card as TDetalArtist).cover || "" : productImage;
