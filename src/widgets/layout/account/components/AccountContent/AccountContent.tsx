@@ -24,17 +24,19 @@ export const AccountContent = ({
   const { accountActions } = useAccountActions();
   const { activeLink } = useActiveLink();
 
-  const dataStatus = accountActions?.dataStatus;
-  const primaryButtonTitle = accountActions?.primaryButtonTitle;
-  const secondaryButtonTitle = accountActions?.secondaryButtonTitle;
-  const primaryDisabled = accountActions?.primaryDisabled;
-  const secondaryDisabled = accountActions?.secondaryDisabled;
-  const onClickPrimaryBtn = accountActions?.onClickPrimaryBtn;
-  const onClickSecondaryBtn = accountActions?.onClickSecondaryBtn;
-  const statusMessage = accountActions?.dataStatusComment;
-  const isLoading = accountActions?.isLoading || false;
+  if (!accountActions || !activeLink) return;
+
+  const dataStatus = accountActions.dataStatus;
+  const primaryButtonTitle = accountActions.primaryButtonTitle;
+  const secondaryButtonTitle = accountActions.secondaryButtonTitle;
+  const primaryDisabled = accountActions.primaryDisabled;
+  const secondaryDisabled = accountActions.secondaryDisabled;
+  const onClickPrimaryBtn = accountActions.onClickPrimaryBtn;
+  const onClickSecondaryBtn = accountActions.onClickSecondaryBtn;
+  const statusMessage = accountActions.dataStatusComment;
+  const isLoading = accountActions.isLoading || false;
   const backPath =
-    typeof activeLink?.href === "string" ? activeLink.href : (activeLink?.href.pathname ?? "/");
+    typeof activeLink.href === "string" ? activeLink.href : (activeLink.href.pathname ?? "/");
 
   const hasButtons = Boolean(primaryButtonTitle || secondaryButtonTitle);
 
