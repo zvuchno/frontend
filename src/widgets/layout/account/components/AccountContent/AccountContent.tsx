@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 import { useActiveLink } from "@/features/profile";
 
+//import { Loader } from "@/shared/ui";
+
 import { MainSectionMenu } from "../MainSectionMenu/MainSectionMenu";
 import s from "./AccountContent.module.scss";
 
@@ -24,19 +26,19 @@ export const AccountContent = ({
   const { accountActions } = useAccountActions();
   const { activeLink } = useActiveLink();
 
-  if (!accountActions || !activeLink) return;
+  //if (!accountActions || !activeLink) return <Loader />;
 
-  const dataStatus = accountActions.dataStatus;
-  const primaryButtonTitle = accountActions.primaryButtonTitle;
-  const secondaryButtonTitle = accountActions.secondaryButtonTitle;
-  const primaryDisabled = accountActions.primaryDisabled;
-  const secondaryDisabled = accountActions.secondaryDisabled;
-  const onClickPrimaryBtn = accountActions.onClickPrimaryBtn;
-  const onClickSecondaryBtn = accountActions.onClickSecondaryBtn;
-  const statusMessage = accountActions.dataStatusComment;
-  const isLoading = accountActions.isLoading || false;
+  const dataStatus = accountActions?.dataStatus;
+  const primaryButtonTitle = accountActions?.primaryButtonTitle;
+  const secondaryButtonTitle = accountActions?.secondaryButtonTitle;
+  const primaryDisabled = accountActions?.primaryDisabled;
+  const secondaryDisabled = accountActions?.secondaryDisabled;
+  const onClickPrimaryBtn = accountActions?.onClickPrimaryBtn;
+  const onClickSecondaryBtn = accountActions?.onClickSecondaryBtn;
+  const statusMessage = accountActions?.dataStatusComment;
+  const isLoading = accountActions?.isLoading || false;
   const backPath =
-    typeof activeLink.href === "string" ? activeLink.href : (activeLink.href.pathname ?? "/");
+    typeof activeLink?.href === "string" ? activeLink.href : (activeLink?.href.pathname ?? "/");
 
   const hasButtons = Boolean(primaryButtonTitle || secondaryButtonTitle);
 
