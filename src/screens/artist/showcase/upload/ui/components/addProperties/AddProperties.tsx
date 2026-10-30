@@ -3,11 +3,11 @@
 import { ButtonUI, CustomInput } from "@/shared/ui";
 import s from "./AddProperties.module.scss";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import type { UploadFormValues } from "@/features/showcaseUpload";
 import clsx from "clsx";
+import { UploadMerchFormValues } from "@/features/showcaseUpload";
 
 export const AddPropertises = () => {
-  const { control, setValue } = useFormContext<UploadFormValues>();
+  const { control, setValue } = useFormContext<UploadMerchFormValues>();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -54,6 +54,7 @@ export const AddPropertises = () => {
                 onChange={field.onChange}
                 error={!!fieldState.error?.message}
                 message={fieldState.error?.message}
+                data-testid="property-name"
               />
             )}
           />
@@ -80,6 +81,7 @@ export const AddPropertises = () => {
                     onChange={field.onChange}
                     error={!!fieldState.error?.message}
                     message={fieldState.error?.message}
+                    data-testid={`value_${variantField.id}`}
                   />
                 )}
               />
@@ -102,6 +104,7 @@ export const AddPropertises = () => {
                     error={!!fieldState.error?.message}
                     message={fieldState.error?.message}
                     placeholder="0"
+                    data-testid={`stock_${variantField.id}`}
                   />
                 )}
               />
@@ -120,6 +123,7 @@ export const AddPropertises = () => {
                       onChange={field.onChange}
                       readOnly
                       disabled
+                      data-testid={`sku_${variantField.id}`}
                     />
                   )}
                 />
@@ -128,6 +132,7 @@ export const AddPropertises = () => {
                 type="button"
                 onClick={() => removeVariant(index)}
                 className={s.removeButton}
+                data-testid={`property-delete-${index}`}
               >
                 удалить
               </button>
@@ -140,6 +145,7 @@ export const AddPropertises = () => {
         type="button"
         className={s.addButton}
         onClick={addVariant}
+        data-testid="property-add-button"
       >
         + Добавить свойство
       </ButtonUI>

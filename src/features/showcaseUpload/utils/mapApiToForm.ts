@@ -1,9 +1,9 @@
 import type { TShowcaseAlbumDetail, TShowcaseMerchDetail } from "@/entities/Artist";
-import type { UploadFormValues } from "../model/types";
+import type { UploadMerchFormValues, UploadReleaseFormValues } from "../model/types";
 
 type TShowcaseItemDetail = TShowcaseAlbumDetail | TShowcaseMerchDetail;
 
-export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
+export function mapApiToForm(item: TShowcaseItemDetail): UploadMerchFormValues | UploadReleaseFormValues {
   // Альбом
   if ("release_type" in item) {
     const album = item as TShowcaseAlbumDetail;
@@ -19,11 +19,7 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
       privacy: album.visibility,
       mainImage: undefined,
       additionalImages: [],
-      kind: undefined,
-      album: undefined,
-      quantity: undefined,
       artistId: String(album.artist_id),
-      tracksOrder: null,
       
     };
   }
@@ -41,8 +37,6 @@ export function mapApiToForm(item: TShowcaseItemDetail): UploadFormValues {
     mainImage: undefined,
     additionalImages: [],
     quantity: merch.stock ?? undefined,
-    releaseDate: '',
-    genre: '',
     variants: merch.variants && merch.variants.length > 0 ? merch.variants : [{
       value: '',
       //sku: '',
