@@ -1,16 +1,24 @@
 import { type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 
+
+
 import { useQueryClient } from "@tanstack/react-query";
 
-import {
-  type TArtistSettingsFieldValues,
-  type TPickupSettings,
-  type TShippingSettings,
-  useDeleteArtistPvzOffice,
-  useManageArtistPickupPoint,
-  useManageArtistPvzOffice,
-} from "@/entities/Artist";
+
+
+import { type TArtistSettingsFieldValues, type TPickupSettings, type TShippingSettings, useDeleteArtistPvzOffice, useManageArtistPickupPoint, useManageArtistPvzOffice } from "@/entities/Artist";
+
+
+
+
+
+
+
+
+
+
+
 
 export const useArtistSettingsSubmit = ({
   initialPickup,
@@ -39,6 +47,7 @@ export const useArtistSettingsSubmit = ({
           enabled: values.shipping_enabled,
           point: values.shippingPoint,
         });
+        await queryClient.invalidateQueries({ queryKey: ["checkList"] });
       }
 
       const points = (values.pickupPoints ?? []).map(({ server_id, ...point }) => ({

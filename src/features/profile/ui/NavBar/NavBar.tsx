@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { SideMenuStatusContext } from "@/widgets/layout/account/AccountLayout";
 
 import { Menutag } from "@/shared/ui/MenuTag/MenuTag";
 
@@ -16,6 +18,8 @@ import { type NavBarProps } from "./NavBar.type";
 export const NavBar = ({ links, title }: NavBarProps) => {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
+
+  const status = useContext(SideMenuStatusContext);
 
   const initMenuState =
     (pathname.includes("fans") && title === "Аккаунт") ||
@@ -85,6 +89,9 @@ export const NavBar = ({ links, title }: NavBarProps) => {
       >
         {links.map((link) => {
           const href = typeof link.href === "string" ? link.href : link.href.pathname;
+          const isComplete = link.checkStatusName
+            ? (Object.entries(status).find(([key]) => key === link.checkStatusName)?.[1] ?? false)
+            : true;
 
           return (
             <Link
@@ -99,6 +106,7 @@ export const NavBar = ({ links, title }: NavBarProps) => {
                 title={link.label}
                 icon={link.icon}
                 isActive={typeof href === "string" && isLinkActive(href)}
+                notComplete={!isComplete}
               />
             </Link>
           );

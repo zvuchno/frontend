@@ -1,7 +1,7 @@
 import { type AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Image from "next/image";
 
-import { ButtonUI, Title } from "@/shared/ui";
+import { ButtonUI, Loader, Title } from "@/shared/ui";
 
 import { DataStatusBar, type TDataStatus } from "../DataStatusBar/DataStatusBar";
 import s from "./MainSectionMenu.module.scss";
@@ -19,6 +19,7 @@ type TMainSectionMenuProps = {
   title?: string;
   hasButtons: boolean;
   router?: AppRouterInstance;
+  isLoading: boolean;
 };
 
 export const MainSectionMenu = ({
@@ -34,6 +35,7 @@ export const MainSectionMenu = ({
   title,
   hasButtons,
   router,
+  isLoading,
 }: TMainSectionMenuProps) => (
   <div className={s.mainSectionMenu}>
     <div className={s.mainSectionSubtitleActions}>
@@ -65,7 +67,7 @@ export const MainSectionMenu = ({
             size='small'
             className={s.mainSectionButton}
             onClick={onClickPrimaryBtn}
-            disabled={primaryDisabled}
+            disabled={primaryDisabled || isLoading}
             data-testid='account-primary-btn'
           >
             {primaryButtonTitle}
@@ -77,7 +79,7 @@ export const MainSectionMenu = ({
             size='small'
             className={s.mainSectionButton}
             onClick={onClickSecondaryBtn}
-            disabled={secondaryDisabled}
+            disabled={secondaryDisabled || isLoading}
             data-testid='accountsecondary-btn'
           >
             {secondaryButtonTitle}

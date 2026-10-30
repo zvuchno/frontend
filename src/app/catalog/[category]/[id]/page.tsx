@@ -94,7 +94,9 @@ export async function generateMetadata({
           " Больше музыкальных товаров и авторского мерча на https://zvuchno.space/"
         : productDescription;
 
-    const image = category === "artists" ? (card as TDetalArtist).cover || "" : productImage;
+    const image =
+      (category === "artists" ? (card as TDetalArtist).cover : productImage) ||
+      "/images/main-banner.png";
     return {
       title: name,
       description: description,
