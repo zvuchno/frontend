@@ -10,8 +10,9 @@ import { type TDetalArtist } from "@/widgets/ArtistDetailCard";
 import { type TDetailMerch } from "@/widgets/ProductDetailCard/MerchDescription";
 import { type TDetailRelease } from "@/widgets/ProductDetailCard/ReleaseDescription";
 
-import s from "./page.module.scss";
 import { RELEASE_TYPE_TRANSLATIONS } from "@/shared/constants/translations";
+
+import s from "./page.module.scss";
 
 function hasDescription(value?: string) {
   return Boolean(value?.trim() && value.trim().toLowerCase() !== "description");
@@ -93,7 +94,9 @@ export async function generateMetadata({
           " Больше музыкальных товаров и авторского мерча на https://zvuchno.space/"
         : productDescription;
 
-    const image = category === "artists" ? (card as TDetalArtist).cover || "" : productImage;
+    const image =
+      (category === "artists" ? (card as TDetalArtist).cover : productImage) ||
+      "/images/main-banner.png";
     return {
       title: name,
       description: description,

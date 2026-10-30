@@ -32,6 +32,7 @@ export const AccountContent = ({
   const onClickPrimaryBtn = accountActions?.onClickPrimaryBtn;
   const onClickSecondaryBtn = accountActions?.onClickSecondaryBtn;
   const statusMessage = accountActions?.dataStatusComment;
+  const isLoading = accountActions?.isLoading || false;
   const backPath =
     typeof activeLink?.href === "string" ? activeLink.href : (activeLink?.href.pathname ?? "/");
 
@@ -53,6 +54,7 @@ export const AccountContent = ({
           title={title}
           hasButtons={hasButtons}
           router={router}
+          isLoading={isLoading}
         />
       )}
 

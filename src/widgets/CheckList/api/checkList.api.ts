@@ -1,10 +1,11 @@
 import { authFetchClient } from "@/api/authFetchFromClient/authFetchClient";
-import { TCheckListResponse } from "../model/types";
+
+import { type TCheckListResponse } from "../model/types";
 
 const baseUrl = "/api/backend";
 const checkListPath = "/v1/artists/onboarding-checklist";
 
-export async function getChecklist (): Promise<TCheckListResponse> {
+export async function getChecklist(): Promise<TCheckListResponse> {
   const response = await authFetchClient<TCheckListResponse>(`${baseUrl}${checkListPath}`, {
     method: "GET",
   });
@@ -12,4 +13,4 @@ export async function getChecklist (): Promise<TCheckListResponse> {
   if (!response) throw new Error("Не удалось получить checkList");
 
   return response;
-};
+}

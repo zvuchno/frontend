@@ -22,8 +22,8 @@ export function useUpdateArtist() {
 
   return useMutation({
     mutationFn: (payload: UpdateCurrentArtistPayload) => updateCurrentArtist(payload),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["currentArtist", "profile"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["currentArtist", "profile"] });
     },
   });
 }
@@ -34,8 +34,8 @@ export function useUpdateArtistCover() {
 
   return useMutation({
     mutationFn: (payload: UpdateCurrentArtistCoverPayload) => updateCurrentArtistCover(payload),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["currentArtist", "profile"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["currentArtist", "profile"] });
     },
   });
 }

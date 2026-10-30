@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 import { useArtistProfileEditMode } from "@/entities/profile";
 
 import { ButtonUI, Loader } from "@/shared/ui";
@@ -26,6 +28,8 @@ export const ArtistDataSectionLayout = ({
   onArtistUpdate,
   onCoverUpdate,
 }: TArtistDataSectionLayoutProps) => {
+  const queryClient = useQueryClient();
+
   const { isEditMode: isProfileEditMode } = useArtistProfileEditMode();
   const artistSectionData = getArtistSectionData(artist);
 
@@ -41,16 +45,16 @@ export const ArtistDataSectionLayout = ({
     if (!artist) return;
     handleAddSocial(item, onArtistUpdate, setIsAddingSocial, {
       ...artist,
-      description: tempDescription
-    })
+      description: tempDescription,
+    });
   };
 
   const addContact = (item: TArtistDataItem) => {
     if (!artist) return;
     handleAddContact(item, onArtistUpdate, setIsAddingContact, {
       ...artist,
-      description: tempDescription
-    })
+      description: tempDescription,
+    });
   };
 
   const deleteContact = (item: TArtistDataItem) =>
@@ -59,7 +63,10 @@ export const ArtistDataSectionLayout = ({
   const deleteSocial = (item: TArtistDataItem) =>
     handleDeleteSocial(item, setDeletingSocialKey, onArtistUpdate, artist);
 
-  const changeCover = (file: File) => handleCoverChange(file, setIsUploadingCover, onCoverUpdate);
+  const changeCover = (file: File) =>
+    handleCoverChange(file, setIsUploadingCover, onCoverUpdate).then(
+      void queryClient.invalidateQueries({ queryKey: ["checkList"] })
+    );
 
   const changeDescription = (value: string) =>
     handleDescriptionChange(value, onArtistUpdate, setIsEdit, artist);

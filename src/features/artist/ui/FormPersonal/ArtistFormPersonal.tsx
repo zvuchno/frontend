@@ -6,7 +6,6 @@ import { type SubmitHandler, get, useFormContext } from "react-hook-form";
 import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 
 import { useUpdateArtistLegalData } from "@/entities/Artist";
-import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
 
 import { setServerErrors } from "@/shared/utils/serverErrorsHandler";
 
@@ -167,6 +166,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
       primaryButtonTitle: "Coхранить",
       primaryDisabled: !(hasChanges && isValid) || isPending,
       onClickPrimaryBtn: onSubmit,
+      isLoading: isPending,
     });
     return () => setAccountActions(null);
   }, [

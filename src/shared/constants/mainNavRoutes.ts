@@ -23,6 +23,7 @@ export type MainNavRouteItem = {
   href: NextLinkProps["href"];
   label: string;
   icon?: IconComponent;
+  checkStatusName?: string;
 };
 
 export type MainNavRoute = MainNavRouteItem & {
@@ -101,6 +102,7 @@ export const fansProfileRoutes = [
     href: "/fans/profile",
     label: "Профиль",
     icon: IconUser as IconComponent,
+    checkStatusName: "statusProfile",
   },
   {
     id: "fans-library",
@@ -140,12 +142,14 @@ export const artistsProfileRoutes = (role: "artist" | "label") => {
       href: "/artist/data",
       label: "Данные",
       icon: IconDocument as IconComponent,
+      checkStatusName: "statusPaymentData",
     },
     {
       id: "artist-showcase",
       href: "/artist/showcase",
       label: "Витрина",
       icon: IconGridAdd as IconComponent,
+      checkStatusName: "statusShowcase",
     },
 
     {
@@ -153,18 +157,21 @@ export const artistsProfileRoutes = (role: "artist" | "label") => {
       href: "/artist/finance",
       label: "Финансы",
       icon: IconCash as IconComponent,
+      checkStatusName: "",
     },
     {
       id: "artist-orders",
       href: "/artist/orders",
       label: "Продажи",
       icon: IconCoin as IconComponent,
+      checkStatusName: "",
     },
     {
       id: "artist-settings",
       href: "/artist/settings",
       label: "Доставка",
       icon: IconCube as IconComponent,
+      checkStatusName: "statusDelivery",
     },
   ];
 
@@ -174,6 +181,7 @@ export const artistsProfileRoutes = (role: "artist" | "label") => {
       href: "/artist/profile",
       label: role === "artist" ? "Кабинет артиста" : "Кабинет лейбла",
       icon: IconStar as IconComponent,
+      checkStatusName: "statusArtistAccount",
     },
   ];
 
@@ -185,6 +193,7 @@ export const artistsProfileRoutes = (role: "artist" | "label") => {
             href: "/artist/label",
             label: "Артисты",
             icon: IconArtists as IconComponent,
+            checkStatusName: "",
           },
         ]
       : [
@@ -193,6 +202,7 @@ export const artistsProfileRoutes = (role: "artist" | "label") => {
             href: "/artist/change-account-type",
             label: "Стать лейблом",
             icon: IconStar as IconComponent,
+            checkStatusName: "",
           },
         ];
 

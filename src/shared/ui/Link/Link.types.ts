@@ -11,6 +11,7 @@ export type LinkItem = {
   href: NextLinkProps["href"];
   label: string;
   icon?: ComponentType<SVGProps<SVGSVGElement>>;
+  checkStatusName?: string;
 };
 
 export type LinkProps = NextLinkProps & {
