@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.releaseTypeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-content: flex-start;
+  max-width: 310px;
+
+  @media(max-width: 362px) {
+    width: fit-content;
+  }
+
+  &__label {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 120%;
+    letter-spacing: -0.04em;
+  }
+
+  &__control {
+    @media(max-width: 362px) {
+      flex-direction: column;
+      row-gap: 10px;
+      width: fit-content;
+    }
+  }
+}

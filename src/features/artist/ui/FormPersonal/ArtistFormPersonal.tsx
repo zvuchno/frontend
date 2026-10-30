@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { type SubmitHandler, get, useFormContext } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 
@@ -131,6 +132,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
       mutate(formattedData, {
         onSuccess: () => {
           setServerErrorMessage("");
+          toast.success("Данные успешно изменены");
         },
 
         onError: (error) => {
@@ -145,6 +147,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
             setError,
             setServerErrorMessage
           );
+          toast.error("Ошибка при сохранении данных");
         },
       });
     },

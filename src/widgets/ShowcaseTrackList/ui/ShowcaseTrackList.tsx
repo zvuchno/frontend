@@ -1,8 +1,6 @@
-"use client";
-
-import s from "./TracksList.module.scss";
-import TrackCard from "@/entities/albums/ui/trackCard/TrackCard";
-import { Loader } from "@/shared/ui";
+import { useEffect, useState } from "react";
+import s from "./ShowcaseTrackList.module.scss";
+import { TShowcaseTrackListProps } from "../types";
 
 import {
   DndContext,
@@ -22,30 +20,11 @@ import {
 } from "@dnd-kit/sortable";
 
 import { CSS } from '@dnd-kit/utilities';
-import { useEffect, useState } from "react";
-import type { TShowcaseTrack } from "@/entities/Artist/model/types";
-import type { PaginatedStoreResponse } from "@/api/store/types";
-import type { 
-  FetchNextPageOptions, 
-  InfiniteData, 
-  InfiniteQueryObserverResult 
-} from "@tanstack/react-query";
-import { DeleteIcon, EditIcon } from "@/shared/ui/Icons";
+import { TShowcaseTrack } from "@/entities/Artist/model/types";
+import TrackCard from "@/entities/albums/ui/trackCard/TrackCard";
+import { Loader } from "@/shared/ui";
 
-type TracksListProps = {
-  tracksList: TShowcaseTrack[];
-  tracksError: Error | null;
-  isLoading: boolean;
-  isFetching: boolean;
-  hasMore: boolean;
-  loadMore: (options?: FetchNextPageOptions | undefined) => 
-    Promise<InfiniteQueryObserverResult<InfiniteData<PaginatedStoreResponse<TShowcaseTrack>, unknown>, Error>>
-  onDeleteTrack: (id: number) => Promise<void>;
-  onEditTrack: (id: number) => void;
-  onOrderChange?: (ids: number[]) => void;
-};
-
-export const TracksList = ({ 
+export const ShowcaseTrackList = ({ 
   tracksList, 
   tracksError, 
   isLoading,
@@ -55,7 +34,7 @@ export const TracksList = ({
   onDeleteTrack, 
   onEditTrack, 
   onOrderChange 
-}: TracksListProps) => {
+}: TShowcaseTrackListProps) => {
 
   const [sortedTracks, setSortedTracks] = useState(tracksList);
   const [isDragging, setIsDragging] = useState(false);

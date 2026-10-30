@@ -17,10 +17,12 @@ export const PassportFieldset = ({
   methods: UseFormReturn<FieldValues, undefined, FieldValues>;
   isCompany: boolean;
 }) => (
-  <fieldset className={clsx(styles.formContent, s.passportlContent, { [s.company]: isCompany })}>
+  <fieldset className={s.passportContentWrapper}>
     <legend className={!isCompany ? styles.legend : s.visuallyHidden}>Паспортные данные</legend>
-    {artistPasportFields.map((field, index) =>
-      createFormField(field, index, methods, index, disabled)
-    )}
+    <div className={clsx(s.passportContent, { [s.company]: isCompany })}>
+      {artistPasportFields.map((field, index) =>
+        createFormField(field, index, methods, index, disabled)
+      )}
+    </div>
   </fieldset>
 );
