@@ -35,7 +35,6 @@ export const AccountContent = ({
   const secondaryDisabled = accountActions?.secondaryDisabled;
   const onClickPrimaryBtn = accountActions?.onClickPrimaryBtn;
   const onClickSecondaryBtn = accountActions?.onClickSecondaryBtn;
-  const statusMessage = accountActions?.dataStatusComment;
   const isLoading = accountActions?.isLoading || false;
   const backPath =
     typeof activeLink?.href === "string" ? activeLink.href : (activeLink?.href.pathname ?? "/");
@@ -47,7 +46,6 @@ export const AccountContent = ({
       {(hasButtons || title) && (
         <MainSectionMenu
           dataStatus={dataStatus}
-          statusMessage={statusMessage}
           pathBack={hasPathBack ? backPath : undefined}
           onClickPrimaryBtn={onClickPrimaryBtn}
           onClickSecondaryBtn={onClickSecondaryBtn}

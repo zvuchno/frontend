@@ -4,8 +4,10 @@ import { useMemo, useState } from "react";
 import { FormProvider, type UseFormRegister, useForm, useWatch } from "react-hook-form";
 
 import { DevTool } from "@hookform/devtools";
+import clsx from "clsx";
 import { useSession } from "next-auth/react";
 
+import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 import { ArtistFormPersonal } from "@/features/artist/";
 import { type FieldValues } from "@/features/artist/";
 import { LegalFormSelector } from "@/features/artist/";
@@ -39,6 +41,9 @@ const LegalEntityRecipientTypeInput = ({
 export const ArtistData = () => {
   const { status } = useSession();
   const { data, isLoading } = useGetArtistLegalData();
+  const { accountActions } = useAccountActions();
+
+  const statusComment = accountActions?.dataStatusComment;
 
   const formValues = useMemo(
     () =>
@@ -89,10 +94,17 @@ export const ArtistData = () => {
     );
 
   return (
-    <FormProvider {...methods}>
-      <ArtistFormPersonal values={formValues} />
-      <LegalEntityRecipientTypeInput recipientType={recipientType} register={methods.register} />
-      <DevTool control={methods.control} />
-    </FormProvider>
+    <div className={clsx(styles.formContentWrapper, styles.comment)}>
+      {statusComment && (
+        <span className={styles.statusComment}>
+          ВНИМАНИЕ: <p>{statusComment}</p>
+        </span>
+      )}
+      <FormProvider {...methods}>
+        <ArtistFormPersonal values={formValues} />
+        <LegalEntityRecipientTypeInput recipientType={recipientType} register={methods.register} />
+        <DevTool control={methods.control} />
+      </FormProvider>
+    </div>
   );
 };
