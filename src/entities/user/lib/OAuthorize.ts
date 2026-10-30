@@ -9,8 +9,8 @@ import { setClientInfoHeaders } from "./setClientInfoHeaders";
 
 const BASE_URL =
   process.env.NODE_ENV === "development"
-    ? process.env.BASE_API_URL_DEV
-    : (process.env.BASE_API_URL ?? process.env.NEXT_PUBLIC_BASE_API_URL);
+    ? (process.env.BASE_API_URL_DEV || process.env.NEXT_PUBLIC_BASE_API_URL)
+    : (process.env.BASE_API_URL || process.env.NEXT_PUBLIC_BASE_API_URL);
 
 export type OAuthResult =
   | { status: "ok"; user: User }
