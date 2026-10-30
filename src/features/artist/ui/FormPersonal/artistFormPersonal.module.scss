@@ -45,6 +45,11 @@
     padding: 0;
     border: none;
 
+    //& > legend {
+    //   grid-column: 1 / -1;
+    //  margin-block-end: 12px;
+    //}
+
     @media (max-width: 1024px) {
       row-gap: 15px;
     }

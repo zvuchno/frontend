@@ -1,14 +1,13 @@
 import { type AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Image from "next/image";
 
-import { ButtonUI, Loader, Title } from "@/shared/ui";
+import { ButtonUI, Title } from "@/shared/ui";
 
 import { DataStatusBar, type TDataStatus } from "../DataStatusBar/DataStatusBar";
 import s from "./MainSectionMenu.module.scss";
 
 type TMainSectionMenuProps = {
   dataStatus?: TDataStatus;
-  statusMessage?: string;
   primaryButtonTitle?: string;
   secondaryButtonTitle?: string;
   primaryDisabled?: boolean;
@@ -24,7 +23,6 @@ type TMainSectionMenuProps = {
 
 export const MainSectionMenu = ({
   dataStatus,
-  statusMessage,
   pathBack,
   onClickPrimaryBtn,
   onClickSecondaryBtn,
@@ -55,7 +53,7 @@ export const MainSectionMenu = ({
         <Title Tag='h3' className={s.subtitle}>
           {title}
         </Title>
-        {dataStatus && <DataStatusBar dataStatus={dataStatus} statusMessage={statusMessage} />}
+        {dataStatus && <DataStatusBar dataStatus={dataStatus} />}
       </div>
     </div>
 

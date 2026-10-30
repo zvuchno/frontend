@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import { HintBlock } from "@/shared/ui/HintBlock";
-
 import styles from "./DataStatusBar.module.scss";
 
 export type TDataStatus = "not-completed" | "on-review" | "is-confirmed";
@@ -21,13 +19,7 @@ const status: Record<TDataStatus, TStatusDetails> = {
   },
 };
 
-export const DataStatusBar = ({
-  dataStatus,
-  statusMessage,
-}: {
-  dataStatus: TDataStatus;
-  statusMessage?: string;
-}) => {
+export const DataStatusBar = ({ dataStatus }: { dataStatus: TDataStatus }) => {
   const title = status[dataStatus].title;
   const img = status[dataStatus].icon;
   const color = status[dataStatus].color;
@@ -38,12 +30,6 @@ export const DataStatusBar = ({
         <Image src={img} alt={title} width={20} height={20} />
         <span className={styles.dataStatusTitle}>{title}</span>
       </div>
-
-      {statusMessage && (
-        <span className={styles.dataStatusHintWrapper}>
-          <HintBlock text={statusMessage} />
-        </span>
-      )}
     </div>
   );
 };

@@ -1,9 +1,15 @@
-.passportlContent {
+.passportContent {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
   grid-template-areas:
     "cell-1-1 cell-1-2"
     "cell-2-1 cell-2-2";
 
   @media (max-width: 1024px) {
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "cell-1-1"
       "cell-1-2"
@@ -12,12 +18,14 @@
   }
 
   @media (max-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas:
       "cell-1-1 cell-1-2"
       "cell-2-1 cell-2-2";
   }
 
   @media (max-width: 490px) {
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "cell-1-1"
       "cell-1-2"
@@ -25,8 +33,14 @@
       "cell-2-2";
   }
 
-  &.company {
-    margin-block-start: -40px;
+  &Wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    min-width: 0;
+    border: none;
+
   }
 }
 
