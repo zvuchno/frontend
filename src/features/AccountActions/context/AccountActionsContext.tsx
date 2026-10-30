@@ -11,6 +11,7 @@ export type TAccountPageActions = {
   onClickPrimaryBtn?: () => void;
   onClickSecondaryBtn?: () => void;
   dataStatusComment?: string;
+  isLoading?: boolean;
 };
 
 type TAccountActionsContextValue = {

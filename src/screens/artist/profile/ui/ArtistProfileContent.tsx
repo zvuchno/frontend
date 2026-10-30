@@ -31,7 +31,7 @@ export function ArtistProfileContent() {
 
   const { data: artist, isLoading, error } = useCurrentArtist();
   const updateArtist = useUpdateArtist();
-  const { mutateAsync: updateArtistProfile } = updateArtist;
+  const { mutateAsync: updateArtistProfile, status: updateStatus } = updateArtist;
   const isSaving = updateArtist.isPending;
 
   const isLoadingArtistProfile = status === "loading" || isLoading;
@@ -113,9 +113,10 @@ export function ArtistProfileContent() {
       onClickPrimaryBtn: onSubmit,
       primaryButtonTitle: "Сохранить",
       primaryDisabled: !isDirty || !isValid || isSaving || hasFormErrors,
+      isLoading: updateStatus === "pending",
     });
     return () => setAccountActions(null);
-  }, [isValid, isDirty, setAccountActions, onSubmit, isSaving, hasFormErrors]);
+  }, [isValid, isDirty, setAccountActions, onSubmit, isSaving, hasFormErrors, updateStatus]);
   //-------------------------------------------------------------------//
 
   if (isLoadingArtistProfile) {

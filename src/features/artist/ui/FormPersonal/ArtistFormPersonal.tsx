@@ -6,7 +6,6 @@ import { type SubmitHandler, get, useFormContext } from "react-hook-form";
 import { useAccountActions } from "@/features/AccountActions/context/useAccountActions";
 
 import { useUpdateArtistLegalData } from "@/entities/Artist";
-import { useArtistLegalDataStore } from "@/entities/Artist/store/useArtistLegalDataStore";
 
 import { setServerErrors } from "@/shared/utils/serverErrorsHandler";
 
@@ -72,10 +71,8 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
 
   const [serverErrorMessage, setServerErrorMessage] = useState("");
   const artistTypeFromServer = values?.legal_profile?.recipient_type;
-  const artistTypeFromStore = useArtistLegalDataStore((state) => state.artistLegalData)
-    ?.legal_profile?.recipient_type;
 
-  const isCompany = isLegalEntity(artistTypeFromServer, artistTypeFromStore);
+  const isCompany = isLegalEntity(artistTypeFromServer);
 
   const methods = useFormContext<FieldValues>();
 
@@ -169,6 +166,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
       primaryButtonTitle: "Coхранить",
       primaryDisabled: !(hasChanges && isValid) || isPending,
       onClickPrimaryBtn: onSubmit,
+      isLoading: isPending,
     });
     return () => setAccountActions(null);
   }, [
@@ -197,7 +195,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
 
           <PassportFieldset methods={methods} isCompany={isCompany} />
 
-          {!isCompany && <PaymentFieldset methods={methods} isCompany={!isCompany} />}
+          {!isCompany && <PaymentFieldset methods={methods} isCompany={isCompany} />}
         </div>
       </fieldset>
 

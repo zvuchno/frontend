@@ -1,6 +1,8 @@
 import { type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 import { type ArtistApiDataItem, type UpdateCurrentArtistPayload } from "@/entities/profile";
 
 import { type TArtistDataItem } from "../ArtistDataSection/ArtistDataSection.types";

@@ -24,7 +24,7 @@ export const CheckList = ({
 }: CheckListProps) => {
 
   const [isListOpen, setIsListOpen] = useState(false);
-  const { data, isLoading, error } = useCheckList(artistSlug);
+  const { data, isLoading, error } = useCheckList();
 
   const handleToggleList = () => setIsListOpen((v) => !v);
 

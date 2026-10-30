@@ -1,5 +1,9 @@
 "use client";
 
+import { createContext } from "react";
+
+import { useCheckList } from "@/widgets/CheckList/model/useCheckList";
+
 import { AccountActionsProvider } from "@/features/AccountActions/context/AccountActionsProvider";
 import { AccountNavigation, ActiveLinkProvider, useActiveLink } from "@/features/profile";
 
@@ -13,9 +17,27 @@ import { AccountContent } from "./components/AccountContent/AccountContent";
 import { SideMenu } from "./components/SideMenu/SideMenu";
 import { useIsNestedAccountRoute } from "./hooks/hooks";
 
+const sideMenuStatus = {
+  statusShowcase: false,
+  statusDelivery: false,
+  statusProfile: false,
+  statusArtistAccount: false,
+  statusPaymentData: false,
+};
+
+export const SideMenuStatusContext = createContext(sideMenuStatus);
+
 const AccountLayoutContent = ({ children }: { children: React.ReactNode }) => {
   const { data: currentArtist } = useCurrentArtist();
   const { activeLink } = useActiveLink();
+
+  const { data: checklist } = useCheckList();
+
+  const statusShowcase = (checklist?.add_first_product && checklist.publish_first_product) || false;
+  const statusDelivery = checklist?.cdek_integration || false;
+  const statusProfile = checklist?.email_verified || false;
+  const statusArtistAccount = checklist?.artist_cover || false;
+  const statusPaymentData = checklist?.payout_details || false;
 
   // для страницы ЛК-Данные определяем какой именно заголовок показывать //
   const isArtistDataPage = activeLink?.id === "artist-data";
@@ -31,14 +53,25 @@ const AccountLayoutContent = ({ children }: { children: React.ReactNode }) => {
 
   const hasPathBack = useIsNestedAccountRoute();
 
-  if (isArtistDataPage && status === "pending") return <Loader />;
+  if ((isArtistDataPage && status === "pending") || !checklist) return <Loader />;
 
   return (
     <AccentContainer className={s.container}>
       <div className={s.body}>
-        <SideMenu>
-          <AccountNavigation type={currentArtist?.profile_type} data-testid='account-menu' />
-        </SideMenu>
+        <SideMenuStatusContext
+          value={{
+            statusDelivery: statusDelivery,
+            statusArtistAccount: statusArtistAccount,
+            statusProfile: statusProfile,
+            statusShowcase: statusShowcase,
+            statusPaymentData: statusPaymentData,
+          }}
+        >
+          <SideMenu>
+            <AccountNavigation type={currentArtist?.profile_type} data-testid='account-menu' />
+          </SideMenu>
+        </SideMenuStatusContext>
+
         <AccountContent
           title={!isArtistDataPage ? activeLink?.label : moderatedLabel}
           hasPathBack={hasPathBack}
