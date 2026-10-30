@@ -1,16 +1,12 @@
-import type { TUpdateAlbumPayload, TUpdateMerchPayload } from "@/entities/Artist";
-import type { UploadFormValues } from "../model/types";
+import { TUpdateMerchPayload } from "@/entities/Artist";
+import { UploadMerchFormValues } from "../model/types";
+import { normalizePrice } from "./normalizePrice";
 
-const normalizePrice = (val: number): string => {
-  const rounded = Math.round(val * 100) / 100;
-  return rounded.toString();
-};
-
-export function mapDirtyFieldsToPayload(
+export function mapMerchDirtyFieldsToPayload(
    dirtyFields: Partial<Record<string, unknown>>,
-   data: UploadFormValues,
+   data: UploadMerchFormValues,
    hasProperty?: boolean,
-): TUpdateAlbumPayload | TUpdateMerchPayload {
+): TUpdateMerchPayload {
   const payload: Record<string, unknown> = {};
 
   const toId = (val: unknown): number | null => {
@@ -23,25 +19,9 @@ export function mapDirtyFieldsToPayload(
     if (key.startsWith('variants.')) return;
     const value = (data as any)[key];
 
-    switch (key as keyof UploadFormValues) {
+    switch (key as keyof UploadMerchFormValues) {
       case 'name':
         payload.name = value;
-        break;
-
-      case 'releaseDate':
-        payload.release_date = value || null;
-        break;
-
-      case 'releaseType':
-        payload.release_type = value;
-        break;
-
-      case 'upc':
-        payload.upc = value || null;
-        break;
-
-      case 'genre':
-        payload.genre = toId(value);
         break;
 
       case 'price':
@@ -67,7 +47,6 @@ export function mapDirtyFieldsToPayload(
         payload.visibility = value as 'public' | 'link_only' | 'hidden';
         break;
 
-      // Поля только для мерча
       case 'kind':
         payload.kind = toId(value);
         break;
@@ -93,5 +72,5 @@ export function mapDirtyFieldsToPayload(
     }
   });
 
-  return payload as TUpdateAlbumPayload | TUpdateMerchPayload;
+  return payload as TUpdateMerchPayload;
 };
