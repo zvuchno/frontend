@@ -72,10 +72,8 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
 
   const [serverErrorMessage, setServerErrorMessage] = useState("");
   const artistTypeFromServer = values?.legal_profile?.recipient_type;
-  const artistTypeFromStore = useArtistLegalDataStore((state) => state.artistLegalData)
-    ?.legal_profile?.recipient_type;
 
-  const isCompany = isLegalEntity(artistTypeFromServer, artistTypeFromStore);
+  const isCompany = isLegalEntity(artistTypeFromServer);
 
   const methods = useFormContext<FieldValues>();
 
@@ -197,7 +195,7 @@ export const ArtistFormPersonal = ({ values }: TArtistFormPersonalProps) => {
 
           <PassportFieldset methods={methods} isCompany={isCompany} />
 
-          {!isCompany && <PaymentFieldset methods={methods} isCompany={!isCompany} />}
+          {!isCompany && <PaymentFieldset methods={methods} isCompany={isCompany} />}
         </div>
       </fieldset>
 
