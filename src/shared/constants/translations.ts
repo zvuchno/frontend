@@ -1,8 +1,8 @@
 export const TRANSLATIONS: Record<string, string> = {
-  all: "Каталог - Все",
-  artists: "Каталог - Артисты",
-  merch: "Каталог - Мерч",
-  release: "Каталог - Музыка",
+  all: "Каталог - Все артисты, музыка и эксклюзивный мерч",
+  artists: "Каталог - Самые талантливые независимые артисты",
+  merch: "Каталог - Винил, CD и мерч от любимых артистов",
+  release: "Каталог - Музыкальные треки и альбомы напрямую от артистов",
 };
 
 export const ORDER_STATUS_TRANSLATIONS: Record<string, string> = {

@@ -1,17 +1,20 @@
-import Hero from "../components/hero/Hero";
-import FiltersBlock from "../components/filtersBlock/FiltersBlock";
 import { Suspense } from "react";
+
 import { getMerchKinds } from "@/api/catalog/merchKindsApi/getMerchKinds";
-import s from "./CategoryPage.module.scss";
+
 import { AccentContainer } from "@/shared/ui";
+
+import FiltersBlock from "../components/filtersBlock/FiltersBlock";
+import Hero from "../components/hero/Hero";
 import ProductsList from "../components/productsList/ProductsList";
+import s from "./CategoryPage.module.scss";
 
 interface CategoryPageProps {
-  category: 'release' | 'all' | 'merch' | 'artists';
+  category: "release" | "all" | "merch" | "artists";
   genre?: string | string[];
   kind?: string | string[];
   artistFilter?: string;
-  ordering?: '-created_at' | 'random';
+  ordering?: "-created_at" | "random";
   offset?: string;
   search?: string;
 }
@@ -25,7 +28,6 @@ export const CategoryPage = async ({
   offset,
   search,
 }: CategoryPageProps) => {
-
   let merchKinds;
 
   if (category === "merch") {
@@ -42,9 +44,7 @@ export const CategoryPage = async ({
           merchList={merchKinds}
         />
       </AccentContainer>
-      <Suspense
-        fallback={<div className={s.message}>Загрузка карточек...</div>}
-      >
+      <Suspense fallback={<div className={s.message}>Загрузка карточек...</div>}>
         <ProductsList
           category={category}
           filterByGenre={genre}
