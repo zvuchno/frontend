@@ -1,7 +1,4 @@
-type TBonusItem = {
-  id: number;
-  name: string;
-};
+import { TBonusItem } from "@/entities/Artist";
 
 export type TBonusList = TBonusItem[];
 

@@ -6,7 +6,7 @@ export const createReleaseProductPayload = (
   data: UploadReleaseFormValues,
   profileType: "artist" | "label" | undefined,
   currentArtistId: number | null,
-  action: "uploadTrack" | "publish" | "draft" | "save" | "cancel",
+  action: "uploadTrack" | "publish" | "draft" | "save" | "cancel" | "uploadBonus",
 ): TCreateAlbumRequest => {
   
   const priceStr = data.price ? normalizePrice(data.price) : "";

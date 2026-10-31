@@ -1,6 +1,6 @@
 "use client";
 
-import { ButtonUI, CustomInput, Text, Title } from "@/shared/ui";
+import { ButtonUI, CustomInput, Loader, Text, Title } from "@/shared/ui";
 import s from "./AddBonusForm.module.scss";
 import { useFormContext } from "react-hook-form";
 import type { TBonusFormValues } from "../../model/types";
@@ -10,11 +10,20 @@ import clsx from "clsx";
 type TAddBonusFormProps = {
   isEditForm: boolean;
   file: File | null;
+  isLoadingEditData: boolean;
+  errorEditData: Error | null;
   handleFileChange: (event: ChangeEvent<HTMLInputElement, Element>) => Promise<void>;
   onSubmit: (data: TBonusFormValues, action: "create" | "save") => Promise<void>;
 };
 
-export const AddBunusForm = ({ isEditForm, file, handleFileChange, onSubmit }: TAddBonusFormProps) => {
+export const AddBunusForm = ({ 
+  isEditForm, 
+  file, 
+  isLoadingEditData, 
+  errorEditData, 
+  handleFileChange, 
+  onSubmit 
+}: TAddBonusFormProps) => {
 
   const bonusInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -28,6 +37,16 @@ export const AddBunusForm = ({ isEditForm, file, handleFileChange, onSubmit }: T
   const handleAddBonusClick = () => {
     bonusInputRef.current?.click();
   };
+
+  if (isLoadingEditData)
+    return (
+      <div className={s.form}>
+        <Loader />
+      </div>
+    );
+
+  if (errorEditData)
+    return <div className={s.form}>{`Не удалось загрузить данные: ${errorEditData.message}`}</div>;
 
   return (
     <form

@@ -7,11 +7,11 @@ import clsx from "clsx";
 import { usePlayerStore } from "../store/usePlayerStore";
 import styles from "./Player.module.scss";
 import type { PlayerUIProps } from "./Player.types";
-import TrackCard from "@/entities/albums/ui/trackCard/TrackCard";
 import { motion, AnimatePresence } from 'framer-motion';
 import type { TTrack } from "@/api/catalog/tracksListApi/types";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { TrackCard } from "@/entities/albums";
 
 export const PlayerUI = ({ className }: PlayerUIProps) => {
   const { 

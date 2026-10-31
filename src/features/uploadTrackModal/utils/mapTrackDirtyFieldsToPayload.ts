@@ -1,5 +1,4 @@
-import type { TShowcaseUpdateTrackInfoPayload } from "@/entities/Artist";
-import type { TrackFormValues } from "../model/types";
+import type { TrackFormValues, TShowcaseUpdateTrackInfoPayload } from "../model/types";
 
 const normalizePrice = (val: number): string => {
   const rounded = Math.round(val * 100) / 100;

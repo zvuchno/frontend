@@ -23,6 +23,7 @@ export type UploadReleaseFormValues = {
   additionalImages?: File[];
   artistId?: string;
   tracksOrder?: number[] | null;
+  bonusesOrder?: number[] | null;
 };
 
 export type UploadMerchFormValues = {
@@ -52,14 +53,6 @@ export type PromocodeFormValues = {
   endAt?: string;
   artistId?: string;
 }
-
-export type TrackFormValues = {
-  name: string;
-  price?: number | null;
-  allowHigherPrice: boolean;
-  description: string;
-  track: File | null;
-};
 
 type TOption = {
   value: string;

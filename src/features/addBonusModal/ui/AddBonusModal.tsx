@@ -43,7 +43,7 @@ export const AddBonuseModal = ({  isOpen, albumId, bonusId, onClose }: TAddBonus
       return initialFormValues;
     }
     return {
-      bonus_file: bonusData.bonus_file,
+      bonus_file: null,
       name: bonusData.name,
       description: bonusData.description,
     };
@@ -141,6 +141,8 @@ export const AddBonuseModal = ({  isOpen, albumId, bonusId, onClose }: TAddBonus
       <FormProvider {...methods}>
         <AddBunusForm 
           isEditForm={isEditForm}
+          errorEditData={error}
+          isLoadingEditData={isLoading}
           file={file}
           handleFileChange={handleFileChange}
           onSubmit={onSubmit}

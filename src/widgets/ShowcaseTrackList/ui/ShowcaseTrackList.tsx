@@ -21,8 +21,8 @@ import {
 
 import { CSS } from '@dnd-kit/utilities';
 import { TShowcaseTrack } from "@/entities/Artist/model/types";
-import TrackCard from "@/entities/albums/ui/trackCard/TrackCard";
 import { Loader } from "@/shared/ui";
+import { TrackCard } from "@/entities/albums";
 
 export const ShowcaseTrackList = ({ 
   tracksList, 
@@ -104,14 +104,18 @@ export const ShowcaseTrackList = ({
       boxShadow: isDragging
         ? "0 8px 16px rgba(0,0,0,0.15)"
         : undefined,
-      cursor: "grab",
+      //cursor: "grab",
       userSelect: "none",
       //touchAction: 'none',
     };
 
+    const cursorStyle: React.CSSProperties = {
+      cursor: "grab",
+    };
+
     return (
       <li ref={setNodeRef} style={style} {...attributes} className={s.tracksList__card}>
-        <div className={s.tracksList__dnd} {...listeners} />
+        <div className={s.tracksList__dnd} {...listeners} style={cursorStyle}/>
         <TrackCard
           image={track.image}
           title={track.artist_name}
