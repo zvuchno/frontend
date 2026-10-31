@@ -2,8 +2,10 @@
 
 import { 
   type TShowcaseAlbumDetail, 
+  useChangeBonusesOrder, 
   useChangeTracksOrder, 
   useCreateAlbum, 
+  useDeleteBonus, 
   useDeleteTrack,
   useUpdateAlbum,
 } from "@/entities/Artist"
@@ -13,16 +15,18 @@ import {
   mapApiToForm, 
   mapReleaseDirtyFieldsToPayload, 
   ReleaseUploadForm, 
-  UploadReleaseFormValues,
+  type UploadReleaseFormValues,
 } from "@/features/showcaseUpload";
 
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { UploadTrackModal } from "../uploadTrackModal/UploadTrackModal";
 import { useRouter } from "next/navigation";
 import { TracksSection } from "../tracksSection/TracksSection";
 import s from "./UploadRelease.module.scss";
 import { ButtonUI } from "@/shared/ui";
+import { UploadTrackModal } from "@/features/uploadTrackModal";
+import { AddBonuseModal } from "@/features/addBonusModal/ui/AddBonusModal";
+import { BonusesSection } from "../bonusesSection/BonusesSection";
 
 type TUploadReleaseContentProps = {
   currentArtistId: number | null;
@@ -41,6 +45,7 @@ const initialFormValues: UploadReleaseFormValues = {
   allowHigherPrice: false,
   mainImage: null,
   tracksOrder: null,
+  bonusesOrder: null,
 };
 
 export const UploadReleaseContent = ({ currentArtistId, product, profileType }: TUploadReleaseContentProps) => {
@@ -49,7 +54,9 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
   // id созданного как черновик релиза перед загрузкой трека
   const [newAlbumId, setNewAlbumId] = useState<number | null>(null);
   const [isTrackModalOpen, setIsTrackModalOpen] = useState<boolean>(false);
+  const [isBonusModalOpen, setIsBonusModalOpen] = useState<boolean>(false);
   const [trackId, setTrackId] = useState<number | undefined>(undefined);
+  const [bonusId, setBonusId] = useState<number | undefined>(undefined);
   const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
 
   const createAlbumMutation = useCreateAlbum();
@@ -57,7 +64,7 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
 
   const currentProductId = product?.id;
   const isEditForm = !!currentProductId;
-  const releaseIdForTracks = currentProductId ?? newAlbumId;
+  const releaseIdForUpload = currentProductId ?? newAlbumId;
 
   const initialValues = useMemo(() => {
     if (!product) {
@@ -86,14 +93,24 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
   }, [initialValues, reset]);
 
   const deleteTrackMutation = useDeleteTrack(currentProductId);
-  const changeTracksOrder = useChangeTracksOrder(releaseIdForTracks);
+  const deleteBonusMutation = useDeleteBonus(currentProductId);
+  const changeTracksOrder = useChangeTracksOrder(currentProductId);
+  const changeBonusesOrder = useChangeBonusesOrder(currentProductId);
 
   const handleUploadTrack = () => {
     handleSubmit((d) => onSubmit(d, "uploadTrack"))();
   };
 
+  const handleUploadBonus = () => {
+    handleSubmit((d) => onSubmit(d, "uploadBonus"))();
+  };
+
   const handleDeleteTrack = async (id: number) => {
     await deleteTrackMutation.mutateAsync({ id });
+  };
+
+  const handleDeleteBonus = async (id: number) => {
+    await deleteBonusMutation.mutateAsync({ id });
   };
 
   const handleEditTrack = (id: number) => {
@@ -101,8 +118,17 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
     setTrackId(id);
   };
 
+  const handleEditBonus = (id: number) => {
+    setIsBonusModalOpen(true);
+    setBonusId(id);
+  };
+
   const handleChangeTracksOrder = (ids: number[]) => {
     setValue("tracksOrder", ids);
+  };
+
+  const handleChangeBonusesOrder = (ids: number[]) => {
+    setValue("bonusesOrder", ids);
   };
 
   const mainImagePreview = useMemo(() => {
@@ -121,20 +147,16 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
     };
   }, [product]);
 
-  const selectedArtist = watch("artistId");
-
   const onSubmit = async (
     data: UploadReleaseFormValues,
-    action: "uploadTrack" | "publish" | "draft" | "save" | "cancel"
+    action: "uploadTrack" | "publish" | "draft" | "save" | "cancel" | "uploadBonus"
   ) => {
     if (isSubmitting) return;
-
-    const artist = profileType === "label" && selectedArtist ? Number(selectedArtist) : currentArtistId
 
     const payload = createReleaseProductPayload(
       data, 
       profileType, 
-      artist, 
+      currentArtistId, 
       action, 
     );
 
@@ -142,6 +164,7 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
       deletedImageIds.length > 0 || (!initialValues.mainImage && data.mainImage);
 
     const currentTracksOrder = data.tracksOrder;
+    const currentBonusesOrder = data.bonusesOrder;
 
     try {
       switch (action) {
@@ -160,12 +183,33 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
             }
           }
           break;
+        case "uploadBonus":
+          if (isEditForm) {
+            setIsBonusModalOpen(true);
+          } else {
+            if (newAlbumId) {
+              setIsBonusModalOpen(true);
+              break;
+            }
+            const albumResponse = await createAlbumMutation.mutateAsync(payload);
+            if (albumResponse) {
+              setNewAlbumId(albumResponse.id);
+              setIsBonusModalOpen(true);
+            }
+          }
+          break;
         case "publish":
         case "draft":
-          if (currentTracksOrder && releaseIdForTracks) {
+          if (currentTracksOrder && releaseIdForUpload) {
             await changeTracksOrder.mutateAsync({
-              album: releaseIdForTracks,
+              album: releaseIdForUpload,
               track_ids: currentTracksOrder
+            });
+          }
+          if (currentBonusesOrder && releaseIdForUpload) {
+            await changeBonusesOrder.mutateAsync({
+              album: releaseIdForUpload,
+              bonus_ids: currentBonusesOrder
             });
           }
           if (newAlbumId) {
@@ -176,10 +220,17 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
           router.replace("/artist/showcase");
           break;
         case "save":
-          if (currentTracksOrder && releaseIdForTracks) {
+          if (currentTracksOrder && releaseIdForUpload) {
             await changeTracksOrder.mutateAsync({
-              album: releaseIdForTracks,
+              album: releaseIdForUpload,
               track_ids: currentTracksOrder
+            });
+          }
+
+          if (currentBonusesOrder && releaseIdForUpload) {
+            await changeBonusesOrder.mutateAsync({
+              album: releaseIdForUpload,
+              bonus_ids: currentBonusesOrder
             });
           }
 
@@ -224,13 +275,22 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
           />
 
           <TracksSection 
-            releaseId={releaseIdForTracks}
+            releaseId={releaseIdForUpload}
             isSubmitting={isSubmitting}
             onUploadTrack={handleUploadTrack}
             onEditTrack={handleEditTrack}
             onChangeTracksOrder={handleChangeTracksOrder}
             onDeleteTrack={handleDeleteTrack}
             releaseType={product?.release_type}
+          />
+
+          <BonusesSection 
+            releaseId={releaseIdForUpload}
+            isSubmitting={isSubmitting}
+            onUploadBonus={handleUploadBonus}
+            onEditBonus={handleEditBonus}
+            onDeleteBonus={handleDeleteBonus}
+            onChangeBonusesOrder={handleChangeBonusesOrder}
           />
 
           <div className={s.buttonsContainer}>
@@ -268,6 +328,18 @@ export const UploadReleaseContent = ({ currentArtistId, product, profileType }: 
           trackId={trackId}
         />
       )}
+
+      {isBonusModalOpen && (
+        <AddBonuseModal 
+          isOpen={isBonusModalOpen}
+          albumId={newAlbumId ? newAlbumId : currentProductId!}
+          bonusId={bonusId}
+          onClose={() => {
+            setIsBonusModalOpen(false);
+            setBonusId(undefined);
+          }}
+        />
+      )}
     </>
   )
-}
+};

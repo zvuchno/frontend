@@ -9,22 +9,22 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 
 import {
   addImage,
+  changeBonusesOrder,
   changeTracksOrder,
   createAlbum,
   createMerch,
   createPromocode,
   deleteAlbum,
+  deleteBonus,
   deleteImage,
   deleteMerch,
   deletePromocode,
   deleteTrack,
-  directUpdateTrack,
-  directUploadTrack,
   getDetailAlbum,
   getDetailMerch,
   getDetailPromocode,
-  getDetailTrack,
   getShowcaseAlbumsList,
+  getShowcaseBonusesList,
   getShowcaseMerchList,
   getShowcasePromocodes,
   getShowcaseTracksList,
@@ -32,12 +32,12 @@ import {
   updateImage,
   updateMerch,
   updatePromocode,
-  updateTrackInfo,
 } from "../api/showcaseApi";
 import type {
   PromoTypeFilter,
   TAddImagePayload,
   TAddImageResponse,
+  TBonusItem,
   TCreateAlbumRequest,
   TCreateMerchRequest,
   TCreatePromocodeRequest,
@@ -50,14 +50,10 @@ import type {
   TShowcasePromocode,
   TShowcasePromocodeDetail,
   TShowcaseTrack,
-  TShowcaseTrackDetail,
-  TShowcaseUpdateTrackInfoPayload,
   TUpdateAlbumPayload,
   TUpdateImagePayload,
   TUpdateMerchPayload,
   TUpdatePromocodePayload,
-  TUpdateTrackPayload,
-  TUploadTrackPayload,
 } from "./types";
 
 const showErrorMessage = (error: unknown) => {
@@ -110,7 +106,7 @@ export function useAlbumsInfiniteQuery({
     enabled: !!artistSlug,
     //staleTime: 10 * 10 * 1000,
   });
-}
+};
 
 export function useMerchInfiniteQuery({
   artistSlug,
@@ -151,7 +147,7 @@ export function useMerchInfiniteQuery({
     enabled: !!artistSlug,
     staleTime: 10 * 10 * 1000,
   });
-}
+};
 
 export function usePromocodesInfiniteQuery({
   discount_type,
@@ -189,7 +185,7 @@ export function usePromocodesInfiniteQuery({
     getNextPageParam: (lastPage) => lastPage?.next,
     staleTime: 10 * 10 * 1000,
   });
-}
+};
 
 //-------обновление товара/промокода-------//
 export function useUpdateAlbum() {
@@ -207,7 +203,7 @@ export function useUpdateAlbum() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 export function useUpdateMerch() {
   const queryClient = useQueryClient();
@@ -224,7 +220,7 @@ export function useUpdateMerch() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 export function useUpdatePromocode() {
   const queryClient = useQueryClient();
@@ -245,7 +241,7 @@ export function useUpdatePromocode() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 //-------удаление товара/промокода-------//
 export function useDeleteAlbum() {
@@ -263,7 +259,7 @@ export function useDeleteAlbum() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 export function useDeleteMerch() {
   const queryClient = useQueryClient();
@@ -280,7 +276,7 @@ export function useDeleteMerch() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 export function useDeletePromocode() {
   const queryClient = useQueryClient();
@@ -297,7 +293,7 @@ export function useDeletePromocode() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 //-------создание товара/промокода-------//
 export function useCreateAlbum() {
@@ -314,7 +310,7 @@ export function useCreateAlbum() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 export function useCreateMerch() {
   const queryClient = useQueryClient();
@@ -330,7 +326,7 @@ export function useCreateMerch() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 export function useCreatePromocode() {
   const queryClient = useQueryClient();
@@ -345,7 +341,7 @@ export function useCreatePromocode() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 //-------получение детальной информации об альбоме(сингле) или мерче (для формы редактирования)-------//
 export function useDetailInfo(type: string, id?: number) {
@@ -357,7 +353,7 @@ export function useDetailInfo(type: string, id?: number) {
     enabled: !!id,
     staleTime: 0,
   });
-}
+};
 
 //-------получение детальной информации о промокоде-------//
 export function useDetailPromocode(id?: number) {
@@ -366,7 +362,7 @@ export function useDetailPromocode(id?: number) {
     queryFn: async () => getDetailPromocode({ id }),
     enabled: !!id,
   });
-}
+};
 
 //-------получение cписка жанров-------//
 export function useGenresList() {
@@ -376,7 +372,7 @@ export function useGenresList() {
     staleTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
-}
+};
 
 //-------получение cписка видов мерча-------//
 export function useMerchKindsList() {
@@ -386,7 +382,7 @@ export function useMerchKindsList() {
     staleTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
-}
+};
 
 //-------загрузка изображения для мерча-------//
 export function useAddImage() {
@@ -402,7 +398,7 @@ export function useAddImage() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 //-------обновление изображения для мерча-------//
 export function useUpdateImage() {
@@ -417,7 +413,7 @@ export function useUpdateImage() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 //-------удаление изображения для мерча-------//
 export function useDeleteImage() {
@@ -432,7 +428,7 @@ export function useDeleteImage() {
       showErrorMessage(error);
     },
   });
-}
+};
 
 //-------треки-------//
 export function useTracksInfiniteQuery(type: string, album?: number | null) {
@@ -459,16 +455,7 @@ export function useTracksInfiniteQuery(type: string, album?: number | null) {
     staleTime: 0,
     refetchOnWindowFocus: false,
   });
-}
-
-export function useDetailTrack(id?: number) {
-  return useQuery({
-    queryKey: ["showcase", "detail", "track", id],
-    queryFn: async () => getDetailTrack({ id }),
-    enabled: !!id,
-    refetchOnWindowFocus: false,
-  });
-}
+};
 
 export function useDeleteTrack(album?: number) {
   const queryClient = useQueryClient();
@@ -485,58 +472,7 @@ export function useDeleteTrack(album?: number) {
       showErrorMessage(error);
     },
   });
-}
-
-export function useUpdateTrackInfo(album: number) {
-  const queryClient = useQueryClient();
-
-  return useMutation<TShowcaseTrackDetail, Error, TShowcaseUpdateTrackInfoPayload>({
-    mutationFn: async (data) => {
-      return updateTrackInfo(data);
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["showcase", "tracks", album] });
-      toast.success("Информация о треке обновлена");
-    },
-    onError: (error) => {
-      showErrorMessage(error);
-    },
-  });
-}
-
-export function useUploadTrack(album: number) {
-  const queryClient = useQueryClient();
-
-  return useMutation<void, Error, { file: File; data: TUploadTrackPayload }>({
-    mutationFn: async ({ file, data }) => {
-      return directUploadTrack(file, data);
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["showcase", "tracks", album] });
-      toast.success("Трек загружен");
-    },
-    onError: (error) => {
-      showErrorMessage(error);
-    },
-  });
-}
-
-export function useUpdateTrack(album: number) {
-  const queryClient = useQueryClient();
-
-  return useMutation<void, Error, { file: File; data: TUpdateTrackPayload }>({
-    mutationFn: async ({ file, data }) => {
-      return directUpdateTrack(file, data);
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["showcase", "tracks", album] });
-      toast.success("Файл трека обновлён");
-    },
-    onError: (error) => {
-      showErrorMessage(error);
-    },
-  });
-}
+};
 
 export function useChangeTracksOrder(albumId?: number | null) {
   const queryClient = useQueryClient();
@@ -553,4 +489,65 @@ export function useChangeTracksOrder(albumId?: number | null) {
       showErrorMessage(error);
     },
   });
-}
+};
+
+//------бонусы------//
+export function useBonusInfiniteQuery(type: string, album?: number | null) {
+  return useInfiniteQuery<
+    PaginatedStoreResponse<TBonusItem>,
+    Error,
+    InfiniteData<PaginatedStoreResponse<TBonusItem>>
+  >({
+    queryKey: ["showcase", "bonuses", album],
+    queryFn: async ({ pageParam }) => {
+      const url = pageParam as string | undefined;
+      if (url)
+        return getShowcaseBonusesList({
+          album,
+          url,
+        });
+      return getShowcaseBonusesList({
+        album,
+      });
+    },
+    initialPageParam: "",
+    getNextPageParam: (lastPage) => lastPage?.next,
+    enabled: !!album && type !== "merch",
+    staleTime: 0,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export function useDeleteBonus(album?: number) {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, { id: number }>({
+    mutationFn: async ({ id }) => {
+      return deleteBonus({ id });
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["showcase", "bonuses", album] });
+      toast.success("Бонус удалён");
+    },
+    onError: (error) => {
+      showErrorMessage(error);
+    },
+  });
+};
+
+export function useChangeBonusesOrder(albumId?: number | null) {
+  const queryClient = useQueryClient();
+
+  return useMutation<TShowcaseTrack[], Error, { album: number; bonus_ids: number[] }>({
+    mutationFn: async (data: { album: number; bonus_ids: number[] }) => {
+      return changeBonusesOrder(data);
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["showcase", "bonuses", albumId] });
+      toast.success("Порядок бонусов обновлён");
+    },
+    onError: (error) => {
+      showErrorMessage(error);
+    },
+  });
+};

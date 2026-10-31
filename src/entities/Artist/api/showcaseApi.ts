@@ -4,6 +4,7 @@ import type { PaginatedStoreResponse } from "@/api/store/types";
 import type {
   TAddImageRequest,
   TAddImageResponse,
+  TBonusItem,
   TCreateAlbumRequest,
   TCreateMerchRequest,
   TCreatePromocodeRequest,
@@ -18,15 +19,10 @@ import type {
   TShowcasePromocodeDetail,
   TShowcasePromocodesRequest,
   TShowcaseTrack,
-  TShowcaseTrackDetail,
-  TShowcaseUpdateTrackInfoPayload,
   TUpdateAlbumRequest,
   TUpdateImageRequest,
   TUpdateMerchRequest,
   TUpdatePromocodeRequest,
-  TUpdateTrackPayload,
-  TUploadTrackPayload,
-  TUploadTrackResponse,
 } from "../model/types";
 import { fillFormData } from "../utils/formDataHelper";
 
@@ -369,7 +365,17 @@ export async function getShowcaseTracksList({
   if (album) params.append("album", album.toString());
 
   const mainUrl = `${baseUrl}/v1/store/tracks?${params.toString()}`;
-  const currentUrl = url ? url : mainUrl;
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
 
   const response = await authFetchClient<PaginatedStoreResponse<TShowcaseTrack>>(currentUrl, {
     method: "GET",
@@ -380,141 +386,12 @@ export async function getShowcaseTracksList({
   return response;
 }
 
-export async function getDetailTrack({ id }: { id?: number }): Promise<TShowcaseTrackDetail> {
-  const url = `${baseUrl}/v1/store/tracks/${id}`;
-
-  const response = await authFetchClient<TShowcaseTrackDetail>(url, {
-    method: "GET",
-  });
-
-  if (!response) throw new Error("Не удалось получить трек");
-
-  return response;
-}
-
 export async function deleteTrack({ id }: { id: number }): Promise<void> {
   const url = `${baseUrl}/v1/store/tracks/${id}/`;
 
   await authFetchClient<void>(url, {
     method: "DELETE",
   });
-}
-
-export async function updateTrackInfo(
-  data: TShowcaseUpdateTrackInfoPayload
-): Promise<TShowcaseTrackDetail> {
-  const { id, ...payload } = data;
-
-  const url = `${baseUrl}/v1/store/tracks/${id}`;
-
-  const response = await authFetchClient<TShowcaseTrackDetail>(url, {
-    method: "PATCH",
-    body: JSON.stringify(payload),
-  });
-
-  if (!response) throw new Error("Не удалось обновить трек");
-
-  return response;
-}
-
-export async function directUploadTrack(file: File, data: TUploadTrackPayload) {
-  const { album_id, ...payload } = data;
-
-  const url = `${baseUrl}/v1/store/albums/${album_id}/track-uploads/initiate`;
-
-  const response = await authFetchClient<TUploadTrackResponse>(url, {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
-
-  if (!response) throw new Error("Не удалось инициировать загрузку трека");
-
-  const transport = response.upload.transport;
-  const formData = new FormData();
-
-  Object.entries(transport.fields).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
-
-  formData.append(transport.file_field_name, file);
-
-  const headers: HeadersInit = {};
-  if (transport.headers) {
-    Object.entries(transport.headers).forEach(([k, v]) => {
-      headers[k] = v;
-    });
-  }
-
-  const uploadRes = await fetch(transport.url, {
-    method: transport.method || "POST",
-    body: formData,
-    headers,
-  });
-
-  if (!uploadRes.ok) throw new Error("Ошибка загрузки файла на транспорт");
-
-  const responseUrl = response.upload.complete_url;
-  const newUrl = new URL(responseUrl);
-  const pathAfterApi = newUrl.pathname.replace(/^\/api/, "");
-
-  const res = await authFetchClient<void>(`${baseUrl}${pathAfterApi}`, {
-    method: "POST",
-  });
-
-  if (res)
-    await authFetchClient<TUploadTrackResponse>(
-      `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete`, 
-      {
-        method: "POST",
-        body: JSON.stringify(payload),
-      }
-    );
-}
-
-export async function directUpdateTrack(file: File, data: TUpdateTrackPayload) {
-  const { track_id, ...payload } = data;
-
-  const url = `${baseUrl}/v1/store/tracks/${track_id}/file-upload/initiate/`;
-
-  const response = await authFetchClient<TUploadTrackResponse>(url, {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
-
-  if (!response) throw new Error("Не удалось инициировать загрузку трека");
-
-  const transport = response.upload.transport;
-  const formData = new FormData();
-
-  Object.entries(transport.fields).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
-
-  formData.append(transport.file_field_name, file);
-
-  const headers: HeadersInit = {};
-  if (transport.headers) {
-    Object.entries(transport.headers).forEach(([k, v]) => {
-      headers[k] = v;
-    });
-  }
-
-  const uploadRes = await fetch(transport.url, {
-    method: transport.method || "POST",
-    body: formData,
-    headers,
-  });
-  if (!uploadRes.ok) throw new Error("Ошибка загрузки файла на транспорт");
-  await authFetchClient<void>(response.upload.complete_url, {
-    method: "POST",
-  });
-
-  // if (res) await authFetchClient<TUploadTrackResponse>(
-  //   `${baseUrl}/v1/store/track-uploads/${response.upload.id}/complete/`,
-  //   {
-  //     method: "POST",
-  //     body: JSON.stringify(payload)
-  //   }, token);
 };
 
 export async function changeTracksOrder(data: { album: number, track_ids: number[] }): Promise<TShowcaseTrack[]> {
@@ -524,6 +401,58 @@ export async function changeTracksOrder(data: { album: number, track_ids: number
   });
 
   if (!response) throw new Error("Не удалось обновить очередь треков.");
+
+  return response;
+};
+
+//-------Бонусы-------//
+export async function getShowcaseBonusesList({
+  album,
+  url,
+}: {
+  album?: number | null;
+  url?: string;
+}): Promise<PaginatedStoreResponse<TBonusItem>> {
+  const params = new URLSearchParams();
+  if (album) params.append("album", album.toString());
+
+  const mainUrl = `${baseUrl}/v1/store/bonuses?${params.toString()}`;
+  const currentUrl = url
+    ? (() => {
+        const parsedUrl = new URL(url, "http://localhost");
+        if (parsedUrl.pathname.startsWith(`${baseUrl}/`)) {
+          return `${parsedUrl.pathname}${parsedUrl.search}`;
+        }
+        const backendPath = parsedUrl.pathname.replace(/^\/api(?=\/)/, "");
+        return `${baseUrl}${backendPath.replace(/\/$/, "")}${parsedUrl.search}`;
+      })()
+    : mainUrl;
+  //const currentUrl = url ? url : mainUrl;
+
+  const response = await authFetchClient<PaginatedStoreResponse<TBonusItem>>(currentUrl, {
+    method: "GET",
+  });
+
+  if (!response) throw new Error("Не удалось получить бонусы");
+
+  return response;
+};
+
+export async function deleteBonus({ id }: { id: number }): Promise<void> {
+  const url = `${baseUrl}/v1/store/bonuses/${id}`;
+
+  await authFetchClient<void>(url, {
+    method: "DELETE",
+  });
+};
+
+export async function changeBonusesOrder(data: { album: number, bonus_ids: number[] }): Promise<TShowcaseTrack[]> {
+  const response = await authFetchClient<TShowcaseTrack[]>(`${baseUrl}/v1/store/bonuses/reorder`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+
+  if (!response) throw new Error("Не удалось обновить очередь бонусов.");
 
   return response;
 };

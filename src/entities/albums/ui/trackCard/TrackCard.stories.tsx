@@ -1,5 +1,5 @@
 import { type Meta, type StoryObj } from "@storybook/nextjs-vite";
-import TrackCard from "./TrackCard";
+import { TrackCard } from "./TrackCard";
 
 const meta: Meta<typeof TrackCard> = {
   title: 'entities/TrackCard',

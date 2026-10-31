@@ -17,10 +17,8 @@ export type {
   TCreateAlbumRequest,
   TCreateMerchRequest,
   TCreatePromocodeRequest,
-  TUploadTrackPayload,
-  TShowcaseUpdateTrackInfoPayload,
-  TUpdateTrackPayload,
   TReleaseType,
+  TBonusItem,
 } from "./model/types";
 export {
   getShowcaseAlbumsList,
@@ -49,12 +47,11 @@ export {
   useDetailPromocode,
   useCreatePromocode,
   useTracksInfiniteQuery,
-  useDetailTrack,
   useDeleteTrack,
-  useUpdateTrackInfo,
-  useUploadTrack,
-  useUpdateTrack,
   useChangeTracksOrder,
+  useBonusInfiniteQuery,
+  useDeleteBonus,
+  useChangeBonusesOrder,
 } from "./model/useShowcase";
 
 export { useGetArtistLegalData } from "./model/useGetArtistLegalData";

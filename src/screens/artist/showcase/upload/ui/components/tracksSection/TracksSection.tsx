@@ -51,13 +51,15 @@ export const TracksSection = ({
     onChangeTracksOrder(ids);
   };
 
+  const showTrackButton = (releaseType === "single" && tracksList.length === 0) || releaseType !== "single";
+
   return (
     <section className={s.uploadContainer}>
       <Title Tag="h4" className={s.uploadContainer__title}>Загрузка трека</Title>
       <Text className={s.uploadContainer__hint}>
         Загрузите трек с устройства (максимальный размер 500 MB; MP3, WAV, FLAC)
       </Text>
-      {(releaseType === "single" && tracksList.length === 0) || releaseType !== "single" && (
+      {showTrackButton && (
         <ButtonUI
           variant='primary'
           type='button'

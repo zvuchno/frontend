@@ -116,12 +116,10 @@ export const UploadMerchContent = ({ currentArtistId, product, profileType }: TU
     ) => {
       if (isSubmitting) return;
 
-      const artist = profileType === "label" && selectedArtist ? Number(selectedArtist) : currentArtistId
-
       const payload = createMerchPayload(
         data, 
         profileType, 
-        artist, 
+        currentArtistId, 
         action, 
         hasProperty
       );

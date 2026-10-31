@@ -27,7 +27,7 @@ export const checkMediaFiles = async (file: File, variant: "image" | "music" | "
   ];
   const isBonus = allowedBonusMime.includes(file.type);
 
-  if (!isImage && !isAudio) {
+  if (!isImage && !isAudio && !isBonus) {
     return {
       validFile: null,
       error: variant === "image" 
