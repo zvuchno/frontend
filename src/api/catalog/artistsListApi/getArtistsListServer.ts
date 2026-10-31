@@ -12,11 +12,16 @@ export async function getArtistsListServer({
   limit,
   offset,
   ordering,
+  search,
 }: TArtistsListRequest): Promise<TArtistsListResponse | null> {
   const params = new URLSearchParams();
 
   if (limit !== undefined) {
     params.append("limit", limit.toString());
+  }
+
+  if (search !== undefined) {
+    params.append("search", search.toString());
   }
 
   if (offset !== undefined) {
